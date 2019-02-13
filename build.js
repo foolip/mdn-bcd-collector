@@ -14,23 +14,9 @@
 
 'use strict';
 
-const express = require('express');
+const fs = require('fs');
 
-const app = express();
-
-app.use(express.static('static'));
-app.use(express.static('generated'));
-
-app.get('/', (req, res) => {
-  res
-      .status(200)
-      .send('Hello, world!')
-      .end();
-});
-
-// Start the server
-const PORT = process.env.PORT || 8080;
-app.listen(PORT, () => {
-  console.log(`App listening on port ${PORT}`);
-  console.log('Press Ctrl+C to quit.');
-});
+try {
+  fs.mkdirSync('generated');
+} catch (e) {}
+fs.writeFileSync('generated/test.html', `hello random ${Math.random()}`);

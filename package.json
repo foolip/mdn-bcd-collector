@@ -13,6 +13,8 @@
   },
   "scripts": {
     "lint": "npx eslint .",
+    "build": "node build.js",
+    "gcp-build": "node build.js",
     "deploy": "gcloud app deploy",
     "start": "node app.js",
     "system-test": "repo-tools test app",
