@@ -17,6 +17,7 @@
 'use strict';
 
 const fs = require('fs-extra');
+const klawSync = require('klaw-sync');
 const path = require('path');
 
 const reports = require('./reffy-reports');
@@ -58,4 +59,24 @@ function buildCSS() {
   writeText(filename, lines);
 }
 
+function buildManifest() {
+  const manifest = {
+    items: [],
+    version: 1,
+  };
+  const files = klawSync(generatedDir, {nodir: true});
+  for (const file of files) {
+    const pathname = path.relative(generatedDir, file.path);
+    if (pathname === 'MANIFEST.json') {
+      continue;
+    }
+    manifest.items.push(`/${pathname}`);
+  }
+  manifest.items.sort();
+
+  const filename = path.join(generatedDir, 'MANIFEST.json');
+  writeText(filename, JSON.stringify(manifest, null, '  '));
+}
+
 buildCSS();
+buildManifest();
