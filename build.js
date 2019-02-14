@@ -12,11 +12,50 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+/* eslint-disable require-jsdoc */
+
 'use strict';
 
-const fs = require('fs');
+const fs = require('fs-extra');
+const path = require('path');
 
-try {
-  fs.mkdirSync('generated');
-} catch (e) {}
-fs.writeFileSync('generated/test.html', `hello random ${Math.random()}`);
+const reports = require('./reffy-reports');
+
+const generatedDir = path.join(__dirname, 'generated');
+
+function writeText(filename, content) {
+  if (Array.isArray(content)) {
+    content = content.join('\n');
+  }
+  content = content.trimEnd() + '\n';
+  fs.ensureDirSync(path.dirname(filename));
+  fs.writeFileSync(filename, content, 'utf8');
+}
+
+function buildCSS() {
+  const propertySet = new Set;
+
+  for (const data of Object.values(reports.css)) {
+    for (const prop of Object.keys(data.properties)) {
+      propertySet.add(prop);
+    }
+  }
+
+  const propertyNames = Array.from(propertySet);
+  propertyNames.sort();
+
+  const lines = [
+    '<!DOCTYPE html>',
+    '<script src="/resources/harness.js"></script>',
+    '<script>',
+  ];
+  for (const name of propertyNames) {
+    lines.push(`t.report("${name}", CSS.supports("${name}", "initial"));`);
+  }
+  lines.push('t.done();', '</script>');
+  const filename = path.join(generatedDir, 'css', 'properties',
+      'dot-supports.html');
+  writeText(filename, lines);
+}
+
+buildCSS();
