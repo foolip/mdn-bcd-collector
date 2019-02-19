@@ -78,5 +78,15 @@ function buildManifest() {
   writeText(filename, JSON.stringify(manifest, null, '  '));
 }
 
+function copyResources() {
+  // Note: package.json is just a file that we know exists, it's not used.
+  const json3Dir = path.dirname(require.resolve('json3/package.json'));
+  const src = path.join(json3Dir, 'lib', 'json3.min.js');
+  const dest = path.join(generatedDir, 'resources', 'json3.min.js');
+  fs.ensureDirSync(path.dirname(dest));
+  fs.copyFileSync(src, dest);
+}
+
 buildCSS();
 buildManifest();
+copyResources();
