@@ -23,16 +23,16 @@
   },
   "dependencies": {
     "body-parser": "^1.18.3",
-    "express": "^4.16.3"
-  },
-  "devDependencies": {
-    "@google-cloud/nodejs-repo-tools": "^3.2.0",
-    "eslint": "^5.13.0",
-    "eslint-config-google": "^0.12.0",
+    "express": "^4.16.3",
     "fs-extra": "^7.0.1",
     "klaw-sync": "^6.0.0",
     "reffy-reports": "git://github.com/foolip/reffy-reports.git#mdn-bcd-updater-fixes",
     "webidl2": "^17.0.1"
+  },
+  "devDependencies": {
+    "@google-cloud/nodejs-repo-tools": "^3.2.0",
+    "eslint": "^5.13.0",
+    "eslint-config-google": "^0.12.0"
   },
   "cloud-repo-tools": {
     "test": {
