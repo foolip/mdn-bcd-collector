@@ -15,16 +15,15 @@
 'use strict';
 
 const express = require('express');
-
+const bodyParser = require('body-parser');
 const app = express();
 
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static('static'));
 app.use(express.static('generated'));
 
-app.get('/', (req, res) => {
-  res
-      .status(200)
-      .send('Hello, world!')
+app.post('/api/report', (req, res) => {
+  res.send(`<pre>${JSON.stringify(req.body, null, '  ')}</pre>`)
       .end();
 });
 
