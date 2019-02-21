@@ -11,6 +11,7 @@ action "Filters for GitHub Actions" {
 action "GitHub Action for Google Cloud SDK auth" {
   uses = "actions/gcloud/auth@1a017b23ef5762d20aeb3972079a7bce2c4a8bfe"
   needs = ["Filters for GitHub Actions"]
+  secrets = ["GCLOUD_AUTH"]
 }
 
 action "GitHub Action for Google Cloud" {
