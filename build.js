@@ -17,7 +17,7 @@
 'use strict';
 
 const fs = require('fs-extra');
-const klawSync = require('klaw-sync');
+const klaw = require('klaw');
 const path = require('path');
 
 const reports = require('./reffy-reports');
@@ -59,21 +59,25 @@ function buildCSS() {
   writeText(filename, lines);
 }
 
-function buildManifest() {
+async function buildManifest() {
   const manifest = {
     items: [],
     version: 1,
   };
-  const files = klawSync(generatedDir, {nodir: true});
-  for (const file of files) {
-    const pathname = path.relative(generatedDir, file.path);
-    if (pathname === 'MANIFEST.json') {
-      continue;
-    }
-    manifest.items.push(`/${pathname}`);
-  }
+  await new Promise((resolve, reject) => {
+    klaw(generatedDir)
+        .on('data', (item) => {
+          if (item.stats.isFile()) {
+            const pathname = path.relative(generatedDir, item.path);
+            if (pathname !== 'MANIFEST.json') {
+              manifest.items.push(`/${pathname}`);
+            }
+          }
+        })
+        .on('end', resolve)
+        .on('error', reject);
+  });
   manifest.items.sort();
-
   const filename = path.join(generatedDir, 'MANIFEST.json');
   writeText(filename, JSON.stringify(manifest, null, '  '));
 }
@@ -87,6 +91,10 @@ function copyResources() {
   fs.copyFileSync(src, dest);
 }
 
-buildCSS();
-buildManifest();
-copyResources();
+async function build() {
+  buildCSS();
+  await buildManifest();
+  copyResources();
+}
+
+build();
