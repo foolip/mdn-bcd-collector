@@ -14,7 +14,7 @@
 
 'use strict';
 
-// This harness should work on as old browsers as possible and should't depend
+// This harness should work on as old browsers as possible and shouldn't depend
 // on any modern JavaScript features.
 
 (function(global) {
