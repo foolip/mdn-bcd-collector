@@ -1,6 +1,6 @@
 workflow "Push" {
   on = "push"
-  resolves = ["Test"]
+  resolves = ["Lint", "Test"]
 }
 
 action "Install" {
@@ -12,6 +12,12 @@ action "Build" {
   needs = "Install"
   uses = "actions/npm@master"
   args = "run build"
+}
+
+action "Lint" {
+  needs = "Build"
+  uses = "actions/npm@master"
+  args = "run lint"
 }
 
 action "Test" {
