@@ -14,23 +14,19 @@
 
 'use strict';
 
-const express = require('express');
-const bodyParser = require('body-parser');
-const logger = require('./logger');
+const winston = require('winston');
+// const {LoggingWinston} = require('@google-cloud/logging-winston');
 
-const app = express();
-app.use(bodyParser.urlencoded({extended: false}));
-app.use(express.static('static'));
-app.use(express.static('generated'));
-
-app.post('/api/report', (req, res) => {
-  res.send(`<pre>${JSON.stringify(req.body, null, '  ')}</pre>`)
-      .end();
+const logger = winston.createLogger({
+  level: 'info',
+  format: winston.format.combine(
+      winston.format.colorize(),
+      winston.format.simple(),
+  ),
+  transports: [
+    new winston.transports.Console(),
+    // new LoggingWinston(),
+  ],
 });
 
-// Start the server
-const PORT = process.env.PORT || 8080;
-app.listen(PORT, () => {
-  logger.info(`App listening on port ${PORT}`);
-  logger.info('Press Ctrl+C to quit.');
-});
+module.exports = logger;

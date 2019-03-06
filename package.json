@@ -28,7 +28,8 @@
     "json3": "^3.3.2",
     "klaw": "^3.0.0",
     "reffy-reports": "git://github.com/foolip/reffy-reports.git#mdn-bcd-updater-fixes",
-    "webidl2": "^17.0.1"
+    "webidl2": "^17.0.1",
+    "winston": "^3.2.1"
   },
   "devDependencies": {
     "@google-cloud/nodejs-repo-tools": "^3.2.0",
