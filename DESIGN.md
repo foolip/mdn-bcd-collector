@@ -12,7 +12,33 @@ BCD itself and reffy-reports are used to generate tests, and tests can also be
 written manually. The output of a test is arbitrary JSON, which must be
 interpreted with knowledge of what the test does.
 
-All tests are listed in `/MANIFEST.json`.
+## API
+
+HTTP endpoints under `/api/` are used to enumerate/iterate test URLs, report
+results for individual tests, and finally create a report for a whole session.
+
+### List tests
+
+```http
+GET /api/tests
+```
+
+#### Parameters
+
+`after`: Only list tests after the given test URL.
+
+`limit`: The maximum number of tests to list. Defaults to all tests.
+
+#### Response
+
+```json
+[
+  "https://mdn-bcd-collector.appspot.com/bcd/api/Sensor.html",
+  "http://mdn-bcd-collector.appspot.com/bcd/css/properties/dot-supports.html"
+]
+```
+
+If there are no more tests an empty array is returned.
 
 ## Running tests
 

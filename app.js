@@ -17,11 +17,23 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const logger = require('./logger');
+const Tests = require('./tests');
+
+const tests = new Tests({
+  manifest: require('./generated/MANIFEST.json'),
+  host: 'localhost',
+});
 
 const app = express();
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(express.static('static'));
 app.use(express.static('generated'));
+
+app.get('/api/tests', (req, res) => {
+  const {after, limit} = req.query;
+  const list = tests.list(after, limit ? +limit : 0);
+  res.json(list);
+});
 
 app.post('/api/report', (req, res) => {
   res.send(`<pre>${JSON.stringify(req.body, null, '  ')}</pre>`)
