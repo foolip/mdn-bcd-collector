@@ -17,9 +17,7 @@
     "gcp-build": "node build.js",
     "deploy": "gcloud app deploy",
     "start": "node app.js",
-    "system-test": "repo-tools test app",
-    "test": "NODE_ENV=test nyc mocha",
-    "e2e-test": "repo-tools test deploy"
+    "test": "NODE_ENV=test nyc mocha"
   },
   "dependencies": {
     "express": "^4.16.3",
@@ -32,21 +30,11 @@
     "winston": "^3.2.1"
   },
   "devDependencies": {
-    "@google-cloud/nodejs-repo-tools": "^3.2.0",
     "chai": "^4.2.0",
     "chai-http": "^4.2.1",
     "eslint": "^5.15.0",
     "eslint-config-google": "^0.12.0",
     "mocha": "^6.0.2",
     "nyc": "^13.3.0"
-  },
-  "cloud-repo-tools": {
-    "test": {
-      "app": {
-        "msg": "Hello, world!"
-      }
-    },
-    "requiresKeyFile": true,
-    "requiresProjectId": true
   }
 }
