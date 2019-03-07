@@ -15,7 +15,8 @@
 'use strict';
 
 const express = require('express');
-const bodyParser = require('body-parser');
+const session = require('express-session');
+
 const logger = require('./logger');
 const Tests = require('./tests');
 
@@ -25,7 +26,13 @@ const tests = new Tests({
 });
 
 const app = express();
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(session({
+  secret: 'not a secret',
+  resave: false,
+  saveUninitialized: true,
+  cookie: {secure: false},
+}));
+app.use(express.json());
 app.use(express.static('static'));
 app.use(express.static('generated'));
 
@@ -35,14 +42,53 @@ app.get('/api/tests', (req, res) => {
   res.json(list);
 });
 
+app.post('/api/results', (req, res) => {
+  if (!req.is('json')) {
+    res.status(400).end();
+    return;
+  }
+
+  let forURL;
+  try {
+    forURL = new URL(req.query.for).toString();
+  } catch (err) {
+    res.status(400).end();
+    return;
+  }
+
+  const results = req.session.results || {};
+
+  if (forURL in results) {
+    res.status(409).end();
+    return;
+  }
+
+  results[forURL] = req.body;
+
+  req.session.results = results;
+  req.session.save((err) => {
+    if (err) {
+      logger.error(err);
+      res.status(500).end();
+    } else {
+      res.status(201).end();
+    }
+  });
+});
+
 app.post('/api/report', (req, res) => {
   res.send(`<pre>${JSON.stringify(req.body, null, '  ')}</pre>`)
       .end();
 });
 
-// Start the server
-const PORT = process.env.PORT || 8080;
-app.listen(PORT, () => {
-  logger.info(`App listening on port ${PORT}`);
-  logger.info('Press Ctrl+C to quit.');
-});
+if (process.env.NODE_ENV === 'test') {
+  // Export for testing
+  module.exports = app;
+} else {
+  // Start the server
+  const PORT = process.env.PORT || 8080;
+  app.listen(PORT, () => {
+    logger.info(`App listening on port ${PORT}`);
+    logger.info('Press Ctrl+C to quit.');
+  });
+}

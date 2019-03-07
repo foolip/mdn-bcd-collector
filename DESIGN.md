@@ -25,9 +25,9 @@ GET /api/tests
 
 #### Parameters
 
-`after`: Only list tests after the given test URL.
+`after`: Only list tests after the given test URL. (optional)
 
-`limit`: The maximum number of tests to list. Defaults to all tests.
+`limit`: The maximum number of tests to list. Defaults to all tests. (optional)
 
 #### Response
 
@@ -39,6 +39,26 @@ GET /api/tests
 ```
 
 If there are no more tests an empty array is returned.
+
+### Report results
+
+```http
+POST /api/results
+```
+
+The `Content-Type` should be `application/json` and the post body should be
+the JSON results with a test-defined structure.
+
+#### Parameters
+
+`for`: The test URL the results are for. (required)
+
+#### Response
+
+Status `201 Created` if the results were saved, and `409 Conflict` if results
+for the test have already been saved.
+
+Cookies are used to keep track of the results.
 
 ## Running tests
 
