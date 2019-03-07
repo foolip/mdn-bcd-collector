@@ -76,9 +76,9 @@ app.post('/api/results', (req, res) => {
   });
 });
 
-app.post('/api/report', (req, res) => {
-  res.send(`<pre>${JSON.stringify(req.body, null, '  ')}</pre>`)
-      .end();
+app.get('/api/results', (req, res) => {
+  const results = req.session.results || {};
+  res.json(results);
 });
 
 if (process.env.NODE_ENV === 'test') {

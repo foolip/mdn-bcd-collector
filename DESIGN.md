@@ -58,7 +58,26 @@ the JSON results with a test-defined structure.
 Status `201 Created` if the results were saved, and `409 Conflict` if results
 for the test have already been saved.
 
-Cookies are used to keep track of the results.
+The results are put in server-side session storage.
+
+### List results
+
+```http
+GET /api/results
+```
+
+#### Response
+
+```json
+{
+  "https://mdn-bcd-collector.appspot.com/bcd/api/Sensor.html": {
+    "some-data": "some-value"
+  }
+}
+```
+
+If no results have been reported to `/api/results` in this session then an
+empty object is returned.
 
 ## Running tests
 

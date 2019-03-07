@@ -36,6 +36,12 @@ describe('/api/results', () => {
     assert.equal(res.status, 400);
   });
 
+  it('list results before', async () => {
+    const res = await agent.get('/api/results');
+    assert.equal(res.status, 200);
+    assert.deepEqual(res.body, {});
+  });
+
   const testURL = 'https://host.test/foo.html';
   const results = {'Foo': true};
   it('submit valid results', async () => {
@@ -50,6 +56,14 @@ describe('/api/results', () => {
         .query({for: testURL})
         .send(results);
     assert.equal(res.status, 409);
+  });
+
+  it('list results after', async () => {
+    const res = await agent.get('/api/results');
+    assert.equal(res.status, 200);
+    assert.deepEqual(res.body, {
+      'https://host.test/foo.html': {'Foo': true},
+    });
   });
 });
 
