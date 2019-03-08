@@ -49,6 +49,8 @@ describe('/api/results', () => {
         .query({for: testURL})
         .send(results);
     assert.equal(res.status, 201);
+    // TODO: mock manifest to allow testing `next`:
+    assert.deepEqual(res.body, {});
   });
 
   it('submit duplicate results', async () => {

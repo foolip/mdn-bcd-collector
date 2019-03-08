@@ -59,10 +59,23 @@ app.post('/api/results', (req, res) => {
     return;
   }
 
+  const response = {};
+
+  // Include next test in response as a convenience.
+  try {
+    const next = tests.list(forURL, 1)[0];
+    if (next) {
+      response.next = next;
+    }
+  } catch (err) {
+    logger.warn(`Results submitted for URL not in manifest: ${forURL}`);
+    // note: indistinguishable from finishing last test to client
+  }
+
   const results = req.session.results || {};
 
   if (forURL in results) {
-    res.status(409).end();
+    res.status(409).json(response);
     return;
   }
 
@@ -74,7 +87,7 @@ app.post('/api/results', (req, res) => {
       logger.error(err);
       res.status(500).end();
     } else {
-      res.status(201).end();
+      res.status(201).json(response);
     }
   });
 });

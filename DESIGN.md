@@ -56,9 +56,19 @@ the JSON results with a test-defined structure.
 #### Response
 
 Status `201 Created` if the results were saved, and `409 Conflict` if results
-for the test have already been saved.
+for the test have already been saved. The results are put in server-side
+session storage.
 
-The results are put in server-side session storage.
+As a convenience, the next test is included in response:
+
+```json
+{
+  "next": "http://mdn-bcd-collector.appspot.com/bcd/api/next/test.html"
+}
+```
+
+This is same as the response of `/api/tests?after=...&limit=1`. If there are no
+more tests or that request errored there is no `next` field.
 
 ### List results
 
