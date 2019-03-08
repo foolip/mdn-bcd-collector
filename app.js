@@ -25,7 +25,7 @@ const Tests = require('./tests');
 
 const tests = new Tests({
   manifest: require('./generated/MANIFEST.json'),
-  host: 'localhost',
+  host: 'localhost:8080',
 });
 
 const app = express();

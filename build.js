@@ -49,9 +49,9 @@ function buildCSS() {
     '<script>',
   ];
   for (const name of propertyNames) {
-    lines.push(`t.report("${name}", CSS.supports("${name}", "initial"));`);
+    lines.push(`r.set("${name}", CSS.supports("${name}", "initial"));`);
   }
-  lines.push('t.done();', '</script>');
+  lines.push('r.done();', '</script>');
   const filename = path.join(generatedDir, 'css', 'properties',
       'dot-supports.html');
   writeText(filename, lines);

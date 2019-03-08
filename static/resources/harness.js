@@ -18,51 +18,34 @@
 // on any modern JavaScript features.
 
 (function(global) {
-  var results = [];
+  var results = null;
 
-  function report(desc, value) {
-    /*
-    switch (typeof value) {
-      case 'boolean':
-      case 'number':
-        break;
-      case 'string':
-        // "escape" strings so that string can be used for other values too
-        value = 'string:' + value;
-        break;
-      case 'symbol':
-        value = 'symbol';
-        break;
-      case 'function':
-        value = 'function';
-      case 'object':
-        if (value === null) {
-          // leave unchanged
-        } else {
-          value = 'object';
-        }
-        break;
-      case 'undefined':
-        value = 'undefined';
-      default:
-        value = 'UNKNOWN';
+  function set(property, value) {
+    if (results == null) {
+      results = {};
     }
-    */
-    var type = typeof value;
-    if (type === 'object' && value === null) {
-      type = 'null';
-    }
-
-    results.push([desc, type]);
+    results[property] = value;
+    return this; // for chaining
   }
 
   function done() {
-    console.log(results);
-    // TODO: send the results somewhere
+    var body = JSON.stringify(results);
+    var client = new XMLHttpRequest();
+    client.open('POST', '/api/results?for='+encodeURIComponent(location.href));
+    client.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+    client.send(body);
+    client.onreadystatechange = function() {
+      if (client.readyState == 4) {
+        var response = JSON.parse(client.responseText);
+        // Navigate to the next page, or /results/ if none.
+        var nextURL = response.next || '/results/';
+        window.location = nextURL;
+      }
+    }
   }
 
-  global.t = {
-    report: report,
+  global.r = {
+    set: set,
     done: done,
   };
 })(this);

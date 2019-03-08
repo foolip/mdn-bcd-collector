@@ -1,0 +1,23 @@
+<!doctype html>
+<meta charset="utf-8">
+<script>
+function exportGitHub() {
+  const client = new XMLHttpRequest();
+  client.open('POST', '/api/results/export/github', true);
+  client.send();
+  client.onreadystatechange = function() {
+    if (client.readyState == 4) {
+      var response = JSON.parse(client.responseText);
+      var url = response.html_url;
+      var input = document.getElementById('pr_url');
+      input.value = url;
+      input.select();
+    }
+  }
+}
+</script>
+<div>
+  <button onclick="exportGitHub()">Export results to GitHub</button>
+  &rarr;
+  <input id="pr_url" size="100">
+</div>

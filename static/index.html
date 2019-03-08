@@ -1,8 +1,27 @@
 <!doctype html>
 <meta charset="utf-8">
-<form method="post" action="/api/report">
-<input name="key" value="value">
-<input type="submit" value="submit report">
-</form>
+<div>
+  <button disabled>Loading tests...</button>
+</div>
+<script>
+function getTests() {
+  var button = document.getElementsByTagName('button')[0];
+  var client = new XMLHttpRequest();
+  client.open('GET', '/api/tests', true);
+  client.send();
+  client.onreadystatechange = function() {
+    if (client.readyState == 4) {
+      var tests = JSON.parse(client.responseText);
+      button.removeAttribute('disabled');
+      button.textContent = 'Run ' + tests.length + ' tests';
+      button.onclick = function() {
+        window.location = tests[0];
+      };
+    }
+  }
+}
+getTests();
+</script>
+
 
 <p><a href="https://github.com/foolip/mdn-bcd-collector">Source on GitHub</a></p>
