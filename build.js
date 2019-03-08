@@ -66,9 +66,14 @@ async function buildManifest() {
     klaw(generatedDir)
         .on('data', (item) => {
           if (item.stats.isFile()) {
-            const pathname = path.relative(generatedDir, item.path);
-            if (pathname !== 'MANIFEST.json') {
-              manifest.items.push(`/${pathname}`);
+            const pathname = `/${path.relative(generatedDir, item.path)}`;
+            if (pathname !== '/MANIFEST.json' &&
+                !pathname.startsWith('/resources/')) {
+              const item = {
+                pathname,
+                protocol: 'http',
+              };
+              manifest.items.push(item);
             }
           }
         })
