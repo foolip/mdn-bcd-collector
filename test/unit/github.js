@@ -34,7 +34,7 @@ describe('GitHub export', () => {
 
   it('happy path', async () => {
     let octokit;
-    const github = proxyquire('../github', {
+    const github = proxyquire('../../github', {
       '@octokit/rest': function(options) {
         assert(octokit === undefined);
         octokit = new Octokit(options);

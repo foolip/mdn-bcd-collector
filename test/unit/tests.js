@@ -15,7 +15,7 @@
 'use strict';
 
 const assert = require('assert');
-const Tests = require('../tests');
+const Tests = require('../../tests');
 
 const MANIFEST = {
   items: [{

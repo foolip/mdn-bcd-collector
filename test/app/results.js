@@ -14,7 +14,7 @@
 
 'use strict';
 
-const app = require('../app');
+const app = require('../../app');
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 
