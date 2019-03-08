@@ -79,6 +79,31 @@ GET /api/results
 If no results have been reported to `/api/results` in this session then an
 empty object is returned.
 
+### Export results to GitHub
+
+```http
+POST /api/results/export/github
+```
+
+#### Parameters
+
+None, the results are taken from session storage.
+
+#### Response
+
+```json
+{
+  "url": "https://api.github.com/repos/foolip/mdn-bcd-results/pulls/1",
+  "html_url": "https://github.com/foolip/mdn-bcd-results/pull/1"
+}
+```
+
+The full response of the [underlying GitHub API](https://developer.github.com/v3/pulls/#create-a-pull-request)
+is returned, but `url` and `html_url` are the most useful fields.
+
+Status `400 Bad Request` is returned if no results have been reported to
+`/api/results` in this session.
+
 ## Running tests
 
 ### Manually

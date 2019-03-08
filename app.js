@@ -18,6 +18,9 @@ const express = require('express');
 const session = require('express-session');
 
 const logger = require('./logger');
+const github = require('./github')({
+  auth: `token ${process.env.GH_TOKEN}`,
+});
 const Tests = require('./tests');
 
 const tests = new Tests({
@@ -79,6 +82,27 @@ app.post('/api/results', (req, res) => {
 app.get('/api/results', (req, res) => {
   const results = req.session.results || {};
   res.json(results);
+});
+
+app.post('/api/results/export/github', (req, res) => {
+  const results = req.session.results;
+  if (!results) {
+    res.status(400).end();
+    return;
+  }
+
+  const userAgent = req.get('User-Agent');
+
+  const report = {results, userAgent};
+
+  github.exportAsPR(report)
+      .then((result) => {
+        res.json(result);
+      })
+      .catch((err) => {
+        logger.error(err);
+        res.status(500).end();
+      });
 });
 
 if (process.env.NODE_ENV === 'test') {
