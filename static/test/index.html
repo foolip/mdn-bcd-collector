@@ -1,0 +1,27 @@
+<!doctype html>
+<meta charset="utf-8">
+<script src="/resources/json3.min.js"></script>
+<script src="/resources/harness.js"></script>
+<script src="chai.js"></script>
+<script src="mocha.js"></script>
+<link rel="stylesheet" href="mocha.css">
+<div id="mocha"></div>
+<script>
+mocha.setup('bdd');
+var assert = chai.assert;
+
+describe('harness.js', () => {
+  it('null results', () => {
+    assert.isNull(r.getAll());
+  });
+
+  it('set', () => {
+    r.set('key', 'value');
+    assert.deepEqual(r.getAll(), {'key': 'value'});
+  });
+});
+
+afterEach(() => r.reset());
+
+mocha.run();
+</script>

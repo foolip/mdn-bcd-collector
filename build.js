@@ -115,12 +115,19 @@ async function buildManifest() {
 }
 
 function copyResources() {
-  // Note: package.json is just a file that we know exists, it's not used.
-  const json3Dir = path.dirname(require.resolve('json3/package.json'));
-  const src = path.join(json3Dir, 'lib', 'json3.min.js');
-  const dest = path.join(generatedDir, 'resources', 'json3.min.js');
-  fs.ensureDirSync(path.dirname(dest));
-  fs.copyFileSync(src, dest);
+  const resources = [
+    ['json3/lib/json3.min.js', 'resources'],
+    ['chai/chai.js', 'test'],
+    ['mocha/mocha.css', 'test'],
+    ['mocha/mocha.js', 'test'],
+  ];
+  for (const [srcInModules, destInGenerated] of resources) {
+    const src = require.resolve(srcInModules);
+    const destDir = path.join(generatedDir, destInGenerated);
+    const dest = path.join(destDir, path.basename(src));
+    fs.ensureDirSync(path.dirname(dest));
+    fs.copyFileSync(src, dest);
+  }
 }
 
 async function build() {

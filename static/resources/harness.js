@@ -50,4 +50,9 @@
     set: set,
     done: done,
   };
+
+  if (location.pathname === '/test/') {
+    global.r.getAll = function() { return results };
+    global.r.reset = function() { results = null };
+  }
 })(this);
