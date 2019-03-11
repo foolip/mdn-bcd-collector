@@ -25,7 +25,9 @@ const Tests = require('./tests');
 
 const tests = new Tests({
   manifest: require('./generated/MANIFEST.json'),
-  host: 'localhost:8080',
+  host: process.env.NODE_ENV === 'production'
+      ? 'mdn-bcd-collector.appspot.com'
+      : 'localhost:8080',
 });
 
 const app = express();
