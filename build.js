@@ -57,6 +57,33 @@ function buildCSS() {
   writeText(filename, lines);
 }
 
+function buildIDL() {
+  const interfaceSet = new Set;
+
+  for (const tree of Object.values(reports.idl)) {
+    for (const dfn of tree) {
+      if (dfn.type === 'interface') {
+        interfaceSet.add(dfn.name);
+      }
+    }
+  }
+
+  const interfaceNames = Array.from(interfaceSet);
+  interfaceNames.sort();
+
+  const lines = [
+    '<!DOCTYPE html>',
+    '<script src="/resources/harness.js"></script>',
+    '<script>',
+  ];
+  for (const name of interfaceNames) {
+    lines.push(`r.set("${name}", typeof this.${name});`);
+  }
+  lines.push('r.done();', '</script>');
+  const filename = path.join(generatedDir, 'api', 'interfaces.html');
+  writeText(filename, lines);
+}
+
 async function buildManifest() {
   const manifest = {
     items: [],
@@ -96,6 +123,7 @@ function copyResources() {
 
 async function build() {
   buildCSS();
+  buildIDL();
   await buildManifest();
   copyResources();
 }
