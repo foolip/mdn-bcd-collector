@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+/* global window, location, XMLHttpRequest */
+
 'use strict';
 
 // This harness should work on as old browsers as possible and shouldn't depend
@@ -41,7 +43,7 @@
         var nextURL = response.next || '/results/';
         window.location = nextURL;
       }
-    }
+    };
   }
 
   global.r = {
