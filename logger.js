@@ -27,6 +27,7 @@ const logger = winston.createLogger({
     new winston.transports.Console(),
     // new LoggingWinston(),
   ],
+  silent: process.env.NODE_ENV === 'test',
 });
 
 module.exports = logger;
