@@ -45,6 +45,8 @@ function buildCSS() {
 
   const lines = [
     '<!DOCTYPE html>',
+    '<meta charset="utf-8">',
+    '<script src="/resources/json3.min.js"></script>',
     '<script src="/resources/harness.js"></script>',
     '<script>',
   ];
@@ -73,6 +75,8 @@ function buildIDL() {
 
   const lines = [
     '<!DOCTYPE html>',
+    '<meta charset="utf-8">',
+    '<script src="/resources/json3.min.js"></script>',
     '<script src="/resources/harness.js"></script>',
     '<script>',
   ];
