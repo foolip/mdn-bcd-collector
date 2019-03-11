@@ -15,18 +15,24 @@
 'use strict';
 
 const winston = require('winston');
-// const {LoggingWinston} = require('@google-cloud/logging-winston');
+const {LoggingWinston} = require('@google-cloud/logging-winston');
+
+function getTransport() {
+  if (process.env.NODE_ENV === 'production' ||
+      process.env.GOOGLE_APPLICATION_CREDENTIALS) {
+    return new LoggingWinston();
+  }
+  return new winston.transports.Console({
+    format: winston.format.combine(
+        winston.format.colorize(),
+        winston.format.simple(),
+    ),
+  });
+}
 
 const logger = winston.createLogger({
   level: 'info',
-  format: winston.format.combine(
-      winston.format.colorize(),
-      winston.format.simple(),
-  ),
-  transports: [
-    new winston.transports.Console(),
-    // new LoggingWinston(),
-  ],
+  transports: [getTransport()],
   silent: process.env.NODE_ENV === 'test',
 });
 
