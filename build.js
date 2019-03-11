@@ -98,8 +98,7 @@ async function buildManifest() {
         .on('data', (item) => {
           if (item.stats.isFile()) {
             const pathname = `/${path.relative(generatedDir, item.path)}`;
-            if (pathname !== '/MANIFEST.json' &&
-                !pathname.startsWith('/resources/')) {
+            if (!pathname.startsWith('/resources/')) {
               const item = {
                 pathname,
                 protocol: 'http',
@@ -112,8 +111,7 @@ async function buildManifest() {
         .on('error', reject);
   });
   manifest.items.sort();
-  const filename = path.join(generatedDir, 'MANIFEST.json');
-  writeText(filename, JSON.stringify(manifest, null, '  '));
+  writeText('MANIFEST.json', JSON.stringify(manifest, null, '  '));
 }
 
 function copyResources() {
