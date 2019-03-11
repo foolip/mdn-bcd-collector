@@ -18,8 +18,12 @@ const express = require('express');
 const session = require('express-session');
 
 const logger = require('./logger');
+
+const secrets = process.env.NODE_ENV === 'test'
+    ? require('./secrets.sample.json')
+    : require('./secrets.json');
 const github = require('./github')({
-  auth: `token ${process.env.GH_TOKEN}`,
+  auth: `token ${secrets.github.token}`,
 });
 const Tests = require('./tests');
 

@@ -1,24 +1,21 @@
-# Quickstart for Node.js in the App Engine standard environment
+# MDN browser-compat-data collector
 
-This is the sample application for the
-[Quickstart for Node.js in the App Engine standard environment][tutorial]
-tutorial found in the [Google App Engine Node.js standard environment][appengine]
-documentation.
+This service is part of an effort to
+[assist BCD updates with automation](https://github.com/mdn/browser-compat-data/issues/3308),
+and exists to run lots of small tests in browsers to determine the support
+status of a feature in a browser, and export those results to the
+[mdn-bcd-results](https://github.com/foolip/mdn-bcd-results) repository.
 
-* [Setup](#setup)
-* [Running locally](#running-locally)
-* [Deploying to App Engine](#deploying-to-app-engine)
-* [Running the tests](#running-the-tests)
+See [DESIGN.md](./DESIGN.md) for details of how this service works.
 
 ## Setup
 
-Before you can run or deploy the sample, you need to do the following:
+    npm install
+    npm run build
 
-1.  Refer to the [appengine/README.md][readme] file for instructions on
-    running and deploying.
-1.  Install dependencies:
+Before you can run or deploy, copy `secrets.sample.json` to `secrets.json`.
 
-        npm install
+(The tests can be run without a `secrets.json`.)
 
 ## Running locally
 
@@ -30,9 +27,4 @@ Before you can run or deploy the sample, you need to do the following:
 
 ## Running the tests
 
-See [Contributing][contributing].
-
-[appengine]: https://cloud.google.com/appengine/docs/standard/nodejs
-[tutorial]: https://cloud.google.com/appengine/docs/standard/nodejs/quickstart
-[readme]: ../../README.md
-[contributing]: https://github.com/GoogleCloudPlatform/nodejs-docs-samples/blob/master/CONTRIBUTING.md
+    npm test
