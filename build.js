@@ -51,27 +51,80 @@ function buildCSS() {
     '<script>',
   ];
   for (const name of propertyNames) {
-    lines.push(`r.set("${name}", CSS.supports("${name}", "initial"));`);
+    const expr = `CSS.supports("${name}", "initial")`;
+    lines.push(`bcd.test("css.properties.${name}", function() {`);
+    lines.push(`  return ${expr};`);
+    lines.push(`}, {`);
+    lines.push(`  "code": ${JSON.stringify(expr)}`);
+    lines.push(`});`);
   }
-  lines.push('r.done();', '</script>');
+  lines.push('bcd.run();', '</script>');
   const filename = path.join(generatedDir, 'css', 'properties',
       'dot-supports.html');
   writeText(filename, lines);
 }
 
-function buildIDL() {
-  const interfaceSet = new Set;
+function flattenIDL(specIDL) {
+  let ast = [];
 
-  for (const tree of Object.values(reports.idl)) {
-    for (const dfn of tree) {
-      if (dfn.type === 'interface') {
-        interfaceSet.add(dfn.name);
+  for (const idl of Object.values(specIDL)) {
+    ast.push(...idl);
+  }
+
+  // merge partials (O^2 but still fast)
+  ast = ast.filter((dfn) => {
+    if (!dfn.partial) {
+      return true;
+    }
+
+    const target = ast.find((it) => !it.partial &&
+                                    it.type === dfn.type &&
+                                    it.name === dfn.name);
+    if (!target) {
+      // eslint-disable-next-line max-len
+      throw new Error(`Original definition not found for partial ${dfn.type} ${dfn.name}`);
+    }
+
+    // move members to target interface/dictionary/etc. and drop partial
+    target.members.push(...dfn.members);
+    return false;
+  });
+
+  // mix in the mixins
+  for (const dfn of ast) {
+    if (dfn.type === 'includes') {
+      const mixin = ast.find((it) => !it.partial &&
+                                     it.type === 'interface mixin' &&
+                                     it.name === dfn.includes);
+      if (!mixin) {
+        // eslint-disable-next-line max-len
+        throw new Error(`Interface mixin ${dfn.includes} not found for target ${dfn.target}`);
       }
+      const target = ast.find((it) => !it.partial &&
+                                      it.type === 'interface' &&
+                                      it.name === dfn.target);
+      if (!target) {
+        // eslint-disable-next-line max-len
+        throw new Error(`Target ${dfn.target} not found for interface mixin ${dfn.includes}`);
+      }
+
+      // move members to target interface
+      target.members.push(...mixin.members);
     }
   }
 
-  const interfaceNames = Array.from(interfaceSet);
-  interfaceNames.sort();
+  // drop includes and mixins
+  ast = ast.filter((dfn) => dfn.type !== 'includes' &&
+                            dfn.type !== 'interface mixin');
+
+  return ast;
+}
+
+function buildIDL() {
+  const ast = flattenIDL(reports.idl);
+
+  const interfaces = ast.filter((dfn) => dfn.type === 'interface');
+  interfaces.sort((a, b) => a.name.localeCompare(b.name));
 
   const lines = [
     '<!DOCTYPE html>',
@@ -80,10 +133,64 @@ function buildIDL() {
     '<script src="/resources/harness.js"></script>',
     '<script>',
   ];
-  for (const name of interfaceNames) {
-    lines.push(`r.set("${name}", typeof this.${name});`);
+  for (const iface of interfaces) {
+    // interface object
+    lines.push(`bcd.test('api.${iface.name}', function() {`);
+    lines.push(`  return self.${iface.name};`);
+    lines.push(`}, {`);
+    lines.push(`  "code": "self.${iface.name}"`);
+    lines.push(`});`);
+
+    // members
+    function nameOf(member) {
+      if (member.name) {
+        return member.name;
+      }
+      if (member.body && member.body.name) {
+        return member.body.name.value;
+      }
+      return undefined;
+    }
+    // TODO: iterable<>, maplike<>, setlike<> declarations are excluded
+    // by filtering to things with names.
+    const members = iface.members.filter(nameOf);
+    members.sort((a, b) => nameOf(a).localeCompare(nameOf(b)));
+
+    for (const member of members) {
+      const isStatic = member.special && member.special.value === 'static';
+      const name = nameOf(member);
+      let expr;
+      switch (member.type) {
+        case 'attribute':
+          if (isStatic) {
+            expr = `${iface.name}.${name}`;
+          } else {
+            expr = `'${name}' in ${iface.name}.prototype`;
+          }
+          break;
+        case 'const':
+          expr = `${iface.name}.${name}`;
+          break;
+        case 'operation':
+          if (isStatic) {
+            expr = `${iface.name}.${name}`;
+          } else {
+            expr = `${iface.name}.prototype.${name}`;
+          }
+          break;
+        default:
+          // eslint-disable-next-line max-len
+          console.warn(`Interface ${iface.name} member type ${member.type} not handled`);
+      }
+
+      lines.push(`bcd.test('api.${iface.name}.${name}', function() {`);
+      lines.push(`  return ${expr};`);
+      lines.push(`}, {`);
+      lines.push(`  "code": ${JSON.stringify(expr)}`);
+      lines.push(`});`);
+    }
   }
-  lines.push('r.done();', '</script>');
+  lines.push('bcd.run();', '</script>');
   const filename = path.join(generatedDir, 'api', 'interfaces.html');
   writeText(filename, lines);
 }
@@ -98,7 +205,8 @@ async function buildManifest() {
         .on('data', (item) => {
           if (item.stats.isFile()) {
             const pathname = `/${path.relative(generatedDir, item.path)}`;
-            if (!pathname.startsWith('/resources/')) {
+            if (!pathname.startsWith('/resources/') &&
+                !pathname.startsWith('/test/')) {
               const item = {
                 pathname,
                 protocol: 'http',

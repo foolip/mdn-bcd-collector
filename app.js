@@ -41,7 +41,7 @@ app.use(session({
   saveUninitialized: true,
   cookie: {secure: false},
 }));
-app.use(express.json());
+app.use(express.json({limit: '32mb'}));
 app.use(express.static('static'));
 app.use(express.static('generated'));
 

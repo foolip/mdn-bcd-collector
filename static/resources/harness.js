@@ -20,17 +20,87 @@
 // on any modern JavaScript features.
 
 (function(global) {
-  var results = null;
+  var pending = [];
 
-  function set(property, value) {
-    if (results == null) {
-      results = {};
+  function describe(value) {
+    var desc = {};
+    desc.type = typeof value;
+    switch (desc.type) {
+      case 'object':
+        if (value === null) {
+          desc.type = 'null';
+          break;
+        }
+        // TODO: include some interesting things
+        break;
+      case 'function':
+        desc.length = value.length;
+        desc.name = value.name;
+        break;
+      case 'boolean':
+      case 'number':
+      case 'string':
+        // for primitive values include the value itself
+        desc.value = value;
+        break;
     }
-    results[property] = value;
-    return this; // for chaining
+    return desc;
   }
 
-  function done() {
+  function test(context, fn, info) {
+    pending.push([context, fn, info]);
+  }
+
+  // Each test is mapped to an object like this:
+  // {
+  //   "context": "api.Attr.localName",
+  //   "info": {
+  //     "code": "'localName' in Attr.prototype"
+  //   },
+  //   "returns": {
+  //     "type": "boolean",
+  //     "value": true
+  //   }
+  // }
+  function run(done) {
+    var results = [];
+
+    var length = pending.length;
+    for (var i = 0; i < length; i++) {
+      var context = pending[i][0];
+      var func = pending[i][1];
+      var info = pending[i][2];
+
+      var result = { context: context }
+
+      var value, how;
+      try {
+        value = func();
+        how = 'returns';
+        // TODO: handle promises as resolves/rejects
+      } catch (e) {
+        value = e;
+        how = 'throws';
+      }
+      result[how] = describe(value);
+
+      if (info !== undefined) {
+        result.info = info;
+      }
+
+      results.push(result);
+    }
+
+    pending = [];
+
+    if (done) {
+      done(results);
+    } else {
+      report(results);
+    }
+  }
+
+  function report(results) {
     var body = JSON.stringify(results);
     var client = new XMLHttpRequest();
     client.open('POST', '/api/results?for='+encodeURIComponent(location.href));
@@ -46,13 +116,8 @@
     };
   }
 
-  global.r = {
-    set: set,
-    done: done,
+  global.bcd = {
+    test: test,
+    run: run,
   };
-
-  if (location.pathname === '/test/') {
-    global.r.getAll = function() { return results };
-    global.r.reset = function() { results = null };
-  }
 })(this);
