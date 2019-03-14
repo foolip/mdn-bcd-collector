@@ -15,7 +15,6 @@
 'use strict';
 
 const fs = require('fs-extra');
-const klaw = require('klaw');
 const path = require('path');
 
 const reports = require('./reffy-reports');
@@ -56,9 +55,10 @@ function buildCSS() {
     lines.push(`});`);
   }
   lines.push('bcd.run();', '</script>');
-  const filename = path.join(generatedDir, 'css', 'properties',
-      'dot-supports.html');
+  const pathname = path.join('css', 'properties', 'dot-supports.html');
+  const filename = path.join(generatedDir, pathname);
   writeText(filename, lines);
+  return [['http', pathname]];
 }
 
 function flattenIDL(specIDL) {
@@ -178,34 +178,17 @@ function buildIDL() {
     }
   }
   lines.push('bcd.run();', '</script>');
-  const filename = path.join(generatedDir, 'api', 'interfaces.html');
+  const pathname = path.join('api', 'interfaces.html');
+  const filename = path.join(generatedDir, pathname);
   writeText(filename, lines);
+  return [['http', pathname], ['https', pathname]];
 }
 
-async function buildManifest() {
-  const manifest = {
-    items: [],
-    version: 1,
-  };
-  await new Promise((resolve, reject) => {
-    klaw(generatedDir)
-        .on('data', (item) => {
-          if (item.stats.isFile()) {
-            const pathname = `/${path.relative(generatedDir, item.path)}`;
-            if (!pathname.startsWith('/resources/') &&
-                !pathname.startsWith('/test/')) {
-              const item = {
-                pathname,
-                protocol: 'http',
-              };
-              manifest.items.push(item);
-            }
-          }
-        })
-        .on('end', resolve)
-        .on('error', reject);
+async function writeManifest(manifest) {
+  manifest.items.sort((a, b) => {
+    return a.pathname.localeCompare(b.pathname) ||
+           a.protocol.localeCompare(b.protocol);
   });
-  manifest.items.sort();
   writeText('MANIFEST.json', JSON.stringify(manifest, null, '  '));
 }
 
@@ -226,9 +209,19 @@ function copyResources() {
 }
 
 async function build() {
-  buildCSS();
-  buildIDL();
-  await buildManifest();
+  const manifest = {
+    items: [],
+  };
+  for (const buildFunc of [buildCSS, buildIDL]) {
+    const items = buildFunc();
+    for (let [protocol, pathname] of items) {
+      if (!pathname.startsWith('/')) {
+        pathname = `/${pathname}`;
+      }
+      manifest.items.push({pathname, protocol});
+    }
+  }
+  await writeManifest(manifest);
   copyResources();
 }
 
