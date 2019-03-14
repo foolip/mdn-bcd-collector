@@ -51,11 +51,8 @@ function buildCSS() {
     '<script>',
   ];
   for (const name of propertyNames) {
-    const expr = `CSS.supports("${name}", "initial")`;
     lines.push(`bcd.test("css.properties.${name}", function() {`);
-    lines.push(`  return ${expr};`);
-    lines.push(`}, {`);
-    lines.push(`  "code": ${JSON.stringify(expr)}`);
+    lines.push(`  return CSS.supports("${name}", "initial");`);
     lines.push(`});`);
   }
   lines.push('bcd.run();', '</script>');
@@ -136,9 +133,7 @@ function buildIDL() {
   for (const iface of interfaces) {
     // interface object
     lines.push(`bcd.test('api.${iface.name}', function() {`);
-    lines.push(`  return self.${iface.name};`);
-    lines.push(`}, {`);
-    lines.push(`  "code": "self.${iface.name}"`);
+    lines.push(`  return '${iface.name}' in self;`);
     lines.push(`});`);
 
     // members
@@ -162,21 +157,15 @@ function buildIDL() {
       let expr;
       switch (member.type) {
         case 'attribute':
+        case 'operation':
           if (isStatic) {
-            expr = `${iface.name}.${name}`;
+            expr = `'${name}' in ${iface.name}`;
           } else {
             expr = `'${name}' in ${iface.name}.prototype`;
           }
           break;
         case 'const':
-          expr = `${iface.name}.${name}`;
-          break;
-        case 'operation':
-          if (isStatic) {
-            expr = `${iface.name}.${name}`;
-          } else {
-            expr = `${iface.name}.prototype.${name}`;
-          }
+          expr = `'${name}' in ${iface.name}`;
           break;
         default:
           // eslint-disable-next-line max-len
@@ -185,8 +174,6 @@ function buildIDL() {
 
       lines.push(`bcd.test('api.${iface.name}.${name}', function() {`);
       lines.push(`  return ${expr};`);
-      lines.push(`}, {`);
-      lines.push(`  "code": ${JSON.stringify(expr)}`);
       lines.push(`});`);
     }
   }
