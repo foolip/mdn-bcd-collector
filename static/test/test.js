@@ -31,43 +31,56 @@ describe('harness.js', function() {
     });
   });
 
-  it('return function', function(done) {
-    bcd.test('ctx', function() {
-      function dostuff() {}
-      return dostuff;
+  it('return true', function(done) {
+    bcd.test('name', function() {
+      return true;
     });
     bcd.run(function(results) {
-      assert.deepEqual(results[0].returns, {type:'function', length:0, name:'dostuff'});
+      assert.deepStrictEqual(results, [{
+        name: 'name',
+        result: true,
+      }]);
+      done();
+    });
+  });
+
+  it('return false', function(done) {
+    bcd.test('name', function() {
+      return false;
+    });
+    bcd.run(function(results) {
+      assert.deepStrictEqual(results, [{
+        name: 'name',
+        result: false,
+      }]);
       done();
     });
   });
 
   it('return null', function(done) {
-    bcd.test('ctx', function() {
+    bcd.test('name', function() {
       return null;
     });
     bcd.run(function(results) {
-      assert.deepEqual(results[0].returns, {type:'null'});
+      assert.deepStrictEqual(results, [{
+        name: 'name',
+        result: null,
+        message: 'returned null',
+      }]);
       done();
     });
   });
 
   it('return object', function(done) {
-    bcd.test('ctx', function() {
+    bcd.test('name', function() {
       return {};
     });
     bcd.run(function(results) {
-      assert.deepEqual(results[0].returns, {type:'object'});
-      done();
-    });
-  });
-
-  it('return string', function(done) {
-    bcd.test('ctx', function() {
-      return 'foo';
-    });
-    bcd.run(function(results) {
-      assert.deepEqual(results[0].returns, {type:'string', value: 'foo'});
+      assert.deepStrictEqual(results, [{
+        name: 'name',
+        result: null,
+        message: 'returned [object Object]',
+      }]);
       done();
     });
   });
@@ -76,41 +89,43 @@ describe('harness.js', function() {
     if (typeof Symbol === 'undefined') {
       this.skip();
     }
-    bcd.test('ctx', function() {
+    bcd.test('name', function() {
       return Symbol('bar');
     });
     bcd.run(function(results) {
-      assert.deepEqual(results[0].returns, {type:'symbol'});
+      assert.deepStrictEqual(results, [{
+        name: 'name',
+        result: null,
+        message: "returned Symbol(bar)",
+      }]);
       done();
     });
   });
 
   it('return undefined', function(done) {
-    bcd.test('ctx', function() {
+    bcd.test('name', function() {
       return undefined;
     });
     bcd.run(function(results) {
-      assert.deepEqual(results[0].returns, {type:'undefined'});
+      assert.deepStrictEqual(results, [{
+        name: 'name',
+        result: null,
+        message: 'returned undefined',
+      }]);
       done();
     });
   });
 
   it('throw error', function(done) {
-    bcd.test('ctx', function() {
+    bcd.test('name', function() {
       throw new Error('something went wrong');
     });
     bcd.run(function(results) {
-      assert.deepEqual(results[0].throws, {type:'object'});
-      done();
-    });
-  });
-
-  it('throw string', function(done) {
-    bcd.test('ctx', function() {
-      throw 'oops';
-    });
-    bcd.run(function(results) {
-      assert.deepEqual(results[0].throws, {type:'string', value:'oops'});
+      assert.deepStrictEqual(results, [{
+        name: 'name',
+        result: null,
+        message: 'threw Error: something went wrong',
+      }]);
       done();
     });
   });
@@ -133,12 +148,12 @@ describe('harness.js', function() {
     }, {b: 2});
     bcd.run(function(results) {
       assert.deepEqual(results, [{
-          context: 'first',
-          returns: {type: 'boolean', value: true},
+          name: 'first',
+          result: true,
           info: {a: 1},
         }, {
-          context: 'second',
-          returns: {type: 'boolean', value: false},
+          name: 'second',
+          result: false,
           info: {b: 2},
       }]);
       done();

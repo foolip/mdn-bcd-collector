@@ -22,67 +22,53 @@
 (function(global) {
   var pending = [];
 
-  function describe(value) {
-    var desc = {};
-    desc.type = typeof value;
-    switch (desc.type) {
-      case 'object':
-        if (value === null) {
-          desc.type = 'null';
-          break;
-        }
-        // TODO: include some interesting things
-        break;
-      case 'function':
-        desc.length = value.length;
-        desc.name = value.name;
-        break;
-      case 'boolean':
-      case 'number':
-      case 'string':
-        // for primitive values include the value itself
-        desc.value = value;
-        break;
-    }
-    return desc;
+  function test(name, fn, info) {
+    pending.push([name, fn, info]);
   }
 
-  function test(context, fn, info) {
-    pending.push([context, fn, info]);
+  function stringify(value) {
+    try {
+      return String(value);
+    } catch (err) {
+      return 'unserializable value';
+    }
   }
 
   // Each test is mapped to an object like this:
   // {
-  //   "context": "api.Attr.localName",
+  //   "name": "api.Attr.localName",
+  //   "result": true,
   //   "info": {
   //     "code": "'localName' in Attr.prototype"
-  //   },
-  //   "returns": {
-  //     "type": "boolean",
-  //     "value": true
   //   }
   // }
+  //
+  // If the test doesn't return true or false, or if it throws, `result` will
+  // be null and a `message` property is set to an explanation.
   function run(done) {
     var results = [];
 
     var length = pending.length;
     for (var i = 0; i < length; i++) {
-      var context = pending[i][0];
+      var name = pending[i][0];
       var func = pending[i][1];
       var info = pending[i][2];
 
-      var result = { context: context }
+      var result = { name: name };
 
-      var value, how;
       try {
-        value = func();
-        how = 'returns';
-        // TODO: handle promises as resolves/rejects
-      } catch (e) {
-        value = e;
-        how = 'throws';
+        var value = func();
+        // TODO: allow callback and promise-vending funcs
+        if (typeof value === 'boolean') {
+          result.result = value;
+        } else {
+          result.result = null;
+          result.message = 'returned ' + stringify(value);
+        }
+      } catch (err) {
+        result.result = null;
+        result.message = 'threw ' + stringify(err);
       }
-      result[how] = describe(value);
 
       if (info !== undefined) {
         result.info = info;
