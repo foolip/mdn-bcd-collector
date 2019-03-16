@@ -51,7 +51,7 @@ function buildCSS() {
   ];
   for (const name of propertyNames) {
     lines.push(`bcd.test("css.properties.${name}", function() {`);
-    lines.push(`  return CSS.supports("${name}", "initial");`);
+    lines.push(`  return CSS.supports("${name}", "inherit");`);
     lines.push(`});`);
   }
   lines.push('bcd.run();', '</script>');
