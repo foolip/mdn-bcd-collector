@@ -18,7 +18,9 @@ const assert = require('assert');
 const fs = require('fs-extra');
 const path = require('path');
 
-const reports = require('./reffy-reports');
+// Inputs for discovering APIs, CSS properties, etc.:
+const bcd = require('mdn-browser-compat-data');
+const reffy = require('./reffy-reports');
 
 const generatedDir = path.join(__dirname, 'generated');
 
@@ -31,14 +33,47 @@ function writeText(filename, content) {
   fs.writeFileSync(filename, content, 'utf8');
 }
 
-function buildCSS() {
-  const propertySet = new Set;
+function collectCSSPropertiesFromBCD(propertySet) {
+  for (const [prop, data] of Object.entries(bcd.css.properties)) {
+    propertySet.add(prop);
+    if (!data.__compat) {
+      // TODO: this misses stuff like css.properties['row-gap'].flex_content
+      continue;
+    }
+    const support = data.__compat.support;
+    if (!support) {
+      continue;
+    }
+    function process(statement) {
+      if (Array.isArray(statement)) {
+        statement.forEach(process);
+        return;
+      }
+      if (statement.alternative_name) {
+        propertySet.add(statement.alternative_name);
+      }
+      if (statement.prefix) {
+        propertySet.add(`${statement.prefix}${prop}`);
+      }
+    }
+    for (const statement of Object.values(support)) {
+      process(statement);
+    }
+  }
+}
 
-  for (const data of Object.values(reports.css)) {
+function collectCSSPropertiesFromReffy(propertySet) {
+  for (const data of Object.values(reffy.css)) {
     for (const prop of Object.keys(data.properties)) {
       propertySet.add(prop);
     }
   }
+}
+
+function buildCSS() {
+  const propertySet = new Set;
+  collectCSSPropertiesFromBCD(propertySet);
+  collectCSSPropertiesFromReffy(propertySet);
 
   const propertyNames = Array.from(propertySet);
   propertyNames.sort();
@@ -151,7 +186,7 @@ function getExposureSet(node) {
 }
 
 function buildIDL() {
-  const ast = flattenIDL(reports.idl);
+  const ast = flattenIDL(reffy.idl);
 
   const interfaces = ast.filter((dfn) => dfn.type === 'interface');
   interfaces.sort((a, b) => a.name.localeCompare(b.name));
