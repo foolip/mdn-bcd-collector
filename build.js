@@ -145,6 +145,8 @@ function buildIDL() {
       continue;
     }
 
+    const isGlobal = !!getExtAttr(iface, 'Global');
+
     // interface object
     lines.push(`bcd.test('api.${iface.name}', function() {`);
     lines.push(`  return '${iface.name}' in self;`);
@@ -172,14 +174,20 @@ function buildIDL() {
       switch (member.type) {
         case 'attribute':
         case 'operation':
-          if (isStatic) {
+          if (isGlobal) {
+            expr = `'${name}' in self`;
+          } else if (isStatic) {
             expr = `'${name}' in ${iface.name}`;
           } else {
             expr = `'${name}' in ${iface.name}.prototype`;
           }
           break;
         case 'const':
-          expr = `'${name}' in ${iface.name}`;
+          if (isGlobal) {
+            expr = `'${name}' in self`;
+          } else {
+            expr = `'${name}' in ${iface.name}`;
+          }
           break;
         default:
           // eslint-disable-next-line max-len
