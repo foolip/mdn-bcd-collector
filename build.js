@@ -14,6 +14,7 @@
 
 'use strict';
 
+const assert = require('assert');
 const fs = require('fs-extra');
 const path = require('path');
 
@@ -124,6 +125,31 @@ function getExtAttr(node, name) {
   return node.extAttrs.items.find((i) => i.name === name);
 }
 
+// https://heycam.github.io/webidl/#dfn-exposure-set
+function getExposureSet(node) {
+  // step 6-8
+  assert(['interface', 'namespace'].includes(node.type));
+  const attr = getExtAttr(node, 'Exposed');
+  if (!attr) {
+    // TODO: remove this once all interfaces have [Exposed].
+    return new Set(['Window']);
+  }
+  const globals = new Set;
+  switch (attr.rhs.type) {
+    case 'identifier':
+      globals.add(attr.rhs.value);
+      break;
+    case 'identifier-list':
+      for (const {value} of attr.rhs.value) {
+        globals.add(value);
+      }
+      break;
+    default:
+      assert.fail(`Unexpected RHS for Exposed extended attribute`);
+  }
+  return globals;
+}
+
 function buildIDL() {
   const ast = flattenIDL(reports.idl);
 
@@ -142,6 +168,12 @@ function buildIDL() {
     if (legacyNamespace) {
       // TODO: handle WebAssembly, which is partly defined using Web IDL but is
       // under javascript.builtins.WebAssembly in BCD, not api.WebAssembly.
+      continue;
+    }
+
+    const exposureSet = getExposureSet(iface);
+    if (!exposureSet.has('Window')) {
+      // TODO: run test in other global scopes as well
       continue;
     }
 
