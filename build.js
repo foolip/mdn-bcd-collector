@@ -70,6 +70,52 @@ function collectCSSPropertiesFromReffy(propertySet) {
   }
 }
 
+// https://drafts.csswg.org/cssom/#css-property-to-idl-attribute
+function cssPropertyToIDLAttribute(property, lowercaseFirst) {
+  let output = '';
+  let uppercaseNext = false;
+  if (lowercaseFirst) {
+    property = property.substr(1);
+  }
+  for (const c of property) {
+    if (c === '-') {
+      uppercaseNext = true;
+    } else if (uppercaseNext) {
+      uppercaseNext = false;
+      output += c.toUpperCase();
+    } else {
+      output += c;
+    }
+  }
+  return output;
+}
+
+function buildCSSPropertyTest(propertyNames, method, basename) {
+  const lines = [
+    '<!DOCTYPE html>',
+    '<meta charset="utf-8">',
+    '<script src="/resources/json3.min.js"></script>',
+    '<script src="/resources/harness.js"></script>',
+    '<script>',
+    '<body>',
+  ];
+  for (const name of propertyNames) {
+    lines.push(`bcd.test("css.properties.${name}", function() {`);
+    if (method === 'CSSStyleDeclaration') {
+      const attrName = cssPropertyToIDLAttribute(name, name.startsWith('-'));
+      lines.push(`  return '${attrName}' in document.body.style;`);
+    } else if (method === 'CSS.supports') {
+      lines.push(`  return CSS.supports("${name}", "inherit");`);
+    }
+    lines.push(`});`);
+  }
+  lines.push('bcd.run();', '</script>');
+  const pathname = path.join('css', 'properties', basename);
+  const filename = path.join(generatedDir, pathname);
+  writeText(filename, lines);
+  return pathname;
+}
+
 function buildCSS() {
   const propertySet = new Set;
   collectCSSPropertiesFromBCD(propertySet);
@@ -78,23 +124,10 @@ function buildCSS() {
   const propertyNames = Array.from(propertySet);
   propertyNames.sort();
 
-  const lines = [
-    '<!DOCTYPE html>',
-    '<meta charset="utf-8">',
-    '<script src="/resources/json3.min.js"></script>',
-    '<script src="/resources/harness.js"></script>',
-    '<script>',
+  return [
+    ['http', buildCSSPropertyTest(propertyNames, 'CSSStyleDeclaration', 'in-style.html')],
+    ['http', buildCSSPropertyTest(propertyNames, 'CSS.supports', 'dot-supports.html')]
   ];
-  for (const name of propertyNames) {
-    lines.push(`bcd.test("css.properties.${name}", function() {`);
-    lines.push(`  return CSS.supports("${name}", "inherit");`);
-    lines.push(`});`);
-  }
-  lines.push('bcd.run();', '</script>');
-  const pathname = path.join('css', 'properties', 'dot-supports.html');
-  const filename = path.join(generatedDir, pathname);
-  writeText(filename, lines);
-  return [['http', pathname]];
 }
 
 function flattenIDL(specIDL) {
