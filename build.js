@@ -117,6 +117,13 @@ function flattenIDL(specIDL) {
   return ast;
 }
 
+function getExtAttr(node, name) {
+  if (!node.extAttrs) {
+    return null;
+  }
+  return node.extAttrs.items.find((i) => i.name === name);
+}
+
 function buildIDL() {
   const ast = flattenIDL(reports.idl);
 
@@ -131,6 +138,13 @@ function buildIDL() {
     '<script>',
   ];
   for (const iface of interfaces) {
+    const legacyNamespace = getExtAttr(iface, 'LegacyNamespace');
+    if (legacyNamespace) {
+      // TODO: handle WebAssembly, which is partly defined using Web IDL but is
+      // under javascript.builtins.WebAssembly in BCD, not api.WebAssembly.
+      continue;
+    }
+
     // interface object
     lines.push(`bcd.test('api.${iface.name}', function() {`);
     lines.push(`  return '${iface.name}' in self;`);
