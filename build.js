@@ -125,8 +125,10 @@ function buildCSS() {
   propertyNames.sort();
 
   return [
-    ['http', buildCSSPropertyTest(propertyNames, 'CSSStyleDeclaration', 'in-style.html')],
-    ['http', buildCSSPropertyTest(propertyNames, 'CSS.supports', 'dot-supports.html')]
+    ['http', buildCSSPropertyTest(propertyNames,
+        'CSSStyleDeclaration', 'in-style.html')],
+    ['http', buildCSSPropertyTest(propertyNames,
+        'CSS.supports', 'dot-supports.html')],
   ];
 }
 
