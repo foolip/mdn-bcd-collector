@@ -130,6 +130,7 @@ app.post('/api/results/export/github', (req, res) => {
       });
 });
 
+/* istanbul ignore else */
 if (process.env.NODE_ENV === 'test') {
   // Export for testing
   module.exports = app;
