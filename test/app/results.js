@@ -43,28 +43,36 @@ describe('/api/results', () => {
   });
 
   const testURL = 'https://host.test/foo.html';
-  const results = {'Foo': true};
+
   it('submit valid results', async () => {
     const res = await agent.post('/api/results')
         .query({for: testURL})
-        .send(results);
+        .send({x: 1});
     assert.equal(res.status, 201);
     // TODO: mock manifest to allow testing `next`:
     assert.deepEqual(res.body, {});
   });
 
-  it('submit duplicate results', async () => {
-    const res = await agent.post('/api/results')
-        .query({for: testURL})
-        .send(results);
-    assert.equal(res.status, 409);
-  });
-
-  it('list results after', async () => {
+  it('list results after valid', async () => {
     const res = await agent.get('/api/results');
     assert.equal(res.status, 200);
     assert.deepEqual(res.body, {
-      'https://host.test/foo.html': {'Foo': true},
+      'https://host.test/foo.html': {x: 1},
+    });
+  });
+
+  it('submit duplicate results', async () => {
+    const res = await agent.post('/api/results')
+        .query({for: testURL})
+        .send({x: 2});
+    assert.equal(res.status, 201);
+  });
+
+  it('list results after duplicate', async () => {
+    const res = await agent.get('/api/results');
+    assert.equal(res.status, 200);
+    assert.deepEqual(res.body, {
+      'https://host.test/foo.html': {x: 2},
     });
   });
 });

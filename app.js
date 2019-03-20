@@ -15,18 +15,26 @@
 'use strict';
 
 const express = require('express');
-const session = require('express-session');
+const cookieParser = require('cookie-parser');
+const uniqueString = require('unique-string');
 
 const logger = require('./logger');
+
+// TODO: none of this setup is pretty
+const {CloudStorage, MemoryStorage} = require('./storage');
+const storage = process.env.NODE_ENV === 'production'
+   ? new CloudStorage
+   : new MemoryStorage;
 
 const secrets = process.env.NODE_ENV === 'test'
     ? require('./secrets.sample.json')
     : require('./secrets.json');
+
 const github = require('./github')({
   auth: `token ${secrets.github.token}`,
 });
-const Tests = require('./tests');
 
+const Tests = require('./tests');
 const tests = new Tests({
   manifest: require('./MANIFEST.json'),
   host: process.env.NODE_ENV === 'production'
@@ -35,13 +43,18 @@ const tests = new Tests({
   httpOnly: process.env.NODE_ENV !== 'production',
 });
 
+function cookieSession(req, res, next) {
+  req.sessionID = req.cookies.sid;
+  if (!req.sessionID) {
+    req.sessionID = uniqueString();
+    res.cookie('sid', req.sessionID);
+  }
+  next();
+}
+
 const app = express();
-app.use(session({
-  secret: 'not a secret',
-  resave: false,
-  saveUninitialized: true,
-  cookie: {secure: false},
-}));
+app.use(cookieParser());
+app.use(cookieSession);
 app.use(express.json({limit: '32mb'}));
 app.use(express.static('static'));
 app.use(express.static('generated'));
@@ -79,43 +92,35 @@ app.post('/api/results', (req, res) => {
     // note: indistinguishable from finishing last test to client
   }
 
-  const results = req.session.results || {};
-
-  if (forURL in results) {
-    res.status(409).json(response);
-    return;
-  }
-
-  results[forURL] = req.body;
-
-  req.session.results = results;
-  req.session.save((err) => {
-    if (err) {
-      logger.error(err);
-      res.status(500).end();
-    } else {
-      res.status(201).json(response);
-    }
-  });
+  storage.put(req.sessionID, forURL, req.body)
+      .then(() => {
+        res.status(201).json(response);
+      })
+      .catch((err) => {
+        logger.error(err);
+        res.status(500).end();
+      });
 });
 
 app.get('/api/results', (req, res) => {
-  const results = req.session.results || {};
-  res.json(results);
+  storage.getAll(req.sessionID)
+      .then((results) => {
+        res.status(200).json(results);
+      })
+      .catch((err) => {
+        logger.error(err);
+        res.status(500).end();
+      });
 });
 
 app.post('/api/results/export/github', (req, res) => {
-  const results = req.session.results;
-  if (!results) {
-    res.status(400).end();
-    return;
-  }
-
-  const userAgent = req.get('User-Agent');
-
-  const report = {results, userAgent};
-
-  github.exportAsPR(report)
+  storage.getAll(req.sessionID)
+      .then((results) => {
+        const userAgent = req.get('User-Agent');
+        const report = {results, userAgent};
+        return report;
+      })
+      .then(github.exportAsPR)
       .then((result) => {
         res.json(result);
       })

@@ -55,9 +55,8 @@ the JSON results with a test-defined structure.
 
 #### Response
 
-Status `201 Created` if the results were saved, and `409 Conflict` if results
-for the test have already been saved. The results are put in server-side
-session storage.
+Status `201 Created` if the results were saved. The results are put in
+server-side session storage.
 
 As a convenience, the next test is included in response:
 
