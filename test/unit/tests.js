@@ -77,4 +77,16 @@ describe('Tests', () => {
       tests.list('https://host.test/not/a/test.html');
     }, Error);
   });
+
+  it('list HTTP-only tests', () => {
+    const httpTests = new Tests({
+      manifest: MANIFEST,
+      host: 'host.test',
+      httpOnly: true,
+    });
+    assert.deepEqual(httpTests.list(), [
+      'http://host.test/a/test.html',
+      'http://host.test/b/test.html',
+    ]);
+  });
 });

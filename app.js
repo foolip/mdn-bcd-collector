@@ -32,6 +32,7 @@ const tests = new Tests({
   host: process.env.NODE_ENV === 'production'
       ? 'mdn-bcd-collector.appspot.com'
       : 'localhost:8080',
+  httpOnly: process.env.NODE_ENV !== 'production',
 });
 
 const app = express();
