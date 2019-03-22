@@ -23,5 +23,5 @@ action "Lint" {
 action "Test" {
   needs = "Build"
   uses = "actions/npm@master"
-  args = "coverage"
+  args = "run coverage"
 }
