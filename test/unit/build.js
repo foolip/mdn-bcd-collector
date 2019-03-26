@@ -18,8 +18,13 @@ const chai = require('chai');
 const chaiSubset = require('chai-subset');
 chai.use(chaiSubset);
 const assert = require('chai').assert;
-const {cssPropertyToIDLAttribute, flattenIDL} = require('../../build');
 const WebIDL2 = require('webidl2');
+
+const {
+  buildIDLTests,
+  cssPropertyToIDLAttribute,
+  flattenIDL,
+} = require('../../build');
 
 describe('build', () => {
   it('cssPropertyToIDLAttribute', () => {
@@ -51,6 +56,16 @@ describe('build', () => {
         type: 'attribute',
         name: 'paintWorklet',
       });
+    });
+  });
+
+  describe('buildIDLTests', () => {
+    it('interface with attribute', () => {
+      const ast = WebIDL2.parse(`interface Attr { attribute any name; };`);
+      assert.deepEqual(buildIDLTests(ast), [
+        ['Attr', '\'Attr\' in self'],
+        ['Attr.name', '\'name\' in Attr.prototype'],
+      ]);
     });
   });
 });
