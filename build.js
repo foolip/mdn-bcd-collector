@@ -347,7 +347,7 @@ async function build(bcd, reffy) {
 
 /* istanbul ignore else */
 if (process.env.NODE_ENV === 'test') {
-  module.exports = {cssPropertyToIDLAttribute};
+  module.exports = {cssPropertyToIDLAttribute, flattenIDL};
 } else {
   const bcd = require('mdn-browser-compat-data');
   const reffy = require('./reffy-reports');
