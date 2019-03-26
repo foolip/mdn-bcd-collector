@@ -67,5 +67,16 @@ describe('build', () => {
         ['Attr.name', '\'name\' in Attr.prototype'],
       ]);
     });
+
+    it('namespace with attribute', () => {
+      const ast = WebIDL2.parse(
+          `namespace CSS {
+             readonly attribute any paintWorklet;
+           };`);
+      assert.deepEqual(buildIDLTests(ast), [
+        ['CSS', '\'CSS\' in self'],
+        ['CSS.paintWorklet', '\'paintWorklet\' in CSS'],
+      ]);
+    });
   });
 });
