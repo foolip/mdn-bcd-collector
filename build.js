@@ -216,19 +216,12 @@ function getExposureSet(node) {
   return globals;
 }
 
-function buildIDL(_, reffy) {
-  const ast = flattenIDL(reffy.idl);
+function buildIDLTests(ast) {
+  const tests = [];
 
   const interfaces = ast.filter((dfn) => dfn.type === 'interface');
   interfaces.sort((a, b) => a.name.localeCompare(b.name));
 
-  const lines = [
-    '<!DOCTYPE html>',
-    '<meta charset="utf-8">',
-    '<script src="/resources/json3.min.js"></script>',
-    '<script src="/resources/harness.js"></script>',
-    '<script>',
-  ];
   for (const iface of interfaces) {
     const legacyNamespace = getExtAttr(iface, 'LegacyNamespace');
     if (legacyNamespace) {
@@ -246,9 +239,7 @@ function buildIDL(_, reffy) {
     const isGlobal = !!getExtAttr(iface, 'Global');
 
     // interface object
-    lines.push(`bcd.test('api.${iface.name}', function() {`);
-    lines.push(`  return '${iface.name}' in self;`);
-    lines.push(`});`);
+    tests.push([iface.name, `'${iface.name}' in self`]);
 
     // members
     function nameOf(member) {
@@ -287,16 +278,38 @@ function buildIDL(_, reffy) {
             expr = `'${name}' in ${iface.name}`;
           }
           break;
-        default:
-          // eslint-disable-next-line max-len
-          console.warn(`Interface ${iface.name} member type ${member.type} not handled`);
       }
 
-      lines.push(`bcd.test('api.${iface.name}.${name}', function() {`);
-      lines.push(`  return ${expr};`);
-      lines.push(`});`);
+      if (expr) {
+        tests.push([`${iface.name}.${name}`, expr]);
+      } else {
+        // eslint-disable-next-line max-len
+        console.warn(`Interface ${iface.name} member type ${member.type} not handled`);
+      }
     }
   }
+
+  return tests;
+}
+
+function buildIDL(_, reffy) {
+  const ast = flattenIDL(reffy.idl);
+  const tests = buildIDLTests(ast);
+
+  const lines = [
+    '<!DOCTYPE html>',
+    '<meta charset="utf-8">',
+    '<script src="/resources/json3.min.js"></script>',
+    '<script src="/resources/harness.js"></script>',
+    '<script>',
+  ];
+
+  for (const [name, expr] of tests) {
+    lines.push(`bcd.test('api.${name}', function() {`);
+    lines.push(`  return ${expr};`);
+    lines.push(`});`);
+  }
+
   lines.push('bcd.run();', '</script>');
   const pathname = path.join('api', 'interfaces.html');
   const filename = path.join(generatedDir, pathname);
@@ -347,7 +360,11 @@ async function build(bcd, reffy) {
 
 /* istanbul ignore else */
 if (process.env.NODE_ENV === 'test') {
-  module.exports = {cssPropertyToIDLAttribute, flattenIDL};
+  module.exports = {
+    buildIDLTests,
+    cssPropertyToIDLAttribute,
+    flattenIDL,
+  };
 } else {
   const bcd = require('mdn-browser-compat-data');
   const reffy = require('./reffy-reports');
