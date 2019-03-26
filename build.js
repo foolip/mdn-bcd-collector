@@ -18,10 +18,6 @@ const assert = require('assert');
 const fs = require('fs-extra');
 const path = require('path');
 
-// Inputs for discovering APIs, CSS properties, etc.:
-const bcd = require('mdn-browser-compat-data');
-const reffy = require('./reffy-reports');
-
 const generatedDir = path.join(__dirname, 'generated');
 
 function writeText(filename, content) {
@@ -33,7 +29,7 @@ function writeText(filename, content) {
   fs.writeFileSync(filename, content, 'utf8');
 }
 
-function collectCSSPropertiesFromBCD(propertySet) {
+function collectCSSPropertiesFromBCD(bcd, propertySet) {
   for (const [prop, data] of Object.entries(bcd.css.properties)) {
     propertySet.add(prop);
     if (!data.__compat) {
@@ -62,7 +58,7 @@ function collectCSSPropertiesFromBCD(propertySet) {
   }
 }
 
-function collectCSSPropertiesFromReffy(propertySet) {
+function collectCSSPropertiesFromReffy(reffy, propertySet) {
   for (const data of Object.values(reffy.css)) {
     for (const prop of Object.keys(data.properties)) {
       propertySet.add(prop);
@@ -116,10 +112,10 @@ function buildCSSPropertyTest(propertyNames, method, basename) {
   return pathname;
 }
 
-function buildCSS() {
+function buildCSS(bcd, reffy) {
   const propertySet = new Set;
-  collectCSSPropertiesFromBCD(propertySet);
-  collectCSSPropertiesFromReffy(propertySet);
+  collectCSSPropertiesFromBCD(bcd, propertySet);
+  collectCSSPropertiesFromReffy(reffy, propertySet);
 
   const propertyNames = Array.from(propertySet);
   propertyNames.sort();
@@ -220,7 +216,7 @@ function getExposureSet(node) {
   return globals;
 }
 
-function buildIDL() {
+function buildIDL(_, reffy) {
   const ast = flattenIDL(reffy.idl);
 
   const interfaces = ast.filter((dfn) => dfn.type === 'interface');
@@ -332,12 +328,12 @@ function copyResources() {
   }
 }
 
-async function build() {
+async function build(bcd, reffy) {
   const manifest = {
     items: [],
   };
   for (const buildFunc of [buildCSS, buildIDL]) {
-    const items = buildFunc();
+    const items = buildFunc(bcd, reffy);
     for (let [protocol, pathname] of items) {
       if (!pathname.startsWith('/')) {
         pathname = `/${pathname}`;
@@ -349,4 +345,11 @@ async function build() {
   copyResources();
 }
 
-build();
+/* istanbul ignore else */
+if (process.env.NODE_ENV === 'test') {
+  module.exports = {cssPropertyToIDLAttribute};
+} else {
+  const bcd = require('mdn-browser-compat-data');
+  const reffy = require('./reffy-reports');
+  build(bcd, reffy);
+}
