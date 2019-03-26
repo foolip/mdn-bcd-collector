@@ -219,6 +219,16 @@ function getExposureSet(node) {
 function buildIDLTests(ast) {
   const tests = [];
 
+  function nameOf(member) {
+    if (member.name) {
+      return member.name;
+    }
+    if (member.body && member.body.name) {
+      return member.body.name.value;
+    }
+    return undefined;
+  }
+
   const interfaces = ast.filter((dfn) => dfn.type === 'interface');
   interfaces.sort((a, b) => a.name.localeCompare(b.name));
 
@@ -242,15 +252,6 @@ function buildIDLTests(ast) {
     tests.push([iface.name, `'${iface.name}' in self`]);
 
     // members
-    function nameOf(member) {
-      if (member.name) {
-        return member.name;
-      }
-      if (member.body && member.body.name) {
-        return member.body.name.value;
-      }
-      return undefined;
-    }
     // TODO: iterable<>, maplike<>, setlike<> declarations are excluded
     // by filtering to things with names.
     const members = iface.members.filter(nameOf);
@@ -286,6 +287,30 @@ function buildIDLTests(ast) {
         // eslint-disable-next-line max-len
         console.warn(`Interface ${iface.name} member type ${member.type} not handled`);
       }
+    }
+  }
+
+  const namespaces = ast.filter((dfn) => dfn.type === 'namespace');
+  namespaces.sort((a, b) => a.name.localeCompare(b.name));
+
+  for (const namespace of namespaces) {
+    const exposureSet = getExposureSet(namespace);
+    if (!exposureSet.has('Window')) {
+      // TODO: run test in other global scopes as well
+      continue;
+    }
+
+    // namespace object
+    tests.push([namespace.name, `'${namespace.name}' in self`]);
+
+    // members
+    const members = namespace.members.filter(nameOf);
+    members.sort((a, b) => nameOf(a).localeCompare(nameOf(b)));
+
+    for (const member of members) {
+      const name = nameOf(member);
+      tests.push([`${namespace.name}.${name}`,
+        `'${name}' in ${namespace.name}`]);
     }
   }
 
