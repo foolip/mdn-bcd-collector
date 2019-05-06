@@ -34,7 +34,7 @@ action "Master" {
 
 action "Secrets" {
   uses = "actions/bin/sh@master"
-  args = "echo \"$SECRETS_JSON\" | base64 -i - -o secrets.json"
+  args = ["echo \"$SECRETS_JSON\" | base64 -i - -o secrets.json"]
   needs = ["Master"]
   secrets = ["SECRETS_JSON"]
 }
