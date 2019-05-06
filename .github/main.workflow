@@ -1,6 +1,6 @@
 workflow "Lint and Test" {
   on = "push"
-  resolves = ["Lint", "Test"]
+  resolves = ["Lint", "Deploy"]
 }
 
 action "Install" {
@@ -24,4 +24,22 @@ action "Test" {
   needs = "Build"
   uses = "actions/npm@master"
   args = "run coverage"
+}
+
+action "Master" {
+  uses = "actions/bin/filter@master"
+  needs = ["Test"]
+  args = "branch master"
+}
+
+action "Authenticate" {
+  uses = "actions/gcloud/auth@master"
+  needs = ["Master"]
+  secrets = ["GCLOUD_AUTH"]
+}
+
+action "Deploy" {
+  uses = "actions/gcloud/cli@master"
+  args = "app deploy"
+  needs = ["Authenticate"]
 }
