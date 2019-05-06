@@ -32,9 +32,16 @@ action "Master" {
   args = "branch master"
 }
 
+action "Secrets" {
+  uses = "actions/bin/sh@master"
+  args = "echo \"$SECRETS_JSON\" | base64 -i - -o secrets.json"
+  needs = ["Master"]
+  secrets = ["SECRETS_JSON"]
+}
+
 action "Authenticate" {
   uses = "actions/gcloud/auth@master"
-  needs = ["Master"]
+  needs = ["Secrets"]
   secrets = ["GCLOUD_AUTH"]
 }
 
