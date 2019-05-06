@@ -40,6 +40,6 @@ action "Authenticate" {
 
 action "Deploy" {
   uses = "actions/gcloud/cli@master"
-  args = "app deploy"
+  args = "app deploy --project=mdn-bcd-collector"
   needs = ["Authenticate"]
 }
