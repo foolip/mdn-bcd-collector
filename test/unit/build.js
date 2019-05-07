@@ -25,6 +25,7 @@ const {
   cssPropertyToIDLAttribute,
   collectCSSPropertiesFromBCD,
   collectCSSPropertiesFromReffy,
+  expandCSSProperties,
   flattenIDL,
 } = require('../../build');
 
@@ -113,6 +114,32 @@ describe('build', () => {
     collectCSSPropertiesFromReffy(reffy, propertySet);
     const properties = Array.from(propertySet);
     assert.deepEqual(properties, ['font-family', 'font-weight', 'grid']);
+  });
+
+  describe('expandCSSProperties', () => {
+    it('unprefixed input', () => {
+      const propertySet = new Set(['foo']);
+      expandCSSProperties(propertySet);
+      const properties = Array.from(propertySet);
+      assert.deepEqual(properties,
+          ['foo', '-moz-foo', '-ms-foo', '-webkit-foo']);
+    });
+
+    it('unprefixed + prefixed input', () => {
+      const propertySet = new Set(['foo', '-webkit-foo']);
+      expandCSSProperties(propertySet);
+      const properties = Array.from(propertySet);
+      assert.deepEqual(properties,
+          ['foo', '-webkit-foo', '-moz-foo', '-ms-foo']);
+    });
+
+    it('prefixed input', () => {
+      const propertySet = new Set(['-moz-foo']);
+      expandCSSProperties(propertySet);
+      const properties = Array.from(propertySet);
+      assert.deepEqual(properties,
+          ['-moz-foo', 'foo', '-ms-foo', '-webkit-foo']);
+    });
   });
 
   it('cssPropertyToIDLAttribute', () => {

@@ -66,6 +66,20 @@ function collectCSSPropertiesFromReffy(reffy, propertySet) {
   }
 }
 
+// add prefixed forms from unprefixed and vice versa
+function expandCSSProperties(propertySet) {
+  for (const prop of propertySet) {
+    const unprefixedProp = prop.replace(/^-[^-]+-/, '');
+    if (unprefixedProp !== prop) {
+      propertySet.add(unprefixedProp);
+      // fall through to add other prefixed forms
+    }
+    for (const prefix of ['moz', 'ms', 'webkit']) {
+      propertySet.add(`-${prefix}-${unprefixedProp}`);
+    }
+  }
+}
+
 // https://drafts.csswg.org/cssom/#css-property-to-idl-attribute
 function cssPropertyToIDLAttribute(property, lowercaseFirst) {
   let output = '';
@@ -116,6 +130,7 @@ function buildCSS(bcd, reffy) {
   const propertySet = new Set;
   collectCSSPropertiesFromBCD(bcd, propertySet);
   collectCSSPropertiesFromReffy(reffy, propertySet);
+  expandCSSProperties(propertySet);
 
   const propertyNames = Array.from(propertySet);
   propertyNames.sort();
@@ -378,6 +393,7 @@ if (process.env.NODE_ENV === 'test') {
     cssPropertyToIDLAttribute,
     collectCSSPropertiesFromBCD,
     collectCSSPropertiesFromReffy,
+    expandCSSProperties,
     flattenIDL,
   };
 } else {
