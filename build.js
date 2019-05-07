@@ -376,6 +376,8 @@ if (process.env.NODE_ENV === 'test') {
   module.exports = {
     buildIDLTests,
     cssPropertyToIDLAttribute,
+    collectCSSPropertiesFromBCD,
+    collectCSSPropertiesFromReffy,
     flattenIDL,
   };
 } else {
