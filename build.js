@@ -248,7 +248,7 @@ function buildIDLTests(ast) {
     members.sort((a, b) => a.name.localeCompare(b.name));
 
     for (const member of members) {
-      const isStatic = member.special && member.special.value === 'static';
+      const isStatic = member.special === 'static';
       let expr;
       switch (member.type) {
         case 'attribute':
