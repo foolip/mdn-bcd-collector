@@ -68,6 +68,17 @@ describe('build', () => {
       ]);
     });
 
+    it('interface with method', () => {
+      const ast = WebIDL2.parse(
+          `interface Node {
+             boolean contains(Node? other);
+           };`);
+      assert.deepEqual(buildIDLTests(ast), [
+        ['Node', '\'Node\' in self'],
+        ['Node.contains', '\'contains\' in Node.prototype'],
+      ]);
+    });
+
     it('namespace with attribute', () => {
       const ast = WebIDL2.parse(
           `namespace CSS {
@@ -76,6 +87,17 @@ describe('build', () => {
       assert.deepEqual(buildIDLTests(ast), [
         ['CSS', '\'CSS\' in self'],
         ['CSS.paintWorklet', '\'paintWorklet\' in CSS'],
+      ]);
+    });
+
+    it('namespace with method', () => {
+      const ast = WebIDL2.parse(
+          `namespace CSS {
+             boolean supports(CSSOMString property, CSSOMString value);
+           };`);
+      assert.deepEqual(buildIDLTests(ast), [
+        ['CSS', '\'CSS\' in self'],
+        ['CSS.supports', '\'supports\' in CSS'],
       ]);
     });
   });
