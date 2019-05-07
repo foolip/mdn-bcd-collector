@@ -1,6 +1,6 @@
-workflow "Lint and Test" {
+workflow "Lint, Test & Deploy" {
   on = "push"
-  resolves = ["Lint", "Deploy"]
+  resolves = ["Deploy"]
 }
 
 action "Install" {
@@ -8,16 +8,16 @@ action "Install" {
   args = "install"
 }
 
+action "Lint" {
+  needs = "Install"
+  uses = "actions/npm@master"
+  args = "run lint"
+}
+
 action "Build" {
   needs = "Install"
   uses = "actions/npm@master"
   args = "run build"
-}
-
-action "Lint" {
-  needs = "Build"
-  uses = "actions/npm@master"
-  args = "run lint"
 }
 
 action "Test" {
@@ -28,7 +28,7 @@ action "Test" {
 
 action "Master" {
   uses = "actions/bin/filter@master"
-  needs = ["Test"]
+  needs = ["Lint", "Test"]
   args = "branch master"
 }
 
