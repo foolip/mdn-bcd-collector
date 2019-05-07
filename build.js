@@ -219,16 +219,6 @@ function getExposureSet(node) {
 function buildIDLTests(ast) {
   const tests = [];
 
-  function nameOf(member) {
-    if (member.name) {
-      return member.name;
-    }
-    if (member.body && member.body.name) {
-      return member.body.name.value;
-    }
-    return undefined;
-  }
-
   const interfaces = ast.filter((dfn) => dfn.type === 'interface');
   interfaces.sort((a, b) => a.name.localeCompare(b.name));
 
@@ -254,35 +244,34 @@ function buildIDLTests(ast) {
     // members
     // TODO: iterable<>, maplike<>, setlike<> declarations are excluded
     // by filtering to things with names.
-    const members = iface.members.filter(nameOf);
-    members.sort((a, b) => nameOf(a).localeCompare(nameOf(b)));
+    const members = iface.members.filter((member) => member.name);
+    members.sort((a, b) => a.name.localeCompare(b.name));
 
     for (const member of members) {
       const isStatic = member.special && member.special.value === 'static';
-      const name = nameOf(member);
       let expr;
       switch (member.type) {
         case 'attribute':
         case 'operation':
           if (isGlobal) {
-            expr = `'${name}' in self`;
+            expr = `'${member.name}' in self`;
           } else if (isStatic) {
-            expr = `'${name}' in ${iface.name}`;
+            expr = `'${member.name}' in ${iface.name}`;
           } else {
-            expr = `'${name}' in ${iface.name}.prototype`;
+            expr = `'${member.name}' in ${iface.name}.prototype`;
           }
           break;
         case 'const':
           if (isGlobal) {
-            expr = `'${name}' in self`;
+            expr = `'${member.name}' in self`;
           } else {
-            expr = `'${name}' in ${iface.name}`;
+            expr = `'${member.name}' in ${iface.name}`;
           }
           break;
       }
 
       if (expr) {
-        tests.push([`${iface.name}.${name}`, expr]);
+        tests.push([`${iface.name}.${member.name}`, expr]);
       } else {
         // eslint-disable-next-line max-len
         console.warn(`Interface ${iface.name} member type ${member.type} not handled`);
@@ -304,13 +293,12 @@ function buildIDLTests(ast) {
     tests.push([namespace.name, `'${namespace.name}' in self`]);
 
     // members
-    const members = namespace.members.filter(nameOf);
-    members.sort((a, b) => nameOf(a).localeCompare(nameOf(b)));
+    const members = namespace.members.filter((member) => member.name);
+    members.sort((a, b) => a.name.localeCompare(b.name));
 
     for (const member of members) {
-      const name = nameOf(member);
-      tests.push([`${namespace.name}.${name}`,
-        `'${name}' in ${namespace.name}`]);
+      tests.push([`${namespace.name}.${member.name}`,
+        `'${member.name}' in ${namespace.name}`]);
     }
   }
 

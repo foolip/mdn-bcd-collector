@@ -50,7 +50,7 @@ describe('build', () => {
       assert.lengthOf(namespace.members, 2);
       assert.containSubset(namespace.members[0], {
         type: 'operation',
-        body: {name: {value: 'supports'}},
+        name: 'supports',
       });
       assert.containSubset(namespace.members[1], {
         type: 'attribute',
