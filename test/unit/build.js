@@ -79,6 +79,17 @@ describe('build', () => {
       ]);
     });
 
+    it('interface with static method', () => {
+      const ast = WebIDL2.parse(
+          `interface MediaSource {
+             static boolean isTypeSupported(DOMString type);
+           };`);
+      assert.deepEqual(buildIDLTests(ast), [
+        ['MediaSource', '\'MediaSource\' in self'],
+        ['MediaSource.isTypeSupported', '\'isTypeSupported\' in MediaSource'],
+      ]);
+    });
+
     it('namespace with attribute', () => {
       const ast = WebIDL2.parse(
           `namespace CSS {
