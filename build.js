@@ -66,7 +66,9 @@ function collectCSSPropertiesFromReffy(reffy, propertySet) {
   }
 }
 
-// add prefixed forms from unprefixed and vice versa
+// Add prefixed forms from unprefixed and vice versa. Items are added to
+// `propertySet` during iteration of the same and this is safe, see
+// https://stackoverflow.com/a/28306768
 function expandCSSProperties(propertySet) {
   for (const prop of propertySet) {
     const unprefixedProp = prop.replace(/^-[^-]+-/, '');
