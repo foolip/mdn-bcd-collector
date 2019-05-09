@@ -46,11 +46,6 @@ describe('/resources/harness.js', () => {
       });
       await page.goto(`http://localhost:${port}/test/#reporter=json`);
       const report = await reportPromise;
-      for (const test of report.tests) {
-        it(test.title, () => {
-          console.log(test.title);
-        });
-      }
       assert.equal(report.stats.failures, 0);
     });
   }

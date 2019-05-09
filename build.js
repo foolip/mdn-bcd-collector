@@ -40,6 +40,7 @@ function collectCSSPropertiesFromBCD(bcd, propertySet) {
     if (!support) {
       continue;
     }
+    // eslint-disable-next-line no-inner-declarations
     function process(statement) {
       if (Array.isArray(statement)) {
         statement.forEach(process);
@@ -290,7 +291,7 @@ function buildIDLTests(ast) {
       if (expr) {
         tests.push([`${iface.name}.${member.name}`, expr]);
       } else {
-        // eslint-disable-next-line max-len
+        // eslint-disable-next-line max-len, no-console
         console.warn(`Interface ${iface.name} member type ${member.type} not handled`);
       }
     }
