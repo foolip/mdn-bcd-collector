@@ -13,7 +13,7 @@
   },
   "scripts": {
     "lint": "eslint .",
-    "build": "node --throw-deprecation build.js",
+    "build": "node build.js",
     "gcp-build": "npm run build",
     "deploy": "gcloud app deploy",
     "start": "node app.js",
