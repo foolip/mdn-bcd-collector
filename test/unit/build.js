@@ -23,10 +23,125 @@ const WebIDL2 = require('webidl2');
 const {
   buildIDLTests,
   cssPropertyToIDLAttribute,
+  collectCSSPropertiesFromBCD,
+  collectCSSPropertiesFromReffy,
+  expandCSSProperties,
   flattenIDL,
 } = require('../../build');
 
 describe('build', () => {
+  describe('collectCSSPropertiesFromBCD', () => {
+    it('simple supported', () => {
+      const bcd = {
+        css: {
+          properties: {
+            appearance: {
+              __compat: {
+                support: {},
+              },
+            },
+          },
+        },
+      };
+      const propertySet = new Set();
+      collectCSSPropertiesFromBCD(bcd, propertySet);
+      const properties = Array.from(propertySet);
+      assert.deepEqual(properties, ['appearance']);
+    });
+
+    it('prefixed support', () => {
+      const bcd = {
+        css: {
+          properties: {
+            appearance: {
+              __compat: {
+                support: {
+                  safari: {
+                    prefix: '-webkit-',
+                  },
+                },
+              },
+            },
+          },
+        },
+      };
+      const propertySet = new Set();
+      collectCSSPropertiesFromBCD(bcd, propertySet);
+      const properties = Array.from(propertySet);
+      assert.deepEqual(properties, ['appearance', '-webkit-appearance']);
+    });
+
+    it('aliased support', () => {
+      const bcd = {
+        css: {
+          properties: {
+            'font-smooth': {
+              __compat: {
+                support: {
+                  safari: {
+                    alternative_name: '-webkit-font-smoothing',
+                  },
+                },
+              },
+            },
+          },
+        },
+      };
+      const propertySet = new Set();
+      collectCSSPropertiesFromBCD(bcd, propertySet);
+      const properties = Array.from(propertySet);
+      assert.deepEqual(properties, ['font-smooth', '-webkit-font-smoothing']);
+    });
+  });
+
+  it('collectCSSPropertiesFromReffy', () => {
+    const reffy = {
+      css: {
+        'css-fonts': {
+          properties: {
+            'font-family': {},
+            'font-weight': {},
+          },
+        },
+        'css-grid': {
+          properties: {
+            'grid': {},
+          },
+        },
+      },
+    };
+    const propertySet = new Set();
+    collectCSSPropertiesFromReffy(reffy, propertySet);
+    const properties = Array.from(propertySet);
+    assert.deepEqual(properties, ['font-family', 'font-weight', 'grid']);
+  });
+
+  describe('expandCSSProperties', () => {
+    it('unprefixed input', () => {
+      const propertySet = new Set(['foo']);
+      expandCSSProperties(propertySet);
+      const properties = Array.from(propertySet);
+      assert.deepEqual(properties,
+          ['foo', '-moz-foo', '-ms-foo', '-webkit-foo']);
+    });
+
+    it('unprefixed + prefixed input', () => {
+      const propertySet = new Set(['foo', '-webkit-foo']);
+      expandCSSProperties(propertySet);
+      const properties = Array.from(propertySet);
+      assert.deepEqual(properties,
+          ['foo', '-webkit-foo', '-moz-foo', '-ms-foo']);
+    });
+
+    it('prefixed input', () => {
+      const propertySet = new Set(['-moz-foo']);
+      expandCSSProperties(propertySet);
+      const properties = Array.from(propertySet);
+      assert.deepEqual(properties,
+          ['-moz-foo', 'foo', '-ms-foo', '-webkit-foo']);
+    });
+  });
+
   it('cssPropertyToIDLAttribute', () => {
     assert.equal(cssPropertyToIDLAttribute('line-height'), 'lineHeight');
     assert.equal(cssPropertyToIDLAttribute('-webkit-line-clamp', true),

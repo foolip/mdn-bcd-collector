@@ -66,6 +66,22 @@ function collectCSSPropertiesFromReffy(reffy, propertySet) {
   }
 }
 
+// Add prefixed forms from unprefixed and vice versa. Items are added to
+// `propertySet` during iteration of the same and this is safe, see
+// https://stackoverflow.com/a/28306768
+function expandCSSProperties(propertySet) {
+  for (const prop of propertySet) {
+    const unprefixedProp = prop.replace(/^-[^-]+-/, '');
+    if (unprefixedProp !== prop) {
+      propertySet.add(unprefixedProp);
+      // fall through to add other prefixed forms
+    }
+    for (const prefix of ['moz', 'ms', 'webkit']) {
+      propertySet.add(`-${prefix}-${unprefixedProp}`);
+    }
+  }
+}
+
 // https://drafts.csswg.org/cssom/#css-property-to-idl-attribute
 function cssPropertyToIDLAttribute(property, lowercaseFirst) {
   let output = '';
@@ -116,6 +132,7 @@ function buildCSS(bcd, reffy) {
   const propertySet = new Set;
   collectCSSPropertiesFromBCD(bcd, propertySet);
   collectCSSPropertiesFromReffy(reffy, propertySet);
+  expandCSSProperties(propertySet);
 
   const propertyNames = Array.from(propertySet);
   propertyNames.sort();
@@ -376,6 +393,9 @@ if (process.env.NODE_ENV === 'test') {
   module.exports = {
     buildIDLTests,
     cssPropertyToIDLAttribute,
+    collectCSSPropertiesFromBCD,
+    collectCSSPropertiesFromReffy,
+    expandCSSProperties,
     flattenIDL,
   };
 } else {
