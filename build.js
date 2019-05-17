@@ -381,5 +381,8 @@ if (process.env.NODE_ENV === 'test') {
 } else {
   const bcd = require('mdn-browser-compat-data');
   const reffy = require('./reffy-reports');
-  build(bcd, reffy);
+  build(bcd, reffy).catch((reason) => {
+    console.error(reason);
+    process.exit(1);
+  });
 }
