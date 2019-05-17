@@ -13,8 +13,8 @@
   },
   "scripts": {
     "lint": "eslint .",
-    "build": "node build.js",
-    "gcp-build": "node build.js",
+    "build": "node --throw-deprecation build.js",
+    "gcp-build": "npm run build",
     "deploy": "gcloud app deploy",
     "start": "node app.js",
     "coverage": "NODE_ENV=test nyc mocha --recursive test --exclude test/puppeteer/*",
