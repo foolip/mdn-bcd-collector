@@ -27,7 +27,7 @@
     "@google-cloud/storage": "2.5.0",
     "@octokit/rest": "16.25.6",
     "cookie-parser": "1.4.4",
-    "express": "4.16.4",
+    "express": "4.17.0",
     "fs-extra": "8.0.1",
     "json-stable-stringify": "1.0.1",
     "json3": "3.3.2",
