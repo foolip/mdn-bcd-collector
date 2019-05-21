@@ -20,6 +20,8 @@ const uniqueString = require('unique-string');
 
 const logger = require('./logger');
 
+const PORT = process.env.PORT || 8080;
+
 // TODO: none of this setup is pretty
 const {CloudStorage, MemoryStorage} = require('./storage');
 const storage = process.env.NODE_ENV === 'production' ?
@@ -39,7 +41,7 @@ const tests = new Tests({
   manifest: require('./MANIFEST.json'),
   host: process.env.NODE_ENV === 'production' ?
       'mdn-bcd-collector.appspot.com' :
-      'localhost:8080',
+      `localhost:${PORT}`,
   httpOnly: process.env.NODE_ENV !== 'production'
 });
 
@@ -136,7 +138,6 @@ if (process.env.NODE_ENV === 'test') {
   module.exports = app;
 } else {
   // Start the server
-  const PORT = process.env.PORT || 8080;
   app.listen(PORT, () => {
     logger.info(`App listening on port ${PORT}`);
     logger.info('Press Ctrl+C to quit.');
