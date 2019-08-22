@@ -1,59 +1,33 @@
 on: push
 name: Lint, Test & Deploy
 jobs:
-  build:
-    name: Build
-    runs-on: ubuntu-latest
-    steps:
-    - name: Install
-      uses: actions/npm@master
-      with:
-        args: install
-    - name: Build
-      uses: actions/npm@master
-      with:
-        args: run build
   lint:
     name: Lint
-    needs: build
     runs-on: ubuntu-latest
     steps:
-    - name: Lint
-      uses: actions/npm@master
-      with:
-        args: run lint
+    - run: npm install
+    - run: npm run lint
   test:
     name: Test
-    needs: build
-    runs-on: ubuntu-latest
     steps:
-    - name: Test
-      uses: actions/npm@master
-      with:
-        args: run coverage
-    - name: Coverage
-      uses: actions/npm@master
+    - run: npm install
+    - run: npm run build
+    - run: npm run coverage
+    - run: npm run coverage-report
       env:
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
-      with:
-        args: run report-coverage
   deploy:
     name: Deploy
     needs: test
     runs-on: ubuntu-latest
     steps:
-    - name: Secrets
-      if: github.branch == 'master'
-      uses: actions/bin/sh@master
+    - run: echo "$SECRETS_JSON" | base64 --decode > secrets.json
       env:
         SECRETS_JSON: ${{ secrets.SECRETS_JSON }}
-      with:
-        args: '"echo \"$SECRETS_JSON\" | base64 --decode > secrets.json"'
-    - name: Authenticate
-      uses: actions/gcloud/auth@master
+    - uses: actions/gcloud/auth@master
       env:
         GCLOUD_AUTH: ${{ secrets.GCLOUD_AUTH }}
-    - name: Deploy
-      uses: actions/gcloud/cli@master
+    - uses: actions/gcloud/cli@master
       with:
         args: app deploy --project=mdn-bcd-collector
+      if: github.branch == 'master'
