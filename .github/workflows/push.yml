@@ -5,34 +5,45 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@master
-    - name: Build
-      uses: actions/npm@master
-      with:
-        args: run build
-    - name: Test
-      uses: actions/npm@master
-      with:
-        args: run coverage
     - name: Install
       uses: actions/npm@master
       with:
         args: install
+    - name: Build
+      uses: actions/npm@master
+      with:
+        args: run build
+  lint:
+    name: Lint
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - name: Lint
+      uses: actions/npm@master
+      with:
+        args: run lint
+  test:
+    name: Test
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+    - name: Test
+      uses: actions/npm@master
+      with:
+        args: run coverage
     - name: Coverage
       uses: actions/npm@master
       env:
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
       with:
         args: run report-coverage
-    - name: Lint
-      uses: actions/npm@master
-      with:
-        args: run lint
-    - name: Master
-      uses: actions/bin/filter@master
-      with:
-        args: branch master
+  deploy:
+    name: Deploy
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
     - name: Secrets
+      if: github.branch == 'master'
       uses: actions/bin/sh@master
       env:
         SECRETS_JSON: ${{ secrets.SECRETS_JSON }}
