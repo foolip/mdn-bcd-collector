@@ -1,0 +1,37 @@
+on: pull_request
+name: Lint & Test
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+    - name: Install
+      uses: actions/npm@master
+      with:
+        args: install
+    - name: Lint
+      uses: actions/npm@master
+      with:
+        args: run lint
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+    - name: Install
+      uses: actions/npm@master
+      with:
+        args: install
+    - name: Build
+      uses: actions/npm@master
+      with:
+        args: run build
+    - name: Test
+      uses: actions/npm@master
+      with:
+        args: run coverage
+    - name: Coverage
+      uses: actions/npm@master
+      env:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+      with:
+        args: run report-coverage
