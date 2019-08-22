@@ -1,0 +1,48 @@
+on: push
+name: Lint, Test & Deploy
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@master
+    - name: Build
+      uses: actions/npm@master
+      with:
+        args: run build
+    - name: Test
+      uses: actions/npm@master
+      with:
+        args: run coverage
+    - name: Install
+      uses: actions/npm@master
+      with:
+        args: install
+    - name: Coverage
+      uses: actions/npm@master
+      env:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+      with:
+        args: run report-coverage
+    - name: Lint
+      uses: actions/npm@master
+      with:
+        args: run lint
+    - name: Master
+      uses: actions/bin/filter@master
+      with:
+        args: branch master
+    - name: Secrets
+      uses: actions/bin/sh@master
+      env:
+        SECRETS_JSON: ${{ secrets.SECRETS_JSON }}
+      with:
+        args: '"echo \"$SECRETS_JSON\" | base64 --decode > secrets.json"'
+    - name: Authenticate
+      uses: actions/gcloud/auth@master
+      env:
+        GCLOUD_AUTH: ${{ secrets.GCLOUD_AUTH }}
+    - name: Deploy
+      uses: actions/gcloud/cli@master
+      with:
+        args: app deploy --project=mdn-bcd-collector
