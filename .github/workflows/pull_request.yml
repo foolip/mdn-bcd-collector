@@ -1,0 +1,21 @@
+on: pull_request
+name: PR
+jobs:
+  lint:
+    name: Lint
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - run: npm install
+    - run: npm run lint
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - run: npm install
+    - run: npm run build
+    - run: npm run coverage
+    - run: npm run report-coverage
+      env:
+        CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
