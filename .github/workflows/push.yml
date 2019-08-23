@@ -5,7 +5,6 @@ on:
 name: master
 jobs:
   test:
-    name: Test
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
@@ -16,7 +15,6 @@ jobs:
       env:
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
   deploy:
-    name: Deploy
     needs: test
     runs-on: ubuntu-latest
     steps:
