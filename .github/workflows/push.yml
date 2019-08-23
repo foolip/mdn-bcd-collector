@@ -1,13 +1,9 @@
-on: push
-name: Lint, Test & Deploy
+on:
+  push:
+    branches:
+    - master
+name: master
 jobs:
-  lint:
-    name: Lint
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v1
-    - run: npm install
-    - run: npm run lint
   test:
     name: Test
     runs-on: ubuntu-latest
@@ -33,4 +29,3 @@ jobs:
     - uses: actions/gcloud/cli@master
       with:
         args: app deploy --project=mdn-bcd-collector
-      if: github.branch == 'master'
