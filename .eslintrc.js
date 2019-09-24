@@ -1,9 +1,14 @@
 module.exports = {
-    "extends": "google",
+    "extends": ["eslint:recommended", "google"],
     "parserOptions": {
         "ecmaVersion": 8
     },
     "rules": {
-        "require-jsdoc": 0
+        "require-jsdoc": "off"
+    },
+    "env": {
+        "es6": true,
+        "mocha": true,
+        "node": true
     }
 };
