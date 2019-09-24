@@ -119,17 +119,16 @@ Status `400 Bad Request` is returned if no results have been reported to
 
 When pointing a browser at https://mdn-bcd-collector.appspot.com/ to run tests,
 the server keeps track of which tests to run, accepts results from each test as
-it run, and combines all of the results at the end.
+it run, and combines all of the results at the end. A random session id, stored
+in a cookie, is used to get results back.
 
-To start a run, the browser posts to `/api/first` and gets a first page URL to
-visit in the response. A random session id is used and carried along through
-every step.
+To start a run, the browser fetches the full list of tests from `/api/tests`
+and navigates to the first test.
 
-On each page, the harness waits for results and posts them to `/api/report`.
-The next page to visit is retrieved from `/api/next`.
-
-When all the tests have been run, `/api/next` will return a URL to a page where
-the results can be submitted is a pull request to a GitHub repository.
+On each page, the harness waits for results and posts them to `/api/results`.
+The next test to run is included in the response from `/api/results`, and when
+there is no next text the browser navigates to a page (`/results/`) where the
+results can be submitted as a pull request to a GitHub repository.
 
 ### WebDriver
 
