@@ -27,8 +27,8 @@ class Tests {
       const afterURL = new URL(after);
       const afterIndex = this.items.findIndex((item) => {
         const itemURL = new URL(`${item.protocol}://${this.host}${item.pathname}`);
-        return itemURL.pathname === afterURL.pathname
-            && itemURL.protocol === afterURL.protocol;
+        return itemURL.pathname === afterURL.pathname &&
+            itemURL.protocol === afterURL.protocol;
       });
 
       if (afterIndex === -1) {
