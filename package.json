@@ -23,7 +23,7 @@
     "test": "npm run coverage && npm run puppeteer"
   },
   "dependencies": {
-    "@google-cloud/logging-winston": "2.0.1",
+    "@google-cloud/logging-winston": "2.1.0",
     "@google-cloud/storage": "3.3.0",
     "@octokit/rest": "16.30.1",
     "cookie-parser": "1.4.4",
