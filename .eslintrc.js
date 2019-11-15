@@ -4,6 +4,7 @@ module.exports = {
         "ecmaVersion": 8
     },
     "rules": {
+        "comma-dangle": ["error", "never"],
         "require-jsdoc": "off"
     },
     "env": {

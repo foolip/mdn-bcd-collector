@@ -41,5 +41,5 @@ function loadTextFiles(relativeDir, extension, parse) {
 
 module.exports = {
   css: loadTextFiles('whatwg/css', '.json', JSON.parse),
-  idl: loadTextFiles('whatwg/idl', '.idl', WebIDL2.parse),
+  idl: loadTextFiles('whatwg/idl', '.idl', WebIDL2.parse)
 };

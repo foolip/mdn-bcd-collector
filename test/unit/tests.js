@@ -20,23 +20,23 @@ const Tests = require('../../tests');
 const MANIFEST = {
   items: [{
     pathname: '/a/test.html',
-    protocol: 'http',
+    protocol: 'http'
   }, {
     pathname: '/b/test.html',
-    protocol: 'http',
+    protocol: 'http'
   }, {
     pathname: '/b/test.html',
-    protocol: 'https',
+    protocol: 'https'
   }, {
     pathname: '/c/test.html',
-    protocol: 'https',
-  }],
+    protocol: 'https'
+  }]
 };
 
 describe('Tests', () => {
   const tests = new Tests({
     manifest: MANIFEST,
-    host: 'host.test',
+    host: 'host.test'
   });
 
   it('list all tests', () => {
@@ -44,27 +44,27 @@ describe('Tests', () => {
       'http://host.test/a/test.html',
       'http://host.test/b/test.html',
       'https://host.test/b/test.html',
-      'https://host.test/c/test.html',
+      'https://host.test/c/test.html'
     ]);
   });
 
   it('list first test', () => {
     assert.deepEqual(tests.list(undefined, 1), [
-      'http://host.test/a/test.html',
+      'http://host.test/a/test.html'
     ]);
   });
 
   it('list middle two tests', () => {
     assert.deepEqual(tests.list('http://host.test/a/test.html', 2), [
       'http://host.test/b/test.html',
-      'https://host.test/b/test.html',
+      'https://host.test/b/test.html'
     ]);
   });
 
   it('list last two tests', () => {
     assert.deepEqual(tests.list('http://host.test/b/test.html'), [
       'https://host.test/b/test.html',
-      'https://host.test/c/test.html',
+      'https://host.test/c/test.html'
     ]);
   });
 
@@ -82,11 +82,11 @@ describe('Tests', () => {
     const httpTests = new Tests({
       manifest: MANIFEST,
       host: 'host.test',
-      httpOnly: true,
+      httpOnly: true
     });
     assert.deepEqual(httpTests.list(), [
       'http://host.test/a/test.html',
-      'http://host.test/b/test.html',
+      'http://host.test/b/test.html'
     ]);
   });
 });

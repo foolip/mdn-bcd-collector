@@ -18,7 +18,7 @@
 
 mocha.setup({
   ui: 'bdd',
-  reporter: location.hash === '#reporter=json' ? 'json' : 'html',
+  reporter: location.hash === '#reporter=json' ? 'json' : 'html'
 });
 
 var assert = chai.assert;
@@ -38,7 +38,7 @@ describe('harness.js', function() {
     bcd.run(function(results) {
       assert.deepStrictEqual(results, [{
         name: 'name',
-        result: true,
+        result: true
       }]);
       done();
     });
@@ -51,7 +51,7 @@ describe('harness.js', function() {
     bcd.run(function(results) {
       assert.deepStrictEqual(results, [{
         name: 'name',
-        result: false,
+        result: false
       }]);
       done();
     });
@@ -65,7 +65,7 @@ describe('harness.js', function() {
       assert.deepStrictEqual(results, [{
         name: 'name',
         result: null,
-        message: 'returned null',
+        message: 'returned null'
       }]);
       done();
     });
@@ -79,7 +79,7 @@ describe('harness.js', function() {
       assert.deepStrictEqual(results, [{
         name: 'name',
         result: null,
-        message: 'returned [object Object]',
+        message: 'returned [object Object]'
       }]);
       done();
     });
@@ -96,7 +96,7 @@ describe('harness.js', function() {
       assert.deepStrictEqual(results, [{
         name: 'name',
         result: null,
-        message: "returned Symbol(bar)",
+        message: "returned Symbol(bar)"
       }]);
       done();
     });
@@ -110,7 +110,7 @@ describe('harness.js', function() {
       assert.deepStrictEqual(results, [{
         name: 'name',
         result: null,
-        message: 'returned undefined',
+        message: 'returned undefined'
       }]);
       done();
     });
@@ -124,7 +124,7 @@ describe('harness.js', function() {
       assert.deepStrictEqual(results, [{
         name: 'name',
         result: null,
-        message: 'threw Error: something went wrong',
+        message: 'threw Error: something went wrong'
       }]);
       done();
     });
@@ -150,11 +150,11 @@ describe('harness.js', function() {
       assert.deepEqual(results, [{
           name: 'first',
           result: true,
-          info: {a: 1},
+          info: {a: 1}
         }, {
           name: 'second',
           result: false,
-          info: {b: 2},
+          info: {b: 2}
       }]);
       done();
     });

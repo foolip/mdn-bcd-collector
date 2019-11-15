@@ -31,7 +31,7 @@ const secrets = process.env.NODE_ENV === 'test' ?
     require('./secrets.json');
 
 const github = require('./github')({
-  auth: `token ${secrets.github.token}`,
+  auth: `token ${secrets.github.token}`
 });
 
 const Tests = require('./tests');
@@ -40,7 +40,7 @@ const tests = new Tests({
   host: process.env.NODE_ENV === 'production' ?
       'mdn-bcd-collector.appspot.com' :
       'localhost:8080',
-  httpOnly: process.env.NODE_ENV !== 'production',
+  httpOnly: process.env.NODE_ENV !== 'production'
 });
 
 function cookieSession(req, res, next) {

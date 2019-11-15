@@ -57,7 +57,7 @@ describe('/api/results', () => {
     const res = await agent.get('/api/results');
     assert.equal(res.status, 200);
     assert.deepEqual(res.body, {
-      'https://host.test/foo.html': {x: 1},
+      'https://host.test/foo.html': {x: 1}
     });
   });
 
@@ -72,7 +72,7 @@ describe('/api/results', () => {
     const res = await agent.get('/api/results');
     assert.equal(res.status, 200);
     assert.deepEqual(res.body, {
-      'https://host.test/foo.html': {x: 2},
+      'https://host.test/foo.html': {x: 2}
     });
   });
 });

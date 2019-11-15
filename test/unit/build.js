@@ -26,7 +26,7 @@ const {
   collectCSSPropertiesFromBCD,
   collectCSSPropertiesFromReffy,
   expandCSSProperties,
-  flattenIDL,
+  flattenIDL
 } = require('../../build');
 
 describe('build', () => {
@@ -37,11 +37,11 @@ describe('build', () => {
           properties: {
             appearance: {
               __compat: {
-                support: {},
-              },
-            },
-          },
-        },
+                support: {}
+              }
+            }
+          }
+        }
       };
       const propertySet = new Set();
       collectCSSPropertiesFromBCD(bcd, propertySet);
@@ -57,13 +57,13 @@ describe('build', () => {
               __compat: {
                 support: {
                   safari: {
-                    prefix: '-webkit-',
-                  },
-                },
-              },
-            },
-          },
-        },
+                    prefix: '-webkit-'
+                  }
+                }
+              }
+            }
+          }
+        }
       };
       const propertySet = new Set();
       collectCSSPropertiesFromBCD(bcd, propertySet);
@@ -79,13 +79,13 @@ describe('build', () => {
               __compat: {
                 support: {
                   safari: {
-                    alternative_name: '-webkit-font-smoothing',
-                  },
-                },
-              },
-            },
-          },
-        },
+                    alternative_name: '-webkit-font-smoothing'
+                  }
+                }
+              }
+            }
+          }
+        }
       };
       const propertySet = new Set();
       collectCSSPropertiesFromBCD(bcd, propertySet);
@@ -100,15 +100,15 @@ describe('build', () => {
         'css-fonts': {
           properties: {
             'font-family': {},
-            'font-weight': {},
-          },
+            'font-weight': {}
+          }
         },
         'css-grid': {
           properties: {
-            'grid': {},
-          },
-        },
-      },
+            'grid': {}
+          }
+        }
+      }
     };
     const propertySet = new Set();
     collectCSSPropertiesFromReffy(reffy, propertySet);
@@ -155,7 +155,7 @@ describe('build', () => {
         paint: WebIDL2.parse(
             `partial namespace CSS {
                readonly attribute any paintWorklet;
-             };`),
+             };`)
       };
       const ast = flattenIDL(specIDL);
       const namespaces = ast.filter((dfn) => dfn.type === 'namespace');
@@ -165,11 +165,11 @@ describe('build', () => {
       assert.lengthOf(namespace.members, 2);
       assert.containSubset(namespace.members[0], {
         type: 'operation',
-        name: 'supports',
+        name: 'supports'
       });
       assert.containSubset(namespace.members[1], {
         type: 'attribute',
-        name: 'paintWorklet',
+        name: 'paintWorklet'
       });
     });
   });
@@ -179,7 +179,7 @@ describe('build', () => {
       const ast = WebIDL2.parse(`interface Attr { attribute any name; };`);
       assert.deepEqual(buildIDLTests(ast), [
         ['Attr', '\'Attr\' in self'],
-        ['Attr.name', '\'name\' in Attr.prototype'],
+        ['Attr.name', '\'name\' in Attr.prototype']
       ]);
     });
 
@@ -190,7 +190,7 @@ describe('build', () => {
            };`);
       assert.deepEqual(buildIDLTests(ast), [
         ['Node', '\'Node\' in self'],
-        ['Node.contains', '\'contains\' in Node.prototype'],
+        ['Node.contains', '\'contains\' in Node.prototype']
       ]);
     });
 
@@ -201,7 +201,7 @@ describe('build', () => {
            };`);
       assert.deepEqual(buildIDLTests(ast), [
         ['MediaSource', '\'MediaSource\' in self'],
-        ['MediaSource.isTypeSupported', '\'isTypeSupported\' in MediaSource'],
+        ['MediaSource.isTypeSupported', '\'isTypeSupported\' in MediaSource']
       ]);
     });
 
@@ -212,7 +212,7 @@ describe('build', () => {
            };`);
       assert.deepEqual(buildIDLTests(ast), [
         ['CSS', '\'CSS\' in self'],
-        ['CSS.paintWorklet', '\'paintWorklet\' in CSS'],
+        ['CSS.paintWorklet', '\'paintWorklet\' in CSS']
       ]);
     });
 
@@ -223,7 +223,7 @@ describe('build', () => {
            };`);
       assert.deepEqual(buildIDLTests(ast), [
         ['CSS', '\'CSS\' in self'],
-        ['CSS.supports', '\'supports\' in CSS'],
+        ['CSS.supports', '\'supports\' in CSS']
       ]);
     });
   });

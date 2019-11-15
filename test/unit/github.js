@@ -22,11 +22,11 @@ const Octokit = require('@octokit/rest');
 const REPORT = {
   results: {},
   // eslint-disable-next-line max-len
-  userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.0 Safari/605.1.15',
+  userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.0 Safari/605.1.15'
 };
 
 const RESULT = {
-  'html_url': 'https://github.com/foolip/mdn-bcd-results/pull/42',
+  'html_url': 'https://github.com/foolip/mdn-bcd-results/pull/42'
 };
 
 describe('GitHub export', () => {
@@ -39,20 +39,20 @@ describe('GitHub export', () => {
         assert(octokit === undefined);
         octokit = new Octokit(options);
         return octokit;
-      },
+      }
     })();
 
     const mock = {
       git: sinon.mock(octokit.git),
       repos: sinon.mock(octokit.repos),
-      pulls: sinon.mock(octokit.pulls),
+      pulls: sinon.mock(octokit.pulls)
     };
 
     mock.git.expects('createRef').once().withArgs({
       owner: 'foolip',
       ref: 'refs/heads/collector/safari-12.0-mac-os-10.14-afd516a15d',
       repo: 'mdn-bcd-results',
-      sha: '753c6ed8e991e9729353a63d650ff0f5bd902b69',
+      sha: '753c6ed8e991e9729353a63d650ff0f5bd902b69'
     });
 
     mock.repos.expects('createFile').once().withArgs(sinon.match({
@@ -61,7 +61,7 @@ describe('GitHub export', () => {
       path: 'safari-12.0-mac-os-10.14-afd516a15d.json',
       message: 'Results from Safari 12.0 / Mac OS 10.14',
       content: sinon.match.string,
-      branch: 'collector/safari-12.0-mac-os-10.14-afd516a15d',
+      branch: 'collector/safari-12.0-mac-os-10.14-afd516a15d'
     }));
 
     mock.pulls.expects('create').once().withArgs({
@@ -69,7 +69,7 @@ describe('GitHub export', () => {
       repo: 'mdn-bcd-results',
       title: 'Results from Safari 12.0 / Mac OS 10.14',
       head: 'collector/safari-12.0-mac-os-10.14-afd516a15d',
-      base: 'master',
+      base: 'master'
     }).resolves({data: RESULT});
 
     const result = await github.exportAsPR(REPORT);

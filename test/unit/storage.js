@@ -91,7 +91,7 @@ describe('storage', () => {
         const data = await storage.getAll(SESSION_ID);
         assert.deepStrictEqual(data, {
           '/a/test.html': {x: 1},
-          '/b/test.html': {x: 2},
+          '/b/test.html': {x: 2}
         });
       });
 
