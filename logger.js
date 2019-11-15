@@ -25,15 +25,15 @@ function getTransport() {
   return new winston.transports.Console({
     format: winston.format.combine(
         winston.format.colorize(),
-        winston.format.simple(),
-    ),
+        winston.format.simple()
+    )
   });
 }
 
 const logger = winston.createLogger({
   level: 'info',
   transports: [getTransport()],
-  silent: process.env.NODE_ENV === 'test',
+  silent: process.env.NODE_ENV === 'test'
 });
 
 module.exports = logger;

@@ -104,6 +104,6 @@
 
   global.bcd = {
     test: test,
-    run: run,
+    run: run
   };
 })(this);

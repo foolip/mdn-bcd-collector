@@ -110,7 +110,7 @@ function buildCSSPropertyTest(propertyNames, method, basename) {
     '<script src="/resources/json3.min.js"></script>',
     '<script src="/resources/harness.js"></script>',
     '<body>',
-    '<script>',
+    '<script>'
   ];
   for (const name of propertyNames) {
     lines.push(`bcd.test("css.properties.${name}", function() {`);
@@ -142,7 +142,7 @@ function buildCSS(bcd, reffy) {
     ['http', buildCSSPropertyTest(propertyNames,
         'CSSStyleDeclaration', 'in-style.html')],
     ['http', buildCSSPropertyTest(propertyNames,
-        'CSS.supports', 'dot-supports.html')],
+        'CSS.supports', 'dot-supports.html')]
   ];
 }
 
@@ -332,7 +332,7 @@ function buildIDL(_, reffy) {
     '<meta charset="utf-8">',
     '<script src="/resources/json3.min.js"></script>',
     '<script src="/resources/harness.js"></script>',
-    '<script>',
+    '<script>'
   ];
 
   for (const [name, expr] of tests) {
@@ -361,7 +361,7 @@ function copyResources() {
     ['json3/lib/json3.min.js', 'resources'],
     ['chai/chai.js', 'test'],
     ['mocha/mocha.css', 'test'],
-    ['mocha/mocha.js', 'test'],
+    ['mocha/mocha.js', 'test']
   ];
   for (const [srcInModules, destInGenerated] of resources) {
     const src = require.resolve(srcInModules);
@@ -374,7 +374,7 @@ function copyResources() {
 
 async function build(bcd, reffy) {
   const manifest = {
-    items: [],
+    items: []
   };
   for (const buildFunc of [buildCSS, buildIDL]) {
     const items = buildFunc(bcd, reffy);
@@ -397,7 +397,7 @@ if (process.env.NODE_ENV === 'test') {
     collectCSSPropertiesFromBCD,
     collectCSSPropertiesFromReffy,
     expandCSSProperties,
-    flattenIDL,
+    flattenIDL
   };
 } else {
   const bcd = require('mdn-browser-compat-data');

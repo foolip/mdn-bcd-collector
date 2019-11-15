@@ -17,7 +17,7 @@
 const app = require('../../app');
 const puppeteers = {
   'Chrome': require('puppeteer'),
-  'Firefox': require('puppeteer-firefox'),
+  'Firefox': require('puppeteer-firefox')
 };
 
 const assert = require('assert');

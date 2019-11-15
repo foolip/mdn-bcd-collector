@@ -44,7 +44,7 @@ module.exports = (options) => {
       repo: 'mdn-bcd-results',
       ref: `refs/heads/${branch}`,
       // first commit in repo
-      sha: '753c6ed8e991e9729353a63d650ff0f5bd902b69',
+      sha: '753c6ed8e991e9729353a63d650ff0f5bd902b69'
     });
 
     await octokit.repos.createFile({
@@ -53,7 +53,7 @@ module.exports = (options) => {
       path: `${name}.json`,
       message: `Results from ${desc}`,
       content: buffer.toString('base64'),
-      branch: branch,
+      branch: branch
     });
 
     const {data} = await octokit.pulls.create({
@@ -61,7 +61,7 @@ module.exports = (options) => {
       repo: 'mdn-bcd-results',
       title: `Results from ${desc}`,
       head: branch,
-      base: 'master',
+      base: 'master'
     });
 
     return data;
