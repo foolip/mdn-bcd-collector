@@ -21,12 +21,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v1
+    - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+      with:
+        version: '275.0.0'
+        service_account_email: ${{ secrets.GCP_SA_EMAIL }}
+        service_account_key: ${{ secrets.GCP_SA_KEY }}
     - run: echo "$SECRETS_JSON" | base64 --decode > secrets.json
       env:
         SECRETS_JSON: ${{ secrets.SECRETS_JSON }}
-    - uses: actions/gcloud/auth@master
-      env:
-        GCLOUD_AUTH: ${{ secrets.GCLOUD_AUTH }}
-    - uses: actions/gcloud/cli@master
-      with:
-        args: app deploy --project=mdn-bcd-collector
+    - run: gcloud app deploy --project=mdn-bcd-collector
