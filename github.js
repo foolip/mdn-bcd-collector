@@ -15,7 +15,7 @@
 'use strict';
 
 const crypto = require('crypto');
-const Octokit = require('@octokit/rest');
+const {Octokit} = require('@octokit/rest');
 const slugify = require('slugify');
 const stringify = require('json-stable-stringify');
 const uaParser = require('ua-parser-js');
@@ -47,7 +47,7 @@ module.exports = (options) => {
       sha: '753c6ed8e991e9729353a63d650ff0f5bd902b69'
     });
 
-    await octokit.repos.createFile({
+    await octokit.repos.createOrUpdateFile({
       owner: 'foolip',
       repo: 'mdn-bcd-results',
       path: `${name}.json`,
