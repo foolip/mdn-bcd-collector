@@ -17,7 +17,7 @@
 const assert = require('assert');
 const proxyquire = require('proxyquire');
 const sinon = require('sinon');
-const Octokit = require('@octokit/rest');
+const {Octokit} = require('@octokit/rest');
 
 const REPORT = {
   results: {},
@@ -35,10 +35,12 @@ describe('GitHub export', () => {
   it('happy path', async () => {
     let octokit;
     const github = proxyquire('../../github', {
-      '@octokit/rest': function(options) {
-        assert(octokit === undefined);
-        octokit = new Octokit(options);
-        return octokit;
+      '@octokit/rest': {
+        Octokit: function(options) {
+          assert(octokit === undefined);
+          octokit = new Octokit(options);
+          return octokit;
+        }
       }
     })();
 
@@ -55,7 +57,7 @@ describe('GitHub export', () => {
       sha: '753c6ed8e991e9729353a63d650ff0f5bd902b69'
     });
 
-    mock.repos.expects('createFile').once().withArgs(sinon.match({
+    mock.repos.expects('createOrUpdateFile').once().withArgs(sinon.match({
       owner: 'foolip',
       repo: 'mdn-bcd-results',
       path: 'safari-12.0-mac-os-10.14-afd516a15d.json',
