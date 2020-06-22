@@ -44,7 +44,7 @@
     "chai-http": "4.3.0",
     "chai-subset": "1.6.0",
     "codecov": "3.7.0",
-    "eslint": "7.2.0",
+    "eslint": "7.3.0",
     "eslint-config-google": "0.14.0",
     "mocha": "7.2.0",
     "nyc": "15.1.0",
