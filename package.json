@@ -33,7 +33,7 @@
     "json3": "3.3.3",
     "mdn-browser-compat-data": "1.0.27",
     "reffy-reports": "git://github.com/foolip/reffy-reports.git#mdn-bcd-updater-fixes",
-    "slugify": "1.4.0",
+    "slugify": "1.4.2",
     "ua-parser-js": "0.7.21",
     "unique-string": "2.0.0",
     "webidl2": "23.12.1",
