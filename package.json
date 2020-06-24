@@ -24,7 +24,7 @@
   },
   "dependencies": {
     "@google-cloud/logging-winston": "3.0.6",
-    "@google-cloud/storage": "4.7.0",
+    "@google-cloud/storage": "5.1.1",
     "@octokit/rest": "18.0.0",
     "cookie-parser": "1.4.5",
     "express": "4.17.1",
