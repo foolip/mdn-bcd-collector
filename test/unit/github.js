@@ -57,14 +57,15 @@ describe('GitHub export', () => {
       sha: '753c6ed8e991e9729353a63d650ff0f5bd902b69'
     });
 
-    mock.repos.expects('createOrUpdateFile').once().withArgs(sinon.match({
-      owner: 'foolip',
-      repo: 'mdn-bcd-results',
-      path: 'safari-12.0-mac-os-10.14-afd516a15d.json',
-      message: 'Results from Safari 12.0 / Mac OS 10.14',
-      content: sinon.match.string,
-      branch: 'collector/safari-12.0-mac-os-10.14-afd516a15d'
-    }));
+    mock.repos.expects('createOrUpdateFileContents')
+        .once().withArgs(sinon.match({
+          owner: 'foolip',
+          repo: 'mdn-bcd-results',
+          path: 'safari-12.0-mac-os-10.14-afd516a15d.json',
+          message: 'Results from Safari 12.0 / Mac OS 10.14',
+          content: sinon.match.string,
+          branch: 'collector/safari-12.0-mac-os-10.14-afd516a15d'
+        }));
 
     mock.pulls.expects('create').once().withArgs({
       owner: 'foolip',

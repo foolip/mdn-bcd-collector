@@ -47,7 +47,7 @@ module.exports = (options) => {
       sha: '753c6ed8e991e9729353a63d650ff0f5bd902b69'
     });
 
-    await octokit.repos.createOrUpdateFile({
+    await octokit.repos.createOrUpdateFileContents({
       owner: 'foolip',
       repo: 'mdn-bcd-results',
       path: `${name}.json`,
