@@ -1,13 +1,6 @@
 version: 2
 updates:
 - package-ecosystem: npm
-  directory: "/"
+  directory: /
   schedule:
-    interval: daily
-    time: "04:00"
-  open-pull-requests-limit: 10
-  ignore:
-  - dependency-name: webidl2
-    versions:
-    - ">= 23.7.a"
-    - "< 23.8"
+    interval: monthly
