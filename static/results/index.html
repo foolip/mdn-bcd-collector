@@ -1,6 +1,12 @@
 <!doctype html>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width">
+<div>
+  <span id="status">Loading page...</span> <a id="link"></a>
+</div>
+<div>
+  <a href="/">Back to start page</a>
+</div>
 <script src="/resources/json3.min.js"></script>
 <script>
 function exportGitHub() {
@@ -18,11 +24,5 @@ function exportGitHub() {
     }
   }
 }
+exportGitHub();
 </script>
-<button onclick="exportGitHub()">Export results to GitHub</button>
-<div>
-  <span id="status"></span> <a id="link"></a>
-</div>
-<div>
-  <a href="/">Back to start page</a>
-</div>
