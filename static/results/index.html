@@ -4,24 +4,24 @@
 <script src="/resources/json3.min.js"></script>
 <script>
 function exportGitHub() {
-  const client = new XMLHttpRequest();
+  var status = document.getElementById('status');
+  var link = document.getElementById('link');
+  var client = new XMLHttpRequest();
   client.open('POST', '/api/results/export/github', true);
   client.send();
+  status.textContent = 'Exporting...';
   client.onreadystatechange = function() {
     if (client.readyState == 4) {
       var response = JSON.parse(client.responseText);
-      var url = response.html_url;
-      var input = document.getElementById('pr_url');
-      input.value = url;
-      input.select();
+      status.textContent = 'Exported to';
+      link.href = link.textContent = response.html_url;
     }
   }
 }
 </script>
+<button onclick="exportGitHub()">Export results to GitHub</button>
 <div>
-  <button onclick="exportGitHub()">Export results to GitHub</button>
-  &rarr;
-  <input id="pr_url" size="50">
+  <span id="status"></span> <a id="link"></a>
 </div>
 <div>
   <a href="/">Back to start page</a>
