@@ -17,6 +17,7 @@
 const assert = require('assert');
 const fs = require('fs-extra');
 const path = require('path');
+const WebIDL2 = require('webidl2');
 
 const generatedDir = path.join(__dirname, 'generated');
 
@@ -146,12 +147,19 @@ function buildCSS(bcd, reffy) {
   ];
 }
 
-function flattenIDL(specIDL) {
+function collectHistoricalIDL() {
+  const idl = fs.readFileSync('./historical.idl', 'utf8');
+  return WebIDL2.parse(idl);
+}
+
+function flattenIDL(specIDLs, historicalIDL) {
   let ast = [];
 
-  for (const idl of Object.values(specIDL)) {
+  for (const idl of Object.values(specIDLs)) {
     ast.push(...idl);
   }
+
+  ast.push(...historicalIDL);
 
   // merge partials (O^2 but still fast)
   ast = ast.filter((dfn) => {
@@ -324,7 +332,7 @@ function buildIDLTests(ast) {
 }
 
 function buildIDL(_, reffy) {
-  const ast = flattenIDL(reffy.idl);
+  const ast = flattenIDL(reffy.idl, collectHistoricalIDL());
   const tests = buildIDLTests(ast);
 
   const lines = [
