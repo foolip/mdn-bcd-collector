@@ -14,13 +14,18 @@
 
 'use strict';
 
-const app = require('../../app');
-const puppeteers = {
-  'Chrome': require('puppeteer'),
-  'Firefox': require('puppeteer-firefox')
-};
-
 const assert = require('assert');
+const puppeteer = require('puppeteer');
+
+const app = require('../../app');
+
+const products = ['chrome', 'firefox'];
+
+// Workaround for https://github.com/puppeteer/puppeteer/issues/6255
+const consoleLogType = {
+  chrome: 'log',
+  firefox: 'verbose'
+};
 
 describe('/resources/harness.js', () => {
   const port = process.env.PORT || 8081;
@@ -30,15 +35,15 @@ describe('/resources/harness.js', () => {
   });
   after(() => server.close());
 
-  for (const [browserName, puppeteer] of Object.entries(puppeteers)) {
-    it(browserName, async () => {
-      const browser = await puppeteer.launch();
+  for (const product of products) {
+    it(product, async () => {
+      const browser = await puppeteer.launch({product});
       after(() => browser.close());
 
       const page = await browser.newPage();
       const reportPromise = new Promise((resolve, reject) => {
         page.on('console', (msg) => {
-          if (msg.type() === 'log') {
+          if (msg.type() === consoleLogType[product]) {
             resolve(JSON.parse(msg.text()));
           }
         });
