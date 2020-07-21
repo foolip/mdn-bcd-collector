@@ -72,7 +72,7 @@ describe('GitHub export', () => {
       repo: 'mdn-bcd-results',
       title: 'Results from Safari 12.0 / Mac OS 10.14',
       head: 'collector/safari-12.0-mac-os-10.14-afd516a15d',
-      base: 'master'
+      base: 'main'
     }).resolves({data: RESULT});
 
     const result = await github.exportAsPR(REPORT);

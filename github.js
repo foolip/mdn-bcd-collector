@@ -61,7 +61,7 @@ module.exports = (options) => {
       repo: 'mdn-bcd-results',
       title: `Results from ${desc}`,
       head: branch,
-      base: 'master'
+      base: 'main'
     });
 
     return data;
