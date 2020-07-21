@@ -1,0 +1,11 @@
+// Manually maintained definitions for features not in any specification, like
+// non-standard features and features that have been removed or renamed.
+
+dictionary ElementRegistrationOptions {
+  object? prototype = null;
+  DOMString? extends = null;
+};
+
+partial interface Document {
+  any registerElement(DOMString type, optional ElementRegistrationOptions options = {});
+};

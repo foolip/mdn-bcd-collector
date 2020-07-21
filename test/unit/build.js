@@ -150,14 +150,16 @@ describe('build', () => {
 
   describe('flattenIDL', () => {
     it('namespace + partial namespace', () => {
-      const specIDL = {
+      const specIDLs = {
         cssom: WebIDL2.parse(`namespace CSS { boolean supports(); };`),
         paint: WebIDL2.parse(
             `partial namespace CSS {
                readonly attribute any paintWorklet;
              };`)
       };
-      const ast = flattenIDL(specIDL);
+      const historicalIDL = WebIDL2.parse(`interface DOMError {};`);
+      const ast = flattenIDL(specIDLs, historicalIDL);
+
       const namespaces = ast.filter((dfn) => dfn.type === 'namespace');
       assert.lengthOf(namespaces, 1);
       const [namespace] = namespaces;
@@ -171,6 +173,10 @@ describe('build', () => {
         type: 'attribute',
         name: 'paintWorklet'
       });
+
+      const interfaces = ast.filter((dfn) => dfn.type === 'interface');
+      assert.lengthOf(interfaces, 1);
+      assert.equal(interfaces[0].name, 'DOMError');
     });
   });
 
