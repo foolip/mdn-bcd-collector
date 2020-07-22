@@ -147,19 +147,19 @@ function buildCSS(bcd, reffy) {
   ];
 }
 
-function collectHistoricalIDL() {
-  const idl = fs.readFileSync('./historical.idl', 'utf8');
+function collectExtraIDL() {
+  const idl = fs.readFileSync('./non-standard.idl', 'utf8');
   return WebIDL2.parse(idl);
 }
 
-function flattenIDL(specIDLs, historicalIDL) {
+function flattenIDL(specIDLs, collectExtraIDL) {
   let ast = [];
 
   for (const idl of Object.values(specIDLs)) {
     ast.push(...idl);
   }
 
-  ast.push(...historicalIDL);
+  ast.push(...collectExtraIDL);
 
   // merge partials (O^2 but still fast)
   ast = ast.filter((dfn) => {
@@ -390,7 +390,7 @@ function validateIDL(ast) {
 }
 
 function buildIDL(_, reffy) {
-  const ast = flattenIDL(reffy.idl, collectHistoricalIDL());
+  const ast = flattenIDL(reffy.idl, collectExtraIDL());
   validateIDL(ast);
   const tests = buildIDLTests(ast);
 
