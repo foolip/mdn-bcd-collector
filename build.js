@@ -299,7 +299,7 @@ function buildIDLTests(ast) {
       if (expr) {
         tests.push([`${iface.name}.${member.name}`, expr]);
       } else {
-        // eslint-disable-next-line max-len, no-console
+        // eslint-disable-next-line max-len
         console.warn(`Interface ${iface.name} member type ${member.type} not handled`);
       }
     }
@@ -331,8 +331,67 @@ function buildIDLTests(ast) {
   return tests;
 }
 
+function allowDuplicates(dfn, member) {
+  switch (dfn.name) {
+    // TODO: sort this out spec-side
+    case 'SVGAElement':
+      return member.name === 'href';
+    // TODO: handle non-conflicting [Exposed] and drop this
+    case 'WebGLRenderingContext':
+    case 'WebGL2RenderingContext':
+      return member.name === 'canvas';
+  }
+  return false;
+}
+
+function validateIDL(ast) {
+  const validations = WebIDL2.validate(ast);
+
+  // Monkey-patching support for https://github.com/w3c/webidl2.js/issues/484
+  for (const dfn of ast) {
+    if (!dfn.members) {
+      continue;
+    }
+    const names = new Set();
+    for (const member of dfn.members) {
+      if (!member.name) {
+        continue;
+      }
+      if (member.type === 'operation') {
+        // Operations can be overloaded, that's a feature.
+        continue;
+      }
+      if (allowDuplicates(dfn, member)) {
+        continue;
+      }
+      if (!names.has(member.name)) {
+        names.add(member.name);
+      } else {
+        validations.push({
+          ruleName: 'no-duplicate-member',
+          // eslint-disable-next-line max-len
+          message: `Validation error: Duplicate member ${member.name} in ${dfn.type} ${dfn.name}`
+        });
+      }
+    }
+  }
+
+  let validationError = false;
+  for (const {ruleName, message} of validations) {
+    if (ruleName === 'no-duplicate' || ruleName === 'no-duplicate-member') {
+      console.error(`${message}\n`);
+      validationError = true;
+    }
+  }
+
+  if (validationError) {
+    process.exit(1);
+  }
+}
+
 function buildIDL(_, reffy) {
   const ast = flattenIDL(reffy.idl, collectHistoricalIDL());
+  validateIDL(ast);
   const tests = buildIDLTests(ast);
 
   const lines = [
