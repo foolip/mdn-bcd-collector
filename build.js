@@ -273,7 +273,14 @@ function buildIDLTests(ast) {
     const members = iface.members.filter((member) => member.name);
     members.sort((a, b) => a.name.localeCompare(b.name));
 
+    // Avoid generating duplicate tests for operations.
+    const handledMemberNames = new Set();
+
     for (const member of members) {
+      if (handledMemberNames.has(member.name)) {
+        continue;
+      }
+
       const isStatic = member.special === 'static';
       let expr;
       switch (member.type) {
@@ -298,6 +305,7 @@ function buildIDLTests(ast) {
 
       if (expr) {
         tests.push([`${iface.name}.${member.name}`, expr]);
+        handledMemberNames.add(member.name);
       } else {
         // eslint-disable-next-line max-len
         console.warn(`Interface ${iface.name} member type ${member.type} not handled`);
