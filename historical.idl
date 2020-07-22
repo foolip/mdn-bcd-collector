@@ -7,5 +7,166 @@ dictionary ElementRegistrationOptions {
 };
 
 partial interface Document {
+  Range caretRangeFromPoint(optional long x = 0, optional long y = 0);
+
+  Promise<boolean> hasStorageAccess();
+  Promise<void> requestStorageAccess();
+
+  Promise<boolean> hasTrustToken(USVString issuer);
+
+  readonly attribute FeaturePolicy featurePolicy;
+
   any registerElement(DOMString type, optional ElementRegistrationOptions options = {});
+
+  readonly attribute DOMString webkitVisibilityState;
+  readonly attribute boolean webkitHidden;
+
+  attribute EventHandler onbeforecopy;
+  attribute EventHandler onbeforecut;
+  attribute EventHandler onbeforepaste;
+  attribute EventHandler onsearch;
+};
+
+partial interface Element {
+  void scrollIntoViewIfNeeded(optional boolean centerIfNeeded);
+  ShadowRoot createShadowRoot();
+  NodeList getDestinationInsertionPoints();
+  readonly attribute DOMString? computedRole;
+  readonly attribute DOMString? computedName;
+  readonly attribute AccessibleNode? accessibleNode;
+
+  attribute EventHandler onbeforecopy;
+  attribute EventHandler onbeforecut;
+  attribute EventHandler onbeforepaste;
+  attribute EventHandler onsearch;
+  attribute EventHandler onbeforematch;
+};
+
+partial interface Event {
+  readonly attribute object path;
+};
+
+partial interface File {
+  readonly attribute object lastModifiedDate;
+};
+
+[Exposed=Window]
+interface GamepadAxisEvent : GamepadEvent {
+  constructor(DOMString type, optional GamepadAxisEventInit eventInitDict = {});
+  readonly attribute unsigned long axis;
+  readonly attribute double value;
+};
+
+[Exposed=Window]
+interface GamepadButtonEvent : GamepadEvent {
+    constructor(DOMString type, optional GamepadButtonEventInit eventInitDict = {});
+    readonly attribute unsigned long button;
+    readonly attribute double value;
+};
+
+partial interface HTMLFrameSetElement {
+  attribute EventHandler onorientationchange;
+};
+
+partial interface HTMLInputElement {
+  attribute boolean incremental;
+};
+
+partial interface HTMLMediaElement {
+  readonly attribute unsigned long long webkitAudioDecodedByteCount;
+  readonly attribute unsigned long long webkitVideoDecodedByteCount;
+};
+
+partial interface HTMLVideoElement {
+  readonly attribute boolean webkitSupportsFullscreen;
+  readonly attribute boolean webkitDisplayingFullscreen;
+  void webkitEnterFullscreen();
+  void webkitExitFullscreen();
+  void webkitEnterFullScreen();
+  void webkitExitFullScreen();
+  readonly attribute unsigned long webkitDecodedFrameCount;
+  readonly attribute unsigned long webkitDroppedFrameCount;
+};
+
+partial interface IDBVersionChangeEvent {
+  readonly attribute IDBDataLossAmount dataLoss;
+  readonly attribute DOMString dataLossMessage;
+};
+
+partial interface MouseEvent {
+  readonly attribute Node fromElement;
+  readonly attribute Node toElement;
+  readonly attribute long layerX;
+  readonly attribute long layerY;
+};
+
+partial interface Navigator {
+  void webkitGetUserMedia(MediaStreamConstraints constraints,
+                          NavigatorUserMediaSuccessCallback successCallback,
+                          NavigatorUserMediaErrorCallback errorCallback);
+};
+
+partial interface Range {
+  void expand(optional DOMString unit = "");
+};
+
+partial interface RTCDataChannel {
+  readonly attribute boolean reliable;
+};
+
+partial interface RTCPeerConnection {
+  sequence<MediaStream> getLocalStreams();
+  sequence<MediaStream> getRemoteStreams();
+  void addStream(MediaStream stream, optional any mediaConstraints);
+  void removeStream(MediaStream stream);
+  RTCDTMFSender createDTMFSender(MediaStreamTrack track);
+  attribute EventHandler onaddstream;
+  attribute EventHandler onremovestream;
+};
+
+partial interface Screen {
+  readonly attribute long availLeft;
+  readonly attribute long availTop;
+};
+
+partial interface Selection {
+  readonly attribute Node? baseNode;
+  readonly attribute unsigned long baseOffset;
+  readonly attribute Node? extentNode;
+  readonly attribute unsigned long extentOffset;
+
+  void modify(optional DOMString alter = "",
+              optional DOMString direction = "",
+              optional DOMString granularity = "");
+};
+
+partial interface Text {
+  NodeList getDestinationInsertionPoints();
+};
+
+partial interface WheelEvent {
+  readonly attribute long wheelDeltaX;
+  readonly attribute long wheelDeltaY;
+  readonly attribute long wheelDelta;
+};
+
+partial interface Window {
+  readonly attribute Navigator clientInformation;
+  boolean find(optional DOMString string = "",
+               optional boolean caseSensitive = false,
+               optional boolean backwards = false,
+               optional boolean wrap = false,
+               optional boolean wholeWord = false,
+               optional boolean searchInFrames = false,
+               optional boolean showDialog = false);
+  readonly attribute boolean offscreenBuffering;
+  attribute DOMString defaultStatus;
+  attribute DOMString defaultstatus;
+  readonly attribute StyleMedia styleMedia;
+  long webkitRequestAnimationFrame(FrameRequestCallback callback);
+  void webkitCancelAnimationFrame(long id);
+  attribute object WebKitCSSMatrix;
+  attribute object WebKitMutationObserver;
+
+  attribute EventHandler onsearch;
 };
