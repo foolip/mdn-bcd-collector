@@ -152,6 +152,24 @@ function collectExtraIDL() {
   return WebIDL2.parse(idl);
 }
 
+function mergeMembers(target, source) {
+  // Check for operation overloads across partials/mixins.
+  const targetOperations = new Set();
+  for (const {type, name} of target.members) {
+    if (type === 'operation' && name) {
+      targetOperations.add(name);
+    }
+  }
+  for (const {type, name} of source.members) {
+    if (type === 'operation' && targetOperations.has(name)) {
+      // eslint-disable-next-line max-len
+      throw new Error(`Operation overloading across partials/mixins for ${target.name}.${name}`);
+    }
+  }
+  // Now merge members.
+  target.members.push(...source.members);
+}
+
 function flattenIDL(specIDLs, collectExtraIDL) {
   let ast = [];
 
@@ -175,8 +193,9 @@ function flattenIDL(specIDLs, collectExtraIDL) {
       throw new Error(`Original definition not found for partial ${dfn.type} ${dfn.name}`);
     }
 
-    // move members to target interface/dictionary/etc. and drop partial
-    target.members.push(...dfn.members);
+    // merge members to target interface/dictionary/etc. and drop partial
+    mergeMembers(target, dfn);
+
     return false;
   });
 
@@ -198,8 +217,8 @@ function flattenIDL(specIDLs, collectExtraIDL) {
         throw new Error(`Target ${dfn.target} not found for interface mixin ${dfn.includes}`);
       }
 
-      // move members to target interface
-      target.members.push(...mixin.members);
+      // merge members to target interface
+      mergeMembers(target, mixin);
     }
   }
 
@@ -366,7 +385,7 @@ function validateIDL(ast) {
         continue;
       }
       if (member.type === 'operation') {
-        // Operations can be overloaded, that's a feature.
+        // Overloading across partials/mixins are checked in mergeMembers.
         continue;
       }
       if (allowDuplicates(dfn, member)) {

@@ -9,9 +9,6 @@ dictionary ElementRegistrationOptions {
 partial interface Document {
   Range caretRangeFromPoint(optional long x = 0, optional long y = 0);
 
-  Promise<boolean> hasStorageAccess();
-  Promise<void> requestStorageAccess();
-
   Promise<boolean> hasTrustToken(USVString issuer);
 
   readonly attribute FeaturePolicy featurePolicy;
