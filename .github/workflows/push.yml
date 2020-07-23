@@ -31,3 +31,5 @@ jobs:
       env:
         SECRETS_JSON: ${{ secrets.SECRETS_JSON }}
     - run: gcloud app deploy
+env:
+  FORCE_COLOR: 3
