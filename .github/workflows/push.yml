@@ -19,6 +19,7 @@ jobs:
     - run: npm run report-coverage
       env:
         CODECOV_TOKEN: ${{ secrets.CODECOV_TOKEN }}
+    - run: npm run puppeteer
   deploy:
     name: Deploy
     needs: test
