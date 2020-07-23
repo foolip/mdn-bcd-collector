@@ -20,7 +20,6 @@
     "start": "node app.js",
     "coverage": "NODE_ENV=test nyc mocha --recursive test --exclude test/puppeteer/*",
     "puppeteer": "NODE_ENV=test mocha test/puppeteer --timeout 30000 --slow 3000",
-    "report-coverage": "nyc report --reporter=text-lcov > coverage.lcov && codecov",
     "test": "npm run coverage && npm run puppeteer"
   },
   "dependencies": {
@@ -44,7 +43,6 @@
     "chai": "4.2.0",
     "chai-http": "4.3.0",
     "chai-subset": "1.6.0",
-    "codecov": "3.7.1",
     "eslint": "7.5.0",
     "eslint-config-google": "0.14.0",
     "mocha": "8.0.1",
