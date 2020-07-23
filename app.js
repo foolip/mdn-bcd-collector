@@ -117,14 +117,11 @@ app.get('/api/results', (req, res) => {
 
 app.post('/api/results/export/github', (req, res) => {
   storage.getAll(req.sessionID)
-      .then((results) => {
+      .then(async (results) => {
         const userAgent = req.get('User-Agent');
         const report = {results, userAgent};
-        return report;
-      })
-      .then(github.exportAsPR)
-      .then((result) => {
-        res.json(result);
+        const response = await github.exportAsPR(report);
+        res.json(response);
       })
       .catch((err) => {
         logger.error(err);
