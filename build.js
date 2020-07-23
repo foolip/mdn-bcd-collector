@@ -14,7 +14,6 @@
 
 'use strict';
 
-const assert = require('assert');
 const fs = require('fs-extra');
 const path = require('path');
 const WebIDL2 = require('webidl2');
@@ -239,7 +238,6 @@ function getExtAttr(node, name) {
 // https://heycam.github.io/webidl/#dfn-exposure-set
 function getExposureSet(node) {
   // step 6-8
-  assert(['interface', 'namespace'].includes(node.type));
   const attr = getExtAttr(node, 'Exposed');
   if (!attr) {
     // TODO: remove this once all interfaces have [Exposed].
@@ -256,7 +254,7 @@ function getExposureSet(node) {
       }
       break;
     default:
-      assert.fail(`Unexpected RHS for Exposed extended attribute`);
+      throw new Error(`Unexpected RHS for Exposed extended attribute`);
   }
   return globals;
 }
