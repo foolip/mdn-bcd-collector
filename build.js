@@ -372,6 +372,12 @@ function allowDuplicates(dfn, member) {
 }
 
 function validateIDL(ast) {
+  const ignoreRules = new Set([
+    'constructor-member',
+    'dict-arg-default',
+    'require-exposed'
+  ]);
+
   const validations = WebIDL2.validate(ast);
 
   // Monkey-patching support for https://github.com/w3c/webidl2.js/issues/484
@@ -405,10 +411,11 @@ function validateIDL(ast) {
 
   let validationError = false;
   for (const {ruleName, message} of validations) {
-    if (ruleName === 'no-duplicate' || ruleName === 'no-duplicate-member') {
-      console.error(`${message}\n`);
-      validationError = true;
+    if (ignoreRules.has(ruleName)) {
+      continue;
     }
+    console.error(`${message}\n`);
+    validationError = true;
   }
 
   if (validationError) {
