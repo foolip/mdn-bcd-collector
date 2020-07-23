@@ -9,7 +9,7 @@
     "url": "https://github.com/foolip/mdn-bcd-collector.git"
   },
   "engines": {
-    "node": ">=8"
+    "node": ">=12"
   },
   "scripts": {
     "install": "cd node_modules/puppeteer && PUPPETEER_PRODUCT=firefox node install.js",
