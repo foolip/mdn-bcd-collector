@@ -12,7 +12,7 @@
     "node": ">=12"
   },
   "scripts": {
-    "install": "test -d node_modules/puppeteer && cd node_modules/puppeteer && PUPPETEER_PRODUCT=firefox node install.js",
+    "prepare": "if [ -d node_modules/puppeteer ]; then cd node_modules/puppeteer && PUPPETEER_PRODUCT=firefox node install.js; fi",
     "lint": "eslint .",
     "build": "node build.js",
     "gcp-build": "npm run build",
