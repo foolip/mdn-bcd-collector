@@ -18,9 +18,14 @@ function exportGitHub() {
   status.textContent = 'Exporting...';
   client.onreadystatechange = function() {
     if (client.readyState == 4) {
-      var response = JSON.parse(client.responseText);
-      status.textContent = 'Exported to';
-      link.href = link.textContent = response.html_url;
+      console.log(client);
+      if (client.status >= 500) {
+        status.textContent = 'Failed to export';
+      } else {
+        var response = JSON.parse(client.responseText);
+        status.textContent = 'Exported to';
+        link.href = link.textContent = response.html_url;
+      }
     }
   }
 }
