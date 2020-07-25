@@ -259,7 +259,7 @@ function getExposureSet(node) {
   return globals;
 }
 
-function buildIDLTests(ast) {
+function buildIDLTests(ast, scope = "Window") {
   const tests = [];
 
   const interfaces = ast.filter((dfn) => dfn.type === 'interface');
@@ -274,10 +274,14 @@ function buildIDLTests(ast) {
     }
 
     const exposureSet = getExposureSet(iface);
-    if (!exposureSet.has('Window')) {
-      // TODO: run test in other global scopes as well
+    if (scope == "Window" && !exposureSet.has('Window')) {
       continue;
     }
+    if (scope == "Worker" && (exposureSet.has('Window') || !exposureSet.has('Worker'))) {
+      // Interfaces exposed on the window don't need to be re-tested
+      continue;
+    }
+    // TODO: any other exposure scopes we need to worry about?
 
     const isGlobal = !!getExtAttr(iface, 'Global');
 
@@ -335,10 +339,14 @@ function buildIDLTests(ast) {
 
   for (const namespace of namespaces) {
     const exposureSet = getExposureSet(namespace);
-    if (!exposureSet.has('Window')) {
-      // TODO: run test in other global scopes as well
+    if (scope == "Window" && !exposureSet.has('Window')) {
       continue;
     }
+    if (scope == "Worker" && (exposureSet.has('Window') || !exposureSet.has('Worker'))) {
+      // Interfaces exposed on the window don't need to be re-tested
+      continue;
+    }
+    // TODO: any other exposure scopes we need to worry about?
 
     // namespace object
     tests.push([namespace.name, `'${namespace.name}' in self`]);
@@ -421,7 +429,7 @@ function validateIDL(ast) {
   }
 }
 
-function buildIDL(_, reffy) {
+function buildIDLWindow(_, reffy) {
   const ast = flattenIDL(reffy.idl, collectExtraIDL());
   validateIDL(ast);
   const tests = buildIDLTests(ast);
@@ -442,6 +450,30 @@ function buildIDL(_, reffy) {
 
   lines.push('bcd.run();', '</script>');
   const pathname = path.join('api', 'interfaces.html');
+  const filename = path.join(generatedDir, pathname);
+  writeText(filename, lines);
+  return [['http', pathname], ['https', pathname]];
+}
+
+function buildIDLWorker(_, reffy) {
+  const ast = flattenIDL(reffy.idl, collectExtraIDL());
+  validateIDL(ast);
+  const tests = buildIDLTests(ast, "Worker");
+
+  const lines = [
+    '<!DOCTYPE html>',
+    '<meta charset="utf-8">',
+    '<script src="/resources/json3.min.js"></script>',
+    '<script src="/resources/harness.js"></script>',
+    '<script>'
+  ];
+
+  for (const [name, expr] of tests) {
+    lines.push(`bcd.test('api.${name}', '${expr}');`);
+  }
+
+  lines.push('bcd.runWorker();', '</script>');
+  const pathname = path.join('api', 'workerinterfaces.html');
   const filename = path.join(generatedDir, pathname);
   writeText(filename, lines);
   return [['http', pathname], ['https', pathname]];
@@ -475,7 +507,7 @@ async function build(bcd, reffy) {
   const manifest = {
     items: []
   };
-  for (const buildFunc of [buildCSS, buildIDL]) {
+  for (const buildFunc of [buildCSS, buildIDLWindow, buildIDLWorker]) {
     const items = buildFunc(bcd, reffy);
     for (let [protocol, pathname] of items) {
       if (!pathname.startsWith('/')) {
