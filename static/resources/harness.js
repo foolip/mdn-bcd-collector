@@ -87,6 +87,8 @@
   }
 
   function runWorker(done) {
+    var results = [];
+
     if ('serviceWorker' in navigator) {
       window.__workerCleanup();
 
@@ -95,22 +97,54 @@
         return window.__waitForSWState(reg, 'activated');
       })
       .then(function (reg) {
-        console.log('installed and running!');
+        var promises = [];
 
-        reg.active.postMessage();
+        var length = pending.length;
+        for (var i = 0; i < length; i++) {
+          promises.push(new Promise(function (resolve, reject) {
+            var broadcast = new BroadcastChannel(pending[i][0]);
 
-        // XXX Do tests
+            pending[i][1] = 'true'; // XXX Remember, functions can't be cloned, they need to be strings
 
-        window.__workerCleanup();
+            reg.active.postMessage(pending[i]);
 
-        if (done) {
-          done(results);
-        } else {
-          report(results);
+            broadcast.onmessage = function(event) {
+              results.push(event.data);
+              resolve();
+            }
+          }));
         }
+
+        Promise.all(promises).then(function() {
+          pending = [];
+
+          window.__workerCleanup();
+
+          if (done) {
+            done(results);
+          } else {
+            report(results);
+          }
+        });
       });
     } else {
       console.log('No worker support');
+
+      var length = pending.length;
+      for (var i = 0; i < length; i++) {
+        var name = pending[i][0];
+        var info = pending[i][2];
+
+        var result = { name: name, result: false };
+
+        if (info !== undefined) {
+          result.info = info;
+        }
+
+        results.push(result);
+      }
+
+      pending = [];
 
       if (done) {
         done(results);
@@ -121,6 +155,7 @@
   }
 
   function report(results) {
+    console.log(results);
     return;
     var body = JSON.stringify(results);
     var client = new XMLHttpRequest();

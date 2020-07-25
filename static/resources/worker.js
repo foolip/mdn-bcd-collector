@@ -10,6 +10,38 @@ self.addEventListener('install', (event) => {
 });
 
 self.addEventListener('message', function(event) {
-    console.log("Got a message!  " + event.data);
-    event.source.postMessage("Got your message, hi there!");
+  function stringify(value) {
+    try {
+      return String(value);
+    } catch (err) {
+      return 'unserializable value';
+    }
+  }
+
+  var name = event.data[0];
+  var func = event.data[1];
+  var info = event.data[2];
+
+  var result = { name: name };
+
+  try {
+    var value = eval(func);
+    // TODO: allow callback and promise-vending funcs
+    if (typeof value === 'boolean') {
+      result.result = value;
+    } else {
+      result.result = null;
+      result.message = 'returned ' + stringify(value);
+    }
+  } catch (err) {
+    result.result = null;
+    result.message = 'threw ' + stringify(err);
+  }
+
+  if (info !== undefined) {
+    result.info = info;
+  }
+
+  var broadcast = new BroadcastChannel(name);
+  broadcast.postMessage(result);
 })
