@@ -18,6 +18,7 @@
 
 // This harness should work on as old browsers as possible and shouldn't depend
 // on any modern JavaScript features.
+// TODO: service workers use potentially advanced features, double-check their compatibility and grab polyfills if needed
 
 (function(global) {
   var pending = [];
@@ -103,8 +104,6 @@
         for (var i = 0; i < length; i++) {
           promises.push(new Promise(function (resolve, reject) {
             var broadcast = new BroadcastChannel(pending[i][0]);
-
-            pending[i][1] = 'true'; // XXX Remember, functions can't be cloned, they need to be strings
 
             reg.active.postMessage(pending[i]);
 
