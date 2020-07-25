@@ -306,16 +306,16 @@ function buildIDLTests(ast) {
           if (isGlobal) {
             expr = `'${member.name}' in self`;
           } else if (isStatic) {
-            expr = `'${member.name}' in ${iface.name}`;
+            expr = `'${iface.name}' in self && '${member.name}' in ${iface.name}`;
           } else {
-            expr = `'${member.name}' in ${iface.name}.prototype`;
+            expr = `'${iface.name}' in self && '${member.name}' in ${iface.name}.prototype`;
           }
           break;
         case 'const':
           if (isGlobal) {
             expr = `'${member.name}' in self`;
           } else {
-            expr = `'${member.name}' in ${iface.name}`;
+            expr = `'${iface.name}' in self && '${member.name}' in ${iface.name}`;
           }
           break;
       }
@@ -349,7 +349,7 @@ function buildIDLTests(ast) {
 
     for (const member of members) {
       tests.push([`${namespace.name}.${member.name}`,
-        `'${member.name}' in ${namespace.name}`]);
+        `'${namespace.name}' in self && '${member.name}' in ${namespace.name}`]);
     }
   }
 
