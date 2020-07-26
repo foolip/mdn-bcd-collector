@@ -443,7 +443,7 @@ function buildIDLWindow(ast) {
   for (const [name, expr] of tests) {
     lines.push(`bcd.test('api.${name}', function() {`);
     lines.push(`  return ${expr};`);
-    lines.push(`});`);
+    lines.push(`}, {'code': "${expr}", 'scope'; 'Window'});`);
   }
 
   lines.push('bcd.run();', '</script>');
@@ -465,7 +465,7 @@ function buildIDLWorker(ast) {
   ];
 
   for (const [name, expr] of tests) {
-    lines.push(`bcd.test('api.${name}', "${expr}");`);
+    lines.push(`bcd.test('api.${name}', "${expr}", {'code': "${expr}", 'scope'; 'Worker'});`);
   }
 
   lines.push('bcd.runWorker();', '</script>');
