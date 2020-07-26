@@ -114,7 +114,7 @@
         var length = pending.length;
         for (var i = 0; i < length; i++) {
           promises.push(new Promise(function (resolve, reject) {
-            var broadcast = new BroadcastChannel(pending[i][0]);
+            var broadcast = new window.BroadcastChannel2(pending[i][0], {type: 'idb', webWorkerSupport: true});
 
             reg.active.postMessage(pending[i]);
 

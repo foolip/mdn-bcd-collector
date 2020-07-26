@@ -1,3 +1,7 @@
+var window = {}; // Needed for the BroadcastChannel polyfill
+
+self.importScripts('broadcastchannel.js');
+
 self.addEventListener('install', (event) => {
   const promiseChain = caches.open('test-cache')
   .then((openCache) => {
@@ -46,6 +50,6 @@ self.addEventListener('message', function(event) {
   result.info.code = func;
   result.info.scope = scope;
 
-  var broadcast = new BroadcastChannel(name);
+  var broadcast = new window.BroadcastChannel2(name, {type: 'idb', webWorkerSupport: true});
   broadcast.postMessage(result);
 })
