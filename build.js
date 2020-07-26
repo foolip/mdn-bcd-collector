@@ -465,7 +465,7 @@ function buildIDLWorker(ast) {
   ];
 
   for (const [name, expr] of tests) {
-    lines.push(`bcd.test('api.${name}', '${expr}');`);
+    lines.push(`bcd.test('api.${name}', "${expr}");`);
   }
 
   lines.push('bcd.runWorker();', '</script>');
