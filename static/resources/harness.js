@@ -59,7 +59,7 @@
       var result = { name: name };
 
       try {
-        var value = func();
+        var value = eval(func);
         // TODO: allow callback and promise-vending funcs
         if (typeof value === 'boolean') {
           result.result = value;
