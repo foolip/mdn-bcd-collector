@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+// TODO: Test for support under a prefix
+
 'use strict';
 
 const fs = require('fs-extra');
