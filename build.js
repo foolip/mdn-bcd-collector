@@ -429,9 +429,7 @@ function validateIDL(ast) {
   }
 }
 
-function buildIDLWindow(_, reffy) {
-  const ast = flattenIDL(reffy.idl, collectExtraIDL());
-  validateIDL(ast);
+function buildIDLWindow(ast) {
   const tests = buildIDLTests(ast);
 
   const lines = [
@@ -455,9 +453,7 @@ function buildIDLWindow(_, reffy) {
   return [['http', pathname], ['https', pathname]];
 }
 
-function buildIDLWorker(_, reffy) {
-  const ast = flattenIDL(reffy.idl, collectExtraIDL());
-  validateIDL(ast);
+function buildIDLWorker(ast) {
   const tests = buildIDLTests(ast, "Worker");
 
   const lines = [
@@ -477,6 +473,12 @@ function buildIDLWorker(_, reffy) {
   const filename = path.join(generatedDir, pathname);
   writeText(filename, lines);
   return [['http', pathname], ['https', pathname]];
+}
+
+function buildIDL(_, reffy) {
+  const ast = flattenIDL(reffy.idl, collectExtraIDL());
+  validateIDL(ast);
+  return buildIDLWindow(ast).concat(buildIDLWorker(ast));
 }
 
 async function writeManifest(manifest) {
@@ -507,7 +509,7 @@ async function build(bcd, reffy) {
   const manifest = {
     items: []
   };
-  for (const buildFunc of [buildCSS, buildIDLWindow, buildIDLWorker]) {
+  for (const buildFunc of [buildCSS, buildIDL]) {
     const items = buildFunc(bcd, reffy);
     for (let [protocol, pathname] of items) {
       if (!pathname.startsWith('/')) {
