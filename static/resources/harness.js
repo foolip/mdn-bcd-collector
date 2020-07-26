@@ -40,7 +40,8 @@
   //   "name": "api.Attr.localName",
   //   "result": true,
   //   "info": {
-  //     "code": "'localName' in Attr.prototype"
+  //     "code": "'localName' in Attr.prototype",
+  //     "scope": "Window"
   //   }
   // }
   //
