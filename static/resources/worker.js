@@ -20,7 +20,7 @@ self.addEventListener('message', function(event) {
 
   var name = event.data[0];
   var func = event.data[1];
-  var info = event.data[2];
+  var info = event.data[3];
 
   var result = { name: name };
 

@@ -23,8 +23,8 @@
 (function(global) {
   var pending = [];
 
-  function test(name, fn, info) {
-    pending.push([name, fn, info]);
+  function test(name, fn, scope, info) {
+    pending.push([name, fn, scope, info]);
   }
 
   function stringify(value) {
@@ -54,7 +54,7 @@
     for (var i = 0; i < length; i++) {
       var name = pending[i][0];
       var func = pending[i][1];
-      var info = pending[i][2];
+      var info = pending[i][3];
 
       var result = { name: name };
 
