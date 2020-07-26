@@ -54,9 +54,10 @@
     for (var i = 0; i < length; i++) {
       var name = pending[i][0];
       var func = pending[i][1];
+      var scope = pending[i][2];
       var info = pending[i][3];
 
-      var result = { name: name };
+      var result = { name: name, info: {} };
 
       try {
         var value = eval(func);
@@ -75,6 +76,9 @@
       if (info !== undefined) {
         result.info = info;
       }
+
+      result.info.code = func;
+      result.info.scope = scope;
 
       results.push(result);
     }
