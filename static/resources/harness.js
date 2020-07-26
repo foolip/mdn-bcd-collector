@@ -117,13 +117,13 @@
         Promise.all(promises).then(function() {
           pending = [];
 
-          window.__workerCleanup();
-
-          if (done) {
-            done(results);
-          } else {
-            report(results);
-          }
+          window.__workerCleanup().then(function() {
+            if (done) {
+              done(results);
+            } else {
+              report(results);
+            }
+          });
         });
       });
     } else {
