@@ -120,14 +120,14 @@ function buildCSSPropertyTest(propertyNames, method, basename) {
   ]);
 
   for (const name of propertyNames) {
-    lines.push(`bcd.test("css.properties.${name}", function() {`);
+    var test = "";
     if (method === 'CSSStyleDeclaration') {
       const attrName = cssPropertyToIDLAttribute(name, name.startsWith('-'));
-      lines.push(`  return '${attrName}' in document.body.style;`);
+      test = `'${attrName}' in document.body.style`;
     } else if (method === 'CSS.supports') {
-      lines.push(`  return CSS.supports("${name}", "inherit");`);
+      test = `CSS.supports('${name}', 'inherit')`;
     }
-    lines.push(`});`);
+    lines.push(`bcd.test("css.properties.${name}", "${test}");`);
   }
   lines.push('bcd.run();', '</script>', '</body>', '</html>');
   const pathname = path.join('css', 'properties', basename);
@@ -475,9 +475,9 @@ function buildIDLWorker(ast) {
     '<script src="/resources/json3.min.js"></script>',
     '<script src="/resources/harness.js"></script>',
     '<script src="/resources/broadcastchannel.js"></script>',
-    '<script>',
     '</head>',
-    '<body>'
+    '<body>',
+    '<script>'
   ]);
 
   for (const [name, expr] of tests) {
