@@ -154,8 +154,6 @@
   }
 
   function report(results) {
-    console.log(results);
-    return;
     var body = JSON.stringify(results);
     var client = new XMLHttpRequest();
     client.open('POST', '/api/results?for='+encodeURIComponent(location.href));
