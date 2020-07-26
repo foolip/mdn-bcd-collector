@@ -494,12 +494,15 @@ function copyResources() {
     ['mocha/mocha.css', 'test'],
     ['mocha/mocha.js', 'test']
   ];
-  for (const [srcInModules, destInGenerated] of resources) {
+  for (const [srcInModules, destInGenerated, newFilename] of resources) {
     const src = require.resolve(srcInModules);
     const destDir = path.join(generatedDir, destInGenerated);
     const dest = path.join(destDir, path.basename(src));
     fs.ensureDirSync(path.dirname(dest));
     fs.copyFileSync(src, dest);
+    if (newFilename) {
+      fs.renameSync(dest, path.join(destDir, newFilename));
+    }
   }
 }
 
