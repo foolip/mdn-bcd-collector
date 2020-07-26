@@ -18,7 +18,13 @@
 
 // This harness should work on as old browsers as possible and shouldn't depend
 // on any modern JavaScript features.
-// TODO: service workers use potentially advanced features, double-check their compatibility and grab polyfills if needed
+
+// TODO: Make service worker tests as compatible as possible.
+//   - ServiceWorker: Chrome 40, Edge 17, Firefox 44, Safari 11.1
+//     - postMessage: same
+//   - BroadcastChannel: Chrome 54, Edge <=79, Firefox 38, Safari FALSE -- NEEDS TO BE FIXED ASAP
+//   - Promises: Chrome 33, Edge 12, Firefox 29, Safari 7.1
+
 
 (function(global) {
   var pending = [];
