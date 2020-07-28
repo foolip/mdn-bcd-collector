@@ -22,7 +22,7 @@
 (function(global) {
   var pending = [];
 
-  function test(name, fn, scope, info) {
+  function addTest(name, fn, scope, info) {
     pending.push([name, fn, scope, info]);
   }
 
@@ -174,6 +174,7 @@
   }
 
   global.bcd = {
+    addTest: addTest,
     test: test,
     run: run,
     runWorker: runWorker

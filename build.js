@@ -129,7 +129,7 @@ function buildCSSPropertyTest(propertyNames, method, basename) {
     } else if (method === 'CSS.supports') {
       test = `CSS.supports('${name}', 'inherit')`;
     }
-    lines.push(`bcd.test("css.properties.${name}", "${test}");`);
+    lines.push(`bcd.addTest("css.properties.${name}", "${test}");`);
   }
   lines.push('bcd.run();', '</script>', '</body>', '</html>');
   const pathname = path.join('css', 'properties', basename);
@@ -455,7 +455,7 @@ function buildIDLWindow(ast) {
   ]);
 
   for (const [name, expr] of tests) {
-    lines.push(`bcd.test('api.${name}', "${expr}", 'Window');`);
+    lines.push(`bcd.addTest('api.${name}', "${expr}", 'Window');`);
   }
 
   lines.push('bcd.run();', '</script>', '</body>', '</html>');
@@ -483,7 +483,7 @@ function buildIDLWorker(ast) {
   ]);
 
   for (const [name, expr] of tests) {
-    lines.push(`bcd.test('api.${name}', "${expr}", 'Worker');`);
+    lines.push(`bcd.addTest('api.${name}', "${expr}", 'Worker');`);
   }
 
   lines.push('bcd.runWorker();', '</script>', '</body>', '</html>');
