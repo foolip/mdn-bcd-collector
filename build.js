@@ -286,7 +286,7 @@ function buildIDLTests(ast, scope = "Window") {
     if (scope == "Window" && !exposureSet.has('Window')) {
       continue;
     }
-    if (scope == "Worker" && (exposureSet.has('Window') || !exposureSet.has('Worker'))) {
+    if (scope == "Worker" && (exposureSet.has('Window') || !(exposureSet.has('Worker') || exposureSet.has('ServiceWorker')))) {
       // Interfaces exposed on the window don't need to be re-tested
       continue;
     }
