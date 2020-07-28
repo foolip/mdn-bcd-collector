@@ -15,37 +15,11 @@
 var window = {}; // Needed for the BroadcastChannel polyfill
 
 self.importScripts('broadcastchannel.js');
+self.importScripts('harness.js');
 
 self.addEventListener('message', function(event) {
+  var result = bcd.test(event.data);
 
-  var name = event.data[0];
-  var func = event.data[1];
-  var scope = event.data[2];
-  var info = event.data[3];
-
-  var result = { name: name, info: {} };
-
-  try {
-    var value = eval(func);
-    // TODO: allow callback and promise-vending funcs
-    if (typeof value === 'boolean') {
-      result.result = value;
-    } else {
-      result.result = null;
-      result.message = 'returned ' + stringify(value);
-    }
-  } catch (err) {
-    result.result = null;
-    result.message = 'threw ' + stringify(err);
-  }
-
-  if (info !== undefined) {
-    result.info = info;
-  }
-
-  result.info.code = func;
-  result.info.scope = scope;
-
-  var broadcast = new window.BroadcastChannel2(name, {type: 'idb', webWorkerSupport: true});
+  var broadcast = new window.BroadcastChannel2(result.name, {type: 'idb', webWorkerSupport: true});
   broadcast.postMessage(result);
 })

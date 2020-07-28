@@ -22,16 +22,16 @@
 (function(global) {
   var pending = [];
 
-  function addTest(name, fn, scope, info) {
-    pending.push([name, fn, scope, info]);
-  }
-
   function stringify(value) {
     try {
       return String(value);
     } catch (err) {
       return 'unserializable value';
     }
+  }
+
+  function addTest(name, fn, scope, info) {
+    pending.push([name, fn, scope, info]);
   }
 
   // Each test is mapped to an object like this:
@@ -46,40 +46,44 @@
   //
   // If the test doesn't return true or false, or if it throws, `result` will
   // be null and a `message` property is set to an explanation.
+  function test(data) {
+    var name = data[0];
+    var func = data[1];
+    var scope = data[2];
+    var info = data[3];
+
+    var result = { name: name, info: {} };
+
+    try {
+      var value = eval(func);
+      // TODO: allow callback and promise-vending funcs
+      if (typeof value === 'boolean') {
+        result.result = value;
+      } else {
+        result.result = null;
+        result.message = 'returned ' + stringify(value);
+      }
+    } catch (err) {
+      result.result = null;
+      result.message = 'threw ' + stringify(err);
+    }
+
+    if (info !== undefined) {
+      result.info = info;
+    }
+
+    result.info.code = func;
+    result.info.scope = scope;
+
+    return result;
+  }
+
   function run(done) {
     var results = [];
 
     var length = pending.length;
     for (var i = 0; i < length; i++) {
-      var name = pending[i][0];
-      var func = pending[i][1];
-      var scope = pending[i][2];
-      var info = pending[i][3];
-
-      var result = { name: name, info: {} };
-
-      try {
-        var value = eval(func);
-        // TODO: allow callback and promise-vending funcs
-        if (typeof value === 'boolean') {
-          result.result = value;
-        } else {
-          result.result = null;
-          result.message = 'returned ' + stringify(value);
-        }
-      } catch (err) {
-        result.result = null;
-        result.message = 'threw ' + stringify(err);
-      }
-
-      if (info !== undefined) {
-        result.info = info;
-      }
-
-      result.info.code = func;
-      result.info.scope = scope;
-
-      results.push(result);
+      results.push(test(pending[i]));
     }
 
     pending = [];
