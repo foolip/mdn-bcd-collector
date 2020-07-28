@@ -118,7 +118,7 @@
           }));
         }
 
-        Promise.all(promises).then(function() {
+        Promise.allSettled(promises).then(function() {
           pending = [];
 
           window.__workerCleanup().then(function() {
