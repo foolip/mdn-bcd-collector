@@ -229,6 +229,8 @@ if ('serviceWorker' in navigator) {
       });
     };
 
+  global.stringify = stringify;
+
     return Promise.all([
       unregisterSW(),
       clearCaches(),

@@ -17,13 +17,6 @@ var window = {}; // Needed for the BroadcastChannel polyfill
 self.importScripts('broadcastchannel.js');
 
 self.addEventListener('message', function(event) {
-  function stringify(value) {
-    try {
-      return String(value);
-    } catch (err) {
-      return 'unserializable value';
-    }
-  }
 
   var name = event.data[0];
   var func = event.data[1];
