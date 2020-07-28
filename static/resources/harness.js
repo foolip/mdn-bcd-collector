@@ -173,6 +173,64 @@
     };
   }
 
+  // Service Worker helpers
+  if ('serviceWorker' in navigator) {
+    window.__waitForSWState = function (registration, desiredState) {
+      return new Promise(function (resolve, reject) {
+        let serviceWorker = registration.installing;
+
+        if (!serviceWorker) {
+          return reject(new Error('The service worker is not installing. ' +
+            'Is the test environment clean?'));
+        }
+
+        const stateListener = function (evt) {
+          if (evt.target.state === desiredState) {
+            serviceWorker.removeEventListener('statechange', stateListener);
+            return resolve(registration);
+          }
+
+          if (evt.target.state === 'redundant') {
+            serviceWorker.removeEventListener('statechange', stateListener);
+
+            return reject(new Error('Installing service worker became redundant'));
+          }
+        };
+
+        serviceWorker.addEventListener('statechange', stateListener);
+      });
+    }
+
+
+    window.__workerCleanup = function () {
+      function unregisterSW() {
+        return navigator.serviceWorker.getRegistrations()
+        .then(function (registrations) {
+          const unregisterPromise = registrations.map(function (registration) {
+            return registration.unregister();
+          });
+          return Promise.all(unregisterPromise);
+        });
+      };
+
+      function clearCaches() {
+        return window.caches.keys()
+        .then(function (cacheNames) {
+          return Promise.all(cacheNames.map(function (cacheName) {
+            return window.caches.delete(cacheName);
+          }));
+        });
+      };
+
+      return Promise.all([
+        unregisterSW(),
+        clearCaches(),
+      ]);
+    };
+  }
+
+  global.stringify = stringify;
+
   global.bcd = {
     addTest: addTest,
     test: test,
@@ -180,60 +238,3 @@
     runWorker: runWorker
   };
 })(this);
-
-if ('serviceWorker' in navigator) {
-  window.__waitForSWState = function (registration, desiredState) {
-    return new Promise(function (resolve, reject) {
-      let serviceWorker = registration.installing;
-
-      if (!serviceWorker) {
-        return reject(new Error('The service worker is not installing. ' +
-          'Is the test environment clean?'));
-      }
-
-      const stateListener = function (evt) {
-        if (evt.target.state === desiredState) {
-          serviceWorker.removeEventListener('statechange', stateListener);
-          return resolve(registration);
-        }
-
-        if (evt.target.state === 'redundant') {
-          serviceWorker.removeEventListener('statechange', stateListener);
-
-          return reject(new Error('Installing service worker became redundant'));
-        }
-      };
-
-      serviceWorker.addEventListener('statechange', stateListener);
-    });
-  }
-
-
-  window.__workerCleanup = function () {
-    function unregisterSW() {
-      return navigator.serviceWorker.getRegistrations()
-      .then(function (registrations) {
-        const unregisterPromise = registrations.map(function (registration) {
-          return registration.unregister();
-        });
-        return Promise.all(unregisterPromise);
-      });
-    };
-
-    function clearCaches() {
-      return window.caches.keys()
-      .then(function (cacheNames) {
-        return Promise.all(cacheNames.map(function (cacheName) {
-          return window.caches.delete(cacheName);
-        }));
-      });
-    };
-
-  global.stringify = stringify;
-
-    return Promise.all([
-      unregisterSW(),
-      clearCaches(),
-    ]);
-  };
-}
