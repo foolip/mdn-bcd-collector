@@ -115,8 +115,8 @@
 
             reg.active.postMessage(pending[i]);
 
-            broadcast.onmessage = function(event) {
-              results.push(event.data);
+            broadcast.onmessage = function(message) {
+              results.push(message);
               resolve();
             }
           }));
