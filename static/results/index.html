@@ -29,7 +29,6 @@ function exportGitHub() {
   status.textContent = 'Exporting...';
   client.onreadystatechange = function() {
     if (client.readyState == 4) {
-      console.log(client);
       if (client.status >= 500) {
         status.textContent = 'Failed to export';
       } else {
