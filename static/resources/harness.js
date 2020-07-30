@@ -246,7 +246,7 @@
             'Is the test environment clean?'));
         }
 
-        const stateListener = function (evt) {
+        function stateListener(evt) {
           if (evt.target.state === desiredState) {
             serviceWorker.removeEventListener('statechange', stateListener);
             return resolve(registration);
@@ -268,7 +268,7 @@
       function unregisterSW() {
         return navigator.serviceWorker.getRegistrations()
         .then(function (registrations) {
-          const unregisterPromise = registrations.map(function (registration) {
+          var unregisterPromise = registrations.map(function (registration) {
             return registration.unregister();
           });
           return Promise.all(unregisterPromise);
