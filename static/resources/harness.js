@@ -239,7 +239,7 @@
   if ('serviceWorker' in navigator) {
     window.__waitForSWState = function (registration, desiredState) {
       return new Promise(function (resolve, reject) {
-        let serviceWorker = registration.installing;
+        var serviceWorker = registration.installing;
 
         if (!serviceWorker) {
           return reject(new Error('The service worker is not installing. ' +
