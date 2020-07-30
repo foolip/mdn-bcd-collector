@@ -98,10 +98,68 @@
   function runWorker(done) {
     var results = [];
 
+    if ('Worker' in self) {
+      var myWorker = new Worker('/resources/worker.js');
+
+      var promises = [];
+
+      var length = pending.length;
+      for (var i = 0; i < length; i++) {
+        promises.push(new Promise(function (resolve, reject) {
+          var broadcast = new window.BroadcastChannel2(pending[i][0], {type: 'idb', webWorkerSupport: true});
+
+          myWorker.postMessage(pending[i]);
+
+          broadcast.onmessage = function(message) {
+            results.push(message);
+            resolve();
+          }
+        }));
+      }
+
+      Promise.allSettled(promises).then(function() {
+        pending = [];
+
+        if (done) {
+          done(results);
+        } else {
+          report(results);
+        }
+      });
+    } else {
+      console.log('No worker support');
+
+      var length = pending.length;
+      for (var i = 0; i < length; i++) {
+        var name = pending[i][0];
+        var info = pending[i][2];
+
+        var result = { name: name, result: false, message: 'No worker support' };
+
+        if (info !== undefined) {
+          result.info = info;
+        }
+
+        results.push(result);
+      }
+
+      pending = [];
+
+      if (done) {
+        done(results);
+      } else {
+        report(results);
+      }
+    }
+  }
+
+  function runServiceWorker(done) {
+    var results = [];
+
     if ('serviceWorker' in navigator) {
       window.__workerCleanup();
 
-      navigator.serviceWorker.register('/resources/worker.js')
+      navigator.serviceWorker.register('/resources/serviceworker.js')
       .then(function (reg) {
         return window.__waitForSWState(reg, 'activated');
       })
@@ -135,14 +193,14 @@
         });
       });
     } else {
-      console.log('No worker support');
+      console.log('No service worker support');
 
       var length = pending.length;
       for (var i = 0; i < length; i++) {
         var name = pending[i][0];
         var info = pending[i][2];
 
-        var result = { name: name, result: false };
+        var result = { name: name, result: false, message: 'No service worker support' };
 
         if (info !== undefined) {
           result.info = info;
@@ -239,6 +297,7 @@
     addTest: addTest,
     test: test,
     run: run,
-    runWorker: runWorker
+    runWorker: runWorker,
+    runServiceWorker: runServiceWorker
   };
 })(this);

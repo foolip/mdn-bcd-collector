@@ -17,9 +17,20 @@ var window = {}; // Needed for the BroadcastChannel polyfill
 self.importScripts('broadcastchannel.js');
 self.importScripts('harness.js');
 
-onmessage = function(event) {
+self.addEventListener('install', (event) => {
+  const promiseChain = caches.open('test-cache')
+  .then((openCache) => {
+    return openCache.put(
+      new Request(''),
+      new Response('')
+    );
+  });
+  event.waitUntil(promiseChain);
+});
+
+self.addEventListener('message', function(event) {
   var result = bcd.test(event.data);
 
   var broadcast = new window.BroadcastChannel2(result.name, {type: 'idb', webWorkerSupport: true});
   broadcast.postMessage(result);
-};
+})

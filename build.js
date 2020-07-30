@@ -286,8 +286,10 @@ function buildIDLTests(ast, scope = "Window") {
     if (scope == "Window" && !exposureSet.has('Window')) {
       continue;
     }
-    if (scope == "Worker" && (exposureSet.has('Window') || !(exposureSet.has('Worker') || exposureSet.has('ServiceWorker')))) {
-      // Interfaces exposed on the window don't need to be re-tested
+    if (scope == "Worker" && (exposureSet.has('Window') || !exposureSet.has('Worker'))) {
+      continue;
+    }
+    if (scope == "ServiceWorker" && ((exposureSet.has('Window') || exposureSet.has('Worker')) || !exposureSet.has('ServiceWorker'))) {
       continue;
     }
     // TODO: any other exposure scopes we need to worry about?
@@ -352,7 +354,9 @@ function buildIDLTests(ast, scope = "Window") {
       continue;
     }
     if (scope == "Worker" && (exposureSet.has('Window') || !exposureSet.has('Worker'))) {
-      // Interfaces exposed on the window don't need to be re-tested
+      continue;
+    }
+    if (scope == "ServiceWorker" && ((exposureSet.has('Window') || exposureSet.has('Worker')) || !exposureSet.has('ServiceWorker'))) {
       continue;
     }
     // TODO: any other exposure scopes we need to worry about?
@@ -493,10 +497,38 @@ function buildIDLWorker(ast) {
   return [['http', pathname], ['https', pathname]];
 }
 
+function buildIDLServiceWorker(ast) {
+  const tests = buildIDLTests(ast, "ServiceWorker");
+
+  const lines = [
+    '<!DOCTYPE html>',
+    '<html>',
+    '<head>'
+  ].concat(copyright).concat([
+    '<meta charset="utf-8">',
+    '<script src="/resources/json3.min.js"></script>',
+    '<script src="/resources/harness.js"></script>',
+    '<script src="/resources/broadcastchannel.js"></script>',
+    '</head>',
+    '<body>',
+    '<script>'
+  ]);
+
+  for (const [name, expr] of tests) {
+    lines.push(`bcd.addTest('api.${name}', "${expr}", 'ServiceWorker');`);
+  }
+
+  lines.push('bcd.runServiceWorker();', '</script>', '</body>', '</html>');
+  const pathname = path.join('api', 'serviceworkerinterfaces.html');
+  const filename = path.join(generatedDir, pathname);
+  writeText(filename, lines);
+  return [['http', pathname], ['https', pathname]];
+}
+
 function buildIDL(_, reffy) {
   const ast = flattenIDL(reffy.idl, collectExtraIDL());
   validateIDL(ast);
-  return buildIDLWindow(ast).concat(buildIDLWorker(ast));
+  return buildIDLWindow(ast).concat(buildIDLWorker(ast)).concat(buildIDLServiceWorker(ast));
 }
 
 async function writeManifest(manifest) {
