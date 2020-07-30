@@ -268,6 +268,22 @@ function getExposureSet(node) {
   return globals;
 }
 
+function isWithinScope(scope, exposureSet) {
+  // This function checks for a scope in the exposureSet whilst ignoring
+  // interfaces exposed on previous scopes, preventing duplication
+  if (scope == "Window" && !exposureSet.has('Window')) {
+    return false;
+  }
+  if (scope == "Worker" && (exposureSet.has('Window') || !exposureSet.has('Worker'))) {
+    return false;
+  }
+  if (scope == "ServiceWorker" && ((exposureSet.has('Window') || exposureSet.has('Worker')) || !exposureSet.has('ServiceWorker'))) {
+    return false;
+  }
+  // TODO: any other exposure scopes we need to worry about?
+  return true;
+}
+
 function buildIDLTests(ast, scope = "Window") {
   const tests = [];
 
@@ -283,16 +299,9 @@ function buildIDLTests(ast, scope = "Window") {
     }
 
     const exposureSet = getExposureSet(iface);
-    if (scope == "Window" && !exposureSet.has('Window')) {
+    if (!isWithinScope(scope, exposureSet)) {
       continue;
     }
-    if (scope == "Worker" && (exposureSet.has('Window') || !exposureSet.has('Worker'))) {
-      continue;
-    }
-    if (scope == "ServiceWorker" && ((exposureSet.has('Window') || exposureSet.has('Worker')) || !exposureSet.has('ServiceWorker'))) {
-      continue;
-    }
-    // TODO: any other exposure scopes we need to worry about?
 
     const isGlobal = !!getExtAttr(iface, 'Global');
 
@@ -350,16 +359,9 @@ function buildIDLTests(ast, scope = "Window") {
 
   for (const namespace of namespaces) {
     const exposureSet = getExposureSet(namespace);
-    if (scope == "Window" && !exposureSet.has('Window')) {
+    if (!isWithinScope(scope, exposureSet)) {
       continue;
     }
-    if (scope == "Worker" && (exposureSet.has('Window') || !exposureSet.has('Worker'))) {
-      continue;
-    }
-    if (scope == "ServiceWorker" && ((exposureSet.has('Window') || exposureSet.has('Worker')) || !exposureSet.has('ServiceWorker'))) {
-      continue;
-    }
-    // TODO: any other exposure scopes we need to worry about?
 
     // namespace object
     tests.push([namespace.name, `'${namespace.name}' in self`]);
@@ -530,7 +532,11 @@ function buildIDLServiceWorker(ast) {
 function buildIDL(_, reffy) {
   const ast = flattenIDL(reffy.idl, collectExtraIDL());
   validateIDL(ast);
-  return buildIDLWindow(ast).concat(buildIDLWorker(ast)).concat(buildIDLServiceWorker(ast));
+  let testpaths = [];
+  for (const buildFunc of [buildIDLWindow, buildIDLWorker, buildIDLServiceWorker]) {
+    testpaths.concat(buildFunc(ast));
+  }
+  return testpaths;
 }
 
 async function writeManifest(manifest) {
