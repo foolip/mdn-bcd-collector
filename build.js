@@ -481,6 +481,7 @@ function buildIDLWorker(ast) {
     '<script src="/resources/json3.min.js"></script>',
     '<script src="/resources/harness.js"></script>',
     '<script src="/resources/broadcastchannel.js"></script>',
+    '<script src="/resources/core.js"></script>',
     '</head>',
     '<body>',
     '<script>'
@@ -509,6 +510,7 @@ function buildIDLServiceWorker(ast) {
     '<script src="/resources/json3.min.js"></script>',
     '<script src="/resources/harness.js"></script>',
     '<script src="/resources/broadcastchannel.js"></script>',
+    '<script src="/resources/core.js"></script>',
     '</head>',
     '<body>',
     '<script>'
@@ -543,6 +545,7 @@ function copyResources() {
   const resources = [
     ['json3/lib/json3.min.js', 'resources'],
     ['broadcast-channel/dist/lib/browser.min.js', 'resources', 'broadcastchannel.js'],
+    ['core-js-bundle/minified.js', 'resources', 'core.js'],
     ['chai/chai.js', 'test'],
     ['mocha/mocha.css', 'test'],
     ['mocha/mocha.js', 'test']
