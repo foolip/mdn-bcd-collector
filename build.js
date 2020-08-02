@@ -534,7 +534,7 @@ function buildIDL(_, reffy) {
   validateIDL(ast);
   let testpaths = [];
   for (const buildFunc of [buildIDLWindow, buildIDLWorker, buildIDLServiceWorker]) {
-    testpaths.concat(buildFunc(ast));
+    testpaths = testpaths.concat(buildFunc(ast));
   }
   return testpaths;
 }
