@@ -484,7 +484,6 @@ function buildIDLWorker(ast) {
     '<meta charset="utf-8">',
     '<script src="/resources/json3.min.js"></script>',
     '<script src="/resources/harness.js"></script>',
-    '<script src="/resources/broadcastchannel.js"></script>',
     '<script src="/resources/core.js"></script>',
     '</head>',
     '<body>',

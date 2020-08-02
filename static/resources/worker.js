@@ -12,14 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-var window = {}; // Needed for the BroadcastChannel polyfill
-
-self.importScripts('broadcastchannel.js');
 self.importScripts('harness.js');
 
 onmessage = function(event) {
   var result = bcd.test(event.data);
-
-  var broadcast = new window.BroadcastChannel2(result.name, {type: 'idb', webWorkerSupport: true});
-  broadcast.postMessage(result);
+  postMessage(result);
 };

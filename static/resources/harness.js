@@ -102,15 +102,18 @@
       var myWorker = new Worker('/resources/worker.js');
 
       var promises = [];
+      var testhandlers = {};
+
+      myWorker.onmessage = function(event) {
+        testhandlers[event.data.name](event.data);
+      }
 
       var length = pending.length;
       for (var i = 0; i < length; i++) {
         promises.push(new Promise(function (resolve, reject) {
-          var broadcast = new window.BroadcastChannel2(pending[i][0], {type: 'idb', webWorkerSupport: true});
-
           myWorker.postMessage(pending[i]);
 
-          broadcast.onmessage = function(message) {
+          testhandlers[pending[i][0]] = function(message) {
             results.push(message);
             resolve();
           }
