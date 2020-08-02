@@ -31,6 +31,6 @@ self.addEventListener('install', (event) => {
 self.addEventListener('message', function(event) {
   var result = bcd.test(event.data);
 
-  var broadcast = new window.BroadcastChannel2(result.name, {type: 'idb', webWorkerSupport: true});
+  var broadcast = new window.BroadcastChannel2(result.name, {type: 'BroadcastChannel' in self ? 'native' : 'idb', webWorkerSupport: true});
   broadcast.postMessage(result);
 })
