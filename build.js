@@ -307,7 +307,7 @@ function buildIDLTests(ast, scope = "Window") {
     const isGlobal = !!getExtAttr(iface, 'Global');
 
     // interface object
-    tests.push([iface.name, `'${iface.name}' in self`]);
+    tests.push([iface.name, [{property: iface.name, scope: 'self'}]]);
 
     // members
     // TODO: iterable<>, maplike<>, setlike<> declarations are excluded
@@ -329,18 +329,18 @@ function buildIDLTests(ast, scope = "Window") {
         case 'attribute':
         case 'operation':
           if (isGlobal) {
-            expr = `'${member.name}' in self`;
+            expr = [{property: member.name, scope: 'self'}];
           } else if (isStatic) {
-            expr = `'${iface.name}' in self && '${member.name}' in ${iface.name}`;
+            expr = [{property: iface.name, scope: 'self'}, {property: member.name, scope: iface.name}];
           } else {
-            expr = `'${iface.name}' in self && '${member.name}' in ${iface.name}.prototype`;
+            expr = [{property: iface.name, scope: 'self'}, {property: member.name, scope: `${iface.name}.prototype`}];
           }
           break;
         case 'const':
           if (isGlobal) {
-            expr = `'${member.name}' in self`;
+            expr = [{property: member.name, scope: 'self'}];
           } else {
-            expr = `'${iface.name}' in self && '${member.name}' in ${iface.name}`;
+            expr = [{property: iface.name, scope: 'self'}, {property: member.name, scope: iface.name}];
           }
           break;
       }
@@ -365,7 +365,7 @@ function buildIDLTests(ast, scope = "Window") {
     }
 
     // namespace object
-    tests.push([namespace.name, `'${namespace.name}' in self`]);
+    tests.push([namespace.name, [{property: namespace.name, scope: 'self'}]]);
 
     // members
     const members = namespace.members.filter((member) => member.name);
@@ -373,7 +373,7 @@ function buildIDLTests(ast, scope = "Window") {
 
     for (const member of members) {
       tests.push([`${namespace.name}.${member.name}`,
-        `'${namespace.name}' in self && '${member.name}' in ${namespace.name}`]);
+        [{property: namespace.name, scope: 'self'}, {property: member.name, scope: namespace.name}]]);
     }
   }
 
@@ -463,7 +463,7 @@ function buildIDLWindow(ast) {
   ]);
 
   for (const [name, expr] of tests) {
-    lines.push(`bcd.addTest('api.${name}', "${expr}", 'Window');`);
+    lines.push(`bcd.addTest('api.${name}', ${JSON.stringify(expr)}, 'Window');`);
   }
 
   lines.push('bcd.run();', '</script>', '</body>', '</html>');
@@ -492,7 +492,7 @@ function buildIDLWorker(ast) {
   ]);
 
   for (const [name, expr] of tests) {
-    lines.push(`bcd.addTest('api.${name}', "${expr}", 'Worker');`);
+    lines.push(`bcd.addTest('api.${name}', ${JSON.stringify(expr)}, 'Worker');`);
   }
 
   lines.push('bcd.runWorker();', '</script>', '</body>', '</html>');
@@ -522,7 +522,7 @@ function buildIDLServiceWorker(ast) {
   ]);
 
   for (const [name, expr] of tests) {
-    lines.push(`bcd.addTest('api.${name}', "${expr}", 'ServiceWorker');`);
+    lines.push(`bcd.addTest('api.${name}', ${JSON.stringify(expr)}, 'ServiceWorker');`);
   }
 
   lines.push('bcd.runServiceWorker();', '</script>', '</body>', '</html>');

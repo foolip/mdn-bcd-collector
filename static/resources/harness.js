@@ -47,17 +47,27 @@
   // If the test doesn't return true or false, or if it throws, `result` will
   // be null and a `message` property is set to an explanation.
   function test(data) {
-
     var result = { name: data.name, info: {} };
 
     try {
-      var value = eval(data.code);
-      // TODO: allow callback and promise-vending funcs
-      if (typeof value === 'boolean') {
-        result.result = value;
+      if (Array.isArray(data.code)) {
+        for (const subtest of data.code) {
+          // XXX Test prefixes
+          var value = eval('"'+subtest.property+'" in '+subtest.scope);
+          result.result = value;
+          if (value === false) {
+            break; // Tests are written in hierarchy order, so if the parent (first test) is unsupported, so is the child (next test)
+          }
+        }
       } else {
-        result.result = null;
-        result.message = 'returned ' + stringify(value);
+        var value = eval(data.code);
+        // TODO: allow callback and promise-vending funcs
+        if (typeof value === 'boolean') {
+          result.result = value;
+        } else {
+          result.result = null;
+          result.message = 'returned ' + stringify(value);
+        }
       }
     } catch (err) {
       result.result = null;
