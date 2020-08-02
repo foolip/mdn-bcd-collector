@@ -118,6 +118,7 @@ function buildCSSPropertyTest(propertyNames, method, basename) {
     '<script src="/resources/harness.js"></script>',
     '</head>',
     '<body>',
+    '<p id="status">Running test...</p>',
     '<script>'
   ]);
 
@@ -457,6 +458,7 @@ function buildIDLWindow(ast) {
     '<script src="/resources/harness.js"></script>',
     '</head>',
     '<body>',
+    '<p id="status">Running test...</p>',
     '<script>'
   ]);
 
@@ -486,6 +488,7 @@ function buildIDLWorker(ast) {
     '<script src="/resources/core.js"></script>',
     '</head>',
     '<body>',
+    '<p id="status">Running test...</p>',
     '<script>'
   ]);
 
@@ -515,6 +518,7 @@ function buildIDLServiceWorker(ast) {
     '<script src="/resources/core.js"></script>',
     '</head>',
     '<body>',
+    '<p id="status">Running test...</p>',
     '<script>'
   ]);
 
