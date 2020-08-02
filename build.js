@@ -571,6 +571,19 @@ function copyResources() {
       fs.renameSync(dest, path.join(destDir, newFilename));
     }
   }
+
+  // Fix source mapping in core-js
+  const corejsPath = path.join(generatedDir, 'resources', 'core.js');
+  fs.readFile(corejsPath, 'utf8', function (err,data) {
+    if (err) {
+      return console.log(err);
+    }
+    let result = data.replace(/sourceMappingURL=minified\.js\.map/g, 'sourceMappingURL=core.js.map');
+
+    fs.writeFile(corejsPath, result, 'utf8', function (err) {
+       if (err) return console.log(err);
+    });
+  });
 }
 
 async function build(bcd, reffy) {
