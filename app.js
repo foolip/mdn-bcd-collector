@@ -20,6 +20,8 @@ const uniqueString = require('unique-string');
 
 const logger = require('./logger');
 
+const pjson = require('./package.json');
+
 const PORT = process.env.PORT || 8080;
 
 // TODO: none of this setup is pretty
@@ -94,7 +96,7 @@ app.post('/api/results', (req, res) => {
     // note: indistinguishable from finishing last test to client
   }
 
-  storage.put(req.sessionID, forURL, req.body)
+  Promise.all([storage.put(req.sessionID, "__version", pjson.version), storage.put(req.sessionID, forURL, req.body)])
       .then(() => {
         res.status(201).json(response);
       })
