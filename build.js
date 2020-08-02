@@ -556,6 +556,7 @@ function copyResources() {
     ['json3/lib/json3.min.js', 'resources'],
     ['broadcast-channel/dist/lib/browser.min.js', 'resources', 'broadcastchannel.js'],
     ['core-js-bundle/minified.js', 'resources', 'core.js'],
+    ['core-js-bundle/minified.js.map', 'resources', 'core.js.map'],
     ['chai/chai.js', 'test'],
     ['mocha/mocha.css', 'test'],
     ['mocha/mocha.js', 'test']
