@@ -30,8 +30,8 @@
     }
   }
 
-  function addTest(name, fn, scope, info) {
-    pending.push([name, fn, scope, info]);
+  function addTest(name, code, scope, info) {
+    pending.push({name: name, code: code, scope: scope, info: info});
   }
 
   // Each test is mapped to an object like this:
@@ -47,15 +47,11 @@
   // If the test doesn't return true or false, or if it throws, `result` will
   // be null and a `message` property is set to an explanation.
   function test(data) {
-    var name = data[0];
-    var func = data[1];
-    var scope = data[2];
-    var info = data[3];
 
-    var result = { name: name, info: {} };
+    var result = { name: data.name, info: {} };
 
     try {
-      var value = eval(func);
+      var value = eval(data.code);
       // TODO: allow callback and promise-vending funcs
       if (typeof value === 'boolean') {
         result.result = value;
@@ -68,12 +64,12 @@
       result.message = 'threw ' + stringify(err);
     }
 
-    if (info !== undefined) {
-      result.info = info;
+    if (data.info !== undefined) {
+      result.info = data.info;
     }
 
-    result.info.code = func;
-    result.info.scope = scope;
+    result.info.code = data.code;
+    result.info.scope = data.scope;
 
     return result;
   }
@@ -113,7 +109,7 @@
         promises.push(new Promise(function (resolve, reject) {
           myWorker.postMessage(pending[i]);
 
-          testhandlers[pending[i][0]] = function(message) {
+          testhandlers[pending[i].name] = function(message) {
             results.push(message);
             resolve();
           }
@@ -172,7 +168,7 @@
         var length = pending.length;
         for (var i = 0; i < length; i++) {
           promises.push(new Promise(function (resolve, reject) {
-            var broadcast = new window.BroadcastChannel2(pending[i][0], {type: 'BroadcastChannel' in self ? 'native' : 'idb', webWorkerSupport: true});
+            var broadcast = new window.BroadcastChannel2(pending[i].name, {type: 'BroadcastChannel' in self ? 'native' : 'idb', webWorkerSupport: true});
 
             reg.active.postMessage(pending[i]);
 
