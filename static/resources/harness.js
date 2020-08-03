@@ -58,7 +58,7 @@
     try {
       if (Array.isArray(data.code)) {
         var parentPrefix = '';
-        
+
         for (var subtest of data.code) {
           for (var prefix of prefixes.api) {
             var property = subtest.property;
@@ -110,6 +110,7 @@
 
     var length = pending.length;
     for (var i = 0; i < length; i++) {
+      document.getElementById('status').innerHTML = "Testing " + pending[i].name;
       results.push(test(pending[i]));
     }
 
@@ -123,6 +124,7 @@
 
     var length = pending.length;
     for (var i = 0; i < length; i++) {
+      document.getElementById('status').innerHTML = "Testing " + pending[i].name;
       results.push(test(pending[i]));
     }
 
@@ -147,6 +149,7 @@
       var length = pending.length;
       for (var i = 0; i < length; i++) {
         promises.push(new Promise(function (resolve, reject) {
+          document.getElementById('status').innerHTML = "Testing " + pending[i].name;
           myWorker.postMessage(pending[i]);
 
           testhandlers[pending[i].name] = function(message) {
@@ -163,6 +166,7 @@
       });
     } else {
       console.log('No worker support');
+      document.getElementById('status').innerHTML = "No worker support, skipping";
 
       var length = pending.length;
       for (var i = 0; i < length; i++) {
@@ -200,6 +204,8 @@
         var length = pending.length;
         for (var i = 0; i < length; i++) {
           promises.push(new Promise(function (resolve, reject) {
+            document.getElementById('status').innerHTML = "Testing " + pending[i].name;
+
             var broadcast = new window.BroadcastChannel2(pending[i].name, {type: 'BroadcastChannel' in self ? 'native' : 'idb', webWorkerSupport: true});
 
             reg.active.postMessage(pending[i]);
@@ -221,6 +227,7 @@
       });
     } else {
       console.log('No service worker support');
+      document.getElementById('status').innerHTML = "No service worker support, skipping";
 
       var length = pending.length;
       for (var i = 0; i < length; i++) {
@@ -243,6 +250,10 @@
   }
 
   function run(scope, done) {
+    setTimeout(function() {
+      document.getElementById('status').innerHTML = document.getElementById('status').innerHTML + "<br />This test seems to be taking a long time; it may have crashed. Check the console for errors.";
+    }, 10000);
+
     if (scope === 'CSS') {
       runCSS(done || report);
     } else if (scope === 'Window') {
