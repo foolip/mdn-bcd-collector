@@ -561,7 +561,7 @@ function buildIDLServiceWorker(ast) {
   const pathname = path.join('api', 'serviceworkerinterfaces.html');
   const filename = path.join(generatedDir, pathname);
   writeText(filename, lines);
-  return [['http', pathname], ['https', pathname]];
+  return [['https', pathname]];
 }
 
 function buildIDL(_, reffy) {
