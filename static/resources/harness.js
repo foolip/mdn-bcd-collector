@@ -69,7 +69,7 @@
 
         for (var i in data.code) {
           var subtest = data.code[i];
-          
+
           for (var j in prefixesToTest) {
             var prefix = prefixesToTest[j];
             var property = subtest.property;
@@ -227,7 +227,7 @@
           message: 'No worker support'
         };
 
-        if (info !== undefined) {
+        if (pending[i].info !== undefined) {
           result.info = pending[i].info;
         }
 
@@ -296,7 +296,7 @@
           message: 'No service worker support'
         };
 
-        if (info !== undefined) {
+        if (pending[i].info !== undefined) {
           result.info = pending[i].info;
         }
 
