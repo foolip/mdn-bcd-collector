@@ -24,7 +24,7 @@
 
   var prefixes = {
     api: ['', 'moz', 'Moz', 'webkit', 'WebKit', 'webKit', 'ms', 'MS'],
-    css: ['', 'webkit', 'moz', 'ms']
+    css: ['', 'khtml', 'webkit', 'moz', 'ms']
   };
 
   function stringify(value) {
@@ -54,13 +54,14 @@
   // be null and a `message` property is set to an explanation.
   function test(data) {
     var result = { name: data.name, info: {} };
+    var category = data.name.split('.')[0];
 
     try {
       if (Array.isArray(data.code)) {
         var parentPrefix = '';
 
         for (var subtest of data.code) {
-          for (var prefix of prefixes.api) {
+          for (var prefix of prefixes[category]) {
             var property = subtest.property;
             if (prefix) {
               property = prefix + property.charAt(0).toUpperCase() + property.slice(1);

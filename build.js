@@ -124,7 +124,7 @@ function buildCSSPropertyTest(propertyNames, method, basename) {
     var test = "";
     if (method === 'CSSStyleDeclaration') {
       const attrName = cssPropertyToIDLAttribute(name, name.startsWith('-'));
-      test = `'${attrName}' in document.body.style`;
+      test = {property: attrName, scope: 'document.body.style'};
     } else if (method === 'CSS.supports') {
       test = `CSS.supports('${name}', 'inherit')`;
     }
