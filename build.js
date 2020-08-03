@@ -51,9 +51,9 @@ function collectCSSPropertiesFromBCD(bcd, propertySet) {
       if (statement.alternative_name) {
         propertySet.add(statement.alternative_name);
       }
-      if (statement.prefix) {
-        propertySet.add(`${statement.prefix}${prop}`);
-      }
+      // if (statement.prefix) {
+      //   propertySet.add(`${statement.prefix}${prop}`);
+      // }
     }
     for (const statement of Object.values(support)) {
       process(statement);
@@ -73,6 +73,8 @@ function collectCSSPropertiesFromReffy(reffy, propertySet) {
 // `propertySet` during iteration of the same and this is safe, see
 // https://stackoverflow.com/a/28306768
 function expandCSSProperties(propertySet) {
+  return; // XXX Moving prefix tests into the harness
+
   for (const prop of propertySet) {
     const unprefixedProp = prop.replace(/^-[^-]+-/, '');
     if (unprefixedProp !== prop) {
@@ -142,7 +144,7 @@ function buildCSS(bcd, reffy) {
   const propertySet = new Set;
   collectCSSPropertiesFromBCD(bcd, propertySet);
   collectCSSPropertiesFromReffy(reffy, propertySet);
-  expandCSSProperties(propertySet);
+  // expandCSSProperties(propertySet);
 
   const propertyNames = Array.from(propertySet);
   propertyNames.sort();
