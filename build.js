@@ -328,6 +328,8 @@ function buildIDLTests(ast, scope = 'Window') {
     // Avoid generating duplicate tests for operations.
     const handledMemberNames = new Set();
 
+    // TODO: add test for API's constructor
+
     for (const member of members) {
       if (handledMemberNames.has(member.name)) {
         continue;
