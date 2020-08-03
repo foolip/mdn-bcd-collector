@@ -126,7 +126,7 @@
     }
 
     if (data.info !== undefined) {
-      result.info = data.info;
+      result.info = Object.assign({}, result.info, data.info);
     }
 
     result.info.code = data.code;
