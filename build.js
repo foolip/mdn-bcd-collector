@@ -121,14 +121,14 @@ function buildCSSPropertyTest(propertyNames, method, basename) {
   ]);
 
   for (const name of propertyNames) {
-    var test = "";
+    let expr = "";
     if (method === 'CSSStyleDeclaration') {
       const attrName = cssPropertyToIDLAttribute(name, name.startsWith('-'));
-      test = {property: attrName, scope: 'document.body.style'};
+      expr = {property: attrName, scope: 'document.body.style'};
     } else if (method === 'CSS.supports') {
-      test = `CSS.supports('${name}', 'inherit')`;
+      expr = {property: name, scope: 'CSS.supports'};
     }
-    lines.push(`bcd.addTest("css.properties.${name}", "${test}");`);
+    lines.push(`bcd.addTest("css.properties.${name}", ${JSON.stringify(expr)}, 'CSS');`);
   }
   lines.push('bcd.run("CSS");', '</script>', '</body>', '</html>');
   const pathname = path.join('css', 'properties', basename);

@@ -63,14 +63,35 @@
         for (var subtest of data.code) {
           for (var prefix of prefixes[category]) {
             var property = subtest.property;
-            if (prefix) {
-              property = prefix + property.charAt(0).toUpperCase() + property.slice(1);
+            var value;
+
+            if (subtest.scope === 'CSS.supports') {
+              if ('CSS' in self) {
+                if (prefix) {
+                  property = "-" + prefix + "-" + property;
+                }
+
+                value = CSS.supports(property, 'inherit');
+              } else {
+                value = null;
+                result.message = "Browser doesn't support CSS API";
+                break;
+              }
+            } else {
+              if (prefix) {
+                property = prefix + property.charAt(0).toUpperCase() + property.slice(1);
+              }
+           
+              value = eval('"'+property+'" in '+parentPrefix+subtest.scope);
             }
-            var value = eval('"'+property+'" in '+parentPrefix+subtest.scope);
 
             result.result = value;
             if (value === true) {
-              parentPrefix = prefix;
+              if (subtest.scope === 'CSS.supports') {
+                parentPrefix = "-" + prefix + "-";
+              } else {
+                parentPrefix = prefix;
+              }
               break;
             }
           }
