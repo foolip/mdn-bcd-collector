@@ -312,6 +312,7 @@
         var serviceWorker = registration.installing;
 
         if (!serviceWorker) {
+          window.location.reload(); // If the service worker isn't installing, it was probably interrupted during a test.
           return reject(new Error('The service worker is not installing. ' +
             'Is the test environment clean?'));
         }
