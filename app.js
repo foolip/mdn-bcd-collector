@@ -20,7 +20,7 @@ const uniqueString = require('unique-string');
 
 const logger = require('./logger');
 
-const pjson = require('./package.json');
+const appversion = require('./package.json').version;
 
 const PORT = process.env.PORT || 8080;
 
@@ -97,7 +97,7 @@ app.post('/api/results', (req, res) => {
   }
 
   Promise.all([
-    storage.put(req.sessionID, '__version', pjson.version),
+    storage.put(req.sessionID, '__version', appversion),
     storage.put(req.sessionID, forURL, req.body)
   ]).then(() => {
     res.status(201).json(response);
@@ -135,7 +135,7 @@ app.post('/api/results/export/github', (req, res) => {
 /* istanbul ignore else */
 if (process.env.NODE_ENV === 'test') {
   // Export for testing
-  module.exports = app;
+  module.exports = {app: app, version: appversion};
 } else {
   // Start the server
   app.listen(PORT, () => {

@@ -17,7 +17,7 @@
 const assert = require('assert');
 const puppeteer = require('puppeteer');
 
-const app = require('../../app');
+const { app } = require('../../app');
 
 const products = ['chrome', 'firefox'];
 
