@@ -12,7 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/* global CSS, console, document, window, location, navigator, XMLHttpRequest, self, Worker, Promise, setTimeout */
+/* global CSS, console, document, window, location, navigator, XMLHttpRequest,
+          self, Worker, Promise, setTimeout */
 
 'use strict';
 
@@ -54,7 +55,7 @@
   // If the test doesn't return true or false, or if it throws, `result` will
   // be null and a `message` property is set to an explanation.
   function test(data) {
-    var result = { name: data.name, info: {} };
+    var result = {name: data.name, info: {}};
     var category = data.name.split('.')[0];
 
     var prefixesToTest = [''];
@@ -76,27 +77,28 @@
             if (subtest.scope === 'CSS.supports') {
               if ('CSS' in self) {
                 if (prefix) {
-                  property = "-" + prefix + "-" + property;
+                  property = '-' + prefix + '-' + property;
                 }
 
                 value = CSS.supports(property, 'inherit');
               } else {
                 value = null;
-                result.message = "Browser doesn't support CSS API";
+                result.message = 'Browser doesn\'t support CSS API';
                 break;
               }
             } else {
               if (prefix) {
-                property = prefix + property.charAt(0).toUpperCase() + property.slice(1);
+                property = prefix + property.charAt(0).toUpperCase() +
+                           property.slice(1);
               }
-           
+
               value = eval('"'+property+'" in '+parentPrefix+subtest.scope);
             }
 
             result.result = value;
             if (value === true) {
               if (subtest.scope === 'CSS.supports') {
-                parentPrefix = "-" + prefix + "-";
+                parentPrefix = '-' + prefix + '-';
               } else {
                 parentPrefix = prefix;
               }
@@ -105,7 +107,9 @@
           }
 
           if (result.result === false) {
-            break; // Tests are written in hierarchy order, so if the parent (first test) is unsupported, so is the child (next test)
+            break;
+            // Tests are written in hierarchy order, so if the parent (first
+            // test) is unsupported, so is the child (next test)
           }
 
           result.prefix = parentPrefix;
@@ -140,7 +144,9 @@
 
     var length = pending.length;
     for (var i = 0; i < length; i++) {
-      if (statusElement) {statusElement.innerHTML = "Testing " + pending[i].name;}
+      if (statusElement) {
+        statusElement.innerHTML = 'Testing ' + pending[i].name;
+      }
       results.push(test(pending[i]));
     }
 
@@ -154,7 +160,9 @@
 
     var length = pending.length;
     for (var i = 0; i < length; i++) {
-      if (statusElement) {statusElement.innerHTML = "Testing " + pending[i].name;}
+      if (statusElement) {
+        statusElement.innerHTML = 'Testing ' + pending[i].name;
+      }
       results.push(test(pending[i]));
     }
 
@@ -176,17 +184,19 @@
 
       myWorker.onmessage = function(event) {
         testhandlers[event.data.name](event.data);
-      }
+      };
 
       for (i = 0; i < length; i++) {
-        promises.push(new Promise(function (resolve) {
-          if (statusElement) {statusElement.innerHTML = "Testing " + pending[i].name;}
+        promises.push(new Promise(function(resolve) {
+          if (statusElement) {
+            statusElement.innerHTML = 'Testing ' + pending[i].name;
+          }
           myWorker.postMessage(pending[i]);
 
           testhandlers[pending[i].name] = function(message) {
             results.push(message);
             resolve();
-          }
+          };
         }));
       }
 
@@ -197,13 +207,15 @@
       });
     } else {
       console.log('No worker support');
-      if (statusElement) {statusElement.innerHTML = "No worker support, skipping";}
+      if (statusElement) {
+        statusElement.innerHTML = 'No worker support, skipping';
+      }
 
       for (i = 0; i < length; i++) {
         var name = pending[i][0];
         var info = pending[i][2];
 
-        var result = { name: name, result: false, message: 'No worker support' };
+        var result = {name: name, result: false, message: 'No worker support'};
 
         if (info !== undefined) {
           result.info = info;
@@ -225,46 +237,57 @@
       window.__workerCleanup();
 
       navigator.serviceWorker.register('/resources/serviceworker.js')
-      .then(function (reg) {
-        return window.__waitForSWState(reg, 'activated');
-      })
-      .then(function (reg) {
-        var promises = [];
+          .then(function(reg) {
+            return window.__waitForSWState(reg, 'activated');
+          })
+          .then(function(reg) {
+            var promises = [];
 
-        var length = pending.length;
-        for (var i = 0; i < length; i++) {
-          promises.push(new Promise(function (resolve) {
-            if (statusElement) {statusElement.innerHTML = "Testing " + pending[i].name;}
+            var length = pending.length;
+            for (var i = 0; i < length; i++) {
+              promises.push(new Promise(function(resolve) {
+                if (statusElement) {
+                  statusElement.innerHTML = 'Testing ' + pending[i].name;
+                }
 
-            var broadcast = new window.BroadcastChannel2(pending[i].name, {type: 'BroadcastChannel' in self ? 'native' : 'idb', webWorkerSupport: true});
+                var broadcast = new window.BroadcastChannel2(pending[i].name, {
+                  type: 'BroadcastChannel' in self ? 'native' : 'idb',
+                  webWorkerSupport: true
+                });
 
-            reg.active.postMessage(pending[i]);
+                reg.active.postMessage(pending[i]);
 
-            broadcast.onmessage = function(message) {
-              results.push(message);
-              resolve();
+                broadcast.onmessage = function(message) {
+                  results.push(message);
+                  resolve();
+                };
+              }));
             }
-          }));
-        }
 
-        Promise.allSettled(promises).then(function() {
-          pending = [];
+            Promise.allSettled(promises).then(function() {
+              pending = [];
 
-          window.__workerCleanup().then(function() {
-            done(results);
+              window.__workerCleanup().then(function() {
+                done(results);
+              });
+            });
           });
-        });
-      });
     } else {
       console.log('No service worker support');
-      if (statusElement) {statusElement.innerHTML = "No service worker support, skipping";}
+      if (statusElement) {
+        statusElement.innerHTML = 'No service worker support, skipping';
+      }
 
       var length = pending.length;
       for (var i = 0; i < length; i++) {
         var name = pending[i][0];
         var info = pending[i][2];
 
-        var result = { name: name, result: false, message: 'No service worker support' };
+        var result = {
+          name: name,
+          result: false,
+          message: 'No service worker support'
+        };
 
         if (info !== undefined) {
           result.info = info;
@@ -282,7 +305,9 @@
   function run(scope, done) {
     setTimeout(function() {
       if (statusElement) {
-        statusElement.innerHTML = statusElement.innerHTML + "<br />This test seems to be taking a long time; it may have crashed. Check the console for errors."
+        statusElement.innerHTML = statusElement.innerHTML +
+          '<br />This test seems to be taking a long time; it may have ' +
+          'crashed. Check the console for errors.';
       }
     }, 10000);
 
@@ -295,7 +320,7 @@
     } else if (scope === 'ServiceWorker') {
       runServiceWorker(done || report);
     } else {
-      console.error("Unknown scope specified: " + scope);
+      console.error('Unknown scope specified: ' + scope);
     }
   }
 
@@ -317,12 +342,15 @@
 
   // Service Worker helpers
   if ('serviceWorker' in navigator) {
-    window.__waitForSWState = function (registration, desiredState) {
-      return new Promise(function (resolve, reject) {
+    window.__waitForSWState = function(registration, desiredState) {
+      return new Promise(function(resolve, reject) {
         var serviceWorker = registration.installing;
 
         if (!serviceWorker) {
-          window.location.reload(); // If the service worker isn't installing, it was probably interrupted during a test.
+          // If the service worker isn't installing, it was probably
+          // interrupted during a test.
+          window.location.reload();
+
           return reject(new Error('The service worker is not installing. ' +
             'Is the test environment clean?'));
         }
@@ -336,38 +364,40 @@
           if (evt.target.state === 'redundant') {
             serviceWorker.removeEventListener('statechange', stateListener);
 
-            return reject(new Error('Installing service worker became redundant'));
+            return reject(
+                new Error('Installing service worker became redundant')
+            );
           }
         }
 
         serviceWorker.addEventListener('statechange', stateListener);
       });
-    }
+    };
 
 
-    window.__workerCleanup = function () {
+    window.__workerCleanup = function() {
       function unregisterSW() {
         return navigator.serviceWorker.getRegistrations()
-        .then(function (registrations) {
-          var unregisterPromise = registrations.map(function (registration) {
-            return registration.unregister();
-          });
-          return Promise.all(unregisterPromise);
-        });
+            .then(function(registrations) {
+              var unregisterPromise = registrations.map(function(registration) {
+                return registration.unregister();
+              });
+              return Promise.all(unregisterPromise);
+            });
       }
 
       function clearCaches() {
         return window.caches.keys()
-        .then(function (cacheNames) {
-          return Promise.all(cacheNames.map(function (cacheName) {
-            return window.caches.delete(cacheName);
-          }));
-        });
+            .then(function(cacheNames) {
+              return Promise.all(cacheNames.map(function(cacheName) {
+                return window.caches.delete(cacheName);
+              }));
+            });
       }
 
       return Promise.all([
         unregisterSW(),
-        clearCaches(),
+        clearCaches()
       ]);
     };
   }

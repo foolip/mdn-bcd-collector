@@ -12,7 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/* eslint no-undef: 0 */
+/* global mocha, chai, describe, it, location */
+/* global bcd */
 
 'use strict';
 
@@ -37,7 +38,7 @@ describe('harness.js', function() {
       assert.deepStrictEqual(results, [{
         name: 'name',
         result: true,
-        info: { code: 'true', scope: 'test' }
+        info: {code: 'true', scope: 'test'}
       }]);
       done();
     });
@@ -49,7 +50,7 @@ describe('harness.js', function() {
       assert.deepStrictEqual(results, [{
         name: 'name',
         result: false,
-        info: { code: 'false', scope: 'test' }
+        info: {code: 'false', scope: 'test'}
       }]);
       done();
     });
@@ -62,7 +63,7 @@ describe('harness.js', function() {
         name: 'name',
         result: null,
         message: 'returned null',
-        info: { code: 'null', scope: 'test' }
+        info: {code: 'null', scope: 'test'}
       }]);
       done();
     });
@@ -72,13 +73,13 @@ describe('harness.js', function() {
     if (typeof Symbol === 'undefined') {
       this.skip();
     }
-    bcd.addTest('name', "Symbol('bar')", 'test');
+    bcd.addTest('name', 'Symbol(\'bar\')', 'test');
     bcd.run('Window', function(results) {
       assert.deepStrictEqual(results, [{
         name: 'name',
         result: null,
-        message: "returned Symbol(bar)",
-        info: { code: "Symbol('bar')", scope: 'test' }
+        message: 'returned Symbol(bar)',
+        info: {code: 'Symbol(\'bar\')', scope: 'test'}
       }]);
       done();
     });
@@ -91,30 +92,32 @@ describe('harness.js', function() {
         name: 'name',
         result: null,
         message: 'returned undefined',
-        info: { code: 'undefined', scope: 'test' }
+        info: {code: 'undefined', scope: 'test'}
       }]);
       done();
     });
   });
 
   it('throw error', function(done) {
-    bcd.addTest('name', "throw new Error('something went wrong')", 'test');
+    bcd.addTest('name', 'throw new Error(\'something went wrong\')', 'test');
     bcd.run('Window', function(results) {
       assert.deepStrictEqual(results, [{
         name: 'name',
         result: null,
         message: 'threw Error: something went wrong',
-        info: { code: "throw new Error('something went wrong')", scope: 'test' }
+        info: {code: 'throw new Error(\'something went wrong\')', scope: 'test'}
       }]);
       done();
     });
   });
 
   it('include info', function(done) {
-    var info = { 'extra': 'stuff' };
+    var info = {'extra': 'stuff'};
     bcd.addTest('ctx', 'true', 'test', info);
     bcd.run('Window', function(results) {
-      assert.deepStrictEqual(results[0].info, { extra: 'stuff', code: 'true', scope: 'test' });
+      assert.deepStrictEqual(results[0].info, {
+        extra: 'stuff', code: 'true', scope: 'test'
+      });
       done();
     });
   });
@@ -124,13 +127,13 @@ describe('harness.js', function() {
     bcd.addTest('second', 'false', 'test', {b: 2});
     bcd.run('Window', function(results) {
       assert.deepEqual(results, [{
-          name: 'first',
-          result: true,
-          info: {code: "true", scope: 'test', a: 1}
-        }, {
-          name: 'second',
-          result: false,
-          info: {code: "false", scope: 'test', b: 2}
+        name: 'first',
+        result: true,
+        info: {code: 'true', scope: 'test', a: 1}
+      }, {
+        name: 'second',
+        result: false,
+        info: {code: 'false', scope: 'test', b: 2}
       }]);
       done();
     });

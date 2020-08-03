@@ -22,18 +22,21 @@ self.importScripts('harness.js');
 
 self.addEventListener('install', function(event) {
   var promiseChain = caches.open('test-cache')
-  .then(function(openCache) {
-    return openCache.put(
-      new Request(''),
-      new Response('')
-    );
-  });
+      .then(function(openCache) {
+        return openCache.put(
+            new Request(''),
+            new Response('')
+        );
+      });
   event.waitUntil(promiseChain);
 });
 
 self.addEventListener('message', function(event) {
   var result = bcd.test(event.data);
 
-  var broadcast = new window.BroadcastChannel2(result.name, {type: 'BroadcastChannel' in self ? 'native' : 'idb', webWorkerSupport: true});
+  var broadcast = new window.BroadcastChannel2(result.name, {
+    type: 'BroadcastChannel' in self ? 'native' : 'idb',
+    webWorkerSupport: true
+  });
   broadcast.postMessage(result);
-})
+});
