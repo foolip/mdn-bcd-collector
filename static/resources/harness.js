@@ -21,6 +21,7 @@
 
 (function(global) {
   var pending = [];
+  var statusElement = 'document' in self && document.getElementById('status');
 
   var prefixes = {
     api: ['', 'moz', 'Moz', 'webkit', 'WebKit', 'webKit', 'ms', 'MS'],
@@ -134,7 +135,7 @@
 
     var length = pending.length;
     for (var i = 0; i < length; i++) {
-      document.getElementById('status').innerHTML = "Testing " + pending[i].name;
+      if (statusElement) {statusElement.innerHTML = "Testing " + pending[i].name;}
       results.push(test(pending[i]));
     }
 
@@ -148,7 +149,7 @@
 
     var length = pending.length;
     for (var i = 0; i < length; i++) {
-      document.getElementById('status').innerHTML = "Testing " + pending[i].name;
+      if (statusElement) {statusElement.innerHTML = "Testing " + pending[i].name;}
       results.push(test(pending[i]));
     }
 
@@ -174,7 +175,7 @@
 
       for (i = 0; i < length; i++) {
         promises.push(new Promise(function (resolve) {
-          document.getElementById('status').innerHTML = "Testing " + pending[i].name;
+          if (statusElement) {statusElement.innerHTML = "Testing " + pending[i].name;}
           myWorker.postMessage(pending[i]);
 
           testhandlers[pending[i].name] = function(message) {
@@ -191,7 +192,7 @@
       });
     } else {
       console.log('No worker support');
-      document.getElementById('status').innerHTML = "No worker support, skipping";
+      if (statusElement) {statusElement.innerHTML = "No worker support, skipping";}
 
       for (i = 0; i < length; i++) {
         var name = pending[i][0];
@@ -228,7 +229,7 @@
         var length = pending.length;
         for (var i = 0; i < length; i++) {
           promises.push(new Promise(function (resolve) {
-            document.getElementById('status').innerHTML = "Testing " + pending[i].name;
+            if (statusElement) {statusElement.innerHTML = "Testing " + pending[i].name;}
 
             var broadcast = new window.BroadcastChannel2(pending[i].name, {type: 'BroadcastChannel' in self ? 'native' : 'idb', webWorkerSupport: true});
 
@@ -251,7 +252,7 @@
       });
     } else {
       console.log('No service worker support');
-      document.getElementById('status').innerHTML = "No service worker support, skipping";
+      if (statusElement) {statusElement.innerHTML = "No service worker support, skipping";}
 
       var length = pending.length;
       for (var i = 0; i < length; i++) {
@@ -275,7 +276,7 @@
 
   function run(scope, done) {
     setTimeout(function() {
-      document.getElementById('status').innerHTML = document.getElementById('status').innerHTML + "<br />This test seems to be taking a long time; it may have crashed. Check the console for errors.";
+      if (statusElement) {statusElement.innerHTML = statusElement.innerHTML + "<br />This test seems to be taking a long time; it may have crashed. Check the console for errors."};
     }, 10000);
 
     if (scope === 'CSS') {
