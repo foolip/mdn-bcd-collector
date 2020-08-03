@@ -114,7 +114,6 @@ describe('harness.js', function() {
     var info = { 'extra': 'stuff' };
     bcd.addTest('ctx', 'true', 'test', info);
     bcd.run('Window', function(results) {
-      console.log(results[0].info);
       assert.deepStrictEqual(results[0].info, { extra: 'stuff', code: 'true', scope: 'test' });
       done();
     });
