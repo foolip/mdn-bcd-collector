@@ -217,13 +217,14 @@
       }
 
       for (i = 0; i < length; i++) {
-        var name = pending[i][0];
-        var info = pending[i][2];
-
-        var result = {name: name, result: false, message: 'No worker support'};
+        var result = {
+          name: pending[i].name,
+          result: false,
+          message: 'No worker support'
+        };
 
         if (info !== undefined) {
-          result.info = info;
+          result.info = pending[i].info;
         }
 
         results.push(result);
@@ -285,17 +286,14 @@
 
       var length = pending.length;
       for (var i = 0; i < length; i++) {
-        var name = pending[i][0];
-        var info = pending[i][2];
-
         var result = {
-          name: name,
+          name: pending[i].name,
           result: false,
           message: 'No service worker support'
         };
 
         if (info !== undefined) {
-          result.info = info;
+          result.info = pending[i].info;
         }
 
         results.push(result);
