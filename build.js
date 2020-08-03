@@ -125,9 +125,9 @@ function buildCSSPropertyTest(propertyNames, method, basename) {
     let expr = '';
     if (method === 'CSSStyleDeclaration') {
       const attrName = cssPropertyToIDLAttribute(name, name.startsWith('-'));
-      expr = {property: attrName, scope: 'document.body.style'};
+      expr = [{property: attrName, scope: 'document.body.style'}];
     } else if (method === 'CSS.supports') {
-      expr = {property: name, scope: 'CSS.supports'};
+      expr = [{property: name, scope: 'CSS.supports'}];
     }
     lines.push(`bcd.addTest("${ident}", ${JSON.stringify(expr)}, 'CSS');`);
   }
