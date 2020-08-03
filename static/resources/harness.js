@@ -57,14 +57,19 @@
     var result = { name: data.name, info: {} };
     var category = data.name.split('.')[0];
 
+    var prefixesToTest = [''];
+    if (category in prefixes) {
+      prefixesToTest = prefixes[category];
+    }
+
     try {
       if (Array.isArray(data.code)) {
         var parentPrefix = '';
 
         for (var i in data.code) {
           var subtest = data.code[i];
-          for (var j in prefixes[category]) {
-            var prefix = prefixes[category][j];
+          for (var j in prefixesToTest) {
+            var prefix = prefixesToTest[j];
             var property = subtest.property;
             var value;
 
