@@ -103,7 +103,11 @@
             result.result = value;
             if (value === true) {
               if (subtest.scope === 'CSS.supports') {
-                parentPrefix = '-' + prefix + '-';
+                if (prefix) {
+                  parentPrefix = '-' + prefix + '-';
+                } else {
+                  parentPrefix = '';
+                }
               } else {
                 parentPrefix = prefix;
               }
