@@ -60,8 +60,10 @@
       if (Array.isArray(data.code)) {
         var parentPrefix = '';
 
-        for (var subtest of data.code) {
-          for (var prefix of prefixes[category]) {
+        for (var i in data.code) {
+          var subtest = data.code[i];
+          for (var j in prefixes[category]) {
+            var prefix = prefixes[category][j];
             var property = subtest.property;
             var value;
 
