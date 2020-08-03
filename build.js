@@ -20,7 +20,7 @@ const WebIDL2 = require('webidl2');
 
 const generatedDir = path.join(__dirname, 'generated');
 
-const copyright = ["<!--Copyright 2020 Google LLC", "", "Licensed under the Apache License, Version 2.0 (the \"License\"); you may not use this file except in compliance with the License. You may obtain a copy of the License at", "", "     https://www.apache.org/licenses/LICENSE-2.0", "", "Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an \"AS IS\" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.-->"];
+const copyright = ['<!--Copyright 2020 Google LLC', '', 'Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at', '', '     https://www.apache.org/licenses/LICENSE-2.0', '', 'Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.-->'];
 
 function writeText(filename, content) {
   if (Array.isArray(content)) {
@@ -121,14 +121,15 @@ function buildCSSPropertyTest(propertyNames, method, basename) {
   ]);
 
   for (const name of propertyNames) {
-    let expr = "";
+    const ident = `css.properties.${name}`;
+    let expr = '';
     if (method === 'CSSStyleDeclaration') {
       const attrName = cssPropertyToIDLAttribute(name, name.startsWith('-'));
       expr = {property: attrName, scope: 'document.body.style'};
     } else if (method === 'CSS.supports') {
       expr = {property: name, scope: 'CSS.supports'};
     }
-    lines.push(`bcd.addTest("css.properties.${name}", ${JSON.stringify(expr)}, 'CSS');`);
+    lines.push(`bcd.addTest("${ident}", ${JSON.stringify(expr)}, 'CSS');`);
   }
   lines.push('bcd.run("CSS");', '</script>', '</body>', '</html>');
   const pathname = path.join('css', 'properties', basename);
@@ -270,20 +271,29 @@ function getExposureSet(node) {
 function isWithinScope(scope, exposureSet) {
   // This function checks for a scope in the exposureSet whilst ignoring
   // interfaces exposed on previous scopes, preventing duplication
-  if (scope == "Window" && !exposureSet.has('Window')) {
+  if (scope == 'Window' && !exposureSet.has('Window')) {
     return false;
   }
-  if (scope == "Worker" && (exposureSet.has('Window') || !exposureSet.has('Worker'))) {
+  if (
+    scope == 'Worker' &&
+    (exposureSet.has('Window') || !exposureSet.has('Worker'))
+  ) {
     return false;
   }
-  if (scope == "ServiceWorker" && ((exposureSet.has('Window') || exposureSet.has('Worker')) || !exposureSet.has('ServiceWorker'))) {
+  if (
+    scope == 'ServiceWorker' &&
+    (
+      (exposureSet.has('Window') || exposureSet.has('Worker')) ||
+      !exposureSet.has('ServiceWorker')
+    )
+  ) {
     return false;
   }
   // TODO: any other exposure scopes we need to worry about?
   return true;
 }
 
-function buildIDLTests(ast, scope = "Window") {
+function buildIDLTests(ast, scope = 'Window') {
   const tests = [];
 
   const interfaces = ast.filter((dfn) => dfn.type === 'interface');
@@ -329,16 +339,25 @@ function buildIDLTests(ast, scope = "Window") {
           if (isGlobal) {
             expr = [{property: member.name, scope: 'self'}];
           } else if (isStatic) {
-            expr = [{property: iface.name, scope: 'self'}, {property: member.name, scope: iface.name}];
+            expr = [
+              {property: iface.name, scope: 'self'},
+              {property: member.name, scope: iface.name}
+            ];
           } else {
-            expr = [{property: iface.name, scope: 'self'}, {property: member.name, scope: `${iface.name}.prototype`}];
+            expr = [
+              {property: iface.name, scope: 'self'},
+              {property: member.name, scope: `${iface.name}.prototype`}
+            ];
           }
           break;
         case 'const':
           if (isGlobal) {
             expr = [{property: member.name, scope: 'self'}];
           } else {
-            expr = [{property: iface.name, scope: 'self'}, {property: member.name, scope: iface.name}];
+            expr = [
+              {property: iface.name, scope: 'self'},
+              {property: member.name, scope: iface.name}
+            ];
           }
           break;
       }
@@ -370,8 +389,13 @@ function buildIDLTests(ast, scope = "Window") {
     members.sort((a, b) => a.name.localeCompare(b.name));
 
     for (const member of members) {
-      tests.push([`${namespace.name}.${member.name}`,
-        [{property: namespace.name, scope: 'self'}, {property: member.name, scope: namespace.name}]]);
+      tests.push([
+        `${namespace.name}.${member.name}`,
+        [
+          {property: namespace.name, scope: 'self'},
+          {property: member.name, scope: namespace.name}
+        ]
+      ]);
     }
   }
 
@@ -461,7 +485,9 @@ function buildIDLWindow(ast) {
   ]);
 
   for (const [name, expr] of tests) {
-    lines.push(`bcd.addTest('api.${name}', ${JSON.stringify(expr)}, 'Window');`);
+    lines.push(
+        `bcd.addTest('api.${name}', ${JSON.stringify(expr)}, 'Window');`
+    );
   }
 
   lines.push('bcd.run("Window");', '</script>', '</body>', '</html>');
@@ -472,7 +498,7 @@ function buildIDLWindow(ast) {
 }
 
 function buildIDLWorker(ast) {
-  const tests = buildIDLTests(ast, "Worker");
+  const tests = buildIDLTests(ast, 'Worker');
 
   const lines = [
     '<!DOCTYPE html>',
@@ -490,7 +516,9 @@ function buildIDLWorker(ast) {
   ]);
 
   for (const [name, expr] of tests) {
-    lines.push(`bcd.addTest('api.${name}', ${JSON.stringify(expr)}, 'Worker');`);
+    lines.push(
+        `bcd.addTest('api.${name}', ${JSON.stringify(expr)}, 'Worker');`
+    );
   }
 
   lines.push('bcd.run("Worker");', '</script>', '</body>', '</html>');
@@ -501,7 +529,7 @@ function buildIDLWorker(ast) {
 }
 
 function buildIDLServiceWorker(ast) {
-  const tests = buildIDLTests(ast, "ServiceWorker");
+  const tests = buildIDLTests(ast, 'ServiceWorker');
 
   const lines = [
     '<!DOCTYPE html>',
@@ -520,7 +548,9 @@ function buildIDLServiceWorker(ast) {
   ]);
 
   for (const [name, expr] of tests) {
-    lines.push(`bcd.addTest('api.${name}', ${JSON.stringify(expr)}, 'ServiceWorker');`);
+    lines.push(
+        `bcd.addTest('api.${name}', ${JSON.stringify(expr)}, 'ServiceWorker');`
+    );
   }
 
   lines.push('bcd.run("ServiceWorker");', '</script>', '</body>', '</html>');
@@ -534,7 +564,9 @@ function buildIDL(_, reffy) {
   const ast = flattenIDL(reffy.idl, collectExtraIDL());
   validateIDL(ast);
   let testpaths = [];
-  for (const buildFunc of [buildIDLWindow, buildIDLWorker, buildIDLServiceWorker]) {
+  for (const buildFunc of [
+    buildIDLWindow, buildIDLWorker, buildIDLServiceWorker
+  ]) {
     testpaths = testpaths.concat(buildFunc(ast));
   }
   return testpaths;
@@ -551,7 +583,11 @@ async function writeManifest(manifest) {
 function copyResources() {
   const resources = [
     ['json3/lib/json3.min.js', 'resources'],
-    ['broadcast-channel/dist/lib/browser.min.js', 'resources', 'broadcastchannel.js'],
+    [
+      'broadcast-channel/dist/lib/browser.min.js',
+      'resources',
+      'broadcastchannel.js'
+    ],
     ['core-js-bundle/minified.js', 'resources', 'core.js'],
     ['core-js-bundle/minified.js.map', 'resources', 'core.js.map'],
     ['chai/chai.js', 'test'],
@@ -571,14 +607,17 @@ function copyResources() {
 
   // Fix source mapping in core-js
   const corejsPath = path.join(generatedDir, 'resources', 'core.js');
-  fs.readFile(corejsPath, 'utf8', function (err,data) {
+  fs.readFile(corejsPath, 'utf8', function(err, data) {
     if (err) {
       return console.log(err);
     }
-    let result = data.replace(/sourceMappingURL=minified\.js\.map/g, 'sourceMappingURL=core.js.map');
+    const result = data.replace(
+        /sourceMappingURL=minified\.js\.map/g,
+        'sourceMappingURL=core.js.map'
+    );
 
-    fs.writeFile(corejsPath, result, 'utf8', function (err) {
-       if (err) return console.log(err);
+    fs.writeFile(corejsPath, result, 'utf8', function(err) {
+      if (err) return console.log(err);
     });
   });
 }

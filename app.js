@@ -96,14 +96,15 @@ app.post('/api/results', (req, res) => {
     // note: indistinguishable from finishing last test to client
   }
 
-  Promise.all([storage.put(req.sessionID, "__version", pjson.version), storage.put(req.sessionID, forURL, req.body)])
-      .then(() => {
-        res.status(201).json(response);
-      })
-      .catch((err) => {
-        logger.error(err);
-        res.status(500).end();
-      });
+  Promise.all([
+    storage.put(req.sessionID, '__version', pjson.version),
+    storage.put(req.sessionID, forURL, req.body)
+  ]).then(() => {
+    res.status(201).json(response);
+  }).catch((err) => {
+    logger.error(err);
+    res.status(500).end();
+  });
 });
 
 app.get('/api/results', (req, res) => {
