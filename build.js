@@ -51,9 +51,6 @@ function collectCSSPropertiesFromBCD(bcd, propertySet) {
       if (statement.alternative_name) {
         propertySet.add(statement.alternative_name);
       }
-      if (statement.prefix) {
-        propertySet.add(`${statement.prefix}${prop}`);
-      }
     }
     for (const statement of Object.values(support)) {
       process(statement);
@@ -65,22 +62,6 @@ function collectCSSPropertiesFromReffy(reffy, propertySet) {
   for (const data of Object.values(reffy.css)) {
     for (const prop of Object.keys(data.properties)) {
       propertySet.add(prop);
-    }
-  }
-}
-
-// Add prefixed forms from unprefixed and vice versa. Items are added to
-// `propertySet` during iteration of the same and this is safe, see
-// https://stackoverflow.com/a/28306768
-function expandCSSProperties(propertySet) {
-  for (const prop of propertySet) {
-    const unprefixedProp = prop.replace(/^-[^-]+-/, '');
-    if (unprefixedProp !== prop) {
-      propertySet.add(unprefixedProp);
-      // fall through to add other prefixed forms
-    }
-    for (const prefix of ['moz', 'ms', 'webkit']) {
-      propertySet.add(`-${prefix}-${unprefixedProp}`);
     }
   }
 }
@@ -142,7 +123,6 @@ function buildCSS(bcd, reffy) {
   const propertySet = new Set;
   collectCSSPropertiesFromBCD(bcd, propertySet);
   collectCSSPropertiesFromReffy(reffy, propertySet);
-  expandCSSProperties(propertySet);
 
   const propertyNames = Array.from(propertySet);
   propertyNames.sort();
@@ -325,6 +305,8 @@ function buildIDLTests(ast, scope = 'Window') {
 
     // Avoid generating duplicate tests for operations.
     const handledMemberNames = new Set();
+
+    // TODO: add test for API's constructor
 
     for (const member of members) {
       if (handledMemberNames.has(member.name)) {
@@ -557,7 +539,7 @@ function buildIDLServiceWorker(ast) {
   const pathname = path.join('api', 'serviceworkerinterfaces.html');
   const filename = path.join(generatedDir, pathname);
   writeText(filename, lines);
-  return [['http', pathname], ['https', pathname]];
+  return [['https', pathname]];
 }
 
 function buildIDL(_, reffy) {
@@ -646,7 +628,6 @@ if (process.env.NODE_ENV === 'test') {
     cssPropertyToIDLAttribute,
     collectCSSPropertiesFromBCD,
     collectCSSPropertiesFromReffy,
-    expandCSSProperties,
     flattenIDL
   };
 } else {

@@ -69,6 +69,7 @@
 
         for (var i in data.code) {
           var subtest = data.code[i];
+
           for (var j in prefixesToTest) {
             var prefix = prefixesToTest[j];
             var property = subtest.property;
@@ -77,7 +78,11 @@
             if (subtest.scope === 'CSS.supports') {
               if ('CSS' in self) {
                 if (prefix) {
-                  property = '-' + prefix + '-' + property;
+                  var prefixToAdd = '-' + prefix;
+                  if (!property.startsWith('-')) {
+                    prefixToAdd += '-';
+                  }
+                  property = prefixToAdd + property;
                 }
 
                 value = CSS.supports(property, 'inherit');
@@ -97,8 +102,12 @@
 
             result.result = value;
             if (value === true) {
-              if (subtest.scope === 'CSS.supports') {
-                parentPrefix = '-' + prefix + '-';
+              if (subtest.scope.startsWith('CSS')) {
+                if (prefix) {
+                  parentPrefix = '-' + prefix + '-';
+                } else {
+                  parentPrefix = '';
+                }
               } else {
                 parentPrefix = prefix;
               }
@@ -212,13 +221,14 @@
       }
 
       for (i = 0; i < length; i++) {
-        var name = pending[i][0];
-        var info = pending[i][2];
+        var result = {
+          name: pending[i].name,
+          result: false,
+          message: 'No worker support'
+        };
 
-        var result = {name: name, result: false, message: 'No worker support'};
-
-        if (info !== undefined) {
-          result.info = info;
+        if (pending[i].info !== undefined) {
+          result.info = pending[i].info;
         }
 
         results.push(result);
@@ -280,17 +290,14 @@
 
       var length = pending.length;
       for (var i = 0; i < length; i++) {
-        var name = pending[i][0];
-        var info = pending[i][2];
-
         var result = {
-          name: name,
+          name: pending[i].name,
           result: false,
           message: 'No service worker support'
         };
 
-        if (info !== undefined) {
-          result.info = info;
+        if (pending[i].info !== undefined) {
+          result.info = pending[i].info;
         }
 
         results.push(result);
