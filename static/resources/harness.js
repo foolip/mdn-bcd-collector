@@ -102,7 +102,7 @@
 
             result.result = value;
             if (value === true) {
-              if (subtest.scope === 'CSS.supports') {
+              if (subtest.scope.startsWith('CSS')) {
                 if (prefix) {
                   parentPrefix = '-' + prefix + '-';
                 } else {
