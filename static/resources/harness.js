@@ -77,7 +77,11 @@
             if (subtest.scope === 'CSS.supports') {
               if ('CSS' in self) {
                 if (prefix) {
-                  property = '-' + prefix + '-' + property;
+                  var prefixToAdd = '-' + prefix;
+                  if (!property.startsWith('-')) {
+                    prefixToAdd += '-';
+                  }
+                  property = prefixToAdd + property;
                 }
 
                 value = CSS.supports(property, 'inherit');
