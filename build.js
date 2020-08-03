@@ -132,7 +132,7 @@ function buildCSSPropertyTest(propertyNames, method, basename) {
     }
     lines.push(`bcd.addTest("css.properties.${name}", "${test}");`);
   }
-  lines.push('bcd.run();', '</script>', '</body>', '</html>');
+  lines.push('bcd.run("CSS");', '</script>', '</body>', '</html>');
   const pathname = path.join('css', 'properties', basename);
   const filename = path.join(generatedDir, pathname);
   writeText(filename, lines);
@@ -466,7 +466,7 @@ function buildIDLWindow(ast) {
     lines.push(`bcd.addTest('api.${name}', ${JSON.stringify(expr)}, 'Window');`);
   }
 
-  lines.push('bcd.run();', '</script>', '</body>', '</html>');
+  lines.push('bcd.run("Window");', '</script>', '</body>', '</html>');
   const pathname = path.join('api', 'interfaces.html');
   const filename = path.join(generatedDir, pathname);
   writeText(filename, lines);
@@ -495,7 +495,7 @@ function buildIDLWorker(ast) {
     lines.push(`bcd.addTest('api.${name}', ${JSON.stringify(expr)}, 'Worker');`);
   }
 
-  lines.push('bcd.runWorker();', '</script>', '</body>', '</html>');
+  lines.push('bcd.run("Worker");', '</script>', '</body>', '</html>');
   const pathname = path.join('api', 'workerinterfaces.html');
   const filename = path.join(generatedDir, pathname);
   writeText(filename, lines);
@@ -525,7 +525,7 @@ function buildIDLServiceWorker(ast) {
     lines.push(`bcd.addTest('api.${name}', ${JSON.stringify(expr)}, 'ServiceWorker');`);
   }
 
-  lines.push('bcd.runServiceWorker();', '</script>', '</body>', '</html>');
+  lines.push('bcd.run("ServiceWorker");', '</script>', '</body>', '</html>');
   const pathname = path.join('api', 'serviceworkerinterfaces.html');
   const filename = path.join(generatedDir, pathname);
   writeText(filename, lines);

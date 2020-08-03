@@ -84,7 +84,7 @@
     return result;
   }
 
-  function run(done) {
+  function runCSS(done) {
     var results = [];
 
     var length = pending.length;
@@ -94,11 +94,20 @@
 
     pending = [];
 
-    if (done) {
-      done(results);
-    } else {
-      report(results);
+    done(results);
+  }
+
+  function runWindow(done) {
+    var results = [];
+
+    var length = pending.length;
+    for (var i = 0; i < length; i++) {
+      results.push(test(pending[i]));
     }
+
+    pending = [];
+
+    done(results);
   }
 
   function runWorker(done) {
@@ -129,11 +138,7 @@
       Promise.allSettled(promises).then(function() {
         pending = [];
 
-        if (done) {
-          done(results);
-        } else {
-          report(results);
-        }
+        done(results);
       });
     } else {
       console.log('No worker support');
@@ -154,11 +159,7 @@
 
       pending = [];
 
-      if (done) {
-        done(results);
-      } else {
-        report(results);
-      }
+      done(results);
     }
   }
 
@@ -193,11 +194,7 @@
           pending = [];
 
           window.__workerCleanup().then(function() {
-            if (done) {
-              done(results);
-            } else {
-              report(results);
-            }
+            done(results);
           });
         });
       });
@@ -220,11 +217,21 @@
 
       pending = [];
 
-      if (done) {
-        done(results);
-      } else {
-        report(results);
-      }
+      done(results);
+    }
+  }
+
+  function run(scope, done) {
+    if (scope === 'CSS') {
+      runCSS(done || report);
+    } else if (scope === 'Window') {
+      runWindow(done || report);
+    } else if (scope === 'Worker') {
+      runWorker(done || report);
+    } else if (scope === 'ServiceWorker') {
+      runServiceWorker(done || report);
+    } else {
+      console.error("Unknown scope specified: " + scope);
     }
   }
 
@@ -305,8 +312,6 @@
   global.bcd = {
     addTest: addTest,
     test: test,
-    run: run,
-    runWorker: runWorker,
-    runServiceWorker: runServiceWorker
+    run: run
   };
 })(this);
