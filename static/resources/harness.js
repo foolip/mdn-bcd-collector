@@ -51,7 +51,7 @@
 
     try {
       if (Array.isArray(data.code)) {
-        for (const subtest of data.code) {
+        for (var subtest of data.code) {
           // XXX Test prefixes
           var value = eval('"'+subtest.property+'" in '+subtest.scope);
           result.result = value;
