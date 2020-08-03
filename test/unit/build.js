@@ -1,4 +1,4 @@
-// Copyright 2019 Google LLC
+// Copyright 2020 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -184,8 +184,11 @@ describe('build', () => {
     it('interface with attribute', () => {
       const ast = WebIDL2.parse(`interface Attr { attribute any name; };`);
       assert.deepEqual(buildIDLTests(ast), [
-        ['Attr', '\'Attr\' in self'],
-        ['Attr.name', '\'name\' in Attr.prototype']
+        ['Attr', [{property: 'Attr', scope: 'self'}]],
+        ['Attr.name', [
+          {property: 'Attr', scope: 'self'},
+          {property: 'name', scope: 'Attr.prototype'}
+        ]]
       ]);
     });
 
@@ -195,8 +198,11 @@ describe('build', () => {
              boolean contains(Node? other);
            };`);
       assert.deepEqual(buildIDLTests(ast), [
-        ['Node', '\'Node\' in self'],
-        ['Node.contains', '\'contains\' in Node.prototype']
+        ['Node', [{property: 'Node', scope: 'self'}]],
+        ['Node.contains', [
+          {property: 'Node', scope: 'self'},
+          {property: 'contains', scope: 'Node.prototype'}
+        ]]
       ]);
     });
 
@@ -206,8 +212,11 @@ describe('build', () => {
              static boolean isTypeSupported(DOMString type);
            };`);
       assert.deepEqual(buildIDLTests(ast), [
-        ['MediaSource', '\'MediaSource\' in self'],
-        ['MediaSource.isTypeSupported', '\'isTypeSupported\' in MediaSource']
+        ['MediaSource', [{property: 'MediaSource', scope: 'self'}]],
+        ['MediaSource.isTypeSupported', [
+          {property: 'MediaSource', scope: 'self'},
+          {property: 'isTypeSupported', scope: 'MediaSource'}
+        ]]
       ]);
     });
 
@@ -217,8 +226,11 @@ describe('build', () => {
              readonly attribute any paintWorklet;
            };`);
       assert.deepEqual(buildIDLTests(ast), [
-        ['CSS', '\'CSS\' in self'],
-        ['CSS.paintWorklet', '\'paintWorklet\' in CSS']
+        ['CSS', [{property: 'CSS', scope: 'self'}]],
+        ['CSS.paintWorklet', [
+          {property: 'CSS', scope: 'self'},
+          {property: 'paintWorklet', scope: 'CSS'}
+        ]]
       ]);
     });
 
@@ -228,8 +240,11 @@ describe('build', () => {
              boolean supports(CSSOMString property, CSSOMString value);
            };`);
       assert.deepEqual(buildIDLTests(ast), [
-        ['CSS', '\'CSS\' in self'],
-        ['CSS.supports', '\'supports\' in CSS']
+        ['CSS', [{property: 'CSS', scope: 'self'}]],
+        ['CSS.supports', [
+          {property: 'CSS', scope: 'self'},
+          {property: 'supports', scope: 'CSS'}
+        ]]
       ]);
     });
   });

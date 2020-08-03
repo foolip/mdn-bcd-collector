@@ -1,4 +1,4 @@
-// Copyright 2019 Google LLC
+// Copyright 2020 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
 
 'use strict';
 
-const app = require('../../app');
+const {app, version} = require('../../app');
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 
@@ -57,6 +57,7 @@ describe('/api/results', () => {
     const res = await agent.get('/api/results');
     assert.equal(res.status, 200);
     assert.deepEqual(res.body, {
+      '__version': version,
       'https://host.test/foo.html': {x: 1}
     });
   });
@@ -72,6 +73,7 @@ describe('/api/results', () => {
     const res = await agent.get('/api/results');
     assert.equal(res.status, 200);
     assert.deepEqual(res.body, {
+      '__version': version,
       'https://host.test/foo.html': {x: 2}
     });
   });

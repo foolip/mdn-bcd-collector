@@ -1,4 +1,4 @@
-// Copyright 2019 Google LLC
+// Copyright 2020 Google LLC
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -12,7 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/* eslint no-undef: 0 */
+/* global mocha, chai, describe, it, location */
+/* global bcd */
 
 'use strict';
 
@@ -25,61 +26,44 @@ var assert = chai.assert;
 
 describe('harness.js', function() {
   it('no tests', function(done) {
-    bcd.run(function(results) {
+    bcd.run('Window', function(results) {
       assert.isEmpty(results);
       done();
     });
   });
 
   it('return true', function(done) {
-    bcd.test('name', function() {
-      return true;
-    });
-    bcd.run(function(results) {
+    bcd.addTest('name', 'true', 'test');
+    bcd.run('Window', function(results) {
       assert.deepStrictEqual(results, [{
         name: 'name',
-        result: true
+        result: true,
+        info: {code: 'true', scope: 'test'}
       }]);
       done();
     });
   });
 
   it('return false', function(done) {
-    bcd.test('name', function() {
-      return false;
-    });
-    bcd.run(function(results) {
+    bcd.addTest('name', 'false', 'test');
+    bcd.run('Window', function(results) {
       assert.deepStrictEqual(results, [{
         name: 'name',
-        result: false
+        result: false,
+        info: {code: 'false', scope: 'test'}
       }]);
       done();
     });
   });
 
   it('return null', function(done) {
-    bcd.test('name', function() {
-      return null;
-    });
-    bcd.run(function(results) {
+    bcd.addTest('name', 'null', 'test');
+    bcd.run('Window', function(results) {
       assert.deepStrictEqual(results, [{
         name: 'name',
         result: null,
-        message: 'returned null'
-      }]);
-      done();
-    });
-  });
-
-  it('return object', function(done) {
-    bcd.test('name', function() {
-      return {};
-    });
-    bcd.run(function(results) {
-      assert.deepStrictEqual(results, [{
-        name: 'name',
-        result: null,
-        message: 'returned [object Object]'
+        message: 'returned null',
+        info: {code: 'null', scope: 'test'}
       }]);
       done();
     });
@@ -89,72 +73,67 @@ describe('harness.js', function() {
     if (typeof Symbol === 'undefined') {
       this.skip();
     }
-    bcd.test('name', function() {
-      return Symbol('bar');
-    });
-    bcd.run(function(results) {
+    bcd.addTest('name', 'Symbol(\'bar\')', 'test');
+    bcd.run('Window', function(results) {
       assert.deepStrictEqual(results, [{
         name: 'name',
         result: null,
-        message: "returned Symbol(bar)"
+        message: 'returned Symbol(bar)',
+        info: {code: 'Symbol(\'bar\')', scope: 'test'}
       }]);
       done();
     });
   });
 
   it('return undefined', function(done) {
-    bcd.test('name', function() {
-      return undefined;
-    });
-    bcd.run(function(results) {
+    bcd.addTest('name', 'undefined', 'test');
+    bcd.run('Window', function(results) {
       assert.deepStrictEqual(results, [{
         name: 'name',
         result: null,
-        message: 'returned undefined'
+        message: 'returned undefined',
+        info: {code: 'undefined', scope: 'test'}
       }]);
       done();
     });
   });
 
   it('throw error', function(done) {
-    bcd.test('name', function() {
-      throw new Error('something went wrong');
-    });
-    bcd.run(function(results) {
+    bcd.addTest('name', 'throw new Error(\'something went wrong\')', 'test');
+    bcd.run('Window', function(results) {
       assert.deepStrictEqual(results, [{
         name: 'name',
         result: null,
-        message: 'threw Error: something went wrong'
+        message: 'threw Error: something went wrong',
+        info: {code: 'throw new Error(\'something went wrong\')', scope: 'test'}
       }]);
       done();
     });
   });
 
   it('include info', function(done) {
-    var info = { 'extra': 'stuff' };
-    bcd.test('ctx', function() {}, info);
-    bcd.run(function(results) {
-      assert.strictEqual(results[0].info, info);
+    var info = {'extra': 'stuff'};
+    bcd.addTest('ctx', 'true', 'test', info);
+    bcd.run('Window', function(results) {
+      assert.deepStrictEqual(results[0].info, {
+        extra: 'stuff', code: 'true', scope: 'test'
+      });
       done();
     });
   });
 
   it('two tests', function(done) {
-    bcd.test('first', function() {
-      return true;
-    }, {a: 1});
-    bcd.test('second', function() {
-      return false;
-    }, {b: 2});
-    bcd.run(function(results) {
+    bcd.addTest('first', 'true', 'test', {a: 1});
+    bcd.addTest('second', 'false', 'test', {b: 2});
+    bcd.run('Window', function(results) {
       assert.deepEqual(results, [{
-          name: 'first',
-          result: true,
-          info: {a: 1}
-        }, {
-          name: 'second',
-          result: false,
-          info: {b: 2}
+        name: 'first',
+        result: true,
+        info: {code: 'true', scope: 'test', a: 1}
+      }, {
+        name: 'second',
+        result: false,
+        info: {code: 'false', scope: 'test', b: 2}
       }]);
       done();
     });

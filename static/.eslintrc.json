@@ -1,7 +1,15 @@
 {
-    "extends": "eslint:recommended",
+    "extends": ["eslint:recommended", "google"],
+    "plugins": ["prettier"],
     "parserOptions": {
         "ecmaVersion": 3
+    },
+    "rules": {
+        "comma-dangle": ["error", "never"],
+        "require-jsdoc": "off",
+        "no-var": "off",
+        "guard-for-in": "off",
+        "no-invalid-this": "off"
     },
     "root": true
 }

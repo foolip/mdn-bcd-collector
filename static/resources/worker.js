@@ -12,25 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-'use strict';
+/* global self */
+/* global bcd */
 
-const assert = require('assert');
+self.importScripts('harness.js');
 
-describe('reffy-reports', () => {
-  let reffy;
-
-  it('require module', () => {
-    reffy = require('../../reffy-reports');
-  });
-
-  it('has some CSS data', () => {
-    assert('white-space' in reffy.css['css-text'].properties);
-  });
-
-  it('has some IDL data', () => {
-    const iface = reffy.idl.dom.find((node) => node.name === 'Attr');
-    assert(iface);
-    const member = iface.members.find((m) => m.name === 'specified');
-    assert(member);
-  });
-});
+self.onmessage = function(event) {
+  var result = bcd.test(event.data);
+  self.postMessage(result);
+};
