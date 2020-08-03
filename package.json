@@ -14,6 +14,7 @@
   "scripts": {
     "prepare": "if [ -d node_modules/puppeteer ]; then cd node_modules/puppeteer && PUPPETEER_PRODUCT=firefox node install.js; fi",
     "lint": "eslint .",
+    "lint-fix": "eslint --fix .",
     "build": "node build.js",
     "gcp-build": "npm run build",
     "deploy": "gcloud app deploy",
