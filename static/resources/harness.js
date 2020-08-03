@@ -22,6 +22,11 @@
 (function(global) {
   var pending = [];
 
+  var prefixes = {
+    api: ['', 'moz', 'Moz', 'webkit', 'WebKit', 'webKit', 'ms', 'MS'],
+    css: ['', 'webkit', 'moz', 'ms']
+  };
+
   function stringify(value) {
     try {
       return String(value);
@@ -38,6 +43,7 @@
   // {
   //   "name": "api.Attr.localName",
   //   "result": true,
+  //   "prefix": "",
   //   "info": {
   //     "code": "'localName' in Attr.prototype",
   //     "scope": "Window"
@@ -51,13 +57,28 @@
 
     try {
       if (Array.isArray(data.code)) {
+        var parentPrefix = '';
+        
         for (var subtest of data.code) {
-          // XXX Test prefixes
-          var value = eval('"'+subtest.property+'" in '+subtest.scope);
-          result.result = value;
-          if (value === false) {
+          for (var prefix of prefixes.api) {
+            var property = subtest.property;
+            if (prefix) {
+              property = prefix + property.charAt(0).toUpperCase() + property.slice(1);
+            }
+            var value = eval('"'+property+'" in '+parentPrefix+subtest.scope);
+
+            result.result = value;
+            if (value === true) {
+              parentPrefix = prefix;
+              break;
+            }
+          }
+
+          if (result.result === false) {
             break; // Tests are written in hierarchy order, so if the parent (first test) is unsupported, so is the child (next test)
           }
+
+          result.prefix = parentPrefix;
         }
       } else {
         var value = eval(data.code);
