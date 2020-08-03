@@ -185,7 +185,10 @@ describe('build', () => {
       const ast = WebIDL2.parse(`interface Attr { attribute any name; };`);
       assert.deepEqual(buildIDLTests(ast), [
         ['Attr', [{property: 'Attr', scope: 'self'}]],
-        ['Attr.name', [{property: 'Attr', scope: 'self'}, {property: 'name', scope: 'Attr.prototype'}]]
+        ['Attr.name', [
+          {property: 'Attr', scope: 'self'},
+          {property: 'name', scope: 'Attr.prototype'}
+        ]]
       ]);
     });
 
@@ -196,7 +199,10 @@ describe('build', () => {
            };`);
       assert.deepEqual(buildIDLTests(ast), [
         ['Node', [{property: 'Node', scope: 'self'}]],
-        ['Node.contains', [{property: 'Node', scope: 'self'}, {property: 'contains', scope: 'Node.prototype'}]]
+        ['Node.contains', [
+          {property: 'Node', scope: 'self'},
+          {property: 'contains', scope: 'Node.prototype'}
+        ]]
       ]);
     });
 
@@ -207,7 +213,10 @@ describe('build', () => {
            };`);
       assert.deepEqual(buildIDLTests(ast), [
         ['MediaSource', [{property: 'MediaSource', scope: 'self'}]],
-        ['MediaSource.isTypeSupported', [{property: 'MediaSource', scope: 'self'}, {property: 'isTypeSupported', scope: 'MediaSource'}]]
+        ['MediaSource.isTypeSupported', [
+          {property: 'MediaSource', scope: 'self'},
+          {property: 'isTypeSupported', scope: 'MediaSource'}
+        ]]
       ]);
     });
 
@@ -218,7 +227,10 @@ describe('build', () => {
            };`);
       assert.deepEqual(buildIDLTests(ast), [
         ['CSS', [{property: 'CSS', scope: 'self'}]],
-        ['CSS.paintWorklet', [{property: 'CSS', scope: 'self'}, {property: 'paintWorklet', scope: 'CSS'}]]
+        ['CSS.paintWorklet', [
+          {property: 'CSS', scope: 'self'},
+          {property: 'paintWorklet', scope: 'CSS'}
+        ]]
       ]);
     });
 
@@ -229,7 +241,10 @@ describe('build', () => {
            };`);
       assert.deepEqual(buildIDLTests(ast), [
         ['CSS', [{property: 'CSS', scope: 'self'}]],
-        ['CSS.supports', [{property: 'CSS', scope: 'self'}, {property: 'supports', scope: 'CSS'}]]
+        ['CSS.supports', [
+          {property: 'CSS', scope: 'self'},
+          {property: 'supports', scope: 'CSS'}
+        ]]
       ]);
     });
   });
