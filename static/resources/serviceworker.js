@@ -12,14 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+/* global self, caches, Request, Response */
+/* global bcd */
+
 var window = {}; // Needed for the BroadcastChannel polyfill
 
 self.importScripts('broadcastchannel.js');
 self.importScripts('harness.js');
 
-self.addEventListener('install', (event) => {
-  const promiseChain = caches.open('test-cache')
-  .then((openCache) => {
+self.addEventListener('install', function(event) {
+  var promiseChain = caches.open('test-cache')
+  .then(function(openCache) {
     return openCache.put(
       new Request(''),
       new Response('')

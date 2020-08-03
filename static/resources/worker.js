@@ -12,9 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+/* global self */
+/* global bcd */
+
 self.importScripts('harness.js');
 
-onmessage = function(event) {
+self.onmessage = function(event) {
   var result = bcd.test(event.data);
-  postMessage(result);
+  self.postMessage(result);
 };

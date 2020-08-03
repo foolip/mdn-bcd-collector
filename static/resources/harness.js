@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/* global window, location, XMLHttpRequest */
+/* global CSS, console, document, window, location, navigator, XMLHttpRequest, self, Worker, Promise, setTimeout */
 
 'use strict';
 
@@ -105,7 +105,7 @@
           result.prefix = parentPrefix;
         }
       } else {
-        var value = eval(data.code);
+        value = eval(data.code);
         // TODO: allow callback and promise-vending funcs
         if (typeof value === 'boolean') {
           result.result = value;
@@ -159,6 +159,8 @@
 
   function runWorker(done) {
     var results = [];
+    var length = pending.length;
+    var i;
 
     if ('Worker' in self) {
       var myWorker = new Worker('/resources/worker.js');
@@ -170,9 +172,8 @@
         testhandlers[event.data.name](event.data);
       }
 
-      var length = pending.length;
-      for (var i = 0; i < length; i++) {
-        promises.push(new Promise(function (resolve, reject) {
+      for (i = 0; i < length; i++) {
+        promises.push(new Promise(function (resolve) {
           document.getElementById('status').innerHTML = "Testing " + pending[i].name;
           myWorker.postMessage(pending[i]);
 
@@ -192,8 +193,7 @@
       console.log('No worker support');
       document.getElementById('status').innerHTML = "No worker support, skipping";
 
-      var length = pending.length;
-      for (var i = 0; i < length; i++) {
+      for (i = 0; i < length; i++) {
         var name = pending[i][0];
         var info = pending[i][2];
 
@@ -227,7 +227,7 @@
 
         var length = pending.length;
         for (var i = 0; i < length; i++) {
-          promises.push(new Promise(function (resolve, reject) {
+          promises.push(new Promise(function (resolve) {
             document.getElementById('status').innerHTML = "Testing " + pending[i].name;
 
             var broadcast = new window.BroadcastChannel2(pending[i].name, {type: 'BroadcastChannel' in self ? 'native' : 'idb', webWorkerSupport: true});
@@ -330,7 +330,7 @@
 
             return reject(new Error('Installing service worker became redundant'));
           }
-        };
+        }
 
         serviceWorker.addEventListener('statechange', stateListener);
       });
@@ -346,7 +346,7 @@
           });
           return Promise.all(unregisterPromise);
         });
-      };
+      }
 
       function clearCaches() {
         return window.caches.keys()
@@ -355,7 +355,7 @@
             return window.caches.delete(cacheName);
           }));
         });
-      };
+      }
 
       return Promise.all([
         unregisterSW(),
