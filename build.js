@@ -18,6 +18,8 @@ const fs = require('fs-extra');
 const path = require('path');
 const WebIDL2 = require('webidl2');
 
+const customTests = require('./custom-tests.json');
+
 const generatedDir = path.join(__dirname, 'generated');
 
 const copyright = ['<!--Copyright 2020 Google LLC', '', 'Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at', '', '     https://www.apache.org/licenses/LICENSE-2.0', '', 'Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.-->'];
@@ -295,7 +297,11 @@ function buildIDLTests(ast, scope = 'Window') {
     const isGlobal = !!getExtAttr(iface, 'Global');
 
     // interface object
-    tests.push([iface.name, [{property: iface.name, scope: 'self'}]]);
+    if (iface.name in customTests.api && "__test" in customTests.api[iface.name]) {
+      tests.push([iface.name, customTests.api[iface.name]["__test"]]);
+    } else {
+      tests.push([iface.name, [{property: iface.name, scope: 'self'}]]);
+    }
 
     // members
     // TODO: iterable<>, maplike<>, setlike<> declarations are excluded
@@ -313,43 +319,50 @@ function buildIDLTests(ast, scope = 'Window') {
         continue;
       }
 
-      const isStatic = member.special === 'static';
-      let expr;
-      switch (member.type) {
-        case 'attribute':
-        case 'operation':
-          if (isGlobal) {
-            expr = [{property: member.name, scope: 'self'}];
-          } else if (isStatic) {
-            expr = [
-              {property: iface.name, scope: 'self'},
-              {property: member.name, scope: iface.name}
-            ];
-          } else {
-            expr = [
-              {property: iface.name, scope: 'self'},
-              {property: member.name, scope: `${iface.name}.prototype`}
-            ];
-          }
-          break;
-        case 'const':
-          if (isGlobal) {
-            expr = [{property: member.name, scope: 'self'}];
-          } else {
-            expr = [
-              {property: iface.name, scope: 'self'},
-              {property: member.name, scope: iface.name}
-            ];
-          }
-          break;
-      }
-
-      if (expr) {
-        tests.push([`${iface.name}.${member.name}`, expr]);
+      if (iface.name in customTests.api &&
+          member.name in customTests.api[iface.name] &&
+          "__test" in customTests.api[iface.name][member.name]) {
+        tests.push([`${iface.name}.${member.name}`, customTests.api[iface.name][member.name]["__test"]]);
         handledMemberNames.add(member.name);
       } else {
-        // eslint-disable-next-line max-len
-        console.warn(`Interface ${iface.name} member type ${member.type} not handled`);
+        const isStatic = member.special === 'static';
+        let expr;
+        switch (member.type) {
+          case 'attribute':
+          case 'operation':
+            if (isGlobal) {
+              expr = [{property: member.name, scope: 'self'}];
+            } else if (isStatic) {
+              expr = [
+                {property: iface.name, scope: 'self'},
+                {property: member.name, scope: iface.name}
+              ];
+            } else {
+              expr = [
+                {property: iface.name, scope: 'self'},
+                {property: member.name, scope: `${iface.name}.prototype`}
+              ];
+            }
+            break;
+          case 'const':
+            if (isGlobal) {
+              expr = [{property: member.name, scope: 'self'}];
+            } else {
+              expr = [
+                {property: iface.name, scope: 'self'},
+                {property: member.name, scope: iface.name}
+              ];
+            }
+            break;
+        }
+
+        if (expr) {
+          tests.push([`${iface.name}.${member.name}`, expr]);
+          handledMemberNames.add(member.name);
+        } else {
+          // eslint-disable-next-line max-len
+          console.warn(`Interface ${iface.name} member type ${member.type} not handled`);
+        }
       }
     }
   }
