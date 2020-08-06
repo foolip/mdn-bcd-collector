@@ -72,11 +72,11 @@
         code = [code];
       }
 
-      for (var i in data.code) {
-        var subtest = data.code[i];
+      for (var i in code) {
+        var subtest = code[i];
 
         if (typeof(subtest) === 'string') {
-          value = eval(data.code);
+          value = eval(subtest);
           // TODO: allow callback and promise-vending funcs
           if (typeof value === 'boolean') {
             result.result = value;
