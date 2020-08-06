@@ -184,6 +184,63 @@ describe('build', () => {
       const properties = Array.from(propertySet);
       assert.deepEqual(properties, ['font-smooth', '-webkit-font-smoothing']);
     });
+
+    it('support array', () => {
+      const bcd = {
+        css: {
+          properties: {
+            'font-smooth': {
+              __compat: {
+                support: {
+                  safari: [
+                    {
+                      prefix: '-webkit-'
+                    },
+                    {
+                      alternative_name: '-webkit-font-smoothing'
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      };
+      const propertySet = new Set();
+      collectCSSPropertiesFromBCD(bcd, propertySet);
+      const properties = Array.from(propertySet);
+      assert.deepEqual(properties, ['font-smooth', '-webkit-font-smoothing']);
+    });
+
+    it('no __compat statement', () => {
+      const bcd = {
+        css: {
+          properties: {
+            appearance: {}
+          }
+        }
+      };
+      const propertySet = new Set();
+      collectCSSPropertiesFromBCD(bcd, propertySet);
+      const properties = Array.from(propertySet);
+      assert.deepEqual(properties, ['appearance']);
+    });
+
+    it('no __compat.support statement', () => {
+      const bcd = {
+        css: {
+          properties: {
+            appearance: {
+              __compat: {}
+            }
+          }
+        }
+      };
+      const propertySet = new Set();
+      collectCSSPropertiesFromBCD(bcd, propertySet);
+      const properties = Array.from(propertySet);
+      assert.deepEqual(properties, ['appearance']);
+    });
   });
 
   it('collectCSSPropertiesFromReffy', () => {
