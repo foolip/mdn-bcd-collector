@@ -24,6 +24,7 @@ const fs = require('fs');
 
 const {
   writeText,
+  loadCustomTests,
   buildIDLTests,
   cssPropertyToIDLAttribute,
   collectCSSPropertiesFromBCD,
@@ -187,6 +188,27 @@ describe('build', () => {
           {property: 'MediaSource', scope: 'self'},
           {property: 'isTypeSupported', scope: 'MediaSource'}
         ]]
+      ]);
+    });
+
+    it('interface with custom test', () => {
+      const ast = WebIDL2.parse(
+          `interface ANGLE_instanced_arrays {
+            void drawArraysInstancedANGLE(GLenum mode, GLint first, GLsizei count, GLsizei primcount);
+          };`);
+      loadCustomTests({
+        "api": {
+          "ANGLE_instanced_arrays": {
+            "__base": "var canvas = document.createElement('canvas'); var gl = canvas.getContext('webgl'); var a = gl.getExtension('ANGLE_instanced_arrays');",
+            "__test": "return !!a;",
+            "drawArraysInstancedANGLE": "return a && 'drawArraysInstancedANGLE' in a;"
+          }
+        },
+        "css": {}
+      });
+      assert.deepEqual(buildIDLTests(ast), [
+        ['ANGLE_instanced_arrays', "(function() {var canvas = document.createElement('canvas'); var gl = canvas.getContext('webgl'); var a = gl.getExtension('ANGLE_instanced_arrays');return !!a;})()"],
+        ['ANGLE_instanced_arrays.drawArraysInstancedANGLE', "(function() {var canvas = document.createElement('canvas'); var gl = canvas.getContext('webgl'); var a = gl.getExtension('ANGLE_instanced_arrays');return a && 'drawArraysInstancedANGLE' in a;})()"]
       ]);
     });
 
