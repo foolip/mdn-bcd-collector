@@ -693,11 +693,11 @@ if (process.env.NODE_ENV === 'test') {
     writeText,
     loadCustomTests,
     getCustomTestAPI,
-    buildIDLTests,
-    cssPropertyToIDLAttribute,
     collectCSSPropertiesFromBCD,
     collectCSSPropertiesFromReffy,
-    flattenIDL
+    cssPropertyToIDLAttribute,
+    flattenIDL,
+    buildIDLTests
   };
 } else {
   const bcd = require('mdn-browser-compat-data');

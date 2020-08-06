@@ -28,11 +28,11 @@ const {
   writeText,
   loadCustomTests,
   getCustomTestAPI,
-  buildIDLTests,
-  cssPropertyToIDLAttribute,
   collectCSSPropertiesFromBCD,
   collectCSSPropertiesFromReffy,
-  flattenIDL
+  cssPropertyToIDLAttribute,
+  flattenIDL,
+  buildIDLTests
 } = require('../../build');
 
 describe('build', () => {
