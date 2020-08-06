@@ -3,7 +3,9 @@
     "ANGLE_instanced_arrays": {
       "__base": "var canvas = document.createElement('canvas'); var gl = canvas.getContext('webgl'); var a = gl.getExtension('ANGLE_instanced_arrays');",
       "__test": "return a;",
-      "drawArraysInstancedANGLE": "return 'drawArraysInstancedANGLE' in a;"
+      "drawArraysInstancedANGLE": "return 'drawArraysInstancedANGLE' in a;",
+      "drawElementsInstancedANGLE": "return 'drawElementsInstancedANGLE' in a;",
+      "vertexAttribDivisorANGLE": "return 'vertexAttribDivisorANGLE' in a;",
     }
   },
   "css": {
