@@ -139,9 +139,9 @@ function buildCSSPropertyTest(propertyNames, method, basename) {
     let expr = '';
     if (method === 'CSSStyleDeclaration') {
       const attrName = cssPropertyToIDLAttribute(name, name.startsWith('-'));
-      expr = [{property: attrName, scope: 'document.body.style'}];
+      expr = {property: attrName, scope: 'document.body.style'};
     } else if (method === 'CSS.supports') {
-      expr = [{property: name, scope: 'CSS.supports'}];
+      expr = {property: name, scope: 'CSS.supports'};
     }
     lines.push(`bcd.addTest("${ident}", ${JSON.stringify(expr)}, 'CSS');`);
   }
@@ -329,7 +329,7 @@ function buildIDLTests(ast, scope = 'Window') {
 
     // interface object
     let customTest = getCustomTestAPI(iface.name);
-    tests.push([iface.name, [customTest || {property: iface.name, scope: 'self'}]]);
+    tests.push([iface.name, customTest || {property: iface.name, scope: 'self'}]);
 
     // members
     // TODO: iterable<>, maplike<>, setlike<> declarations are excluded
@@ -358,7 +358,7 @@ function buildIDLTests(ast, scope = 'Window') {
           case 'attribute':
           case 'operation':
             if (isGlobal) {
-              expr = [{property: member.name, scope: 'self'}];
+              expr = {property: member.name, scope: 'self'};
             } else if (isStatic) {
               expr = [
                 {property: iface.name, scope: 'self'},
@@ -373,7 +373,7 @@ function buildIDLTests(ast, scope = 'Window') {
             break;
           case 'const':
             if (isGlobal) {
-              expr = [{property: member.name, scope: 'self'}];
+              expr = {property: member.name, scope: 'self'};
             } else {
               expr = [
                 {property: iface.name, scope: 'self'},
@@ -405,7 +405,7 @@ function buildIDLTests(ast, scope = 'Window') {
 
     // namespace object
     let customTest = getCustomTestAPI(namespace.name);
-    tests.push([namespace.name, [customTest || {property: namespace.name, scope: 'self'}]]);
+    tests.push([namespace.name, customTest || {property: namespace.name, scope: 'self'}]);
 
     // members
     const members = namespace.members.filter((member) => member.name);
