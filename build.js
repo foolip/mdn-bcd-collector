@@ -33,6 +33,37 @@ function writeText(filename, content) {
   fs.writeFileSync(filename, content, 'utf8');
 }
 
+function getCustomTestAPI(name, member) {
+  let test = false;
+
+  if (name in customTests.api && "__base" in customTests.api[name]) {
+    test = customTests.api[name].__base;
+    if (member === undefined) {
+      if ("__test" in customTests.api[name]) {
+        test += customTests.api[name].__test;
+      } else {
+        test = false;
+      }
+    } else {
+      if (member in customTests.api[name]) {
+        test += customTests.api[name][member];
+      } else {
+        test = false;
+      }
+    }
+  } else {
+    if (name in customTests.api && member in customTests.api[name]) {
+      test = customTests.api[name][member];
+    }
+  }
+
+  if (test) {
+    test = `function() {${test}}`
+  }
+
+  return test;
+}
+
 function collectCSSPropertiesFromBCD(bcd, propertySet) {
   for (const [prop, data] of Object.entries(bcd.css.properties)) {
     propertySet.add(prop);
@@ -297,11 +328,8 @@ function buildIDLTests(ast, scope = 'Window') {
     const isGlobal = !!getExtAttr(iface, 'Global');
 
     // interface object
-    if (iface.name in customTests.api && "__test" in customTests.api[iface.name]) {
-      tests.push([iface.name, customTests.api[iface.name]["__test"]]);
-    } else {
-      tests.push([iface.name, [{property: iface.name, scope: 'self'}]]);
-    }
+    let customTest = getCustomTestAPI(iface.name);
+    tests.push([iface.name, [customTest || {property: iface.name, scope: 'self'}]]);
 
     // members
     // TODO: iterable<>, maplike<>, setlike<> declarations are excluded
@@ -319,14 +347,13 @@ function buildIDLTests(ast, scope = 'Window') {
         continue;
       }
 
-      if (iface.name in customTests.api &&
-          member.name in customTests.api[iface.name] &&
-          "__test" in customTests.api[iface.name][member.name]) {
-        tests.push([`${iface.name}.${member.name}`, customTests.api[iface.name][member.name]["__test"]]);
-        handledMemberNames.add(member.name);
+      let expr;
+      let customTestMember = getCustomTestAPI(iface.name, member.name);
+
+      if (customTestMember) {
+        expr = customTest ? customTestMember : [{property: iface.name, scope: 'self'}, customTestMember];
       } else {
         const isStatic = member.special === 'static';
-        let expr;
         switch (member.type) {
           case 'attribute':
           case 'operation':
@@ -355,14 +382,14 @@ function buildIDLTests(ast, scope = 'Window') {
             }
             break;
         }
+      }
 
-        if (expr) {
-          tests.push([`${iface.name}.${member.name}`, expr]);
-          handledMemberNames.add(member.name);
-        } else {
-          // eslint-disable-next-line max-len
-          console.warn(`Interface ${iface.name} member type ${member.type} not handled`);
-        }
+      if (expr) {
+        tests.push([`${iface.name}.${member.name}`, expr]);
+        handledMemberNames.add(member.name);
+      } else {
+        // eslint-disable-next-line max-len
+        console.warn(`Interface ${iface.name} member type ${member.type} not handled`);
       }
     }
   }
@@ -377,20 +404,30 @@ function buildIDLTests(ast, scope = 'Window') {
     }
 
     // namespace object
-    tests.push([namespace.name, [{property: namespace.name, scope: 'self'}]]);
+    let customTest = getCustomTestAPI(namespace.name);
+    tests.push([namespace.name, [customTest || {property: namespace.name, scope: 'self'}]]);
 
     // members
     const members = namespace.members.filter((member) => member.name);
     members.sort((a, b) => a.name.localeCompare(b.name));
 
     for (const member of members) {
-      tests.push([
-        `${namespace.name}.${member.name}`,
-        [
-          {property: namespace.name, scope: 'self'},
-          {property: member.name, scope: namespace.name}
-        ]
-      ]);
+      let customTestMember = getCustomTestAPI(namespace.name, member.name);
+
+      if (customTestMember) {
+        tests.push([
+          `${namespace.name}.${member.name}`,
+          customTest ? customTestMember : [{property: namespace.name, scope: 'self'}, customTestMember]
+        ]);
+      } else {
+        tests.push([
+          `${namespace.name}.${member.name}`,
+          [
+            {property: namespace.name, scope: 'self'},
+            {property: member.name, scope: namespace.name}
+          ]
+        ]);
+      }
     }
   }
 
