@@ -197,4 +197,4 @@ entirely static.
 
 ## Reports
 
-A `bcd_report.json` is written somewhere. TODO: where?
+A JSON report file is automatically generated and submitted to https://github.com/foolip/mdn-bcd-results as a pull request.  A user can also download the JSON report by visiting `/api/results` (of which is linked at the end of the tests).
