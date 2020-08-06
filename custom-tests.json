@@ -1,32 +1,10 @@
-// Copyright 2020 Google LLC
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     https://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-// API Structure:
-//  "INTERFACE_NAME": {
-//    "__base": "CODE_TO_REPEAT_FOR_EVERY_TEST",
-//    "__test": "CODE_SPECIFIC_TO_TEST_THE_INTERFACE",
-//    "MEMBER": "CODE_TO_TEST_THE_MEMBER"
-//  }
-//
-// This compiles into "function() {__base + __test/MEMBER}".  __test/MEMBER
-// should be a return statement.
-
-// CSS Structure: (To be planned)
-
 {
   "api": {
-    
+    "ANGLE_instanced_arrays": {
+      "__base": "var canvas = document.createElement('canvas'); var gl = canvas.getContext('webgl'); var a = gl.getExtension('ANGLE_instanced_arrays');",
+      "__test": "return a;",
+      "drawArraysInstancedANGLE": "return 'drawArraysInstancedANGLE' in a;"
+    }
   },
   "css": {
 

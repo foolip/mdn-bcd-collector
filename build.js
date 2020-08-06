@@ -18,6 +18,18 @@ const fs = require('fs-extra');
 const path = require('path');
 const WebIDL2 = require('webidl2');
 
+// Custom Tests Structure:
+//   API:
+//    "INTERFACE_NAME": {
+//      "__base": "CODE_TO_REPEAT_FOR_EVERY_TEST",
+//      "__test": "CODE_SPECIFIC_TO_TEST_THE_INTERFACE",
+//      "MEMBER": "CODE_TO_TEST_THE_MEMBER"
+//    }
+// 
+//   This compiles into "function() {__base + __test/MEMBER}".  __test/MEMBER
+//   should be a return statement.
+// 
+//   CSS Structure: (To be planned)
 const customTests = require('./custom-tests.json');
 
 const generatedDir = path.join(__dirname, 'generated');
