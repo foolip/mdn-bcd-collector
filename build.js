@@ -18,11 +18,15 @@ const fs = require('fs-extra');
 const path = require('path');
 const WebIDL2 = require('webidl2');
 
-const customTests = require('./custom-tests.json');
-
 const generatedDir = path.join(__dirname, 'generated');
 
 const copyright = ['<!--Copyright 2020 Google LLC', '', 'Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at', '', '     https://www.apache.org/licenses/LICENSE-2.0', '', 'Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.-->'];
+
+// Custom tests are defined in custom-tests.json
+let customTests = {
+  'api': {},
+  'css': {}
+};
 
 function writeText(filename, content) {
   if (Array.isArray(content)) {
@@ -31,6 +35,10 @@ function writeText(filename, content) {
   content = content.trimEnd() + '\n';
   fs.ensureDirSync(path.dirname(filename));
   fs.writeFileSync(filename, content, 'utf8');
+}
+
+function loadCustomTests(newTests) {
+  customTests = newTests ? newTests : require('./custom-tests.json');
 }
 
 function getCustomTestAPI(name, member) {
@@ -251,10 +259,7 @@ function flattenIDL(specIDLs, collectExtraIDL) {
 }
 
 function getExtAttr(node, name) {
-  if (!node.extAttrs) {
-    return null;
-  }
-  return node.extAttrs.find((i) => i.name === name);
+  return node.extAttrs && node.extAttrs.find((i) => i.name === name);
 }
 
 // https://heycam.github.io/webidl/#dfn-exposure-set
@@ -668,6 +673,7 @@ async function build(bcd, reffy) {
   const manifest = {
     items: []
   };
+  loadCustomTests();
   for (const buildFunc of [buildCSS, buildIDL]) {
     const items = buildFunc(bcd, reffy);
     for (let [protocol, pathname] of items) {
@@ -684,11 +690,14 @@ async function build(bcd, reffy) {
 /* istanbul ignore else */
 if (process.env.NODE_ENV === 'test') {
   module.exports = {
-    buildIDLTests,
-    cssPropertyToIDLAttribute,
+    writeText,
+    loadCustomTests,
+    getCustomTestAPI,
     collectCSSPropertiesFromBCD,
     collectCSSPropertiesFromReffy,
-    flattenIDL
+    cssPropertyToIDLAttribute,
+    flattenIDL,
+    buildIDLTests
   };
 } else {
   const bcd = require('mdn-browser-compat-data');

@@ -56,6 +56,12 @@ function cookieSession(req, res, next) {
   next();
 }
 
+/* istanbul ignore next */
+function catchError(err, res) {
+  logger.error(err);
+  res.status(500).end();
+}
+
 const app = express();
 app.use(cookieParser());
 app.use(cookieSession);
@@ -101,10 +107,8 @@ app.post('/api/results', (req, res) => {
     storage.put(req.sessionID, forURL, req.body)
   ]).then(() => {
     res.status(201).json(response);
-  }).catch((err) => {
-    logger.error(err);
-    res.status(500).end();
-  });
+  })
+      .catch(/* istanbul ignore next */ (err) => catchError(err, res));
 });
 
 app.get('/api/results', (req, res) => {
@@ -112,12 +116,10 @@ app.get('/api/results', (req, res) => {
       .then((results) => {
         res.status(200).json(results);
       })
-      .catch((err) => {
-        logger.error(err);
-        res.status(500).end();
-      });
+      .catch(/* istanbul ignore next */ (err) => catchError(err, res));
 });
 
+/* istanbul ignore next: we don't want to create lots of dummy PRs */
 app.post('/api/results/export/github', (req, res) => {
   storage.getAll(req.sessionID)
       .then(async (results) => {
@@ -126,10 +128,7 @@ app.post('/api/results/export/github', (req, res) => {
         const response = await github.exportAsPR(report);
         res.json(response);
       })
-      .catch((err) => {
-        logger.error(err);
-        res.status(500).end();
-      });
+      .catch(/* istanbul ignore next */ (err) => catchError(err, res));
 });
 
 /* istanbul ignore else */

@@ -18,6 +18,9 @@ const {app, version} = require('../../app');
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 
+const manifest = require('../../MANIFEST.json');
+const manifestItems = manifest.items.filter((item) => item.protocol === 'http');
+
 chai.use(chaiHttp);
 const agent = chai.request.agent(app);
 const assert = chai.assert;
@@ -42,15 +45,17 @@ describe('/api/results', () => {
     assert.deepEqual(res.body, {});
   });
 
-  const testURL = 'https://host.test/foo.html';
+  const testURL = `http://localhost:8080${manifestItems[0].pathname}`;
+  const testURL2 = `https://host.test${manifestItems[1].pathname}`;
 
   it('submit valid results', async () => {
     const res = await agent.post('/api/results')
         .query({for: testURL})
         .send({x: 1});
     assert.equal(res.status, 201);
-    // TODO: mock manifest to allow testing `next`:
-    assert.deepEqual(res.body, {});
+    assert.deepEqual(res.body, {
+      'next': `http://localhost:8080${manifestItems[1].pathname}`
+    });
   });
 
   it('list results after valid', async () => {
@@ -58,7 +63,7 @@ describe('/api/results', () => {
     assert.equal(res.status, 200);
     assert.deepEqual(res.body, {
       '__version': version,
-      'https://host.test/foo.html': {x: 1}
+      [testURL]: {x: 1}
     });
   });
 
@@ -74,8 +79,33 @@ describe('/api/results', () => {
     assert.equal(res.status, 200);
     assert.deepEqual(res.body, {
       '__version': version,
-      'https://host.test/foo.html': {x: 2}
+      [testURL]: {x: 2}
     });
+  });
+
+  it('submit results for new/last manifest', async () => {
+    const res = await agent.post('/api/results')
+        .query({for: testURL2})
+        .send({y: 3});
+    assert.equal(res.status, 201);
+    assert.deepEqual(res.body, {});
+  });
+
+  it('list results after new/last manifest', async () => {
+    const res = await agent.get('/api/results');
+    assert.equal(res.status, 200);
+    assert.deepEqual(res.body, {
+      '__version': version,
+      [testURL]: {x: 2},
+      [testURL2]: {y: 3}
+    });
+  });
+
+  it('submit invalid results', async () => {
+    const res = await agent.post('/api/results')
+        .query({for: testURL})
+        .send('my bad results');
+    assert.equal(res.status, 400);
   });
 });
 

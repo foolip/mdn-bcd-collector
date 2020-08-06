@@ -16,19 +16,163 @@
 
 const chai = require('chai');
 const chaiSubset = require('chai-subset');
-chai.use(chaiSubset);
-const assert = require('chai').assert;
+const chaiFs = require('chai-fs');
+chai.use(chaiSubset).use(chaiFs);
+const assert = chai.assert;
+const expect = chai.expect;
+
 const WebIDL2 = require('webidl2');
+const fs = require('fs');
 
 const {
-  buildIDLTests,
-  cssPropertyToIDLAttribute,
+  writeText,
+  loadCustomTests,
+  getCustomTestAPI,
   collectCSSPropertiesFromBCD,
   collectCSSPropertiesFromReffy,
-  flattenIDL
+  cssPropertyToIDLAttribute,
+  flattenIDL,
+  buildIDLTests
 } = require('../../build');
 
 describe('build', () => {
+  describe('writeText', () => {
+    const filepath = '.testtmp';
+
+    it('simple supported', () => {
+      writeText(filepath, 'foo\nbar');
+      assert.fileContent(filepath, 'foo\nbar\n');
+    });
+
+    it('array', () => {
+      writeText(filepath, ['foo', 'bar', 'baz']);
+      assert.fileContent(filepath, 'foo\nbar\nbaz\n');
+    });
+
+    afterEach(() => {
+      fs.unlinkSync(filepath);
+    });
+  });
+
+  describe('getCustomTestAPI', () => {
+    describe('no custom tests', () => {
+      beforeEach(() => {
+        loadCustomTests({api: {}, css: {}});
+      });
+
+      it('interface', () => {
+        assert.equal(getCustomTestAPI('foo'), false);
+      });
+
+      it('member', () => {
+        assert.equal(getCustomTestAPI('foo', 'bar'), false);
+      });
+    });
+
+    describe('custom test for interface only', () => {
+      beforeEach(() => {
+        loadCustomTests({
+          api: {
+            'foo': {
+              '__base': 'var a = 1;',
+              '__test': 'return a;'
+            }
+          },
+          css: {}
+        });
+      });
+
+      it('interface', () => {
+        assert.equal(
+            getCustomTestAPI('foo'),
+            '(function() {var a = 1;return a;})()'
+        );
+      });
+
+      it('member', () => {
+        assert.equal(getCustomTestAPI('foo', 'bar'), false);
+      });
+    });
+
+    describe('custom test for member only', () => {
+      beforeEach(() => {
+        loadCustomTests({
+          api: {
+            'foo': {
+              '__base': 'var a = 1;',
+              'bar': 'return a + 1;'
+            }
+          },
+          css: {}
+        });
+      });
+
+      it('interface', () => {
+        assert.equal(getCustomTestAPI('foo'), false);
+      });
+
+      it('member', () => {
+        assert.equal(
+            getCustomTestAPI('foo', 'bar'),
+            '(function() {var a = 1;return a + 1;})()'
+        );
+      });
+    });
+
+    describe('custom test for member only, no __base', () => {
+      beforeEach(() => {
+        loadCustomTests({
+          api: {
+            'foo': {
+              'bar': 'return 1 + 1;'
+            }
+          },
+          css: {}
+        });
+      });
+
+      it('interface', () => {
+        assert.equal(getCustomTestAPI('foo'), false);
+      });
+
+      it('member', () => {
+        assert.equal(
+            getCustomTestAPI('foo', 'bar'),
+            '(function() {return 1 + 1;})()'
+        );
+      });
+    });
+
+    describe('custom test for interface and member', () => {
+      beforeEach(() => {
+        loadCustomTests({
+          api: {
+            'foo': {
+              '__base': 'var a = 1;',
+              '__test': 'return a;',
+              'bar': 'return a + 1;'
+            }
+          },
+          css: {}
+        });
+      });
+
+      it('interface', () => {
+        assert.equal(
+            getCustomTestAPI('foo'),
+            '(function() {var a = 1;return a;})()'
+        );
+      });
+
+      it('member', () => {
+        assert.equal(
+            getCustomTestAPI('foo', 'bar'),
+            '(function() {var a = 1;return a + 1;})()'
+        );
+      });
+    });
+  });
+
   describe('collectCSSPropertiesFromBCD', () => {
     it('simple supported', () => {
       const bcd = {
@@ -69,6 +213,63 @@ describe('build', () => {
       const properties = Array.from(propertySet);
       assert.deepEqual(properties, ['font-smooth', '-webkit-font-smoothing']);
     });
+
+    it('support array', () => {
+      const bcd = {
+        css: {
+          properties: {
+            'font-smooth': {
+              __compat: {
+                support: {
+                  safari: [
+                    {
+                      prefix: '-webkit-'
+                    },
+                    {
+                      alternative_name: '-webkit-font-smoothing'
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      };
+      const propertySet = new Set();
+      collectCSSPropertiesFromBCD(bcd, propertySet);
+      const properties = Array.from(propertySet);
+      assert.deepEqual(properties, ['font-smooth', '-webkit-font-smoothing']);
+    });
+
+    it('no __compat statement', () => {
+      const bcd = {
+        css: {
+          properties: {
+            appearance: {}
+          }
+        }
+      };
+      const propertySet = new Set();
+      collectCSSPropertiesFromBCD(bcd, propertySet);
+      const properties = Array.from(propertySet);
+      assert.deepEqual(properties, ['appearance']);
+    });
+
+    it('no __compat.support statement', () => {
+      const bcd = {
+        css: {
+          properties: {
+            appearance: {
+              __compat: {}
+            }
+          }
+        }
+      };
+      const propertySet = new Set();
+      collectCSSPropertiesFromBCD(bcd, propertySet);
+      const properties = Array.from(propertySet);
+      assert.deepEqual(properties, ['appearance']);
+    });
   });
 
   it('collectCSSPropertiesFromReffy', () => {
@@ -100,6 +301,40 @@ describe('build', () => {
   });
 
   describe('flattenIDL', () => {
+    const historicalIDL = WebIDL2.parse(`interface DOMError {};`);
+
+    it('interface + mixin', () => {
+      const specIDLs = {
+        first: WebIDL2.parse(`interface DummyError : Error {
+               readonly attribute boolean imadumdum;
+             };`),
+        secnd: WebIDL2.parse(
+            `interface mixin DummyErrorHelper {
+               DummyError geterror();
+             };
+
+             DummyError includes DummyErrorHelper;`)
+      };
+      const ast = flattenIDL(specIDLs, historicalIDL);
+
+      const interfaces = ast.filter((dfn) => dfn.type === 'interface');
+      assert.lengthOf(interfaces, 2);
+
+      assert.equal(interfaces[0].name, 'DummyError');
+      console.log(interfaces[0].members);
+      assert.lengthOf(interfaces[0].members, 2);
+      assert.containSubset(interfaces[0].members[0], {
+        type: 'attribute',
+        name: 'imadumdum'
+      });
+      assert.containSubset(interfaces[0].members[1], {
+        type: 'operation',
+        name: 'geterror'
+      });
+
+      assert.equal(interfaces[1].name, 'DOMError');
+    });
+
     it('namespace + partial namespace', () => {
       const specIDLs = {
         cssom: WebIDL2.parse(`namespace CSS { boolean supports(); };`),
@@ -108,7 +343,6 @@ describe('build', () => {
                readonly attribute any paintWorklet;
              };`)
       };
-      const historicalIDL = WebIDL2.parse(`interface DOMError {};`);
       const ast = flattenIDL(specIDLs, historicalIDL);
 
       const namespaces = ast.filter((dfn) => dfn.type === 'namespace');
@@ -128,6 +362,64 @@ describe('build', () => {
       const interfaces = ast.filter((dfn) => dfn.type === 'interface');
       assert.lengthOf(interfaces, 1);
       assert.equal(interfaces[0].name, 'DOMError');
+    });
+
+    it('mixin missing', () => {
+      const specIDLs = {
+        first: WebIDL2.parse(`interface mixin DummyErrorHelper {
+               DummyError geterror();
+             };`),
+        secnd: WebIDL2.parse(`DummyError includes DummyErrorHelper;`)
+      };
+
+      expect(() => {
+        flattenIDL(specIDLs, historicalIDL);
+      // eslint-disable-next-line max-len
+      }).to.throw('Target DummyError not found for interface mixin DummyErrorHelper');
+    });
+
+    it('interface missing', () => {
+      const specIDLs = {
+        first: WebIDL2.parse(`interface DummyError : Error {
+               readonly attribute boolean imadumdum;
+             };`),
+        secnd: WebIDL2.parse(`DummyError includes DummyErrorHelper;`)
+      };
+
+      expect(() => {
+        flattenIDL(specIDLs, historicalIDL);
+      // eslint-disable-next-line max-len
+      }).to.throw('Interface mixin DummyErrorHelper not found for target DummyError');
+    });
+
+    it('Operation overloading', () => {
+      const specIDLs = {
+        cssom: WebIDL2.parse(`namespace CSS { boolean supports(); };`),
+        paint: WebIDL2.parse(
+            `partial namespace CSS {
+               readonly attribute any paintWorklet;
+             };`),
+        paint2: WebIDL2.parse(
+            `partial namespace CSS {
+               boolean supports();
+             };`)
+      };
+      expect(() => {
+        flattenIDL(specIDLs, historicalIDL);
+      // eslint-disable-next-line max-len
+      }).to.throw('Operation overloading across partials/mixins for CSS.supports');
+    });
+
+    it('Partial missing main', () => {
+      const specIDLs = {
+        paint: WebIDL2.parse(
+            `partial namespace CSS {
+               readonly attribute any paintWorklet;
+             };`)
+      };
+      expect(() => {
+        flattenIDL(specIDLs, historicalIDL);
+      }).to.throw('Original definition not found for partial namespace CSS');
     });
   });
 
@@ -168,6 +460,36 @@ describe('build', () => {
           {property: 'MediaSource', scope: 'self'},
           {property: 'isTypeSupported', scope: 'MediaSource'}
         ]]
+      ]);
+    });
+
+    it('interface with custom test', () => {
+      const ast = WebIDL2.parse(
+          `interface ANGLE_instanced_arrays {
+            void drawArraysInstancedANGLE(
+              GLenum mode,
+              GLint first,
+              GLsizei count,
+              GLsizei primcount
+            );
+          };`);
+      loadCustomTests({
+        'api': {
+          'ANGLE_instanced_arrays': {
+            // eslint-disable-next-line max-len
+            '__base': 'var canvas = document.createElement(\'canvas\'); var gl = canvas.getContext(\'webgl\'); var a = gl.getExtension(\'ANGLE_instanced_arrays\');',
+            '__test': 'return !!a;',
+            // eslint-disable-next-line max-len
+            'drawArraysInstancedANGLE': 'return a && \'drawArraysInstancedANGLE\' in a;'
+          }
+        },
+        'css': {}
+      });
+      assert.deepEqual(buildIDLTests(ast), [
+        // eslint-disable-next-line max-len
+        ['ANGLE_instanced_arrays', '(function() {var canvas = document.createElement(\'canvas\'); var gl = canvas.getContext(\'webgl\'); var a = gl.getExtension(\'ANGLE_instanced_arrays\');return !!a;})()'],
+        // eslint-disable-next-line max-len
+        ['ANGLE_instanced_arrays.drawArraysInstancedANGLE', '(function() {var canvas = document.createElement(\'canvas\'); var gl = canvas.getContext(\'webgl\'); var a = gl.getExtension(\'ANGLE_instanced_arrays\');return a && \'drawArraysInstancedANGLE\' in a;})()']
       ]);
     });
 
