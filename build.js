@@ -697,6 +697,8 @@ if (process.env.NODE_ENV === 'test') {
     collectCSSPropertiesFromReffy,
     cssPropertyToIDLAttribute,
     flattenIDL,
+    getExposureSet,
+    isWithinScope,
     buildIDLTests
   };
 } else {

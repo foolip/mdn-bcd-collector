@@ -32,6 +32,8 @@ const {
   collectCSSPropertiesFromReffy,
   cssPropertyToIDLAttribute,
   flattenIDL,
+  getExposureSet,
+  isWithinScope,
   buildIDLTests
 } = require('../../build');
 
@@ -422,6 +424,83 @@ describe('build', () => {
     });
   });
 
+  describe('getExposureSet', () => {
+    const historicalIDL = WebIDL2.parse(`interface DOMError {};`);
+
+    it('no defined exposure set', () => {
+      const specIDLs = {
+        first: WebIDL2.parse(`interface Dummy {
+               readonly attribute boolean imadumdum;
+             };`)
+      };
+      const ast = flattenIDL(specIDLs, historicalIDL);
+      const interfaces = ast.filter((dfn) => dfn.type === 'interface');
+      const exposureSet = getExposureSet(interfaces[0]);
+      assert.hasAllKeys(exposureSet, ['Window']);
+    });
+
+    it('single exposure', () => {
+      const specIDLs = {
+        first: WebIDL2.parse(`[Exposed=Worker] interface Dummy {
+               readonly attribute boolean imadumdum;
+             };`)
+      };
+      const ast = flattenIDL(specIDLs, historicalIDL);
+      const interfaces = ast.filter((dfn) => dfn.type === 'interface');
+      const exposureSet = getExposureSet(interfaces[0]);
+      assert.hasAllKeys(exposureSet, ['Worker']);
+    });
+
+    it('multiple exposure', () => {
+      const specIDLs = {
+        first: WebIDL2.parse(`[Exposed=(Window,Worker)] interface Dummy {
+               readonly attribute boolean imadumdum;
+             };`)
+      };
+      const ast = flattenIDL(specIDLs, historicalIDL);
+      const interfaces = ast.filter((dfn) => dfn.type === 'interface');
+      const exposureSet = getExposureSet(interfaces[0]);
+      assert.hasAllKeys(exposureSet, ['Window', 'Worker']);
+    });
+  });
+
+  describe('getExposureSet', () => {
+    it('basic tests', () => {
+      const specIDLs = {
+        window: WebIDL2.parse(`[Exposed=Window] interface DummyOne {};`),
+        webworker: WebIDL2.parse(`[Exposed=Worker] interface DummyTwo {};`),
+        serviceworker: WebIDL2.parse(
+          `[Exposed=ServiceWorker] interface DummyThree {};`
+        ),
+        bothworkers: WebIDL2.parse(
+          `[Exposed=(Worker,ServiceWorker)] interface DummyFour {};`
+        ),
+        windowandworker: WebIDL2.parse(
+          `[Exposed=(Window,Worker)] interface DummyFive {};`
+        )
+      };
+      const historicalIDL = WebIDL2.parse(`interface DOMError {};`);
+      const ast = flattenIDL(specIDLs, historicalIDL);
+      const interfaces = ast.filter((dfn) => dfn.type === 'interface');
+
+      const interfaceScopes = {
+        DummyOne: 'Window',
+        DummyTwo: 'Worker',
+        DummyThree: 'ServiceWorker',
+        DummyFour: 'Worker',
+        DummyFive: 'Window',
+        DOMError: 'Window'
+      };
+
+      for (const iface of interfaces) {
+        const exposureSet = getExposureSet(iface);
+        assert.equal(isWithinScope('Window', exposureSet), interfaceScopes[iface.name] === 'Window');
+        assert.equal(isWithinScope('Worker', exposureSet), interfaceScopes[iface.name] === 'Worker');
+        assert.equal(isWithinScope('ServiceWorker', exposureSet), interfaceScopes[iface.name] === 'ServiceWorker');
+      }
+    });
+  });
+
   describe('buildIDLTests', () => {
     it('interface with attribute', () => {
       const ast = WebIDL2.parse(`interface Attr { attribute any name; };`);
@@ -490,6 +569,27 @@ describe('build', () => {
         // eslint-disable-next-line max-len
         ['ANGLE_instanced_arrays.drawArraysInstancedANGLE', '(function() {var canvas = document.createElement(\'canvas\'); var gl = canvas.getContext(\'webgl\'); var a = gl.getExtension(\'ANGLE_instanced_arrays\');return a && \'drawArraysInstancedANGLE\' in a;})()']
       ]);
+    });
+
+    it('interface with legacy namespace', () => {
+      const ast = WebIDL2.parse(`[LegacyNamespace] interface Legacy {};`);
+      assert.deepEqual(buildIDLTests(ast), []);
+    });
+
+    it('limit scopes', () => {
+      const ast = WebIDL2.parse(`
+        [Exposed=Window] interface Worker {};
+        [Exposed=Worker] interface WorkerSync {};
+        [Exposed=(Window,Worker)] interface MessageChannel {};
+      `);
+      assert.deepEqual(buildIDLTests(ast), [
+        ['MessageChannel', {property: 'MessageChannel', scope: 'self'}],
+        ['Worker', {property: 'Worker', scope: 'self'}]
+      ]);
+      assert.deepEqual(buildIDLTests(ast, "Worker"), [
+        ['WorkerSync', {property: 'WorkerSync', scope: 'self'}],
+      ]);
+      assert.deepEqual(buildIDLTests(ast, "ServiceWorker"), []);
     });
 
     it('namespace with attribute', () => {
