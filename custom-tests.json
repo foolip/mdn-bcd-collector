@@ -6,6 +6,7 @@
       "drawArraysInstancedANGLE": "return 'drawArraysInstancedANGLE' in a;",
       "drawElementsInstancedANGLE": "return 'drawElementsInstancedANGLE' in a;",
       "vertexAttribDivisorANGLE": "return 'vertexAttribDivisorANGLE' in a;",
+      "VERTEX_ATTRIB_ARRAY_DIVISOR_ANGLE": "return 'VERTEX_ATTRIB_ARRAY_DIVISOR_ANGLE' in a;"
     }
   },
   "css": {
