@@ -25,6 +25,7 @@ const fs = require('fs');
 const {
   writeText,
   loadCustomTests,
+  getCustomTestAPI,
   buildIDLTests,
   cssPropertyToIDLAttribute,
   collectCSSPropertiesFromBCD,
@@ -47,6 +48,100 @@ describe('build', () => {
     });
 
     afterEach(() => {fs.unlinkSync(filepath)});
+  });
+
+  describe('getCustomTestAPI', () => {
+    describe('no custom tests', () => {
+      beforeEach(() => {loadCustomTests({api: {}, css: {}})});
+
+      it('interface', () => {
+        assert.equal(getCustomTestAPI('foo'), false);
+      });
+
+      it('member', () => {
+        assert.equal(getCustomTestAPI('foo', 'bar'), false);
+      });
+    });
+
+    describe('custom test for interface only', () => {
+      beforeEach(() => {loadCustomTests({
+        api: {
+          'foo': {
+            '__base': 'var a = 1;',
+            '__test': 'return a;'
+          }
+        },
+        css: {}
+      })});
+
+      it('interface', () => {
+        assert.equal(getCustomTestAPI('foo'), '(function() {var a = 1;return a;})()');
+      });
+
+      it('member', () => {
+        assert.equal(getCustomTestAPI('foo', 'bar'), false);
+      });
+    });
+
+    describe('custom test for member only', () => {
+      beforeEach(() => {loadCustomTests({
+        api: {
+          'foo': {
+            '__base': 'var a = 1;',
+            'bar': 'return a + 1;'
+          }
+        },
+        css: {}
+      })});
+
+      it('interface', () => {
+        assert.equal(getCustomTestAPI('foo'), false);
+      });
+
+      it('member', () => {
+        assert.equal(getCustomTestAPI('foo', 'bar'), '(function() {var a = 1;return a + 1;})()');
+      });
+    });
+
+    describe('custom test for member only, no __base', () => {
+      beforeEach(() => {loadCustomTests({
+        api: {
+          'foo': {
+            'bar': 'return 1 + 1;'
+          }
+        },
+        css: {}
+      })});
+
+      it('interface', () => {
+        assert.equal(getCustomTestAPI('foo'), false);
+      });
+
+      it('member', () => {
+        assert.equal(getCustomTestAPI('foo', 'bar'), '(function() {return 1 + 1;})()');
+      });
+    });
+
+    describe('custom test for interface and member', () => {
+      beforeEach(() => {loadCustomTests({
+        api: {
+          'foo': {
+            '__base': 'var a = 1;',
+            '__test': 'return a;',
+            'bar': 'return a + 1;'
+          }
+        },
+        css: {}
+      })});
+
+      it('interface', () => {
+        assert.equal(getCustomTestAPI('foo'), '(function() {var a = 1;return a;})()');
+      });
+
+      it('member', () => {
+        assert.equal(getCustomTestAPI('foo', 'bar'), '(function() {var a = 1;return a + 1;})()');
+      });
+    });
   });
 
   describe('collectCSSPropertiesFromBCD', () => {

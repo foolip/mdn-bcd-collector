@@ -695,6 +695,7 @@ if (process.env.NODE_ENV === 'test') {
   module.exports = {
     writeText,
     loadCustomTests,
+    getCustomTestAPI,
     buildIDLTests,
     cssPropertyToIDLAttribute,
     collectCSSPropertiesFromBCD,
