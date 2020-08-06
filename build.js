@@ -24,8 +24,8 @@ const copyright = ['<!--Copyright 2020 Google LLC', '', 'Licensed under the Apac
 
 // Custom tests are defined in custom-tests.json
 let customTests = {
-  "api": {},
-  "css": {}
+  'api': {},
+  'css': {}
 };
 
 function writeText(filename, content) {

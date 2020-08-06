@@ -54,7 +54,7 @@ describe('/api/results', () => {
         .send({x: 1});
     assert.equal(res.status, 201);
     assert.deepEqual(res.body, {
-      "next": `http://localhost:8080${manifestItems[1].pathname}`
+      'next': `http://localhost:8080${manifestItems[1].pathname}`
     });
   });
 
@@ -104,7 +104,7 @@ describe('/api/results', () => {
   it('submit invalid results', async () => {
     const res = await agent.post('/api/results')
         .query({for: testURL})
-        .send("my bad results");
+        .send('my bad results');
     assert.equal(res.status, 400);
   });
 });

@@ -108,7 +108,7 @@ app.post('/api/results', (req, res) => {
   ]).then(() => {
     res.status(201).json(response);
   })
-  .catch(/* istanbul ignore next */ (err) => catchError(err, res));
+      .catch(/* istanbul ignore next */ (err) => catchError(err, res));
 });
 
 app.get('/api/results', (req, res) => {

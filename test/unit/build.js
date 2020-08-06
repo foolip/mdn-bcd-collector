@@ -49,12 +49,16 @@ describe('build', () => {
       assert.fileContent(filepath, 'foo\nbar\nbaz\n');
     });
 
-    afterEach(() => {fs.unlinkSync(filepath)});
+    afterEach(() => {
+      fs.unlinkSync(filepath);
+    });
   });
 
   describe('getCustomTestAPI', () => {
     describe('no custom tests', () => {
-      beforeEach(() => {loadCustomTests({api: {}, css: {}})});
+      beforeEach(() => {
+        loadCustomTests({api: {}, css: {}});
+      });
 
       it('interface', () => {
         assert.equal(getCustomTestAPI('foo'), false);
@@ -66,18 +70,23 @@ describe('build', () => {
     });
 
     describe('custom test for interface only', () => {
-      beforeEach(() => {loadCustomTests({
-        api: {
-          'foo': {
-            '__base': 'var a = 1;',
-            '__test': 'return a;'
-          }
-        },
-        css: {}
-      })});
+      beforeEach(() => {
+        loadCustomTests({
+          api: {
+            'foo': {
+              '__base': 'var a = 1;',
+              '__test': 'return a;'
+            }
+          },
+          css: {}
+        });
+      });
 
       it('interface', () => {
-        assert.equal(getCustomTestAPI('foo'), '(function() {var a = 1;return a;})()');
+        assert.equal(
+            getCustomTestAPI('foo'),
+            '(function() {var a = 1;return a;})()'
+        );
       });
 
       it('member', () => {
@@ -86,62 +95,80 @@ describe('build', () => {
     });
 
     describe('custom test for member only', () => {
-      beforeEach(() => {loadCustomTests({
-        api: {
-          'foo': {
-            '__base': 'var a = 1;',
-            'bar': 'return a + 1;'
-          }
-        },
-        css: {}
-      })});
+      beforeEach(() => {
+        loadCustomTests({
+          api: {
+            'foo': {
+              '__base': 'var a = 1;',
+              'bar': 'return a + 1;'
+            }
+          },
+          css: {}
+        });
+      });
 
       it('interface', () => {
         assert.equal(getCustomTestAPI('foo'), false);
       });
 
       it('member', () => {
-        assert.equal(getCustomTestAPI('foo', 'bar'), '(function() {var a = 1;return a + 1;})()');
+        assert.equal(
+            getCustomTestAPI('foo', 'bar'),
+            '(function() {var a = 1;return a + 1;})()'
+        );
       });
     });
 
     describe('custom test for member only, no __base', () => {
-      beforeEach(() => {loadCustomTests({
-        api: {
-          'foo': {
-            'bar': 'return 1 + 1;'
-          }
-        },
-        css: {}
-      })});
+      beforeEach(() => {
+        loadCustomTests({
+          api: {
+            'foo': {
+              'bar': 'return 1 + 1;'
+            }
+          },
+          css: {}
+        });
+      });
 
       it('interface', () => {
         assert.equal(getCustomTestAPI('foo'), false);
       });
 
       it('member', () => {
-        assert.equal(getCustomTestAPI('foo', 'bar'), '(function() {return 1 + 1;})()');
+        assert.equal(
+            getCustomTestAPI('foo', 'bar'),
+            '(function() {return 1 + 1;})()'
+        );
       });
     });
 
     describe('custom test for interface and member', () => {
-      beforeEach(() => {loadCustomTests({
-        api: {
-          'foo': {
-            '__base': 'var a = 1;',
-            '__test': 'return a;',
-            'bar': 'return a + 1;'
-          }
-        },
-        css: {}
-      })});
+      beforeEach(() => {
+        loadCustomTests({
+          api: {
+            'foo': {
+              '__base': 'var a = 1;',
+              '__test': 'return a;',
+              'bar': 'return a + 1;'
+            }
+          },
+          css: {}
+        });
+      });
 
       it('interface', () => {
-        assert.equal(getCustomTestAPI('foo'), '(function() {var a = 1;return a;})()');
+        assert.equal(
+            getCustomTestAPI('foo'),
+            '(function() {var a = 1;return a;})()'
+        );
       });
 
       it('member', () => {
-        assert.equal(getCustomTestAPI('foo', 'bar'), '(function() {var a = 1;return a + 1;})()');
+        assert.equal(
+            getCustomTestAPI('foo', 'bar'),
+            '(function() {var a = 1;return a + 1;})()'
+        );
       });
     });
   });
@@ -344,8 +371,11 @@ describe('build', () => {
              };`),
         secnd: WebIDL2.parse(`DummyError includes DummyErrorHelper;`)
       };
-      
-      expect(() => {flattenIDL(specIDLs, historicalIDL)}).to.throw('Target DummyError not found for interface mixin DummyErrorHelper');
+
+      expect(() => {
+        flattenIDL(specIDLs, historicalIDL);
+      // eslint-disable-next-line max-len
+      }).to.throw('Target DummyError not found for interface mixin DummyErrorHelper');
     });
 
     it('interface missing', () => {
@@ -355,8 +385,11 @@ describe('build', () => {
              };`),
         secnd: WebIDL2.parse(`DummyError includes DummyErrorHelper;`)
       };
-      
-      expect(() => {flattenIDL(specIDLs, historicalIDL)}).to.throw('Interface mixin DummyErrorHelper not found for target DummyError');
+
+      expect(() => {
+        flattenIDL(specIDLs, historicalIDL);
+      // eslint-disable-next-line max-len
+      }).to.throw('Interface mixin DummyErrorHelper not found for target DummyError');
     });
 
     it('Operation overloading', () => {
@@ -371,7 +404,10 @@ describe('build', () => {
                boolean supports();
              };`)
       };
-      expect(() => {flattenIDL(specIDLs, historicalIDL)}).to.throw('Operation overloading across partials/mixins for CSS.supports');
+      expect(() => {
+        flattenIDL(specIDLs, historicalIDL);
+      // eslint-disable-next-line max-len
+      }).to.throw('Operation overloading across partials/mixins for CSS.supports');
     });
 
     it('Partial missing main', () => {
@@ -379,9 +415,11 @@ describe('build', () => {
         paint: WebIDL2.parse(
             `partial namespace CSS {
                readonly attribute any paintWorklet;
-             };`),
+             };`)
       };
-      expect(() => {flattenIDL(specIDLs, historicalIDL)}).to.throw('Original definition not found for partial namespace CSS');
+      expect(() => {
+        flattenIDL(specIDLs, historicalIDL);
+      }).to.throw('Original definition not found for partial namespace CSS');
     });
   });
 
@@ -428,21 +466,30 @@ describe('build', () => {
     it('interface with custom test', () => {
       const ast = WebIDL2.parse(
           `interface ANGLE_instanced_arrays {
-            void drawArraysInstancedANGLE(GLenum mode, GLint first, GLsizei count, GLsizei primcount);
+            void drawArraysInstancedANGLE(
+              GLenum mode,
+              GLint first,
+              GLsizei count,
+              GLsizei primcount
+            );
           };`);
       loadCustomTests({
-        "api": {
-          "ANGLE_instanced_arrays": {
-            "__base": "var canvas = document.createElement('canvas'); var gl = canvas.getContext('webgl'); var a = gl.getExtension('ANGLE_instanced_arrays');",
-            "__test": "return !!a;",
-            "drawArraysInstancedANGLE": "return a && 'drawArraysInstancedANGLE' in a;"
+        'api': {
+          'ANGLE_instanced_arrays': {
+            // eslint-disable-next-line max-len
+            '__base': 'var canvas = document.createElement(\'canvas\'); var gl = canvas.getContext(\'webgl\'); var a = gl.getExtension(\'ANGLE_instanced_arrays\');',
+            '__test': 'return !!a;',
+            // eslint-disable-next-line max-len
+            'drawArraysInstancedANGLE': 'return a && \'drawArraysInstancedANGLE\' in a;'
           }
         },
-        "css": {}
+        'css': {}
       });
       assert.deepEqual(buildIDLTests(ast), [
-        ['ANGLE_instanced_arrays', "(function() {var canvas = document.createElement('canvas'); var gl = canvas.getContext('webgl'); var a = gl.getExtension('ANGLE_instanced_arrays');return !!a;})()"],
-        ['ANGLE_instanced_arrays.drawArraysInstancedANGLE', "(function() {var canvas = document.createElement('canvas'); var gl = canvas.getContext('webgl'); var a = gl.getExtension('ANGLE_instanced_arrays');return a && 'drawArraysInstancedANGLE' in a;})()"]
+        // eslint-disable-next-line max-len
+        ['ANGLE_instanced_arrays', '(function() {var canvas = document.createElement(\'canvas\'); var gl = canvas.getContext(\'webgl\'); var a = gl.getExtension(\'ANGLE_instanced_arrays\');return !!a;})()'],
+        // eslint-disable-next-line max-len
+        ['ANGLE_instanced_arrays.drawArraysInstancedANGLE', '(function() {var canvas = document.createElement(\'canvas\'); var gl = canvas.getContext(\'webgl\'); var a = gl.getExtension(\'ANGLE_instanced_arrays\');return a && \'drawArraysInstancedANGLE\' in a;})()']
       ]);
     });
 
