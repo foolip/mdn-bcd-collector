@@ -39,7 +39,7 @@ describe('harness.js', function() {
         name: 'name',
         result: true,
         info: {code: 'true', scope: 'test'},
-        prefix: ""
+        prefix: ''
       }]);
       done();
     });
@@ -65,7 +65,7 @@ describe('harness.js', function() {
         result: null,
         message: 'returned null',
         info: {code: 'null', scope: 'test'},
-        prefix: ""
+        prefix: ''
       }]);
       done();
     });
@@ -82,7 +82,7 @@ describe('harness.js', function() {
         result: null,
         message: 'returned Symbol(bar)',
         info: {code: 'Symbol(\'bar\')', scope: 'test'},
-        prefix: ""
+        prefix: ''
       }]);
       done();
     });
@@ -96,7 +96,7 @@ describe('harness.js', function() {
         result: null,
         message: 'returned undefined',
         info: {code: 'undefined', scope: 'test'},
-        prefix: ""
+        prefix: ''
       }]);
       done();
     });
@@ -134,7 +134,7 @@ describe('harness.js', function() {
         name: 'first',
         result: true,
         info: {code: 'true', scope: 'test', a: 1},
-        prefix: ""
+        prefix: ''
       }, {
         name: 'second',
         result: false,
