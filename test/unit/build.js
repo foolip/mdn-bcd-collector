@@ -321,7 +321,6 @@ describe('build', () => {
       assert.lengthOf(interfaces, 2);
 
       assert.equal(interfaces[0].name, 'DummyError');
-      console.log(interfaces[0].members);
       assert.lengthOf(interfaces[0].members, 2);
       assert.containSubset(interfaces[0].members[0], {
         type: 'attribute',
