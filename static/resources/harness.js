@@ -27,7 +27,9 @@
   var prefixes = {
     api: ['', 'moz', 'Moz', 'webkit', 'WebKit', 'webKit', 'ms', 'MS'],
     css: ['', 'khtml', 'webkit', 'moz', 'ms']
-  }; // TODO Detect browser and select prefixes accordingly (along with allowing testing with alternative name)
+  };
+  // TODO Detect browser and select prefixes accordingly (along with
+  // allowing testing with alternative name)
 
   function stringify(value) {
     try {

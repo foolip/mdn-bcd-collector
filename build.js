@@ -25,10 +25,10 @@ const WebIDL2 = require('webidl2');
 //      "__test": "CODE_SPECIFIC_TO_TEST_THE_INTERFACE",
 //      "MEMBER": "CODE_TO_TEST_THE_MEMBER"
 //    }
-// 
+//
 //   This compiles into "function() {__base + __test/MEMBER}".  __test/MEMBER
 //   should be a return statement.
-// 
+//
 //   CSS Structure: (To be planned)
 const customTests = require('./custom-tests.json');
 
@@ -48,10 +48,10 @@ function writeText(filename, content) {
 function getCustomTestAPI(name, member) {
   let test = false;
 
-  if (name in customTests.api && "__base" in customTests.api[name]) {
+  if (name in customTests.api && '__base' in customTests.api[name]) {
     test = customTests.api[name].__base;
     if (member === undefined) {
-      if ("__test" in customTests.api[name]) {
+      if ('__test' in customTests.api[name]) {
         test += customTests.api[name].__test;
       } else {
         test = false;
@@ -70,7 +70,7 @@ function getCustomTestAPI(name, member) {
   }
 
   if (test) {
-    test = `(function() {${test}})()`
+    test = `(function() {${test}})()`;
   }
 
   return test;
@@ -340,8 +340,11 @@ function buildIDLTests(ast, scope = 'Window') {
     const isGlobal = !!getExtAttr(iface, 'Global');
 
     // interface object
-    let customTest = getCustomTestAPI(iface.name);
-    tests.push([iface.name, customTest || {property: iface.name, scope: 'self'}]);
+    const customTest = getCustomTestAPI(iface.name);
+    tests.push([
+      iface.name,
+      customTest || {property: iface.name, scope: 'self'}
+    ]);
 
     // members
     // TODO: iterable<>, maplike<>, setlike<> declarations are excluded
@@ -360,10 +363,12 @@ function buildIDLTests(ast, scope = 'Window') {
       }
 
       let expr;
-      let customTestMember = getCustomTestAPI(iface.name, member.name);
+      const customTestMember = getCustomTestAPI(iface.name, member.name);
 
       if (customTestMember) {
-        expr = customTest ? customTestMember : [{property: iface.name, scope: 'self'}, customTestMember];
+        expr = customTest ?
+               customTestMember :
+               [{property: iface.name, scope: 'self'}, customTestMember];
       } else {
         const isStatic = member.special === 'static';
         switch (member.type) {
@@ -416,20 +421,25 @@ function buildIDLTests(ast, scope = 'Window') {
     }
 
     // namespace object
-    let customTest = getCustomTestAPI(namespace.name);
-    tests.push([namespace.name, customTest || {property: namespace.name, scope: 'self'}]);
+    const customTest = getCustomTestAPI(namespace.name);
+    tests.push([
+      namespace.name,
+      customTest || {property: namespace.name, scope: 'self'}
+    ]);
 
     // members
     const members = namespace.members.filter((member) => member.name);
     members.sort((a, b) => a.name.localeCompare(b.name));
 
     for (const member of members) {
-      let customTestMember = getCustomTestAPI(namespace.name, member.name);
+      const customTestMember = getCustomTestAPI(namespace.name, member.name);
 
       if (customTestMember) {
         tests.push([
           `${namespace.name}.${member.name}`,
-          customTest ? customTestMember : [{property: namespace.name, scope: 'self'}, customTestMember]
+          customTest ?
+            customTestMember :
+            [{property: namespace.name, scope: 'self'}, customTestMember]
         ]);
       } else {
         tests.push([
