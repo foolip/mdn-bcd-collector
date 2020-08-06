@@ -70,7 +70,7 @@ function getCustomTestAPI(name, member) {
   }
 
   if (test) {
-    test = `function() {${test}}`
+    test = `(function() {${test}})()`
   }
 
   return test;
