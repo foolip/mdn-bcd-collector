@@ -16,11 +16,14 @@
 
 const chai = require('chai');
 const chaiSubset = require('chai-subset');
-chai.use(chaiSubset);
+const chaiFs = require('chai-fs');
+chai.use(chaiSubset).use(chaiFs);
 const assert = require('chai').assert;
 const WebIDL2 = require('webidl2');
+const fs = require('fs');
 
 const {
+  writeText,
   buildIDLTests,
   cssPropertyToIDLAttribute,
   collectCSSPropertiesFromBCD,
@@ -29,6 +32,22 @@ const {
 } = require('../../build');
 
 describe('build', () => {
+  describe('writeText', () => {
+    const filepath = '.testtmp';
+
+    it('simple supported', () => {
+      writeText(filepath, 'foo\nbar');
+      assert.fileContent(filepath, 'foo\nbar\n');
+    });
+
+    it('array', () => {
+      writeText(filepath, ['foo', 'bar', 'baz']);
+      assert.fileContent(filepath, 'foo\nbar\nbaz\n');
+    });
+
+    afterEach(() => {fs.unlinkSync(filepath)});
+  });
+
   describe('collectCSSPropertiesFromBCD', () => {
     it('simple supported', () => {
       const bcd = {

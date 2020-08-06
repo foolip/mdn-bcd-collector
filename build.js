@@ -693,6 +693,7 @@ async function build(bcd, reffy) {
 /* istanbul ignore else */
 if (process.env.NODE_ENV === 'test') {
   module.exports = {
+    writeText,
     loadCustomTests,
     buildIDLTests,
     cssPropertyToIDLAttribute,

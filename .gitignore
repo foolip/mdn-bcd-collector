@@ -5,3 +5,4 @@ coverage/
 generated/
 node_modules/
 secrets.json
+.testtmp
