@@ -259,10 +259,7 @@ function flattenIDL(specIDLs, collectExtraIDL) {
 }
 
 function getExtAttr(node, name) {
-  if (!node.extAttrs) {
-    return null;
-  }
-  return node.extAttrs.find((i) => i.name === name);
+  return node.extAttrs && node.extAttrs.find((i) => i.name === name);
 }
 
 // https://heycam.github.io/webidl/#dfn-exposure-set
