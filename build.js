@@ -18,6 +18,8 @@ const fs = require('fs-extra');
 const path = require('path');
 const WebIDL2 = require('webidl2');
 
+const customTests = require('./custom-tests.json');
+
 const generatedDir = path.join(__dirname, 'generated');
 
 const copyright = ['<!--Copyright 2020 Google LLC', '', 'Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at', '', '     https://www.apache.org/licenses/LICENSE-2.0', '', 'Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.-->'];
@@ -29,6 +31,37 @@ function writeText(filename, content) {
   content = content.trimEnd() + '\n';
   fs.ensureDirSync(path.dirname(filename));
   fs.writeFileSync(filename, content, 'utf8');
+}
+
+function getCustomTestAPI(name, member) {
+  let test = false;
+
+  if (name in customTests.api && '__base' in customTests.api[name]) {
+    test = customTests.api[name].__base;
+    if (member === undefined) {
+      if ('__test' in customTests.api[name]) {
+        test += customTests.api[name].__test;
+      } else {
+        test = false;
+      }
+    } else {
+      if (member in customTests.api[name]) {
+        test += customTests.api[name][member];
+      } else {
+        test = false;
+      }
+    }
+  } else {
+    if (name in customTests.api && member in customTests.api[name]) {
+      test = customTests.api[name][member];
+    }
+  }
+
+  if (test) {
+    test = `(function() {${test}})()`;
+  }
+
+  return test;
 }
 
 function collectCSSPropertiesFromBCD(bcd, propertySet) {
@@ -106,9 +139,9 @@ function buildCSSPropertyTest(propertyNames, method, basename) {
     let expr = '';
     if (method === 'CSSStyleDeclaration') {
       const attrName = cssPropertyToIDLAttribute(name, name.startsWith('-'));
-      expr = [{property: attrName, scope: 'document.body.style'}];
+      expr = {property: attrName, scope: 'document.body.style'};
     } else if (method === 'CSS.supports') {
-      expr = [{property: name, scope: 'CSS.supports'}];
+      expr = {property: name, scope: 'CSS.supports'};
     }
     lines.push(`bcd.addTest("${ident}", ${JSON.stringify(expr)}, 'CSS');`);
   }
@@ -295,7 +328,11 @@ function buildIDLTests(ast, scope = 'Window') {
     const isGlobal = !!getExtAttr(iface, 'Global');
 
     // interface object
-    tests.push([iface.name, [{property: iface.name, scope: 'self'}]]);
+    const customTest = getCustomTestAPI(iface.name);
+    tests.push([
+      iface.name,
+      customTest || {property: iface.name, scope: 'self'}
+    ]);
 
     // members
     // TODO: iterable<>, maplike<>, setlike<> declarations are excluded
@@ -313,35 +350,43 @@ function buildIDLTests(ast, scope = 'Window') {
         continue;
       }
 
-      const isStatic = member.special === 'static';
       let expr;
-      switch (member.type) {
-        case 'attribute':
-        case 'operation':
-          if (isGlobal) {
-            expr = [{property: member.name, scope: 'self'}];
-          } else if (isStatic) {
-            expr = [
-              {property: iface.name, scope: 'self'},
-              {property: member.name, scope: iface.name}
-            ];
-          } else {
-            expr = [
-              {property: iface.name, scope: 'self'},
-              {property: member.name, scope: `${iface.name}.prototype`}
-            ];
-          }
-          break;
-        case 'const':
-          if (isGlobal) {
-            expr = [{property: member.name, scope: 'self'}];
-          } else {
-            expr = [
-              {property: iface.name, scope: 'self'},
-              {property: member.name, scope: iface.name}
-            ];
-          }
-          break;
+      const customTestMember = getCustomTestAPI(iface.name, member.name);
+
+      if (customTestMember) {
+        expr = customTest ?
+               customTestMember :
+               [{property: iface.name, scope: 'self'}, customTestMember];
+      } else {
+        const isStatic = member.special === 'static';
+        switch (member.type) {
+          case 'attribute':
+          case 'operation':
+            if (isGlobal) {
+              expr = {property: member.name, scope: 'self'};
+            } else if (isStatic) {
+              expr = [
+                {property: iface.name, scope: 'self'},
+                {property: member.name, scope: iface.name}
+              ];
+            } else {
+              expr = [
+                {property: iface.name, scope: 'self'},
+                {property: member.name, scope: `${iface.name}.prototype`}
+              ];
+            }
+            break;
+          case 'const':
+            if (isGlobal) {
+              expr = {property: member.name, scope: 'self'};
+            } else {
+              expr = [
+                {property: iface.name, scope: 'self'},
+                {property: member.name, scope: iface.name}
+              ];
+            }
+            break;
+        }
       }
 
       if (expr) {
@@ -364,20 +409,35 @@ function buildIDLTests(ast, scope = 'Window') {
     }
 
     // namespace object
-    tests.push([namespace.name, [{property: namespace.name, scope: 'self'}]]);
+    const customTest = getCustomTestAPI(namespace.name);
+    tests.push([
+      namespace.name,
+      customTest || {property: namespace.name, scope: 'self'}
+    ]);
 
     // members
     const members = namespace.members.filter((member) => member.name);
     members.sort((a, b) => a.name.localeCompare(b.name));
 
     for (const member of members) {
-      tests.push([
-        `${namespace.name}.${member.name}`,
-        [
-          {property: namespace.name, scope: 'self'},
-          {property: member.name, scope: namespace.name}
-        ]
-      ]);
+      const customTestMember = getCustomTestAPI(namespace.name, member.name);
+
+      if (customTestMember) {
+        tests.push([
+          `${namespace.name}.${member.name}`,
+          customTest ?
+            customTestMember :
+            [{property: namespace.name, scope: 'self'}, customTestMember]
+        ]);
+      } else {
+        tests.push([
+          `${namespace.name}.${member.name}`,
+          [
+            {property: namespace.name, scope: 'self'},
+            {property: member.name, scope: namespace.name}
+          ]
+        ]);
+      }
     }
   }
 

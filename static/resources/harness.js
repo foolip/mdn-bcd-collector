@@ -28,6 +28,8 @@
     api: ['', 'moz', 'Moz', 'webkit', 'WebKit', 'webKit', 'ms', 'MS'],
     css: ['', 'khtml', 'webkit', 'moz', 'ms']
   };
+  // TODO Detect browser and select prefixes accordingly (along with
+  // allowing testing with alternative name)
 
   function stringify(value) {
     try {
@@ -64,12 +66,25 @@
     }
 
     try {
-      if (Array.isArray(data.code)) {
-        var parentPrefix = '';
+      var parentPrefix = '';
+      var code = data.code;
+      if (!Array.isArray(code)) {
+        code = [code];
+      }
 
-        for (var i in data.code) {
-          var subtest = data.code[i];
+      for (var i in code) {
+        var subtest = code[i];
 
+        if (typeof(subtest) === 'string') {
+          value = eval(subtest);
+          // TODO: allow callback and promise-vending funcs
+          if (typeof value === 'boolean') {
+            result.result = value;
+          } else {
+            result.result = null;
+            result.message = 'returned ' + stringify(value);
+          }
+        } else {
           for (var j in prefixesToTest) {
             var prefix = prefixesToTest[j];
             var property = subtest.property;
@@ -114,24 +129,15 @@
               break;
             }
           }
-
-          if (result.result === false) {
-            break;
-            // Tests are written in hierarchy order, so if the parent (first
-            // test) is unsupported, so is the child (next test)
-          }
-
-          result.prefix = parentPrefix;
         }
-      } else {
-        value = eval(data.code);
-        // TODO: allow callback and promise-vending funcs
-        if (typeof value === 'boolean') {
-          result.result = value;
-        } else {
-          result.result = null;
-          result.message = 'returned ' + stringify(value);
+
+        if (result.result === false) {
+          break;
+          // Tests are written in hierarchy order, so if the parent (first
+          // test) is unsupported, so is the child (next test)
         }
+
+        result.prefix = parentPrefix;
       }
     } catch (err) {
       result.result = null;
