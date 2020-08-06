@@ -19,6 +19,7 @@ const chaiSubset = require('chai-subset');
 const chaiFs = require('chai-fs');
 chai.use(chaiSubset).use(chaiFs);
 const assert = chai.assert;
+const expect = chai.expect;
 
 const WebIDL2 = require('webidl2');
 const fs = require('fs');
@@ -273,6 +274,40 @@ describe('build', () => {
   });
 
   describe('flattenIDL', () => {
+    const historicalIDL = WebIDL2.parse(`interface DOMError {};`);
+
+    it('interface + mixin', () => {
+      const specIDLs = {
+        first: WebIDL2.parse(`interface DummyError : Error {
+               readonly attribute boolean imadumdum;
+             };`),
+        secnd: WebIDL2.parse(
+            `interface mixin DummyErrorHelper {
+               DummyError geterror();
+             };
+
+             DummyError includes DummyErrorHelper;`)
+      };
+      const ast = flattenIDL(specIDLs, historicalIDL);
+
+      const interfaces = ast.filter((dfn) => dfn.type === 'interface');
+      assert.lengthOf(interfaces, 2);
+
+      assert.equal(interfaces[0].name, 'DummyError');
+      console.log(interfaces[0].members);
+      assert.lengthOf(interfaces[0].members, 2);
+      assert.containSubset(interfaces[0].members[0], {
+        type: 'attribute',
+        name: 'imadumdum'
+      });
+      assert.containSubset(interfaces[0].members[1], {
+        type: 'operation',
+        name: 'geterror'
+      });
+
+      assert.equal(interfaces[1].name, 'DOMError');
+    });
+
     it('namespace + partial namespace', () => {
       const specIDLs = {
         cssom: WebIDL2.parse(`namespace CSS { boolean supports(); };`),
@@ -281,7 +316,6 @@ describe('build', () => {
                readonly attribute any paintWorklet;
              };`)
       };
-      const historicalIDL = WebIDL2.parse(`interface DOMError {};`);
       const ast = flattenIDL(specIDLs, historicalIDL);
 
       const namespaces = ast.filter((dfn) => dfn.type === 'namespace');
@@ -301,6 +335,53 @@ describe('build', () => {
       const interfaces = ast.filter((dfn) => dfn.type === 'interface');
       assert.lengthOf(interfaces, 1);
       assert.equal(interfaces[0].name, 'DOMError');
+    });
+
+    it('mixin missing', () => {
+      const specIDLs = {
+        first: WebIDL2.parse(`interface mixin DummyErrorHelper {
+               DummyError geterror();
+             };`),
+        secnd: WebIDL2.parse(`DummyError includes DummyErrorHelper;`)
+      };
+      
+      expect(() => {flattenIDL(specIDLs, historicalIDL)}).to.throw('Target DummyError not found for interface mixin DummyErrorHelper');
+    });
+
+    it('interface missing', () => {
+      const specIDLs = {
+        first: WebIDL2.parse(`interface DummyError : Error {
+               readonly attribute boolean imadumdum;
+             };`),
+        secnd: WebIDL2.parse(`DummyError includes DummyErrorHelper;`)
+      };
+      
+      expect(() => {flattenIDL(specIDLs, historicalIDL)}).to.throw('Interface mixin DummyErrorHelper not found for target DummyError');
+    });
+
+    it('Operation overloading', () => {
+      const specIDLs = {
+        cssom: WebIDL2.parse(`namespace CSS { boolean supports(); };`),
+        paint: WebIDL2.parse(
+            `partial namespace CSS {
+               readonly attribute any paintWorklet;
+             };`),
+        paint2: WebIDL2.parse(
+            `partial namespace CSS {
+               boolean supports();
+             };`)
+      };
+      expect(() => {flattenIDL(specIDLs, historicalIDL)}).to.throw('Operation overloading across partials/mixins for CSS.supports');
+    });
+
+    it('Partial missing main', () => {
+      const specIDLs = {
+        paint: WebIDL2.parse(
+            `partial namespace CSS {
+               readonly attribute any paintWorklet;
+             };`),
+      };
+      expect(() => {flattenIDL(specIDLs, historicalIDL)}).to.throw('Original definition not found for partial namespace CSS');
     });
   });
 
