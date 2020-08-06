@@ -18,7 +18,8 @@ const chai = require('chai');
 const chaiSubset = require('chai-subset');
 const chaiFs = require('chai-fs');
 chai.use(chaiSubset).use(chaiFs);
-const assert = require('chai').assert;
+const assert = chai.assert;
+
 const WebIDL2 = require('webidl2');
 const fs = require('fs');
 
