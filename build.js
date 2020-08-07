@@ -496,7 +496,7 @@ function validateIDL(ast) {
     }
   }
 
-  let validationErrors = [];
+  const validationErrors = [];
   for (const {ruleName, message} of validations) {
     if (ignoreRules.has(ruleName)) {
       continue;
