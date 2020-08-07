@@ -32,7 +32,10 @@ const {
   collectCSSPropertiesFromReffy,
   cssPropertyToIDLAttribute,
   flattenIDL,
-  buildIDLTests
+  getExposureSet,
+  isWithinScope,
+  buildIDLTests,
+  validateIDL
 } = require('../../build');
 
 describe('build', () => {
@@ -321,7 +324,6 @@ describe('build', () => {
       assert.lengthOf(interfaces, 2);
 
       assert.equal(interfaces[0].name, 'DummyError');
-      console.log(interfaces[0].members);
       assert.lengthOf(interfaces[0].members, 2);
       assert.containSubset(interfaces[0].members[0], {
         type: 'attribute',
@@ -423,6 +425,106 @@ describe('build', () => {
     });
   });
 
+  describe('getExposureSet', () => {
+    const historicalIDL = WebIDL2.parse(`interface DOMError {};`);
+
+    it('no defined exposure set', () => {
+      const specIDLs = {
+        first: WebIDL2.parse(`interface Dummy {
+               readonly attribute boolean imadumdum;
+             };`)
+      };
+      const ast = flattenIDL(specIDLs, historicalIDL);
+      const interfaces = ast.filter((dfn) => dfn.type === 'interface');
+      const exposureSet = getExposureSet(interfaces[0]);
+      assert.hasAllKeys(exposureSet, ['Window']);
+    });
+
+    it('single exposure', () => {
+      const specIDLs = {
+        first: WebIDL2.parse(`[Exposed=Worker] interface Dummy {
+               readonly attribute boolean imadumdum;
+             };`)
+      };
+      const ast = flattenIDL(specIDLs, historicalIDL);
+      const interfaces = ast.filter((dfn) => dfn.type === 'interface');
+      const exposureSet = getExposureSet(interfaces[0]);
+      assert.hasAllKeys(exposureSet, ['Worker']);
+    });
+
+    it('multiple exposure', () => {
+      const specIDLs = {
+        first: WebIDL2.parse(`[Exposed=(Window,Worker)] interface Dummy {
+               readonly attribute boolean imadumdum;
+             };`)
+      };
+      const ast = flattenIDL(specIDLs, historicalIDL);
+      const interfaces = ast.filter((dfn) => dfn.type === 'interface');
+      const exposureSet = getExposureSet(interfaces[0]);
+      assert.hasAllKeys(exposureSet, ['Window', 'Worker']);
+    });
+  });
+
+  describe('getExposureSet', () => {
+    it('basic tests', () => {
+      const specIDLs = {
+        window: WebIDL2.parse(`[Exposed=Window] interface DummyOne {};`),
+        webworker: WebIDL2.parse(`[Exposed=Worker] interface DummyTwo {};`),
+        serviceworker: WebIDL2.parse(
+            `[Exposed=ServiceWorker] interface DummyThree {};`
+        ),
+        bothworkers: WebIDL2.parse(
+            `[Exposed=(Worker,ServiceWorker)] interface DummyFour {};`
+        ),
+        windowandworker: WebIDL2.parse(
+            `[Exposed=(Window,Worker)] interface DummyFive {};`
+        )
+      };
+      const historicalIDL = WebIDL2.parse(`interface DOMError {};`);
+      const ast = flattenIDL(specIDLs, historicalIDL);
+      const interfaces = ast.filter((dfn) => dfn.type === 'interface');
+
+      const interfaceScopes = {
+        DummyOne: 'Window',
+        DummyTwo: 'Worker',
+        DummyThree: 'ServiceWorker',
+        DummyFour: 'Worker',
+        DummyFive: 'Window',
+        DOMError: 'Window'
+      };
+
+      for (const iface of interfaces) {
+        const exposureSet = getExposureSet(iface);
+        assert.equal(
+            isWithinScope('Window', exposureSet),
+            interfaceScopes[iface.name] === 'Window'
+        );
+        assert.equal(
+            isWithinScope('Worker', exposureSet),
+            interfaceScopes[iface.name] === 'Worker'
+        );
+        assert.equal(
+            isWithinScope('ServiceWorker', exposureSet),
+            interfaceScopes[iface.name] === 'ServiceWorker'
+        );
+      }
+    });
+
+    it('bad exposure set', () => {
+      const specIDLs = {
+        badexposure: WebIDL2.parse(`[Exposed=0] interface DummyOne {};`)
+      };
+      const historicalIDL = WebIDL2.parse(`interface DOMError {};`);
+      const ast = flattenIDL(specIDLs, historicalIDL);
+      const interfaces = ast.filter((dfn) => dfn.type === 'interface');
+
+      expect(() => {
+        getExposureSet(interfaces[0]);
+      })
+          .to.throw('Unexpected RHS for Exposed extended attribute');
+    });
+  });
+
   describe('buildIDLTests', () => {
     it('interface with attribute', () => {
       const ast = WebIDL2.parse(`interface Attr { attribute any name; };`);
@@ -463,6 +565,20 @@ describe('build', () => {
       ]);
     });
 
+    it('interface with const', () => {
+      const ast = WebIDL2.parse(
+          `interface Window {
+             const boolean isWindow = true;
+           };`);
+      assert.deepEqual(buildIDLTests(ast), [
+        ['Window', {property: 'Window', scope: 'self'}],
+        ['Window.isWindow', [
+          {property: 'Window', scope: 'self'},
+          {property: 'isWindow', scope: 'Window'}
+        ]]
+      ]);
+    });
+
     it('interface with custom test', () => {
       const ast = WebIDL2.parse(
           `interface ANGLE_instanced_arrays {
@@ -493,6 +609,92 @@ describe('build', () => {
       ]);
     });
 
+    it('interface with legacy namespace', () => {
+      const ast = WebIDL2.parse(`[LegacyNamespace] interface Legacy {};`);
+      assert.deepEqual(buildIDLTests(ast), []);
+    });
+
+    it('global interface', () => {
+      const ast = WebIDL2.parse(`[Global=(Window,Worker)]
+      interface WindowOrWorkerGlobalScope {
+        attribute boolean isLoaded;
+        const boolean active = true;
+      };`);
+      assert.deepEqual(buildIDLTests(ast), [
+        [
+          'WindowOrWorkerGlobalScope',
+          {
+            'property': 'WindowOrWorkerGlobalScope',
+            'scope': 'self'
+          }
+        ],
+        [
+          'WindowOrWorkerGlobalScope.active',
+          {
+            'property': 'active',
+            'scope': 'self'
+          }
+        ],
+        [
+          'WindowOrWorkerGlobalScope.isLoaded',
+          {
+            'property': 'isLoaded',
+            'scope': 'self'
+          }
+        ]
+      ]);
+    });
+
+    it('interface with constructor', () => {
+      const ast = WebIDL2.parse(`interface DoubleList {
+        iterable<double>;
+      };`);
+      assert.deepEqual(buildIDLTests(ast), [
+        [
+          'DoubleList',
+          {
+            'property': 'DoubleList',
+            'scope': 'self'
+          }
+        ]
+      ]);
+    });
+
+    it('limit scopes', () => {
+      const ast = WebIDL2.parse(`
+        [Exposed=Window] interface Worker {};
+        [Exposed=Worker] interface WorkerSync {};
+        [Exposed=(Window,Worker)] interface MessageChannel {};
+        namespace CSS {};
+      `);
+      assert.deepEqual(buildIDLTests(ast), [
+        ['MessageChannel', {property: 'MessageChannel', scope: 'self'}],
+        ['Worker', {property: 'Worker', scope: 'self'}],
+        ['CSS', {property: 'CSS', scope: 'self'}]
+      ]);
+      assert.deepEqual(buildIDLTests(ast, 'Worker'), [
+        ['WorkerSync', {property: 'WorkerSync', scope: 'self'}]
+      ]);
+      assert.deepEqual(buildIDLTests(ast, 'ServiceWorker'), []);
+    });
+
+    it('operator variations', () => {
+      const ast = WebIDL2.parse(`
+        interface AudioNode : EventTarget {
+          void disconnect ();
+          void disconnect (unsigned long output);
+          void disconnect (AudioNode destinationNode);
+        };
+      `);
+      assert.deepEqual(buildIDLTests(ast), [
+        ['AudioNode', {property: 'AudioNode', scope: 'self'}],
+        ['AudioNode.disconnect', [
+          {property: 'AudioNode', scope: 'self'},
+          {property: 'disconnect', scope: 'AudioNode.prototype'}
+        ]]
+      ]);
+    });
+
     it('namespace with attribute', () => {
       const ast = WebIDL2.parse(
           `namespace CSS {
@@ -519,6 +721,97 @@ describe('build', () => {
           {property: 'supports', scope: 'CSS'}
         ]]
       ]);
+    });
+
+    it('namespace with custom test', () => {
+      const ast = WebIDL2.parse(
+          `namespace CSS {
+             readonly attribute any paintWorklet;
+           };`);
+      loadCustomTests({
+        'api': {
+          'CSS': {
+            '__base': 'var css = CSS;',
+            '__test': 'return !!css;',
+            'paintWorklet': 'return css && \'paintWorklet\' in css;'
+          }
+        },
+        'css': {}
+      });
+      assert.deepEqual(buildIDLTests(ast), [
+        // eslint-disable-next-line max-len
+        ['CSS', '(function() {var css = CSS;return !!css;})()'],
+        // eslint-disable-next-line max-len
+        ['CSS.paintWorklet', '(function() {var css = CSS;return css && \'paintWorklet\' in css;})()']
+      ]);
+    });
+  });
+
+  describe('validateIDL', () => {
+    it('valid idl', () => {
+      const ast = WebIDL2.parse(`interface Node {
+        boolean contains(Node otherNode);
+      };`);
+      expect(() => {
+        validateIDL(ast);
+      }).to.not.throw();
+    });
+
+    it('no members', () => {
+      const ast = WebIDL2.parse(`interface Node {};`);
+      expect(() => {
+        validateIDL(ast);
+      }).to.not.throw();
+    });
+
+    it('overloaded operator', () => {
+      const ast = WebIDL2.parse(`interface Node {
+        boolean contains(Node otherNode);
+        boolean contains(Node otherNode, boolean deepEqual);
+      };`);
+      expect(() => {
+        validateIDL(ast);
+      }).to.not.throw();
+    });
+
+    it('nameless member', () => {
+      const ast = WebIDL2.parse(`interface Node {
+        iterable<Node>;
+      };`);
+      expect(() => {
+        validateIDL(ast);
+      }).to.not.throw();
+    });
+
+    /* Remove when issues are resolved spec-side */
+    it('allowed duplicates', () => {
+      const ast = WebIDL2.parse(`interface SVGAElement {
+        attribute DOMString href;
+        attribute DOMString href;
+      };
+
+      interface WebGLRenderingContext {
+        attribute Canvas canvas;
+        attribute Canvas canvas;
+      };
+
+      interface WebGL2RenderingContext {
+        attribute Canvas canvas;
+        attribute Canvas canvas;
+      };`);
+      expect(() => {
+        validateIDL(ast);
+      }).to.not.throw();
+    });
+
+    it('disallowed duplicates', () => {
+      const ast = WebIDL2.parse(`interface Node {
+        attribute DOMString type;
+        attribute DOMString type;
+      };`);
+      expect(() => {
+        validateIDL(ast);
+      }).to.throw();
     });
   });
 });

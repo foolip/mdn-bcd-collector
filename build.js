@@ -176,6 +176,7 @@ function buildCSS(bcd, reffy) {
   ];
 }
 
+/* istanbul ignore next */
 function collectExtraIDL() {
   const idl = fs.readFileSync('./non-standard.idl', 'utf8');
   return WebIDL2.parse(idl);
@@ -340,8 +341,8 @@ function buildIDLTests(ast, scope = 'Window') {
     ]);
 
     // members
-    // TODO: iterable<>, maplike<>, setlike<> declarations are excluded
-    // by filtering to things with names.
+    // TODO: iterable<>, maplike<>, setlike<>, and constructor declarations are
+    // excluded by filtering to things with names.
     const members = iface.members.filter((member) => member.name);
     members.sort((a, b) => a.name.localeCompare(b.name));
 
@@ -394,13 +395,8 @@ function buildIDLTests(ast, scope = 'Window') {
         }
       }
 
-      if (expr) {
-        tests.push([`${iface.name}.${member.name}`, expr]);
-        handledMemberNames.add(member.name);
-      } else {
-        // eslint-disable-next-line max-len
-        console.warn(`Interface ${iface.name} member type ${member.type} not handled`);
-      }
+      tests.push([`${iface.name}.${member.name}`, expr]);
+      handledMemberNames.add(member.name);
     }
   }
 
@@ -473,7 +469,7 @@ function validateIDL(ast) {
 
   // Monkey-patching support for https://github.com/w3c/webidl2.js/issues/484
   for (const dfn of ast) {
-    if (!dfn.members) {
+    if (!dfn.members || dfn.members.length == 0) {
       continue;
     }
     const names = new Set();
@@ -500,18 +496,19 @@ function validateIDL(ast) {
     }
   }
 
-  let validationError = false;
+  const validationErrors = [];
   for (const {ruleName, message} of validations) {
     if (ignoreRules.has(ruleName)) {
       continue;
     }
-    console.error(`${message}\n`);
-    validationError = true;
+    validationErrors.push(message);
   }
 
-  if (validationError) {
-    process.exit(1);
+  if (validationErrors.length) {
+    throw new Error(`Validation errors:\n\n${validationErrors.join('\n')}`);
   }
+
+  return true;
 }
 
 function buildIDLWindow(ast) {
@@ -697,7 +694,10 @@ if (process.env.NODE_ENV === 'test') {
     collectCSSPropertiesFromReffy,
     cssPropertyToIDLAttribute,
     flattenIDL,
-    buildIDLTests
+    getExposureSet,
+    isWithinScope,
+    buildIDLTests,
+    validateIDL
   };
 } else {
   const bcd = require('mdn-browser-compat-data');
