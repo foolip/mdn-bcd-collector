@@ -176,6 +176,7 @@ function buildCSS(bcd, reffy) {
   ];
 }
 
+/* istanbul ignore next */
 function collectExtraIDL() {
   const idl = fs.readFileSync('./non-standard.idl', 'utf8');
   return WebIDL2.parse(idl);
