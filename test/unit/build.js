@@ -752,12 +752,12 @@ describe('build', () => {
       const ast = WebIDL2.parse(`interface Node {
         boolean contains(Node otherNode);
       };`);
-      assert.equal(validateIDL(ast), true);
+      expect(() => {validateIDL(ast)}).to.not.throw();
     });
 
     it('no members', () => {
       const ast = WebIDL2.parse(`interface Node {};`);
-      assert.equal(validateIDL(ast), true);
+      expect(() => {validateIDL(ast)}).to.not.throw();
     });
 
     it('overloaded operator', () => {
@@ -765,18 +765,18 @@ describe('build', () => {
         boolean contains(Node otherNode);
         boolean contains(Node otherNode, boolean deepEqual);
       };`);
-      assert.equal(validateIDL(ast), true);
+      expect(() => {validateIDL(ast)}).to.not.throw();
     });
 
     it('nameless member', () => {
       const ast = WebIDL2.parse(`interface Node {
         iterable<Node>;
       };`);
-      assert.equal(validateIDL(ast), true);
+      expect(() => {validateIDL(ast)}).to.not.throw();
     });
 
     /* Remove when issues are resolved spec-side */
-    it('allow duplicates', () => {
+    it('allowed duplicates', () => {
       const ast = WebIDL2.parse(`interface SVGAElement {
         attribute DOMString href;
         attribute DOMString href;
@@ -791,7 +791,15 @@ describe('build', () => {
         attribute Canvas canvas;
         attribute Canvas canvas;
       };`);
-      assert.equal(validateIDL(ast), true);
+      expect(() => {validateIDL(ast)}).to.not.throw();
+    });
+
+    it('disallowed duplicates', () => {
+      const ast = WebIDL2.parse(`interface Node {
+        attribute DOMString type;
+        attribute DOMString type;
+      };`);
+      expect(() => {validateIDL(ast)}).to.throw();
     });
   });
 });

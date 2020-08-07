@@ -496,16 +496,19 @@ function validateIDL(ast) {
     }
   }
 
-  let validationError = false;
+  let validationErrors = [];
   for (const {ruleName, message} of validations) {
     if (ignoreRules.has(ruleName)) {
       continue;
     }
-    console.error(`${message}\n`);
-    validationError = true;
+    validationErrors.push(message);
   }
 
-  return !validationError;
+  if (validationErrors.length) {
+    throw new Error(`Validation errors:\n\n${validationErrors.join('\n')}`);
+  }
+
+  return true;
 }
 
 function buildIDLWindow(ast) {
@@ -603,9 +606,7 @@ function buildIDLServiceWorker(ast) {
 
 function buildIDL(_, reffy) {
   const ast = flattenIDL(reffy.idl, collectExtraIDL());
-  if (!validateIDL(ast)) {
-    process.exit(1);
-  }
+  validateIDL(ast);
   let testpaths = [];
   for (const buildFunc of [
     buildIDLWindow, buildIDLWorker, buildIDLServiceWorker
