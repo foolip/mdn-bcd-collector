@@ -340,8 +340,8 @@ function buildIDLTests(ast, scope = 'Window') {
     ]);
 
     // members
-    // TODO: iterable<>, maplike<>, setlike<> declarations are excluded
-    // by filtering to things with names.
+    // TODO: iterable<>, maplike<>, setlike<>, and constructor declarations are
+    // excluded by filtering to things with names.
     const members = iface.members.filter((member) => member.name);
     members.sort((a, b) => a.name.localeCompare(b.name));
 
@@ -394,13 +394,8 @@ function buildIDLTests(ast, scope = 'Window') {
         }
       }
 
-      if (expr) {
-        tests.push([`${iface.name}.${member.name}`, expr]);
-        handledMemberNames.add(member.name);
-      } else {
-        // eslint-disable-next-line max-len
-        console.warn(`Interface ${iface.name} member type ${member.type} not handled`);
-      }
+      tests.push([`${iface.name}.${member.name}`, expr]);
+      handledMemberNames.add(member.name);
     }
   }
 
