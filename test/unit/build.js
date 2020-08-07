@@ -471,13 +471,13 @@ describe('build', () => {
         window: WebIDL2.parse(`[Exposed=Window] interface DummyOne {};`),
         webworker: WebIDL2.parse(`[Exposed=Worker] interface DummyTwo {};`),
         serviceworker: WebIDL2.parse(
-          `[Exposed=ServiceWorker] interface DummyThree {};`
+            `[Exposed=ServiceWorker] interface DummyThree {};`
         ),
         bothworkers: WebIDL2.parse(
-          `[Exposed=(Worker,ServiceWorker)] interface DummyFour {};`
+            `[Exposed=(Worker,ServiceWorker)] interface DummyFour {};`
         ),
         windowandworker: WebIDL2.parse(
-          `[Exposed=(Window,Worker)] interface DummyFive {};`
+            `[Exposed=(Window,Worker)] interface DummyFive {};`
         )
       };
       const historicalIDL = WebIDL2.parse(`interface DOMError {};`);
@@ -495,9 +495,18 @@ describe('build', () => {
 
       for (const iface of interfaces) {
         const exposureSet = getExposureSet(iface);
-        assert.equal(isWithinScope('Window', exposureSet), interfaceScopes[iface.name] === 'Window');
-        assert.equal(isWithinScope('Worker', exposureSet), interfaceScopes[iface.name] === 'Worker');
-        assert.equal(isWithinScope('ServiceWorker', exposureSet), interfaceScopes[iface.name] === 'ServiceWorker');
+        assert.equal(
+            isWithinScope('Window', exposureSet),
+            interfaceScopes[iface.name] === 'Window'
+        );
+        assert.equal(
+            isWithinScope('Worker', exposureSet),
+            interfaceScopes[iface.name] === 'Worker'
+        );
+        assert.equal(
+            isWithinScope('ServiceWorker', exposureSet),
+            interfaceScopes[iface.name] === 'ServiceWorker'
+        );
       }
     });
 
@@ -508,9 +517,11 @@ describe('build', () => {
       const historicalIDL = WebIDL2.parse(`interface DOMError {};`);
       const ast = flattenIDL(specIDLs, historicalIDL);
       const interfaces = ast.filter((dfn) => dfn.type === 'interface');
-      
-      expect(() => {getExposureSet(interfaces[0])})
-        .to.throw('Unexpected RHS for Exposed extended attribute');
+
+      expect(() => {
+        getExposureSet(interfaces[0]);
+      })
+          .to.throw('Unexpected RHS for Exposed extended attribute');
     });
   });
 
@@ -604,30 +615,31 @@ describe('build', () => {
     });
 
     it('global interface', () => {
-      const ast = WebIDL2.parse(`[Global=(Window,Worker)] interface WindowOrWorkerGlobalScope {
+      const ast = WebIDL2.parse(`[Global=(Window,Worker)]
+      interface WindowOrWorkerGlobalScope {
         attribute boolean isLoaded;
         const boolean active = true;
       };`);
       assert.deepEqual(buildIDLTests(ast), [
         [
-          "WindowOrWorkerGlobalScope",
+          'WindowOrWorkerGlobalScope',
           {
-            "property": "WindowOrWorkerGlobalScope",
-            "scope": "self",
+            'property': 'WindowOrWorkerGlobalScope',
+            'scope': 'self'
           }
         ],
         [
-          "WindowOrWorkerGlobalScope.active",
+          'WindowOrWorkerGlobalScope.active',
           {
-            "property": "active",
-            "scope": "self"
+            'property': 'active',
+            'scope': 'self'
           }
         ],
         [
-          "WindowOrWorkerGlobalScope.isLoaded",
+          'WindowOrWorkerGlobalScope.isLoaded',
           {
-            "property": "isLoaded",
-            "scope": "self"
+            'property': 'isLoaded',
+            'scope': 'self'
           }
         ]
       ]);
@@ -639,10 +651,10 @@ describe('build', () => {
       };`);
       assert.deepEqual(buildIDLTests(ast), [
         [
-          "DoubleList",
+          'DoubleList',
           {
-            "property": "DoubleList",
-            "scope": "self",
+            'property': 'DoubleList',
+            'scope': 'self'
           }
         ]
       ]);
@@ -660,10 +672,10 @@ describe('build', () => {
         ['Worker', {property: 'Worker', scope: 'self'}],
         ['CSS', {property: 'CSS', scope: 'self'}]
       ]);
-      assert.deepEqual(buildIDLTests(ast, "Worker"), [
-        ['WorkerSync', {property: 'WorkerSync', scope: 'self'}],
+      assert.deepEqual(buildIDLTests(ast, 'Worker'), [
+        ['WorkerSync', {property: 'WorkerSync', scope: 'self'}]
       ]);
-      assert.deepEqual(buildIDLTests(ast, "ServiceWorker"), []);
+      assert.deepEqual(buildIDLTests(ast, 'ServiceWorker'), []);
     });
 
     it('operator variations', () => {
