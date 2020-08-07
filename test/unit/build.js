@@ -787,7 +787,7 @@ describe('build', () => {
         attribute Canvas canvas;
       };
 
-      interface WebGLRenderingContext2 {
+      interface WebGL2RenderingContext {
         attribute Canvas canvas;
         attribute Canvas canvas;
       };`);
