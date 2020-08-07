@@ -470,7 +470,7 @@ function validateIDL(ast) {
 
   // Monkey-patching support for https://github.com/w3c/webidl2.js/issues/484
   for (const dfn of ast) {
-    if (!dfn.members) {
+    if (!dfn.members || dfn.members.length == 0) {
       continue;
     }
     const names = new Set();
