@@ -34,7 +34,8 @@ const {
   flattenIDL,
   getExposureSet,
   isWithinScope,
-  buildIDLTests
+  buildIDLTests,
+  validateIDL
 } = require('../../build');
 
 describe('build', () => {
@@ -731,6 +732,54 @@ describe('build', () => {
         // eslint-disable-next-line max-len
         ['CSS.paintWorklet', '(function() {var css = CSS;return css && \'paintWorklet\' in css;})()']
       ]);
+    });
+  });
+
+  describe('validateIDL', () => {
+    it('valid idl', () => {
+      const ast = WebIDL2.parse(`interface Node {
+        boolean contains(Node otherNode);
+      };`);
+      assert.equal(validateIDL(ast), true);
+    });
+
+    it('no members', () => {
+      const ast = WebIDL2.parse(`interface Node {};`);
+      assert.equal(validateIDL(ast), true);
+    });
+
+    it('overloaded operator', () => {
+      const ast = WebIDL2.parse(`interface Node {
+        boolean contains(Node otherNode);
+        boolean contains(Node otherNode, boolean deepEqual);
+      };`);
+      assert.equal(validateIDL(ast), true);
+    });
+
+    it('nameless member', () => {
+      const ast = WebIDL2.parse(`interface Node {
+        iterable<Node>;
+      };`);
+      assert.equal(validateIDL(ast), true);
+    });
+
+    /* Remove when issues are resolved spec-side */
+    it('allow duplicates', () => {
+      const ast = WebIDL2.parse(`interface SVGAElement {
+        attribute DOMString href;
+        attribute DOMString href;
+      };
+
+      interface WebGLRenderingContext {
+        attribute Canvas canvas;
+        attribute Canvas canvas;
+      };
+
+      interface WebGLRenderingContext2 {
+        attribute Canvas canvas;
+        attribute Canvas canvas;
+      };`);
+      assert.equal(validateIDL(ast), true);
     });
   });
 });

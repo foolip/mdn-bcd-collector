@@ -445,7 +445,6 @@ function buildIDLTests(ast, scope = 'Window') {
   return tests;
 }
 
-/* istanbul ignore next: this is a safeguard to resolve spec-side issues */
 function allowDuplicates(dfn, member) {
   switch (dfn.name) {
     // TODO: sort this out spec-side
@@ -696,7 +695,8 @@ if (process.env.NODE_ENV === 'test') {
     flattenIDL,
     getExposureSet,
     isWithinScope,
-    buildIDLTests
+    buildIDLTests,
+    validateIDL
   };
 } else {
   const bcd = require('mdn-browser-compat-data');
