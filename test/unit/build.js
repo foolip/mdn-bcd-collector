@@ -553,6 +553,20 @@ describe('build', () => {
       ]);
     });
 
+    it('interface with const', () => {
+      const ast = WebIDL2.parse(
+          `interface Window {
+             const boolean isWindow = true;
+           };`);
+      assert.deepEqual(buildIDLTests(ast), [
+        ['Window', {property: 'Window', scope: 'self'}],
+        ['Window.isWindow', [
+          {property: 'Window', scope: 'self'},
+          {property: 'isWindow', scope: 'Window'}
+        ]]
+      ]);
+    });
+
     it('interface with custom test', () => {
       const ast = WebIDL2.parse(
           `interface ANGLE_instanced_arrays {
@@ -591,6 +605,7 @@ describe('build', () => {
     it('global interface', () => {
       const ast = WebIDL2.parse(`[Global=(Window,Worker)] interface WindowOrWorkerGlobalScope {
         attribute boolean isLoaded;
+        const boolean active = true;
       };`);
       assert.deepEqual(buildIDLTests(ast), [
         [
@@ -598,6 +613,13 @@ describe('build', () => {
           {
             "property": "WindowOrWorkerGlobalScope",
             "scope": "self",
+          }
+        ],
+        [
+          "WindowOrWorkerGlobalScope.active",
+          {
+            "property": "active",
+            "scope": "self"
           }
         ],
         [
@@ -610,15 +632,32 @@ describe('build', () => {
       ]);
     });
 
+    it('interface with constructor', () => {
+      const ast = WebIDL2.parse(`interface DoubleList {
+        iterable<double>;
+      };`);
+      assert.deepEqual(buildIDLTests(ast), [
+        [
+          "DoubleList",
+          {
+            "property": "DoubleList",
+            "scope": "self",
+          }
+        ]
+      ]);
+    });
+
     it('limit scopes', () => {
       const ast = WebIDL2.parse(`
         [Exposed=Window] interface Worker {};
         [Exposed=Worker] interface WorkerSync {};
         [Exposed=(Window,Worker)] interface MessageChannel {};
+        namespace CSS {};
       `);
       assert.deepEqual(buildIDLTests(ast), [
         ['MessageChannel', {property: 'MessageChannel', scope: 'self'}],
-        ['Worker', {property: 'Worker', scope: 'self'}]
+        ['Worker', {property: 'Worker', scope: 'self'}],
+        ['CSS', {property: 'CSS', scope: 'self'}]
       ]);
       assert.deepEqual(buildIDLTests(ast, "Worker"), [
         ['WorkerSync', {property: 'WorkerSync', scope: 'self'}],
@@ -668,6 +707,29 @@ describe('build', () => {
           {property: 'CSS', scope: 'self'},
           {property: 'supports', scope: 'CSS'}
         ]]
+      ]);
+    });
+
+    it('namespace with custom test', () => {
+      const ast = WebIDL2.parse(
+          `namespace CSS {
+             readonly attribute any paintWorklet;
+           };`);
+      loadCustomTests({
+        'api': {
+          'CSS': {
+            '__base': 'var css = CSS;',
+            '__test': 'return !!css;',
+            'paintWorklet': 'return css && \'paintWorklet\' in css;'
+          }
+        },
+        'css': {}
+      });
+      assert.deepEqual(buildIDLTests(ast), [
+        // eslint-disable-next-line max-len
+        ['CSS', '(function() {var css = CSS;return !!css;})()'],
+        // eslint-disable-next-line max-len
+        ['CSS.paintWorklet', '(function() {var css = CSS;return css && \'paintWorklet\' in css;})()']
       ]);
     });
   });
