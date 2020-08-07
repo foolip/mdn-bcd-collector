@@ -499,6 +499,18 @@ describe('build', () => {
         assert.equal(isWithinScope('ServiceWorker', exposureSet), interfaceScopes[iface.name] === 'ServiceWorker');
       }
     });
+
+    it('bad exposure set', () => {
+      const specIDLs = {
+        badexposure: WebIDL2.parse(`[Exposed=0] interface DummyOne {};`)
+      };
+      const historicalIDL = WebIDL2.parse(`interface DOMError {};`);
+      const ast = flattenIDL(specIDLs, historicalIDL);
+      const interfaces = ast.filter((dfn) => dfn.type === 'interface');
+      
+      expect(() => {getExposureSet(interfaces[0])})
+        .to.throw('Unexpected RHS for Exposed extended attribute');
+    });
   });
 
   describe('buildIDLTests', () => {
@@ -576,6 +588,28 @@ describe('build', () => {
       assert.deepEqual(buildIDLTests(ast), []);
     });
 
+    it('global interface', () => {
+      const ast = WebIDL2.parse(`[Global=(Window,Worker)] interface WindowOrWorkerGlobalScope {
+        attribute boolean isLoaded;
+      };`);
+      assert.deepEqual(buildIDLTests(ast), [
+        [
+          "WindowOrWorkerGlobalScope",
+          {
+            "property": "WindowOrWorkerGlobalScope",
+            "scope": "self",
+          }
+        ],
+        [
+          "WindowOrWorkerGlobalScope.isLoaded",
+          {
+            "property": "isLoaded",
+            "scope": "self"
+          }
+        ]
+      ]);
+    });
+
     it('limit scopes', () => {
       const ast = WebIDL2.parse(`
         [Exposed=Window] interface Worker {};
@@ -590,6 +624,23 @@ describe('build', () => {
         ['WorkerSync', {property: 'WorkerSync', scope: 'self'}],
       ]);
       assert.deepEqual(buildIDLTests(ast, "ServiceWorker"), []);
+    });
+
+    it('operator variations', () => {
+      const ast = WebIDL2.parse(`
+        interface AudioNode : EventTarget {
+          void disconnect ();
+          void disconnect (unsigned long output);
+          void disconnect (AudioNode destinationNode);
+        };
+      `);
+      assert.deepEqual(buildIDLTests(ast), [
+        ['AudioNode', {property: 'AudioNode', scope: 'self'}],
+        ['AudioNode.disconnect', [
+          {property: 'AudioNode', scope: 'self'},
+          {property: 'disconnect', scope: 'AudioNode.prototype'}
+        ]]
+      ]);
     });
 
     it('namespace with attribute', () => {
