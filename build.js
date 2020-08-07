@@ -506,9 +506,7 @@ function validateIDL(ast) {
     validationError = true;
   }
 
-  if (validationError) {
-    process.exit(1);
-  }
+  return !validationError;
 }
 
 function buildIDLWindow(ast) {
@@ -606,7 +604,9 @@ function buildIDLServiceWorker(ast) {
 
 function buildIDL(_, reffy) {
   const ast = flattenIDL(reffy.idl, collectExtraIDL());
-  validateIDL(ast);
+  if (!validateIDL(ast)) {
+    process.exit(1);
+  }
   let testpaths = [];
   for (const buildFunc of [
     buildIDLWindow, buildIDLWorker, buildIDLServiceWorker
