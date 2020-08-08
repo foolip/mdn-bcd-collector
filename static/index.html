@@ -14,11 +14,11 @@ Unless required by applicable law or agreed to in writing, software distributed 
 </head>
 <body>
 <div>
-  <button disabled>Loading tests...</button>
+  <button id="start" disabled>Loading tests...</button>
 </div>
 <script>
 function getTests() {
-  var button = document.getElementsByTagName('button')[0];
+  var button = document.getElementById('start');
   var client = new XMLHttpRequest();
   client.open('GET', '/api/tests', true);
   client.send();
