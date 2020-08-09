@@ -10,11 +10,12 @@ const host = process.env.NODE_ENV === 'test' ?
 
 // TODO filter for specific releases
 const browsersToTest = {
-  'chrome': Object.keys(bcd.browsers.chrome.releases),
-  'edge': Object.keys(bcd.browsers.edge.releases),
-  'firefox': Object.keys(bcd.browsers.firefox.releases),
-  'ie': Object.keys(bcd.browsers.ie.releases),
-  'safari': Object.keys(bcd.browsers.safari.releases),
+  'chrome': Object.keys(bcd.browsers.chrome.releases).filter(k => (k >= 26)),
+  'edge': Object.keys(bcd.browsers.edge.releases).filter(k => (k >= 13)),
+  'firefox': Object.keys(bcd.browsers.firefox.releases).filter(k => (k >= 4)),
+  'ie': Object.keys(bcd.browsers.ie.releases).filter(k => (k >= 9)),
+  'safari': Object.keys(bcd.browsers.safari.releases)
+              .filter(k => (k >= 8 && !k.includes("."))),
 };
 
 for (const browser in browsersToTest) {
