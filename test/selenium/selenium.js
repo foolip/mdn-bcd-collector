@@ -1,5 +1,4 @@
-const { Builder, By, Key, until } = require('selenium-webdriver');
-const assert = require('assert');
+const {Builder, By, until} = require('selenium-webdriver');
 const bcd = require('mdn-browser-compat-data');
 
 const secrets = require('../../secrets.json');
@@ -10,14 +9,15 @@ const host = process.env.NODE_ENV === 'test' ?
 
 // TODO filter for specific releases
 const browsersToTest = {
-  'chrome': Object.keys(bcd.browsers.chrome.releases).filter(k => (k >= 26)),
-  'edge': Object.keys(bcd.browsers.edge.releases).filter(k => (k >= 13)),
-  'firefox': Object.keys(bcd.browsers.firefox.releases).filter(k => (k >= 4)),
-  'ie': Object.keys(bcd.browsers.ie.releases).filter(k => (k >= 9)),
+  'chrome': Object.keys(bcd.browsers.chrome.releases).filter((k) => (k >= 26)),
+  'edge': Object.keys(bcd.browsers.edge.releases).filter((k) => (k >= 13)),
+  'firefox': Object.keys(bcd.browsers.firefox.releases).filter((k) => (k >= 4)),
+  'ie': Object.keys(bcd.browsers.ie.releases).filter((k) => (k >= 9)),
   'safari': Object.keys(bcd.browsers.safari.releases)
-              .filter(k => (k >= 8 && !k.includes("."))),
+      .filter((k) => (k >= 8 && !k.includes('.')))
 };
 
+// eslint-disable-next-line guard-for-in
 for (const browser in browsersToTest) {
   for (const version of browsersToTest[browser]) {
     describe(`${bcd.browsers[browser].name} ${version}`, function() {
@@ -27,8 +27,8 @@ for (const browser in browsersToTest) {
 
       beforeEach(function() {
         driver = new Builder().usingServer(
-          `https://${secrets.saucelabs.username}:${secrets.saucelabs.access_key}@ondemand.us-west-1.saucelabs.com:443/wd/hub`
-          ).forBrowser(browser, version).build();
+            `https://${secrets.saucelabs.username}:${secrets.saucelabs.access_key}@ondemand.us-west-1.saucelabs.com:443/wd/hub`
+        ).forBrowser(browser, version).build();
       });
 
       afterEach(async function() {
@@ -37,11 +37,21 @@ for (const browser in browsersToTest) {
 
       it('run', async function() {
         await driver.get(host);
-        await driver.wait(until.elementIsEnabled(await driver.findElement(By.id("start")), 'Run'), 30000);
-        await driver.findElement(By.id("start")).click();
+        await driver.wait(
+            until.elementIsEnabled(
+                await driver.findElement(By.id('start')), 'Run'
+            ),
+            30000
+        );
+        await driver.findElement(By.id('start')).click();
         await driver.wait(until.urlIs(`${host}/results/`), 30000);
-        await driver.wait(until.elementTextContains(await driver.findElement(By.id("status")), 'to'), 30000);
+        await driver.wait(
+            until.elementTextContains(
+                await driver.findElement(By.id('status')), 'to'
+            ),
+            30000
+        );
       });
-    })
-  };
-};
+    });
+  }
+}
