@@ -9,13 +9,17 @@ const {
 const bcd = require('mdn-browser-compat-data');
 
 // TODO: define target browsers
-const browsersToTest = {
+let browsersToTest = {
   'chrome': Object.keys(bcd.browsers.chrome.releases).filter((k) => (k >= 26)),
   'edge': Object.keys(bcd.browsers.edge.releases).filter((k) => (k >= 13)),
   'firefox': Object.keys(bcd.browsers.firefox.releases).filter((k) => (k >= 4)),
   'ie': Object.keys(bcd.browsers.ie.releases).filter((k) => (k >= 9)),
   'safari': Object.keys(bcd.browsers.safari.releases).filter((k) => (k >= 8))
 };
+
+if (process.env.BROWSER) {
+  browsersToTest = {[process.env.BROWSER]: browsersToTest[process.env.BROWSER]}
+}
 
 const secrets = require('../../secrets.json');
 
