@@ -38,6 +38,10 @@ are not supported.  You may use any testing service, such as SauceLabs,
 BrowserStack, LambdaTest, etc. -- please check with your provider on how to
 configure your WebDriver URL.
 
+You can also test just a single browser by defining the `BROWSER` environment variable:
+
+    BROWSER=chrome npm run selenium
+
 ## Running the tests
 
     npm test
