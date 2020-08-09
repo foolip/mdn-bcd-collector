@@ -197,6 +197,12 @@ partial interface CompositionEvent {
   attribute DOMString locale;
 };
 
+partial namespace console {
+  void exception(any msg);
+  void profile(optional DOMString profileName);
+  void profileEnd(optional DOMString profileName);
+};
+
 // https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/modules/payments/abort_payment_event.idl;drc=c2e7d4f0b24814b0d1c51a964db34ec5b4930756
 // https://github.com/w3c/payment-handler/pull/170
 [
@@ -242,3 +248,22 @@ interface BudgetState {
   readonly attribute double budgetAt;
   readonly attribute DOMTimeStamp time;
 };
+
+// https://webaudio.github.io/web-audio-api/#AudioScheduledSourceNode
+// Modified to extend ConstantSourceNode w/out mixin stuff
+
+[Exposed=Window]
+partial interface ConstantSourceNode {
+  attribute EventHandler onended;
+  void start(optional double when = 0);
+  void stop(optional double when = 0);
+};
+
+
+// https://w3c.github.io/mediacapture-main/#dom-constrainboolean
+
+typedef (boolean or ConstrainBooleanParameters) ConstrainBoolean;
+typedef (DOMString or sequence<DOMString> or ConstrainDOMStringParameters) ConstrainDOMString;
+typedef (double or ConstrainDoubleRange) ConstrainDouble;
+typedef (long or ConstrainLongRange) ConstrainLong;
+typedef ([Clamp] unsigned long or ConstrainULongRange) ConstrainULong;
