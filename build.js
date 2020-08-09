@@ -164,7 +164,9 @@ function buildCSSPropertyTest(propertyNames, method, basename) {
       } else if (method === 'CSS.supports') {
         expr = {property: name, scope: 'CSS.supports'};
       }
-      lines.push(`bcd.addTest("${ident}", ${JSON.stringify(expr)}, 'CSS');`);
+      if (expr) {
+        lines.push(`bcd.addTest("${ident}", ${JSON.stringify(expr)}, 'CSS');`);
+      }
     }
   }
   lines.push('bcd.run("CSS");', '</script>', '</body>', '</html>');
