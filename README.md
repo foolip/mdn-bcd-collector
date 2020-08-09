@@ -25,6 +25,19 @@ Before you can run or deploy, copy `secrets.sample.json` to `secrets.json`.
 
     npm run deploy
 
+(This is performed automatically when a commit is pushed to `main`.)
+
+## Run tests via Selenium WebDriver
+
+To test using the latest deployed version, run:
+
+    npm run selenium
+
+You must configure your Selenium remote in `secrets.json`; local environments
+are not supported.  You may use any testing service, such as SauceLabs,
+BrowserStack, LambdaTest, etc. -- please check with your provider on how to
+configure your WebDriver URL.
+
 ## Running the tests
 
     npm test
