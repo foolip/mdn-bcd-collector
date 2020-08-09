@@ -1,5 +1,6 @@
 const { Builder, By, Key, until } = require('selenium-webdriver');
 const assert = require('assert');
+const bcd = require('mdn-browser-compat-data');
 
 const secrets = require('../../secrets.json');
 
@@ -8,8 +9,12 @@ const host = process.env.NODE_ENV === 'test' ?
       'http://mdn-bcd-collector.appspot.com';
 
 const browsersToTest = {
-  'chrome': {undefined: ""}
-}
+  'chrome': bcd.browsers.chrome.releases,
+  'edge': bcd.browsers.edge.releases,
+  'firefox': bcd.browsers.firefox.releases,
+  'ie': bcd.browsers.ie.releases,
+  'safari': bcd.browsers.safari.releases,
+};
 
 for (const browser in browsersToTest) {
   for (const version in browsersToTest[browser]) {
