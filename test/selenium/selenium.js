@@ -13,8 +13,7 @@ const browsersToTest = {
   'edge': Object.keys(bcd.browsers.edge.releases).filter((k) => (k >= 13)),
   'firefox': Object.keys(bcd.browsers.firefox.releases).filter((k) => (k >= 4)),
   'ie': Object.keys(bcd.browsers.ie.releases).filter((k) => (k >= 9)),
-  'safari': Object.keys(bcd.browsers.safari.releases)
-      .filter((k) => (k >= 8 && !k.includes('.')))
+  'safari': Object.keys(bcd.browsers.safari.releases).filter((k) => (k >= 8))
 };
 
 // eslint-disable-next-line guard-for-in
