@@ -178,11 +178,9 @@ describe('build', () => {
   });
 
   describe('getCustomTestCSS', () => {
-    describe('no custom tests', () => {
-      it('no custom tests', () => {
-        loadCustomTests({api: {}, css: {}});
-        assert.equal(getCustomTestCSS('foo'), false);
-      });
+    it('no custom tests', () => {
+      loadCustomTests({api: {}, css: {}});
+      assert.equal(getCustomTestCSS('foo'), false);
     });
 
     it('custom test for property', () => {
@@ -195,10 +193,7 @@ describe('build', () => {
         }
       });
 
-      assert.equal(
-          getCustomTestCSS('foo'),
-          '(function() {return 1;})()'
-      );
+      assert.equal(getCustomTestCSS('foo'), '(function() {return 1;})()');
     });
   });
 
