@@ -28,6 +28,7 @@ const {
   writeText,
   loadCustomTests,
   getCustomTestAPI,
+  getCustomTestCSS,
   collectCSSPropertiesFromBCD,
   collectCSSPropertiesFromReffy,
   cssPropertyToIDLAttribute,
@@ -173,6 +174,26 @@ describe('build', () => {
             '(function() {var a = 1;return a + 1;})()'
         );
       });
+    });
+  });
+
+  describe('getCustomTestCSS', () => {
+    it('no custom tests', () => {
+      loadCustomTests({api: {}, css: {}});
+      assert.equal(getCustomTestCSS('foo'), false);
+    });
+
+    it('custom test for property', () => {
+      loadCustomTests({
+        api: {},
+        css: {
+          properties: {
+            foo: 'return 1;'
+          }
+        }
+      });
+
+      assert.equal(getCustomTestCSS('foo'), '(function() {return 1;})()');
     });
   });
 
