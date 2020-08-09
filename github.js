@@ -39,6 +39,10 @@ module.exports = (options) => {
     const name = `${slug}-${digest}`;
     const branch = `collector/${name}`;
 
+    if ((await octokit.auth()).type == 'unauthenticated') {
+      return false;
+    }
+
     await octokit.git.createRef({
       owner: 'foolip',
       repo: 'mdn-bcd-results',
