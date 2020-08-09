@@ -81,4 +81,17 @@ describe('GitHub export', () => {
     const result = await github.exportAsPR(REPORT);
     assert.equal(result, RESULT);
   });
+
+  it('no auth token', async () => {
+    const github = proxyquire('../../github', {
+      '@octokit/rest': {
+        Octokit: function(options) {
+          return new Octokit(options);
+        }
+      }
+    })();
+
+    const result = await github.exportAsPR(REPORT);
+    assert.equal(result, false);
+  });
 });
