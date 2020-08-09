@@ -7,7 +7,6 @@ const host = process.env.NODE_ENV === 'test' ?
       `http://localhost:8080` :
       'http://mdn-bcd-collector.appspot.com';
 
-// TODO filter for specific releases
 const browsersToTest = {
   'chrome': Object.keys(bcd.browsers.chrome.releases).filter((k) => (k >= 26)),
   'edge': Object.keys(bcd.browsers.edge.releases).filter((k) => (k >= 13)),
