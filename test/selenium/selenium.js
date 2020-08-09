@@ -1,4 +1,4 @@
-const {Builder, By, until} = require('selenium-webdriver');
+const {Builder, By, Capabilities, until} = require('selenium-webdriver');
 const bcd = require('mdn-browser-compat-data');
 
 // TODO: define target browsers
@@ -35,8 +35,14 @@ for (const browser in browsersToTest) {
       let driver;
 
       beforeEach(function() {
+        let capabilities = new Capabilities();
+        capabilities.setBrowserName(browser.toUpperCase());
+        capabilities.setBrowserVersion(version);
+
+        // TODO: capabilities are ignored for the most part, aside from browser name (version number ignored)
+
         driver = new Builder().usingServer(seleniumUrl)
-            .forBrowser(browser, version).build();
+            .withCapabilities(capabilities).build();
       });
 
       afterEach(async function() {
