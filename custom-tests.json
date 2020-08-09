@@ -10,6 +10,8 @@
     }
   },
   "css": {
-
+    "properties": {
+      "custom-property": "return CSS.supports('color', 'var(--foo)') || CSS.supports('color', 'env(--foo)');"
+    }
   }
 }
