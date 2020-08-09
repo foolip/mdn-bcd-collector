@@ -72,6 +72,12 @@ function getCustomTestAPI(name, member) {
   return test;
 }
 
+function getCustomTestCSS(name) {
+  return 'properties' in customTests.css &&
+      name in customTests.css.properties &&
+      customTests.css.properties[name];
+}
+
 function collectCSSPropertiesFromBCD(bcd, propertySet) {
   for (const [prop, data] of Object.entries(bcd.css.properties)) {
     propertySet.add(prop);
@@ -144,14 +150,22 @@ function buildCSSPropertyTest(propertyNames, method, basename) {
 
   for (const name of propertyNames) {
     const ident = `css.properties.${name}`;
-    let expr = '';
-    if (method === 'CSSStyleDeclaration') {
-      const attrName = cssPropertyToIDLAttribute(name, name.startsWith('-'));
-      expr = {property: attrName, scope: 'document.body.style'};
-    } else if (method === 'CSS.supports') {
-      expr = {property: name, scope: 'CSS.supports'};
+    const customExpr = getCustomTestCSS(name);
+
+    if (customExpr) {
+      if (method === 'custom') {
+        lines.push(`bcd.addTest("${ident}", "${customExpr}", 'CSS');`);
+      }
+    } else {
+      let expr = '';
+      if (method === 'CSSStyleDeclaration') {
+        const attrName = cssPropertyToIDLAttribute(name, name.startsWith('-'));
+        expr = {property: attrName, scope: 'document.body.style'};
+      } else if (method === 'CSS.supports') {
+        expr = {property: name, scope: 'CSS.supports'};
+      }
+      lines.push(`bcd.addTest("${ident}", ${JSON.stringify(expr)}, 'CSS');`);
     }
-    lines.push(`bcd.addTest("${ident}", ${JSON.stringify(expr)}, 'CSS');`);
   }
   lines.push('bcd.run("CSS");', '</script>', '</body>', '</html>');
   const pathname = path.join('css', 'properties', basename);
@@ -172,7 +186,9 @@ function buildCSS(bcd, reffy) {
     ['http', buildCSSPropertyTest(propertyNames,
         'CSSStyleDeclaration', 'in-style.html')],
     ['http', buildCSSPropertyTest(propertyNames,
-        'CSS.supports', 'dot-supports.html')]
+        'CSS.supports', 'dot-supports.html')],
+    ['http', buildCSSPropertyTest(propertyNames,
+        'custom', 'custom-support-test.html')]
   ];
 }
 

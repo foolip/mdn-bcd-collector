@@ -69,7 +69,38 @@ Tips: make sure that all return statements will return a boolean, and implement 
 
 #### CSS
 
-To be planned...
+Each CSS property is written in the following structure:
+
+```json
+"PROPERTY_NAME": "CODE_TO_TEST_THE_PROPERTY"
+```
+
+Each test will compile into a function as follows: `function() {CODE}`
+
+Example:
+
+The following JSON...
+
+```json
+{
+  "api": {
+
+  },
+  "css": {
+    "properties": {
+      "custom-property": "return CSS.supports('color', 'var(--foo)') || CSS.supports('color', 'env(--foo)');"
+    }
+  }
+}
+```
+
+...will compile into...
+
+```javascript
+bcd.addTest('css.properties.custom-property', "(function() {return CSS.supports('color', 'var(--foo)') || CSS.supports('color', 'env(--foo)');})()", 'CSS');
+```
+
+Tips: make sure that all return statements will return a boolean, and implement thorough feature checking.
 
 ## API
 
