@@ -706,6 +706,7 @@ if (process.env.NODE_ENV === 'test') {
     writeText,
     loadCustomTests,
     getCustomTestAPI,
+    getCustomTestCSS,
     collectCSSPropertiesFromBCD,
     collectCSSPropertiesFromReffy,
     cssPropertyToIDLAttribute,
