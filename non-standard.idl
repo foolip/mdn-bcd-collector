@@ -173,6 +173,30 @@ partial interface AudioListener {
   attribute double speedOfSound;
 };
 
+[NoInterfaceObject]
+interface mixin CanvasHitRegion {
+  void addHitRegion(optional HitRegionOptions options);
+  void removeHitRegion(DOMString id);
+  void clearHitRegions();
+};
+
+CanvasRenderingContext2D includes CanvasHitRegion;
+
+partial interface CanvasRenderingContext2D {
+  attribute DOMMatrix currentTransform;
+  void drawWidgetAsOnScreen(Window window);
+  void drawWindow(Window window, double x, double y, double w, double h, DOMString bgColor, optional byte flags);
+};
+
+partial interface CloseEvent {
+  CloseEvent initCloseEvent();
+};
+
+partial interface CompositionEvent {
+  CompositionEvent initCompositionEvent();
+  attribute DOMString locale;
+};
+
 // https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/modules/payments/abort_payment_event.idl;drc=c2e7d4f0b24814b0d1c51a964db34ec5b4930756
 // https://github.com/w3c/payment-handler/pull/170
 [
@@ -189,4 +213,32 @@ interface ANGLE_instanced_arrays {
     void drawArraysInstancedANGLE(GLenum mode, GLint first, GLsizei count, GLsizei primcount);
     void drawElementsInstancedANGLE(GLenum mode, GLsizei count, GLenum type, GLintptr offset, GLsizei primcount);
     void vertexAttribDivisorANGLE(GLuint index, GLuint divisor); 
+};
+
+// https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/modules/app_banner/before_install_prompt_event.idl;drc=af69d93ec0d5334cdc03316058660a37116f32b3
+
+[
+    ActiveScriptWrappable,
+    Exposed=Window
+] interface BeforeInstallPromptEvent : Event {
+    [CallWith=ExecutionContext] constructor(DOMString type, optional BeforeInstallPromptEventInit eventInitDict = {});
+    readonly attribute FrozenArray<DOMString> platforms;
+    [CallWith=ScriptState, RaisesException] readonly attribute Promise<AppBannerPromptResult> userChoice;
+    [CallWith=ScriptState, RaisesException] Promise<void> prompt();
+};
+
+// https://wicg.github.io/budget-api/#budget-service-interface
+
+[Exposed=(Window,Worker)]
+interface BudgetService {
+    Promise<double> getCost(OperationType operation);
+    Promise<sequence<BudgetState>> getBudget();
+
+    Promise<boolean> reserve(OperationType operation);
+};
+
+[Exposed=(Window,Worker)]
+interface BudgetState {
+  readonly attribute double budgetAt;
+  readonly attribute DOMTimeStamp time;
 };
