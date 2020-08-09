@@ -206,41 +206,41 @@ partial namespace console {
 // https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/modules/payments/abort_payment_event.idl;drc=c2e7d4f0b24814b0d1c51a964db34ec5b4930756
 // https://github.com/w3c/payment-handler/pull/170
 [
-    Constructor=Image(DOMString type, optional ExtendableEventInit eventInitDict),
-    Exposed=ServiceWorker
+  Constructor=Image(DOMString type, optional ExtendableEventInit eventInitDict),
+  Exposed=ServiceWorker
 ] interface AbortPaymentEvent : ExtendableEvent {
-    [CallWith=ScriptState, RaisesException] void respondWith(Promise<boolean> paymentAbortedResponse);
+  [CallWith=ScriptState, RaisesException] void respondWith(Promise<boolean> paymentAbortedResponse);
 };
 
 // https://www.khronos.org/registry/webgl/extensions/ANGLE_instanced_arrays/
 
 interface ANGLE_instanced_arrays {
-    const GLenum VERTEX_ATTRIB_ARRAY_DIVISOR_ANGLE = 0x88FE;
-    void drawArraysInstancedANGLE(GLenum mode, GLint first, GLsizei count, GLsizei primcount);
-    void drawElementsInstancedANGLE(GLenum mode, GLsizei count, GLenum type, GLintptr offset, GLsizei primcount);
-    void vertexAttribDivisorANGLE(GLuint index, GLuint divisor); 
+  const GLenum VERTEX_ATTRIB_ARRAY_DIVISOR_ANGLE = 0x88FE;
+  void drawArraysInstancedANGLE(GLenum mode, GLint first, GLsizei count, GLsizei primcount);
+  void drawElementsInstancedANGLE(GLenum mode, GLsizei count, GLenum type, GLintptr offset, GLsizei primcount);
+  void vertexAttribDivisorANGLE(GLuint index, GLuint divisor); 
 };
 
 // https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/modules/app_banner/before_install_prompt_event.idl;drc=af69d93ec0d5334cdc03316058660a37116f32b3
 
 [
-    ActiveScriptWrappable,
-    Exposed=Window
+  ActiveScriptWrappable,
+  Exposed=Window
 ] interface BeforeInstallPromptEvent : Event {
-    [CallWith=ExecutionContext] constructor(DOMString type, optional BeforeInstallPromptEventInit eventInitDict = {});
-    readonly attribute FrozenArray<DOMString> platforms;
-    [CallWith=ScriptState, RaisesException] readonly attribute Promise<AppBannerPromptResult> userChoice;
-    [CallWith=ScriptState, RaisesException] Promise<void> prompt();
+  [CallWith=ExecutionContext] constructor(DOMString type, optional BeforeInstallPromptEventInit eventInitDict = {});
+  readonly attribute FrozenArray<DOMString> platforms;
+  [CallWith=ScriptState, RaisesException] readonly attribute Promise<AppBannerPromptResult> userChoice;
+  [CallWith=ScriptState, RaisesException] Promise<void> prompt();
 };
 
 // https://wicg.github.io/budget-api/#budget-service-interface
 
 [Exposed=(Window,Worker)]
 interface BudgetService {
-    Promise<double> getCost(OperationType operation);
-    Promise<sequence<BudgetState>> getBudget();
+  Promise<double> getCost(OperationType operation);
+  Promise<sequence<BudgetState>> getBudget();
 
-    Promise<boolean> reserve(OperationType operation);
+  Promise<boolean> reserve(OperationType operation);
 };
 
 [Exposed=(Window,Worker)]
