@@ -8,35 +8,33 @@ const host = process.env.NODE_ENV === 'test' ?
       'http://mdn-bcd-collector.appspot.com';
 
 const browsersToTest = {
-  'chrome': [undefined]
-};
+  'chrome': {undefined: ""}
+}
 
-describe('selenium', function() {
-  this.timeout(30000);
-  this.slow(15000);
-  let driverBuilder, vars;
+for (const browser in browsersToTest) {
+  for (const version in browsersToTest[browser]) {
+    describe(`${bcd.browsers[browser].name} ${version}`, function() {
+      this.timeout(30000);
+      this.slow(15000);
+      let driver;
 
-  const run = async (driver) => {
-    await driver.get(host);
-    await driver.wait(until.elementIsEnabled(await driver.findElement(By.id("start")), 'Run'), 30000);
-    await driver.findElement(By.id("start")).click();
-    await driver.wait(until.urlIs(`${host}/results/`), 30000);
-    await driver.wait(until.elementTextContains(await driver.findElement(By.id("status")), 'to'), 30000);
-    await driver.quit();
-  }
-
-  beforeEach(async function() {
-    driverBuilder = await new Builder().usingServer(
-      `https://${secrets.saucelabs.username}:${secrets.saucelabs.access_key}@ondemand.us-west-1.saucelabs.com:443/wd/hub`
-      );
-    vars = {};
-  })
-
-  for (const browser in browsersToTest) {
-    for (const version of browsersToTest[browser]) {
-      it(`${browser} ${version}`, async function() {
-        run(driverBuilder.forBrowser(browser, version).build());
+      beforeEach(function() {
+        driver = new Builder().usingServer(
+          `https://${secrets.saucelabs.username}:${secrets.saucelabs.access_key}@ondemand.us-west-1.saucelabs.com:443/wd/hub`
+          ).forBrowser(browser, version).build();
       });
-    }
+
+      afterEach(async function() {
+        await driver.quit();
+      });
+
+      it('run', async function() {
+        await driver.get(host);
+        await driver.wait(until.elementIsEnabled(await driver.findElement(By.id("start")), 'Run'), 30000);
+        await driver.findElement(By.id("start")).click();
+        await driver.wait(until.urlIs(`${host}/results/`), 30000);
+        await driver.wait(until.elementTextContains(await driver.findElement(By.id("status")), 'to'), 30000);
+      });
+    })
   };
-})
+};
