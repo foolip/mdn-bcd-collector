@@ -8,13 +8,25 @@ const {
 } = require('selenium-webdriver');
 const bcd = require('mdn-browser-compat-data');
 
+const filterVersions = (data, earliestVersion) => {
+  let versions = [];
+
+  for (const [version, versionData] of Object.entries(data)) {
+    if ((versionData.status == "current" || versionData.status == "retired") && version >= earliestVersion) {
+      versions += version;
+    }
+  }
+
+  return versions;
+}
+
 // TODO: define target browsers
 let browsersToTest = {
-  'chrome': Object.keys(bcd.browsers.chrome.releases).filter((k) => (k >= 26)),
-  'edge': Object.keys(bcd.browsers.edge.releases).filter((k) => (k >= 13)),
-  'firefox': Object.keys(bcd.browsers.firefox.releases).filter((k) => (k >= 4)),
-  'ie': Object.keys(bcd.browsers.ie.releases).filter((k) => (k >= 9)),
-  'safari': Object.keys(bcd.browsers.safari.releases).filter((k) => (k >= 8))
+  'chrome': filterVersions(bcd.browsers.chrome.releases, 26),
+  'edge': filterVersions(bcd.browsers.edge.releases, 13),
+  'firefox': filterVersions(bcd.browsers.firefox.releases, 4),
+  'ie': filterVersions(bcd.browsers.ie.releases, 9),
+  'safari': filterVersions(bcd.browsers.safari.releases, 8),
 };
 
 if (process.env.BROWSER) {
