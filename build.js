@@ -75,7 +75,7 @@ function getCustomTestAPI(name, member) {
 function getCustomTestCSS(name) {
   return 'properties' in customTests.css &&
       name in customTests.css.properties &&
-      customTests.css.properties[name];
+      `(function() {${customTests.css.properties[name]}})()`;
 }
 
 function collectCSSPropertiesFromBCD(bcd, propertySet) {
