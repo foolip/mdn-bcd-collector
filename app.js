@@ -34,9 +34,11 @@ const secrets = process.env.NODE_ENV === 'test' ?
     require('./secrets.sample.json') :
     require('./secrets.json');
 
-const github = require('./github')({
-  auth: `token ${secrets.github.token}`
-});
+const github = require('./github')(
+  secrets.github.token ?
+  {auth: `token ${secrets.github.token}`} :
+  {}
+);
 
 const Tests = require('./tests');
 const tests = new Tests({
@@ -126,7 +128,11 @@ app.post('/api/results/export/github', (req, res) => {
         const userAgent = req.get('User-Agent');
         const report = {results, userAgent};
         const response = await github.exportAsPR(report);
-        res.json(response);
+        if (response) {
+          res.json(response);
+        } else {
+          res.status(500).end();
+        }
       })
       .catch(/* istanbul ignore next */ (err) => catchError(err, res));
 });

@@ -45,10 +45,13 @@ describe('GitHub export', () => {
     })();
 
     const mock = {
+      octokit: sinon.mock(octokit),
       git: sinon.mock(octokit.git),
       repos: sinon.mock(octokit.repos),
       pulls: sinon.mock(octokit.pulls)
     };
+
+    mock.octokit.expects('auth').once().resolves({type: 'mocked'});
 
     mock.git.expects('createRef').once().withArgs({
       owner: 'foolip',
@@ -77,5 +80,18 @@ describe('GitHub export', () => {
 
     const result = await github.exportAsPR(REPORT);
     assert.equal(result, RESULT);
+  });
+
+  it('no auth token', async () => {
+    const github = proxyquire('../../github', {
+      '@octokit/rest': {
+        Octokit: function(options) {
+          return new Octokit(options);
+        }
+      }
+    })();
+
+    const result = await github.exportAsPR(REPORT);
+    assert.equal(result, false);
   });
 });
