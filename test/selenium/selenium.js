@@ -10,15 +10,15 @@ const host = process.env.NODE_ENV === 'test' ?
 
 // TODO filter for specific releases
 const browsersToTest = {
-  'chrome': bcd.browsers.chrome.releases,
-  'edge': bcd.browsers.edge.releases,
-  'firefox': bcd.browsers.firefox.releases,
-  'ie': bcd.browsers.ie.releases,
-  'safari': bcd.browsers.safari.releases,
+  'chrome': Object.keys(bcd.browsers.chrome.releases),
+  'edge': Object.keys(bcd.browsers.edge.releases),
+  'firefox': Object.keys(bcd.browsers.firefox.releases),
+  'ie': Object.keys(bcd.browsers.ie.releases),
+  'safari': Object.keys(bcd.browsers.safari.releases),
 };
 
 for (const browser in browsersToTest) {
-  for (const version in browsersToTest[browser]) {
+  for (const version of browsersToTest[browser]) {
     describe(`${bcd.browsers[browser].name} ${version}`, function() {
       this.timeout(30000);
       this.slow(15000);
