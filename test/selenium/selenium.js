@@ -12,13 +12,16 @@ const filterVersions = (data, earliestVersion) => {
   let versions = [];
 
   for (const [version, versionData] of Object.entries(data)) {
-    if ((versionData.status == "current" || versionData.status == "retired") && version >= earliestVersion) {
+    if (
+      (versionData.status == 'current' || versionData.status == 'retired') &&
+      version >= earliestVersion
+    ) {
       versions += version;
     }
   }
 
   return versions;
-}
+};
 
 // TODO: define target browsers
 let browsersToTest = {
@@ -26,11 +29,11 @@ let browsersToTest = {
   'edge': filterVersions(bcd.browsers.edge.releases, 13),
   'firefox': filterVersions(bcd.browsers.firefox.releases, 4),
   'ie': filterVersions(bcd.browsers.ie.releases, 9),
-  'safari': filterVersions(bcd.browsers.safari.releases, 8),
+  'safari': filterVersions(bcd.browsers.safari.releases, 8)
 };
 
 if (process.env.BROWSER) {
-  browsersToTest = {[process.env.BROWSER]: browsersToTest[process.env.BROWSER]}
+  browsersToTest = {[process.env.BROWSER]: browsersToTest[process.env.BROWSER]};
 }
 
 const secrets = require('../../secrets.json');
