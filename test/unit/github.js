@@ -45,10 +45,13 @@ describe('GitHub export', () => {
     })();
 
     const mock = {
+      octokit: sinon.mock(octokit),
       git: sinon.mock(octokit.git),
       repos: sinon.mock(octokit.repos),
       pulls: sinon.mock(octokit.pulls)
     };
+
+    mock.octokit.expects('auth').once().resolves({type: 'mocked'});
 
     mock.git.expects('createRef').once().withArgs({
       owner: 'foolip',
