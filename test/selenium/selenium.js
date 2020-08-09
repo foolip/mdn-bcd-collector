@@ -41,8 +41,8 @@ if (!seleniumUrl) {
 for (const browser in browsersToTest) {
   for (const version of browsersToTest[browser]) {
     describe(`${bcd.browsers[browser].name} ${version}`, function() {
-      this.timeout(30000);
-      this.slow(15000);
+      this.timeout(60000);
+      this.slow(30000);
       let driver;
 
       beforeEach(function() {
@@ -70,12 +70,12 @@ for (const browser in browsersToTest) {
             30000
         );
         await driver.findElement(By.id('start')).click();
-        await driver.wait(until.urlIs(`${host}/results/`), 30000);
+        await driver.wait(until.urlIs(`${host}/results/`), 60000);
         await driver.wait(
             until.elementTextContains(
                 await driver.findElement(By.id('status')), 'to'
             ),
-            30000
+            15000
         );
       });
     });
