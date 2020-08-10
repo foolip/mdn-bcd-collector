@@ -368,9 +368,37 @@ function buildIDLTests(ast, scope = 'Window') {
           members.push({name: iface.name, type: 'constructor'});
           break;
         case 'iterable':
+          members.push(
+              {name: 'entries', type: 'operation'},
+              {name: 'keys', type: 'operation'},
+              {name: 'values', type: 'operation'},
+              {name: 'forEach', type: 'operation'}
+          );
+          break;
         case 'maplike':
+          members.push(
+              {name: 'size', type: 'operation'},
+              {name: 'entries', type: 'operation'},
+              {name: 'keys', type: 'operation'},
+              {name: 'values', type: 'operation'},
+              {name: 'get', type: 'operation'},
+              {name: 'has', type: 'operation'},
+              {name: 'clear', type: 'operation'},
+              {name: 'delete', type: 'operation'},
+              {name: 'set', type: 'operation'}
+          );
+          break;
         case 'setlike':
-          // TODO: add members
+          members.push(
+              {name: 'size', type: 'operation'},
+              {name: 'entries', type: 'operation'},
+              {name: 'values', type: 'operation'},
+              {name: 'keys', type: 'operation'},
+              {name: 'has', type: 'operation'},
+              {name: 'add', type: 'operation'},
+              {name: 'delete', type: 'operation'},
+              {name: 'clear', type: 'operation'}
+          );
           break;
         case 'operation':
           // We don't care about setter/getter functions
