@@ -405,6 +405,9 @@ function buildIDLTests(ast, scope = 'Window') {
           break;
       }
     }
+    if (getExtAttr(iface, 'Constructor')) {
+      members.push({name: iface.name, type: 'constructor'});
+    }
 
     // Avoid generating duplicate tests for operations.
     const handledMemberNames = new Set();
