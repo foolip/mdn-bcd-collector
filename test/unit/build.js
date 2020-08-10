@@ -666,10 +666,37 @@ describe('build', () => {
       ]);
     });
 
-    it('interface with constructor', () => {
+    it('interface with constructor operation', () => {
       const ast = WebIDL2.parse(`interface Number {
         constructor(optional any value);
       };`);
+      assert.deepEqual(buildIDLTests(ast), [
+        [
+          'Number',
+          {
+            'property': 'Number',
+            'scope': 'self'
+          }
+        ],
+        [
+          'Number.Number',
+          [
+            {
+              'property': 'Number',
+              'scope': 'self'
+            },
+            {
+              'property': 'constructor',
+              'scope': 'Number'
+            }
+          ]
+        ]
+      ]);
+    });
+
+    it('interface with constructor in ExtAttr', () => {
+      const ast = WebIDL2.parse(`[Constructor(optional any value)]
+        interface Number {};`);
       assert.deepEqual(buildIDLTests(ast), [
         [
           'Number',
