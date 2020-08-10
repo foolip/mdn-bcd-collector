@@ -34,7 +34,6 @@ const {
   cssPropertyToIDLAttribute,
   flattenIDL,
   getExposureSet,
-  isWithinScope,
   buildIDLTests,
   validateIDL
 } = require('../../build');
@@ -483,66 +482,6 @@ describe('build', () => {
       const interfaces = ast.filter((dfn) => dfn.type === 'interface');
       const exposureSet = getExposureSet(interfaces[0]);
       assert.hasAllKeys(exposureSet, ['Window', 'Worker']);
-    });
-  });
-
-  describe('getExposureSet', () => {
-    it('basic tests', () => {
-      const specIDLs = {
-        window: WebIDL2.parse(`[Exposed=Window] interface DummyOne {};`),
-        webworker: WebIDL2.parse(`[Exposed=Worker] interface DummyTwo {};`),
-        serviceworker: WebIDL2.parse(
-            `[Exposed=ServiceWorker] interface DummyThree {};`
-        ),
-        bothworkers: WebIDL2.parse(
-            `[Exposed=(Worker,ServiceWorker)] interface DummyFour {};`
-        ),
-        windowandworker: WebIDL2.parse(
-            `[Exposed=(Window,Worker)] interface DummyFive {};`
-        )
-      };
-      const historicalIDL = WebIDL2.parse(`interface DOMError {};`);
-      const ast = flattenIDL(specIDLs, historicalIDL);
-      const interfaces = ast.filter((dfn) => dfn.type === 'interface');
-
-      const interfaceScopes = {
-        DummyOne: 'Window',
-        DummyTwo: 'Worker',
-        DummyThree: 'ServiceWorker',
-        DummyFour: 'Worker',
-        DummyFive: 'Window',
-        DOMError: 'Window'
-      };
-
-      for (const iface of interfaces) {
-        const exposureSet = getExposureSet(iface);
-        assert.equal(
-            isWithinScope('Window', exposureSet),
-            interfaceScopes[iface.name] === 'Window'
-        );
-        assert.equal(
-            isWithinScope('Worker', exposureSet),
-            interfaceScopes[iface.name] === 'Worker'
-        );
-        assert.equal(
-            isWithinScope('ServiceWorker', exposureSet),
-            interfaceScopes[iface.name] === 'ServiceWorker'
-        );
-      }
-    });
-
-    it('bad exposure set', () => {
-      const specIDLs = {
-        badexposure: WebIDL2.parse(`[Exposed=0] interface DummyOne {};`)
-      };
-      const historicalIDL = WebIDL2.parse(`interface DOMError {};`);
-      const ast = flattenIDL(specIDLs, historicalIDL);
-      const interfaces = ast.filter((dfn) => dfn.type === 'interface');
-
-      expect(() => {
-        getExposureSet(interfaces[0]);
-      })
-          .to.throw('Unexpected RHS for Exposed extended attribute');
     });
   });
 
@@ -1063,11 +1002,12 @@ describe('build', () => {
         namespace CSS {};
       `);
       assert.deepEqual(buildIDLTests(ast), [
+        ['CSS', {property: 'CSS', scope: 'self'}],
         ['MessageChannel', {property: 'MessageChannel', scope: 'self'}],
-        ['Worker', {property: 'Worker', scope: 'self'}],
-        ['CSS', {property: 'CSS', scope: 'self'}]
+        ['Worker', {property: 'Worker', scope: 'self'}]
       ]);
       assert.deepEqual(buildIDLTests(ast, 'Worker'), [
+        ['MessageChannel', {property: 'MessageChannel', scope: 'self'}],
         ['WorkerSync', {property: 'WorkerSync', scope: 'self'}]
       ]);
       assert.deepEqual(buildIDLTests(ast, 'ServiceWorker'), []);
@@ -1138,6 +1078,54 @@ describe('build', () => {
         ['CSS', '(function() {var css = CSS;return !!css;})()'],
         // eslint-disable-next-line max-len
         ['CSS.paintWorklet', '(function() {var css = CSS;return css && \'paintWorklet\' in css;})()']
+      ]);
+    });
+
+    it('dictionary', () => {
+      const ast = WebIDL2.parse(
+          `dictionary ElementRegistrationOptions {
+              object? prototype = null;
+              DOMString? extends = null;
+           };`);
+      assert.deepEqual(buildIDLTests(ast), [
+        ['ElementRegistrationOptions',
+          {property: 'ElementRegistrationOptions', scope: 'self'}
+        ],
+        ['ElementRegistrationOptions.extends', [
+          {property: 'ElementRegistrationOptions', scope: 'self'},
+          {property: 'extends', scope: 'ElementRegistrationOptions'}
+        ]],
+        ['ElementRegistrationOptions.prototype', [
+          {property: 'ElementRegistrationOptions', scope: 'self'},
+          {property: 'prototype', scope: 'ElementRegistrationOptions'}
+        ]]
+      ]);
+    });
+
+    it('dictionary with custom test', () => {
+      const ast = WebIDL2.parse(
+          `dictionary ElementRegistrationOptions {
+              object? prototype = null;
+              DOMString? extends = null;
+           };`);
+      loadCustomTests({
+        'api': {
+          'ElementRegistrationOptions': {
+            '__base': 'var ers = ElementRegistrationOptions;',
+            '__test': 'return !!ers;',
+            'extends': 'return ers && \'extends\' in ers;',
+            'prototype': 'return ers && \'prototype\' in ers;'
+          }
+        },
+        'css': {}
+      });
+      assert.deepEqual(buildIDLTests(ast), [
+        // eslint-disable-next-line max-len
+        ['ElementRegistrationOptions', '(function() {var ers = ElementRegistrationOptions;return !!ers;})()'],
+        // eslint-disable-next-line max-len
+        ['ElementRegistrationOptions.extends', '(function() {var ers = ElementRegistrationOptions;return ers && \'extends\' in ers;})()'],
+        // eslint-disable-next-line max-len
+        ['ElementRegistrationOptions.prototype', '(function() {var ers = ElementRegistrationOptions;return ers && \'prototype\' in ers;})()']
       ]);
     });
   });

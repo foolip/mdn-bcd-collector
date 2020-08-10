@@ -84,6 +84,37 @@
             result.result = null;
             result.message = 'returned ' + stringify(value);
           }
+        } else if (subtest.property == 'constructor') {
+          var iface = parentPrefix+subtest.scope;
+          var args = '';
+          for (var a = 0; a < eval(iface+'.constructor.length'); a++) {
+            if (a == 0) {
+              args = args + '\'' + a + '\'';
+            } else {
+              args = args + ',' + '\'' + a + '\'';
+            }
+          }
+
+          try {
+            result.code = 'new '+iface+'('+args+')';
+            eval('new '+iface+'('+args+')');
+            result.result = true;
+          } catch (err) {
+            if (
+              err.name == 'TypeError' &&
+              err.message == 'Illegal constructor'
+            ) {
+              result.result = false;
+            } else if (err.message.includes('Failed to construct')) {
+              // If it failed to construct, and not illegal, there's a
+              // constructor
+              result.result = true;
+            } else {
+              result.result = null;
+            }
+
+            result.message = 'threw ' + stringify(err);
+          }
         } else {
           for (var j in prefixesToTest) {
             var prefix = prefixesToTest[j];

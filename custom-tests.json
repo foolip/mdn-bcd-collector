@@ -1,8 +1,17 @@
 {
   "api": {
-    
+    "ANGLE_instanced_arrays": {
+      "__base": "var canvas = document.createElement('canvas'); var gl = canvas.getContext('webgl'); var a = gl.getExtension('ANGLE_instanced_arrays');",
+      "__test": "return !!a;",
+      "drawArraysInstancedANGLE": "return a && 'drawArraysInstancedANGLE' in a;",
+      "drawElementsInstancedANGLE": "return a && 'drawElementsInstancedANGLE' in a;",
+      "vertexAttribDivisorANGLE": "return a && 'vertexAttribDivisorANGLE' in a;",
+      "VERTEX_ATTRIB_ARRAY_DIVISOR_ANGLE": "return a && 'VERTEX_ATTRIB_ARRAY_DIVISOR_ANGLE' in a;"
+    }
   },
   "css": {
-
+    "properties": {
+      "custom-property": "return CSS.supports('color', 'var(--foo)') || CSS.supports('color', 'env(--foo)');"
+    }
   }
 }

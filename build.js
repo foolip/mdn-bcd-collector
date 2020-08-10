@@ -300,40 +300,20 @@ function getExposureSet(node) {
       }
       break;
     default:
+      /* istanbul ignore next */
       throw new Error(`Unexpected RHS for Exposed extended attribute`);
   }
   return globals;
 }
 
-function isWithinScope(scope, exposureSet) {
-  // This function checks for a scope in the exposureSet whilst ignoring
-  // interfaces exposed on previous scopes, preventing duplication
-  if (scope == 'Window' && !exposureSet.has('Window')) {
-    return false;
-  }
-  if (
-    scope == 'Worker' &&
-    (exposureSet.has('Window') || !exposureSet.has('Worker'))
-  ) {
-    return false;
-  }
-  if (
-    scope == 'ServiceWorker' &&
-    (
-      (exposureSet.has('Window') || exposureSet.has('Worker')) ||
-      !exposureSet.has('ServiceWorker')
-    )
-  ) {
-    return false;
-  }
-  // TODO: any other exposure scopes we need to worry about?
-  return true;
-}
-
 function buildIDLTests(ast, scope = 'Window') {
   const tests = [];
 
-  const interfaces = ast.filter((dfn) => dfn.type === 'interface');
+  const interfaces = ast.filter((dfn) =>
+    dfn.type === 'interface' ||
+    dfn.type === 'namespace' ||
+    dfn.type === 'dictionary'
+  );
   interfaces.sort((a, b) => a.name.localeCompare(b.name));
 
   for (const iface of interfaces) {
@@ -345,7 +325,7 @@ function buildIDLTests(ast, scope = 'Window') {
     }
 
     const exposureSet = getExposureSet(iface);
-    if (!isWithinScope(scope, exposureSet)) {
+    if (!exposureSet.has(scope)) {
       continue;
     }
 
@@ -424,10 +404,15 @@ function buildIDLTests(ast, scope = 'Window') {
                customTestMember :
                [{property: iface.name, scope: 'self'}, customTestMember];
       } else {
-        const isStatic = member.special === 'static';
+        const isStatic = (
+          member.special === 'static' ||
+          iface.type === 'namespace' ||
+          iface.type === 'dictionary'
+        );
         switch (member.type) {
           case 'attribute':
           case 'operation':
+          case 'field':
             if (isGlobal) {
               expr = {property: member.name, scope: 'self'};
             } else if (isStatic) {
@@ -463,48 +448,6 @@ function buildIDLTests(ast, scope = 'Window') {
 
       tests.push([`${iface.name}.${member.name}`, expr]);
       handledMemberNames.add(member.name);
-    }
-  }
-
-  const namespaces = ast.filter((dfn) => dfn.type === 'namespace');
-  namespaces.sort((a, b) => a.name.localeCompare(b.name));
-
-  for (const namespace of namespaces) {
-    const exposureSet = getExposureSet(namespace);
-    if (!isWithinScope(scope, exposureSet)) {
-      continue;
-    }
-
-    // namespace object
-    const customTest = getCustomTestAPI(namespace.name);
-    tests.push([
-      namespace.name,
-      customTest || {property: namespace.name, scope: 'self'}
-    ]);
-
-    // members
-    const members = namespace.members.filter((member) => member.name);
-    members.sort((a, b) => a.name.localeCompare(b.name));
-
-    for (const member of members) {
-      const customTestMember = getCustomTestAPI(namespace.name, member.name);
-
-      if (customTestMember) {
-        tests.push([
-          `${namespace.name}.${member.name}`,
-          customTest ?
-            customTestMember :
-            [{property: namespace.name, scope: 'self'}, customTestMember]
-        ]);
-      } else {
-        tests.push([
-          `${namespace.name}.${member.name}`,
-          [
-            {property: namespace.name, scope: 'self'},
-            {property: member.name, scope: namespace.name}
-          ]
-        ]);
-      }
     }
   }
 
@@ -762,7 +705,6 @@ if (process.env.NODE_ENV === 'test') {
     cssPropertyToIDLAttribute,
     flattenIDL,
     getExposureSet,
-    isWithinScope,
     buildIDLTests,
     validateIDL
   };
