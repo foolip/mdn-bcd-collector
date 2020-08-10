@@ -305,15 +305,6 @@ function getExposureSet(node) {
   return globals;
 }
 
-function isWithinScope(scope, exposureSet) {
-  // TODO: any other exposure scopes we need to worry about?
-  return (
-    (scope == 'Window' && exposureSet.has('Window')) ||
-    (scope == 'Worker' && exposureSet.has('Worker')) ||
-    (scope == 'ServiceWorker' && exposureSet.has('ServiceWorker'))
-  );
-}
-
 function buildIDLTests(ast, scope = 'Window') {
   const tests = [];
 
@@ -333,7 +324,7 @@ function buildIDLTests(ast, scope = 'Window') {
     }
 
     const exposureSet = getExposureSet(iface);
-    if (!isWithinScope(scope, exposureSet)) {
+    if (!exposureSet.has(scope)) {
       continue;
     }
 
@@ -713,7 +704,6 @@ if (process.env.NODE_ENV === 'test') {
     cssPropertyToIDLAttribute,
     flattenIDL,
     getExposureSet,
-    isWithinScope,
     buildIDLTests,
     validateIDL
   };
