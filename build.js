@@ -436,6 +436,7 @@ function buildIDLTests(ast, scope = 'Window') {
         switch (member.type) {
           case 'attribute':
           case 'operation':
+          case 'field':
             if (isGlobal) {
               expr = {property: member.name, scope: 'self'};
             } else if (isStatic) {
