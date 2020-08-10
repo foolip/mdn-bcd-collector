@@ -306,28 +306,12 @@ function getExposureSet(node) {
 }
 
 function isWithinScope(scope, exposureSet) {
-  // This function checks for a scope in the exposureSet whilst ignoring
-  // interfaces exposed on previous scopes, preventing duplication
-  if (scope == 'Window' && !exposureSet.has('Window')) {
-    return false;
-  }
-  if (
-    scope == 'Worker' &&
-    (exposureSet.has('Window') || !exposureSet.has('Worker'))
-  ) {
-    return false;
-  }
-  if (
-    scope == 'ServiceWorker' &&
-    (
-      (exposureSet.has('Window') || exposureSet.has('Worker')) ||
-      !exposureSet.has('ServiceWorker')
-    )
-  ) {
-    return false;
-  }
   // TODO: any other exposure scopes we need to worry about?
-  return true;
+  return (
+    (scope == 'Window' && exposureSet.has('Window')) ||
+    (scope == 'Worker' && exposureSet.has('Worker')) ||
+    (scope == 'ServiceWorker' && exposureSet.has('ServiceWorker'))
+  );
 }
 
 function buildIDLTests(ast, scope = 'Window') {
