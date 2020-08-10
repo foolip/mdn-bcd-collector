@@ -300,6 +300,7 @@ function getExposureSet(node) {
       }
       break;
     default:
+      /* istanbul ignore next */
       throw new Error(`Unexpected RHS for Exposed extended attribute`);
   }
   return globals;
