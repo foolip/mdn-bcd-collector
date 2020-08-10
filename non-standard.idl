@@ -168,6 +168,10 @@ partial interface Window {
   attribute EventHandler onsearch;
 };
 
+partial interface AnimationEvent {
+  AnimationEvent initAnimationEvent(DOMString typeArg, boolean canBubbleArg, boolean cancelableArg, DOMString animationNameArg, float elapsedTimeArg);
+};
+
 partial interface AudioListener {
   attribute double dopplerFactor;
   attribute double speedOfSound;
