@@ -1063,9 +1063,9 @@ describe('build', () => {
         namespace CSS {};
       `);
       assert.deepEqual(buildIDLTests(ast), [
+        ['CSS', {property: 'CSS', scope: 'self'}],
         ['MessageChannel', {property: 'MessageChannel', scope: 'self'}],
-        ['Worker', {property: 'Worker', scope: 'self'}],
-        ['CSS', {property: 'CSS', scope: 'self'}]
+        ['Worker', {property: 'Worker', scope: 'self'}]
       ]);
       assert.deepEqual(buildIDLTests(ast, 'Worker'), [
         ['WorkerSync', {property: 'WorkerSync', scope: 'self'}]

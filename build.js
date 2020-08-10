@@ -333,7 +333,10 @@ function isWithinScope(scope, exposureSet) {
 function buildIDLTests(ast, scope = 'Window') {
   const tests = [];
 
-  const interfaces = ast.filter((dfn) => dfn.type === 'interface');
+  const interfaces = ast.filter((dfn) => 
+    dfn.type === 'interface' ||
+    dfn.type === 'namespace'
+  );
   interfaces.sort((a, b) => a.name.localeCompare(b.name));
 
   for (const iface of interfaces) {
@@ -424,7 +427,10 @@ function buildIDLTests(ast, scope = 'Window') {
                customTestMember :
                [{property: iface.name, scope: 'self'}, customTestMember];
       } else {
-        const isStatic = member.special === 'static';
+        const isStatic = (
+          member.special === 'static' ||
+          iface.type === 'namespace'
+        );
         switch (member.type) {
           case 'attribute':
           case 'operation':
@@ -463,48 +469,6 @@ function buildIDLTests(ast, scope = 'Window') {
 
       tests.push([`${iface.name}.${member.name}`, expr]);
       handledMemberNames.add(member.name);
-    }
-  }
-
-  const namespaces = ast.filter((dfn) => dfn.type === 'namespace');
-  namespaces.sort((a, b) => a.name.localeCompare(b.name));
-
-  for (const namespace of namespaces) {
-    const exposureSet = getExposureSet(namespace);
-    if (!isWithinScope(scope, exposureSet)) {
-      continue;
-    }
-
-    // namespace object
-    const customTest = getCustomTestAPI(namespace.name);
-    tests.push([
-      namespace.name,
-      customTest || {property: namespace.name, scope: 'self'}
-    ]);
-
-    // members
-    const members = namespace.members.filter((member) => member.name);
-    members.sort((a, b) => a.name.localeCompare(b.name));
-
-    for (const member of members) {
-      const customTestMember = getCustomTestAPI(namespace.name, member.name);
-
-      if (customTestMember) {
-        tests.push([
-          `${namespace.name}.${member.name}`,
-          customTest ?
-            customTestMember :
-            [{property: namespace.name, scope: 'self'}, customTestMember]
-        ]);
-      } else {
-        tests.push([
-          `${namespace.name}.${member.name}`,
-          [
-            {property: namespace.name, scope: 'self'},
-            {property: member.name, scope: namespace.name}
-          ]
-        ]);
-      }
     }
   }
 
