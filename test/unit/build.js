@@ -747,6 +747,19 @@ describe('build', () => {
           ]
         ],
         [
+          'DoubleList.forEach',
+          [
+            {
+              'property': 'DoubleList',
+              'scope': 'self'
+            },
+            {
+              'property': 'forEach',
+              'scope': 'DoubleList.prototype'
+            }
+          ]
+        ],
+        [
           'DoubleList.keys',
           [
             {
@@ -771,19 +784,6 @@ describe('build', () => {
               'scope': 'DoubleList.prototype'
             }
           ]
-        ],
-        [
-          'DoubleList.forEach',
-          [
-            {
-              'property': 'DoubleList',
-              'scope': 'self'
-            },
-            {
-              'property': 'forEach',
-              'scope': 'DoubleList.prototype'
-            }
-          ]
         ]
       ]);
     });
@@ -801,14 +801,27 @@ describe('build', () => {
           }
         ],
         [
-          'DoubleMap.size',
+          'DoubleMap.clear',
           [
             {
               'property': 'DoubleMap',
               'scope': 'self'
             },
             {
-              'property': 'size',
+              'property': 'clear',
+              'scope': 'DoubleMap.prototype'
+            }
+          ]
+        ],
+        [
+          'DoubleMap.delete',
+          [
+            {
+              'property': 'DoubleMap',
+              'scope': 'self'
+            },
+            {
+              'property': 'delete',
               'scope': 'DoubleMap.prototype'
             }
           ]
@@ -822,32 +835,6 @@ describe('build', () => {
             },
             {
               'property': 'entries',
-              'scope': 'DoubleMap.prototype'
-            }
-          ]
-        ],
-        [
-          'DoubleMap.keys',
-          [
-            {
-              'property': 'DoubleMap',
-              'scope': 'self'
-            },
-            {
-              'property': 'keys',
-              'scope': 'DoubleMap.prototype'
-            }
-          ]
-        ],
-        [
-          'DoubleMap.values',
-          [
-            {
-              'property': 'DoubleMap',
-              'scope': 'self'
-            },
-            {
-              'property': 'values',
               'scope': 'DoubleMap.prototype'
             }
           ]
@@ -879,27 +866,14 @@ describe('build', () => {
           ]
         ],
         [
-          'DoubleMap.clear',
+          'DoubleMap.keys',
           [
             {
               'property': 'DoubleMap',
               'scope': 'self'
             },
             {
-              'property': 'clear',
-              'scope': 'DoubleMap.prototype'
-            }
-          ]
-        ],
-        [
-          'DoubleMap.delete',
-          [
-            {
-              'property': 'DoubleMap',
-              'scope': 'self'
-            },
-            {
-              'property': 'delete',
+              'property': 'keys',
               'scope': 'DoubleMap.prototype'
             }
           ]
@@ -913,6 +887,32 @@ describe('build', () => {
             },
             {
               'property': 'set',
+              'scope': 'DoubleMap.prototype'
+            }
+          ]
+        ],
+        [
+          'DoubleMap.size',
+          [
+            {
+              'property': 'DoubleMap',
+              'scope': 'self'
+            },
+            {
+              'property': 'size',
+              'scope': 'DoubleMap.prototype'
+            }
+          ]
+        ],
+        [
+          'DoubleMap.values',
+          [
+            {
+              'property': 'DoubleMap',
+              'scope': 'self'
+            },
+            {
+              'property': 'values',
               'scope': 'DoubleMap.prototype'
             }
           ]
@@ -933,71 +933,6 @@ describe('build', () => {
           }
         ],
         [
-          'DoubleSet.size',
-          [
-            {
-              'property': 'DoubleSet',
-              'scope': 'self'
-            },
-            {
-              'property': 'size',
-              'scope': 'DoubleSet.prototype'
-            }
-          ]
-        ],
-        [
-          'DoubleSet.entries',
-          [
-            {
-              'property': 'DoubleSet',
-              'scope': 'self'
-            },
-            {
-              'property': 'entries',
-              'scope': 'DoubleSet.prototype'
-            }
-          ]
-        ],
-        [
-          'DoubleSet.values',
-          [
-            {
-              'property': 'DoubleSet',
-              'scope': 'self'
-            },
-            {
-              'property': 'values',
-              'scope': 'DoubleSet.prototype'
-            }
-          ]
-        ],
-        [
-          'DoubleSet.keys',
-          [
-            {
-              'property': 'DoubleSet',
-              'scope': 'self'
-            },
-            {
-              'property': 'keys',
-              'scope': 'DoubleSet.prototype'
-            }
-          ]
-        ],
-        [
-          'DoubleSet.has',
-          [
-            {
-              'property': 'DoubleSet',
-              'scope': 'self'
-            },
-            {
-              'property': 'has',
-              'scope': 'DoubleSet.prototype'
-            }
-          ]
-        ],
-        [
           'DoubleSet.add',
           [
             {
@@ -1006,6 +941,19 @@ describe('build', () => {
             },
             {
               'property': 'add',
+              'scope': 'DoubleSet.prototype'
+            }
+          ]
+        ],
+        [
+          'DoubleSet.clear',
+          [
+            {
+              'property': 'DoubleSet',
+              'scope': 'self'
+            },
+            {
+              'property': 'clear',
               'scope': 'DoubleSet.prototype'
             }
           ]
@@ -1024,14 +972,66 @@ describe('build', () => {
           ]
         ],
         [
-          'DoubleSet.clear',
+          'DoubleSet.entries',
           [
             {
               'property': 'DoubleSet',
               'scope': 'self'
             },
             {
-              'property': 'clear',
+              'property': 'entries',
+              'scope': 'DoubleSet.prototype'
+            }
+          ]
+        ],
+        [
+          'DoubleSet.has',
+          [
+            {
+              'property': 'DoubleSet',
+              'scope': 'self'
+            },
+            {
+              'property': 'has',
+              'scope': 'DoubleSet.prototype'
+            }
+          ]
+        ],
+        [
+          'DoubleSet.keys',
+          [
+            {
+              'property': 'DoubleSet',
+              'scope': 'self'
+            },
+            {
+              'property': 'keys',
+              'scope': 'DoubleSet.prototype'
+            }
+          ]
+        ],
+        [
+          'DoubleSet.size',
+          [
+            {
+              'property': 'DoubleSet',
+              'scope': 'self'
+            },
+            {
+              'property': 'size',
+              'scope': 'DoubleSet.prototype'
+            }
+          ]
+        ],
+        [
+          'DoubleSet.values',
+          [
+            {
+              'property': 'DoubleSet',
+              'scope': 'self'
+            },
+            {
+              'property': 'values',
               'scope': 'DoubleSet.prototype'
             }
           ]
