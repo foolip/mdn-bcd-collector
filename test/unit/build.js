@@ -1140,6 +1140,52 @@ describe('build', () => {
         ['CSS.paintWorklet', '(function() {var css = CSS;return css && \'paintWorklet\' in css;})()']
       ]);
     });
+
+    it('dictionary', () => {
+      const ast = WebIDL2.parse(
+          `dictionary ElementRegistrationOptions {
+              object? prototype = null;
+              DOMString? extends = null;
+           };`);
+      assert.deepEqual(buildIDLTests(ast), [
+        ['ElementRegistrationOptions', {property: 'ElementRegistrationOptions', scope: 'self'}],
+        ['ElementRegistrationOptions.extends', [
+          {property: 'ElementRegistrationOptions', scope: 'self'},
+          {property: 'extends', scope: 'ElementRegistrationOptions'}
+        ]],
+        ['ElementRegistrationOptions.prototype', [
+          {property: 'ElementRegistrationOptions', scope: 'self'},
+          {property: 'prototype', scope: 'ElementRegistrationOptions'}
+        ]]
+      ]);
+    });
+
+    it('dictionary with custom test', () => {
+      const ast = WebIDL2.parse(
+          `dictionary ElementRegistrationOptions {
+              object? prototype = null;
+              DOMString? extends = null;
+           };`);
+      loadCustomTests({
+        'api': {
+          'ElementRegistrationOptions': {
+            '__base': 'var ers = ElementRegistrationOptions;',
+            '__test': 'return !!ers;',
+            'extends': 'return ers && \'extends\' in ers;',
+            'prototype': 'return ers && \'prototype\' in ers;'
+          }
+        },
+        'css': {}
+      });
+      assert.deepEqual(buildIDLTests(ast), [
+        // eslint-disable-next-line max-len
+        ['ElementRegistrationOptions', '(function() {var ers = ElementRegistrationOptions;return !!ers;})()'],
+        // eslint-disable-next-line max-len
+        ['ElementRegistrationOptions.extends', '(function() {var ers = ElementRegistrationOptions;return ers && \'extends\' in ers;})()'],
+        // eslint-disable-next-line max-len
+        ['ElementRegistrationOptions.prototype', '(function() {var ers = ElementRegistrationOptions;return ers && \'prototype\' in ers;})()']
+      ]);
+    });
   });
 
   describe('validateIDL', () => {
