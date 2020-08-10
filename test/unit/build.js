@@ -486,7 +486,7 @@ describe('build', () => {
     });
   });
 
-  describe('getExposureSet', () => {
+  describe('isWithinScope', () => {
     it('basic tests', () => {
       const specIDLs = {
         window: WebIDL2.parse(`[Exposed=Window] interface DummyOne {};`),
