@@ -667,6 +667,34 @@ describe('build', () => {
     });
 
     it('interface with constructor', () => {
+      const ast = WebIDL2.parse(`interface Number {
+        constructor(optional any value);
+      };`);
+      assert.deepEqual(buildIDLTests(ast), [
+        [
+          'Number',
+          {
+            'property': 'Number',
+            'scope': 'self'
+          }
+        ],
+        [
+          'Number.Number',
+          [
+            {
+              'property': 'Number',
+              'scope': 'self'
+            },
+            {
+              'property': 'constructor',
+              'scope': 'Number'
+            }
+          ]
+        ]
+      ]);
+    });
+
+    it('iterable interface', () => {
       const ast = WebIDL2.parse(`interface DoubleList {
         iterable<double>;
       };`);
@@ -675,6 +703,325 @@ describe('build', () => {
           'DoubleList',
           {
             'property': 'DoubleList',
+            'scope': 'self'
+          }
+        ],
+        [
+          'DoubleList.entries',
+          [
+            {
+              'property': 'DoubleList',
+              'scope': 'self'
+            },
+            {
+              'property': 'entries',
+              'scope': 'DoubleList.prototype'
+            }
+          ]
+        ],
+        [
+          'DoubleList.keys',
+          [
+            {
+              'property': 'DoubleList',
+              'scope': 'self'
+            },
+            {
+              'property': 'keys',
+              'scope': 'DoubleList.prototype'
+            }
+          ]
+        ],
+        [
+          'DoubleList.values',
+          [
+            {
+              'property': 'DoubleList',
+              'scope': 'self'
+            },
+            {
+              'property': 'values',
+              'scope': 'DoubleList.prototype'
+            }
+          ]
+        ],
+        [
+          'DoubleList.forEach',
+          [
+            {
+              'property': 'DoubleList',
+              'scope': 'self'
+            },
+            {
+              'property': 'forEach',
+              'scope': 'DoubleList.prototype'
+            }
+          ]
+        ]
+      ]);
+    });
+
+    it('maplike interface', () => {
+      const ast = WebIDL2.parse(`interface DoubleMap {
+        maplike<DOMString, double>;
+      };`);
+      assert.deepEqual(buildIDLTests(ast), [
+        [
+          'DoubleMap',
+          {
+            'property': 'DoubleMap',
+            'scope': 'self'
+          }
+        ],
+        [
+          'DoubleMap.size',
+          [
+            {
+              'property': 'DoubleMap',
+              'scope': 'self'
+            },
+            {
+              'property': 'size',
+              'scope': 'DoubleMap.prototype'
+            }
+          ]
+        ],
+        [
+          'DoubleMap.entries',
+          [
+            {
+              'property': 'DoubleMap',
+              'scope': 'self'
+            },
+            {
+              'property': 'entries',
+              'scope': 'DoubleMap.prototype'
+            }
+          ]
+        ],
+        [
+          'DoubleMap.keys',
+          [
+            {
+              'property': 'DoubleMap',
+              'scope': 'self'
+            },
+            {
+              'property': 'keys',
+              'scope': 'DoubleMap.prototype'
+            }
+          ]
+        ],
+        [
+          'DoubleMap.values',
+          [
+            {
+              'property': 'DoubleMap',
+              'scope': 'self'
+            },
+            {
+              'property': 'values',
+              'scope': 'DoubleMap.prototype'
+            }
+          ]
+        ],
+        [
+          'DoubleMap.get',
+          [
+            {
+              'property': 'DoubleMap',
+              'scope': 'self'
+            },
+            {
+              'property': 'get',
+              'scope': 'DoubleMap.prototype'
+            }
+          ]
+        ],
+        [
+          'DoubleMap.has',
+          [
+            {
+              'property': 'DoubleMap',
+              'scope': 'self'
+            },
+            {
+              'property': 'has',
+              'scope': 'DoubleMap.prototype'
+            }
+          ]
+        ],
+        [
+          'DoubleMap.clear',
+          [
+            {
+              'property': 'DoubleMap',
+              'scope': 'self'
+            },
+            {
+              'property': 'clear',
+              'scope': 'DoubleMap.prototype'
+            }
+          ]
+        ],
+        [
+          'DoubleMap.delete',
+          [
+            {
+              'property': 'DoubleMap',
+              'scope': 'self'
+            },
+            {
+              'property': 'delete',
+              'scope': 'DoubleMap.prototype'
+            }
+          ]
+        ],
+        [
+          'DoubleMap.set',
+          [
+            {
+              'property': 'DoubleMap',
+              'scope': 'self'
+            },
+            {
+              'property': 'set',
+              'scope': 'DoubleMap.prototype'
+            }
+          ]
+        ]
+      ]);
+    });
+
+    it('setlike interface', () => {
+      const ast = WebIDL2.parse(`interface DoubleSet {
+        setlike<double>;
+      };`);
+      assert.deepEqual(buildIDLTests(ast), [
+        [
+          'DoubleSet',
+          {
+            'property': 'DoubleSet',
+            'scope': 'self'
+          }
+        ],
+        [
+          'DoubleSet.size',
+          [
+            {
+              'property': 'DoubleSet',
+              'scope': 'self'
+            },
+            {
+              'property': 'size',
+              'scope': 'DoubleSet.prototype'
+            }
+          ]
+        ],
+        [
+          'DoubleSet.entries',
+          [
+            {
+              'property': 'DoubleSet',
+              'scope': 'self'
+            },
+            {
+              'property': 'entries',
+              'scope': 'DoubleSet.prototype'
+            }
+          ]
+        ],
+        [
+          'DoubleSet.values',
+          [
+            {
+              'property': 'DoubleSet',
+              'scope': 'self'
+            },
+            {
+              'property': 'values',
+              'scope': 'DoubleSet.prototype'
+            }
+          ]
+        ],
+        [
+          'DoubleSet.keys',
+          [
+            {
+              'property': 'DoubleSet',
+              'scope': 'self'
+            },
+            {
+              'property': 'keys',
+              'scope': 'DoubleSet.prototype'
+            }
+          ]
+        ],
+        [
+          'DoubleSet.has',
+          [
+            {
+              'property': 'DoubleSet',
+              'scope': 'self'
+            },
+            {
+              'property': 'has',
+              'scope': 'DoubleSet.prototype'
+            }
+          ]
+        ],
+        [
+          'DoubleSet.add',
+          [
+            {
+              'property': 'DoubleSet',
+              'scope': 'self'
+            },
+            {
+              'property': 'add',
+              'scope': 'DoubleSet.prototype'
+            }
+          ]
+        ],
+        [
+          'DoubleSet.delete',
+          [
+            {
+              'property': 'DoubleSet',
+              'scope': 'self'
+            },
+            {
+              'property': 'delete',
+              'scope': 'DoubleSet.prototype'
+            }
+          ]
+        ],
+        [
+          'DoubleSet.clear',
+          [
+            {
+              'property': 'DoubleSet',
+              'scope': 'self'
+            },
+            {
+              'property': 'clear',
+              'scope': 'DoubleSet.prototype'
+            }
+          ]
+        ]
+      ]);
+    });
+
+    it('interface with getter/setter', () => {
+      const ast = WebIDL2.parse(`interface GetMe {
+        getter GetMe (unsigned long index);
+        setter void (GetMe data, optional unsigned long index);
+      };`);
+      assert.deepEqual(buildIDLTests(ast), [
+        [
+          'GetMe',
+          {
+            'property': 'GetMe',
             'scope': 'self'
           }
         ]
