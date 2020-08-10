@@ -359,7 +359,7 @@ function buildIDLTests(ast, scope = 'Window') {
     ]);
 
     // members
-    let members = iface.members.filter((member) => member.name);
+    const members = iface.members.filter((member) => member.name);
     members.sort((a, b) => a.name.localeCompare(b.name));
 
     for (const member of iface.members.filter((member) => !member.name)) {
@@ -403,7 +403,7 @@ function buildIDLTests(ast, scope = 'Window') {
         case 'operation':
           // We don't care about setter/getter functions
           break;
-      } 
+      }
     }
 
     // Avoid generating duplicate tests for operations.
