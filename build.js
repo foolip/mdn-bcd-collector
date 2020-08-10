@@ -360,8 +360,6 @@ function buildIDLTests(ast, scope = 'Window') {
 
     // members
     const members = iface.members.filter((member) => member.name);
-    members.sort((a, b) => a.name.localeCompare(b.name));
-
     for (const member of iface.members.filter((member) => !member.name)) {
       switch (member.type) {
         case 'constructor':
@@ -408,6 +406,7 @@ function buildIDLTests(ast, scope = 'Window') {
     if (getExtAttr(iface, 'Constructor')) {
       members.push({name: iface.name, type: 'constructor'});
     }
+    members.sort((a, b) => a.name.localeCompare(b.name));
 
     // Avoid generating duplicate tests for operations.
     const handledMemberNames = new Set();
