@@ -359,15 +359,27 @@ function buildIDLTests(ast, scope = 'Window') {
     ]);
 
     // members
-    // TODO: iterable<>, maplike<>, setlike<>, and constructor declarations are
-    // excluded by filtering to things with names.
-    const members = iface.members.filter((member) => member.name);
+    let members = iface.members.filter((member) => member.name);
     members.sort((a, b) => a.name.localeCompare(b.name));
+
+    for (const member of iface.members.filter((member) => !member.name)) {
+      switch (member.type) {
+        case 'constructor':
+          members.push({name: iface.name, type: 'constructor'});
+          break;
+        case 'iterable':
+        case 'maplike':
+        case 'setlike':
+          // TODO: add members
+          break;
+        case 'operation':
+          // We don't care about setter/getter functions
+          break;
+      } 
+    }
 
     // Avoid generating duplicate tests for operations.
     const handledMemberNames = new Set();
-
-    // TODO: add test for API's constructor
 
     for (const member of members) {
       if (handledMemberNames.has(member.name)) {
@@ -409,6 +421,12 @@ function buildIDLTests(ast, scope = 'Window') {
                 {property: member.name, scope: iface.name}
               ];
             }
+            break;
+          case 'constructor':
+            expr = [
+              {property: iface.name, scope: 'self'},
+              {property: 'constructor', scope: iface.name}
+            ];
             break;
         }
       }
