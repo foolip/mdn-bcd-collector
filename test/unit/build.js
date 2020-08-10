@@ -1088,7 +1088,9 @@ describe('build', () => {
               DOMString? extends = null;
            };`);
       assert.deepEqual(buildIDLTests(ast), [
-        ['ElementRegistrationOptions', {property: 'ElementRegistrationOptions', scope: 'self'}],
+        ['ElementRegistrationOptions',
+          {property: 'ElementRegistrationOptions', scope: 'self'}
+        ],
         ['ElementRegistrationOptions.extends', [
           {property: 'ElementRegistrationOptions', scope: 'self'},
           {property: 'extends', scope: 'ElementRegistrationOptions'}

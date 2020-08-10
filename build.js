@@ -308,7 +308,7 @@ function getExposureSet(node) {
 function buildIDLTests(ast, scope = 'Window') {
   const tests = [];
 
-  const interfaces = ast.filter((dfn) => 
+  const interfaces = ast.filter((dfn) =>
     dfn.type === 'interface' ||
     dfn.type === 'namespace' ||
     dfn.type === 'dictionary'

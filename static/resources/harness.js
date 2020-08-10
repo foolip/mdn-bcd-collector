@@ -86,21 +86,24 @@
           }
         } else if (subtest.property == 'constructor') {
           var iface = parentPrefix+subtest.scope;
-          var args = "";
-          for (var i = 0; i < eval(iface+".constructor.length"); i++) {
-            if (i == 0) {
-              args = args + "'" + i + "'";
+          var args = '';
+          for (var a = 0; a < eval(iface+'.constructor.length'); a++) {
+            if (a == 0) {
+              args = args + '\'' + a + '\'';
             } else {
-              args = args + "," + "'" + i + "'";
+              args = args + ',' + '\'' + a + '\'';
             }
           }
 
           try {
-            result.code = "new "+iface+"("+args+")";
-            eval("new "+iface+"("+args+")");
+            result.code = 'new '+iface+'('+args+')';
+            eval('new '+iface+'('+args+')');
             result.result = true;
-          } catch(err) {
-            if (err.name == 'TypeError' && err.message == 'Illegal constructor') {
+          } catch (err) {
+            if (
+              err.name == 'TypeError' &&
+              err.message == 'Illegal constructor'
+            ) {
               result.result = false;
             } else if (err.message.includes('Failed to construct')) {
               // If it failed to construct, and not illegal, there's a
