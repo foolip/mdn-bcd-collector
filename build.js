@@ -335,7 +335,8 @@ function buildIDLTests(ast, scope = 'Window') {
 
   const interfaces = ast.filter((dfn) => 
     dfn.type === 'interface' ||
-    dfn.type === 'namespace'
+    dfn.type === 'namespace' ||
+    dfn.type === 'dictionary'
   );
   interfaces.sort((a, b) => a.name.localeCompare(b.name));
 
@@ -429,7 +430,8 @@ function buildIDLTests(ast, scope = 'Window') {
       } else {
         const isStatic = (
           member.special === 'static' ||
-          iface.type === 'namespace'
+          iface.type === 'namespace' ||
+          iface.type === 'dictionary'
         );
         switch (member.type) {
           case 'attribute':
