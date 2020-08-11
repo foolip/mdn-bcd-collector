@@ -20,6 +20,8 @@ const slugify = require('slugify');
 const stringify = require('json-stable-stringify');
 const uaParser = require('ua-parser-js');
 
+const appversion = require('./package.json').version;
+
 module.exports = (options) => {
   const octokit = new Octokit(options);
 
@@ -36,7 +38,7 @@ module.exports = (options) => {
     const desc = `${browser} / ${os}`;
     const slug = slugify(desc, {lower: true});
 
-    const name = `${slug}-${digest}`;
+    const name = `${appversion}-${slug}-${digest}`;
     const branch = `collector/${name}`;
 
     if ((await octokit.auth()).type == 'unauthenticated') {
