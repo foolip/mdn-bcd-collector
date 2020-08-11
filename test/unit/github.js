@@ -19,6 +19,8 @@ const proxyquire = require('proxyquire');
 const sinon = require('sinon');
 const {Octokit} = require('@octokit/rest');
 
+const appversion = require('../../package.json').version;
+
 const REPORT = {
   results: {},
   // eslint-disable-next-line max-len
@@ -55,7 +57,7 @@ describe('GitHub export', () => {
 
     mock.git.expects('createRef').once().withArgs({
       owner: 'foolip',
-      ref: 'refs/heads/collector/safari-12.0-mac-os-10.14-afd516a15d',
+      ref: `refs/heads/collector/${appversion}-safari-12.0-mac-os-10.14-afd516a15d`,
       repo: 'mdn-bcd-results',
       sha: '753c6ed8e991e9729353a63d650ff0f5bd902b69'
     });
@@ -64,17 +66,17 @@ describe('GitHub export', () => {
         .once().withArgs(sinon.match({
           owner: 'foolip',
           repo: 'mdn-bcd-results',
-          path: 'safari-12.0-mac-os-10.14-afd516a15d.json',
+          path: `${appversion}-safari-12.0-mac-os-10.14-afd516a15d.json`,
           message: 'Results from Safari 12.0 / Mac OS 10.14',
           content: sinon.match.string,
-          branch: 'collector/safari-12.0-mac-os-10.14-afd516a15d'
+          branch: `collector/${appversion}-safari-12.0-mac-os-10.14-afd516a15d`
         }));
 
     mock.pulls.expects('create').once().withArgs({
       owner: 'foolip',
       repo: 'mdn-bcd-results',
       title: 'Results from Safari 12.0 / Mac OS 10.14',
-      head: 'collector/safari-12.0-mac-os-10.14-afd516a15d',
+      head: `collector/${appversion}-safari-12.0-mac-os-10.14-afd516a15d`,
       base: 'main'
     }).resolves({data: RESULT});
 
