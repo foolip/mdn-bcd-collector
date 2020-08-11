@@ -23,7 +23,7 @@ const {
 const bcd = require('mdn-browser-compat-data');
 
 const filterVersions = (data, earliestVersion) => {
-  let versions = [];
+  const versions = [];
 
   for (const [version, versionData] of Object.entries(data)) {
     if (
