@@ -96,7 +96,7 @@ for (const browser in browsersToTest) {
             until.elementIsEnabled(
                 await driver.findElement(By.id('start')), 'Run'
             ),
-            30000
+            10000
         );
         await driver.findElement(By.id('start')).click();
         await driver.wait(until.urlIs(`${host}/results/`), 60000);
@@ -104,7 +104,7 @@ for (const browser in browsersToTest) {
             until.elementTextContains(
                 await driver.findElement(By.id('status')), 'to'
             ),
-            15000
+            30000
         );
       });
     });
