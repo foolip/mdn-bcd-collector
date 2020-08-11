@@ -303,12 +303,12 @@
                   }
               );
 
-              reg.active.postMessage(pending[i]);
-
               broadcast.onmessage = function(message) {
                 results.push(message);
                 resolve();
               };
+
+              reg.active.postMessage(pending[i]);
             }));
           }
 
