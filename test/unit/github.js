@@ -57,8 +57,8 @@ describe('GitHub export', () => {
 
     mock.git.expects('createRef').once().withArgs({
       owner: 'foolip',
-      ref:
-        `refs/heads/collector/${appversion}-safari-12.0-mac-os-10.14-afd516a15d`,
+      // eslint-disable-next-line max-len
+      ref: `refs/heads/collector/${appversion}-safari-12.0-mac-os-10.14-afd516a15d`,
       repo: 'mdn-bcd-results',
       sha: '753c6ed8e991e9729353a63d650ff0f5bd902b69'
     });
