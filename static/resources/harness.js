@@ -418,9 +418,8 @@
       });
     };
 
-
     window.__workerCleanup = function() {
-      function unregisterSW() {
+      if ('getRegistrations' in navigator.serviceWorker) {
         return navigator.serviceWorker.getRegistrations()
             .then(function(registrations) {
               var unregisterPromise = registrations.map(function(registration) {
@@ -428,21 +427,14 @@
               });
               return Promise.all(unregisterPromise);
             });
-      }
-
-      function clearCaches() {
-        return window.caches.keys()
-            .then(function(cacheNames) {
-              return Promise.all(cacheNames.map(function(cacheName) {
-                return window.caches.delete(cacheName);
-              }));
+      } else {
+        return navigator.serviceWorker.getRegistration()
+            .then(function(registration) {
+              if (registration) {
+                return registration.unregister();
+              }
             });
       }
-
-      return Promise.all([
-        unregisterSW(),
-        clearCaches()
-      ]);
     };
   }
 
