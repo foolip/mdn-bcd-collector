@@ -283,51 +283,50 @@
     if ('serviceWorker' in navigator) {
       window.__workerCleanup().then(function() {
         console.log('Starting registration');
-        navigator.serviceWorker.register('/resources/serviceworker.js')
-            .then(function(reg) {
-              console.log('Registered, waiting for activation');
-              return window.__waitForSWState(reg, 'activated');
-            })
-            .then(function(reg) {
-              console.log('Activated');
-              var promises = [];
+        navigator.serviceWorker.register('/resources/serviceworker.js', {
+          scope: '/resources/'
+        }).then(function(reg) {
+          console.log('Registered, waiting for activation');
+          return window.__waitForSWState(reg, 'activated');
+        }).then(function(reg) {
+          console.log('Activated');
+          var promises = [];
 
-              var length = pending.length;
-              for (var i = 0; i < length; i++) {
-                promises.push(new Promise(function(resolve) {
-                  if (statusElement) {
-                    statusElement.innerHTML = 'Testing ' + pending[i].name;
-                  }
-
-                  var broadcast = new window.BroadcastChannel2(
-                      pending[i].name, {
-                        type: 'BroadcastChannel' in self ? 'native' : 'idb',
-                        webWorkerSupport: true
-                      }
-                  );
-
-                  reg.active.postMessage(pending[i]);
-
-                  broadcast.onmessage = function(message) {
-                    results.push(message);
-                    resolve();
-                  };
-                }));
+          var length = pending.length;
+          for (var i = 0; i < length; i++) {
+            promises.push(new Promise(function(resolve) {
+              if (statusElement) {
+                statusElement.innerHTML = 'Testing ' + pending[i].name;
               }
 
-              Promise.allSettled(promises).then(function() {
-                console.log('All tests done');
-                pending = [];
+              var broadcast = new window.BroadcastChannel2(
+                  pending[i].name, {
+                    type: 'BroadcastChannel' in self ? 'native' : 'idb',
+                    webWorkerSupport: true
+                  }
+              );
 
-                window.__workerCleanup().then(function() {
-                  console.log('Cleaning up');
-                  done(results);
-                });
-              });
-            })
-            .catch(function(error) {
-              console.error(error);
+              reg.active.postMessage(pending[i]);
+
+              broadcast.onmessage = function(message) {
+                results.push(message);
+                resolve();
+              };
+            }));
+          }
+
+          Promise.allSettled(promises).then(function() {
+            console.log('All tests done');
+            pending = [];
+
+            window.__workerCleanup().then(function() {
+              console.log('Cleaning up');
+              done(results);
             });
+          });
+        }).catch(function(error) {
+          console.error(error);
+        });
       });
     } else {
       console.log('No service worker support');
