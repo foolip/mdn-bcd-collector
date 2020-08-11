@@ -37,14 +37,13 @@ const filterVersions = (data, earliestVersion) => {
   return versions;
 };
 
-// TODO: define target browsers
 // TODO: IE and pre-Blink Edge have issues with automated runtime
 let browsersToTest = {
-  'chrome': filterVersions(bcd.browsers.chrome.releases, 26),
+  'chrome': filterVersions(bcd.browsers.chrome.releases, 40),
   'edge': filterVersions(bcd.browsers.edge.releases, 13),
-  'firefox': filterVersions(bcd.browsers.firefox.releases, 4),
-  'ie': filterVersions(bcd.browsers.ie.releases, 9),
-  'safari': filterVersions(bcd.browsers.safari.releases, 8)
+  'firefox': filterVersions(bcd.browsers.firefox.releases, 35),
+  'ie': filterVersions(bcd.browsers.ie.releases, 11),
+  'safari': filterVersions(bcd.browsers.safari.releases, 9)
 };
 
 if (process.env.BROWSER) {
