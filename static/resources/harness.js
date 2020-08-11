@@ -432,7 +432,7 @@
               return Promise.all(unregisterPromise);
             });
       } else {
-        return navigator.serviceWorker.getRegistration()
+        return navigator.serviceWorker.getRegistration('/resources/')
             .then(function(registration) {
               if (registration) {
                 return registration.unregister();
