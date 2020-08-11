@@ -299,10 +299,12 @@
                     statusElement.innerHTML = 'Testing ' + pending[i].name;
                   }
 
-                  var broadcast = new window.BroadcastChannel2(pending[i].name, {
-                    type: 'BroadcastChannel' in self ? 'native' : 'idb',
-                    webWorkerSupport: true
-                  });
+                  var broadcast = new window.BroadcastChannel2(
+                    pending[i].name, {
+                      type: 'BroadcastChannel' in self ? 'native' : 'idb',
+                      webWorkerSupport: true
+                    }
+                  );
 
                   reg.active.postMessage(pending[i]);
 
