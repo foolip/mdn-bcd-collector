@@ -282,11 +282,14 @@
 
     if ('serviceWorker' in navigator) {
       window.__workerCleanup().then(function() {
+        console.log('Starting registration');
         navigator.serviceWorker.register('/resources/serviceworker.js')
             .then(function(reg) {
+              console.log('Registered, waiting for activation');
               return window.__waitForSWState(reg, 'activated');
             })
             .then(function(reg) {
+              console.log('Activated');
               var promises = [];
 
               var length = pending.length;
@@ -311,9 +314,11 @@
               }
 
               Promise.allSettled(promises).then(function() {
+                console.log('All tests done');
                 pending = [];
 
                 window.__workerCleanup().then(function() {
+                  console.log('Cleaning up');
                   done(results);
                 });
               });
