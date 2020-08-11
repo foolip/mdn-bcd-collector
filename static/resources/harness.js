@@ -300,10 +300,10 @@
                   }
 
                   var broadcast = new window.BroadcastChannel2(
-                    pending[i].name, {
-                      type: 'BroadcastChannel' in self ? 'native' : 'idb',
-                      webWorkerSupport: true
-                    }
+                      pending[i].name, {
+                        type: 'BroadcastChannel' in self ? 'native' : 'idb',
+                        webWorkerSupport: true
+                      }
                   );
 
                   reg.active.postMessage(pending[i]);
