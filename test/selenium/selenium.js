@@ -30,7 +30,7 @@ const filterVersions = (data, earliestVersion) => {
       (versionData.status == 'current' || versionData.status == 'retired') &&
       version >= earliestVersion
     ) {
-      versions += version;
+      versions.push(version);
     }
   }
 
