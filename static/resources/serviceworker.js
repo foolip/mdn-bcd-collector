@@ -29,6 +29,5 @@ self.addEventListener('install', function(event) {
 });
 
 self.addEventListener('message', function(event) {
-  var result = bcd.test(event.data);
-  event.source.postMessage(event.data);
+  event.source.postMessage(bcd.test(event.data));
 });
