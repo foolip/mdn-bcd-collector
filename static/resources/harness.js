@@ -282,52 +282,44 @@
 
     if ('serviceWorker' in navigator) {
       window.__workerCleanup().then(function() {
-        console.log('Starting registration');
-        navigator.serviceWorker.register('/resources/serviceworker.js')
-            .then(function(reg) {
-              console.log('Registered, waiting for activation');
-              return window.__waitForSWState(reg, 'activated');
-            })
-            .then(function(reg) {
-              console.log('Activated');
-              var promises = [];
+        navigator.serviceWorker.register('/resources/serviceworker.js', {
+          scope: '/resources/'
+        }).then(function(reg) {
+          return window.__waitForSWState(reg, 'activated');
+        }).then(navigator.serviceWorker.ready).then(function(reg) {
+          var promises = [];
+          var testhandlers = {};
 
-              var length = pending.length;
-              for (var i = 0; i < length; i++) {
-                promises.push(new Promise(function(resolve) {
-                  if (statusElement) {
-                    statusElement.innerHTML = 'Testing ' + pending[i].name;
-                  }
+          navigator.serviceWorker.onmessage = function(event) {
+            testhandlers[event.data.name](event.data);
+          };
 
-                  var broadcast = new window.BroadcastChannel2(
-                      pending[i].name, {
-                        type: 'BroadcastChannel' in self ? 'native' : 'idb',
-                        webWorkerSupport: true
-                      }
-                  );
-
-                  reg.active.postMessage(pending[i]);
-
-                  broadcast.onmessage = function(message) {
-                    results.push(message);
-                    resolve();
-                  };
-                }));
+          var length = pending.length;
+          for (var i = 0; i < length; i++) {
+            promises.push(new Promise(function(resolve) {
+              if (statusElement) {
+                statusElement.innerHTML = 'Testing ' + pending[i].name;
               }
 
-              Promise.allSettled(promises).then(function() {
-                console.log('All tests done');
-                pending = [];
+              navigator.serviceWorker.postMessage(pending[i]);
 
-                window.__workerCleanup().then(function() {
-                  console.log('Cleaning up');
-                  done(results);
-                });
-              });
-            })
-            .catch(function(error) {
-              console.error(error);
+              testhandlers[pending[i].name] = function(message) {
+                results.push(message);
+                resolve();
+              };
+            }));
+          }
+
+          Promise.allSettled(promises).then(function() {
+            pending = [];
+
+            window.__workerCleanup().then(function() {
+              done(results);
             });
+          });
+        }).catch(function(error) {
+          console.error(error);
+        });
       });
     } else {
       console.log('No service worker support');
@@ -438,7 +430,7 @@
               return Promise.all(unregisterPromise);
             });
       } else {
-        return navigator.serviceWorker.getRegistration()
+        return navigator.serviceWorker.getRegistration('/resources/')
             .then(function(registration) {
               if (registration) {
                 return registration.unregister();
