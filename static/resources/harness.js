@@ -286,8 +286,13 @@
           scope: '/resources/'
         }).then(function(reg) {
           return window.__waitForSWState(reg, 'activated');
-        }).then(function(reg) {
+        }).then(navigator.serviceWorker.ready).then(function(reg) {
           var promises = [];
+          var testhandlers = {};
+
+          navigator.serviceWorker.onmessage = function(event) {
+            testhandlers[event.data.name](event.data);
+          };
 
           var length = pending.length;
           for (var i = 0; i < length; i++) {
@@ -296,19 +301,12 @@
                 statusElement.innerHTML = 'Testing ' + pending[i].name;
               }
 
-              var broadcast = new window.BroadcastChannel2(
-                  pending[i].name, {
-                    type: 'BroadcastChannel' in self ? 'native' : 'idb',
-                    webWorkerSupport: true
-                  }
-              );
+              navigator.serviceWorker.postMessage(pending[i]);
 
-              broadcast.onmessage = function(message) {
+              testhandlers[pending[i].name] = function(message) {
                 results.push(message);
                 resolve();
               };
-
-              reg.active.postMessage(pending[i]);
             }));
           }
 

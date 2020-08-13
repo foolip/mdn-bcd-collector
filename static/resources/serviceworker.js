@@ -15,9 +15,6 @@
 /* global self, caches, Request, Response */
 /* global bcd */
 
-var window = {}; // Needed for the BroadcastChannel polyfill
-
-self.importScripts('broadcastchannel.js');
 self.importScripts('harness.js');
 
 self.addEventListener('install', function(event) {
@@ -33,10 +30,5 @@ self.addEventListener('install', function(event) {
 
 self.addEventListener('message', function(event) {
   var result = bcd.test(event.data);
-
-  var broadcast = new window.BroadcastChannel2(result.name, {
-    type: 'BroadcastChannel' in self ? 'native' : 'idb',
-    webWorkerSupport: true
-  });
-  broadcast.postMessage(result);
+  event.source.postMessage(event.data);
 });
