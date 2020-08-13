@@ -1,7 +1,7 @@
 {
   "api": {
     "ANGLE_instanced_arrays": {
-      "__base": "var canvas = document.createElement('canvas'); var gl = canvas.getContext('webgl'); var a = gl.getExtension('ANGLE_instanced_arrays');",
+      "__base": "var canvas = document.createElement('canvas'); var gl = canvas.getContext('webgl'); if (!gl) {return false}; var a = gl.getExtension('ANGLE_instanced_arrays');",
       "__test": "return !!a;",
       "drawArraysInstancedANGLE": "return a && 'drawArraysInstancedANGLE' in a;",
       "drawElementsInstancedANGLE": "return a && 'drawElementsInstancedANGLE' in a;",

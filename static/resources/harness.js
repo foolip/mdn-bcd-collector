@@ -148,7 +148,7 @@
 
             result.result = value;
             if (value === true) {
-              if (subtest.scope.startsWith('CSS')) {
+              if (subtest.scope === 'CSS.supports') {
                 if (prefix) {
                   parentPrefix = '-' + prefix + '-';
                 } else {
