@@ -592,7 +592,6 @@ function buildIDLServiceWorker(ast) {
     '<meta charset="utf-8">',
     '<script src="/resources/json3.min.js"></script>',
     '<script src="/resources/harness.js"></script>',
-    '<script src="/resources/broadcastchannel.js"></script>',
     '<script src="/resources/core.js"></script>',
     '</head>',
     '<body>',
@@ -636,11 +635,6 @@ async function writeManifest(manifest) {
 function copyResources() {
   const resources = [
     ['json3/lib/json3.min.js', 'resources'],
-    [
-      'broadcast-channel/dist/lib/browser.min.js',
-      'resources',
-      'broadcastchannel.js'
-    ],
     ['core-js-bundle/minified.js', 'resources', 'core.js'],
     ['core-js-bundle/minified.js.map', 'resources', 'core.js.map'],
     ['chai/chai.js', 'test'],
