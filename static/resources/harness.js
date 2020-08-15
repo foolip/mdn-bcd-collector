@@ -39,6 +39,20 @@
     }
   }
 
+  function stringStartsWith(string, search) {
+    if (string.startsWith) {
+      return string.startsWith(search);
+    };
+    return string.substring(0, 0 + search.length) === search;
+  };
+
+  function stringIncludes(string, search) {
+    if (string.includes) {
+      return string.includes(search);
+    };
+    return string.indexOf(search) !== -1;
+  };
+
   function addTest(name, code, scope, info) {
     pending.push({name: name, code: code, scope: scope, info: info});
   }
@@ -105,7 +119,7 @@
               err.message == 'Illegal constructor'
             ) {
               result.result = false;
-            } else if (err.message.includes('Failed to construct')) {
+            } else if (stringIncludes(err.message, 'Failed to construct')) {
               // If it failed to construct, and not illegal, there's a
               // constructor
               result.result = true;
@@ -125,7 +139,7 @@
               if ('CSS' in self) {
                 if (prefix) {
                   var prefixToAdd = '-' + prefix;
-                  if (!property.startsWith('-')) {
+                  if (!stringStartsWith(property, '-')) {
                     prefixToAdd += '-';
                   }
                   property = prefixToAdd + property;
