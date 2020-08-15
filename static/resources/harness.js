@@ -42,16 +42,16 @@
   function stringStartsWith(string, search) {
     if (string.startsWith) {
       return string.startsWith(search);
-    };
+    }
     return string.substring(0, 0 + search.length) === search;
-  };
+  }
 
   function stringIncludes(string, search) {
     if (string.includes) {
       return string.includes(search);
-    };
+    }
     return string.indexOf(search) !== -1;
-  };
+  }
 
   function addTest(name, code, scope, info) {
     pending.push({name: name, code: code, scope: scope, info: info});
