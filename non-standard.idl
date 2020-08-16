@@ -219,6 +219,97 @@ partial interface DataTransfer {
   nsIVariant mozTypesAt(unsigned long index);
 };
 
+partial interface AudioBufferSourceNode {
+  attribute EventHandler onended;
+};
+
+partial interface AudioContext {
+  ConstantSourceNode createConstantSource();
+};
+
+partial dictionary BasicCardRequest {
+  sequence<DOMString> supportedTypes = [];
+};
+
+interface BlobBuilder;
+
+partial interface BluetoothDevice {
+  readonly attribute BluetoothAdvertisingData adData;
+  Promise<BluetoothGATTRemoteServer> connectGATT();
+  readonly attribute long deviceClass;
+  BluetoothGATTRemoteServer? gattServer();
+  readonly attribute boolean paired;
+  readonly attribute short productVersion;
+  readonly attribute short productID;
+  void unwatchAdvertisements();
+  readonly attribute FrozenArray<long> uuids;
+  readonly attribute long vendorID;
+  readonly attribute long vendorIDSource;
+};
+
+partial interface CanMakePaymentEvent {
+  readonly attribute FrozenArray<PaymentDetailsModifier> modifiers;
+};
+
+partial namespace console {
+  void timeStamp(DOMString label);
+};
+
+[SecureContext]
+interface mixin CredentialUserData {
+  readonly attribute USVString name;
+  readonly attribute USVString iconURL;
+};
+
+Credential includes CredentialUserData;
+
+partial interface CSSStyleDeclaration {
+  CSSValue getPropertyCSSValue(DOMString property);
+};
+
+partial interface DataTransfer {
+  void addElement(Element el);
+};
+
+interface DirectoryEntrySync;
+
+interface DirectoryReaderSync;
+
+partial interface Document {
+  boolean contains();
+  void createEntityReference();
+  Touch createTouch();
+  TouchList createTouchList();
+  readonly attribute nsIURI documentURIObject;
+  readonly attribute DOMConfiguration domConfig;
+  void enableStyleSheetsForSet(DOMString? name);
+  boolean execCommandShowHelp(DOMString name);
+  readonly attribute long fileSize;
+  nsIBoxObject getBoxObjectFor(DOMElement element);
+  readonly attribute long height;
+  readonly attribute DOMString? lastStyleSheetSet;
+  void loadOverlay(DOMString url, nsIObserver observer);
+  void mozSetImageElement(DOMString imageElementId, DOMElement imageElement);
+  readonly attribute boolean mozSyntheticDocument;
+  void normalizeDocument();
+  attribute EventHandler onafterscriptexecute;
+  attribute EventHandler onbeforescriptexecute;
+  readonly attribue DOMString? origin;
+  readonly attribute Node? popupNode;
+  readonly attribute DOMString? preferredStyleSheetSet;
+  void queryCommandText();
+  void releaseCapture();
+  void routeEvent();
+  readonly attribute DOMString? selectedStyleSheetSet;
+  readonly attribute FrozenArray<DOMElement> styleSheetSets;
+  readonly atttribute XULTooltip tooltipNode;
+  attribute UndoManager undoManager;
+  readonly attribute long width;
+  readonly attribute DOMString? xmlEncoding;
+  readonly attribute DOMString? xmlStandalone;
+  readonly attribute DOMString? xmlVersion;
+};
+
 // https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/modules/payments/abort_payment_event.idl;drc=c2e7d4f0b24814b0d1c51a964db34ec5b4930756
 // https://github.com/w3c/payment-handler/pull/170
 [
@@ -247,6 +338,16 @@ interface ANGLE_instanced_arrays {
   readonly attribute FrozenArray<DOMString> platforms;
   [CallWith=ScriptState, RaisesException] readonly attribute Promise<AppBannerPromptResult> userChoice;
   [CallWith=ScriptState, RaisesException] Promise<void> prompt();
+};
+
+// https://developer.mozilla.org/en-US/docs/Web/API/BluetoothAdvertisingData
+
+interface BluetoothAdvertisingData {
+  readonly attribute unsigned short? appearance;
+  readonly attribute byte? txPower;
+  readonly attribute byte? rssi;
+  readonly attribute Map manufacturerData;
+  readonly attribute Map serviceData;
 };
 
 // https://wicg.github.io/budget-api/#budget-service-interface
@@ -352,4 +453,40 @@ interface CSSValueList : CSSValue {
 [Exposed=Window, RuntimeEnabled=WebAnimationsAPI]
 interface CSSTransition : Animation {
   readonly attribute CSSOMString transitionProperty;
+};
+
+// https://searchfox.org/mozilla-central/rev/2f9eacd9d3d995c937b4251a5557d95d494c9be1/dom/webidl/DeviceLightEvent.webidl
+
+[Exposed=Window]
+interface DeviceLightEvent : Event {
+  constructor(DOMString type, optional DeviceLightEventInit eventInitDict = {});
+  readonly attribute unrestricted double value;
+};
+
+dictionary DeviceLightEventInit : EventInit {
+  unrestricted double value = Infinity;
+};
+
+// https://searchfox.org/mozilla-central/rev/2f9eacd9d3d995c937b4251a5557d95d494c9be1/dom/webidl/DeviceProximityEvent.webidl
+
+[Exposed=Window]
+interface DeviceProximityEvent : Event {
+  constructor(DOMString type, optional DeviceProximityEventInit eventInitDict = {});
+  readonly attribute double value;
+  readonly attribute double min;
+  readonly attribute double max;
+};
+
+dictionary DeviceProximityEventInit : EventInit {
+  unrestricted double value = Infinity;
+  unrestricted double min = -Infinity;
+  unrestricted double max = Infinity;
+};
+
+// https://www.w3.org/TR/DOM-Level-3-Core/core.html#ID-412266927
+
+interface DocumentType : Node {
+  readonly attribute NamedNodeMap entities;
+  readonly attribute DOMString internalSubset;
+  readonly attribute NamedNodeMap notations;
 };
