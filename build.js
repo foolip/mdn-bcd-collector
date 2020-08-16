@@ -363,7 +363,8 @@ function buildIDLTests(ast, scope = 'Window') {
               {name: 'has', type: 'operation'},
               {name: 'clear', type: 'operation'},
               {name: 'delete', type: 'operation'},
-              {name: 'set', type: 'operation'}
+              {name: 'set', type: 'operation'},
+              {name: 'forEach', type: 'operation'}
           );
           break;
         case 'setlike':
