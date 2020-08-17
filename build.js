@@ -363,7 +363,8 @@ function buildIDLTests(ast, scope = 'Window') {
               {name: 'has', type: 'operation'},
               {name: 'clear', type: 'operation'},
               {name: 'delete', type: 'operation'},
-              {name: 'set', type: 'operation'}
+              {name: 'set', type: 'operation'},
+              {name: 'forEach', type: 'operation'}
           );
           break;
         case 'setlike':
@@ -551,7 +552,8 @@ function buildIDLWindow(ast) {
 }
 
 function buildIDLWorker(ast) {
-  const tests = buildIDLTests(ast, 'Worker');
+  const tests = buildIDLTests(ast, 'Worker')
+      .concat(buildIDLTests(ast, 'DedicatedWorker'));
 
   const lines = [
     '<!DOCTYPE html>',
