@@ -294,7 +294,7 @@ partial interface Document {
   void normalizeDocument();
   attribute EventHandler onafterscriptexecute;
   attribute EventHandler onbeforescriptexecute;
-  readonly attribue DOMString? origin;
+  readonly attribute DOMString? origin;
   readonly attribute Node? popupNode;
   readonly attribute DOMString? preferredStyleSheetSet;
   void queryCommandText();
@@ -302,7 +302,7 @@ partial interface Document {
   void routeEvent();
   readonly attribute DOMString? selectedStyleSheetSet;
   readonly attribute FrozenArray<DOMElement> styleSheetSets;
-  readonly atttribute XULTooltip tooltipNode;
+  readonly attribute XULTooltip tooltipNode;
   attribute UndoManager undoManager;
   readonly attribute long width;
   readonly attribute DOMString? xmlEncoding;
