@@ -779,6 +779,19 @@ describe('build', () => {
           ]
         ],
         [
+          'DoubleMap.forEach',
+          [
+            {
+              'property': 'DoubleMap',
+              'scope': 'self'
+            },
+            {
+              'property': 'forEach',
+              'scope': 'DoubleMap.prototype'
+            }
+          ]
+        ],
+        [
           'DoubleMap.get',
           [
             {
