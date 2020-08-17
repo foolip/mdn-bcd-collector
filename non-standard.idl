@@ -231,7 +231,7 @@ partial dictionary BasicCardRequest {
   sequence<DOMString> supportedTypes = [];
 };
 
-interface BlobBuilder;
+interface BlobBuilder {};
 
 partial interface BluetoothDevice {
   readonly attribute BluetoothAdvertisingData adData;
@@ -271,9 +271,9 @@ partial interface DataTransfer {
   void addElement(Element el);
 };
 
-interface DirectoryEntrySync;
+interface DirectoryEntrySync {};
 
-interface DirectoryReaderSync;
+interface DirectoryReaderSync {};
 
 partial interface Document {
   boolean contains();
@@ -485,7 +485,7 @@ dictionary DeviceProximityEventInit : EventInit {
 
 // https://www.w3.org/TR/DOM-Level-3-Core/core.html#ID-412266927
 
-interface DocumentType : Node {
+partial interface DocumentType {
   readonly attribute NamedNodeMap entities;
   readonly attribute DOMString internalSubset;
   readonly attribute NamedNodeMap notations;
