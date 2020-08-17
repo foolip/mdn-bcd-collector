@@ -553,7 +553,7 @@ function buildIDLWindow(ast) {
 
 function buildIDLWorker(ast) {
   const tests = buildIDLTests(ast, 'Worker')
-                  .concat(buildIDLTests(ast, 'DedicatedWorker'));
+      .concat(buildIDLTests(ast, 'DedicatedWorker'));
 
   const lines = [
     '<!DOCTYPE html>',
