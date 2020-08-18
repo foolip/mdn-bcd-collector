@@ -350,7 +350,8 @@ function buildIDLTests(ast, scope = 'Window') {
               {name: 'entries', type: 'operation'},
               {name: 'keys', type: 'operation'},
               {name: 'values', type: 'operation'},
-              {name: 'forEach', type: 'operation'}
+              {name: 'forEach', type: 'operation'},
+              {name: '@@iterator', type: 'symbol'}
           );
           break;
         case 'maplike':
@@ -442,6 +443,16 @@ function buildIDLTests(ast, scope = 'Window') {
             expr = [
               {property: iface.name, scope: 'self'},
               {property: 'constructor', scope: iface.name}
+            ];
+            break;
+          case 'symbol':
+            // eslint-disable-next-line no-case-declarations
+            const symbol = member.name.replace('@@', '');
+            expr = [
+              {property: iface.name, scope: 'self'},
+              {property: 'Symbol', scope: 'self'},
+              {property: symbol, scope: 'Symbol'},
+              {property: `Symbol.${symbol}`, scope: `${iface.name}.prototype`}
             ];
             break;
         }

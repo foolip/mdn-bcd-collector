@@ -673,6 +673,27 @@ describe('build', () => {
           }
         ],
         [
+          'DoubleList.@@iterator',
+          [
+            {
+              'property': 'DoubleList',
+              'scope': 'self'
+            },
+            {
+              'property': 'Symbol',
+              'scope': 'self'
+            },
+            {
+              'property': 'iterator',
+              'scope': 'Symbol'
+            },
+            {
+              'property': 'Symbol.iterator',
+              'scope': 'DoubleList.prototype'
+            }
+          ]
+        ],
+        [
           'DoubleList.entries',
           [
             {
