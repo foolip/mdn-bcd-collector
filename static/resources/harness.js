@@ -157,7 +157,11 @@
                            property.slice(1);
               }
 
-              value = eval('"'+property+'" in '+parentPrefix+subtest.scope);
+              if (stringStartsWith(property, 'Symbol.')) {
+                value = eval(property+' in '+parentPrefix+subtest.scope);
+              } else {
+                value = eval('"'+property+'" in '+parentPrefix+subtest.scope);
+              }
             }
 
             result.result = value;
