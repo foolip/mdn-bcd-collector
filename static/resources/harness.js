@@ -335,8 +335,6 @@
               done(results);
             });
           });
-        }).catch(function(error) {
-          console.error(error);
         });
       });
     } else {
