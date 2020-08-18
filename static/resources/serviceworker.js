@@ -15,6 +15,8 @@
 /* global self, caches, Request, Response */
 /* global bcd */
 
+var window = {};
+
 self.importScripts('harness.js');
 
 self.addEventListener('install', function(event) {

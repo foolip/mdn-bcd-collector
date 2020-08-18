@@ -15,6 +15,8 @@
 /* global self */
 /* global bcd */
 
+var window = {};
+
 self.importScripts('harness.js');
 
 self.onmessage = function(event) {
