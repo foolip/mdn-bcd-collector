@@ -15,6 +15,7 @@
 /* global self, caches, Request, Response */
 /* global bcd */
 
+// eslint-disable-next-line no-unused-vars
 var window = {};
 
 self.importScripts('harness.js');
