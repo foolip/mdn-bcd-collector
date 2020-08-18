@@ -137,8 +137,8 @@ function buildCSSPropertyTest(propertyNames, method, basename) {
   const lines = [
     '<!DOCTYPE html>',
     '<html>',
-    '<head>'
-  ].concat(copyright).concat([
+    '<head>',
+    ...copyright,
     '<meta charset="utf-8">',
     '<script src="/resources/json3.min.js"></script>',
     '<script src="/resources/harness.js"></script>',
@@ -146,7 +146,7 @@ function buildCSSPropertyTest(propertyNames, method, basename) {
     '<body>',
     '<p id="status">Running test...</p>',
     '<script>'
-  ]);
+  ];
 
   for (const name of propertyNames) {
     const ident = `css.properties.${name}`;
@@ -527,8 +527,8 @@ function buildIDLWindow(ast) {
   const lines = [
     '<!DOCTYPE html>',
     '<html>',
-    '<head>'
-  ].concat(copyright).concat([
+    '<head>',
+    ...copyright,
     '<meta charset="utf-8">',
     '<script src="/resources/json3.min.js"></script>',
     '<script src="/resources/harness.js"></script>',
@@ -536,7 +536,7 @@ function buildIDLWindow(ast) {
     '<body>',
     '<p id="status">Running test...</p>',
     '<script>'
-  ]);
+  ];
 
   for (const [name, expr] of tests) {
     lines.push(
@@ -552,14 +552,16 @@ function buildIDLWindow(ast) {
 }
 
 function buildIDLWorker(ast) {
-  const tests = buildIDLTests(ast, 'Worker')
-      .concat(buildIDLTests(ast, 'DedicatedWorker'));
+  const tests = [
+    ...buildIDLTests(ast, 'Worker'),
+    ...buildIDLTests(ast, 'DedicatedWorker')
+  ];
 
   const lines = [
     '<!DOCTYPE html>',
     '<html>',
-    '<head>'
-  ].concat(copyright).concat([
+    '<head>',
+    ...copyright,
     '<meta charset="utf-8">',
     '<script src="/resources/json3.min.js"></script>',
     '<script src="/resources/harness.js"></script>',
@@ -568,7 +570,7 @@ function buildIDLWorker(ast) {
     '<body>',
     '<p id="status">Running test...</p>',
     '<script>'
-  ]);
+  ];
 
   for (const [name, expr] of tests) {
     lines.push(
@@ -589,8 +591,8 @@ function buildIDLServiceWorker(ast) {
   const lines = [
     '<!DOCTYPE html>',
     '<html>',
-    '<head>'
-  ].concat(copyright).concat([
+    '<head>',
+    ...copyright,
     '<meta charset="utf-8">',
     '<script src="/resources/json3.min.js"></script>',
     '<script src="/resources/harness.js"></script>',
@@ -599,7 +601,7 @@ function buildIDLServiceWorker(ast) {
     '<body>',
     '<p id="status">Running test...</p>',
     '<script>'
-  ]);
+  ];
 
   for (const [name, expr] of tests) {
     lines.push(
