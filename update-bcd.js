@@ -8,7 +8,7 @@ const uaParser = require('ua-parser-js');
 const overrides = require('./overrides').filter(Array.isArray);
 
 function findEntry(bcd, path) {
-  let keys = path.split('.');
+  const keys = path.split('.');
   let entry = bcd;
   while (entry && keys.length) {
     entry = entry[keys.shift()];
@@ -28,7 +28,7 @@ function isDirectory(fp) {
 function save(bcd, bcdDir) {
   function processObject(object, keypath) {
     if (keypath.length && !['api', 'css'].includes(keypath[0])) {
-        return;
+      return;
     }
     for (const [key, value] of Object.entries(object)) {
       const candidate = path.join(bcdDir, ...keypath, key);
@@ -60,7 +60,7 @@ function getBrowserAndVersion(userAgent, browsers) {
   const ua = uaParser(userAgent);
 
   let browser = ua.browser.name.toLowerCase();
-  let os = ua.os.name.toLowerCase();
+  const os = ua.os.name.toLowerCase();
   if (browser === 'mobile safari') {
     browser = 'safari_ios';
   }
@@ -88,7 +88,7 @@ function getSupportMap(report) {
   // Transform `report` to map from test name (BCD path) to array of results.
   const testMap = new Map;
   for (const [url, results] of Object.entries(report.results)) {
-    if (url === "__version") continue;
+    if (url === '__version') continue;
     for (const test of results) {
       const tests = testMap.get(test.name) || [];
       tests.push({url, result: test.result});
@@ -104,6 +104,7 @@ function getSupportMap(report) {
   const supportMap = new Map;
   for (const [name, results] of testMap.entries()) {
     let supported = null;
+    // eslint-disable-next-line no-unused-vars
     for (const {url, result} of results) {
       if (result === null) {
         continue;
@@ -113,12 +114,16 @@ function getSupportMap(report) {
         continue;
       }
       if (supported !== result) {
-        // This will happen for [SecureContext] APIs and APIs under multiple 
+        // This will happen for [SecureContext] APIs and APIs under multiple
         // scopes.
-        //console.log(`Contradictory results for ${name}: ${JSON.stringify(results, null, '  ')}`);
+        // console.log(`Contradictory results for ${name}: ${JSON.stringify(
+        //     results, null, '  '
+        // )}`);
         supported = true;
         break;
       }
+
+      // XXX Check against HTTP vs. HTTPS
     }
     supportMap.set(name, supported);
   }
@@ -132,7 +137,9 @@ function getSupportMatrix(bcd, reportFiles) {
 
   for (const reportFile of reportFiles) {
     const report = JSON.parse(fs.readFileSync(reportFile));
-    const [browser, version] = getBrowserAndVersion(report.userAgent, bcd.browsers);
+    const [browser, version] = getBrowserAndVersion(
+        report.userAgent, bcd.browsers
+    );
     if (!browser || !version) {
       console.warn(`Ignoring unknown browser/version: ${report.userAgent}`);
       continue;
@@ -238,7 +245,9 @@ function update(bcd, supportMatrix) {
 
       const simpleStatement = supportStatement.find((statement) => {
         const ignoreKeys = new Set(['notes', 'partial_implementation']);
-        const keys = Object.keys(statement).filter(key => !ignoreKeys.has(key));
+        const keys = Object.keys(statement).filter(
+            (key) => !ignoreKeys.has(key)
+        );
         return keys.length === 1;
       });
       if (!simpleStatement) {
@@ -254,11 +263,18 @@ function update(bcd, supportMatrix) {
 
       console.log(`Updating ${path}`);
 
-      if (!(typeof(simpleStatement.version_added) === 'string' && inferredStatments[0].version_added === true)) {
+      if (
+        !(typeof(simpleStatement.version_added) === 'string' &&
+        inferredStatments[0].version_added === true)
+      ) {
         simpleStatement.version_added = inferredStatments[0].version_added;
       }
 
-      if (inferredStatments[0].version_removed && !(typeof(simpleStatement.version_removed) === 'string' && inferredStatments[0].version_removed === true)) {
+      if (
+        inferredStatments[0].version_removed &&
+        !(typeof(simpleStatement.version_removed) === 'string' &&
+          inferredStatments[0].version_removed === true)
+      ) {
         simpleStatement.version_removed = inferredStatments[0].version_removed;
       }
     }
