@@ -290,4 +290,17 @@ function main(reportFiles) {
   save(bcd, BCD_DIR);
 }
 
-main(process.argv.slice(2));
+/* istanbul ignore else */
+if (process.env.NODE_ENV === 'test') {
+  module.exports = {
+    findEntry,
+    isDirectory,
+    getBrowserAndVersion,
+    getSupportMap,
+    getSupportMatrix,
+    inferSupportStatements,
+    update
+  };
+} else {
+  main(process.argv.slice(2));
+}
