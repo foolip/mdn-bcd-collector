@@ -1,0 +1,10 @@
+[
+  "https://github.com/mdn/browser-compat-data/pull/3684",
+  ["css.properties.border-image-outset", "safari", "5.1", false],
+  ["css.properties.border-image-repeat", "safari", "5.1", false],
+  ["css.properties.border-image-slice", "safari", "5.1", false],
+  ["css.properties.border-image-source", "safari", "5.1", false],
+  ["css.properties.border-image-width", "safari", "5.1", false],
+  "https://github.com/mdn/browser-compat-data/pull/3667#discussion_r269207837",
+  ["css.properties.ime-mode", "edge", "*", null]
+]
