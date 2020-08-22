@@ -300,8 +300,10 @@ function main(reportFiles) {
   save(bcd, BCD_DIR);
 }
 
-/* istanbul ignore else */
-if (process.env.NODE_ENV === 'test') {
+/* istanbul ignore if */
+if (require.main === module) {
+  main(process.argv.slice(2));
+} else {
   module.exports = {
     findEntry,
     isDirectory,
@@ -312,6 +314,4 @@ if (process.env.NODE_ENV === 'test') {
     update,
     loadFiles
   };
-} else {
-  main(process.argv.slice(2));
 }
