@@ -22,7 +22,8 @@
     "coverage": "NODE_ENV=test nyc mocha --recursive test --exclude test/puppeteer/* --exclude test/selenium/*",
     "puppeteer": "NODE_ENV=test mocha test/puppeteer --timeout 30000 --slow 10000",
     "test": "npm run coverage && npm run puppeteer",
-    "selenium": "mocha test/selenium"
+    "selenium": "mocha test/selenium",
+    "update-bcd": "node update-bcd.js"
   },
   "dependencies": {
     "@google-cloud/logging-winston": "4.0.0",
@@ -47,6 +48,7 @@
     "chai-fs": "^2.0.0",
     "chai-http": "4.3.0",
     "chai-subset": "1.6.0",
+    "compare-versions": "^3.6.0",
     "eslint": "7.7.0",
     "eslint-config-google": "0.14.0",
     "eslint-plugin-prettier": "^3.1.4",
