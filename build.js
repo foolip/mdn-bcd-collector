@@ -702,8 +702,15 @@ async function build(bcd, reffy) {
   copyResources();
 }
 
-/* istanbul ignore else */
-if (process.env.NODE_ENV === 'test') {
+/* istanbul ignore if */
+if (require.main === module) {
+  const bcd = require('mdn-browser-compat-data');
+  const reffy = require('./reffy-reports');
+  build(bcd, reffy).catch((reason) => {
+    console.error(reason);
+    process.exit(1);
+  });
+} else {
   module.exports = {
     writeText,
     loadCustomTests,
@@ -717,11 +724,4 @@ if (process.env.NODE_ENV === 'test') {
     buildIDLTests,
     validateIDL
   };
-} else {
-  const bcd = require('mdn-browser-compat-data');
-  const reffy = require('./reffy-reports');
-  build(bcd, reffy).catch((reason) => {
-    console.error(reason);
-    process.exit(1);
-  });
 }

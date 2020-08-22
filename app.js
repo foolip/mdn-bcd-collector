@@ -137,14 +137,14 @@ app.post('/api/results/export/github', (req, res) => {
       .catch(/* istanbul ignore next */ (err) => catchError(err, res));
 });
 
-/* istanbul ignore else */
-if (process.env.NODE_ENV === 'test') {
-  // Export for testing
-  module.exports = {app: app, version: appversion};
-} else {
+/* istanbul ignore if */
+if (require.main === module) {
   // Start the server
   app.listen(PORT, () => {
     logger.info(`App listening on port ${PORT}`);
     logger.info('Press Ctrl+C to quit.');
   });
+} else {
+  // Export for testing
+  module.exports = {app: app, version: appversion};
 }
