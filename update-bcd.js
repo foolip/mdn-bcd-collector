@@ -280,11 +280,39 @@ function update(bcd, supportMatrix) {
   }
 }
 
-function loadFiles(reportFiles) {
+function loadFile(reportFile) {
+  try {
+    return JSON.parse(fs.readFileSync(reportFile));
+  } catch (e) {
+    console.warn(`Could not parse ${reportFile}; skipping`);
+    return null;
+  }
+}
+
+function loadFiles(files, root = '') {
   const reports = [];
-  for (const reportFile of reportFiles) {
-    const report = JSON.parse(fs.readFileSync(reportFile));
-    reports.push(report);
+
+  for (const filename of files) {
+    const filepath = root + filename;
+    const fileStats = fs.lstatSync(filepath);
+
+    console.log(filepath);
+
+    if (path.basename(filename).startsWith('.')) {
+      // Ignores .DS_Store, .git, etc.
+      continue;
+    } else if (fileStats.isDirectory()) {
+      const newReports = loadFiles(fs.readdirSync(filepath), filepath);
+      reports.push(...newReports);
+    } else if (fileStats.isFile()) {
+      const report = loadFile(filepath);
+
+      if (report) {
+        reports.push(report);
+      }
+    } else {
+      console.warn(`${filepath} is not file or folder; skipping`);
+    }
   }
 
   return reports;
