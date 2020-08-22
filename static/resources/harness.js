@@ -100,18 +100,10 @@
           }
         } else if (subtest.property == 'constructor') {
           var iface = parentPrefix+subtest.scope;
-          var args = '';
-          for (var a = 0; a < eval(iface+'.constructor.length'); a++) {
-            if (a == 0) {
-              args = args + '\'' + a + '\'';
-            } else {
-              args = args + ',' + '\'' + a + '\'';
-            }
-          }
 
           try {
-            result.code = 'new '+iface+'('+args+')';
-            eval('new '+iface+'('+args+')');
+            result.code = 'new '+iface+'()';
+            eval('new '+iface+'()');
             result.result = true;
           } catch (err) {
             if (
@@ -119,9 +111,14 @@
               err.message == 'Illegal constructor'
             ) {
               result.result = false;
-            } else if (stringIncludes(err.message, 'Failed to construct')) {
-              // If it failed to construct, and not illegal, there's a
-              // constructor
+            } else if (
+              stringIncludes(err.message, 'Not enough arguments') ||
+              stringIncludes(err.message, 'argument required') ||
+              stringIncludes(err.message, 'arguments required') ||
+              stringIncludes(err.message, 'Failed to construct')
+            ) {
+              // If it failed to construct and it's not illegal or just needs
+              // more arguments, the constructor's good
               result.result = true;
             } else {
               result.result = null;
