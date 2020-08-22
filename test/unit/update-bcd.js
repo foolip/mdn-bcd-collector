@@ -21,6 +21,6 @@ describe('BCD updater', () => {
   // XXX Write tests
 
   it('', () => {
-    assert.deepEqual(true, true);
+    assert.deepEqual(updatebcd, updatebcd);
   });
 });
