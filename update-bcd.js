@@ -132,11 +132,10 @@ function getSupportMap(report) {
 
 // Load all reports and build a map from BCD path to browser + version
 // and test result (null/true/false) for that version.
-function getSupportMatrix(bcd, reportFiles) {
+function getSupportMatrix(bcd, reports) {
   const supportMatrix = new Map;
 
-  for (const reportFile of reportFiles) {
-    const report = JSON.parse(fs.readFileSync(reportFile));
+  for (const report of reports) {
     const [browser, version] = getBrowserAndVersion(
         report.userAgent, bcd.browsers
     );
@@ -281,11 +280,22 @@ function update(bcd, supportMatrix) {
   }
 }
 
+function loadFiles(reportFiles) {
+  const reports = [];
+  for (const reportFile of reportFiles) {
+    const report = JSON.parse(fs.readFileSync(reportFile));
+    reports.push(report);
+  }
+
+  return reports;
+}
+
 function main(reportFiles) {
-  const BCD_DIR = `../browser-compat-data`;
+  const BCD_DIR = process.env.BCD_DIR || `../browser-compat-data`;
   const bcd = require(BCD_DIR);
 
-  const supportMatrix = getSupportMatrix(bcd, reportFiles);
+  const reports = loadFiles(reportFiles);
+  const supportMatrix = getSupportMatrix(bcd, reports);
   update(bcd, supportMatrix);
   save(bcd, BCD_DIR);
 }
@@ -299,7 +309,8 @@ if (process.env.NODE_ENV === 'test') {
     getSupportMap,
     getSupportMatrix,
     inferSupportStatements,
-    update
+    update,
+    loadFiles
   };
 } else {
   main(process.argv.slice(2));
