@@ -106,10 +106,7 @@
             eval('new '+iface+'()');
             result.result = true;
           } catch (err) {
-            if (
-              err.name == 'TypeError' &&
-              err.message == 'Illegal constructor'
-            ) {
+            if (stringIncludes(err.message, 'Illegal constructor')) {
               result.result = false;
             } else if (
               stringIncludes(err.message, 'Not enough arguments') ||
