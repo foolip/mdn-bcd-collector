@@ -296,8 +296,6 @@ function loadFiles(files, root = '') {
     const filepath = root + filename;
     const fileStats = fs.lstatSync(filepath);
 
-    console.log(filepath);
-
     if (path.basename(filename).startsWith('.')) {
       // Ignores .DS_Store, .git, etc.
       continue;
