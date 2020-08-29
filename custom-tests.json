@@ -16,6 +16,15 @@
       "length": "return buffer && 'length' in buffer;",
       "numberOfChannels": "return buffer && 'numberOfChannels' in buffer;",
       "sampleRate": "return buffer && 'sampleRate' in buffer;",
+    },
+    "AudioBufferSourceNode": {
+      "__base": "var audioCtx = new (window.AudioContext || window.webkitAudioContext)(); if (!audioCtx) {return false}; var source = audioCtx.createBufferSource();",
+      "__test": "return !!source;",
+      "loop": "return source && 'loop' in source;",
+      "loopEnd": "return source && 'loopEnd' in source;",
+      "loopStart": "return source && 'loopStart' in source;",
+      "onended": "return source && 'onended' in source;",
+      "start": "return source && 'start' in source;",
     }
   },
   "css": {
