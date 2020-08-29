@@ -4,6 +4,7 @@ const compareVersions = require('compare-versions');
 const fs = require('fs');
 const path = require('path');
 const uaParser = require('ua-parser-js');
+const bcd = require('mdn-browser-compat-data');
 
 const overrides = require('./overrides').filter(Array.isArray);
 
@@ -156,6 +157,11 @@ function getSupportMatrix(bcd, reports) {
       let versionMap = browserMap.get(browser);
       if (!versionMap) {
         versionMap = new Map;
+        for (let browserVersion of 
+          Object.keys(bcd.browsers[browser].releases)
+        ) {
+          versionMap.set(browserVersion, null);
+        }
         browserMap.set(browser, versionMap);
       }
       versionMap.set(version, supported);
@@ -191,24 +197,26 @@ function inferSupportStatements(versionMap) {
   const statements = [];
   for (const [i, version] of versions.entries()) {
     const supported = versionMap.get(version);
-    if (i === 0) {
-      // TODO: exact version if it's the first version in browser.json
-      statements.push({version_added: supported});
-      continue;
-    }
+
     const lastStatement = statements[statements.length - 1];
     if (supported === true) {
-      if (!lastStatement.version_added) {
-        lastStatement.version_added = version;
-      } else if (lastStatement.version_removed) {
-        // added back again
-        statements.push({version_added: version});
+      if (lastStatement) {
+        if (!lastStatement.version_added) {
+          lastStatement.version_added = version;
+        } else if (lastStatement.version_removed) {
+          // added back again
+          statements.push({version_added: version});
+        } else {
+          // leave `lastStatement.version_added` as is
+        }
       } else {
-        // leave `lastStatement.version_added` as is
+        statements.push({version_added: version});
       }
     } else if (supported === false) {
-      if (lastStatement.version_added) {
+      if (lastStatement && lastStatement.version_added) {
         lastStatement.version_removed = version;
+      } else if (!lastStatement) {
+        statements.push({version_added: false});
       }
     } else if (supported === null) {
       // TODO
