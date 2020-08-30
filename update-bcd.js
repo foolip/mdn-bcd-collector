@@ -134,6 +134,7 @@ function getSupportMap(report) {
 // Load all reports and build a map from BCD path to browser + version
 // and test result (null/true/false) for that version.
 function getSupportMatrix(bcd, reports) {
+  // TODO catch prefixed support
   const supportMatrix = new Map;
 
   for (const report of reports) {
@@ -191,8 +192,8 @@ function getSupportMatrix(bcd, reports) {
 }
 
 function inferSupportStatements(versionMap) {
-  const versions = Array.from(versionMap.keys());
-  versions.sort(compareVersions);
+  const versions = Array.from(versionMap.keys()).sort(compareVersions);
+  console.log(versions);
 
   const statements = [];
   const lastKnown = {version: null, support: null, prefix: ""};
@@ -283,7 +284,15 @@ function update(bcd, supportMatrix) {
         // is not supported. So only update in case new data contracts that.
         if (inferredStatments.some((statement) => statement.version_added)) {
           supportStatement.unshift(...inferredStatments);
-          entry.__compat.support[browser] = supportStatement;
+          supportStatement = supportStatement.filter(
+            (item, pos, self) => (pos === self.findIndex((el) => (
+              el.version_added == item.version_added &&
+              el.version_removed == item.version_removed &&
+              el.prefix == item.prefix
+            )))
+          );
+          entry.__compat.support[browser] = supportStatement.length === 1 ?
+            supportStatement[0] : supportStatement;
         }
         continue;
       }
