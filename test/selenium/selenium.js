@@ -69,9 +69,7 @@ if (!seleniumUrl) {
 // eslint-disable-next-line guard-for-in
 for (const browser in browsersToTest) {
   for (const version of browsersToTest[browser]) {
-    describe(`${bcd.browsers[browser].name} ${version}`, function() {
-      this.timeout(60000);
-      this.slow(30000);
+    describe(`${bcd.browsers[browser].name} ${version}`, () => {
       let driver;
 
       beforeEach(function() {
@@ -106,7 +104,7 @@ for (const browser in browsersToTest) {
             ),
             30000
         );
-      });
+      }).slow(30000).timeout(60000);
     });
   }
 }

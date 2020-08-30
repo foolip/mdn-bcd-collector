@@ -1,6 +1,7 @@
 {
     "extends": ["eslint:recommended", "google"],
     "plugins": ["prettier"],
+    "parser": "babel-eslint",
     "parserOptions": {
         "ecmaVersion": 8
     },

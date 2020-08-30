@@ -44,6 +44,7 @@
     "winston": "3.3.3"
   },
   "devDependencies": {
+    "babel-eslint": "^10.1.0",
     "chai": "4.2.0",
     "chai-fs": "^2.0.0",
     "chai-http": "4.3.0",

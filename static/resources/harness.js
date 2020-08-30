@@ -106,12 +106,16 @@
             eval('new '+iface+'()');
             result.result = true;
           } catch (err) {
-            if (stringIncludes(err.message, 'Illegal constructor')) {
+            if (
+              stringIncludes(err.message, 'Illegal constructor') ||
+              stringIncludes(err.message, 'Function expected')
+            ) {
               result.result = false;
             } else if (
               stringIncludes(err.message, 'Not enough arguments') ||
               stringIncludes(err.message, 'argument required') ||
-              stringIncludes(err.message, 'arguments required')
+              stringIncludes(err.message, 'arguments required') ||
+              stringIncludes(err.message, 'Argument not optional')
             ) {
               // If it failed to construct and it's not illegal or just needs
               // more arguments, the constructor's good
