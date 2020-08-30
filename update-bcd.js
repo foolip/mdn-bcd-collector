@@ -4,7 +4,6 @@ const compareVersions = require('compare-versions');
 const fs = require('fs');
 const path = require('path');
 const uaParser = require('ua-parser-js');
-const bcd = require('mdn-browser-compat-data');
 
 const overrides = require('./overrides').filter(Array.isArray);
 
