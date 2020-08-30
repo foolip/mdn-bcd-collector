@@ -195,35 +195,55 @@ function inferSupportStatements(versionMap) {
   versions.sort(compareVersions);
 
   const statements = [];
+  const lastKnown = {version: null, support: null, prefix: ""};
+  let lastWasNull = false;
+
   for (const [i, version] of versions.entries()) {
     const supported = versionMap.get(version);
-
     const lastStatement = statements[statements.length - 1];
+
     if (supported === true) {
-      if (lastStatement) {
-        if (!lastStatement.version_added) {
-          lastStatement.version_added = version;
-        } else if (lastStatement.version_removed) {
-          // added back again
-          statements.push({version_added: version});
-        } else {
-          // leave `lastStatement.version_added` as is
-        }
-      } else {
+      if (!lastStatement) {
+        statements.push({
+          version_added: (i === 0 || lastKnown.support === false)
+            ? version
+            : true
+        });
+      } else if (!lastStatement.version_added) {
+        lastStatement.version_added = version;
+      } else if (lastStatement.version_removed) {
+        // added back again
         statements.push({version_added: version});
       }
+
+      lastKnown.version = version;
+      lastKnown.support = true;
+      lastKnown.prefix = ""; // TODO hook up with real prefixes
+      lastWasNull = false;
     } else if (supported === false) {
-      if (lastStatement && lastStatement.version_added) {
-        lastStatement.version_removed = version;
+      if (
+        lastStatement &&
+        lastStatement.version_added &&
+        !lastStatement.version_removed
+      ) {
+        lastStatement.version_removed = 
+          (!lastWasNull || lastKnown.support === false) ? version : true;
       } else if (!lastStatement) {
         statements.push({version_added: false});
       }
+
+      lastKnown.version = version;
+      lastKnown.support = false;
+      lastKnown.prefix = "";
+      lastWasNull = false;
     } else if (supported === null) {
+      lastWasNull = true;
       // TODO
     } else {
       throw new Error('result not true/false/null');
     }
   }
+
   return statements;
 }
 
