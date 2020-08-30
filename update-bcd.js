@@ -138,7 +138,7 @@ function getSupportMap(report) {
         supported = {result: result, prefix: prefix};
         continue;
       }
-      if (supported !== result) {
+      if (supported.result !== result) {
         // This will happen for [SecureContext] APIs and APIs under multiple
         // scopes.
         // console.log(`Contradictory results for ${name}: ${JSON.stringify(
