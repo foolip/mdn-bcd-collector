@@ -193,7 +193,6 @@ function getSupportMatrix(bcd, reports) {
 
 function inferSupportStatements(versionMap) {
   const versions = Array.from(versionMap.keys()).sort(compareVersions);
-  console.log(versions);
 
   const statements = [];
   const lastKnown = {version: null, support: null, prefix: ""};
