@@ -116,7 +116,7 @@ function getSupportMap(report) {
     if (url === '__version') continue;
     for (const test of results) {
       const tests = testMap.get(test.name) || [];
-      tests.push({url, result: test.result});
+      tests.push({url, result: test.result, prefix: test.prefix});
       testMap.set(test.name, tests);
     }
   }
@@ -128,14 +128,14 @@ function getSupportMap(report) {
   // Transform `testMap` to map from test name (BCD path) to flattened support.
   const supportMap = new Map;
   for (const [name, results] of testMap.entries()) {
-    let supported = null;
+    let supported = {result: null, prefix: ""};
     // eslint-disable-next-line no-unused-vars
-    for (const {url, result} of results) {
+    for (const {url, result, prefix} of results) {
       if (result === null) {
         continue;
       }
-      if (supported === null) {
-        supported = result;
+      if (supported.result === null) {
+        supported = {result: result, prefix: prefix};
         continue;
       }
       if (supported !== result) {
@@ -144,12 +144,13 @@ function getSupportMap(report) {
         // console.log(`Contradictory results for ${name}: ${JSON.stringify(
         //     results, null, '  '
         // )}`);
-        supported = true;
+        supported.result = true;
         break;
       }
 
       // XXX Check against HTTP vs. HTTPS
     }
+
     supportMap.set(name, supported);
   }
   return supportMap;
@@ -185,7 +186,7 @@ function getSupportMatrix(bcd, reports) {
         for (let browserVersion of 
           Object.keys(bcd.browsers[browser].releases)
         ) {
-          versionMap.set(browserVersion, null);
+          versionMap.set(browserVersion, {result: null, prefix: ""});
         }
         browserMap.set(browser, versionMap);
       }
@@ -194,7 +195,7 @@ function getSupportMatrix(bcd, reports) {
   }
 
   // apply manual overrides
-  for (const [path, browser, version, supported] of overrides) {
+  for (const [path, browser, version, supported, prefix] of overrides) {
     const browserMap = supportMatrix.get(path);
     if (!browserMap) {
       continue;
@@ -205,10 +206,15 @@ function getSupportMatrix(bcd, reports) {
     }
     if (version === '*') {
       for (const v of versionMap.keys()) {
-        versionMap.set(v, supported);
+        versionMap.set(v, {
+          result: supported, ...(prefix && {prefix: prefix})
+        });
       }
     } else {
-      versionMap.set(version, supported);
+      versionMap.set(version, {
+        result: supported,
+        ...(prefix && {prefix: prefix})
+      });
     }
   }
 
@@ -223,7 +229,7 @@ function inferSupportStatements(versionMap) {
   let lastWasNull = false;
 
   for (const [i, version] of versions.entries()) {
-    const supported = versionMap.get(version);
+    const {result: supported, prefix} = versionMap.get(version);
     const lastStatement = statements[statements.length - 1];
 
     if (supported === true) {
@@ -231,13 +237,23 @@ function inferSupportStatements(versionMap) {
         statements.push({
           version_added: (i === 0 || lastKnown.support === false)
             ? version
-            : true
+            : true,
+          ...(prefix && {prefix: prefix})
         });
       } else if (!lastStatement.version_added) {
         lastStatement.version_added = version;
       } else if (lastStatement.version_removed) {
         // added back again
-        statements.push({version_added: version});
+        statements.push({
+          version_added: version,
+          ...(prefix && {prefix: prefix})
+        });
+      } else if (lastStatement.prefix !== prefix) {
+        // Prefix changed
+        statements.push({
+          version_added: version,
+          ...(prefix && {prefix: prefix})
+        });
       }
 
       lastKnown.version = version;
@@ -264,7 +280,7 @@ function inferSupportStatements(versionMap) {
       lastWasNull = true;
       // TODO
     } else {
-      throw new Error('result not true/false/null');
+      throw new Error(`result not true/false/null; got ${supported}`);
     }
   }
 
