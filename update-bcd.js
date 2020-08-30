@@ -25,27 +25,27 @@ function isDirectory(fp) {
 }
 
 function isEquivalent(a, b) {
-    // Create arrays of property names
-    const aProps = Object.getOwnPropertyNames(a);
-    const bProps = Object.getOwnPropertyNames(b);
+  // Create arrays of property names
+  const aProps = Object.getOwnPropertyNames(a);
+  const bProps = Object.getOwnPropertyNames(b);
 
-    // If number of properties is different,
+  // If number of properties is different,
+  // objects are not equivalent
+  if (aProps.length != bProps.length) {
+    return false;
+  }
+
+  for (const propName of aProps) {
+    // If values of same property are not equal,
     // objects are not equivalent
-    if (aProps.length != bProps.length) {
-        return false;
+    if (a[propName] !== b[propName]) {
+      return false;
     }
+  }
 
-    for (const propName of aProps) {
-        // If values of same property are not equal,
-        // objects are not equivalent
-        if (a[propName] !== b[propName]) {
-            return false;
-        }
-    }
-
-    // If we made it this far, objects
-    // are considered equivalent
-    return true;
+  // If we made it this far, objects
+  // are considered equivalent
+  return true;
 }
 
 // https://github.com/mdn/browser-compat-data/issues/3617
@@ -127,7 +127,7 @@ function getSupportMap(report) {
   // Transform `testMap` to map from test name (BCD path) to flattened support.
   const supportMap = new Map;
   for (const [name, results] of testMap.entries()) {
-    let supported = {result: null, prefix: ""};
+    let supported = {result: null, prefix: ''};
     // eslint-disable-next-line no-unused-vars
     for (const {url, result, prefix} of results) {
       if (result === null) {
@@ -182,10 +182,10 @@ function getSupportMatrix(bcd, reports) {
       let versionMap = browserMap.get(browser);
       if (!versionMap) {
         versionMap = new Map;
-        for (let browserVersion of 
+        for (const browserVersion of
           Object.keys(bcd.browsers[browser].releases)
         ) {
-          versionMap.set(browserVersion, {result: null, prefix: ""});
+          versionMap.set(browserVersion, {result: null, prefix: ''});
         }
         browserMap.set(browser, versionMap);
       }
@@ -224,7 +224,7 @@ function inferSupportStatements(versionMap) {
   const versions = Array.from(versionMap.keys()).sort(compareVersions);
 
   const statements = [];
-  const lastKnown = {version: null, support: null, prefix: ""};
+  const lastKnown = {version: null, support: null, prefix: ''};
   let lastWasNull = false;
 
   for (const [i, version] of versions.entries()) {
@@ -234,9 +234,9 @@ function inferSupportStatements(versionMap) {
     if (supported === true) {
       if (!lastStatement) {
         statements.push({
-          version_added: (i === 0 || lastKnown.support === false)
-            ? version
-            : true,
+          version_added: (i === 0 || lastKnown.support === false) ?
+            version :
+            true,
           ...(prefix && {prefix: prefix})
         });
       } else if (!lastStatement.version_added) {
@@ -257,7 +257,7 @@ function inferSupportStatements(versionMap) {
 
       lastKnown.version = version;
       lastKnown.support = true;
-      lastKnown.prefix = ""; // TODO hook up with real prefixes
+      lastKnown.prefix = ''; // TODO hook up with real prefixes
       lastWasNull = false;
     } else if (supported === false) {
       if (
@@ -265,7 +265,7 @@ function inferSupportStatements(versionMap) {
         lastStatement.version_added &&
         !lastStatement.version_removed
       ) {
-        lastStatement.version_removed = 
+        lastStatement.version_removed =
           (!lastWasNull || lastKnown.support === false) ? version : true;
       } else if (!lastStatement) {
         statements.push({version_added: false});
@@ -273,7 +273,7 @@ function inferSupportStatements(versionMap) {
 
       lastKnown.version = version;
       lastKnown.support = false;
-      lastKnown.prefix = "";
+      lastKnown.prefix = '';
       lastWasNull = false;
     } else if (supported === null) {
       lastWasNull = true;
@@ -323,9 +323,9 @@ function update(bcd, supportMatrix) {
         if (inferredStatments.some((statement) => statement.version_added)) {
           supportStatement.unshift(...inferredStatments);
           supportStatement = supportStatement.filter(
-            (item, pos, self) => (pos === self.findIndex((el) => (
-              isEquivalent(el, item)
-            )))
+              (item, pos, self) => (pos === self.findIndex((el) => (
+                isEquivalent(el, item)
+              )))
           );
           entry.__compat.support[browser] = supportStatement.length === 1 ?
             supportStatement[0] : supportStatement;
