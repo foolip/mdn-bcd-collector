@@ -24,6 +24,30 @@ function isDirectory(fp) {
   }
 }
 
+function isEquivalent(a, b) {
+  // Create arrays of property names
+  const aProps = Object.getOwnPropertyNames(a);
+  const bProps = Object.getOwnPropertyNames(b);
+
+  // If number of properties is different,
+  // objects are not equivalent
+  if (aProps.length != bProps.length) {
+    return false;
+  }
+
+  for (const propName of aProps) {
+    // If values of same property are not equal,
+    // objects are not equivalent
+    if (a[propName] !== b[propName]) {
+      return false;
+    }
+  }
+
+  // If we made it this far, objects
+  // are considered equivalent
+  return true;
+}
+
 // https://github.com/mdn/browser-compat-data/issues/3617
 function save(bcd, bcdDir) {
   function processObject(object, keypath) {
@@ -91,7 +115,7 @@ function getSupportMap(report) {
     if (url === '__version') continue;
     for (const test of results) {
       const tests = testMap.get(test.name) || [];
-      tests.push({url, result: test.result});
+      tests.push({url, result: test.result, prefix: test.prefix});
       testMap.set(test.name, tests);
     }
   }
@@ -103,28 +127,29 @@ function getSupportMap(report) {
   // Transform `testMap` to map from test name (BCD path) to flattened support.
   const supportMap = new Map;
   for (const [name, results] of testMap.entries()) {
-    let supported = null;
+    let supported = {result: null, prefix: ''};
     // eslint-disable-next-line no-unused-vars
-    for (const {url, result} of results) {
+    for (const {url, result, prefix} of results) {
       if (result === null) {
         continue;
       }
-      if (supported === null) {
-        supported = result;
+      if (supported.result === null) {
+        supported = {result: result, prefix: prefix};
         continue;
       }
-      if (supported !== result) {
+      if (supported.result !== result) {
         // This will happen for [SecureContext] APIs and APIs under multiple
         // scopes.
         // console.log(`Contradictory results for ${name}: ${JSON.stringify(
         //     results, null, '  '
         // )}`);
-        supported = true;
+        supported.result = true;
         break;
       }
 
       // XXX Check against HTTP vs. HTTPS
     }
+
     supportMap.set(name, supported);
   }
   return supportMap;
@@ -133,6 +158,7 @@ function getSupportMap(report) {
 // Load all reports and build a map from BCD path to browser + version
 // and test result (null/true/false) for that version.
 function getSupportMatrix(bcd, reports) {
+  // TODO catch prefixed support
   const supportMatrix = new Map;
 
   for (const report of reports) {
@@ -156,6 +182,11 @@ function getSupportMatrix(bcd, reports) {
       let versionMap = browserMap.get(browser);
       if (!versionMap) {
         versionMap = new Map;
+        for (const browserVersion of
+          Object.keys(bcd.browsers[browser].releases)
+        ) {
+          versionMap.set(browserVersion, {result: null, prefix: ''});
+        }
         browserMap.set(browser, versionMap);
       }
       versionMap.set(version, supported);
@@ -163,7 +194,7 @@ function getSupportMatrix(bcd, reports) {
   }
 
   // apply manual overrides
-  for (const [path, browser, version, supported] of overrides) {
+  for (const [path, browser, version, supported, prefix] of overrides) {
     const browserMap = supportMatrix.get(path);
     if (!browserMap) {
       continue;
@@ -174,10 +205,15 @@ function getSupportMatrix(bcd, reports) {
     }
     if (version === '*') {
       for (const v of versionMap.keys()) {
-        versionMap.set(v, supported);
+        versionMap.set(v, {
+          result: supported, ...(prefix && {prefix: prefix})
+        });
       }
     } else {
-      versionMap.set(version, supported);
+      versionMap.set(version, {
+        result: supported,
+        ...(prefix && {prefix: prefix})
+      });
     }
   }
 
@@ -185,37 +221,68 @@ function getSupportMatrix(bcd, reports) {
 }
 
 function inferSupportStatements(versionMap) {
-  const versions = Array.from(versionMap.keys());
-  versions.sort(compareVersions);
+  const versions = Array.from(versionMap.keys()).sort(compareVersions);
 
   const statements = [];
+  const lastKnown = {version: null, support: null, prefix: ''};
+  let lastWasNull = false;
+
   for (const [i, version] of versions.entries()) {
-    const supported = versionMap.get(version);
-    if (i === 0) {
-      // TODO: exact version if it's the first version in browser.json
-      statements.push({version_added: supported});
-      continue;
-    }
+    const {result: supported, prefix} = versionMap.get(version);
     const lastStatement = statements[statements.length - 1];
+
     if (supported === true) {
-      if (!lastStatement.version_added) {
+      if (!lastStatement) {
+        statements.push({
+          version_added: (i === 0 || lastKnown.support === false) ?
+            version :
+            true,
+          ...(prefix && {prefix: prefix})
+        });
+      } else if (!lastStatement.version_added) {
         lastStatement.version_added = version;
       } else if (lastStatement.version_removed) {
         // added back again
-        statements.push({version_added: version});
-      } else {
-        // leave `lastStatement.version_added` as is
+        statements.push({
+          version_added: version,
+          ...(prefix && {prefix: prefix})
+        });
+      } else if (lastStatement.prefix !== prefix) {
+        // Prefix changed
+        statements.push({
+          version_added: version,
+          ...(prefix && {prefix: prefix})
+        });
       }
+
+      lastKnown.version = version;
+      lastKnown.support = true;
+      lastKnown.prefix = ''; // TODO hook up with real prefixes
+      lastWasNull = false;
     } else if (supported === false) {
-      if (lastStatement.version_added) {
-        lastStatement.version_removed = version;
+      if (
+        lastStatement &&
+        lastStatement.version_added &&
+        !lastStatement.version_removed
+      ) {
+        lastStatement.version_removed =
+          (!lastWasNull || lastKnown.support === false) ? version : true;
+      } else if (!lastStatement) {
+        statements.push({version_added: false});
       }
+
+      lastKnown.version = version;
+      lastKnown.support = false;
+      lastKnown.prefix = '';
+      lastWasNull = false;
     } else if (supported === null) {
+      lastWasNull = true;
       // TODO
     } else {
-      throw new Error('result not true/false/null');
+      throw new Error(`result not true/false/null; got ${supported}`);
     }
   }
+
   return statements;
 }
 
@@ -255,7 +322,13 @@ function update(bcd, supportMatrix) {
         // is not supported. So only update in case new data contracts that.
         if (inferredStatments.some((statement) => statement.version_added)) {
           supportStatement.unshift(...inferredStatments);
-          entry.__compat.support[browser] = supportStatement;
+          supportStatement = supportStatement.filter(
+              (item, pos, self) => (pos === self.findIndex((el) => (
+                isEquivalent(el, item)
+              )))
+          );
+          entry.__compat.support[browser] = supportStatement.length === 1 ?
+            supportStatement[0] : supportStatement;
         }
         continue;
       }
