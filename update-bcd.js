@@ -25,6 +25,30 @@ function isDirectory(fp) {
   }
 }
 
+function isEquivalent(a, b) {
+    // Create arrays of property names
+    const aProps = Object.getOwnPropertyNames(a);
+    const bProps = Object.getOwnPropertyNames(b);
+
+    // If number of properties is different,
+    // objects are not equivalent
+    if (aProps.length != bProps.length) {
+        return false;
+    }
+
+    for (const propName of aProps) {
+        // If values of same property are not equal,
+        // objects are not equivalent
+        if (a[propName] !== b[propName]) {
+            return false;
+        }
+    }
+
+    // If we made it this far, objects
+    // are considered equivalent
+    return true;
+}
+
 // https://github.com/mdn/browser-compat-data/issues/3617
 function save(bcd, bcdDir) {
   function processObject(object, keypath) {
@@ -285,9 +309,7 @@ function update(bcd, supportMatrix) {
           supportStatement.unshift(...inferredStatments);
           supportStatement = supportStatement.filter(
             (item, pos, self) => (pos === self.findIndex((el) => (
-              el.version_added == item.version_added &&
-              el.version_removed == item.version_removed &&
-              el.prefix == item.prefix
+              isEquivalent(el, item)
             )))
           );
           entry.__compat.support[browser] = supportStatement.length === 1 ?
