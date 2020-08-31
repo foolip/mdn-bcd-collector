@@ -50,14 +50,14 @@ function getCustomTestAPI(name, member) {
       if ('__test' in customTests.api[name]) {
         test = testbase + customTests.api[name].__test;
       } else {
-        test = testbase ? testbase + 'return !!instance' : false;
+        test = testbase ? testbase + 'return !!instance;' : false;
       }
     } else {
       if (member in customTests.api[name]) {
-        test += customTests.api[name][member];
+        test = testbase + customTests.api[name][member];
       } else {
         test = testbase ?
-          testbase + `return instance && '${member}' in instance` :
+          testbase + `return instance && '${member}' in instance;` :
           false;
       }
     }
