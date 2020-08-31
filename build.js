@@ -44,7 +44,7 @@ function loadCustomTests(newTests) {
 function getCustomTestAPI(name, member) {
   let test = false;
 
-  if (name in customTests.api && '__base' in customTests.api[name]) {
+  if (name in customTests.api) {
     const testbase = customTests.api[name].__base || '';
     if (member === undefined) {
       if ('__test' in customTests.api[name]) {
