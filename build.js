@@ -45,18 +45,20 @@ function getCustomTestAPI(name, member) {
   let test = false;
 
   if (name in customTests.api && '__base' in customTests.api[name]) {
-    test = customTests.api[name].__base;
+    const testbase = customTests.api[name].__base || '';
     if (member === undefined) {
       if ('__test' in customTests.api[name]) {
-        test += customTests.api[name].__test;
+        test = testbase + customTests.api[name].__test;
       } else {
-        test = false;
+        test = testbase ? testbase + 'return !!instance' : false;
       }
     } else {
       if (member in customTests.api[name]) {
         test += customTests.api[name][member];
       } else {
-        test = false;
+        test = testbase ?
+          testbase + `return instance && '${member}' in instance` :
+          false;
       }
     }
   } else {
