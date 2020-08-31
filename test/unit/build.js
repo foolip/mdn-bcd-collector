@@ -100,6 +100,27 @@ describe('build', () => {
       });
     });
 
+    describe('custom test for interface only, no base', () => {
+      beforeEach(() => {
+        loadCustomTests({
+          api: {
+            'foo': {
+              '__test': 'return 1;'
+            }
+          },
+          css: {}
+        });
+      });
+
+      it('interface', () => {
+        assert.equal(getCustomTestAPI('foo'), '(function() {return 1;})()');
+      });
+
+      it('member', () => {
+        assert.equal(getCustomTestAPI('foo', 'bar'), false);
+      });
+    });
+
     describe('custom test for member only', () => {
       beforeEach(() => {
         loadCustomTests({
