@@ -93,6 +93,30 @@ describe('build', () => {
       });
 
       it('member', () => {
+        assert.equal(
+            getCustomTestAPI('foo', 'bar'),
+            '(function() {var a = 1;return instance && \'bar\' in instance;})()'
+        );
+      });
+    });
+
+    describe('custom test for interface only, no base', () => {
+      beforeEach(() => {
+        loadCustomTests({
+          api: {
+            'foo': {
+              '__test': 'return 1;'
+            }
+          },
+          css: {}
+        });
+      });
+
+      it('interface', () => {
+        assert.equal(getCustomTestAPI('foo'), '(function() {return 1;})()');
+      });
+
+      it('member', () => {
         assert.equal(getCustomTestAPI('foo', 'bar'), false);
       });
     });
@@ -111,7 +135,10 @@ describe('build', () => {
       });
 
       it('interface', () => {
-        assert.equal(getCustomTestAPI('foo'), false);
+        assert.equal(
+            getCustomTestAPI('foo'),
+            '(function() {var a = 1;return !!instance;})()'
+        );
       });
 
       it('member', () => {
