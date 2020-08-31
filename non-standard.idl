@@ -137,6 +137,14 @@ partial interface Selection {
               optional DOMString granularity = "");
 };
 
+// https://www.w3.org/TR/2016/CR-SVG2-20160915/interact.html#InterfaceSVGCursorElement
+[Exposed=Window]
+interface SVGCursorElement : SVGElement {
+  [SameObject] readonly attribute SVGAnimatedLength x;
+  [SameObject] readonly attribute SVGAnimatedLength y;
+};
+SVGCursorElement includes SVGURIReference;
+
 partial interface Text {
   NodeList getDestinationInsertionPoints();
 };
@@ -325,7 +333,7 @@ interface ANGLE_instanced_arrays {
   const GLenum VERTEX_ATTRIB_ARRAY_DIVISOR_ANGLE = 0x88FE;
   void drawArraysInstancedANGLE(GLenum mode, GLint first, GLsizei count, GLsizei primcount);
   void drawElementsInstancedANGLE(GLenum mode, GLsizei count, GLenum type, GLintptr offset, GLsizei primcount);
-  void vertexAttribDivisorANGLE(GLuint index, GLuint divisor); 
+  void vertexAttribDivisorANGLE(GLuint index, GLuint divisor);
 };
 
 // https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/modules/app_banner/before_install_prompt_event.idl;drc=af69d93ec0d5334cdc03316058660a37116f32b3
