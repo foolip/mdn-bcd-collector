@@ -28,7 +28,11 @@ Each API interface is written in the following structure:
 }
 ```
 
-`__base` is the common code to access the interface, repeated across every test.  This is where you create your elements and set up your environment.  Next, to test the interface itself, define a return statement in `__test`.  You can then define a return statement for each member that follows.
+`__base` is the common code to access the interface, repeated across every test.  This is where you create your elements and set up your environment.  The instance of the interface being tested should be defined in a variable called `instance`.  This will allow the build script to automatically generate tests for the instance and its members.
+
+You can define a custom method to test the interface instance itself via `__test`.  The `__test` should be a return statement that returns `true` or `false`.  If no `__test` is defined, it will default to `return !!instance`.
+
+Each member can have a custom test by defining a property as the member name.  Like `__test`, it should be a return statement that returns `true` or `false`.  If no custom test is defined, it will default to `return instance && 'MEMBER' in instance`.
 
 Each test will compile into a function as follows: `function() {__base + __test/MEMBER}`
 
@@ -40,12 +44,9 @@ The following JSON...
 {
   "api": {
     "ANGLE_instanced_arrays": {
-      "__base": "var canvas = document.createElement('canvas'); var gl = canvas.getContext('webgl'); var a = gl.getExtension('ANGLE_instanced_arrays');",
-      "__test": "return !!a;",
-      "drawArraysInstancedANGLE": "return a && 'drawArraysInstancedANGLE' in a;",
-      "drawElementsInstancedANGLE": "return a && 'drawElementsInstancedANGLE' in a;",
-      "vertexAttribDivisorANGLE": "return a && 'vertexAttribDivisorANGLE' in a;",
-      "VERTEX_ATTRIB_ARRAY_DIVISOR_ANGLE": "return a && 'VERTEX_ATTRIB_ARRAY_DIVISOR_ANGLE' in a;"
+      "__base": "var canvas = document.createElement('canvas'); var gl = canvas.getContext('webgl'); var instance = gl.getExtension('ANGLE_instanced_arrays');",
+      "__test": "return canvas && instance;",
+      "drawArraysInstancedANGLE": "return true && instance && 'drawArraysInstancedANGLE' in instance;"
     }
   },
   "css": {
@@ -57,15 +58,15 @@ The following JSON...
 ...will compile into...
 
 ```javascript
-bcd.addTest('api.ANGLE_instanced_arrays', "(function() {var canvas = document.createElement('canvas'); var gl = canvas.getContext('webgl'); var a = gl.getExtension('ANGLE_instanced_arrays');return !!a;})()", 'Window');
-bcd.addTest('api.ANGLE_instanced_arrays.drawArraysInstancedANGLE', "(function() {var canvas = document.createElement('canvas'); var gl = canvas.getContext('webgl'); var a = gl.getExtension('ANGLE_instanced_arrays');return a && 'drawArraysInstancedANGLE' in a;})()", 'Window');
-bcd.addTest('api.ANGLE_instanced_arrays.drawElementsInstancedANGLE', "(function() {var canvas = document.createElement('canvas'); var gl = canvas.getContext('webgl'); var a = gl.getExtension('ANGLE_instanced_arrays');return a && 'drawElementsInstancedANGLE' in a;})()", 'Window');
-bcd.addTest('api.ANGLE_instanced_arrays.VERTEX_ATTRIB_ARRAY_DIVISOR_ANGLE', "(function() {var canvas = document.createElement('canvas'); var gl = canvas.getContext('webgl'); var a = gl.getExtension('ANGLE_instanced_arrays');return a && 'VERTEX_ATTRIB_ARRAY_DIVISOR_ANGLE' in a;})()", 'Window');
-bcd.addTest('api.ANGLE_instanced_arrays.vertexAttribDivisorANGLE', "(function() {var canvas = document.createElement('canvas'); var gl = canvas.getContext('webgl'); var a = gl.getExtension('ANGLE_instanced_arrays');return a && 'vertexAttribDivisorANGLE' in a;})()", 'Window');
+bcd.addTest('api.ANGLE_instanced_arrays', "(function() {var canvas = document.createElement('canvas'); var gl = canvas.getContext('webgl'); var instance = gl.getExtension('ANGLE_instanced_arrays');return canvas && instance;})()", 'Window');
+bcd.addTest('api.ANGLE_instanced_arrays.drawArraysInstancedANGLE', "(function() {var canvas = document.createElement('canvas'); var gl = canvas.getContext('webgl'); var instance = gl.getExtension('ANGLE_instanced_arrays');return true && instance && 'drawArraysInstancedANGLE' in instance;})()", 'Window');
+bcd.addTest('api.ANGLE_instanced_arrays.drawElementsInstancedANGLE', "(function() {var canvas = document.createElement('canvas'); var gl = canvas.getContext('webgl'); var instance = gl.getExtension('ANGLE_instanced_arrays');return instance && 'drawElementsInstancedANGLE' in instance;})()", 'Window');
+bcd.addTest('api.ANGLE_instanced_arrays.VERTEX_ATTRIB_ARRAY_DIVISOR_ANGLE', "(function() {var canvas = document.createElement('canvas'); var gl = canvas.getContext('webgl'); var instance = gl.getExtension('ANGLE_instanced_arrays');return instance && 'VERTEX_ATTRIB_ARRAY_DIVISOR_ANGLE' in instance;})()", 'Window');
+bcd.addTest('api.ANGLE_instanced_arrays.vertexAttribDivisorANGLE', "(function() {var canvas = document.createElement('canvas'); var gl = canvas.getContext('webgl'); var instance = gl.getExtension('ANGLE_instanced_arrays');return instance && 'vertexAttribDivisorANGLE' in instance;})()", 'Window');
 bcd.addTest('api.Animation', {"property":"Animation","scope":"self"}, 'Window');
 ```
 
-Tips: make sure that all return statements will return a boolean, and implement thorough feature checking.
+Tips: make sure to implement thorough feature checking as to not raise exceptions.
 
 #### CSS
 
