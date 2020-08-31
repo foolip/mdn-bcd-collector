@@ -1,30 +1,13 @@
 {
   "api": {
     "ANGLE_instanced_arrays": {
-      "__base": "var canvas = document.createElement('canvas'); if (!canvas) {return false}; var gl = canvas.getContext('webgl'); if (!gl) {return false}; var a = gl.getExtension('ANGLE_instanced_arrays');",
-      "__test": "return !!a;",
-      "drawArraysInstancedANGLE": "return a && 'drawArraysInstancedANGLE' in a;",
-      "drawElementsInstancedANGLE": "return a && 'drawElementsInstancedANGLE' in a;",
-      "vertexAttribDivisorANGLE": "return a && 'vertexAttribDivisorANGLE' in a;",
-      "VERTEX_ATTRIB_ARRAY_DIVISOR_ANGLE": "return a && 'VERTEX_ATTRIB_ARRAY_DIVISOR_ANGLE' in a;"
+      "__base": "var canvas = document.createElement('canvas'); if (!canvas) {return false}; var gl = canvas.getContext('webgl'); if (!gl) {return false}; var instance = gl.getExtension('ANGLE_instanced_arrays');"
     },
     "AudioBuffer": {
-      "__base": "var audioCtx = new (window.AudioContext || window.webkitAudioContext)(); if (!audioCtx) {return false}; var buffer = audioCtx.createBuffer(2, audioCtx.sampleRate * 3, audioCtx.sampleRate);",
-      "__test": "return !!buffer;",
-      "duration": "return buffer && 'duration' in buffer;",
-      "getChannelData": "return buffer && 'getChannelData' in buffer;",
-      "length": "return buffer && 'length' in buffer;",
-      "numberOfChannels": "return buffer && 'numberOfChannels' in buffer;",
-      "sampleRate": "return buffer && 'sampleRate' in buffer;"
+      "__base": "var audioCtx = new (window.AudioContext || window.webkitAudioContext)(); if (!audioCtx) {return false}; var instance = audioCtx.createBuffer(2, audioCtx.sampleRate * 3, audioCtx.sampleRate);"
     },
     "AudioBufferSourceNode": {
-      "__base": "var audioCtx = new (window.AudioContext || window.webkitAudioContext)(); if (!audioCtx) {return false}; var source = audioCtx.createBufferSource();",
-      "__test": "return !!source;",
-      "loop": "return source && 'loop' in source;",
-      "loopEnd": "return source && 'loopEnd' in source;",
-      "loopStart": "return source && 'loopStart' in source;",
-      "onended": "return source && 'onended' in source;",
-      "start": "return source && 'start' in source;"
+      "__base": "var audioCtx = new (window.AudioContext || window.webkitAudioContext)(); if (!audioCtx) {return false}; var instance = audioCtx.createBufferSource();"
     }
   },
   "css": {
