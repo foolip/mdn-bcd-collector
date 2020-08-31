@@ -7,7 +7,8 @@
     },
     "rules": {
         "comma-dangle": ["error", "never"],
-        "require-jsdoc": "off"
+        "require-jsdoc": "off",
+        "no-unused-vars": ["error", {"varsIgnorePattern": "^_$"}]
     },
     "env": {
         "es6": true,
