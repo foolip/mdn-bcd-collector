@@ -257,7 +257,7 @@ function inferSupportStatements(versionMap) {
 
       lastKnown.version = version;
       lastKnown.support = true;
-      lastKnown.prefix = ''; // TODO hook up with real prefixes
+      lastKnown.prefix = prefix;
       lastWasNull = false;
     } else if (supported === false) {
       if (
@@ -273,7 +273,7 @@ function inferSupportStatements(versionMap) {
 
       lastKnown.version = version;
       lastKnown.support = false;
-      lastKnown.prefix = '';
+      lastKnown.prefix = prefix;
       lastWasNull = false;
     } else if (supported === null) {
       lastWasNull = true;
