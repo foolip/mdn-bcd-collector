@@ -93,7 +93,10 @@ describe('build', () => {
       });
 
       it('member', () => {
-        assert.equal(getCustomTestAPI('foo', 'bar'), "(function() {var a = 1;return instance && 'bar' in instance;})()");
+        assert.equal(
+            getCustomTestAPI('foo', 'bar'),
+            '(function() {var a = 1;return instance && \'bar\' in instance;})()'
+        );
       });
     });
 
@@ -111,7 +114,10 @@ describe('build', () => {
       });
 
       it('interface', () => {
-        assert.equal(getCustomTestAPI('foo'), '(function() {var a = 1;return !!instance;})()');
+        assert.equal(
+            getCustomTestAPI('foo'),
+            '(function() {var a = 1;return !!instance;})()'
+        );
       });
 
       it('member', () => {
