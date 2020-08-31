@@ -234,9 +234,7 @@ function inferSupportStatements(versionMap) {
     if (supported === true) {
       if (!lastStatement) {
         statements.push({
-          version_added: (i === 0 || lastKnown.support === false) ?
-            version :
-            true,
+          version_added: (lastWasNull && lastKnown.support === false) ? true : version,
           ...(prefix && {prefix: prefix})
         });
       } else if (!lastStatement.version_added) {
