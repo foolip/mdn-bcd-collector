@@ -105,6 +105,7 @@ partial interface Navigator {
 
 partial interface Range {
   void expand(optional DOMString unit = "");
+  short compareNode(Node node);
 };
 
 partial interface RTCDataChannel {
