@@ -37,6 +37,29 @@ function writeText(filename, content) {
   fs.writeFileSync(filename, content, 'utf8');
 }
 
+function writeTestFile(filename, lines) {
+  const content = [
+    '<!DOCTYPE html>',
+    '<html>',
+    '<head>',
+    ...copyright,
+    '<meta charset="utf-8">',
+    '<script src="/resources/json3.min.js"></script>',
+    '<script src="/resources/harness.js"></script>',
+    '<script src="/resources/core.js"></script>',
+    '</head>',
+    '<body>',
+    '<p id="status">Running tests...</p>',
+    '<script>',
+    ...lines,
+    '</script>',
+    '</body>',
+    '</html>'
+  ];
+
+  writeText(filename, content);
+}
+
 function loadCustomTests(newTests) {
   customTests = newTests ? newTests : require('./custom-tests.json');
 }
@@ -136,19 +159,7 @@ function cssPropertyToIDLAttribute(property, lowercaseFirst) {
 }
 
 function buildCSSPropertyTest(propertyNames, method, basename) {
-  const lines = [
-    '<!DOCTYPE html>',
-    '<html>',
-    '<head>',
-    ...copyright,
-    '<meta charset="utf-8">',
-    '<script src="/resources/json3.min.js"></script>',
-    '<script src="/resources/harness.js"></script>',
-    '</head>',
-    '<body>',
-    '<p id="status">Running test...</p>',
-    '<script>'
-  ];
+  const lines = [];
 
   for (const name of propertyNames) {
     const ident = `css.properties.${name}`;
@@ -171,10 +182,10 @@ function buildCSSPropertyTest(propertyNames, method, basename) {
       }
     }
   }
-  lines.push('bcd.run("CSS");', '</script>', '</body>', '</html>');
+  lines.push('bcd.run("CSS");');
   const pathname = path.join('css', 'properties', basename);
   const filename = path.join(generatedDir, pathname);
-  writeText(filename, lines);
+  writeTestFile(filename, lines);
   return pathname;
 }
 
@@ -532,19 +543,7 @@ function validateIDL(ast) {
 }
 
 function buildIDLWindow(tests) {
-  const lines = [
-    '<!DOCTYPE html>',
-    '<html>',
-    '<head>',
-    ...copyright,
-    '<meta charset="utf-8">',
-    '<script src="/resources/json3.min.js"></script>',
-    '<script src="/resources/harness.js"></script>',
-    '</head>',
-    '<body>',
-    '<p id="status">Running test...</p>',
-    '<script>'
-  ];
+  const lines = [];
 
   for (const [name, expr, exposureSet] of tests) {
     if (!exposureSet.has('Window')) {
@@ -555,28 +554,15 @@ function buildIDLWindow(tests) {
     );
   }
 
-  lines.push('bcd.run("Window");', '</script>', '</body>', '</html>');
+  lines.push('bcd.run("Window");');
   const pathname = path.join('api', 'interfaces.html');
   const filename = path.join(generatedDir, pathname);
-  writeText(filename, lines);
+  writeTestFile(filename, lines);
   return [['http', pathname], ['https', pathname]];
 }
 
 function buildIDLWorker(tests) {
-  const lines = [
-    '<!DOCTYPE html>',
-    '<html>',
-    '<head>',
-    ...copyright,
-    '<meta charset="utf-8">',
-    '<script src="/resources/json3.min.js"></script>',
-    '<script src="/resources/harness.js"></script>',
-    '<script src="/resources/core.js"></script>',
-    '</head>',
-    '<body>',
-    '<p id="status">Running test...</p>',
-    '<script>'
-  ];
+  const lines = [];
 
   for (const [name, expr, exposureSet] of tests) {
     if (!exposureSet.has('Worker') || !exposureSet.has('DedicatedWorker')) {
@@ -587,28 +573,15 @@ function buildIDLWorker(tests) {
     );
   }
 
-  lines.push('bcd.run("Worker");', '</script>', '</body>', '</html>');
+  lines.push('bcd.run("Worker");');
   const pathname = path.join('api', 'workerinterfaces.html');
   const filename = path.join(generatedDir, pathname);
-  writeText(filename, lines);
+  writeTestFile(filename, lines);
   return [['http', pathname], ['https', pathname]];
 }
 
 function buildIDLServiceWorker(tests) {
-  const lines = [
-    '<!DOCTYPE html>',
-    '<html>',
-    '<head>',
-    ...copyright,
-    '<meta charset="utf-8">',
-    '<script src="/resources/json3.min.js"></script>',
-    '<script src="/resources/harness.js"></script>',
-    '<script src="/resources/core.js"></script>',
-    '</head>',
-    '<body>',
-    '<p id="status">Running test...</p>',
-    '<script>'
-  ];
+  const lines = [];
 
   for (const [name, expr, exposureSet] of tests) {
     if (!exposureSet.has('ServiceWorker')) {
@@ -619,10 +592,10 @@ function buildIDLServiceWorker(tests) {
     );
   }
 
-  lines.push('bcd.run("ServiceWorker");', '</script>', '</body>', '</html>');
+  lines.push('bcd.run("ServiceWorker");');
   const pathname = path.join('api', 'serviceworkerinterfaces.html');
   const filename = path.join(generatedDir, pathname);
-  writeText(filename, lines);
+  writeTestFile(filename, lines);
   return [['https', pathname]];
 }
 
