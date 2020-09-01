@@ -399,6 +399,11 @@
     };
   }
 
+  function finishIndividual(results) {
+    console.log(results);
+    alert("XXX finishIndividual not implemented! XXX");
+  }
+
   // Service Worker helpers
   if ('serviceWorker' in navigator) {
     window.__waitForSWState = function(registration, desiredState) {
@@ -458,6 +463,7 @@
   global.bcd = {
     addTest: addTest,
     test: test,
-    run: run
+    run: run,
+    finishIndividual: finishIndividual
   };
 })(this);

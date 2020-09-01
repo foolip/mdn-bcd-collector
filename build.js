@@ -618,6 +618,42 @@ function buildIDLServiceWorker(tests) {
   return [['https', pathname]];
 }
 
+function buildIDLIndividual(tests) {
+  const handledIfaces = {};
+
+  for (const [name, expr, exposureSet, memberTests] of tests) {
+    handledIfaces[name] = [];
+    const lines = [];
+
+    const scope = exposureSet.has('Window') ? 'Window' :
+        (exposureSet.has('Worker') || exposureSet.has('DedicatedWorker')) ?
+        'Worker' : exposureSet.has('ServiceWorker') ? 'ServiceWorker' : null;
+
+    lines.push(
+        `bcd.addTest('api.${name}', ${JSON.stringify(expr)}, '${scope}');`
+    );
+
+    for (const [memberName, memberExpr] of memberTests) {
+      handledIfaces[name].push(memberName);
+      const test = `bcd.addTest('api.${name}.${memberName}', ${JSON.stringify(memberExpr)}, '${scope}');`;
+      lines.push(test);
+
+      const pathname = path.join('api', `${name}/${memberName}.html`);
+      const filename = path.join(generatedDir, pathname);
+      writeTestFile(filename, [
+        test, `bcd.run("${scope}", bcd.finishIndividual);`
+      ]);
+    }
+
+    lines.push(`bcd.run("${scope}", bcd.finishIndividual);`);
+    const pathname = path.join('api', `${name}/index.html`);
+    const filename = path.join(generatedDir, pathname);
+    writeTestFile(filename, lines);
+  }
+
+  return handledIfaces;
+}
+
 function buildIDL(_, reffy) {
   const ast = flattenIDL(reffy.idl, collectExtraIDL());
   validateIDL(ast);
@@ -629,6 +665,7 @@ function buildIDL(_, reffy) {
     testpaths = testpaths.concat(buildFunc(tests));
   }
   return testpaths;
+  const handledIfaces = buildIDLIndividual(tests);
 }
 
 async function writeManifest(manifest) {
