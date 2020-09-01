@@ -485,6 +485,7 @@ function validateIDL(ast) {
   const ignoreRules = new Set([
     'constructor-member',
     'dict-arg-default',
+    'replace-void',
     'require-exposed'
   ]);
 
@@ -524,7 +525,7 @@ function validateIDL(ast) {
     if (ignoreRules.has(ruleName)) {
       continue;
     }
-    validationErrors.push(message);
+    validationErrors.push(`${message} [${ruleName}]`);
   }
 
   if (validationErrors.length) {
