@@ -165,19 +165,22 @@ function buildCSSTests(propertyNames, method, basename) {
     const ident = `css.properties.${name}`;
     const customExpr = getCustomTestCSS(name);
 
-    if (method === 'custom' || method === 'all') {
-      lines.push(`bcd.addTest("${ident}", "${customExpr}", 'CSS');`);
-    }
-    if (method === 'CSSStyleDeclaration' || method === 'all') {
-      const attrName = cssPropertyToIDLAttribute(name, name.startsWith('-'));
-      lines.push(`bcd.addTest("${ident}", ${JSON.stringify(
-        {property: attrName, scope: 'document.body.style'}
-      )}, 'CSS');`);
-    }
-    if (method === 'CSS.supports' || method === 'all') {
-      lines.push(`bcd.addTest("${ident}", ${JSON.stringify(
-        {property: name, scope: 'CSS.supports'}
-      )}, 'CSS');`);
+    if (customExpr) {
+      if (method === 'custom' || method === 'all') {
+        lines.push(`bcd.addTest("${ident}", "${customExpr}", 'CSS');`);
+      }
+    } else {
+      if (method === 'CSSStyleDeclaration' || method === 'all') {
+        const attrName = cssPropertyToIDLAttribute(name, name.startsWith('-'));
+        lines.push(`bcd.addTest("${ident}", ${JSON.stringify(
+          {property: attrName, scope: 'document.body.style'}
+        )}, 'CSS');`);
+      }
+      if (method === 'CSS.supports' || method === 'all') {
+        lines.push(`bcd.addTest("${ident}", ${JSON.stringify(
+          {property: name, scope: 'CSS.supports'}
+        )}, 'CSS');`);
+      }
     }
   }
 
