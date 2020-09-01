@@ -173,12 +173,12 @@ function buildCSSTests(propertyNames, method, basename) {
       if (method === 'CSSStyleDeclaration' || method === 'all') {
         const attrName = cssPropertyToIDLAttribute(name, name.startsWith('-'));
         lines.push(`bcd.addTest("${ident}", ${JSON.stringify(
-          {property: attrName, scope: 'document.body.style'}
+            {property: attrName, scope: 'document.body.style'}
         )}, 'CSS');`);
       }
       if (method === 'CSS.supports' || method === 'all') {
         lines.push(`bcd.addTest("${ident}", ${JSON.stringify(
-          {property: name, scope: 'CSS.supports'}
+            {property: name, scope: 'CSS.supports'}
         )}, 'CSS');`);
       }
     }
@@ -751,8 +751,7 @@ async function build(bcd, reffy) {
     }
     if (individualItems) {
       for (const item of individualItems) {
-        let url = item.replace(/\./g, '/');
-        manifest.individualItems[item] = url;
+        manifest.individualItems[item] = item.replace(/\./g, '/');
       }
     }
   }
