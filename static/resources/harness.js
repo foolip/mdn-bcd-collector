@@ -129,7 +129,7 @@
             result.message = 'threw ' + stringify(err);
           }
         } else {
-          var thisCompiled = "";
+          var thisCompiled = '';
 
           for (var j in prefixesToTest) {
             var prefix = prefixesToTest[j];
@@ -146,7 +146,8 @@
                   property = prefixToAdd + property;
                 }
 
-                thisCompiled = "CSS.supports('" + property + "', 'inherit');";
+                thisCompiled = 'CSS.supports(\'' +
+                    property + '\', \'inherit\');';
                 value = CSS.supports(property, 'inherit');
               } else {
                 value = null;
@@ -409,13 +410,13 @@
   }
 
   function finishIndividual(results) {
-    var response = "";
+    var response = '';
     for (var i=0; i<results.length; i++) {
       var result = results[i];
-      response += result.name + ": <strong>" + result.result;
-      if (result.prefix) response += " (" + result.prefix + " prefix)";
-      response += "</strong>\n<code>" +
-          result.info.code.join(" && ") + ";</code>\n\n";
+      response += result.name + ': <strong>' + result.result;
+      if (result.prefix) response += ' (' + result.prefix + ' prefix)';
+      response += '</strong>\n<code>' +
+          result.info.code.join(' && ') + ';</code>\n\n';
     }
     document.getElementById('status').innerHTML =
       response.replace(/\n/g, '<br />');
