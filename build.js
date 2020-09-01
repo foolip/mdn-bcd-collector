@@ -748,7 +748,7 @@ async function build(bcd, reffy) {
       manifest.items.push({pathname, protocol});
     }
     if (individualItems) {
-      for (let item of individualItems) {
+      for (const item of individualItems) {
         let url = item.replace(/\./g, '/');
         if (item.split('.').length == 2 && item.startsWith('api')) {
           url += '/index';
