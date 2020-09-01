@@ -53,7 +53,8 @@ class Tests {
   }
 
   listIndividual() {
-    return Object.entries(this.individualItems).sort((a, b) => (a[0].localeCompare(b[0])));
+    return Object.entries(this.individualItems)
+        .sort((a, b) => (a[0].localeCompare(b[0])));
   }
 }
 
