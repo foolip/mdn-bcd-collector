@@ -204,7 +204,7 @@
       result.info = Object.assign({}, result.info, data.info);
     }
 
-    result.info.code = compiledCode;
+    result.info.code = compiledCode.join(' && ');
     result.info.scope = data.scope;
 
     return result;
@@ -415,8 +415,7 @@
       var result = results[i];
       response += result.name + ': <strong>' + result.result;
       if (result.prefix) response += ' (' + result.prefix + ' prefix)';
-      response += '</strong>\n<code>' +
-          result.info.code.join(' && ') + ';</code>\n\n';
+      response += '</strong>\n<code>' + result.info.code + ';</code>\n\n';
     }
     document.getElementById('status').innerHTML =
       response.replace(/\n/g, '<br />');
