@@ -664,8 +664,8 @@ function buildIDL(_, reffy) {
   ]) {
     testpaths = testpaths.concat(buildFunc(tests));
   }
-  return testpaths;
   const handledIfaces = buildIDLIndividual(tests);
+  return [testpaths, handledIfaces];
 }
 
 async function writeManifest(manifest) {
@@ -715,17 +715,20 @@ function copyResources() {
 
 async function build(bcd, reffy) {
   const manifest = {
-    items: []
+    items: [],
+    individualItems: []
   };
+
   loadCustomTests();
   for (const buildFunc of [buildCSS, buildIDL]) {
-    const items = buildFunc(bcd, reffy);
+    const [items, individualItems] = buildFunc(bcd, reffy);
     for (let [protocol, pathname] of items) {
       if (!pathname.startsWith('/')) {
         pathname = `/${pathname}`;
       }
       manifest.items.push({pathname, protocol});
     }
+    manifest.individualItems += individualItems;
   }
   await writeManifest(manifest);
   copyResources();

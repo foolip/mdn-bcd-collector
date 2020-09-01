@@ -18,6 +18,7 @@ class Tests {
   constructor(options) {
     this.items = options.manifest.items
         .filter((item) => !options.httpOnly || item.protocol === 'http');
+    this.individualItems = options.manifest.individualItems;
     this.host = options.host;
   }
 
