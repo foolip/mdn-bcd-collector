@@ -748,7 +748,7 @@ async function build(bcd, reffy) {
       manifest.items.push({pathname, protocol});
     }
     if (individualItems) {
-      manifest.individualItems += individualItems;
+      manifest.individualItems.push(...individualItems);
     }
   }
   await writeManifest(manifest);
