@@ -158,7 +158,7 @@ function cssPropertyToIDLAttribute(property, lowercaseFirst) {
   return output;
 }
 
-function buildCSSPropertyTest(propertyNames, method, basename) {
+function buildCSSTests(propertyNames, method, basename) {
   const lines = [];
 
   for (const name of propertyNames) {
@@ -197,14 +197,16 @@ function buildCSS(bcd, reffy) {
   const propertyNames = Array.from(propertySet);
   propertyNames.sort();
 
-  return [
-    ['http', buildCSSPropertyTest(propertyNames,
+  const mainTests = [
+    ['http', buildCSSTests(propertyNames,
         'CSSStyleDeclaration', 'in-style.html')],
-    ['http', buildCSSPropertyTest(propertyNames,
+    ['http', buildCSSTests(propertyNames,
         'CSS.supports', 'dot-supports.html')],
-    ['http', buildCSSPropertyTest(propertyNames,
+    ['http', buildCSSTests(propertyNames,
         'custom', 'custom-support-test.html')]
   ];
+
+  return [mainTests, null];
 }
 
 /* istanbul ignore next */
