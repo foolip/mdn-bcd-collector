@@ -40,7 +40,7 @@
     "slugify": "1.4.5",
     "ua-parser-js": "0.7.21",
     "unique-string": "2.0.0",
-    "webidl2": "23.12.1",
+    "webidl2": "23.13.0",
     "winston": "3.3.3"
   },
   "devDependencies": {
