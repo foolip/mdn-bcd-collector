@@ -240,6 +240,7 @@ partial dictionary BasicCardRequest {
   sequence<DOMString> supportedTypes = [];
 };
 
+[Exposed=Window]
 interface BlobBuilder {};
 
 partial interface BluetoothDevice {
@@ -280,8 +281,10 @@ partial interface DataTransfer {
   void addElement(Element el);
 };
 
+[Exposed=Window]
 interface DirectoryEntrySync {};
 
+[Exposed=Window]
 interface DirectoryReaderSync {};
 
 partial interface Document {
@@ -336,6 +339,7 @@ partial interface Element {
   readonly attribute boolean tabStop;
 };
 
+[Exposed=Window]
 interface EntrySync {};
 
 partial interface Event {
@@ -441,6 +445,7 @@ interface EXT_texture_filter_anisotropic {
 
 // https://developer.mozilla.org/en-US/docs/Web/API/BluetoothAdvertisingData
 
+[Exposed=Window]
 interface BluetoothAdvertisingData {
   readonly attribute unsigned short? appearance;
   readonly attribute byte? txPower;
@@ -494,6 +499,7 @@ interface CSSAnimation : Animation {
 
 // https://www.w3.org/TR/DOM-Level-2-Style/css.html
 
+[Exposed=Window]
 interface CSSPrimitiveValue : CSSValue {
   const unsigned short CSS_UNKNOWN = 0;
   const unsigned short CSS_NUMBER = 1;
@@ -532,6 +538,7 @@ interface CSSPrimitiveValue : CSSValue {
   RGBColor getRGBColorValue();
 };
 
+[Exposed=Window]
 interface CSSValue {
   const unsigned short CSS_INHERIT = 0;
   const unsigned short CSS_PRIMITIVE_VALUE = 1;
@@ -542,6 +549,7 @@ interface CSSValue {
   readonly attribute unsigned short cssValueType;
 };
 
+[Exposed=Window]
 interface CSSValueList : CSSValue {
   readonly attribute unsigned long length;
   CSSValue item(unsigned long index);
@@ -591,6 +599,7 @@ partial interface DocumentType {
   readonly attribute NamedNodeMap notations;
 };
 
+[Exposed=Window]
 interface DOMConfiguration {
   void setParameter(DOMString name, DOMUserData value);
   DOMUserData getParameter(DOMString name);
@@ -598,6 +607,7 @@ interface DOMConfiguration {
   readonly attribute DOMStringList parameterNames;
 };
 
+[Exposed=Window]
 interface DOMError {
   const unsigned short SEVERITY_WARNING = 1;
   const unsigned short SEVERITY_ERROR = 2;
@@ -613,10 +623,12 @@ interface DOMError {
   readonly attribute DOMString name;
 };
 
+[Exposed=Window]
 interface DOMErrorHandler {
   boolean handleError(DOMError error);
 };
 
+[Exposed=Window]
 interface DOMImplementationList {
   DOMImplementation item(unsigned long index);
   readonly attribute unsigned long length;
