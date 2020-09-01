@@ -308,7 +308,7 @@ function getExposureSet(node) {
   return globals;
 }
 
-function buildIDLTests(ast, scope = 'Window') {
+function buildIDLTests(ast) {
   const tests = [];
 
   const interfaces = ast.filter((dfn) =>
@@ -327,17 +327,14 @@ function buildIDLTests(ast, scope = 'Window') {
     }
 
     const exposureSet = getExposureSet(iface);
-    if (!exposureSet.has(scope)) {
-      continue;
-    }
-
     const isGlobal = !!getExtAttr(iface, 'Global');
 
     // interface object
     const customTest = getCustomTestAPI(iface.name);
     tests.push([
       iface.name,
-      customTest || {property: iface.name, scope: 'self'}
+      customTest || {property: iface.name, scope: 'self'},
+      exposureSet
     ]);
 
     // members
@@ -460,7 +457,7 @@ function buildIDLTests(ast, scope = 'Window') {
         }
       }
 
-      tests.push([`${iface.name}.${member.name}`, expr]);
+      tests.push([`${iface.name}.${member.name}`, expr, exposureSet]);
       handledMemberNames.add(member.name);
     }
   }
@@ -534,9 +531,7 @@ function validateIDL(ast) {
   return true;
 }
 
-function buildIDLWindow(ast) {
-  const tests = buildIDLTests(ast);
-
+function buildIDLWindow(tests) {
   const lines = [
     '<!DOCTYPE html>',
     '<html>',
@@ -551,7 +546,10 @@ function buildIDLWindow(ast) {
     '<script>'
   ];
 
-  for (const [name, expr] of tests) {
+  for (const [name, expr, exposureSet] of tests) {
+    if (!exposureSet.has('Window')) {
+      continue;
+    }
     lines.push(
         `bcd.addTest('api.${name}', ${JSON.stringify(expr)}, 'Window');`
     );
@@ -564,12 +562,7 @@ function buildIDLWindow(ast) {
   return [['http', pathname], ['https', pathname]];
 }
 
-function buildIDLWorker(ast) {
-  const tests = [
-    ...buildIDLTests(ast, 'Worker'),
-    ...buildIDLTests(ast, 'DedicatedWorker')
-  ];
-
+function buildIDLWorker(tests) {
   const lines = [
     '<!DOCTYPE html>',
     '<html>',
@@ -585,7 +578,10 @@ function buildIDLWorker(ast) {
     '<script>'
   ];
 
-  for (const [name, expr] of tests) {
+  for (const [name, expr, exposureSet] of tests) {
+    if (!exposureSet.has('Worker') || !exposureSet.has('DedicatedWorker')) {
+      continue;
+    }
     lines.push(
         `bcd.addTest('api.${name}', ${JSON.stringify(expr)}, 'Worker');`
     );
@@ -598,9 +594,7 @@ function buildIDLWorker(ast) {
   return [['http', pathname], ['https', pathname]];
 }
 
-function buildIDLServiceWorker(ast) {
-  const tests = buildIDLTests(ast, 'ServiceWorker');
-
+function buildIDLServiceWorker(tests) {
   const lines = [
     '<!DOCTYPE html>',
     '<html>',
@@ -616,7 +610,10 @@ function buildIDLServiceWorker(ast) {
     '<script>'
   ];
 
-  for (const [name, expr] of tests) {
+  for (const [name, expr, exposureSet] of tests) {
+    if (!exposureSet.has('ServiceWorker')) {
+      continue;
+    }
     lines.push(
         `bcd.addTest('api.${name}', ${JSON.stringify(expr)}, 'ServiceWorker');`
     );
@@ -632,11 +629,12 @@ function buildIDLServiceWorker(ast) {
 function buildIDL(_, reffy) {
   const ast = flattenIDL(reffy.idl, collectExtraIDL());
   validateIDL(ast);
+  const tests = buildIDLTests(ast);
   let testpaths = [];
   for (const buildFunc of [
     buildIDLWindow, buildIDLWorker, buildIDLServiceWorker
   ]) {
-    testpaths = testpaths.concat(buildFunc(ast));
+    testpaths = testpaths.concat(buildFunc(tests));
   }
   return testpaths;
 }
