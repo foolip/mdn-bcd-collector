@@ -735,7 +735,7 @@ function copyResources() {
 async function build(bcd, reffy) {
   const manifest = {
     items: [],
-    individualItems: {}
+    individualItems: []
   };
 
   loadCustomTests();
