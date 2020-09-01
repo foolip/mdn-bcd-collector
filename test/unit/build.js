@@ -516,12 +516,13 @@ describe('build', () => {
     it('interface with attribute', () => {
       const ast = WebIDL2.parse(`interface Attr { attribute any name; };`);
       assert.deepEqual(buildIDLTests(ast), [
-        ['Attr', {property: 'Attr', scope: 'self'}],
-        ['Attr.name', [
-          {property: 'Attr', scope: 'self'},
-          {property: 'name', scope: 'Attr.prototype'}
-        ]]
-      ]);
+        ['Attr', {property: 'Attr', scope: 'self'}, new Set(['Window']), [
+          ['name', [
+            {property: 'Attr', scope: 'self'},
+            {property: 'name', scope: 'Attr.prototype'}
+          ]]
+        ]
+        ]]);
     });
 
     it('interface with method', () => {
@@ -530,12 +531,13 @@ describe('build', () => {
              boolean contains(Node? other);
            };`);
       assert.deepEqual(buildIDLTests(ast), [
-        ['Node', {property: 'Node', scope: 'self'}],
-        ['Node.contains', [
-          {property: 'Node', scope: 'self'},
-          {property: 'contains', scope: 'Node.prototype'}
-        ]]
-      ]);
+        ['Node', {property: 'Node', scope: 'self'}, new Set(['Window']), [
+          ['contains', [
+            {property: 'Node', scope: 'self'},
+            {property: 'contains', scope: 'Node.prototype'}
+          ]]
+        ]
+        ]]);
     });
 
     it('interface with static method', () => {
@@ -544,12 +546,14 @@ describe('build', () => {
              static boolean isTypeSupported(DOMString type);
            };`);
       assert.deepEqual(buildIDLTests(ast), [
-        ['MediaSource', {property: 'MediaSource', scope: 'self'}],
-        ['MediaSource.isTypeSupported', [
-          {property: 'MediaSource', scope: 'self'},
-          {property: 'isTypeSupported', scope: 'MediaSource'}
-        ]]
-      ]);
+        ['MediaSource', {property: 'MediaSource', scope: 'self'},
+          new Set(['Window']), [
+            ['isTypeSupported', [
+              {property: 'MediaSource', scope: 'self'},
+              {property: 'isTypeSupported', scope: 'MediaSource'}
+            ]]
+          ]
+        ]]);
     });
 
     it('interface with const', () => {
@@ -558,12 +562,13 @@ describe('build', () => {
              const boolean isWindow = true;
            };`);
       assert.deepEqual(buildIDLTests(ast), [
-        ['Window', {property: 'Window', scope: 'self'}],
-        ['Window.isWindow', [
-          {property: 'Window', scope: 'self'},
-          {property: 'isWindow', scope: 'Window'}
-        ]]
-      ]);
+        ['Window', {property: 'Window', scope: 'self'}, new Set(['Window']), [
+          ['isWindow', [
+            {property: 'Window', scope: 'self'},
+            {property: 'isWindow', scope: 'Window'}
+          ]]
+        ]
+        ]]);
     });
 
     it('interface with custom test', () => {
@@ -575,25 +580,35 @@ describe('build', () => {
               GLsizei count,
               GLsizei primcount
             );
+            void drawElementsInstancedANGLE(
+              GLenum mode,
+              GLsizei count,
+              GLenum type,
+              GLintptr offset,
+              GLsizei primcoun
+            );
           };`);
       loadCustomTests({
         'api': {
           'ANGLE_instanced_arrays': {
             // eslint-disable-next-line max-len
-            '__base': 'var canvas = document.createElement(\'canvas\'); var gl = canvas.getContext(\'webgl\'); var a = gl.getExtension(\'ANGLE_instanced_arrays\');',
-            '__test': 'return !!a;',
+            '__base': 'var canvas = document.createElement(\'canvas\'); var gl = canvas.getContext(\'webgl\'); var instance = gl.getExtension(\'ANGLE_instanced_arrays\');',
+            '__test': 'return !!instance;',
             // eslint-disable-next-line max-len
-            'drawArraysInstancedANGLE': 'return a && \'drawArraysInstancedANGLE\' in a;'
+            'drawArraysInstancedANGLE': 'return instance && \'drawArraysInstancedANGLE\' in instance;'
           }
         },
         'css': {}
       });
       assert.deepEqual(buildIDLTests(ast), [
         // eslint-disable-next-line max-len
-        ['ANGLE_instanced_arrays', '(function() {var canvas = document.createElement(\'canvas\'); var gl = canvas.getContext(\'webgl\'); var a = gl.getExtension(\'ANGLE_instanced_arrays\');return !!a;})()'],
-        // eslint-disable-next-line max-len
-        ['ANGLE_instanced_arrays.drawArraysInstancedANGLE', '(function() {var canvas = document.createElement(\'canvas\'); var gl = canvas.getContext(\'webgl\'); var a = gl.getExtension(\'ANGLE_instanced_arrays\');return a && \'drawArraysInstancedANGLE\' in a;})()']
-      ]);
+        ['ANGLE_instanced_arrays', '(function() {var canvas = document.createElement(\'canvas\'); var gl = canvas.getContext(\'webgl\'); var instance = gl.getExtension(\'ANGLE_instanced_arrays\');return !!instance;})()', new Set(['Window']), [
+          // eslint-disable-next-line max-len
+          ['drawArraysInstancedANGLE', '(function() {var canvas = document.createElement(\'canvas\'); var gl = canvas.getContext(\'webgl\'); var instance = gl.getExtension(\'ANGLE_instanced_arrays\');return instance && \'drawArraysInstancedANGLE\' in instance;})()'],
+          // eslint-disable-next-line max-len
+          ['drawElementsInstancedANGLE', '(function() {var canvas = document.createElement(\'canvas\'); var gl = canvas.getContext(\'webgl\'); var instance = gl.getExtension(\'ANGLE_instanced_arrays\');return instance && \'drawElementsInstancedANGLE\' in instance;})()']
+        ]
+        ]]);
     });
 
     it('interface with legacy namespace', () => {
@@ -613,21 +628,24 @@ describe('build', () => {
           {
             'property': 'WindowOrWorkerGlobalScope',
             'scope': 'self'
-          }
-        ],
-        [
-          'WindowOrWorkerGlobalScope.active',
-          {
-            'property': 'active',
-            'scope': 'self'
-          }
-        ],
-        [
-          'WindowOrWorkerGlobalScope.isLoaded',
-          {
-            'property': 'isLoaded',
-            'scope': 'self'
-          }
+          },
+          new Set(['Window']),
+          [
+            [
+              'active',
+              {
+                'property': 'active',
+                'scope': 'self'
+              }
+            ],
+            [
+              'isLoaded',
+              {
+                'property': 'isLoaded',
+                'scope': 'self'
+              }
+            ]
+          ]
         ]
       ]);
     });
@@ -642,19 +660,22 @@ describe('build', () => {
           {
             'property': 'Number',
             'scope': 'self'
-          }
-        ],
-        [
-          'Number.Number',
+          },
+          new Set(['Window']),
           [
-            {
-              'property': 'Number',
-              'scope': 'self'
-            },
-            {
-              'property': 'constructor',
-              'scope': 'Number'
-            }
+            [
+              'Number',
+              [
+                {
+                  'property': 'Number',
+                  'scope': 'self'
+                },
+                {
+                  'property': 'constructor',
+                  'scope': 'Number'
+                }
+              ]
+            ]
           ]
         ]
       ]);
@@ -669,19 +690,22 @@ describe('build', () => {
           {
             'property': 'Number',
             'scope': 'self'
-          }
-        ],
-        [
-          'Number.Number',
+          },
+          new Set(['Window']),
           [
-            {
-              'property': 'Number',
-              'scope': 'self'
-            },
-            {
-              'property': 'constructor',
-              'scope': 'Number'
-            }
+            [
+              'Number',
+              [
+                {
+                  'property': 'Number',
+                  'scope': 'self'
+                },
+                {
+                  'property': 'constructor',
+                  'scope': 'Number'
+                }
+              ]
+            ]
           ]
         ]
       ]);
@@ -697,79 +721,82 @@ describe('build', () => {
           {
             'property': 'DoubleList',
             'scope': 'self'
-          }
-        ],
-        [
-          'DoubleList.@@iterator',
+          },
+          new Set(['Window']),
           [
-            {
-              'property': 'DoubleList',
-              'scope': 'self'
-            },
-            {
-              'property': 'Symbol',
-              'scope': 'self'
-            },
-            {
-              'property': 'iterator',
-              'scope': 'Symbol'
-            },
-            {
-              'property': 'Symbol.iterator',
-              'scope': 'DoubleList.prototype'
-            }
-          ]
-        ],
-        [
-          'DoubleList.entries',
-          [
-            {
-              'property': 'DoubleList',
-              'scope': 'self'
-            },
-            {
-              'property': 'entries',
-              'scope': 'DoubleList.prototype'
-            }
-          ]
-        ],
-        [
-          'DoubleList.forEach',
-          [
-            {
-              'property': 'DoubleList',
-              'scope': 'self'
-            },
-            {
-              'property': 'forEach',
-              'scope': 'DoubleList.prototype'
-            }
-          ]
-        ],
-        [
-          'DoubleList.keys',
-          [
-            {
-              'property': 'DoubleList',
-              'scope': 'self'
-            },
-            {
-              'property': 'keys',
-              'scope': 'DoubleList.prototype'
-            }
-          ]
-        ],
-        [
-          'DoubleList.values',
-          [
-            {
-              'property': 'DoubleList',
-              'scope': 'self'
-            },
-            {
-              'property': 'values',
-              'scope': 'DoubleList.prototype'
-            }
+            [
+              '@@iterator',
+              [
+                {
+                  'property': 'DoubleList',
+                  'scope': 'self'
+                },
+                {
+                  'property': 'Symbol',
+                  'scope': 'self'
+                },
+                {
+                  'property': 'iterator',
+                  'scope': 'Symbol'
+                },
+                {
+                  'property': 'Symbol.iterator',
+                  'scope': 'DoubleList.prototype'
+                }
+              ]
+            ],
+            [
+              'entries',
+              [
+                {
+                  'property': 'DoubleList',
+                  'scope': 'self'
+                },
+                {
+                  'property': 'entries',
+                  'scope': 'DoubleList.prototype'
+                }
+              ]
+            ],
+            [
+              'forEach',
+              [
+                {
+                  'property': 'DoubleList',
+                  'scope': 'self'
+                },
+                {
+                  'property': 'forEach',
+                  'scope': 'DoubleList.prototype'
+                }
+              ]
+            ],
+            [
+              'keys',
+              [
+                {
+                  'property': 'DoubleList',
+                  'scope': 'self'
+                },
+                {
+                  'property': 'keys',
+                  'scope': 'DoubleList.prototype'
+                }
+              ]
+            ],
+            [
+              'values',
+              [
+                {
+                  'property': 'DoubleList',
+                  'scope': 'self'
+                },
+                {
+                  'property': 'values',
+                  'scope': 'DoubleList.prototype'
+                }
+              ]
+            ]
           ]
         ]
       ]);
@@ -785,136 +812,139 @@ describe('build', () => {
           {
             'property': 'DoubleMap',
             'scope': 'self'
-          }
-        ],
-        [
-          'DoubleMap.clear',
+          },
+          new Set(['Window']),
           [
-            {
-              'property': 'DoubleMap',
-              'scope': 'self'
-            },
-            {
-              'property': 'clear',
-              'scope': 'DoubleMap.prototype'
-            }
-          ]
-        ],
-        [
-          'DoubleMap.delete',
-          [
-            {
-              'property': 'DoubleMap',
-              'scope': 'self'
-            },
-            {
-              'property': 'delete',
-              'scope': 'DoubleMap.prototype'
-            }
-          ]
-        ],
-        [
-          'DoubleMap.entries',
-          [
-            {
-              'property': 'DoubleMap',
-              'scope': 'self'
-            },
-            {
-              'property': 'entries',
-              'scope': 'DoubleMap.prototype'
-            }
-          ]
-        ],
-        [
-          'DoubleMap.forEach',
-          [
-            {
-              'property': 'DoubleMap',
-              'scope': 'self'
-            },
-            {
-              'property': 'forEach',
-              'scope': 'DoubleMap.prototype'
-            }
-          ]
-        ],
-        [
-          'DoubleMap.get',
-          [
-            {
-              'property': 'DoubleMap',
-              'scope': 'self'
-            },
-            {
-              'property': 'get',
-              'scope': 'DoubleMap.prototype'
-            }
-          ]
-        ],
-        [
-          'DoubleMap.has',
-          [
-            {
-              'property': 'DoubleMap',
-              'scope': 'self'
-            },
-            {
-              'property': 'has',
-              'scope': 'DoubleMap.prototype'
-            }
-          ]
-        ],
-        [
-          'DoubleMap.keys',
-          [
-            {
-              'property': 'DoubleMap',
-              'scope': 'self'
-            },
-            {
-              'property': 'keys',
-              'scope': 'DoubleMap.prototype'
-            }
-          ]
-        ],
-        [
-          'DoubleMap.set',
-          [
-            {
-              'property': 'DoubleMap',
-              'scope': 'self'
-            },
-            {
-              'property': 'set',
-              'scope': 'DoubleMap.prototype'
-            }
-          ]
-        ],
-        [
-          'DoubleMap.size',
-          [
-            {
-              'property': 'DoubleMap',
-              'scope': 'self'
-            },
-            {
-              'property': 'size',
-              'scope': 'DoubleMap.prototype'
-            }
-          ]
-        ],
-        [
-          'DoubleMap.values',
-          [
-            {
-              'property': 'DoubleMap',
-              'scope': 'self'
-            },
-            {
-              'property': 'values',
-              'scope': 'DoubleMap.prototype'
-            }
+            [
+              'clear',
+              [
+                {
+                  'property': 'DoubleMap',
+                  'scope': 'self'
+                },
+                {
+                  'property': 'clear',
+                  'scope': 'DoubleMap.prototype'
+                }
+              ]
+            ],
+            [
+              'delete',
+              [
+                {
+                  'property': 'DoubleMap',
+                  'scope': 'self'
+                },
+                {
+                  'property': 'delete',
+                  'scope': 'DoubleMap.prototype'
+                }
+              ]
+            ],
+            [
+              'entries',
+              [
+                {
+                  'property': 'DoubleMap',
+                  'scope': 'self'
+                },
+                {
+                  'property': 'entries',
+                  'scope': 'DoubleMap.prototype'
+                }
+              ]
+            ],
+            [
+              'forEach',
+              [
+                {
+                  'property': 'DoubleMap',
+                  'scope': 'self'
+                },
+                {
+                  'property': 'forEach',
+                  'scope': 'DoubleMap.prototype'
+                }
+              ]
+            ],
+            [
+              'get',
+              [
+                {
+                  'property': 'DoubleMap',
+                  'scope': 'self'
+                },
+                {
+                  'property': 'get',
+                  'scope': 'DoubleMap.prototype'
+                }
+              ]
+            ],
+            [
+              'has',
+              [
+                {
+                  'property': 'DoubleMap',
+                  'scope': 'self'
+                },
+                {
+                  'property': 'has',
+                  'scope': 'DoubleMap.prototype'
+                }
+              ]
+            ],
+            [
+              'keys',
+              [
+                {
+                  'property': 'DoubleMap',
+                  'scope': 'self'
+                },
+                {
+                  'property': 'keys',
+                  'scope': 'DoubleMap.prototype'
+                }
+              ]
+            ],
+            [
+              'set',
+              [
+                {
+                  'property': 'DoubleMap',
+                  'scope': 'self'
+                },
+                {
+                  'property': 'set',
+                  'scope': 'DoubleMap.prototype'
+                }
+              ]
+            ],
+            [
+              'size',
+              [
+                {
+                  'property': 'DoubleMap',
+                  'scope': 'self'
+                },
+                {
+                  'property': 'size',
+                  'scope': 'DoubleMap.prototype'
+                }
+              ]
+            ],
+            [
+              'values',
+              [
+                {
+                  'property': 'DoubleMap',
+                  'scope': 'self'
+                },
+                {
+                  'property': 'values',
+                  'scope': 'DoubleMap.prototype'
+                }
+              ]
+            ]
           ]
         ]
       ]);
@@ -930,110 +960,113 @@ describe('build', () => {
           {
             'property': 'DoubleSet',
             'scope': 'self'
-          }
-        ],
-        [
-          'DoubleSet.add',
+          },
+          new Set(['Window']),
           [
-            {
-              'property': 'DoubleSet',
-              'scope': 'self'
-            },
-            {
-              'property': 'add',
-              'scope': 'DoubleSet.prototype'
-            }
-          ]
-        ],
-        [
-          'DoubleSet.clear',
-          [
-            {
-              'property': 'DoubleSet',
-              'scope': 'self'
-            },
-            {
-              'property': 'clear',
-              'scope': 'DoubleSet.prototype'
-            }
-          ]
-        ],
-        [
-          'DoubleSet.delete',
-          [
-            {
-              'property': 'DoubleSet',
-              'scope': 'self'
-            },
-            {
-              'property': 'delete',
-              'scope': 'DoubleSet.prototype'
-            }
-          ]
-        ],
-        [
-          'DoubleSet.entries',
-          [
-            {
-              'property': 'DoubleSet',
-              'scope': 'self'
-            },
-            {
-              'property': 'entries',
-              'scope': 'DoubleSet.prototype'
-            }
-          ]
-        ],
-        [
-          'DoubleSet.has',
-          [
-            {
-              'property': 'DoubleSet',
-              'scope': 'self'
-            },
-            {
-              'property': 'has',
-              'scope': 'DoubleSet.prototype'
-            }
-          ]
-        ],
-        [
-          'DoubleSet.keys',
-          [
-            {
-              'property': 'DoubleSet',
-              'scope': 'self'
-            },
-            {
-              'property': 'keys',
-              'scope': 'DoubleSet.prototype'
-            }
-          ]
-        ],
-        [
-          'DoubleSet.size',
-          [
-            {
-              'property': 'DoubleSet',
-              'scope': 'self'
-            },
-            {
-              'property': 'size',
-              'scope': 'DoubleSet.prototype'
-            }
-          ]
-        ],
-        [
-          'DoubleSet.values',
-          [
-            {
-              'property': 'DoubleSet',
-              'scope': 'self'
-            },
-            {
-              'property': 'values',
-              'scope': 'DoubleSet.prototype'
-            }
+            [
+              'add',
+              [
+                {
+                  'property': 'DoubleSet',
+                  'scope': 'self'
+                },
+                {
+                  'property': 'add',
+                  'scope': 'DoubleSet.prototype'
+                }
+              ]
+            ],
+            [
+              'clear',
+              [
+                {
+                  'property': 'DoubleSet',
+                  'scope': 'self'
+                },
+                {
+                  'property': 'clear',
+                  'scope': 'DoubleSet.prototype'
+                }
+              ]
+            ],
+            [
+              'delete',
+              [
+                {
+                  'property': 'DoubleSet',
+                  'scope': 'self'
+                },
+                {
+                  'property': 'delete',
+                  'scope': 'DoubleSet.prototype'
+                }
+              ]
+            ],
+            [
+              'entries',
+              [
+                {
+                  'property': 'DoubleSet',
+                  'scope': 'self'
+                },
+                {
+                  'property': 'entries',
+                  'scope': 'DoubleSet.prototype'
+                }
+              ]
+            ],
+            [
+              'has',
+              [
+                {
+                  'property': 'DoubleSet',
+                  'scope': 'self'
+                },
+                {
+                  'property': 'has',
+                  'scope': 'DoubleSet.prototype'
+                }
+              ]
+            ],
+            [
+              'keys',
+              [
+                {
+                  'property': 'DoubleSet',
+                  'scope': 'self'
+                },
+                {
+                  'property': 'keys',
+                  'scope': 'DoubleSet.prototype'
+                }
+              ]
+            ],
+            [
+              'size',
+              [
+                {
+                  'property': 'DoubleSet',
+                  'scope': 'self'
+                },
+                {
+                  'property': 'size',
+                  'scope': 'DoubleSet.prototype'
+                }
+              ]
+            ],
+            [
+              'values',
+              [
+                {
+                  'property': 'DoubleSet',
+                  'scope': 'self'
+                },
+                {
+                  'property': 'values',
+                  'scope': 'DoubleSet.prototype'
+                }
+              ]
+            ]
           ]
         ]
       ]);
@@ -1050,12 +1083,14 @@ describe('build', () => {
           {
             'property': 'GetMe',
             'scope': 'self'
-          }
+          },
+          new Set(['Window']),
+          []
         ]
       ]);
     });
 
-    it('limit scopes', () => {
+    it('varied scopes', () => {
       const ast = WebIDL2.parse(`
         [Exposed=Window] interface Worker {};
         [Exposed=Worker] interface WorkerSync {};
@@ -1063,15 +1098,26 @@ describe('build', () => {
         namespace CSS {};
       `);
       assert.deepEqual(buildIDLTests(ast), [
-        ['CSS', {property: 'CSS', scope: 'self'}],
-        ['MessageChannel', {property: 'MessageChannel', scope: 'self'}],
-        ['Worker', {property: 'Worker', scope: 'self'}]
+        ['CSS', {property: 'CSS', scope: 'self'}, new Set(['Window']), []],
+        [
+          'MessageChannel',
+          {property: 'MessageChannel', scope: 'self'},
+          new Set(['Window', 'Worker']),
+          []
+        ],
+        [
+          'Worker',
+          {property: 'Worker', scope: 'self'},
+          new Set(['Window']),
+          []
+        ],
+        [
+          'WorkerSync',
+          {property: 'WorkerSync', scope: 'self'},
+          new Set(['Worker']),
+          []
+        ]
       ]);
-      assert.deepEqual(buildIDLTests(ast, 'Worker'), [
-        ['MessageChannel', {property: 'MessageChannel', scope: 'self'}],
-        ['WorkerSync', {property: 'WorkerSync', scope: 'self'}]
-      ]);
-      assert.deepEqual(buildIDLTests(ast, 'ServiceWorker'), []);
     });
 
     it('operator variations', () => {
@@ -1083,11 +1129,17 @@ describe('build', () => {
         };
       `);
       assert.deepEqual(buildIDLTests(ast), [
-        ['AudioNode', {property: 'AudioNode', scope: 'self'}],
-        ['AudioNode.disconnect', [
+        [
+          'AudioNode',
           {property: 'AudioNode', scope: 'self'},
-          {property: 'disconnect', scope: 'AudioNode.prototype'}
-        ]]
+          new Set(['Window']),
+          [
+            ['disconnect', [
+              {property: 'AudioNode', scope: 'self'},
+              {property: 'disconnect', scope: 'AudioNode.prototype'}
+            ]]
+          ]
+        ]
       ]);
     });
 
@@ -1097,12 +1149,13 @@ describe('build', () => {
              readonly attribute any paintWorklet;
            };`);
       assert.deepEqual(buildIDLTests(ast), [
-        ['CSS', {property: 'CSS', scope: 'self'}],
-        ['CSS.paintWorklet', [
-          {property: 'CSS', scope: 'self'},
-          {property: 'paintWorklet', scope: 'CSS'}
-        ]]
-      ]);
+        ['CSS', {property: 'CSS', scope: 'self'}, new Set(['Window']), [
+          ['paintWorklet', [
+            {property: 'CSS', scope: 'self'},
+            {property: 'paintWorklet', scope: 'CSS'}
+          ]]
+        ]
+        ]]);
     });
 
     it('namespace with method', () => {
@@ -1111,12 +1164,13 @@ describe('build', () => {
              boolean supports(CSSOMString property, CSSOMString value);
            };`);
       assert.deepEqual(buildIDLTests(ast), [
-        ['CSS', {property: 'CSS', scope: 'self'}],
-        ['CSS.supports', [
-          {property: 'CSS', scope: 'self'},
-          {property: 'supports', scope: 'CSS'}
-        ]]
-      ]);
+        ['CSS', {property: 'CSS', scope: 'self'}, new Set(['Window']), [
+          ['supports', [
+            {property: 'CSS', scope: 'self'},
+            {property: 'supports', scope: 'CSS'}
+          ]]
+        ]
+        ]]);
     });
 
     it('namespace with custom test', () => {
@@ -1136,9 +1190,15 @@ describe('build', () => {
       });
       assert.deepEqual(buildIDLTests(ast), [
         // eslint-disable-next-line max-len
-        ['CSS', '(function() {var css = CSS;return !!css;})()'],
-        // eslint-disable-next-line max-len
-        ['CSS.paintWorklet', '(function() {var css = CSS;return css && \'paintWorklet\' in css;})()']
+        [
+          'CSS',
+          '(function() {var css = CSS;return !!css;})()',
+          new Set(['Window']),
+          [
+            // eslint-disable-next-line max-len
+            ['paintWorklet', '(function() {var css = CSS;return css && \'paintWorklet\' in css;})()']
+          ]
+        ]
       ]);
     });
 
@@ -1149,17 +1209,21 @@ describe('build', () => {
               DOMString? extends = null;
            };`);
       assert.deepEqual(buildIDLTests(ast), [
-        ['ElementRegistrationOptions',
-          {property: 'ElementRegistrationOptions', scope: 'self'}
-        ],
-        ['ElementRegistrationOptions.extends', [
+        [
+          'ElementRegistrationOptions',
           {property: 'ElementRegistrationOptions', scope: 'self'},
-          {property: 'extends', scope: 'ElementRegistrationOptions'}
-        ]],
-        ['ElementRegistrationOptions.prototype', [
-          {property: 'ElementRegistrationOptions', scope: 'self'},
-          {property: 'prototype', scope: 'ElementRegistrationOptions'}
-        ]]
+          new Set(['Window']),
+          [
+            ['extends', [
+              {property: 'ElementRegistrationOptions', scope: 'self'},
+              {property: 'extends', scope: 'ElementRegistrationOptions'}
+            ]],
+            ['prototype', [
+              {property: 'ElementRegistrationOptions', scope: 'self'},
+              {property: 'prototype', scope: 'ElementRegistrationOptions'}
+            ]]
+          ]
+        ]
       ]);
     });
 
@@ -1182,12 +1246,13 @@ describe('build', () => {
       });
       assert.deepEqual(buildIDLTests(ast), [
         // eslint-disable-next-line max-len
-        ['ElementRegistrationOptions', '(function() {var ers = ElementRegistrationOptions;return !!ers;})()'],
-        // eslint-disable-next-line max-len
-        ['ElementRegistrationOptions.extends', '(function() {var ers = ElementRegistrationOptions;return ers && \'extends\' in ers;})()'],
-        // eslint-disable-next-line max-len
-        ['ElementRegistrationOptions.prototype', '(function() {var ers = ElementRegistrationOptions;return ers && \'prototype\' in ers;})()']
-      ]);
+        ['ElementRegistrationOptions', '(function() {var ers = ElementRegistrationOptions;return !!ers;})()', new Set(['Window']), [
+          // eslint-disable-next-line max-len
+          ['extends', '(function() {var ers = ElementRegistrationOptions;return ers && \'extends\' in ers;})()'],
+          // eslint-disable-next-line max-len
+          ['prototype', '(function() {var ers = ElementRegistrationOptions;return ers && \'prototype\' in ers;})()']
+        ]
+        ]]);
     });
   });
 

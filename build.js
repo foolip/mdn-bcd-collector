@@ -37,6 +37,29 @@ function writeText(filename, content) {
   fs.writeFileSync(filename, content, 'utf8');
 }
 
+function writeTestFile(filename, lines) {
+  const content = [
+    '<!DOCTYPE html>',
+    '<html>',
+    '<head>',
+    ...copyright,
+    '<meta charset="utf-8">',
+    '<script src="/resources/json3.min.js"></script>',
+    '<script src="/resources/harness.js"></script>',
+    '<script src="/resources/core.js"></script>',
+    '</head>',
+    '<body>',
+    '<p id="status">Running tests...</p>',
+    '<script>',
+    ...lines,
+    '</script>',
+    '</body>',
+    '</html>'
+  ];
+
+  writeText(filename, content);
+}
+
 function loadCustomTests(newTests) {
   customTests = newTests ? newTests : require('./custom-tests.json');
 }
@@ -135,35 +158,23 @@ function cssPropertyToIDLAttribute(property, lowercaseFirst) {
   return output;
 }
 
-function buildCSSPropertyTest(propertyNames, method, basename) {
-  const lines = [
-    '<!DOCTYPE html>',
-    '<html>',
-    '<head>',
-    ...copyright,
-    '<meta charset="utf-8">',
-    '<script src="/resources/json3.min.js"></script>',
-    '<script src="/resources/harness.js"></script>',
-    '</head>',
-    '<body>',
-    '<p id="status">Running test...</p>',
-    '<script>'
-  ];
+function buildCSSTests(propertyNames, method, basename) {
+  const lines = [];
 
   for (const name of propertyNames) {
     const ident = `css.properties.${name}`;
     const customExpr = getCustomTestCSS(name);
 
     if (customExpr) {
-      if (method === 'custom') {
+      if (method === 'custom' || method === 'all') {
         lines.push(`bcd.addTest("${ident}", "${customExpr}", 'CSS');`);
       }
     } else {
       let expr = '';
-      if (method === 'CSSStyleDeclaration') {
+      if (method === 'CSSStyleDeclaration' || method === 'all') {
         const attrName = cssPropertyToIDLAttribute(name, name.startsWith('-'));
         expr = {property: attrName, scope: 'document.body.style'};
-      } else if (method === 'CSS.supports') {
+      } else if (method === 'CSS.supports' || method === 'all') {
         expr = {property: name, scope: 'CSS.supports'};
       }
       if (expr) {
@@ -171,10 +182,16 @@ function buildCSSPropertyTest(propertyNames, method, basename) {
       }
     }
   }
-  lines.push('bcd.run("CSS");', '</script>', '</body>', '</html>');
+
+  lines.push(
+    method === 'all' ?
+    'bcd.run("CSS", bcd.finishIndividual);' :
+    'bcd.run("CSS");'
+  );
+
   const pathname = path.join('css', 'properties', basename);
   const filename = path.join(generatedDir, pathname);
-  writeText(filename, lines);
+  writeTestFile(filename, lines);
   return pathname;
 }
 
@@ -186,14 +203,23 @@ function buildCSS(bcd, reffy) {
   const propertyNames = Array.from(propertySet);
   propertyNames.sort();
 
-  return [
-    ['http', buildCSSPropertyTest(propertyNames,
+  const mainTests = [
+    ['http', buildCSSTests(propertyNames,
         'CSSStyleDeclaration', 'in-style.html')],
-    ['http', buildCSSPropertyTest(propertyNames,
+    ['http', buildCSSTests(propertyNames,
         'CSS.supports', 'dot-supports.html')],
-    ['http', buildCSSPropertyTest(propertyNames,
+    ['http', buildCSSTests(propertyNames,
         'custom', 'custom-support-test.html')]
   ];
+
+  const individualItems = [];
+
+  for (const property of propertyNames) {
+    buildCSSTests([property], 'all', `${property}.html`);
+    individualItems.push(`css.properties.${property}`);
+  }
+
+  return [mainTests, individualItems];
 }
 
 /* istanbul ignore next */
@@ -308,7 +334,7 @@ function getExposureSet(node) {
   return globals;
 }
 
-function buildIDLTests(ast, scope = 'Window') {
+function buildIDLTests(ast) {
   const tests = [];
 
   const interfaces = ast.filter((dfn) =>
@@ -327,18 +353,9 @@ function buildIDLTests(ast, scope = 'Window') {
     }
 
     const exposureSet = getExposureSet(iface);
-    if (!exposureSet.has(scope)) {
-      continue;
-    }
-
     const isGlobal = !!getExtAttr(iface, 'Global');
-
-    // interface object
-    const customTest = getCustomTestAPI(iface.name);
-    tests.push([
-      iface.name,
-      customTest || {property: iface.name, scope: 'self'}
-    ]);
+    const customIfaceTest = getCustomTestAPI(iface.name);
+    const memberTests = [];
 
     // members
     const members = iface.members.filter((member) => member.name);
@@ -404,7 +421,7 @@ function buildIDLTests(ast, scope = 'Window') {
       const customTestMember = getCustomTestAPI(iface.name, member.name);
 
       if (customTestMember) {
-        expr = customTest ?
+        expr = customIfaceTest ?
                customTestMember :
                [{property: iface.name, scope: 'self'}, customTestMember];
       } else {
@@ -460,9 +477,16 @@ function buildIDLTests(ast, scope = 'Window') {
         }
       }
 
-      tests.push([`${iface.name}.${member.name}`, expr]);
+      memberTests.push([`${member.name}`, expr]);
       handledMemberNames.add(member.name);
     }
+
+    tests.push([
+      iface.name,
+      customIfaceTest || {property: iface.name, scope: 'self'},
+      exposureSet,
+      memberTests
+    ]);
   }
 
   return tests;
@@ -535,111 +559,133 @@ function validateIDL(ast) {
   return true;
 }
 
-function buildIDLWindow(ast) {
-  const tests = buildIDLTests(ast);
+function buildIDLWindow(tests) {
+  const lines = [];
 
-  const lines = [
-    '<!DOCTYPE html>',
-    '<html>',
-    '<head>',
-    ...copyright,
-    '<meta charset="utf-8">',
-    '<script src="/resources/json3.min.js"></script>',
-    '<script src="/resources/harness.js"></script>',
-    '</head>',
-    '<body>',
-    '<p id="status">Running test...</p>',
-    '<script>'
-  ];
-
-  for (const [name, expr] of tests) {
+  for (const [name, expr, exposureSet, memberTests] of tests) {
+    if (!exposureSet.has('Window')) {
+      continue;
+    }
     lines.push(
         `bcd.addTest('api.${name}', ${JSON.stringify(expr)}, 'Window');`
     );
+
+    for (const [memberName, memberExpr] of memberTests) {
+      lines.push(
+          // eslint-disable-next-line max-len
+          `bcd.addTest('api.${name}.${memberName}', ${JSON.stringify(memberExpr)}, 'Window');`
+      );
+    }
   }
 
-  lines.push('bcd.run("Window");', '</script>', '</body>', '</html>');
+  lines.push('bcd.run("Window");');
   const pathname = path.join('api', 'interfaces.html');
   const filename = path.join(generatedDir, pathname);
-  writeText(filename, lines);
+  writeTestFile(filename, lines);
   return [['http', pathname], ['https', pathname]];
 }
 
-function buildIDLWorker(ast) {
-  const tests = [
-    ...buildIDLTests(ast, 'Worker'),
-    ...buildIDLTests(ast, 'DedicatedWorker')
-  ];
+function buildIDLWorker(tests) {
+  const lines = [];
 
-  const lines = [
-    '<!DOCTYPE html>',
-    '<html>',
-    '<head>',
-    ...copyright,
-    '<meta charset="utf-8">',
-    '<script src="/resources/json3.min.js"></script>',
-    '<script src="/resources/harness.js"></script>',
-    '<script src="/resources/core.js"></script>',
-    '</head>',
-    '<body>',
-    '<p id="status">Running test...</p>',
-    '<script>'
-  ];
-
-  for (const [name, expr] of tests) {
+  for (const [name, expr, exposureSet, memberTests] of tests) {
+    if (!exposureSet.has('Worker') || !exposureSet.has('DedicatedWorker')) {
+      continue;
+    }
     lines.push(
         `bcd.addTest('api.${name}', ${JSON.stringify(expr)}, 'Worker');`
     );
+
+    for (const [memberName, memberExpr] of memberTests) {
+      lines.push(
+          // eslint-disable-next-line max-len
+          `bcd.addTest('api.${name}.${memberName}', ${JSON.stringify(memberExpr)}, 'Worker');`
+      );
+    }
   }
 
-  lines.push('bcd.run("Worker");', '</script>', '</body>', '</html>');
+  lines.push('bcd.run("Worker");');
   const pathname = path.join('api', 'workerinterfaces.html');
   const filename = path.join(generatedDir, pathname);
-  writeText(filename, lines);
+  writeTestFile(filename, lines);
   return [['http', pathname], ['https', pathname]];
 }
 
-function buildIDLServiceWorker(ast) {
-  const tests = buildIDLTests(ast, 'ServiceWorker');
+function buildIDLServiceWorker(tests) {
+  const lines = [];
 
-  const lines = [
-    '<!DOCTYPE html>',
-    '<html>',
-    '<head>',
-    ...copyright,
-    '<meta charset="utf-8">',
-    '<script src="/resources/json3.min.js"></script>',
-    '<script src="/resources/harness.js"></script>',
-    '<script src="/resources/core.js"></script>',
-    '</head>',
-    '<body>',
-    '<p id="status">Running test...</p>',
-    '<script>'
-  ];
-
-  for (const [name, expr] of tests) {
+  for (const [name, expr, exposureSet, memberTests] of tests) {
+    if (!exposureSet.has('ServiceWorker')) {
+      continue;
+    }
     lines.push(
         `bcd.addTest('api.${name}', ${JSON.stringify(expr)}, 'ServiceWorker');`
     );
+
+    for (const [memberName, memberExpr] of memberTests) {
+      lines.push(
+          // eslint-disable-next-line max-len
+          `bcd.addTest('api.${name}.${memberName}', ${JSON.stringify(memberExpr)}, 'ServiceWorker');`
+      );
+    }
   }
 
-  lines.push('bcd.run("ServiceWorker");', '</script>', '</body>', '</html>');
+  lines.push('bcd.run("ServiceWorker");');
   const pathname = path.join('api', 'serviceworkerinterfaces.html');
   const filename = path.join(generatedDir, pathname);
-  writeText(filename, lines);
+  writeTestFile(filename, lines);
   return [['https', pathname]];
+}
+
+function buildIDLIndividual(tests) {
+  const handledIfaces = [];
+
+  for (const [name, expr, exposureSet, memberTests] of tests) {
+    handledIfaces.push(`api.${name}`);
+    const lines = [];
+
+    const scope = exposureSet.has('Window') ? 'Window' :
+        (exposureSet.has('Worker') || exposureSet.has('DedicatedWorker')) ?
+        'Worker' : exposureSet.has('ServiceWorker') ? 'ServiceWorker' : null;
+
+    lines.push(
+        `bcd.addTest('api.${name}', ${JSON.stringify(expr)}, '${scope}');`
+    );
+
+    for (const [memberName, memberExpr] of memberTests) {
+      handledIfaces.push(`api.${name}.${memberName}`);
+      // eslint-disable-next-line max-len
+      const test = `bcd.addTest('api.${name}.${memberName}', ${JSON.stringify(memberExpr)}, '${scope}');`;
+      lines.push(test);
+
+      const pathname = path.join('api', `${name}/${memberName}.html`);
+      const filename = path.join(generatedDir, pathname);
+      writeTestFile(filename, [
+        test, `bcd.run("${scope}", bcd.finishIndividual);`
+      ]);
+    }
+
+    lines.push(`bcd.run("${scope}", bcd.finishIndividual);`);
+    const pathname = path.join('api', `${name}/index.html`);
+    const filename = path.join(generatedDir, pathname);
+    writeTestFile(filename, lines);
+  }
+
+  return handledIfaces;
 }
 
 function buildIDL(_, reffy) {
   const ast = flattenIDL(reffy.idl, collectExtraIDL());
   validateIDL(ast);
+  const tests = buildIDLTests(ast);
   let testpaths = [];
   for (const buildFunc of [
     buildIDLWindow, buildIDLWorker, buildIDLServiceWorker
   ]) {
-    testpaths = testpaths.concat(buildFunc(ast));
+    testpaths = testpaths.concat(buildFunc(tests));
   }
-  return testpaths;
+  const handledIfaces = buildIDLIndividual(tests);
+  return [testpaths, handledIfaces];
 }
 
 async function writeManifest(manifest) {
@@ -689,16 +735,27 @@ function copyResources() {
 
 async function build(bcd, reffy) {
   const manifest = {
-    items: []
+    items: [],
+    individualItems: {}
   };
+
   loadCustomTests();
   for (const buildFunc of [buildCSS, buildIDL]) {
-    const items = buildFunc(bcd, reffy);
+    const [items, individualItems] = buildFunc(bcd, reffy);
     for (let [protocol, pathname] of items) {
       if (!pathname.startsWith('/')) {
         pathname = `/${pathname}`;
       }
       manifest.items.push({pathname, protocol});
+    }
+    if (individualItems) {
+      for (const item of individualItems) {
+        let url = item.replace(/\./g, '/');
+        if (item.split('.').length == 2 && item.startsWith('api')) {
+          url += '/index';
+        }
+        manifest.individualItems[item] = url + '.html';
+      }
     }
   }
   await writeManifest(manifest);

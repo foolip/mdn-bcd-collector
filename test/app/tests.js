@@ -27,7 +27,7 @@ describe('/api/tests', () => {
     const res = await agent.get('/api/tests?limit=1');
     assert.equal(res.status, 200);
     assert.isArray(res.body);
-    assert.equal(res.body.length, 1);
+    assert.equal(res.body[0].length, 1);
   });
 });
 

@@ -74,7 +74,8 @@ app.use(express.static('generated'));
 app.get('/api/tests', (req, res) => {
   const {after, limit} = req.query;
   const list = tests.list(after, limit ? +limit : 0);
-  res.json(list);
+  const individualList = tests.listIndividual(after, limit ? +limit : 0);
+  res.json([list, individualList]);
 });
 
 app.post('/api/results', (req, res) => {

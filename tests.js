@@ -18,6 +18,7 @@ class Tests {
   constructor(options) {
     this.items = options.manifest.items
         .filter((item) => !options.httpOnly || item.protocol === 'http');
+    this.individualItems = options.manifest.individualItems;
     this.host = options.host;
   }
 
@@ -49,6 +50,11 @@ class Tests {
     return this.items.slice(begin, end).map((item) => {
       return `${item.protocol}://${this.host}${item.pathname}`;
     });
+  }
+
+  listIndividual() {
+    return Object.entries(this.individualItems)
+        .sort((a, b) => (a[0].localeCompare(b[0])));
   }
 }
 

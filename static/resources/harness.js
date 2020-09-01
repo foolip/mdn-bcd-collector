@@ -82,6 +82,7 @@
     try {
       var parentPrefix = '';
       var code = data.code;
+      var compiledCode = [];
       if (!Array.isArray(code)) {
         code = [code];
       }
@@ -90,6 +91,7 @@
         var subtest = code[i];
 
         if (typeof(subtest) === 'string') {
+          compiledCode.push(subtest);
           value = eval(subtest);
           // TODO: allow callback and promise-vending funcs
           if (typeof value === 'boolean') {
@@ -100,9 +102,9 @@
           }
         } else if (subtest.property == 'constructor') {
           var iface = parentPrefix+subtest.scope;
+          compiledCode.push('new '+iface+'()');
 
           try {
-            result.code = 'new '+iface+'()';
             eval('new '+iface+'()');
             result.result = true;
           } catch (err) {
@@ -127,6 +129,8 @@
             result.message = 'threw ' + stringify(err);
           }
         } else {
+          var thisCompiled = '';
+
           for (var j in prefixesToTest) {
             var prefix = prefixesToTest[j];
             var property = subtest.property;
@@ -142,6 +146,8 @@
                   property = prefixToAdd + property;
                 }
 
+                thisCompiled = 'CSS.supports(\'' +
+                    property + '\', \'inherit\');';
                 value = CSS.supports(property, 'inherit');
               } else {
                 value = null;
@@ -155,9 +161,11 @@
               }
 
               if (stringStartsWith(property, 'Symbol.')) {
-                value = eval(property+' in '+parentPrefix+subtest.scope);
+                thisCompiled = property+' in '+parentPrefix+subtest.scope;
+                value = eval(thisCompiled);
               } else {
-                value = eval('"'+property+'" in '+parentPrefix+subtest.scope);
+                thisCompiled = '"'+property+'" in '+parentPrefix+subtest.scope;
+                value = eval(thisCompiled);
               }
             }
 
@@ -175,6 +183,8 @@
               break;
             }
           }
+
+          compiledCode.push(thisCompiled);
         }
 
         if (result.result === false) {
@@ -194,7 +204,7 @@
       result.info = Object.assign({}, result.info, data.info);
     }
 
-    result.info.code = data.code;
+    result.info.code = compiledCode.join(' && ');
     result.info.scope = data.scope;
 
     return result;
@@ -399,6 +409,18 @@
     };
   }
 
+  function finishIndividual(results) {
+    var response = '';
+    for (var i=0; i<results.length; i++) {
+      var result = results[i];
+      response += result.name + ': <strong>' + result.result;
+      if (result.prefix) response += ' (' + result.prefix + ' prefix)';
+      response += '</strong>\n<code>' + result.info.code + ';</code>\n\n';
+    }
+    document.getElementById('status').innerHTML =
+      response.replace(/\n/g, '<br />');
+  }
+
   // Service Worker helpers
   if ('serviceWorker' in navigator) {
     window.__waitForSWState = function(registration, desiredState) {
@@ -458,6 +480,7 @@
   global.bcd = {
     addTest: addTest,
     test: test,
-    run: run
+    run: run,
+    finishIndividual: finishIndividual
   };
 })(this);
