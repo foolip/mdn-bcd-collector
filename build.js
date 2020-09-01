@@ -188,7 +188,7 @@ function buildCSSTests(propertyNames, method, basename) {
     'bcd.run("CSS", bcd.finishIndividual);' :
     'bcd.run("CSS");'
   );
-  
+
   const pathname = path.join('css', 'properties', basename);
   const filename = path.join(generatedDir, pathname);
   writeTestFile(filename, lines);
@@ -216,10 +216,10 @@ function buildCSS(bcd, reffy) {
 
   for (const property of propertyNames) {
     buildCSSTests([property], 'all', `${property}.html`);
-    individualItems.push(property);
+    individualItems.push(`css.properties.${property}`);
   }
 
-  return [mainTests, {css: individualItems}];
+  return [mainTests, individualItems];
 }
 
 /* istanbul ignore next */
@@ -680,7 +680,7 @@ function buildIDL(_, reffy) {
     testpaths = testpaths.concat(buildFunc(tests));
   }
   const handledIfaces = buildIDLIndividual(tests);
-  return [testpaths, {api: handledIfaces}];
+  return [testpaths, handledIfaces];
 }
 
 async function writeManifest(manifest) {
@@ -744,10 +744,7 @@ async function build(bcd, reffy) {
       manifest.items.push({pathname, protocol});
     }
     if (individualItems) {
-      manifest.individualItems = Object.assign(
-        manifest.individualItems,
-        individualItems
-      );
+      manifest.individualItems += individualItems;
     }
   }
   await writeManifest(manifest);
