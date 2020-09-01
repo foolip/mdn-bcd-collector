@@ -15,21 +15,53 @@ Unless required by applicable law or agreed to in writing, software distributed 
 <body>
 <div>
   <button id="start" disabled>Loading tests...</button>
+  <br /><br />
+  <select id="individualTests" disabled>
+    <option value="">Loading tests...</option>
+  </select>
+  <button id="individualStart" disabled>Loading tests...</button>
 </div>
 <script>
 function getTests() {
   var button = document.getElementById('start');
+  var dropdown = document.getElementById('individualTests');
+  var buttonIndividual = document.getElementById('individualStart');
   var client = new XMLHttpRequest();
   client.open('GET', '/api/tests', true);
   client.send();
   client.onreadystatechange = function() {
     if (client.readyState == 4) {
-      var tests = JSON.parse(client.responseText);
+      var response = JSON.parse(client.responseText);
+
+      var tests = response[0];
       button.removeAttribute('disabled');
       button.textContent = 'Run ' + tests.length + ' tests';
       button.onclick = function() {
         window.location = tests[0];
       };
+
+      var individualItems = response[1];
+      buttonIndividual.removeAttribute('disabled');
+      buttonIndividual.textContent = 'Run individual test';
+      
+      dropdown.removeAttribute('disabled');
+      dropdown.remove(0);
+      var c = document.createElement("option");
+      c.text = "Select individual test:";
+      c.value = "";
+      dropdown.add(c);
+      for (var i=0; i<individualItems.length; i++) {
+        var item = individualItems[i];
+        var option = document.createElement("option");
+        option.text = item[0];
+        option.value = item[1];
+        dropdown.add(option);
+      }
+
+      buttonIndividual.onclick = function() {
+        var newUrl = dropdown.options[dropdown.selectedIndex].value;
+        if (newUrl) window.location = newUrl;
+      }
     }
   }
 }

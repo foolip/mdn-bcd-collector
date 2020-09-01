@@ -51,6 +51,10 @@ class Tests {
       return `${item.protocol}://${this.host}${item.pathname}`;
     });
   }
+
+  listIndividual() {
+    return Object.entries(this.individualItems).sort((a, b) => (a[0].localeCompare(b[0])));
+  }
 }
 
 module.exports = Tests;
