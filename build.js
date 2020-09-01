@@ -621,10 +621,10 @@ function buildIDLServiceWorker(tests) {
 }
 
 function buildIDLIndividual(tests) {
-  const handledIfaces = {};
+  const handledIfaces = [];
 
   for (const [name, expr, exposureSet, memberTests] of tests) {
-    handledIfaces[name] = [];
+    handledIfaces.push(`api.${name}`);
     const lines = [];
 
     const scope = exposureSet.has('Window') ? 'Window' :
@@ -636,7 +636,7 @@ function buildIDLIndividual(tests) {
     );
 
     for (const [memberName, memberExpr] of memberTests) {
-      handledIfaces[name].push(memberName);
+      handledIfaces.push(`api.${name}.${memberName}`);
       const test = `bcd.addTest('api.${name}.${memberName}', ${JSON.stringify(memberExpr)}, '${scope}');`;
       lines.push(test);
 
@@ -667,7 +667,7 @@ function buildIDL(_, reffy) {
     testpaths = testpaths.concat(buildFunc(tests));
   }
   const handledIfaces = buildIDLIndividual(tests);
-  return [testpaths, handledIfaces];
+  return [testpaths, {api: handledIfaces}];
 }
 
 async function writeManifest(manifest) {
@@ -718,7 +718,7 @@ function copyResources() {
 async function build(bcd, reffy) {
   const manifest = {
     items: [],
-    individualItems: []
+    individualItems: {}
   };
 
   loadCustomTests();
@@ -730,7 +730,12 @@ async function build(bcd, reffy) {
       }
       manifest.items.push({pathname, protocol});
     }
-    manifest.individualItems += individualItems;
+    if (individualItems) {
+      manifest.individualItems = Object.assign(
+        manifest.individualItems,
+        individualItems
+      );
+    }
   }
   await writeManifest(manifest);
   copyResources();
