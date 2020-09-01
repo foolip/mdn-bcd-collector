@@ -166,15 +166,15 @@ function buildCSSTests(propertyNames, method, basename) {
     const customExpr = getCustomTestCSS(name);
 
     if (customExpr) {
-      if (method === 'custom') {
+      if (method === 'custom' || method === 'all') {
         lines.push(`bcd.addTest("${ident}", "${customExpr}", 'CSS');`);
       }
     } else {
       let expr = '';
-      if (method === 'CSSStyleDeclaration') {
+      if (method === 'CSSStyleDeclaration' || method === 'all') {
         const attrName = cssPropertyToIDLAttribute(name, name.startsWith('-'));
         expr = {property: attrName, scope: 'document.body.style'};
-      } else if (method === 'CSS.supports') {
+      } else if (method === 'CSS.supports' || method === 'all') {
         expr = {property: name, scope: 'CSS.supports'};
       }
       if (expr) {
@@ -182,7 +182,13 @@ function buildCSSTests(propertyNames, method, basename) {
       }
     }
   }
-  lines.push('bcd.run("CSS");');
+
+  lines.push(
+    method === 'all' ?
+    'bcd.run("CSS", bcd.finishIndividual);' :
+    'bcd.run("CSS");'
+  );
+  
   const pathname = path.join('css', 'properties', basename);
   const filename = path.join(generatedDir, pathname);
   writeTestFile(filename, lines);
@@ -206,7 +212,14 @@ function buildCSS(bcd, reffy) {
         'custom', 'custom-support-test.html')]
   ];
 
-  return [mainTests, null];
+  const individualItems = [];
+
+  for (const property of propertyNames) {
+    buildCSSTests([property], 'all', `${property}.html`);
+    individualItems.push(property);
+  }
+
+  return [mainTests, {css: individualItems}];
 }
 
 /* istanbul ignore next */
