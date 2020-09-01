@@ -13,7 +13,7 @@
 // limitations under the License.
 
 /* global CSS, console, document, window, location, navigator, XMLHttpRequest,
-          self, Worker, Promise, setTimeout */
+          self, Worker, Promise, setTimeout, clearTimeout */
 
 'use strict';
 
@@ -22,7 +22,6 @@
 
 (function(global) {
   var pending = [];
-  var statusElement = 'document' in self && document.getElementById('status');
 
   var prefixes = {
     api: ['', 'moz', 'Moz', 'webkit', 'WebKit', 'webKit', 'ms', 'MS'],
@@ -51,6 +50,17 @@
       return string.includes(search);
     }
     return string.indexOf(search) !== -1;
+  }
+
+  function updateStatus(newStatus, append) {
+    var statusElement = document.getElementById('status');
+    if (!statusElement) return;
+
+    if (append) {
+      statusElement.innerHTML = statusElement.innerHTML + newStatus;
+    } else {
+      statusElement.innerHTML = newStatus;
+    }
   }
 
   function addTest(name, code, scope, info) {
@@ -210,39 +220,35 @@
     return result;
   }
 
-  function runCSS(done) {
+  function runCSS(callback) {
     var results = [];
 
     var length = pending.length;
     for (var i = 0; i < length; i++) {
-      if (statusElement) {
-        statusElement.innerHTML = 'Testing ' + pending[i].name;
-      }
+      updateStatus('Testing ' + pending[i].name);
       results.push(test(pending[i]));
     }
 
     pending = [];
 
-    done(results);
+    callback(results);
   }
 
-  function runWindow(done) {
+  function runWindow(callback) {
     var results = [];
 
     var length = pending.length;
     for (var i = 0; i < length; i++) {
-      if (statusElement) {
-        statusElement.innerHTML = 'Testing ' + pending[i].name;
-      }
+      updateStatus('Testing ' + pending[i].name);
       results.push(test(pending[i]));
     }
 
     pending = [];
 
-    done(results);
+    callback(results);
   }
 
-  function runWorker(done) {
+  function runWorker(callback) {
     var results = [];
     var length = pending.length;
     var i;
@@ -259,9 +265,7 @@
 
       for (i = 0; i < length; i++) {
         promises.push(new Promise(function(resolve) {
-          if (statusElement) {
-            statusElement.innerHTML = 'Testing ' + pending[i].name;
-          }
+          updateStatus('Testing ' + pending[i].name);
           myWorker.postMessage(pending[i]);
 
           testhandlers[pending[i].name] = function(message) {
@@ -274,13 +278,11 @@
       Promise.allSettled(promises).then(function() {
         pending = [];
 
-        done(results);
+        callback(results);
       });
     } else {
       console.log('No worker support');
-      if (statusElement) {
-        statusElement.innerHTML = 'No worker support, skipping';
-      }
+      updateStatus('No worker support, skipping');
 
       for (i = 0; i < length; i++) {
         var result = {
@@ -298,11 +300,11 @@
 
       pending = [];
 
-      done(results);
+      callback(results);
     }
   }
 
-  function runServiceWorker(done) {
+  function runServiceWorker(callback) {
     var results = [];
 
     if ('serviceWorker' in navigator) {
@@ -322,9 +324,7 @@
           var length = pending.length;
           for (var i = 0; i < length; i++) {
             promises.push(new Promise(function(resolve) {
-              if (statusElement) {
-                statusElement.innerHTML = 'Testing ' + pending[i].name;
-              }
+              updateStatus('Testing ' + pending[i].name);
 
               navigator.serviceWorker.postMessage(pending[i]);
 
@@ -339,16 +339,13 @@
             pending = [];
 
             window.__workerCleanup().then(function() {
-              done(results);
+              callback(results);
             });
           });
         });
       });
     } else {
-      console.log('No service worker support');
-      if (statusElement) {
-        statusElement.innerHTML = 'No service worker support, skipping';
-      }
+      updateStatus('No service worker support, skipping');
 
       var length = pending.length;
       for (var i = 0; i < length; i++) {
@@ -367,27 +364,34 @@
 
       pending = [];
 
-      done(results);
+      callback(results);
     }
   }
 
-  function run(scope, done) {
-    setTimeout(function() {
-      if (statusElement) {
-        statusElement.innerHTML = statusElement.innerHTML +
-          '<br />This test seems to be taking a long time; it may have ' +
-          'crashed. Check the console for errors.';
-      }
+  function run(scope, callback) {
+    var timeout = setTimeout(function() {
+      updateStatus('<br />This test seems to be taking a long time; ' +
+          'it may have crashed. Check the console for errors.', true);
     }, 10000);
 
+    var onfinish = function(results) {
+      clearTimeout(timeout);
+
+      if (callback) {
+        callback(results);
+      } else {
+        report(results);
+      }
+    };
+
     if (scope === 'CSS') {
-      runCSS(done || report);
+      runCSS(onfinish);
     } else if (scope === 'Window') {
-      runWindow(done || report);
+      runWindow(onfinish);
     } else if (scope === 'Worker') {
-      runWorker(done || report);
+      runWorker(onfinish);
     } else if (scope === 'ServiceWorker') {
-      runServiceWorker(done || report);
+      runServiceWorker(onfinish);
     } else {
       console.error('Unknown scope specified: ' + scope);
     }
@@ -417,8 +421,8 @@
       if (result.prefix) response += ' (' + result.prefix + ' prefix)';
       response += '</strong>\n<code>' + result.info.code + ';</code>\n\n';
     }
-    document.getElementById('status').innerHTML =
-      response.replace(/\n/g, '<br />');
+    console.log(response, results);
+    updateStatus(response.replace(/\n/g, '<br />'), true);
   }
 
   // Service Worker helpers
