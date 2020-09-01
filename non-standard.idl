@@ -240,6 +240,7 @@ partial dictionary BasicCardRequest {
   sequence<DOMString> supportedTypes = [];
 };
 
+[Exposed=Window]
 interface BlobBuilder {};
 
 partial interface BluetoothDevice {
@@ -280,8 +281,10 @@ partial interface DataTransfer {
   void addElement(Element el);
 };
 
+[Exposed=Window]
 interface DirectoryEntrySync {};
 
+[Exposed=Window]
 interface DirectoryReaderSync {};
 
 partial interface Document {
@@ -336,6 +339,7 @@ partial interface Element {
   readonly attribute boolean tabStop;
 };
 
+[Exposed=Window]
 interface EntrySync {};
 
 partial interface Event {
@@ -357,6 +361,7 @@ partial interface Event {
 
 // https://www.khronos.org/registry/webgl/extensions/
 
+[NoInterfaceObject]
 interface ANGLE_instanced_arrays {
   const GLenum VERTEX_ATTRIB_ARRAY_DIVISOR_ANGLE = 0x88FE;
   void drawArraysInstancedANGLE(GLenum mode, GLint first, GLsizei count, GLsizei primcount);
@@ -364,13 +369,15 @@ interface ANGLE_instanced_arrays {
   void vertexAttribDivisorANGLE(GLuint index, GLuint divisor);
 };
 
+[NoInterfaceObject]
 interface EXT_blend_minmax {
   const GLenum MIN_EXT = 0x8007;
   const GLenum MAX_EXT = 0x8008;
 };
 
-interface EXT_color_buffer_float {};
+[NoInterfaceObject] interface EXT_color_buffer_float {};
 
+[NoInterfaceObject]
 interface EXT_color_buffer_half_float {
   const GLenum RGBA16F_EXT = 0x881A;
   const GLenum RGB16F_EXT = 0x881B;
@@ -378,6 +385,7 @@ interface EXT_color_buffer_half_float {
   const GLenum UNSIGNED_NORMALIZED_EXT = 0x8C17;
 };
 
+[NoInterfaceObject]
 interface EXT_disjoint_timer_query {
   const GLenum QUERY_COUNTER_BITS_EXT = 0x8864;
   const GLenum CURRENT_QUERY_EXT = 0x8865;
@@ -397,10 +405,11 @@ interface EXT_disjoint_timer_query {
   any getQueryObjectEXT(WebGLTimerQueryEXT query, GLenum pname);
 };
 
-interface EXT_float_blend {};
-interface EXT_frag_depth {};
-interface EXT_shader_texture_lod {};
+[NoInterfaceObject] interface EXT_float_blend {};
+[NoInterfaceObject] interface EXT_frag_depth {};
+[NoInterfaceObject] interface EXT_shader_texture_lod {};
 
+[NoInterfaceObject]
 interface EXT_sRGB {
   const GLenum SRGB_EXT = 0x8C40;
   const GLenum SRGB_ALPHA_EXT = 0x8C42;
@@ -408,6 +417,7 @@ interface EXT_sRGB {
   const GLenum FRAMEBUFFER_ATTACHMENT_COLOR_ENCODING_EXT = 0x8210;
 };
 
+[NoInterfaceObject]
 interface EXT_texture_compression_bptc {
   const GLenum COMPRESSED_RGBA_BPTC_UNORM_EXT = 0x8E8C;
   const GLenum COMPRESSED_SRGB_ALPHA_BPTC_UNORM_EXT = 0x8E8D;
@@ -415,6 +425,7 @@ interface EXT_texture_compression_bptc {
   const GLenum COMPRESSED_RGB_BPTC_UNSIGNED_FLOAT_EXT = 0x8E8F;
 };
 
+[NoInterfaceObject]
 interface EXT_texture_compression_rgtc {
   const GLenum COMPRESSED_RED_RGTC1_EXT = 0x8DBB;
   const GLenum COMPRESSED_SIGNED_RED_RGTC1_EXT = 0x8DBC;
@@ -422,6 +433,7 @@ interface EXT_texture_compression_rgtc {
   const GLenum COMPRESSED_SIGNED_RED_GREEN_RGTC2_EXT = 0x8DBE;
 };
 
+[NoInterfaceObject]
 interface EXT_texture_filter_anisotropic {
   const GLenum TEXTURE_MAX_ANISOTROPY_EXT = 0x84FE;
   const GLenum MAX_TEXTURE_MAX_ANISOTROPY_EXT = 0x84FF;
@@ -441,6 +453,7 @@ interface EXT_texture_filter_anisotropic {
 
 // https://developer.mozilla.org/en-US/docs/Web/API/BluetoothAdvertisingData
 
+[Exposed=Window]
 interface BluetoothAdvertisingData {
   readonly attribute unsigned short? appearance;
   readonly attribute byte? txPower;
@@ -494,6 +507,7 @@ interface CSSAnimation : Animation {
 
 // https://www.w3.org/TR/DOM-Level-2-Style/css.html
 
+[Exposed=Window]
 interface CSSPrimitiveValue : CSSValue {
   const unsigned short CSS_UNKNOWN = 0;
   const unsigned short CSS_NUMBER = 1;
@@ -532,6 +546,7 @@ interface CSSPrimitiveValue : CSSValue {
   RGBColor getRGBColorValue();
 };
 
+[Exposed=Window]
 interface CSSValue {
   const unsigned short CSS_INHERIT = 0;
   const unsigned short CSS_PRIMITIVE_VALUE = 1;
@@ -542,6 +557,7 @@ interface CSSValue {
   readonly attribute unsigned short cssValueType;
 };
 
+[Exposed=Window]
 interface CSSValueList : CSSValue {
   readonly attribute unsigned long length;
   CSSValue item(unsigned long index);
@@ -591,6 +607,7 @@ partial interface DocumentType {
   readonly attribute NamedNodeMap notations;
 };
 
+[Exposed=Window]
 interface DOMConfiguration {
   void setParameter(DOMString name, DOMUserData value);
   DOMUserData getParameter(DOMString name);
@@ -598,6 +615,7 @@ interface DOMConfiguration {
   readonly attribute DOMStringList parameterNames;
 };
 
+[Exposed=Window]
 interface DOMError {
   const unsigned short SEVERITY_WARNING = 1;
   const unsigned short SEVERITY_ERROR = 2;
@@ -613,10 +631,12 @@ interface DOMError {
   readonly attribute DOMString name;
 };
 
+[Exposed=Window]
 interface DOMErrorHandler {
   boolean handleError(DOMError error);
 };
 
+[Exposed=Window]
 interface DOMImplementationList {
   DOMImplementation item(unsigned long index);
   readonly attribute unsigned long length;
