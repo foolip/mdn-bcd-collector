@@ -339,14 +339,8 @@ function buildIDLTests(ast) {
 
     const exposureSet = getExposureSet(iface);
     const isGlobal = !!getExtAttr(iface, 'Global');
-
-    // interface object
-    const customTest = getCustomTestAPI(iface.name);
-    tests.push([
-      iface.name,
-      customTest || {property: iface.name, scope: 'self'},
-      exposureSet
-    ]);
+    const customIfaceTest = getCustomTestAPI(iface.name);
+    const memberTests = [];
 
     // members
     const members = iface.members.filter((member) => member.name);
@@ -412,7 +406,7 @@ function buildIDLTests(ast) {
       const customTestMember = getCustomTestAPI(iface.name, member.name);
 
       if (customTestMember) {
-        expr = customTest ?
+        expr = customIfaceTest ?
                customTestMember :
                [{property: iface.name, scope: 'self'}, customTestMember];
       } else {
@@ -468,9 +462,16 @@ function buildIDLTests(ast) {
         }
       }
 
-      tests.push([`${iface.name}.${member.name}`, expr, exposureSet]);
+      memberTests.push([`${member.name}`, expr]);
       handledMemberNames.add(member.name);
     }
+
+    tests.push([
+      iface.name,
+      customIfaceTest || {property: iface.name, scope: 'self'},
+      exposureSet,
+      memberTests
+    ]);
   }
 
   return tests;
@@ -545,13 +546,19 @@ function validateIDL(ast) {
 function buildIDLWindow(tests) {
   const lines = [];
 
-  for (const [name, expr, exposureSet] of tests) {
+  for (const [name, expr, exposureSet, memberTests] of tests) {
     if (!exposureSet.has('Window')) {
       continue;
     }
     lines.push(
         `bcd.addTest('api.${name}', ${JSON.stringify(expr)}, 'Window');`
     );
+
+    for (const [memberName, memberExpr] of memberTests) {
+      lines.push(
+          `bcd.addTest('api.${name}.${memberName}', ${JSON.stringify(memberExpr)}, 'Window');`
+      );
+    }
   }
 
   lines.push('bcd.run("Window");');
@@ -564,13 +571,19 @@ function buildIDLWindow(tests) {
 function buildIDLWorker(tests) {
   const lines = [];
 
-  for (const [name, expr, exposureSet] of tests) {
+  for (const [name, expr, exposureSet, memberTests] of tests) {
     if (!exposureSet.has('Worker') || !exposureSet.has('DedicatedWorker')) {
       continue;
     }
     lines.push(
         `bcd.addTest('api.${name}', ${JSON.stringify(expr)}, 'Worker');`
     );
+
+    for (const [memberName, memberExpr] of memberTests) {
+      lines.push(
+          `bcd.addTest('api.${name}.${memberName}', ${JSON.stringify(memberExpr)}, 'Worker');`
+      );
+    }
   }
 
   lines.push('bcd.run("Worker");');
@@ -583,13 +596,19 @@ function buildIDLWorker(tests) {
 function buildIDLServiceWorker(tests) {
   const lines = [];
 
-  for (const [name, expr, exposureSet] of tests) {
+  for (const [name, expr, exposureSet, memberTests] of tests) {
     if (!exposureSet.has('ServiceWorker')) {
       continue;
     }
     lines.push(
         `bcd.addTest('api.${name}', ${JSON.stringify(expr)}, 'ServiceWorker');`
     );
+
+    for (const [memberName, memberExpr] of memberTests) {
+      lines.push(
+          `bcd.addTest('api.${name}.${memberName}', ${JSON.stringify(memberExpr)}, 'ServiceWorker');`
+      );
+    }
   }
 
   lines.push('bcd.run("ServiceWorker");');
