@@ -170,15 +170,16 @@ function buildCSSTests(propertyNames, method, basename) {
         lines.push(`bcd.addTest("${ident}", "${customExpr}", 'CSS');`);
       }
     } else {
-      let expr = '';
       if (method === 'CSSStyleDeclaration' || method === 'all') {
         const attrName = cssPropertyToIDLAttribute(name, name.startsWith('-'));
-        expr = {property: attrName, scope: 'document.body.style'};
-      } else if (method === 'CSS.supports' || method === 'all') {
-        expr = {property: name, scope: 'CSS.supports'};
+        lines.push(`bcd.addTest("${ident}", ${JSON.stringify(
+            {property: attrName, scope: 'document.body.style'}
+        )}, 'CSS');`);
       }
-      if (expr) {
-        lines.push(`bcd.addTest("${ident}", ${JSON.stringify(expr)}, 'CSS');`);
+      if (method === 'CSS.supports' || method === 'all') {
+        lines.push(`bcd.addTest("${ident}", ${JSON.stringify(
+            {property: name, scope: 'CSS.supports'}
+        )}, 'CSS');`);
       }
     }
   }
@@ -215,7 +216,7 @@ function buildCSS(bcd, reffy) {
   const individualItems = [];
 
   for (const property of propertyNames) {
-    buildCSSTests([property], 'all', `${property}.html`);
+    buildCSSTests([property], 'all', `${property}/index.html`);
     individualItems.push(`css.properties.${property}`);
   }
 
@@ -658,7 +659,7 @@ function buildIDLIndividual(tests) {
       const test = `bcd.addTest('api.${name}.${memberName}', ${JSON.stringify(memberExpr)}, '${scope}');`;
       lines.push(test);
 
-      const pathname = path.join('api', `${name}/${memberName}.html`);
+      const pathname = path.join('api', `${name}/${memberName}/index.html`);
       const filename = path.join(generatedDir, pathname);
       writeTestFile(filename, [
         test, `bcd.run("${scope}", bcd.finishIndividual);`
@@ -750,11 +751,7 @@ async function build(bcd, reffy) {
     }
     if (individualItems) {
       for (const item of individualItems) {
-        let url = item.replace(/\./g, '/');
-        if (item.split('.').length == 2 && item.startsWith('api')) {
-          url += '/index';
-        }
-        manifest.individualItems[item] = url + '.html';
+        manifest.individualItems[item] = item.replace(/\./g, '/');
       }
     }
   }
