@@ -571,6 +571,7 @@ function buildIDLWindow(tests) {
 
     for (const [memberName, memberExpr] of memberTests) {
       lines.push(
+          // eslint-disable-next-line max-len
           `bcd.addTest('api.${name}.${memberName}', ${JSON.stringify(memberExpr)}, 'Window');`
       );
     }
@@ -596,6 +597,7 @@ function buildIDLWorker(tests) {
 
     for (const [memberName, memberExpr] of memberTests) {
       lines.push(
+          // eslint-disable-next-line max-len
           `bcd.addTest('api.${name}.${memberName}', ${JSON.stringify(memberExpr)}, 'Worker');`
       );
     }
@@ -621,6 +623,7 @@ function buildIDLServiceWorker(tests) {
 
     for (const [memberName, memberExpr] of memberTests) {
       lines.push(
+          // eslint-disable-next-line max-len
           `bcd.addTest('api.${name}.${memberName}', ${JSON.stringify(memberExpr)}, 'ServiceWorker');`
       );
     }
@@ -650,6 +653,7 @@ function buildIDLIndividual(tests) {
 
     for (const [memberName, memberExpr] of memberTests) {
       handledIfaces.push(`api.${name}.${memberName}`);
+      // eslint-disable-next-line max-len
       const test = `bcd.addTest('api.${name}.${memberName}', ${JSON.stringify(memberExpr)}, '${scope}');`;
       lines.push(test);
 

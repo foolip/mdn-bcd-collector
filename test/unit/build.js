@@ -522,7 +522,7 @@ describe('build', () => {
             {property: 'name', scope: 'Attr.prototype'}
           ]]
         ]
-      ]]);
+        ]]);
     });
 
     it('interface with method', () => {
@@ -537,7 +537,7 @@ describe('build', () => {
             {property: 'contains', scope: 'Node.prototype'}
           ]]
         ]
-      ]]);
+        ]]);
     });
 
     it('interface with static method', () => {
@@ -547,13 +547,13 @@ describe('build', () => {
            };`);
       assert.deepEqual(buildIDLTests(ast), [
         ['MediaSource', {property: 'MediaSource', scope: 'self'},
-        new Set(['Window']), [
-          ['isTypeSupported', [
-            {property: 'MediaSource', scope: 'self'},
-            {property: 'isTypeSupported', scope: 'MediaSource'}
-          ]]
-        ]
-      ]]);
+          new Set(['Window']), [
+            ['isTypeSupported', [
+              {property: 'MediaSource', scope: 'self'},
+              {property: 'isTypeSupported', scope: 'MediaSource'}
+            ]]
+          ]
+        ]]);
     });
 
     it('interface with const', () => {
@@ -568,7 +568,7 @@ describe('build', () => {
             {property: 'isWindow', scope: 'Window'}
           ]]
         ]
-      ]]);
+        ]]);
     });
 
     it('interface with custom test', () => {
@@ -607,8 +607,8 @@ describe('build', () => {
           ['drawArraysInstancedANGLE', '(function() {var canvas = document.createElement(\'canvas\'); var gl = canvas.getContext(\'webgl\'); var instance = gl.getExtension(\'ANGLE_instanced_arrays\');return instance && \'drawArraysInstancedANGLE\' in instance;})()'],
           // eslint-disable-next-line max-len
           ['drawElementsInstancedANGLE', '(function() {var canvas = document.createElement(\'canvas\'); var gl = canvas.getContext(\'webgl\'); var instance = gl.getExtension(\'ANGLE_instanced_arrays\');return instance && \'drawElementsInstancedANGLE\' in instance;})()']
-          ]
-      ]]);
+        ]
+        ]]);
     });
 
     it('interface with legacy namespace', () => {
@@ -1105,7 +1105,12 @@ describe('build', () => {
           new Set(['Window', 'Worker']),
           []
         ],
-        ['Worker', {property: 'Worker', scope: 'self'}, new Set(['Window']), []],
+        [
+          'Worker',
+          {property: 'Worker', scope: 'self'},
+          new Set(['Window']),
+          []
+        ],
         [
           'WorkerSync',
           {property: 'WorkerSync', scope: 'self'},
@@ -1124,13 +1129,18 @@ describe('build', () => {
         };
       `);
       assert.deepEqual(buildIDLTests(ast), [
-        ['AudioNode', {property: 'AudioNode', scope: 'self'}, new Set(['Window']), [
-        ['disconnect', [
+        [
+          'AudioNode',
           {property: 'AudioNode', scope: 'self'},
-          {property: 'disconnect', scope: 'AudioNode.prototype'}
-        ]]
+          new Set(['Window']),
+          [
+            ['disconnect', [
+              {property: 'AudioNode', scope: 'self'},
+              {property: 'disconnect', scope: 'AudioNode.prototype'}
+            ]]
+          ]
         ]
-      ]]);
+      ]);
     });
 
     it('namespace with attribute', () => {
@@ -1145,7 +1155,7 @@ describe('build', () => {
             {property: 'paintWorklet', scope: 'CSS'}
           ]]
         ]
-      ]]);
+        ]]);
     });
 
     it('namespace with method', () => {
@@ -1160,7 +1170,7 @@ describe('build', () => {
             {property: 'supports', scope: 'CSS'}
           ]]
         ]
-      ]]);
+        ]]);
     });
 
     it('namespace with custom test', () => {
@@ -1242,7 +1252,7 @@ describe('build', () => {
           // eslint-disable-next-line max-len
           ['prototype', '(function() {var ers = ElementRegistrationOptions;return ers && \'prototype\' in ers;})()']
         ]
-      ]]);
+        ]]);
     });
   });
 
