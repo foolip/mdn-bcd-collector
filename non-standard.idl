@@ -318,6 +318,34 @@ partial interface Document {
   readonly attribute DOMString? xmlVersion;
 };
 
+partial interface DOMMatrixReadOnly {
+  void scaleNonUniformSelf(optional unrestricted double scaleX = 1, optional unrestricted double scaleY = 1);
+  DOMString toString();
+  void tranform();
+};
+
+partial interface Element {
+  readonly attribute DOMString? accessKey;
+  readonly attribute DOMString? attributeStyleMap;
+  readonly attribute DOMString? currentStyle;
+  readonly attribute DOMString? name;
+  readonly attribute boolean openOrClosedShadowRoot;
+  readonly attribute DOMString? runtimeStyle;
+  readonly attribute Number? scrollLeftMax;
+  void setCapture(optional boolean retargetToElement);
+  readonly attribute boolean tabStop;
+};
+
+interface EntrySync {};
+
+partial interface Event {
+  readonly attribute Element? explicitOriginalTarget;
+  boolean getPreventDefault();
+  readonly attribute Element? originalTarget;
+  attribute boolean preventBubble;
+  attribute boolean preventCapture;
+};
+
 // https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/modules/payments/abort_payment_event.idl;drc=c2e7d4f0b24814b0d1c51a964db34ec5b4930756
 // https://github.com/w3c/payment-handler/pull/170
 [
@@ -460,6 +488,7 @@ interface CSSValueList : CSSValue {
 
 [Exposed=Window, RuntimeEnabled=WebAnimationsAPI]
 interface CSSTransition : Animation {
+  constructor();
   readonly attribute CSSOMString transitionProperty;
 };
 
@@ -491,10 +520,41 @@ dictionary DeviceProximityEventInit : EventInit {
   unrestricted double max = Infinity;
 };
 
-// https://www.w3.org/TR/DOM-Level-3-Core/core.html#ID-412266927
+// https://www.w3.org/TR/DOM-Level-3-Core/core.html
 
 partial interface DocumentType {
   readonly attribute NamedNodeMap entities;
   readonly attribute DOMString internalSubset;
   readonly attribute NamedNodeMap notations;
+};
+
+interface DOMConfiguration {
+  void setParameter(DOMString name, DOMUserData value);
+  DOMUserData getParameter(DOMString name);
+  boolean canSetParameter(DOMString name, DOMUserData value);
+  readonly attribute DOMStringList parameterNames;
+};
+
+interface DOMError {
+  const unsigned short SEVERITY_WARNING = 1;
+  const unsigned short SEVERITY_ERROR = 2;
+  const unsigned short SEVERITY_FATAL_ERROR = 3;
+
+  readonly attribute unsigned short severity;
+  readonly attribute DOMString message;
+  readonly attribute DOMString type;
+  readonly attribute DOMObject relatedException;
+  readonly attribute DOMObject relatedData;
+  readonly attribute DOMLocator location;
+
+  readonly attribute DOMString name;
+};
+
+interface DOMErrorHandler {
+  boolean handleError(DOMError error);
+};
+
+interface DOMImplementationList {
+  DOMImplementation item(unsigned long index);
+  readonly attribute unsigned long length;
 };
