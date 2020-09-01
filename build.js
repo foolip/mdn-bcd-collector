@@ -735,7 +735,7 @@ function copyResources() {
 async function build(bcd, reffy) {
   const manifest = {
     items: [],
-    individualItems: []
+    individualItems: {}
   };
 
   loadCustomTests();
@@ -748,7 +748,13 @@ async function build(bcd, reffy) {
       manifest.items.push({pathname, protocol});
     }
     if (individualItems) {
-      manifest.individualItems.push(...individualItems);
+      for (let item of individualItems) {
+        let url = item.replace(/\./g, '/');
+        if (item.split('.').length == 2 && item.startsWith('api')) {
+          url += '/index';
+        }
+        manifest.individualItems[item] = url + '.html';
+      }
     }
   }
   await writeManifest(manifest);
