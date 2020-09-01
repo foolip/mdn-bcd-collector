@@ -8,6 +8,39 @@
     },
     "AudioBufferSourceNode": {
       "__base": "var audioCtx = new (window.AudioContext || window.webkitAudioContext)(); if (!audioCtx) {return false}; var instance = audioCtx.createBufferSource();"
+    },
+    "EXT_blend_minmax": {
+      "__base": "var canvas = document.createElement('canvas'); if (!canvas) {return false}; var gl = canvas.getContext('webgl'); if (!gl) {return false}; var instance = gl.getExtension('EXT_blend_minmax');"
+    },
+    "EXT_color_buffer_float": {
+      "__base": "var canvas = document.createElement('canvas'); if (!canvas) {return false}; var gl = canvas.getContext('webgl'); if (!gl) {return false}; var instance = gl.getExtension('EXT_color_buffer_float');"
+    },
+    "EXT_color_buffer_half_float": {
+      "__base": "var canvas = document.createElement('canvas'); if (!canvas) {return false}; var gl = canvas.getContext('webgl'); if (!gl) {return false}; var instance = gl.getExtension('EXT_color_buffer_half_float');"
+    },
+    "EXT_disjoint_timer_query": {
+      "__base": "var canvas = document.createElement('canvas'); if (!canvas) {return false}; var gl = canvas.getContext('webgl'); if (!gl) {return false}; var instance = gl.getExtension('EXT_disjoint_timer_query');"
+    },
+    "EXT_float_blend": {
+      "__base": "var canvas = document.createElement('canvas'); if (!canvas) {return false}; var gl = canvas.getContext('webgl'); if (!gl) {return false}; var instance = gl.getExtension('EXT_float_blend');"
+    },
+    "EXT_frag_depth": {
+      "__base": "var canvas = document.createElement('canvas'); if (!canvas) {return false}; var gl = canvas.getContext('webgl'); if (!gl) {return false}; var instance = gl.getExtension('EXT_frag_depth');"
+    },
+    "EXT_shader_texture_lod": {
+      "__base": "var canvas = document.createElement('canvas'); if (!canvas) {return false}; var gl = canvas.getContext('webgl'); if (!gl) {return false}; var instance = gl.getExtension('EXT_shader_texture_lod');"
+    },
+    "EXT_sRGB": {
+      "__base": "var canvas = document.createElement('canvas'); if (!canvas) {return false}; var gl = canvas.getContext('webgl'); if (!gl) {return false}; var instance = gl.getExtension('EXT_sRGB');"
+    },
+    "EXT_texture_compression_bptc": {
+      "__base": "var canvas = document.createElement('canvas'); if (!canvas) {return false}; var gl = canvas.getContext('webgl'); if (!gl) {return false}; var instance = gl.getExtension('EXT_texture_compression_bptc');"
+    },
+    "EXT_texture_compression_rgtc": {
+      "__base": "var canvas = document.createElement('canvas'); if (!canvas) {return false}; var gl = canvas.getContext('webgl'); if (!gl) {return false}; var instance = gl.getExtension('EXT_texture_compression_rgtc');"
+    },
+    "EXT_texture_filter_anisotropic": {
+      "__base": "var canvas = document.createElement('canvas'); if (!canvas) {return false}; var gl = canvas.getContext('webgl'); if (!gl) {return false}; var instance = gl.getExtension('EXT_texture_filter_anisotropic');"
     }
   },
   "css": {

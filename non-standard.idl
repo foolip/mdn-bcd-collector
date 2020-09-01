@@ -318,6 +318,33 @@ partial interface Document {
   readonly attribute DOMString? xmlVersion;
 };
 
+partial interface DOMMatrixReadOnly {
+  void scaleNonUniformSelf(optional unrestricted double scaleX = 1, optional unrestricted double scaleY = 1);
+  void tranform();
+};
+
+partial interface Element {
+  readonly attribute DOMString? accessKey;
+  readonly attribute DOMString? attributeStyleMap;
+  readonly attribute DOMString? currentStyle;
+  readonly attribute DOMString? name;
+  readonly attribute boolean openOrClosedShadowRoot;
+  readonly attribute DOMString? runtimeStyle;
+  readonly attribute Number? scrollLeftMax;
+  void setCapture(optional boolean retargetToElement);
+  readonly attribute boolean tabStop;
+};
+
+interface EntrySync {};
+
+partial interface Event {
+  readonly attribute Element? explicitOriginalTarget;
+  boolean getPreventDefault();
+  readonly attribute Element? originalTarget;
+  attribute boolean preventBubble;
+  attribute boolean preventCapture;
+};
+
 // https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/modules/payments/abort_payment_event.idl;drc=c2e7d4f0b24814b0d1c51a964db34ec5b4930756
 // https://github.com/w3c/payment-handler/pull/170
 [
@@ -327,13 +354,76 @@ partial interface Document {
   [CallWith=ScriptState, RaisesException] void respondWith(Promise<boolean> paymentAbortedResponse);
 };
 
-// https://www.khronos.org/registry/webgl/extensions/ANGLE_instanced_arrays/
+// https://www.khronos.org/registry/webgl/extensions/
 
 interface ANGLE_instanced_arrays {
   const GLenum VERTEX_ATTRIB_ARRAY_DIVISOR_ANGLE = 0x88FE;
   void drawArraysInstancedANGLE(GLenum mode, GLint first, GLsizei count, GLsizei primcount);
   void drawElementsInstancedANGLE(GLenum mode, GLsizei count, GLenum type, GLintptr offset, GLsizei primcount);
   void vertexAttribDivisorANGLE(GLuint index, GLuint divisor);
+};
+
+interface EXT_blend_minmax {
+  const GLenum MIN_EXT = 0x8007;
+  const GLenum MAX_EXT = 0x8008;
+};
+
+interface EXT_color_buffer_float {};
+
+interface EXT_color_buffer_half_float {
+  const GLenum RGBA16F_EXT = 0x881A;
+  const GLenum RGB16F_EXT = 0x881B;
+  const GLenum FRAMEBUFFER_ATTACHMENT_COMPONENT_TYPE_EXT = 0x8211;
+  const GLenum UNSIGNED_NORMALIZED_EXT = 0x8C17;
+};
+
+interface EXT_disjoint_timer_query {
+  const GLenum QUERY_COUNTER_BITS_EXT = 0x8864;
+  const GLenum CURRENT_QUERY_EXT = 0x8865;
+  const GLenum QUERY_RESULT_EXT = 0x8866;
+  const GLenum QUERY_RESULT_AVAILABLE_EXT = 0x8867;
+  const GLenum TIME_ELAPSED_EXT = 0x88BF;
+  const GLenum TIMESTAMP_EXT = 0x8E28;
+  const GLenum GPU_DISJOINT_EXT = 0x8FBB;
+
+  WebGLTimerQueryEXT? createQueryEXT();
+  void deleteQueryEXT(WebGLTimerQueryEXT? query);
+  [WebGLHandlesContextLoss] boolean isQueryEXT(WebGLTimerQueryEXT? query);
+  void beginQueryEXT(GLenum target, WebGLTimerQueryEXT query);
+  void endQueryEXT(GLenum target);
+  void queryCounterEXT(WebGLTimerQueryEXT query, GLenum target);
+  any getQueryEXT(GLenum target, GLenum pname);
+  any getQueryObjectEXT(WebGLTimerQueryEXT query, GLenum pname);
+};
+
+interface EXT_float_blend {};
+interface EXT_frag_depth {};
+interface EXT_shader_texture_lod {};
+
+interface EXT_sRGB {
+  const GLenum SRGB_EXT = 0x8C40;
+  const GLenum SRGB_ALPHA_EXT = 0x8C42;
+  const GLenum SRGB8_ALPHA8_EXT = 0x8C43;
+  const GLenum FRAMEBUFFER_ATTACHMENT_COLOR_ENCODING_EXT = 0x8210;
+};
+
+interface EXT_texture_compression_bptc {
+  const GLenum COMPRESSED_RGBA_BPTC_UNORM_EXT = 0x8E8C;
+  const GLenum COMPRESSED_SRGB_ALPHA_BPTC_UNORM_EXT = 0x8E8D;
+  const GLenum COMPRESSED_RGB_BPTC_SIGNED_FLOAT_EXT = 0x8E8E;
+  const GLenum COMPRESSED_RGB_BPTC_UNSIGNED_FLOAT_EXT = 0x8E8F;
+};
+
+interface EXT_texture_compression_rgtc {
+  const GLenum COMPRESSED_RED_RGTC1_EXT = 0x8DBB;
+  const GLenum COMPRESSED_SIGNED_RED_RGTC1_EXT = 0x8DBC;
+  const GLenum COMPRESSED_RED_GREEN_RGTC2_EXT = 0x8DBD;
+  const GLenum COMPRESSED_SIGNED_RED_GREEN_RGTC2_EXT = 0x8DBE;
+};
+
+interface EXT_texture_filter_anisotropic {
+  const GLenum TEXTURE_MAX_ANISOTROPY_EXT = 0x84FE;
+  const GLenum MAX_TEXTURE_MAX_ANISOTROPY_EXT = 0x84FF;
 };
 
 // https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/modules/app_banner/before_install_prompt_event.idl;drc=af69d93ec0d5334cdc03316058660a37116f32b3
@@ -460,6 +550,7 @@ interface CSSValueList : CSSValue {
 
 [Exposed=Window, RuntimeEnabled=WebAnimationsAPI]
 interface CSSTransition : Animation {
+  constructor();
   readonly attribute CSSOMString transitionProperty;
 };
 
@@ -491,10 +582,41 @@ dictionary DeviceProximityEventInit : EventInit {
   unrestricted double max = Infinity;
 };
 
-// https://www.w3.org/TR/DOM-Level-3-Core/core.html#ID-412266927
+// https://www.w3.org/TR/DOM-Level-3-Core/core.html
 
 partial interface DocumentType {
   readonly attribute NamedNodeMap entities;
   readonly attribute DOMString internalSubset;
   readonly attribute NamedNodeMap notations;
+};
+
+interface DOMConfiguration {
+  void setParameter(DOMString name, DOMUserData value);
+  DOMUserData getParameter(DOMString name);
+  boolean canSetParameter(DOMString name, DOMUserData value);
+  readonly attribute DOMStringList parameterNames;
+};
+
+interface DOMError {
+  const unsigned short SEVERITY_WARNING = 1;
+  const unsigned short SEVERITY_ERROR = 2;
+  const unsigned short SEVERITY_FATAL_ERROR = 3;
+
+  readonly attribute unsigned short severity;
+  readonly attribute DOMString message;
+  readonly attribute DOMString type;
+  readonly attribute DOMObject relatedException;
+  readonly attribute DOMObject relatedData;
+  readonly attribute DOMLocator location;
+
+  readonly attribute DOMString name;
+};
+
+interface DOMErrorHandler {
+  boolean handleError(DOMError error);
+};
+
+interface DOMImplementationList {
+  DOMImplementation item(unsigned long index);
+  readonly attribute unsigned long length;
 };
