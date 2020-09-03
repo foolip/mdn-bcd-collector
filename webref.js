@@ -19,7 +19,7 @@ const path = require('path');
 const WebIDL2 = require('webidl2');
 
 // Note: package.json is just a file that we know exists, it's not used.
-const reportsDir = path.dirname(require.resolve('reffy-reports/package.json'));
+const reportsDir = path.dirname(require.resolve('webref/package.json'));
 
 // Load text (UTF-8) files from a directory and return an object mapping each
 // name (sans extension) to the parsed result of that text.

@@ -16,19 +16,19 @@
 
 const assert = require('assert');
 
-describe('reffy-reports', () => {
-  let reffy;
+describe('webref', () => {
+  let webref;
 
   it('require module', () => {
-    reffy = require('../../reffy-reports');
+    webref = require('../../webref');
   });
 
   it('has some CSS data', () => {
-    assert('white-space' in reffy.css['css-text'].properties);
+    assert('white-space' in webref.css['css-text'].properties);
   });
 
   it('has some IDL data', () => {
-    const iface = reffy.idl.dom.find((node) => node.name === 'Attr');
+    const iface = webref.idl.dom.find((node) => node.name === 'Attr');
     assert(iface);
     const member = iface.members.find((m) => m.name === 'specified');
     assert(member);

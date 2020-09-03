@@ -130,8 +130,8 @@ function collectCSSPropertiesFromBCD(bcd, propertySet) {
   }
 }
 
-function collectCSSPropertiesFromReffy(reffy, propertySet) {
-  for (const data of Object.values(reffy.css)) {
+function collectCSSPropertiesFromReffy(webref, propertySet) {
+  for (const data of Object.values(webref.css)) {
     for (const prop of Object.keys(data.properties)) {
       propertySet.add(prop);
     }
@@ -196,10 +196,10 @@ function buildCSSTests(propertyNames, method, basename) {
   return pathname;
 }
 
-function buildCSS(bcd, reffy) {
+function buildCSS(bcd, webref) {
   const propertySet = new Set;
   collectCSSPropertiesFromBCD(bcd, propertySet);
-  collectCSSPropertiesFromReffy(reffy, propertySet);
+  collectCSSPropertiesFromReffy(webref, propertySet);
 
   const propertyNames = Array.from(propertySet);
   propertyNames.sort();
@@ -675,8 +675,8 @@ function buildIDLIndividual(tests) {
   return handledIfaces;
 }
 
-function buildIDL(_, reffy) {
-  const ast = flattenIDL(reffy.idl, collectExtraIDL());
+function buildIDL(_, webref) {
+  const ast = flattenIDL(webref.idl, collectExtraIDL());
   validateIDL(ast);
   const tests = buildIDLTests(ast);
   let testpaths = [];
@@ -734,7 +734,7 @@ function copyResources() {
   });
 }
 
-async function build(bcd, reffy) {
+async function build(bcd, webref) {
   const manifest = {
     items: [],
     individualItems: {}
@@ -742,7 +742,7 @@ async function build(bcd, reffy) {
 
   loadCustomTests();
   for (const buildFunc of [buildCSS, buildIDL]) {
-    const [items, individualItems] = buildFunc(bcd, reffy);
+    const [items, individualItems] = buildFunc(bcd, webref);
     for (let [protocol, pathname] of items) {
       if (!pathname.startsWith('/')) {
         pathname = `/${pathname}`;
@@ -762,8 +762,8 @@ async function build(bcd, reffy) {
 /* istanbul ignore if */
 if (require.main === module) {
   const bcd = require('mdn-browser-compat-data');
-  const reffy = require('./reffy-reports');
-  build(bcd, reffy).catch((reason) => {
+  const webref = require('./webref');
+  build(bcd, webref).catch((reason) => {
     console.error(reason);
     process.exit(1);
   });

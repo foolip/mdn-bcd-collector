@@ -8,7 +8,7 @@ the results is not done as part of this service.
 
 ## Tests
 
-BCD itself and reffy-reports are used to generate tests, and tests can also be
+BCD itself and webref are used to generate tests, and tests can also be
 written manually. The output of a test is arbitrary JSON, which must be
 interpreted with knowledge of what the test does.
 

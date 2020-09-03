@@ -323,7 +323,7 @@ describe('build', () => {
   });
 
   it('collectCSSPropertiesFromReffy', () => {
-    const reffy = {
+    const webref = {
       css: {
         'css-fonts': {
           properties: {
@@ -339,7 +339,7 @@ describe('build', () => {
       }
     };
     const propertySet = new Set();
-    collectCSSPropertiesFromReffy(reffy, propertySet);
+    collectCSSPropertiesFromReffy(webref, propertySet);
     const properties = Array.from(propertySet);
     assert.deepEqual(properties, ['font-family', 'font-weight', 'grid']);
   });
