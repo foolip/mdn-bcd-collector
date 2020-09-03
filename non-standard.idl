@@ -303,11 +303,9 @@ interface DirectoryReaderSync {};
 
 partial interface Document {
   boolean contains();
-  void createEntityReference();
   Touch createTouch();
   TouchList createTouchList();
   readonly attribute nsIURI documentURIObject;
-  readonly attribute DOMConfiguration domConfig;
   void enableStyleSheetsForSet(DOMString? name);
   boolean execCommandShowHelp(DOMString name);
   readonly attribute long fileSize;
@@ -331,9 +329,6 @@ partial interface Document {
   readonly attribute XULTooltip tooltipNode;
   attribute UndoManager undoManager;
   readonly attribute long width;
-  readonly attribute DOMString? xmlEncoding;
-  readonly attribute DOMString? xmlStandalone;
-  readonly attribute DOMString? xmlVersion;
 };
 
 partial interface DOMMatrixReadOnly {
@@ -605,12 +600,29 @@ dictionary DeviceProximityEventInit : EventInit {
   unrestricted double max = Infinity;
 };
 
-// https://www.w3.org/TR/DOM-Level-3-Core/core.html
+// https://www.w3.org/TR/DOM-Level-3-Core/idl-definitions.html
+
+typedef any DOMUserData;
+typedef object DOMObject;
+
+partial interface Attr {
+  readonly attribute TypeInfo schemaTypeInfo;
+  readonly attribute boolean isId;
+};
+
+partial interface Document {
+  EntityReference createEntityReference(DOMString name);
+  readonly attribute DOMString xmlEncoding;
+  attribute boolean xmlStandalone;
+  readonly attribute DOMString xmlVersion;
+  attribute boolean strictErrorChecking;
+  readonly attribute DOMConfiguration domConfig;
+};
 
 partial interface DocumentType {
   readonly attribute NamedNodeMap entities;
-  readonly attribute DOMString internalSubset;
   readonly attribute NamedNodeMap notations;
+  readonly attribute DOMString internalSubset;
 };
 
 [Exposed=Window]
@@ -619,6 +631,8 @@ interface DOMConfiguration {
   DOMUserData getParameter(DOMString name);
   boolean canSetParameter(DOMString name, DOMUserData value);
   readonly attribute DOMStringList parameterNames;
+  void normalizeDocument();
+  Node renameNode(Node n, DOMString namespaceURI, DOMString qualifiedName);
 };
 
 [Exposed=Window]
@@ -638,12 +652,103 @@ interface DOMError {
 };
 
 [Exposed=Window]
-interface DOMErrorHandler {
+callback interface DOMErrorHandler {
   boolean handleError(DOMError error);
+};
+
+partial interface DOMImplementation {
+  DOMObject getFeature(DOMString feature, DOMString version);
 };
 
 [Exposed=Window]
 interface DOMImplementationList {
   DOMImplementation item(unsigned long index);
   readonly attribute unsigned long length;
+};
+
+[Exposed=Window]
+interface DOMImplementationSource {
+  DOMImplementation getDOMImplementation(DOMString features);
+  DOMImplementationList getDOMImplementationList(DOMString features);
+};
+
+[Exposed=Window]
+interface DOMLocator {
+  readonly attribute long lineNumber;
+  readonly attribute long columnNumber;
+  readonly attribute long byteOffset;
+  readonly attribute long utf16Offset;
+  readonly attribute Node relatedNode;
+  readonly attribute DOMString uri;
+};
+
+partial interface Element {
+  readonly attribute TypeInfo schemaTypeInfo;
+  void setIdAttribute(DOMString name, boolean isId);
+  void setIdAttributeNS(DOMString namespaceURI, DOMString localName, boolean isId);
+  void setIdAttributeNode(Attr idAttr, boolean isId);
+};
+
+[Exposed=Window]
+interface Entity : Node {
+  readonly attribute DOMString publicId;
+  readonly attribute DOMString systemId;
+  readonly attribute DOMString notationName;
+  readonly attribute DOMString inputEncoding;
+  readonly attribute DOMString xmlEncoding;
+  readonly attribute DOMString xmlVersion;
+};
+
+[Exposed=Window]
+interface EntityReference : Node {};
+
+[Exposed=Window]
+interface NameList {
+  DOMString getName(unsigned long index);
+  DOMString getNamespaceURI(unsigned long index);
+  readonly attribute unsigned long length;
+  boolean contains(DOMString str);
+  boolean containsNS(DOMString namespaceURI, DOMString name);
+};
+
+partial interface Node {
+  boolean isSupported(DOMString feature, DOMString version);
+  DOMObject getFeature(DOMString feature, DOMString version);
+  DOMUserData getUserData(DOMString key);
+  DOMUserData setUserData(DOMString key, DOMUserData data, UserDataHandler handler);
+};
+
+[Exposed=Window]
+interface Notation : Node {
+  readonly attribute DOMString publicId;
+  readonly attribute DOMString systemId;
+};
+
+partial interface Text {
+  readonly attribute boolean isElementContentWhitespace;
+  Text replaceWholeText(DOMString content);
+};
+
+[Exposed=Window]
+interface TypeInfo {
+  readonly attribute DOMString typeName;
+  readonly attribute DOMString typeNamespace;
+
+  const unsigned long DERIVATION_RESTRICTION = 0x00000001;
+  const unsigned long DERIVATION_EXTENSION = 0x00000002;
+  const unsigned long DERIVATION_UNION = 0x00000004;
+  const unsigned long DERIVATION_LIST = 0x00000008;
+
+  boolean isDerivedFrom(DOMString typeNamespace, DOMString typeName, unsigned long derivationMethod);
+};
+
+[Exposed=Window]
+interface UserDataHandler {
+  const unsigned short NODE_CLONED = 1;
+  const unsigned short NODE_IMPORTED = 2;
+  const unsigned short NODE_DELETED = 3;
+  const unsigned short NODE_RENAMED = 4;
+  const unsigned short NODE_ADOPTED = 5;
+
+  void handle(unsigned short operation, DOMString key, DOMUserData data, Node src, Node dst);
 };
