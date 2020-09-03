@@ -353,6 +353,7 @@
         });
       });
     } else {
+      console.log('No service worker support, skipping');
       updateStatus('No service worker support, skipping');
 
       var length = pending.length;
@@ -429,7 +430,6 @@
       if (result.prefix) response += ' (' + result.prefix + ' prefix)';
       response += '</strong>\n<code>' + result.info.code + ';</code>\n\n';
     }
-    console.log(response, results);
     updateStatus(response.replace(/\n/g, '<br />'));
   }
 
