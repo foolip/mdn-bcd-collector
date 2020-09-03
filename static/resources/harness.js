@@ -422,7 +422,7 @@
       response += '</strong>\n<code>' + result.info.code + ';</code>\n\n';
     }
     console.log(response, results);
-    updateStatus(response.replace(/\n/g, '<br />'), true);
+    updateStatus(response.replace(/\n/g, '<br />'));
   }
 
   // Service Worker helpers
