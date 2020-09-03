@@ -334,7 +334,7 @@
             promises.push(new Promise(function(resolve) {
               updateStatus('Testing ' + pending[i].name);
 
-              navigator.serviceWorker.postMessage(pending[i]);
+              reg.active.postMessage(pending[i]);
 
               testhandlers[pending[i].name] = function(message) {
                 results.push(message);
