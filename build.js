@@ -590,7 +590,7 @@ function buildIDLWorker(tests) {
   const lines = [];
 
   for (const [name, expr, exposureSet, memberTests] of tests) {
-    if (!exposureSet.has('Worker') || !exposureSet.has('DedicatedWorker')) {
+    if (!(exposureSet.has('Worker') || exposureSet.has('DedicatedWorker'))) {
       continue;
     }
     lines.push(
