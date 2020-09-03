@@ -139,12 +139,13 @@
             result.message = 'threw ' + stringify(err);
           }
         } else {
-          var thisCompiled = '';
+          var compiled = '';
 
           for (var j in prefixesToTest) {
             var prefix = prefixesToTest[j];
             var property = subtest.property;
             var value;
+            var thisCompiled = '';
 
             if (subtest.scope === 'CSS.supports') {
               if ('CSS' in self) {
@@ -177,10 +178,17 @@
                 thisCompiled = '"'+property+'" in '+parentPrefix+subtest.scope;
                 value = eval(thisCompiled);
               }
+
+              if (!compiled) {
+                // Set to first compiled statement in case support is false
+                compiled = thisCompiled;
+              }
             }
 
             result.result = value;
             if (value === true) {
+              compiled = thisCompiled;
+
               if (subtest.scope === 'CSS.supports') {
                 if (prefix) {
                   parentPrefix = '-' + prefix + '-';
@@ -194,7 +202,7 @@
             }
           }
 
-          compiledCode.push(thisCompiled);
+          compiledCode.push(compiled);
         }
 
         if (result.result === false) {
