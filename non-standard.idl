@@ -103,6 +103,23 @@ partial interface MouseEvent {
   readonly attribute long layerY;
 };
 
+// https://w3c.github.io/uievents/#legacy-mutationevent-events
+
+[Exposed=Window]
+interface MutationEvent : Event {
+  const unsigned short MODIFICATION = 1;
+  const unsigned short ADDITION = 2;
+  const unsigned short REMOVAL = 3;
+
+  readonly attribute Node? relatedNode;
+  readonly attribute DOMString prevValue;
+  readonly attribute DOMString newValue;
+  readonly attribute DOMString attrName;
+  readonly attribute unsigned short attrChange;
+
+  void initMutationEvent(DOMString type, boolean bubbles, boolean cancelable, Node? relatedNode, DOMString prevValue, DOMString newValue, DOMString attrName, unsigned short attrChange);
+};
+
 partial interface Navigator {
   void webkitGetUserMedia(MediaStreamConstraints constraints,
                           NavigatorUserMediaSuccessCallback successCallback,
@@ -192,7 +209,7 @@ partial interface Window {
 };
 
 partial interface AnimationEvent {
-  AnimationEvent initAnimationEvent(DOMString typeArg, boolean canBubbleArg, boolean cancelableArg, DOMString animationNameArg, float elapsedTimeArg);
+  void initAnimationEvent(DOMString type, boolean bubbles, boolean cancelable, DOMString animationName, float elapsedTime);
 };
 
 partial interface AudioListener {
