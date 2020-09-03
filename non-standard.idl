@@ -109,6 +109,14 @@ partial interface Navigator {
                           NavigatorUserMediaErrorCallback errorCallback);
 };
 
+// https://www.w3.org/TR/DOM-Level-2-Traversal-Range/idl-definitions.html
+partial interface NodeIterator {
+  readonly attribute boolean expandEntityReferences;
+};
+partial interface TreeWalker {
+  readonly attribute boolean expandEntityReferences;
+};
+
 partial interface Range {
   void expand(optional DOMString unit = "");
   short compareNode(Node node);
