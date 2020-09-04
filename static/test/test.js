@@ -59,7 +59,6 @@ describe('harness.js', function() {
   it('return null', function(done) {
     bcd.addTest('name', 'null', 'test');
     bcd.run('Window', function(results) {
-      console.log(results);
       assert.deepStrictEqual(results, [{
         name: 'name',
         result: null,

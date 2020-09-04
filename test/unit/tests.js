@@ -20,31 +20,31 @@ const Tests = require('../../tests');
 const MANIFEST = {
   tests: {
     'api.AbortController': {
-      "test": {
-        "property": "AbortController",
-        "scope": "self"
+      'test': {
+        'property': 'AbortController',
+        'scope': 'self'
       },
-      "combinator": "and",
-      "scope": [
-        "Window",
-        "Worker"
+      'combinator': 'and',
+      'scope': [
+        'Window',
+        'Worker'
       ]
     },
     'api.AbortController.signal': {
-      "test": [
+      'test': [
         {
-          "property": "AbortController",
-          "scope": "self"
+          'property': 'AbortController',
+          'scope': 'self'
         },
         {
-          "property": "signal",
-          "scope": "AbortController"
+          'property': 'signal',
+          'scope': 'AbortController'
         }
       ],
-      "combinator": "and",
-      "scope": [
-        "Window",
-        "Worker"
+      'combinator': 'and',
+      'scope': [
+        'Window',
+        'Worker'
       ]
     },
     'api.FooBar': null
@@ -93,21 +93,21 @@ describe('Tests', () => {
   it('getTests', () => {
     assert.deepEqual(tests.getTests('/api/interfaces'), {
       'api.AbortController': {
-        "test": '"AbortController" in self',
-        "combinator": "and",
-        "scope": ["Window", "Worker"]
+        'test': '"AbortController" in self',
+        'combinator': 'and',
+        'scope': ['Window', 'Worker']
       },
       'api.AbortController.signal': {
-        "test": '"AbortController" in self && "signal" in AbortController',
-        "combinator": "and",
-        "scope": ["Window", "Worker"]
+        'test': '"AbortController" in self && "signal" in AbortController',
+        'combinator': 'and',
+        'scope': ['Window', 'Worker']
       }
     });
     assert.deepEqual(tests.getTests('/api/workerinterfaces'), {
       'api.AbortController': {
-        "test": '"AbortController" in self',
-        "combinator": "and",
-        "scope": ["Window", "Worker"]
+        'test': '"AbortController" in self',
+        'combinator': 'and',
+        'scope': ['Window', 'Worker']
       }
     });
   });
