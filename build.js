@@ -158,7 +158,7 @@ function cssPropertyToIDLAttribute(property, lowercaseFirst) {
   return output;
 }
 
-function buildCSS(bcd, webref) {
+function buildCSS(webref, bcd) {
   const propertySet = new Set;
   collectCSSPropertiesFromBCD(bcd, propertySet);
   collectCSSPropertiesFromReffy(webref, propertySet);
@@ -364,7 +364,7 @@ function validateIDL(ast) {
   return true;
 }
 
-function buildIDL(_, webref) {
+function buildIDL(webref) {
   const ast = flattenIDL(webref.idl, collectExtraIDL());
   validateIDL(ast);
 
@@ -570,7 +570,7 @@ function copyResources() {
   });
 }
 
-async function build(bcd, webref) {
+async function build(webref, bcd) {
   const manifest = {
     items: [],
     individualItems: {}
@@ -578,7 +578,7 @@ async function build(bcd, webref) {
 
   loadCustomTests();
   for (const buildFunc of [buildCSS, buildIDL]) {
-    const [items, individualItems] = buildFunc(bcd, webref);
+    const [items, individualItems] = buildFunc(webref, bcd);
     for (let [protocol, pathname] of items) {
       if (!pathname.startsWith('/')) {
         pathname = `/${pathname}`;
@@ -599,7 +599,7 @@ async function build(bcd, webref) {
 if (require.main === module) {
   const bcd = require('mdn-browser-compat-data');
   const webref = require('./webref');
-  build(bcd, webref).catch((reason) => {
+  build(webref, bcd).catch((reason) => {
     console.error(reason);
     process.exit(1);
   });
