@@ -27,11 +27,11 @@ const generatedDir = path.join(__dirname, 'generated');
 async function writeFile(filename, content) {
   if (Array.isArray(content)) {
     content = content.join('\n');
-  } else if (typeof content === 'Object') {
+  } else if (typeof content === 'object') {
     content = JSON.stringify(content, null, '  ');
   }
   content = content.trimEnd() + '\n';
-  
+
   await fs.ensureDir(path.dirname(filename));
   await fs.writeFile(filename, content, 'utf8');
 }
