@@ -40,7 +40,7 @@ class Tests {
       if (this.endpoints[endpoints[index]].httpsOnly) {
         if (this.httpOnly) {
           // Skip this endpoint and go to the next
-          return next(endpoints[index]);
+          return this.next(endpoints[index]);
         } else {
           return `https://${this.host}${endpoints[index]}`;
         }
@@ -51,7 +51,7 @@ class Tests {
   }
 
   getTests(endpoint) {
-    const idents = this.endpoints[endpoint] ? 
+    const idents = this.endpoints[endpoint] ?
         this.endpoints[endpoint].entries :
         this.individualEndpoints[endpoint];
     const tests = {};
@@ -65,7 +65,7 @@ class Tests {
 
   getScope(endpoint) {
     const e = this.endpoints[endpoint];
-    return e ? e.scope : "";
+    return e ? e.scope : '';
   }
 
   listEndpoints() {

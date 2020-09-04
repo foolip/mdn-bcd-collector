@@ -87,7 +87,7 @@ function generateTestPage(endpoint) {
     '</head>',
     '<body>',
     '<p id="status">Running tests...</p>',
-    '<script>',
+    '<script>'
   ];
 
   for (const [ident, test] of Object.entries(theseTests)) {
@@ -111,8 +111,8 @@ function generateTestPage(endpoint) {
 
   lines.push('</script>', '</body>', '</html>');
 
-  return lines.join("\n");
-};
+  return lines.join('\n');
+}
 
 const app = express();
 app.use(cookieParser());
@@ -122,7 +122,6 @@ app.use(express.static('static'));
 app.use(express.static('generated'));
 
 app.get('/api/tests', (req, res) => {
-  const {after, limit} = req.query;
   const list = tests.listEndpoints();
   const individualList = tests.listIndividual();
   res.json([list, individualList]);

@@ -626,7 +626,7 @@ describe('build', () => {
           }
         }
       });
-      
+
       assert.deepEqual(buildIDLTests(ast), {
         'api.ANGLE_instanced_arrays': {
           'test': '(function() {var canvas = document.createElement(\'canvas\'); var gl = canvas.getContext(\'webgl\'); var instance = gl.getExtension(\'ANGLE_instanced_arrays\');return !!instance;})()',
