@@ -138,6 +138,20 @@ app.post('/api/results/export/github', (req, res) => {
       .catch(/* istanbul ignore next */ (err) => catchError(err, res));
 });
 
+for (const endpoint of tests.listEndpoints()) {
+  app.get(endpoint, (req, res) => {
+    // XXX Build tests
+    res.status(201).json(tests.getTests(endpoint));
+  });
+}
+
+for (const [_, endpoint] of tests.listIndividual()) {
+  app.get(endpoint, (req, res) => {
+    // XXX Build tests
+    res.status(201).json(tests.getTests(endpoint));
+  });
+}
+
 /* istanbul ignore if */
 if (require.main === module) {
   // Start the server
