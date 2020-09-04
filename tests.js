@@ -37,7 +37,14 @@ class Tests {
   }
 
   getTests(endpoint) {
-    return this.endpoints[endpoint] || this.individualEndpoints[endpoint];
+    const idents = this.endpoints[endpoint] || this.individualEndpoints[endpoint];
+    const tests = {};
+
+    for (const ident of idents) {
+      tests[ident] = this.tests[ident];
+    }
+
+    return tests;
   }
 
   listEndpoints() {
