@@ -1,0 +1,8 @@
+{
+  "all": true,
+  "exclude": [
+    "**/generated/**",
+    "**/static/**",
+    "**/unittest/**"
+  ]
+}
