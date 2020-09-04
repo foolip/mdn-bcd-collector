@@ -51,7 +51,7 @@ class Tests {
   }
 
   compileTest(test) {
-    let compiledCode = [];
+    const compiledCode = [];
 
     for (const subtest of test.test) {
       if (typeof(subtest) === 'string') {
@@ -67,7 +67,7 @@ class Tests {
       }
     }
 
-    return compiledCode.join(test.comparator == "and" ? " && " : " || ");
+    return compiledCode.join(test.comparator == 'and' ? ' && ' : ' || ');
   }
 
   getTests(endpoint) {
@@ -77,7 +77,7 @@ class Tests {
     const tests = {};
 
     for (const ident of idents) {
-      let test = this.tests[ident];
+      const test = this.tests[ident];
       test.test = this.compileTest(test);
       tests[ident] = test;
     }
