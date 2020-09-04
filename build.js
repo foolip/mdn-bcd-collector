@@ -561,10 +561,12 @@ async function build(webref, bcd) {
             break;
         }
 
-        if (!(endpoint in manifest.endpoints.main)) {
-          manifest.endpoints.main[endpoint] = [];
+        if (endpoint) {
+          if (!(endpoint in manifest.endpoints.main)) {
+            manifest.endpoints.main[endpoint] = [];
+          }
+          manifest.endpoints.main[endpoint].push(ident);
         }
-        manifest.endpoints.main[endpoint].push(ident);
       }
 
       let url = '';
