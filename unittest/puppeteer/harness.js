@@ -58,7 +58,7 @@ describe('/resources/harness.js', () => {
 
       if (product == 'chrome') {
         const jsCoverage = await page.coverage.stopJSCoverage();
-        pti.write([...jsCoverage], { includeHostname: false, storagePath: './.nyc_output' })
+        pti.write(jsCoverage, {includeHostname: false, storagePath: './.nyc_output'});
       }
 
       assert.equal(report.stats.failures, 0);
