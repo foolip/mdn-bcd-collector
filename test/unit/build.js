@@ -423,7 +423,6 @@ describe('build', () => {
 
       expect(() => {
         flattenIDL(specIDLs, historicalIDL);
-      // eslint-disable-next-line max-len
       }).to.throw('Target DummyError not found for interface mixin DummyErrorHelper');
     });
 
@@ -437,7 +436,6 @@ describe('build', () => {
 
       expect(() => {
         flattenIDL(specIDLs, historicalIDL);
-      // eslint-disable-next-line max-len
       }).to.throw('Interface mixin DummyErrorHelper not found for target DummyError');
     });
 
@@ -455,7 +453,6 @@ describe('build', () => {
       };
       expect(() => {
         flattenIDL(specIDLs, historicalIDL);
-      // eslint-disable-next-line max-len
       }).to.throw('Operation overloading across partials/mixins for CSS.supports');
     });
 
@@ -591,21 +588,16 @@ describe('build', () => {
       loadCustomTests({
         'api': {
           'ANGLE_instanced_arrays': {
-            // eslint-disable-next-line max-len
             '__base': 'var canvas = document.createElement(\'canvas\'); var gl = canvas.getContext(\'webgl\'); var instance = gl.getExtension(\'ANGLE_instanced_arrays\');',
             '__test': 'return !!instance;',
-            // eslint-disable-next-line max-len
             'drawArraysInstancedANGLE': 'return instance && \'drawArraysInstancedANGLE\' in instance;'
           }
         },
         'css': {}
       });
       assert.deepEqual(buildIDLTests(ast), [
-        // eslint-disable-next-line max-len
         ['ANGLE_instanced_arrays', '(function() {var canvas = document.createElement(\'canvas\'); var gl = canvas.getContext(\'webgl\'); var instance = gl.getExtension(\'ANGLE_instanced_arrays\');return !!instance;})()', new Set(['Window']), [
-          // eslint-disable-next-line max-len
           ['drawArraysInstancedANGLE', '(function() {var canvas = document.createElement(\'canvas\'); var gl = canvas.getContext(\'webgl\'); var instance = gl.getExtension(\'ANGLE_instanced_arrays\');return instance && \'drawArraysInstancedANGLE\' in instance;})()'],
-          // eslint-disable-next-line max-len
           ['drawElementsInstancedANGLE', '(function() {var canvas = document.createElement(\'canvas\'); var gl = canvas.getContext(\'webgl\'); var instance = gl.getExtension(\'ANGLE_instanced_arrays\');return instance && \'drawElementsInstancedANGLE\' in instance;})()']
         ]
         ]]);
@@ -1189,13 +1181,11 @@ describe('build', () => {
         'css': {}
       });
       assert.deepEqual(buildIDLTests(ast), [
-        // eslint-disable-next-line max-len
         [
           'CSS',
           '(function() {var css = CSS;return !!css;})()',
           new Set(['Window']),
           [
-            // eslint-disable-next-line max-len
             ['paintWorklet', '(function() {var css = CSS;return css && \'paintWorklet\' in css;})()']
           ]
         ]
@@ -1245,11 +1235,8 @@ describe('build', () => {
         'css': {}
       });
       assert.deepEqual(buildIDLTests(ast), [
-        // eslint-disable-next-line max-len
         ['ElementRegistrationOptions', '(function() {var ers = ElementRegistrationOptions;return !!ers;})()', new Set(['Window']), [
-          // eslint-disable-next-line max-len
           ['extends', '(function() {var ers = ElementRegistrationOptions;return ers && \'extends\' in ers;})()'],
-          // eslint-disable-next-line max-len
           ['prototype', '(function() {var ers = ElementRegistrationOptions;return ers && \'prototype\' in ers;})()']
         ]
         ]]);

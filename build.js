@@ -165,7 +165,6 @@ function mergeMembers(target, source) {
   }
   for (const {type, name} of source.members) {
     if (type === 'operation' && targetOperations.has(name)) {
-      // eslint-disable-next-line max-len
       throw new Error(`Operation overloading across partials/mixins for ${target.name}.${name}`);
     }
   }
@@ -192,7 +191,6 @@ function flattenIDL(specIDLs, collectExtraIDL) {
                                     it.type === dfn.type &&
                                     it.name === dfn.name);
     if (!target) {
-      // eslint-disable-next-line max-len
       throw new Error(`Original definition not found for partial ${dfn.type} ${dfn.name}`);
     }
 
@@ -209,14 +207,12 @@ function flattenIDL(specIDLs, collectExtraIDL) {
                                      it.type === 'interface mixin' &&
                                      it.name === dfn.includes);
       if (!mixin) {
-        // eslint-disable-next-line max-len
         throw new Error(`Interface mixin ${dfn.includes} not found for target ${dfn.target}`);
       }
       const target = ast.find((it) => !it.partial &&
                                       it.type === 'interface' &&
                                       it.name === dfn.target);
       if (!target) {
-        // eslint-disable-next-line max-len
         throw new Error(`Target ${dfn.target} not found for interface mixin ${dfn.includes}`);
       }
 
@@ -360,7 +356,6 @@ function validateIDL(ast) {
       } else {
         validations.push({
           ruleName: 'no-duplicate-member',
-          // eslint-disable-next-line max-len
           message: `Validation error: Duplicate member ${member.name} in ${dfn.type} ${dfn.name}`
         });
       }

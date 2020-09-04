@@ -8,7 +8,16 @@
     "rules": {
         "comma-dangle": ["error", "never"],
         "require-jsdoc": "off",
-        "no-unused-vars": ["error", {"varsIgnorePattern": "^_$"}]
+        "no-unused-vars": ["error", {"varsIgnorePattern": "^_$"}],
+        "max-len": ["error", {
+            "code": 80,
+            "tabWidth": 2,
+            "ignoreStrings": true,
+            "ignoreTemplateLiterals": true,
+            "ignoreRegExpLiterals": true,
+            "ignoreUrls": true,
+            "ignorePattern": "goog.(module|require)"
+        }]
     },
     "env": {
         "es6": true,
