@@ -64,6 +64,45 @@ function catchError(err, res) {
   res.status(500).end();
 }
 
+function generateTestPage(tests, individual) {
+  const lines = [
+    '<!DOCTYPE html>',
+    '<html>',
+    '<head>',
+    '<!--Copyright 2020 Google LLC',
+    '',
+    'Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at',
+    '',
+    '     https://www.apache.org/licenses/LICENSE-2.0',
+    '',
+    'Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.-->',
+    '<meta charset="utf-8">',
+    '<script src="/resources/json3.min.js"></script>',
+    '<script src="/resources/harness.js"></script>',
+    '<script src="/resources/core.js"></script>',
+    '</head>',
+    '<body>',
+    '<p id="status">Running tests...</p>',
+    '<script>',
+  ];
+
+  for (const [ident, test] of Object.entries(tests)) {
+    for (const scope of test.scope) {
+      lines.push(`bcd.addTest("${ident}", ${JSON.stringify(test.test)}, "${scope}");`);
+    }
+  }
+
+  if (individual) {
+    lines.push("bcd.run('', bcd.finishAndDisplay);");
+  } else {
+    lines.push("bcd.run('');");
+  }
+
+  lines.push('</script>', '</body>', '</html>');
+
+  return lines.join("\n");
+};
+
 const app = express();
 app.use(cookieParser());
 app.use(cookieSession);
@@ -140,15 +179,13 @@ app.post('/api/results/export/github', (req, res) => {
 
 for (const endpoint of tests.listEndpoints()) {
   app.get(endpoint, (req, res) => {
-    // XXX Build tests
-    res.status(201).json(tests.getTests(endpoint));
+    res.send(generateTestPage(tests.getTests(endpoint)));
   });
 }
 
 for (const [_, endpoint] of tests.listIndividual()) {
   app.get(endpoint, (req, res) => {
-    // XXX Build tests
-    res.status(201).json(tests.getTests(endpoint));
+    res.send(generateTestPage(tests.getTests(endpoint, true)))
   });
 }
 
