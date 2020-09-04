@@ -580,6 +580,11 @@ async function build(webref, bcd) {
       for (const part of ident.split('.')) {
         url += '/' + part;
 
+        if (['/api', '/css', '/css/properties'].includes(url)) {
+          // Ignore things tested in main endpoints
+          continue;
+        }
+
         if (!(url in manifest.endpoints.individual)) {
           manifest.endpoints.individual[url] = [];
         }
