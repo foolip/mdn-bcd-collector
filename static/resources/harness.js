@@ -67,8 +67,19 @@
     pending.push({name: name, code: code, scope: scope, info: info});
   }
 
+  // eslint-disable-next-line no-unused-vars
   function testWithPrefix(data) {
-    // XXX Kept for reference for prefixes, not actively used
+    // XXX Not actively used; kept for historical purposes. Code compilation
+    // has been moved to the server-side, aside from prefixes. Once prefixes
+    // are implemented, remove this code
+
+    var result = {name: data.name, info: {}};
+    var category = data.name.split('.')[0];
+
+    var prefixesToTest = [''];
+    if (category in prefixes) {
+      prefixesToTest = prefixes[category];
+    }
 
     try {
       var parentPrefix = '';
@@ -198,6 +209,15 @@
       result.result = null;
       result.message = 'threw ' + stringify(err);
     }
+
+    if (data.info !== undefined) {
+      result.info = Object.assign({}, result.info, data.info);
+    }
+
+    result.info.code = compiledCode.join(' && ');
+    result.info.scope = data.scope;
+
+    return result;
   }
 
   // Each test is mapped to an object like this:
