@@ -38,11 +38,12 @@ class Tests {
       }
 
       if (this.endpoints[endpoints[index]].httpsOnly) {
+        const newUrl = `https://${this.host}${endpoints[index]}`;
         if (this.httpOnly) {
           // Skip this endpoint and go to the next
-          return this.next(endpoints[index]);
+          return this.next(newUrl);
         } else {
-          return `https://${this.host}${endpoints[index]}`;
+          return newUrl;
         }
       }
 
