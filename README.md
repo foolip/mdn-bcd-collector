@@ -42,6 +42,6 @@ You can also test just a single browser by defining the `BROWSER` environment va
 
     BROWSER=chrome npm run selenium
 
-## Running the tests
+## Running the unit tests and linter
 
     npm test
