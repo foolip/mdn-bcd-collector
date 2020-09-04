@@ -285,10 +285,6 @@ function getExposureSet(node) {
   return globals;
 }
 
-function buildIDLTests(ast) {
-  
-}
-
 function allowDuplicates(dfn, member) {
   switch (dfn.name) {
     // TODO: sort this out spec-side
