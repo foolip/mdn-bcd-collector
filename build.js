@@ -53,10 +53,6 @@ function getCustomTestAPI(name, member) {
           false;
       }
     }
-  } else {
-    if (name in customTests.api && member in customTests.api[name]) {
-      test = customTests.api[name][member];
-    }
   }
 
   if (test) {
