@@ -69,6 +69,49 @@ class Tests {
     return e ? e.scope : '';
   }
 
+  generateTestPage(endpoint) {
+    const theseTests = this.getTests(endpoint);
+    let testScope = this.getScope(endpoint);
+    let individual = false;
+
+    const lines = [
+      '<!DOCTYPE html>',
+      '<html>',
+      '<head>',
+      '<meta charset="utf-8">',
+      '<script src="/resources/json3.min.js"></script>',
+      '<script src="/resources/harness.js"></script>',
+      '<script src="/resources/core.js"></script>',
+      '</head>',
+      '<body>',
+      '<p id="status">Running tests...</p>',
+      '<script>'
+    ];
+
+    for (const [ident, test] of Object.entries(theseTests)) {
+      for (const scope of test.scope) {
+        if (!testScope) {
+          // Set scope to the first found scope if it's an individual test
+          testScope = scope;
+          individual = true;
+        }
+        if (scope == testScope) {
+          lines.push(`bcd.addTest("${ident}", ${JSON.stringify(test.code)}, "${scope}");`);
+        }
+      }
+    }
+
+    if (individual) {
+      lines.push(`bcd.run('${testScope}', bcd.finishAndDisplay);`);
+    } else {
+      lines.push(`bcd.run('${testScope}');`);
+    }
+
+    lines.push('</script>', '</body>', '</html>');
+
+    return lines.join('\n');
+  }
+
   listEndpoints() {
     return Object.keys(this.endpoints);
   }
