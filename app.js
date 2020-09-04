@@ -64,7 +64,10 @@ function catchError(err, res) {
   res.status(500).end();
 }
 
-function generateTestPage(tests, individual) {
+function generateTestPage(endpoint) {
+  const theseTests = tests.getTests(endpoint);
+  const testScope = tests.getScope(endpoint);
+
   const lines = [
     '<!DOCTYPE html>',
     '<html>',
@@ -86,16 +89,18 @@ function generateTestPage(tests, individual) {
     '<script>',
   ];
 
-  for (const [ident, test] of Object.entries(tests)) {
+  for (const [ident, test] of Object.entries(theseTests)) {
     for (const scope of test.scope) {
-      lines.push(`bcd.addTest("${ident}", ${JSON.stringify(test.test)}, "${scope}");`);
+      if (testScope && scope == testScope) {
+        lines.push(`bcd.addTest("${ident}", ${JSON.stringify(test.test)}, "${scope}");`);
+      }
     }
   }
 
-  if (individual) {
-    lines.push("bcd.run('', bcd.finishAndDisplay);");
+  if (testScope) {
+    lines.push(`bcd.run('${testScope}');`);
   } else {
-    lines.push("bcd.run('');");
+    lines.push(`bcd.run('', bcd.finishAndDisplay);`);
   }
 
   lines.push('</script>', '</body>', '</html>');
@@ -179,13 +184,13 @@ app.post('/api/results/export/github', (req, res) => {
 
 for (const endpoint of tests.listEndpoints()) {
   app.get(endpoint, (req, res) => {
-    res.send(generateTestPage(tests.getTests(endpoint)));
+    res.send(generateTestPage(endpoint));
   });
 }
 
 for (const [_, endpoint] of tests.listIndividual()) {
   app.get(endpoint, (req, res) => {
-    res.send(generateTestPage(tests.getTests(endpoint, true)))
+    res.send(generateTestPage(endpoint));
   });
 }
 

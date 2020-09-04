@@ -564,10 +564,14 @@ async function build(webref, bcd) {
 
         if (endpoint) {
           if (!(endpoint in manifest.endpoints.main)) {
-            manifest.endpoints.main[endpoint] = [];
+            manifest.endpoints.main[endpoint] = {
+              scope: scope,
+              httpsOnly: scope === 'ServiceWorker',
+              entries: []
+            };
           }
-          if (!(ident in manifest.endpoints.main[endpoint])) {
-            manifest.endpoints.main[endpoint].push(ident);
+          if (!(ident in manifest.endpoints.main[endpoint].entries)) {
+            manifest.endpoints.main[endpoint].entries.push(ident);
           }
         }
       }

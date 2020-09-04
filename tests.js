@@ -37,7 +37,8 @@ class Tests {
   }
 
   getTests(endpoint) {
-    const idents = this.endpoints[endpoint] || this.individualEndpoints[endpoint];
+    const idents = this.endpoints[endpoint].entries
+        || this.individualEndpoints[endpoint];
     const tests = {};
 
     for (const ident of idents) {
@@ -45,6 +46,11 @@ class Tests {
     }
 
     return tests;
+  }
+
+  getScope(endpoint) {
+    const e = this.endpoints[endpoint];
+    return e ? e.scope : "";
   }
 
   listEndpoints() {
