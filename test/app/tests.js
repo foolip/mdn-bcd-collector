@@ -23,11 +23,13 @@ const agent = chai.request.agent(app);
 const assert = chai.assert;
 
 describe('/api/tests', () => {
-  it('list one test', async () => {
-    const res = await agent.get('/api/tests?limit=1');
+  it('list tests', async () => {
+    const res = await agent.get('/api/tests');
     assert.equal(res.status, 200);
     assert.isArray(res.body);
-    assert.equal(res.body[0].length, 1);
+    assert.isArray(res.body[0]);
+    assert.isArray(res.body[1]);
+    assert.equal(res.body.length, 2);
   });
 });
 

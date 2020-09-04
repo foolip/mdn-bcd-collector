@@ -19,7 +19,7 @@ const chai = require('chai');
 const chaiHttp = require('chai-http');
 
 const manifest = require('../../MANIFEST.json');
-const manifestItems = manifest.items.filter((item) => item.protocol === 'http');
+const manifestItems = Object.entries(manifest.endpoints.main);
 
 chai.use(chaiHttp);
 const agent = chai.request.agent(app);
@@ -45,8 +45,8 @@ describe('/api/results', () => {
     assert.deepEqual(res.body, {});
   });
 
-  const testURL = `http://localhost:8080${manifestItems[0].pathname}`;
-  const testURL2 = `https://host.test${manifestItems[1].pathname}`;
+  const testURL = `http://localhost:8080${manifestItems[0][0]}`;
+  const testURL2 = `https://host.test${manifestItems[1][0]}`;
 
   it('submit valid results', async () => {
     const res = await agent.post('/api/results')
@@ -54,7 +54,7 @@ describe('/api/results', () => {
         .send({x: 1});
     assert.equal(res.status, 201);
     assert.deepEqual(res.body, {
-      'next': `http://localhost:8080${manifestItems[1].pathname}`
+      'next': `http://localhost:8080${manifestItems[1][0]}`
     });
   });
 

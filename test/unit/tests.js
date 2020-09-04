@@ -18,19 +18,39 @@ const assert = require('assert');
 const Tests = require('../../tests');
 
 const MANIFEST = {
-  items: [{
-    pathname: '/a/test.html',
-    protocol: 'http'
-  }, {
-    pathname: '/b/test.html',
-    protocol: 'http'
-  }, {
-    pathname: '/b/test.html',
-    protocol: 'https'
-  }, {
-    pathname: '/c/test.html',
-    protocol: 'https'
-  }]
+  tests: {
+    'api.AbortController': true,
+    'api.AbortController.controller': false,
+    'api.FooBar': null
+  },
+  endpoints: {
+    main: {
+      '/api/interfaces': {
+        scope: 'Window',
+        httpsOnly: false,
+        entries: [
+          'api.AbortController',
+          'api.AbortController.controller'
+        ]
+      },
+      '/api/serviceworkerinterfaces': {
+        scope: 'ServiceWorker',
+        httpsOnly: true,
+        entries: [
+          'api.AbortController'
+        ]
+      }
+    },
+    individual: {
+      '/api/AbortController': [
+        'api.AbortController',
+        'api.AbortController.controller'
+      ],
+      '/api/AbortController/controller': [
+        'api.AbortController.controller'
+      ]
+    }
+  }
 };
 
 describe('Tests', () => {
@@ -39,54 +59,33 @@ describe('Tests', () => {
     host: 'host.test'
   });
 
-  it('list all tests', () => {
-    assert.deepEqual(tests.list(), [
-      'http://host.test/a/test.html',
-      'http://host.test/b/test.html',
-      'https://host.test/b/test.html',
-      'https://host.test/c/test.html'
-    ]);
-  });
-
-  it('list first test', () => {
-    assert.deepEqual(tests.list(undefined, 1), [
-      'http://host.test/a/test.html'
-    ]);
-  });
-
-  it('list middle two tests', () => {
-    assert.deepEqual(tests.list('http://host.test/a/test.html', 2), [
-      'http://host.test/b/test.html',
-      'https://host.test/b/test.html'
-    ]);
-  });
-
-  it('list last two tests', () => {
-    assert.deepEqual(tests.list('http://host.test/b/test.html'), [
-      'https://host.test/b/test.html',
-      'https://host.test/c/test.html'
-    ]);
-  });
-
-  it('list after last test', () => {
-    assert.deepEqual(tests.list('https://host.test/c/test.html'), []);
-  });
-
-  it('list after non-existent test', () => {
-    assert.throws(() => {
-      tests.list('https://host.test/not/a/test.html');
-    }, Error);
-  });
-
-  it('list HTTP-only tests', () => {
-    const httpTests = new Tests({
-      manifest: MANIFEST,
-      host: 'host.test',
-      httpOnly: true
+  it('getTests', () => {
+    assert.deepEqual(tests.getTests('/api/interfaces'), {
+      'api.AbortController': true,
+      'api.AbortController.controller': false
     });
-    assert.deepEqual(httpTests.list(), [
-      'http://host.test/a/test.html',
-      'http://host.test/b/test.html'
+    assert.deepEqual(tests.getTests('/api/serviceworkerinterfaces'), {
+      'api.AbortController': true
+    });
+  });
+
+  it('getScope', () => {
+    assert.equal(tests.getScope('/api/interfaces'), 'Window');
+    assert.equal(tests.getScope('/api/serviceworkerinterfaces'), 'ServiceWorker');
+    assert.equal(tests.getScope('/api/dummy'), '');
+  });
+
+  it('listEndpoints', () => {
+    assert.deepEqual(tests.listEndpoints(), [
+      '/api/interfaces',
+      '/api/serviceworkerinterfaces'
+    ]);
+  });
+
+  it('listIndividual', () => {
+    assert.deepEqual(tests.listIndividual(), [
+      ['api.AbortController', '/api/AbortController'],
+      ['api.AbortController.controller', '/api/AbortController/controller']
     ]);
   });
 });
