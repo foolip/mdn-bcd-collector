@@ -158,69 +158,27 @@ function cssPropertyToIDLAttribute(property, lowercaseFirst) {
   return output;
 }
 
-function buildCSSTests(propertyNames, method, basename) {
-  const lines = [];
-
-  for (const name of propertyNames) {
-    const ident = `css.properties.${name}`;
-    const customExpr = getCustomTestCSS(name);
-
-    if (customExpr) {
-      if (method === 'custom' || method === 'all') {
-        lines.push(`bcd.addTest("${ident}", "${customExpr}", 'CSS');`);
-      }
-    } else {
-      if (method === 'CSSStyleDeclaration' || method === 'all') {
-        const attrName = cssPropertyToIDLAttribute(name, name.startsWith('-'));
-        lines.push(`bcd.addTest("${ident}", ${JSON.stringify(
-            {property: attrName, scope: 'document.body.style'}
-        )}, 'CSS');`);
-      }
-      if (method === 'CSS.supports' || method === 'all') {
-        lines.push(`bcd.addTest("${ident}", ${JSON.stringify(
-            {property: name, scope: 'CSS.supports'}
-        )}, 'CSS');`);
-      }
-    }
-  }
-
-  lines.push(
-    method === 'all' ?
-    'bcd.run("CSS", bcd.finishIndividual);' :
-    'bcd.run("CSS");'
-  );
-
-  const pathname = path.join('css', 'properties', basename);
-  const filename = path.join(generatedDir, pathname);
-  writeTestFile(filename, lines);
-  return pathname;
-}
-
 function buildCSS(bcd, webref) {
   const propertySet = new Set;
   collectCSSPropertiesFromBCD(bcd, propertySet);
   collectCSSPropertiesFromReffy(webref, propertySet);
 
-  const propertyNames = Array.from(propertySet);
-  propertyNames.sort();
+  const tests = [];
 
-  const mainTests = [
-    ['http', buildCSSTests(propertyNames,
-        'CSSStyleDeclaration', 'in-style.html')],
-    ['http', buildCSSTests(propertyNames,
-        'CSS.supports', 'dot-supports.html')],
-    ['http', buildCSSTests(propertyNames,
-        'custom', 'custom-support-test.html')]
-  ];
+  for (const name of Array.from(propertySet).sort()) {
+    const ident = `css.properties.${name}`;
+    const customExpr = getCustomTestCSS(name);
 
-  const individualItems = [];
-
-  for (const property of propertyNames) {
-    buildCSSTests([property], 'all', `${property}/index.html`);
-    individualItems.push(`css.properties.${property}`);
+    if (customExpr) {
+      tests.push(ident, customExpr, "CSS", []);
+    } else {
+      const attrName = cssPropertyToIDLAttribute(name, name.startsWith('-'));
+      tests.push(ident, {property: attrName, scope: 'document.body.style'}, "CSS", []);
+      tests.push(ident, {property: name, scope: 'CSS.supports'}, "CSS", []);
+    }
   }
 
-  return [mainTests, individualItems];
+  return tests;
 }
 
 /* istanbul ignore next */
@@ -336,6 +294,80 @@ function getExposureSet(node) {
 }
 
 function buildIDLTests(ast) {
+  
+}
+
+function allowDuplicates(dfn, member) {
+  switch (dfn.name) {
+    // TODO: sort this out spec-side
+    case 'SVGAElement':
+      return member.name === 'href';
+    // TODO: handle non-conflicting [Exposed] and drop this
+    case 'WebGLRenderingContext':
+    case 'WebGL2RenderingContext':
+      return member.name === 'canvas';
+  }
+  return false;
+}
+
+function validateIDL(ast) {
+  const ignoreRules = new Set([
+    'constructor-member',
+    'dict-arg-default',
+    'replace-void',
+    'require-exposed'
+  ]);
+
+  const validations = WebIDL2.validate(ast);
+
+  // Monkey-patching support for https://github.com/w3c/webidl2.js/issues/484
+  for (const dfn of ast) {
+    if (!dfn.members || dfn.members.length == 0) {
+      continue;
+    }
+    const names = new Set();
+    for (const member of dfn.members) {
+      if (!member.name) {
+        continue;
+      }
+      if (member.type === 'operation') {
+        // Overloading across partials/mixins are checked in mergeMembers.
+        continue;
+      }
+      if (allowDuplicates(dfn, member)) {
+        continue;
+      }
+      if (!names.has(member.name)) {
+        names.add(member.name);
+      } else {
+        validations.push({
+          ruleName: 'no-duplicate-member',
+          // eslint-disable-next-line max-len
+          message: `Validation error: Duplicate member ${member.name} in ${dfn.type} ${dfn.name}`
+        });
+      }
+    }
+  }
+
+  const validationErrors = [];
+  for (const {ruleName, message} of validations) {
+    if (ignoreRules.has(ruleName)) {
+      continue;
+    }
+    validationErrors.push(`${message} [${ruleName}]`);
+  }
+
+  if (validationErrors.length) {
+    throw new Error(`Validation errors:\n\n${validationErrors.join('\n')}`);
+  }
+
+  return true;
+}
+
+function buildIDL(_, webref) {
+  const ast = flattenIDL(webref.idl, collectExtraIDL());
+  validateIDL(ast);
+
   const tests = [];
 
   const interfaces = ast.filter((dfn) =>
@@ -491,202 +523,6 @@ function buildIDLTests(ast) {
   }
 
   return tests;
-}
-
-function allowDuplicates(dfn, member) {
-  switch (dfn.name) {
-    // TODO: sort this out spec-side
-    case 'SVGAElement':
-      return member.name === 'href';
-    // TODO: handle non-conflicting [Exposed] and drop this
-    case 'WebGLRenderingContext':
-    case 'WebGL2RenderingContext':
-      return member.name === 'canvas';
-  }
-  return false;
-}
-
-function validateIDL(ast) {
-  const ignoreRules = new Set([
-    'constructor-member',
-    'dict-arg-default',
-    'replace-void',
-    'require-exposed'
-  ]);
-
-  const validations = WebIDL2.validate(ast);
-
-  // Monkey-patching support for https://github.com/w3c/webidl2.js/issues/484
-  for (const dfn of ast) {
-    if (!dfn.members || dfn.members.length == 0) {
-      continue;
-    }
-    const names = new Set();
-    for (const member of dfn.members) {
-      if (!member.name) {
-        continue;
-      }
-      if (member.type === 'operation') {
-        // Overloading across partials/mixins are checked in mergeMembers.
-        continue;
-      }
-      if (allowDuplicates(dfn, member)) {
-        continue;
-      }
-      if (!names.has(member.name)) {
-        names.add(member.name);
-      } else {
-        validations.push({
-          ruleName: 'no-duplicate-member',
-          // eslint-disable-next-line max-len
-          message: `Validation error: Duplicate member ${member.name} in ${dfn.type} ${dfn.name}`
-        });
-      }
-    }
-  }
-
-  const validationErrors = [];
-  for (const {ruleName, message} of validations) {
-    if (ignoreRules.has(ruleName)) {
-      continue;
-    }
-    validationErrors.push(`${message} [${ruleName}]`);
-  }
-
-  if (validationErrors.length) {
-    throw new Error(`Validation errors:\n\n${validationErrors.join('\n')}`);
-  }
-
-  return true;
-}
-
-function buildIDLWindow(tests) {
-  const lines = [];
-
-  for (const [name, expr, exposureSet, memberTests] of tests) {
-    if (!exposureSet.has('Window')) {
-      continue;
-    }
-    lines.push(
-        `bcd.addTest('api.${name}', ${JSON.stringify(expr)}, 'Window');`
-    );
-
-    for (const [memberName, memberExpr] of memberTests) {
-      lines.push(
-          // eslint-disable-next-line max-len
-          `bcd.addTest('api.${name}.${memberName}', ${JSON.stringify(memberExpr)}, 'Window');`
-      );
-    }
-  }
-
-  lines.push('bcd.run("Window");');
-  const pathname = path.join('api', 'interfaces.html');
-  const filename = path.join(generatedDir, pathname);
-  writeTestFile(filename, lines);
-  return [['http', pathname], ['https', pathname]];
-}
-
-function buildIDLWorker(tests) {
-  const lines = [];
-
-  for (const [name, expr, exposureSet, memberTests] of tests) {
-    if (!(exposureSet.has('Worker') || exposureSet.has('DedicatedWorker'))) {
-      continue;
-    }
-    lines.push(
-        `bcd.addTest('api.${name}', ${JSON.stringify(expr)}, 'Worker');`
-    );
-
-    for (const [memberName, memberExpr] of memberTests) {
-      lines.push(
-          // eslint-disable-next-line max-len
-          `bcd.addTest('api.${name}.${memberName}', ${JSON.stringify(memberExpr)}, 'Worker');`
-      );
-    }
-  }
-
-  lines.push('bcd.run("Worker");');
-  const pathname = path.join('api', 'workerinterfaces.html');
-  const filename = path.join(generatedDir, pathname);
-  writeTestFile(filename, lines);
-  return [['http', pathname], ['https', pathname]];
-}
-
-function buildIDLServiceWorker(tests) {
-  const lines = [];
-
-  for (const [name, expr, exposureSet, memberTests] of tests) {
-    if (!exposureSet.has('ServiceWorker')) {
-      continue;
-    }
-    lines.push(
-        `bcd.addTest('api.${name}', ${JSON.stringify(expr)}, 'ServiceWorker');`
-    );
-
-    for (const [memberName, memberExpr] of memberTests) {
-      lines.push(
-          // eslint-disable-next-line max-len
-          `bcd.addTest('api.${name}.${memberName}', ${JSON.stringify(memberExpr)}, 'ServiceWorker');`
-      );
-    }
-  }
-
-  lines.push('bcd.run("ServiceWorker");');
-  const pathname = path.join('api', 'serviceworkerinterfaces.html');
-  const filename = path.join(generatedDir, pathname);
-  writeTestFile(filename, lines);
-  return [['https', pathname]];
-}
-
-function buildIDLIndividual(tests) {
-  const handledIfaces = [];
-
-  for (const [name, expr, exposureSet, memberTests] of tests) {
-    handledIfaces.push(`api.${name}`);
-    const lines = [];
-
-    const scope = exposureSet.has('Window') ? 'Window' :
-        (exposureSet.has('Worker') || exposureSet.has('DedicatedWorker')) ?
-        'Worker' : exposureSet.has('ServiceWorker') ? 'ServiceWorker' : null;
-
-    lines.push(
-        `bcd.addTest('api.${name}', ${JSON.stringify(expr)}, '${scope}');`
-    );
-
-    for (const [memberName, memberExpr] of memberTests) {
-      handledIfaces.push(`api.${name}.${memberName}`);
-      // eslint-disable-next-line max-len
-      const test = `bcd.addTest('api.${name}.${memberName}', ${JSON.stringify(memberExpr)}, '${scope}');`;
-      lines.push(test);
-
-      const pathname = path.join('api', `${name}/${memberName}/index.html`);
-      const filename = path.join(generatedDir, pathname);
-      writeTestFile(filename, [
-        test, `bcd.run("${scope}", bcd.finishIndividual);`
-      ]);
-    }
-
-    lines.push(`bcd.run("${scope}", bcd.finishIndividual);`);
-    const pathname = path.join('api', `${name}/index.html`);
-    const filename = path.join(generatedDir, pathname);
-    writeTestFile(filename, lines);
-  }
-
-  return handledIfaces;
-}
-
-function buildIDL(_, webref) {
-  const ast = flattenIDL(webref.idl, collectExtraIDL());
-  validateIDL(ast);
-  const tests = buildIDLTests(ast);
-  let testpaths = [];
-  for (const buildFunc of [
-    buildIDLWindow, buildIDLWorker, buildIDLServiceWorker
-  ]) {
-    testpaths = testpaths.concat(buildFunc(tests));
-  }
-  const handledIfaces = buildIDLIndividual(tests);
-  return [testpaths, handledIfaces];
 }
 
 async function writeManifest(manifest) {
