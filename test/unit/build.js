@@ -27,14 +27,15 @@ const proxyquire = require('proxyquire');
 const fs = require('fs');
 
 const {
-  collectCSSPropertiesFromBCD,
-  collectCSSPropertiesFromReffy,
-  cssPropertyToIDLAttribute,
   writeFile,
   flattenIDL,
   getExposureSet,
+  validateIDL,
   buildIDLTests,
-  validateIDL
+  collectCSSPropertiesFromBCD,
+  collectCSSPropertiesFromReffy,
+  cssPropertyToIDLAttribute,
+  buildCSS
 } = proxyquire('../../build', {
   './custom-tests.json': {'api': {}, 'css': {}}
 });

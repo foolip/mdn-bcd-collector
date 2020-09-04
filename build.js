@@ -68,83 +68,6 @@ function getCustomTestCSS(name) {
       `(function() {${customTests.css.properties[name]}})()`;
 }
 
-function collectCSSPropertiesFromBCD(bcd, propertySet) {
-  for (const [prop, data] of Object.entries(bcd.css.properties)) {
-    propertySet.add(prop);
-    if (!data.__compat) {
-      // TODO: this misses stuff like css.properties['row-gap'].flex_content
-      continue;
-    }
-    const support = data.__compat.support;
-    if (!support) {
-      continue;
-    }
-    // eslint-disable-next-line no-inner-declarations
-    function process(statement) {
-      if (Array.isArray(statement)) {
-        statement.forEach(process);
-        return;
-      }
-      if (statement.alternative_name) {
-        propertySet.add(statement.alternative_name);
-      }
-    }
-    for (const statement of Object.values(support)) {
-      process(statement);
-    }
-  }
-}
-
-function collectCSSPropertiesFromReffy(webref, propertySet) {
-  for (const data of Object.values(webref.css)) {
-    for (const prop of Object.keys(data.properties)) {
-      propertySet.add(prop);
-    }
-  }
-}
-
-// https://drafts.csswg.org/cssom/#css-property-to-idl-attribute
-function cssPropertyToIDLAttribute(property, lowercaseFirst) {
-  let output = '';
-  let uppercaseNext = false;
-  if (lowercaseFirst) {
-    property = property.substr(1);
-  }
-  for (const c of property) {
-    if (c === '-') {
-      uppercaseNext = true;
-    } else if (uppercaseNext) {
-      uppercaseNext = false;
-      output += c.toUpperCase();
-    } else {
-      output += c;
-    }
-  }
-  return output;
-}
-
-function buildCSS(webref, bcd) {
-  const propertySet = new Set;
-  collectCSSPropertiesFromBCD(bcd, propertySet);
-  collectCSSPropertiesFromReffy(webref, propertySet);
-
-  const tests = {};
-
-  for (const name of Array.from(propertySet).sort()) {
-    const attrName = cssPropertyToIDLAttribute(name, name.startsWith('-'));
-    tests[`css.properties.${name}`] = {
-      'test': getCustomTestCSS(name) || [
-        {property: attrName, scope: 'document.body.style'},
-        {property: name, scope: 'CSS.supports'}
-      ],
-      'combinator': 'or',
-      'scope': 'CSS'
-    };
-  }
-
-  return tests;
-}
-
 /* istanbul ignore next */
 function collectExtraIDL() {
   const idl = fs.readFileSync('./non-standard.idl', 'utf8');
@@ -489,6 +412,83 @@ function buildIDL(webref) {
   return buildIDLTests(ast);
 }
 
+function collectCSSPropertiesFromBCD(bcd, propertySet) {
+  for (const [prop, data] of Object.entries(bcd.css.properties)) {
+    propertySet.add(prop);
+    if (!data.__compat) {
+      // TODO: this misses stuff like css.properties['row-gap'].flex_content
+      continue;
+    }
+    const support = data.__compat.support;
+    if (!support) {
+      continue;
+    }
+    // eslint-disable-next-line no-inner-declarations
+    function process(statement) {
+      if (Array.isArray(statement)) {
+        statement.forEach(process);
+        return;
+      }
+      if (statement.alternative_name) {
+        propertySet.add(statement.alternative_name);
+      }
+    }
+    for (const statement of Object.values(support)) {
+      process(statement);
+    }
+  }
+}
+
+function collectCSSPropertiesFromReffy(webref, propertySet) {
+  for (const data of Object.values(webref.css)) {
+    for (const prop of Object.keys(data.properties)) {
+      propertySet.add(prop);
+    }
+  }
+}
+
+// https://drafts.csswg.org/cssom/#css-property-to-idl-attribute
+function cssPropertyToIDLAttribute(property, lowercaseFirst) {
+  let output = '';
+  let uppercaseNext = false;
+  if (lowercaseFirst) {
+    property = property.substr(1);
+  }
+  for (const c of property) {
+    if (c === '-') {
+      uppercaseNext = true;
+    } else if (uppercaseNext) {
+      uppercaseNext = false;
+      output += c.toUpperCase();
+    } else {
+      output += c;
+    }
+  }
+  return output;
+}
+
+function buildCSS(webref, bcd) {
+  const propertySet = new Set;
+  collectCSSPropertiesFromBCD(bcd, propertySet);
+  collectCSSPropertiesFromReffy(webref, propertySet);
+
+  const tests = {};
+
+  for (const name of Array.from(propertySet).sort()) {
+    const attrName = cssPropertyToIDLAttribute(name, name.startsWith('-'));
+    tests[`css.properties.${name}`] = {
+      'test': getCustomTestCSS(name) || [
+        {property: attrName, scope: 'document.body.style'},
+        {property: name, scope: 'CSS.supports'}
+      ],
+      'combinator': 'or',
+      'scope': 'CSS'
+    };
+  }
+
+  return tests;
+}
+
 async function writeManifest(manifest) {
   await writeFile('MANIFEST.json', JSON.stringify(manifest, null, '  '));
 }
@@ -594,12 +594,13 @@ if (require.main === module) {
     writeFile,
     getCustomTestAPI,
     getCustomTestCSS,
-    collectCSSPropertiesFromBCD,
-    collectCSSPropertiesFromReffy,
-    cssPropertyToIDLAttribute,
     flattenIDL,
     getExposureSet,
     buildIDLTests,
-    validateIDL
+    validateIDL,
+    collectCSSPropertiesFromBCD,
+    collectCSSPropertiesFromReffy,
+    cssPropertyToIDLAttribute,
+    buildCSS
   };
 }
