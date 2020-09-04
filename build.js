@@ -256,6 +256,60 @@ function flattenIDL(specIDLs, collectExtraIDL) {
   return ast;
 }
 
+function flattenMembers(iface) {
+  const members = iface.members.filter((member) => member.name);
+  for (const member of iface.members.filter((member) => !member.name)) {
+    switch (member.type) {
+      case 'constructor':
+        members.push({name: iface.name, type: 'constructor'});
+        break;
+      case 'iterable':
+        members.push(
+            {name: 'entries', type: 'operation'},
+            {name: 'keys', type: 'operation'},
+            {name: 'values', type: 'operation'},
+            {name: 'forEach', type: 'operation'},
+            {name: '@@iterator', type: 'symbol'}
+        );
+        break;
+      case 'maplike':
+        members.push(
+            {name: 'size', type: 'operation'},
+            {name: 'entries', type: 'operation'},
+            {name: 'keys', type: 'operation'},
+            {name: 'values', type: 'operation'},
+            {name: 'get', type: 'operation'},
+            {name: 'has', type: 'operation'},
+            {name: 'clear', type: 'operation'},
+            {name: 'delete', type: 'operation'},
+            {name: 'set', type: 'operation'},
+            {name: 'forEach', type: 'operation'}
+        );
+        break;
+      case 'setlike':
+        members.push(
+            {name: 'size', type: 'operation'},
+            {name: 'entries', type: 'operation'},
+            {name: 'values', type: 'operation'},
+            {name: 'keys', type: 'operation'},
+            {name: 'has', type: 'operation'},
+            {name: 'add', type: 'operation'},
+            {name: 'delete', type: 'operation'},
+            {name: 'clear', type: 'operation'}
+        );
+        break;
+      case 'operation':
+        // We don't care about setter/getter functions
+        break;
+    }
+  }
+  if (getExtAttr(iface, 'Constructor')) {
+    members.push({name: iface.name, type: 'constructor'});
+  }
+
+  return members.sort((a, b) => a.name.localeCompare(b.name));
+}
+
 function getExtAttr(node, name) {
   return node.extAttrs && node.extAttrs.find((i) => i.name === name);
 }
@@ -376,59 +430,8 @@ function buildIDL(webref) {
     const exposureSet = getExposureSet(iface);
     const isGlobal = !!getExtAttr(iface, 'Global');
     const customIfaceTest = getCustomTestAPI(iface.name);
+    const members = flattenMembers(iface);
     const memberTests = [];
-
-    // members
-    const members = iface.members.filter((member) => member.name);
-    for (const member of iface.members.filter((member) => !member.name)) {
-      switch (member.type) {
-        case 'constructor':
-          members.push({name: iface.name, type: 'constructor'});
-          break;
-        case 'iterable':
-          members.push(
-              {name: 'entries', type: 'operation'},
-              {name: 'keys', type: 'operation'},
-              {name: 'values', type: 'operation'},
-              {name: 'forEach', type: 'operation'},
-              {name: '@@iterator', type: 'symbol'}
-          );
-          break;
-        case 'maplike':
-          members.push(
-              {name: 'size', type: 'operation'},
-              {name: 'entries', type: 'operation'},
-              {name: 'keys', type: 'operation'},
-              {name: 'values', type: 'operation'},
-              {name: 'get', type: 'operation'},
-              {name: 'has', type: 'operation'},
-              {name: 'clear', type: 'operation'},
-              {name: 'delete', type: 'operation'},
-              {name: 'set', type: 'operation'},
-              {name: 'forEach', type: 'operation'}
-          );
-          break;
-        case 'setlike':
-          members.push(
-              {name: 'size', type: 'operation'},
-              {name: 'entries', type: 'operation'},
-              {name: 'values', type: 'operation'},
-              {name: 'keys', type: 'operation'},
-              {name: 'has', type: 'operation'},
-              {name: 'add', type: 'operation'},
-              {name: 'delete', type: 'operation'},
-              {name: 'clear', type: 'operation'}
-          );
-          break;
-        case 'operation':
-          // We don't care about setter/getter functions
-          break;
-      }
-    }
-    if (getExtAttr(iface, 'Constructor')) {
-      members.push({name: iface.name, type: 'constructor'});
-    }
-    members.sort((a, b) => a.name.localeCompare(b.name));
 
     // Avoid generating duplicate tests for operations.
     const handledMemberNames = new Set();
