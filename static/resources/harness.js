@@ -269,13 +269,16 @@
 
     try {
       var value = eval(data.code);
-      if (typeof value === 'object' && 'result' in value) {
+      if (value && typeof value === 'object' && 'result' in value) {
         result.result = value.result;
         if (value.message) {
           result.message = value.message;
         }
-      } else {
+      } else if (typeof value === 'boolean') {
         result.result = value;
+      } else {
+        result.result = null;
+        result.message = 'returned ' + stringify(value);
       }
     } catch (err) {
       result.result = null;
