@@ -516,10 +516,6 @@ function buildCSS(webref, bcd) {
   return tests;
 }
 
-async function writeManifest(manifest) {
-  await writeFile('MANIFEST.json', JSON.stringify(manifest, null, '  '));
-}
-
 function copyResources() {
   const resources = [
     ['json3/lib/json3.min.js', 'resources'],
@@ -622,7 +618,7 @@ async function build(webref, bcd) {
     }
   }
 
-  await writeManifest(manifest);
+  await writeFile('MANIFEST.json', manifest);
   copyResources();
 }
 
