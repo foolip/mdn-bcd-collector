@@ -78,7 +78,7 @@ class Tests {
 
     for (const ident of idents) {
       let test = this.tests[ident];
-      test.test = compileTest(test);
+      test.test = this.compileTest(test);
       tests[ident] = test;
     }
 
