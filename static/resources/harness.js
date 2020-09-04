@@ -67,27 +67,8 @@
     pending.push({name: name, code: code, scope: scope, info: info});
   }
 
-  // Each test is mapped to an object like this:
-  // {
-  //   "name": "api.Attr.localName",
-  //   "result": true,
-  //   "prefix": "",
-  //   "info": {
-  //     "code": "'localName' in Attr.prototype",
-  //     "scope": "Window"
-  //   }
-  // }
-  //
-  // If the test doesn't return true or false, or if it throws, `result` will
-  // be null and a `message` property is set to an explanation.
-  function test(data) {
-    var result = {name: data.name, info: {}};
-    var category = data.name.split('.')[0];
-
-    var prefixesToTest = [''];
-    if (category in prefixes) {
-      prefixesToTest = prefixes[category];
-    }
+  function testWithPrefix(data) {
+    // XXX Kept for reference for prefixes, not actively used
 
     try {
       var parentPrefix = '';
@@ -217,12 +198,42 @@
       result.result = null;
       result.message = 'threw ' + stringify(err);
     }
+  }
+
+  // Each test is mapped to an object like this:
+  // {
+  //   "name": "api.Attr.localName",
+  //   "result": true,
+  //   "prefix": "",
+  //   "info": {
+  //     "code": "'localName' in Attr.prototype",
+  //     "scope": "Window"
+  //   }
+  // }
+  //
+  // If the test doesn't return true or false, or if it throws, `result` will
+  // be null and a `message` property is set to an explanation.
+  function test(data) {
+    var result = {name: data.name, info: {}};
+    var category = data.name.split('.')[0];
+
+    var prefixesToTest = [''];
+    if (category in prefixes) {
+      prefixesToTest = prefixes[category];
+    }
+
+    try {
+      result.result = eval(data.code);
+    } catch (err) {
+      result.result = null;
+      result.message = 'threw ' + stringify(err);
+    }
 
     if (data.info !== undefined) {
       result.info = Object.assign({}, result.info, data.info);
     }
 
-    result.info.code = compiledCode.join(' && ');
+    result.info.code = data.code;
     result.info.scope = data.scope;
 
     return result;

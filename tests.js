@@ -50,6 +50,26 @@ class Tests {
     }
   }
 
+  compileTest(test) {
+    let compiledCode = [];
+
+    for (const subtest of test.test) {
+      if (typeof(subtest) === 'string') {
+        compiledCode.push(subtest);
+      } else if (subtest.property == 'constructor') {
+        compiledCode.push('new '+subtest.scope+'()');
+      } else if (subtest.scope === 'CSS.supports') {
+        compiledCode.push(`CSS.supports("${subtest.property}", "inherit");`);
+      } else if (stringStartsWith(subtest.property, 'Symbol.')) {
+        compiledCode.push(`${subtest.property} in ${subtest.scope}`);
+      } else {
+        compiledCode.push(`"${subtest.property}" in ${subtest.scope}`);
+      }
+    }
+
+    return compiledCode.join(test.comparator == "and" ? " && " : " || ");
+  }
+
   getTests(endpoint) {
     const idents = this.endpoints[endpoint] ?
         this.endpoints[endpoint].entries :
@@ -57,7 +77,9 @@ class Tests {
     const tests = {};
 
     for (const ident of idents) {
-      tests[ident] = this.tests[ident];
+      let test = this.tests[ident];
+      test.test = compileTest(test);
+      tests[ident] = test;
     }
 
     return tests;
