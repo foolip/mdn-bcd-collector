@@ -482,7 +482,7 @@ function buildCSS(webref, bcd) {
         {property: name, scope: 'CSS.supports'}
       ],
       'combinator': 'or',
-      'scope': 'CSS'
+      'scope': ['CSS']
     };
   }
 
