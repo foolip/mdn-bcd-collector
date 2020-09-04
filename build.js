@@ -565,7 +565,9 @@ async function build(webref, bcd) {
           if (!(endpoint in manifest.endpoints.main)) {
             manifest.endpoints.main[endpoint] = [];
           }
-          manifest.endpoints.main[endpoint].push(ident);
+          if (!(ident in manifest.endpoints.main[endpoint])) {
+            manifest.endpoints.main[endpoint].push(ident);
+          }
         }
       }
 
@@ -576,7 +578,9 @@ async function build(webref, bcd) {
         if (!(url in manifest.endpoints.individual)) {
           manifest.endpoints.individual[url] = [];
         }
-        manifest.endpoints.individual[url].push(ident);
+        if (!(ident in manifest.endpoints.individual[url])) {
+          manifest.endpoints.individual[url].push(ident);
+        }
       }
     }
   }
