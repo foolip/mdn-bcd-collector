@@ -109,4 +109,22 @@ describe('/api/results', () => {
   });
 });
 
+describe('/api/tests', () => {
+  it('list tests', async () => {
+    const res = await agent.get('/api/tests');
+    assert.equal(res.status, 200);
+    assert.isArray(res.body);
+    assert.isArray(res.body[0]);
+    assert.isArray(res.body[1]);
+    assert.equal(res.body.length, 2);
+  });
+});
+
+describe('/tests/', () => {
+  it('get first test', async () => {
+    const res = await agent.get(manifestItems[0][0]);
+    assert.equal(res.status, 200);
+  });
+});
+
 after(() => agent.close());
