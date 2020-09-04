@@ -235,12 +235,6 @@
   // be null and a `message` property is set to an explanation.
   function test(data) {
     var result = {name: data.name, info: {}};
-    var category = data.name.split('.')[0];
-
-    var prefixesToTest = [''];
-    if (category in prefixes) {
-      prefixesToTest = prefixes[category];
-    }
 
     try {
       result.result = eval(data.code);
