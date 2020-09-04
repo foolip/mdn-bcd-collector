@@ -575,19 +575,38 @@ async function build(webref, bcd) {
     const tests = buildFunc(webref, bcd);
     manifest.tests = Object.assign(manifest.tests, tests);
     for (const [ident, test] of Object.entries(tests)) {
-      console.log(ident, test);
-    }
+      const scopes = Array.isArray(test.scope) ? test.scope : [test.scope];
+      for (const scope of scopes) {
+        let endpoint = '';
+        switch (scope) {
+          case 'Window':
+            endpoint = '/api/interfaces';
+            break;
+          case 'Worker':
+            endpoint = '/api/workerinterfaces';
+            break;
+          case 'ServiceWorker':
+            endpoint = '/api/serviceworkerinterfaces';
+            break;
+          case 'CSS':
+            endpoint = '/css/properties';
+            break;
+        }
 
-    continue; // XXX convert code below
-    for (let [protocol, pathname] of items) {
-      if (!pathname.startsWith('/')) {
-        pathname = `/${pathname}`;
+        if (!(endpoint in manifest.endpoints.main)) {
+          manifest.endpoints.main[endpoint] = [];
+        }
+        manifest.endpoints.main[endpoint].push(ident);
       }
-      manifest.items.push({pathname, protocol});
-    }
-    if (individualItems) {
-      for (const item of individualItems) {
-        manifest.individualItems[item] = item.replace(/\./g, '/');
+
+      let url = '';
+      for (const part of ident.split('.')) {
+        url += '/' + part;
+
+        if (!(url in manifest.endpoints.individual)) {
+          manifest.endpoints.individual[url] = [];
+        }
+        manifest.endpoints.individual[url].push(ident);
       }
     }
   }
