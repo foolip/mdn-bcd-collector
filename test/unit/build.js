@@ -1224,4 +1224,69 @@ describe('build', () => {
       }).to.throw();
     });
   });
+
+  it('buildCSS', () => {
+    const bcd = {
+      css: {
+        properties: {
+          appearance: {
+            __compat: {
+              support: {}
+            }
+          }
+        }
+      }
+    };
+
+    const webref = {
+      css: {
+        'css-fonts': {
+          properties: {
+            'font-family': {},
+            'font-weight': {}
+          }
+        },
+        'css-grid': {
+          properties: {
+            'grid': {}
+          }
+        }
+      }
+    };
+
+    assert.deepEqual(buildCSS(webref, bcd), {
+      'css.properties.appearance': {
+        'test': [
+          {property: 'appearance', scope: 'document.body.style'},
+          {property: 'appearance', scope: 'CSS.supports'}
+        ],
+        'combinator': 'or',
+        'scope': ['CSS']
+      },
+      'css.properties.font-family': {
+        'test': [
+          {property: 'fontFamily', scope: 'document.body.style'},
+          {property: 'font-family', scope: 'CSS.supports'}
+        ],
+        'combinator': 'or',
+        'scope': ['CSS']
+      },
+      'css.properties.font-weight': {
+        'test': [
+          {property: 'fontWeight', scope: 'document.body.style'},
+          {property: 'font-weight', scope: 'CSS.supports'}
+        ],
+        'combinator': 'or',
+        'scope': ['CSS']
+      },
+      'css.properties.grid': {
+        'test': [
+          {property: 'grid', scope: 'document.body.style'},
+          {property: 'grid', scope: 'CSS.supports'}
+        ],
+        'combinator': 'or',
+        'scope': ['CSS']
+      }
+    });
+  });
 });
