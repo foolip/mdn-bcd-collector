@@ -20,10 +20,7 @@ const Tests = require('../../tests');
 const MANIFEST = {
   tests: {
     'api.AbortController': {
-      'test': {
-        'property': 'AbortController',
-        'scope': 'self'
-      },
+      'code': '"AbortController" in self',
       'combinator': 'and',
       'scope': [
         'Window',
@@ -31,16 +28,7 @@ const MANIFEST = {
       ]
     },
     'api.AbortController.signal': {
-      'test': [
-        {
-          'property': 'AbortController',
-          'scope': 'self'
-        },
-        {
-          'property': 'signal',
-          'scope': 'AbortController'
-        }
-      ],
+      'code': '"AbortController" in self && "signal" in AbortController',
       'combinator': 'and',
       'scope': [
         'Window',
@@ -93,19 +81,19 @@ describe('Tests', () => {
   it('getTests', () => {
     assert.deepEqual(tests.getTests('/api/interfaces'), {
       'api.AbortController': {
-        'test': '"AbortController" in self',
+        'code': '"AbortController" in self',
         'combinator': 'and',
         'scope': ['Window', 'Worker']
       },
       'api.AbortController.signal': {
-        'test': '"AbortController" in self && "signal" in AbortController',
+        'code': '"AbortController" in self && "signal" in AbortController',
         'combinator': 'and',
         'scope': ['Window', 'Worker']
       }
     });
     assert.deepEqual(tests.getTests('/api/workerinterfaces'), {
       'api.AbortController': {
-        'test': '"AbortController" in self',
+        'code': '"AbortController" in self',
         'combinator': 'and',
         'scope': ['Window', 'Worker']
       }

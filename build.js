@@ -77,9 +77,9 @@ function compileTest(test) {
     if (typeof(subtest) === 'string') {
       compiledCode.push(subtest);
     } else if (subtest.property == 'constructor') {
-      compiledCode.push(`bcd.testConstructor('${subtest.scope}')`);
+      compiledCode.push(`bcd.testConstructor("${subtest.scope}")`);
     } else if (subtest.scope === 'CSS.supports') {
-      compiledCode.push(`CSS.supports("${subtest.property}", "inherit");`);
+      compiledCode.push(`CSS.supports("${subtest.property}", "inherit")`);
     } else if (subtest.property.startsWith('Symbol.')) {
       compiledCode.push(`${subtest.property} in ${subtest.scope}`);
     } else {

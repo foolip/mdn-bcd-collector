@@ -515,15 +515,12 @@ describe('build', () => {
       const ast = WebIDL2.parse(`interface Attr { attribute any name; };`);
       assert.deepEqual(buildIDLTests(ast), {
         'api.Attr': {
-          'test': {property: 'Attr', scope: 'self'},
+          'code': '"Attr" in self',
           'combinator': 'and',
           'scope': ['Window']
         },
         'api.Attr.name': {
-          'test': [
-            {property: 'Attr', scope: 'self'},
-            {property: 'name', scope: 'Attr.prototype'}
-          ],
+          'code': '"Attr" in self && "name" in Attr.prototype',
           'combinator': 'and',
           'scope': ['Window']
         }
@@ -537,15 +534,12 @@ describe('build', () => {
            };`);
       assert.deepEqual(buildIDLTests(ast), {
         'api.Node': {
-          'test': {property: 'Node', scope: 'self'},
+          'code': '"Node" in self',
           'combinator': 'and',
           'scope': ['Window']
         },
         'api.Node.contains': {
-          'test': [
-            {property: 'Node', scope: 'self'},
-            {property: 'contains', scope: 'Node.prototype'}
-          ],
+          'code': '"Node" in self && "contains" in Node.prototype',
           'combinator': 'and',
           'scope': ['Window']
         }
@@ -560,15 +554,12 @@ describe('build', () => {
 
       assert.deepEqual(buildIDLTests(ast), {
         'api.MediaSource': {
-          'test': {property: 'MediaSource', scope: 'self'},
+          'code': '"MediaSource" in self',
           'combinator': 'and',
           'scope': ['Window']
         },
         'api.MediaSource.isTypeSupported': {
-          'test': [
-            {property: 'MediaSource', scope: 'self'},
-            {property: 'isTypeSupported', scope: 'MediaSource'}
-          ],
+          'code': '"MediaSource" in self && "isTypeSupported" in MediaSource',
           'combinator': 'and',
           'scope': ['Window']
         }
@@ -583,15 +574,12 @@ describe('build', () => {
 
       assert.deepEqual(buildIDLTests(ast), {
         'api.Window': {
-          'test': {property: 'Window', scope: 'self'},
+          'code': '"Window" in self',
           'combinator': 'and',
           'scope': ['Window']
         },
         'api.Window.isWindow': {
-          'test': [
-            {property: 'Window', scope: 'self'},
-            {property: 'isWindow', scope: 'Window'}
-          ],
+          'code': '"Window" in self && "isWindow" in Window',
           'combinator': 'and',
           'scope': ['Window']
         }
@@ -629,17 +617,17 @@ describe('build', () => {
 
       assert.deepEqual(buildIDLTests(ast), {
         'api.ANGLE_instanced_arrays': {
-          'test': '(function() {var canvas = document.createElement(\'canvas\'); var gl = canvas.getContext(\'webgl\'); var instance = gl.getExtension(\'ANGLE_instanced_arrays\');return !!instance;})()',
+          'code': '(function() {var canvas = document.createElement(\'canvas\'); var gl = canvas.getContext(\'webgl\'); var instance = gl.getExtension(\'ANGLE_instanced_arrays\');return !!instance;})()',
           'combinator': 'and',
           'scope': ['Window']
         },
         'api.ANGLE_instanced_arrays.drawArraysInstancedANGLE': {
-          'test': '(function() {var canvas = document.createElement(\'canvas\'); var gl = canvas.getContext(\'webgl\'); var instance = gl.getExtension(\'ANGLE_instanced_arrays\');return true && instance && \'drawArraysInstancedANGLE\' in instance;})()',
+          'code': '(function() {var canvas = document.createElement(\'canvas\'); var gl = canvas.getContext(\'webgl\'); var instance = gl.getExtension(\'ANGLE_instanced_arrays\');return true && instance && \'drawArraysInstancedANGLE\' in instance;})()',
           'combinator': 'and',
           'scope': ['Window']
         },
         'api.ANGLE_instanced_arrays.drawElementsInstancedANGLE': {
-          'test': '(function() {var canvas = document.createElement(\'canvas\'); var gl = canvas.getContext(\'webgl\'); var instance = gl.getExtension(\'ANGLE_instanced_arrays\');return instance && \'drawElementsInstancedANGLE\' in instance;})()',
+          'code': '(function() {var canvas = document.createElement(\'canvas\'); var gl = canvas.getContext(\'webgl\'); var instance = gl.getExtension(\'ANGLE_instanced_arrays\');return instance && \'drawElementsInstancedANGLE\' in instance;})()',
           'combinator': 'and',
           'scope': ['Window']
         }
@@ -660,17 +648,17 @@ describe('build', () => {
 
       assert.deepEqual(buildIDLTests(ast), {
         'api.WindowOrWorkerGlobalScope': {
-          'test': {property: 'WindowOrWorkerGlobalScope', scope: 'self'},
+          'code': '"WindowOrWorkerGlobalScope" in self',
           'combinator': 'and',
           'scope': ['Window']
         },
         'api.WindowOrWorkerGlobalScope.active': {
-          'test': {property: 'active', scope: 'self'},
+          'code': '"active" in self',
           'combinator': 'and',
           'scope': ['Window']
         },
         'api.WindowOrWorkerGlobalScope.isLoaded': {
-          'test': {property: 'isLoaded', scope: 'self'},
+          'code': '"isLoaded" in self',
           'combinator': 'and',
           'scope': ['Window']
         }
@@ -684,15 +672,12 @@ describe('build', () => {
 
       assert.deepEqual(buildIDLTests(ast), {
         'api.Number': {
-          'test': {property: 'Number', scope: 'self'},
+          'code': '"Number" in self',
           'combinator': 'and',
           'scope': ['Window']
         },
         'api.Number.Number': {
-          'test': [
-            {property: 'Number', scope: 'self'},
-            {property: 'constructor', scope: 'Number'}
-          ],
+          'code': '"Number" in self && bcd.testConstructor("Number")',
           'combinator': 'and',
           'scope': ['Window']
         }
@@ -704,15 +689,12 @@ describe('build', () => {
         interface Number {};`);
       assert.deepEqual(buildIDLTests(ast), {
         'api.Number': {
-          'test': {property: 'Number', scope: 'self'},
+          'code': '"Number" in self',
           'combinator': 'and',
           'scope': ['Window']
         },
         'api.Number.Number': {
-          'test': [
-            {property: 'Number', scope: 'self'},
-            {property: 'constructor', scope: 'Number'}
-          ],
+          'code': '"Number" in self && bcd.testConstructor("Number")',
           'combinator': 'and',
           'scope': ['Window']
         }
@@ -725,49 +707,32 @@ describe('build', () => {
       };`);
       assert.deepEqual(buildIDLTests(ast), {
         'api.DoubleList': {
-          'test': {property: 'DoubleList', scope: 'self'},
+          'code': '"DoubleList" in self',
           'combinator': 'and',
           'scope': ['Window']
         },
         'api.DoubleList.@@iterator': {
-          'test': [
-            {'property': 'DoubleList', 'scope': 'self'},
-            {'property': 'Symbol', 'scope': 'self'},
-            {'property': 'iterator', 'scope': 'Symbol'},
-            {'property': 'Symbol.iterator', 'scope': 'DoubleList.prototype'}
-          ],
+          'code': '"DoubleList" in self && "Symbol" in self && "iterator" in Symbol && Symbol.iterator in DoubleList.prototype',
           'combinator': 'and',
           'scope': ['Window']
         },
         'api.DoubleList.entries': {
-          'test': [
-            {'property': 'DoubleList', 'scope': 'self'},
-            {'property': 'entries', 'scope': 'DoubleList.prototype'}
-          ],
+          'code': '"DoubleList" in self && "entries" in DoubleList.prototype',
           'combinator': 'and',
           'scope': ['Window']
         },
         'api.DoubleList.forEach': {
-          'test': [
-            {'property': 'DoubleList', 'scope': 'self'},
-            {'property': 'forEach', 'scope': 'DoubleList.prototype'}
-          ],
+          'code': '"DoubleList" in self && "forEach" in DoubleList.prototype',
           'combinator': 'and',
           'scope': ['Window']
         },
         'api.DoubleList.keys': {
-          'test': [
-            {'property': 'DoubleList', 'scope': 'self'},
-            {'property': 'keys', 'scope': 'DoubleList.prototype'}
-          ],
+          'code': '"DoubleList" in self && "keys" in DoubleList.prototype',
           'combinator': 'and',
           'scope': ['Window']
         },
         'api.DoubleList.values': {
-          'test': [
-            {'property': 'DoubleList', 'scope': 'self'},
-            {'property': 'values', 'scope': 'DoubleList.prototype'}
-          ],
+          'code': '"DoubleList" in self && "values" in DoubleList.prototype',
           'combinator': 'and',
           'scope': ['Window']
         }
@@ -780,87 +745,57 @@ describe('build', () => {
       };`);
       assert.deepEqual(buildIDLTests(ast), {
         'api.DoubleMap': {
-          'test': {property: 'DoubleMap', scope: 'self'},
+          'code': '"DoubleMap" in self',
           'combinator': 'and',
           'scope': ['Window']
         },
         'api.DoubleMap.clear': {
-          'test': [
-            {'property': 'DoubleMap', 'scope': 'self'},
-            {'property': 'clear', 'scope': 'DoubleMap.prototype'}
-          ],
+          'code': '"DoubleMap" in self && "clear" in DoubleMap.prototype',
           'combinator': 'and',
           'scope': ['Window']
         },
         'api.DoubleMap.delete': {
-          'test': [
-            {'property': 'DoubleMap', 'scope': 'self'},
-            {'property': 'delete', 'scope': 'DoubleMap.prototype'}
-          ],
+          'code': '"DoubleMap" in self && "delete" in DoubleMap.prototype',
           'combinator': 'and',
           'scope': ['Window']
         },
         'api.DoubleMap.entries': {
-          'test': [
-            {'property': 'DoubleMap', 'scope': 'self'},
-            {'property': 'entries', 'scope': 'DoubleMap.prototype'}
-          ],
+          'code': '"DoubleMap" in self && "entries" in DoubleMap.prototype',
           'combinator': 'and',
           'scope': ['Window']
         },
         'api.DoubleMap.forEach': {
-          'test': [
-            {'property': 'DoubleMap', 'scope': 'self'},
-            {'property': 'forEach', 'scope': 'DoubleMap.prototype'}
-          ],
+          'code': '"DoubleMap" in self && "forEach" in DoubleMap.prototype',
           'combinator': 'and',
           'scope': ['Window']
         },
         'api.DoubleMap.get': {
-          'test': [
-            {'property': 'DoubleMap', 'scope': 'self'},
-            {'property': 'get', 'scope': 'DoubleMap.prototype'}
-          ],
+          'code': '"DoubleMap" in self && "get" in DoubleMap.prototype',
           'combinator': 'and',
           'scope': ['Window']
         },
         'api.DoubleMap.has': {
-          'test': [
-            {'property': 'DoubleMap', 'scope': 'self'},
-            {'property': 'has', 'scope': 'DoubleMap.prototype'}
-          ],
+          'code': '"DoubleMap" in self && "has" in DoubleMap.prototype',
           'combinator': 'and',
           'scope': ['Window']
         },
         'api.DoubleMap.keys': {
-          'test': [
-            {'property': 'DoubleMap', 'scope': 'self'},
-            {'property': 'keys', 'scope': 'DoubleMap.prototype'}
-          ],
+          'code': '"DoubleMap" in self && "keys" in DoubleMap.prototype',
           'combinator': 'and',
           'scope': ['Window']
         },
         'api.DoubleMap.set': {
-          'test': [
-            {'property': 'DoubleMap', 'scope': 'self'},
-            {'property': 'set', 'scope': 'DoubleMap.prototype'}
-          ],
+          'code': '"DoubleMap" in self && "set" in DoubleMap.prototype',
           'combinator': 'and',
           'scope': ['Window']
         },
         'api.DoubleMap.size': {
-          'test': [
-            {'property': 'DoubleMap', 'scope': 'self'},
-            {'property': 'size', 'scope': 'DoubleMap.prototype'}
-          ],
+          'code': '"DoubleMap" in self && "size" in DoubleMap.prototype',
           'combinator': 'and',
           'scope': ['Window']
         },
         'api.DoubleMap.values': {
-          'test': [
-            {'property': 'DoubleMap', 'scope': 'self'},
-            {'property': 'values', 'scope': 'DoubleMap.prototype'}
-          ],
+          'code': '"DoubleMap" in self && "values" in DoubleMap.prototype',
           'combinator': 'and',
           'scope': ['Window']
         }
@@ -873,71 +808,47 @@ describe('build', () => {
       };`);
       assert.deepEqual(buildIDLTests(ast), {
         'api.DoubleSet': {
-          'test': {property: 'DoubleSet', scope: 'self'},
+          'code': '"DoubleSet" in self',
           'combinator': 'and',
           'scope': ['Window']
         },
         'api.DoubleSet.add': {
-          'test': [
-            {'property': 'DoubleSet', 'scope': 'self'},
-            {'property': 'add', 'scope': 'DoubleSet.prototype'}
-          ],
+          'code': '"DoubleSet" in self && "add" in DoubleSet.prototype',
           'combinator': 'and',
           'scope': ['Window']
         },
         'api.DoubleSet.clear': {
-          'test': [
-            {'property': 'DoubleSet', 'scope': 'self'},
-            {'property': 'clear', 'scope': 'DoubleSet.prototype'}
-          ],
+          'code': '"DoubleSet" in self && "clear" in DoubleSet.prototype',
           'combinator': 'and',
           'scope': ['Window']
         },
         'api.DoubleSet.delete': {
-          'test': [
-            {'property': 'DoubleSet', 'scope': 'self'},
-            {'property': 'delete', 'scope': 'DoubleSet.prototype'}
-          ],
+          'code': '"DoubleSet" in self && "delete" in DoubleSet.prototype',
           'combinator': 'and',
           'scope': ['Window']
         },
         'api.DoubleSet.entries': {
-          'test': [
-            {'property': 'DoubleSet', 'scope': 'self'},
-            {'property': 'entries', 'scope': 'DoubleSet.prototype'}
-          ],
+          'code': '"DoubleSet" in self && "entries" in DoubleSet.prototype',
           'combinator': 'and',
           'scope': ['Window']
         },
         'api.DoubleSet.has': {
-          'test': [
-            {'property': 'DoubleSet', 'scope': 'self'},
-            {'property': 'has', 'scope': 'DoubleSet.prototype'}
-          ],
+          'code': '"DoubleSet" in self && "has" in DoubleSet.prototype',
           'combinator': 'and',
           'scope': ['Window']
         },
         'api.DoubleSet.keys': {
-          'test': [
-            {'property': 'DoubleSet', 'scope': 'self'},
-            {'property': 'keys', 'scope': 'DoubleSet.prototype'}
-          ],
+          'code': '"DoubleSet" in self && "keys" in DoubleSet.prototype',
           'combinator': 'and',
           'scope': ['Window']
         },
         'api.DoubleSet.size': {
-          'test': [
-            {'property': 'DoubleSet', 'scope': 'self'},
-            {'property': 'size', 'scope': 'DoubleSet.prototype'}
-          ],
+          'code': '"DoubleSet" in self && "size" in DoubleSet.prototype',
           'combinator': 'and',
           'scope': ['Window']
         },
         'api.DoubleSet.values': {
-          'test': [
-            {'property': 'DoubleSet', 'scope': 'self'},
-            {'property': 'values', 'scope': 'DoubleSet.prototype'}
-          ],
+          'code': '"DoubleSet" in self && "values" in DoubleSet.prototype',
           'combinator': 'and',
           'scope': ['Window']
         }
@@ -951,7 +862,7 @@ describe('build', () => {
       };`);
       assert.deepEqual(buildIDLTests(ast), {
         'api.GetMe': {
-          'test': {property: 'GetMe', scope: 'self'},
+          'code': '"GetMe" in self',
           'combinator': 'and',
           'scope': ['Window']
         }
@@ -967,22 +878,22 @@ describe('build', () => {
       `);
       assert.deepEqual(buildIDLTests(ast), {
         'api.CSS': {
-          'test': {property: 'CSS', scope: 'self'},
+          'code': '"CSS" in self',
           'combinator': 'and',
           'scope': ['Window']
         },
         'api.MessageChannel': {
-          'test': {property: 'MessageChannel', scope: 'self'},
+          'code': '"MessageChannel" in self',
           'combinator': 'and',
           'scope': ['Window', 'Worker']
         },
         'api.Worker': {
-          'test': {property: 'Worker', scope: 'self'},
+          'code': '"Worker" in self',
           'combinator': 'and',
           'scope': ['Window']
         },
         'api.WorkerSync': {
-          'test': {property: 'WorkerSync', scope: 'self'},
+          'code': '"WorkerSync" in self',
           'combinator': 'and',
           'scope': ['Worker']
         }
@@ -999,15 +910,12 @@ describe('build', () => {
       `);
       assert.deepEqual(buildIDLTests(ast), {
         'api.AudioNode': {
-          'test': {property: 'AudioNode', scope: 'self'},
+          'code': '"AudioNode" in self',
           'combinator': 'and',
           'scope': ['Window']
         },
         'api.AudioNode.disconnect': {
-          'test': [
-            {property: 'AudioNode', scope: 'self'},
-            {property: 'disconnect', scope: 'AudioNode.prototype'}
-          ],
+          'code': '"AudioNode" in self && "disconnect" in AudioNode.prototype',
           'combinator': 'and',
           'scope': ['Window']
         }
@@ -1021,15 +929,12 @@ describe('build', () => {
            };`);
       assert.deepEqual(buildIDLTests(ast), {
         'api.CSS': {
-          'test': {property: 'CSS', scope: 'self'},
+          'code': '"CSS" in self',
           'combinator': 'and',
           'scope': ['Window']
         },
         'api.CSS.paintWorklet': {
-          'test': [
-            {property: 'CSS', scope: 'self'},
-            {property: 'paintWorklet', scope: 'CSS'}
-          ],
+          'code': '"CSS" in self && "paintWorklet" in CSS',
           'combinator': 'and',
           'scope': ['Window']
         }
@@ -1043,15 +948,12 @@ describe('build', () => {
            };`);
       assert.deepEqual(buildIDLTests(ast), {
         'api.CSS': {
-          'test': {property: 'CSS', scope: 'self'},
+          'code': '"CSS" in self',
           'combinator': 'and',
           'scope': ['Window']
         },
         'api.CSS.supports': {
-          'test': [
-            {property: 'CSS', scope: 'self'},
-            {property: 'supports', scope: 'CSS'}
-          ],
+          'code': '"CSS" in self && "supports" in CSS',
           'combinator': 'and',
           'scope': ['Window']
         }
@@ -1078,12 +980,12 @@ describe('build', () => {
 
       assert.deepEqual(buildIDLTests(ast), {
         'api.CSS': {
-          'test': '(function() {var css = CSS;return !!css;})()',
+          'code': '(function() {var css = CSS;return !!css;})()',
           'combinator': 'and',
           'scope': ['Window']
         },
         'api.CSS.paintWorklet': {
-          'test': '(function() {var css = CSS;return css && \'paintWorklet\' in css;})()',
+          'code': '(function() {var css = CSS;return css && \'paintWorklet\' in css;})()',
           'combinator': 'and',
           'scope': ['Window']
         }
@@ -1098,23 +1000,17 @@ describe('build', () => {
            };`);
       assert.deepEqual(buildIDLTests(ast), {
         'api.ElementRegistrationOptions': {
-          'test': {property: 'ElementRegistrationOptions', scope: 'self'},
+          'code': '"ElementRegistrationOptions" in self',
           'combinator': 'and',
           'scope': ['Window']
         },
         'api.ElementRegistrationOptions.extends': {
-          'test': [
-            {property: 'ElementRegistrationOptions', scope: 'self'},
-            {property: 'extends', scope: 'ElementRegistrationOptions'}
-          ],
+          'code': '"ElementRegistrationOptions" in self && "extends" in ElementRegistrationOptions',
           'combinator': 'and',
           'scope': ['Window']
         },
         'api.ElementRegistrationOptions.prototype': {
-          'test': [
-            {property: 'ElementRegistrationOptions', scope: 'self'},
-            {property: 'prototype', scope: 'ElementRegistrationOptions'}
-          ],
+          'code': '"ElementRegistrationOptions" in self && "prototype" in ElementRegistrationOptions',
           'combinator': 'and',
           'scope': ['Window']
         }
@@ -1139,17 +1035,17 @@ describe('build', () => {
 
       assert.deepEqual(buildIDLTests(ast), {
         'api.ElementRegistrationOptions': {
-          'test': '(function() {var instance = ElementRegistrationOptions;return !!instance;})()',
+          'code': '(function() {var instance = ElementRegistrationOptions;return !!instance;})()',
           'combinator': 'and',
           'scope': ['Window']
         },
         'api.ElementRegistrationOptions.extends': {
-          'test': '(function() {var instance = ElementRegistrationOptions;return instance && \'extends\' in instance;})()',
+          'code': '(function() {var instance = ElementRegistrationOptions;return instance && \'extends\' in instance;})()',
           'combinator': 'and',
           'scope': ['Window']
         },
         'api.ElementRegistrationOptions.prototype': {
-          'test': '(function() {var instance = ElementRegistrationOptions;return instance && \'prototype\' in instance;})()',
+          'code': '(function() {var instance = ElementRegistrationOptions;return instance && \'prototype\' in instance;})()',
           'combinator': 'and',
           'scope': ['Window']
         }
@@ -1256,34 +1152,22 @@ describe('build', () => {
 
     assert.deepEqual(buildCSS(webref, bcd), {
       'css.properties.appearance': {
-        'test': [
-          {property: 'appearance', scope: 'document.body.style'},
-          {property: 'appearance', scope: 'CSS.supports'}
-        ],
+        'code': '"appearance" in document.body.style || CSS.supports("appearance", "inherit")',
         'combinator': 'or',
         'scope': ['CSS']
       },
       'css.properties.font-family': {
-        'test': [
-          {property: 'fontFamily', scope: 'document.body.style'},
-          {property: 'font-family', scope: 'CSS.supports'}
-        ],
+        'code': '"fontFamily" in document.body.style || CSS.supports("font-family", "inherit")',
         'combinator': 'or',
         'scope': ['CSS']
       },
       'css.properties.font-weight': {
-        'test': [
-          {property: 'fontWeight', scope: 'document.body.style'},
-          {property: 'font-weight', scope: 'CSS.supports'}
-        ],
+        'code': '"fontWeight" in document.body.style || CSS.supports("font-weight", "inherit")',
         'combinator': 'or',
         'scope': ['CSS']
       },
       'css.properties.grid': {
-        'test': [
-          {property: 'grid', scope: 'document.body.style'},
-          {property: 'grid', scope: 'CSS.supports'}
-        ],
+        'code': '"grid" in document.body.style || CSS.supports("grid", "inherit")',
         'combinator': 'or',
         'scope': ['CSS']
       }

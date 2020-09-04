@@ -46,7 +46,7 @@ describe('/backend/results', () => {
   });
 
   const testURL = `http://localhost:8080${manifestItems[0][0]}`;
-  const testURL2 = `https://host.test${manifestItems[1][0]}`;
+  const testURL2 = `https://host.test${manifestItems[manifestItems.length - 1][0]}`;
 
   it('submit valid results', async () => {
     const res = await agent.post('/backend/results')
