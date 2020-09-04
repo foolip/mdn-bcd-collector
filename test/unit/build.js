@@ -516,12 +516,10 @@ describe('build', () => {
       assert.deepEqual(buildIDLTests(ast), {
         'api.Attr': {
           'code': '"Attr" in self',
-          'combinator': 'and',
           'scope': ['Window']
         },
         'api.Attr.name': {
           'code': '"Attr" in self && "name" in Attr.prototype',
-          'combinator': 'and',
           'scope': ['Window']
         }
       });
@@ -535,12 +533,10 @@ describe('build', () => {
       assert.deepEqual(buildIDLTests(ast), {
         'api.Node': {
           'code': '"Node" in self',
-          'combinator': 'and',
           'scope': ['Window']
         },
         'api.Node.contains': {
           'code': '"Node" in self && "contains" in Node.prototype',
-          'combinator': 'and',
           'scope': ['Window']
         }
       });
@@ -555,12 +551,10 @@ describe('build', () => {
       assert.deepEqual(buildIDLTests(ast), {
         'api.MediaSource': {
           'code': '"MediaSource" in self',
-          'combinator': 'and',
           'scope': ['Window']
         },
         'api.MediaSource.isTypeSupported': {
           'code': '"MediaSource" in self && "isTypeSupported" in MediaSource',
-          'combinator': 'and',
           'scope': ['Window']
         }
       });
@@ -575,12 +569,10 @@ describe('build', () => {
       assert.deepEqual(buildIDLTests(ast), {
         'api.Window': {
           'code': '"Window" in self',
-          'combinator': 'and',
           'scope': ['Window']
         },
         'api.Window.isWindow': {
           'code': '"Window" in self && "isWindow" in Window',
-          'combinator': 'and',
           'scope': ['Window']
         }
       });
@@ -618,17 +610,14 @@ describe('build', () => {
       assert.deepEqual(buildIDLTests(ast), {
         'api.ANGLE_instanced_arrays': {
           'code': '(function() {var canvas = document.createElement(\'canvas\'); var gl = canvas.getContext(\'webgl\'); var instance = gl.getExtension(\'ANGLE_instanced_arrays\');return !!instance;})()',
-          'combinator': 'and',
           'scope': ['Window']
         },
         'api.ANGLE_instanced_arrays.drawArraysInstancedANGLE': {
           'code': '(function() {var canvas = document.createElement(\'canvas\'); var gl = canvas.getContext(\'webgl\'); var instance = gl.getExtension(\'ANGLE_instanced_arrays\');return true && instance && \'drawArraysInstancedANGLE\' in instance;})()',
-          'combinator': 'and',
           'scope': ['Window']
         },
         'api.ANGLE_instanced_arrays.drawElementsInstancedANGLE': {
           'code': '(function() {var canvas = document.createElement(\'canvas\'); var gl = canvas.getContext(\'webgl\'); var instance = gl.getExtension(\'ANGLE_instanced_arrays\');return instance && \'drawElementsInstancedANGLE\' in instance;})()',
-          'combinator': 'and',
           'scope': ['Window']
         }
       });
@@ -649,17 +638,14 @@ describe('build', () => {
       assert.deepEqual(buildIDLTests(ast), {
         'api.WindowOrWorkerGlobalScope': {
           'code': '"WindowOrWorkerGlobalScope" in self',
-          'combinator': 'and',
           'scope': ['Window']
         },
         'api.WindowOrWorkerGlobalScope.active': {
           'code': '"active" in self',
-          'combinator': 'and',
           'scope': ['Window']
         },
         'api.WindowOrWorkerGlobalScope.isLoaded': {
           'code': '"isLoaded" in self',
-          'combinator': 'and',
           'scope': ['Window']
         }
       });
@@ -673,12 +659,10 @@ describe('build', () => {
       assert.deepEqual(buildIDLTests(ast), {
         'api.Number': {
           'code': '"Number" in self',
-          'combinator': 'and',
           'scope': ['Window']
         },
         'api.Number.Number': {
           'code': '"Number" in self && bcd.testConstructor("Number")',
-          'combinator': 'and',
           'scope': ['Window']
         }
       });
@@ -690,12 +674,10 @@ describe('build', () => {
       assert.deepEqual(buildIDLTests(ast), {
         'api.Number': {
           'code': '"Number" in self',
-          'combinator': 'and',
           'scope': ['Window']
         },
         'api.Number.Number': {
           'code': '"Number" in self && bcd.testConstructor("Number")',
-          'combinator': 'and',
           'scope': ['Window']
         }
       });
@@ -708,32 +690,26 @@ describe('build', () => {
       assert.deepEqual(buildIDLTests(ast), {
         'api.DoubleList': {
           'code': '"DoubleList" in self',
-          'combinator': 'and',
           'scope': ['Window']
         },
         'api.DoubleList.@@iterator': {
           'code': '"DoubleList" in self && "Symbol" in self && "iterator" in Symbol && Symbol.iterator in DoubleList.prototype',
-          'combinator': 'and',
           'scope': ['Window']
         },
         'api.DoubleList.entries': {
           'code': '"DoubleList" in self && "entries" in DoubleList.prototype',
-          'combinator': 'and',
           'scope': ['Window']
         },
         'api.DoubleList.forEach': {
           'code': '"DoubleList" in self && "forEach" in DoubleList.prototype',
-          'combinator': 'and',
           'scope': ['Window']
         },
         'api.DoubleList.keys': {
           'code': '"DoubleList" in self && "keys" in DoubleList.prototype',
-          'combinator': 'and',
           'scope': ['Window']
         },
         'api.DoubleList.values': {
           'code': '"DoubleList" in self && "values" in DoubleList.prototype',
-          'combinator': 'and',
           'scope': ['Window']
         }
       });
@@ -746,57 +722,46 @@ describe('build', () => {
       assert.deepEqual(buildIDLTests(ast), {
         'api.DoubleMap': {
           'code': '"DoubleMap" in self',
-          'combinator': 'and',
           'scope': ['Window']
         },
         'api.DoubleMap.clear': {
           'code': '"DoubleMap" in self && "clear" in DoubleMap.prototype',
-          'combinator': 'and',
           'scope': ['Window']
         },
         'api.DoubleMap.delete': {
           'code': '"DoubleMap" in self && "delete" in DoubleMap.prototype',
-          'combinator': 'and',
           'scope': ['Window']
         },
         'api.DoubleMap.entries': {
           'code': '"DoubleMap" in self && "entries" in DoubleMap.prototype',
-          'combinator': 'and',
           'scope': ['Window']
         },
         'api.DoubleMap.forEach': {
           'code': '"DoubleMap" in self && "forEach" in DoubleMap.prototype',
-          'combinator': 'and',
           'scope': ['Window']
         },
         'api.DoubleMap.get': {
           'code': '"DoubleMap" in self && "get" in DoubleMap.prototype',
-          'combinator': 'and',
           'scope': ['Window']
         },
         'api.DoubleMap.has': {
           'code': '"DoubleMap" in self && "has" in DoubleMap.prototype',
-          'combinator': 'and',
           'scope': ['Window']
         },
         'api.DoubleMap.keys': {
           'code': '"DoubleMap" in self && "keys" in DoubleMap.prototype',
-          'combinator': 'and',
           'scope': ['Window']
         },
         'api.DoubleMap.set': {
           'code': '"DoubleMap" in self && "set" in DoubleMap.prototype',
-          'combinator': 'and',
           'scope': ['Window']
         },
         'api.DoubleMap.size': {
           'code': '"DoubleMap" in self && "size" in DoubleMap.prototype',
-          'combinator': 'and',
           'scope': ['Window']
         },
         'api.DoubleMap.values': {
           'code': '"DoubleMap" in self && "values" in DoubleMap.prototype',
-          'combinator': 'and',
           'scope': ['Window']
         }
       });
@@ -809,47 +774,38 @@ describe('build', () => {
       assert.deepEqual(buildIDLTests(ast), {
         'api.DoubleSet': {
           'code': '"DoubleSet" in self',
-          'combinator': 'and',
           'scope': ['Window']
         },
         'api.DoubleSet.add': {
           'code': '"DoubleSet" in self && "add" in DoubleSet.prototype',
-          'combinator': 'and',
           'scope': ['Window']
         },
         'api.DoubleSet.clear': {
           'code': '"DoubleSet" in self && "clear" in DoubleSet.prototype',
-          'combinator': 'and',
           'scope': ['Window']
         },
         'api.DoubleSet.delete': {
           'code': '"DoubleSet" in self && "delete" in DoubleSet.prototype',
-          'combinator': 'and',
           'scope': ['Window']
         },
         'api.DoubleSet.entries': {
           'code': '"DoubleSet" in self && "entries" in DoubleSet.prototype',
-          'combinator': 'and',
           'scope': ['Window']
         },
         'api.DoubleSet.has': {
           'code': '"DoubleSet" in self && "has" in DoubleSet.prototype',
-          'combinator': 'and',
           'scope': ['Window']
         },
         'api.DoubleSet.keys': {
           'code': '"DoubleSet" in self && "keys" in DoubleSet.prototype',
-          'combinator': 'and',
           'scope': ['Window']
         },
         'api.DoubleSet.size': {
           'code': '"DoubleSet" in self && "size" in DoubleSet.prototype',
-          'combinator': 'and',
           'scope': ['Window']
         },
         'api.DoubleSet.values': {
           'code': '"DoubleSet" in self && "values" in DoubleSet.prototype',
-          'combinator': 'and',
           'scope': ['Window']
         }
       });
@@ -863,7 +819,6 @@ describe('build', () => {
       assert.deepEqual(buildIDLTests(ast), {
         'api.GetMe': {
           'code': '"GetMe" in self',
-          'combinator': 'and',
           'scope': ['Window']
         }
       });
@@ -879,22 +834,18 @@ describe('build', () => {
       assert.deepEqual(buildIDLTests(ast), {
         'api.CSS': {
           'code': '"CSS" in self',
-          'combinator': 'and',
           'scope': ['Window']
         },
         'api.MessageChannel': {
           'code': '"MessageChannel" in self',
-          'combinator': 'and',
           'scope': ['Window', 'Worker']
         },
         'api.Worker': {
           'code': '"Worker" in self',
-          'combinator': 'and',
           'scope': ['Window']
         },
         'api.WorkerSync': {
           'code': '"WorkerSync" in self',
-          'combinator': 'and',
           'scope': ['Worker']
         }
       });
@@ -911,12 +862,10 @@ describe('build', () => {
       assert.deepEqual(buildIDLTests(ast), {
         'api.AudioNode': {
           'code': '"AudioNode" in self',
-          'combinator': 'and',
           'scope': ['Window']
         },
         'api.AudioNode.disconnect': {
           'code': '"AudioNode" in self && "disconnect" in AudioNode.prototype',
-          'combinator': 'and',
           'scope': ['Window']
         }
       });
@@ -930,12 +879,10 @@ describe('build', () => {
       assert.deepEqual(buildIDLTests(ast), {
         'api.CSS': {
           'code': '"CSS" in self',
-          'combinator': 'and',
           'scope': ['Window']
         },
         'api.CSS.paintWorklet': {
           'code': '"CSS" in self && "paintWorklet" in CSS',
-          'combinator': 'and',
           'scope': ['Window']
         }
       });
@@ -949,12 +896,10 @@ describe('build', () => {
       assert.deepEqual(buildIDLTests(ast), {
         'api.CSS': {
           'code': '"CSS" in self',
-          'combinator': 'and',
           'scope': ['Window']
         },
         'api.CSS.supports': {
           'code': '"CSS" in self && "supports" in CSS',
-          'combinator': 'and',
           'scope': ['Window']
         }
       });
@@ -981,12 +926,10 @@ describe('build', () => {
       assert.deepEqual(buildIDLTests(ast), {
         'api.CSS': {
           'code': '(function() {var css = CSS;return !!css;})()',
-          'combinator': 'and',
           'scope': ['Window']
         },
         'api.CSS.paintWorklet': {
           'code': '(function() {var css = CSS;return css && \'paintWorklet\' in css;})()',
-          'combinator': 'and',
           'scope': ['Window']
         }
       });
@@ -1001,17 +944,14 @@ describe('build', () => {
       assert.deepEqual(buildIDLTests(ast), {
         'api.ElementRegistrationOptions': {
           'code': '"ElementRegistrationOptions" in self',
-          'combinator': 'and',
           'scope': ['Window']
         },
         'api.ElementRegistrationOptions.extends': {
           'code': '"ElementRegistrationOptions" in self && "extends" in ElementRegistrationOptions',
-          'combinator': 'and',
           'scope': ['Window']
         },
         'api.ElementRegistrationOptions.prototype': {
           'code': '"ElementRegistrationOptions" in self && "prototype" in ElementRegistrationOptions',
-          'combinator': 'and',
           'scope': ['Window']
         }
       });
@@ -1036,17 +976,14 @@ describe('build', () => {
       assert.deepEqual(buildIDLTests(ast), {
         'api.ElementRegistrationOptions': {
           'code': '(function() {var instance = ElementRegistrationOptions;return !!instance;})()',
-          'combinator': 'and',
           'scope': ['Window']
         },
         'api.ElementRegistrationOptions.extends': {
           'code': '(function() {var instance = ElementRegistrationOptions;return instance && \'extends\' in instance;})()',
-          'combinator': 'and',
           'scope': ['Window']
         },
         'api.ElementRegistrationOptions.prototype': {
           'code': '(function() {var instance = ElementRegistrationOptions;return instance && \'prototype\' in instance;})()',
-          'combinator': 'and',
           'scope': ['Window']
         }
       });
@@ -1153,22 +1090,18 @@ describe('build', () => {
     assert.deepEqual(buildCSS(webref, bcd), {
       'css.properties.appearance': {
         'code': '"appearance" in document.body.style || CSS.supports("appearance", "inherit")',
-        'combinator': 'or',
         'scope': ['CSS']
       },
       'css.properties.font-family': {
         'code': '"fontFamily" in document.body.style || CSS.supports("font-family", "inherit")',
-        'combinator': 'or',
         'scope': ['CSS']
       },
       'css.properties.font-weight': {
         'code': '"fontWeight" in document.body.style || CSS.supports("font-weight", "inherit")',
-        'combinator': 'or',
         'scope': ['CSS']
       },
       'css.properties.grid': {
         'code': '"grid" in document.body.style || CSS.supports("grid", "inherit")',
-        'combinator': 'or',
         'scope': ['CSS']
       }
     });

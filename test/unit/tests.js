@@ -21,7 +21,6 @@ const MANIFEST = {
   tests: {
     'api.AbortController': {
       'code': '"AbortController" in self',
-      'combinator': 'and',
       'scope': [
         'Window',
         'Worker'
@@ -29,7 +28,6 @@ const MANIFEST = {
     },
     'api.AbortController.signal': {
       'code': '"AbortController" in self && "signal" in AbortController',
-      'combinator': 'and',
       'scope': [
         'Window',
         'Worker'
@@ -82,19 +80,16 @@ describe('Tests', () => {
     assert.deepEqual(tests.getTests('/api/interfaces'), {
       'api.AbortController': {
         'code': '"AbortController" in self',
-        'combinator': 'and',
         'scope': ['Window', 'Worker']
       },
       'api.AbortController.signal': {
         'code': '"AbortController" in self && "signal" in AbortController',
-        'combinator': 'and',
         'scope': ['Window', 'Worker']
       }
     });
     assert.deepEqual(tests.getTests('/api/workerinterfaces'), {
       'api.AbortController': {
         'code': '"AbortController" in self',
-        'combinator': 'and',
         'scope': ['Window', 'Worker']
       }
     });

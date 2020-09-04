@@ -88,6 +88,7 @@ function compileTest(test) {
   }
 
   newTest.code = compiledCode.join(test.combinator == 'and' ? ' && ' : ' || ');
+  delete newTest.combinator;
   return newTest;
 }
 
