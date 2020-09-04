@@ -516,7 +516,7 @@ function buildCSS(webref, bcd) {
   return tests;
 }
 
-function copyResources() {
+async function copyResources() {
   const resources = [
     ['json3/lib/json3.min.js', 'resources'],
     ['core-js-bundle/minified.js', 'resources', 'core.js'],
@@ -529,16 +529,16 @@ function copyResources() {
     const src = require.resolve(srcInModules);
     const destDir = path.join(generatedDir, destInGenerated);
     const dest = path.join(destDir, path.basename(src));
-    fs.ensureDirSync(path.dirname(dest));
-    fs.copyFileSync(src, dest);
+    await fs.ensureDir(path.dirname(dest));
+    await fs.copyFile(src, dest);
     if (newFilename) {
-      fs.renameSync(dest, path.join(destDir, newFilename));
+      await fs.rename(dest, path.join(destDir, newFilename));
     }
   }
 
   // Fix source mapping in core-js
   const corejsPath = path.join(generatedDir, 'resources', 'core.js');
-  fs.readFile(corejsPath, 'utf8', function(err, data) {
+  await fs.readFile(corejsPath, 'utf8', function(err, data) {
     if (err) {
       return console.log(err);
     }
@@ -547,7 +547,7 @@ function copyResources() {
         'sourceMappingURL=core.js.map'
     );
 
-    fs.writeFile(corejsPath, result, 'utf8', function(err) {
+    fs.writeFileSync(corejsPath, result, 'utf8', function(err) {
       if (err) return console.log(err);
     });
   });
@@ -619,7 +619,7 @@ async function build(webref, bcd) {
   }
 
   await writeFile('MANIFEST.json', manifest);
-  copyResources();
+  await copyResources();
 }
 
 /* istanbul ignore if */
