@@ -76,6 +76,30 @@ describe('Tests', () => {
     host: 'host.test'
   });
 
+  it('listMainEndpoints', () => {
+    assert.deepEqual(tests.listMainEndpoints(), [
+      '/api/interfaces',
+      '/api/workerinterfaces',
+      '/api/serviceworkerinterfaces'
+    ]);
+  });
+
+  it('listIndividual', () => {
+    assert.deepEqual(tests.listIndividual(), [
+      ['api.AbortController', '/api/AbortController'],
+      ['api.AbortController.signal', '/api/AbortController/signal']
+    ]);
+  });
+
+  it('listAllEndpoints', () => {
+    assert.deepEqual(tests.listAllEndpoints(), [
+      '/api/interfaces',
+      '/api/workerinterfaces',
+      '/api/serviceworkerinterfaces',
+      '/api/AbortController',
+      '/api/AbortController/signal'
+    ]);
+  });
   it('getTests', () => {
     assert.deepEqual(tests.getTests('/api/interfaces'), {
       'api.AbortController': {
@@ -99,20 +123,5 @@ describe('Tests', () => {
     assert.equal(tests.getScope('/api/interfaces'), 'Window');
     assert.equal(tests.getScope('/api/serviceworkerinterfaces'), 'ServiceWorker');
     assert.equal(tests.getScope('/api/dummy'), '');
-  });
-
-  it('listEndpoints', () => {
-    assert.deepEqual(tests.listEndpoints(), [
-      '/api/interfaces',
-      '/api/workerinterfaces',
-      '/api/serviceworkerinterfaces'
-    ]);
-  });
-
-  it('listIndividual', () => {
-    assert.deepEqual(tests.listIndividual(), [
-      ['api.AbortController', '/api/AbortController'],
-      ['api.AbortController.signal', '/api/AbortController/signal']
-    ]);
   });
 });

@@ -72,9 +72,7 @@ app.use(express.static('static'));
 app.use(express.static('generated'));
 
 app.get('/api/tests', (req, res) => {
-  const list = tests.listEndpoints();
-  const individualList = tests.listIndividual();
-  res.json([list, individualList]);
+  res.json([tests.listMainEndpoints(), tests.listIndividual()]);
 });
 
 app.post('/api/results', (req, res) => {
@@ -100,6 +98,7 @@ app.post('/api/results', (req, res) => {
       response.next = next;
     }
   } catch (err) {
+    /* istanbul ignore next */
     logger.warn(`Results submitted for URL not in manifest: ${forURL}`);
     // note: indistinguishable from finishing last test to client
   }
@@ -137,13 +136,7 @@ app.post('/api/results/export/github', (req, res) => {
       .catch(/* istanbul ignore next */ (err) => catchError(err, res));
 });
 
-for (const endpoint of tests.listEndpoints()) {
-  app.get(endpoint, (req, res) => {
-    res.send(tests.generateTestPage(endpoint));
-  });
-}
-
-for (const [_, endpoint] of tests.listIndividual()) {
+for (const endpoint of tests.listAllEndpoints()) {
   app.get(endpoint, (req, res) => {
     res.send(tests.generateTestPage(endpoint));
   });

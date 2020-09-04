@@ -23,12 +23,29 @@ class Tests {
     this.httpOnly = options.httpOnly;
   }
 
+  listMainEndpoints() {
+    return Object.keys(this.endpoints);
+  }
+
+  listIndividual() {
+    return Object.keys(this.individualEndpoints).map((item) => (
+      [item.substr(1).replace('tests/', '').replace(/\//g, '.'), item]
+    ));
+  }
+
+  listAllEndpoints() {
+    return [
+      ...this.listMainEndpoints(),
+      ...this.listIndividual().map((item) => (item[1]))
+    ];
+  }
+
   next(after) {
     const afterURL = new URL(after);
     if (!this.httpOnly && afterURL.protocol === 'http:') {
       return `https://${this.host}${afterURL.pathname}`;
     } else {
-      const endpoints = this.listEndpoints();
+      const endpoints = this.listMainEndpoints();
       const index = endpoints.findIndex((item) => {
         return item === afterURL.pathname;
       }) + 1;
@@ -110,16 +127,6 @@ class Tests {
     lines.push('</script>', '</body>', '</html>');
 
     return lines.join('\n');
-  }
-
-  listEndpoints() {
-    return Object.keys(this.endpoints);
-  }
-
-  listIndividual() {
-    return Object.keys(this.individualEndpoints).map((item) => (
-      [item.substr(1).replace('tests/', '').replace(/\//g, '.'), item]
-    ));
   }
 }
 
