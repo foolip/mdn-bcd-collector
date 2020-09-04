@@ -24,13 +24,13 @@ const webref = require('./webref');
 
 const generatedDir = path.join(__dirname, 'generated');
 
-function writeText(filename, content) {
+async function writeFile(filename, content) {
   if (Array.isArray(content)) {
     content = content.join('\n');
   }
   content = content.trimEnd() + '\n';
-  fs.ensureDirSync(path.dirname(filename));
-  fs.writeFileSync(filename, content, 'utf8');
+  await fs.ensureDir(path.dirname(filename));
+  await fs.writeFile(filename, content, 'utf8');
 }
 
 function getCustomTestAPI(name, member) {
@@ -490,7 +490,7 @@ function buildIDL(webref) {
 }
 
 async function writeManifest(manifest) {
-  writeText('MANIFEST.json', JSON.stringify(manifest, null, '  '));
+  await writeFile('MANIFEST.json', JSON.stringify(manifest, null, '  '));
 }
 
 function copyResources() {
@@ -591,7 +591,7 @@ if (require.main === module) {
   });
 } else {
   module.exports = {
-    writeText,
+    writeFile,
     getCustomTestAPI,
     getCustomTestCSS,
     collectCSSPropertiesFromBCD,

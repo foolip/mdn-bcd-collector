@@ -27,10 +27,10 @@ const proxyquire = require('proxyquire');
 const fs = require('fs');
 
 const {
-  writeText,
   collectCSSPropertiesFromBCD,
   collectCSSPropertiesFromReffy,
   cssPropertyToIDLAttribute,
+  writeFile,
   flattenIDL,
   getExposureSet,
   buildIDLTests,
@@ -40,16 +40,16 @@ const {
 });
 
 describe('build', () => {
-  describe('writeText', () => {
+  describe('writeFile', () => {
     const filepath = '.testtmp';
 
-    it('simple supported', () => {
-      writeText(filepath, 'foo\nbar');
+    it('simple supported', async () => {
+      await writeFile(filepath, 'foo\nbar');
       assert.fileContent(filepath, 'foo\nbar\n');
     });
 
-    it('array', () => {
-      writeText(filepath, ['foo', 'bar', 'baz']);
+    it('array', async () => {
+      await writeFile(filepath, ['foo', 'bar', 'baz']);
       assert.fileContent(filepath, 'foo\nbar\nbaz\n');
     });
 
