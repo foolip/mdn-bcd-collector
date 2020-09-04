@@ -83,7 +83,7 @@
         stringIncludes(err.message, 'Not enough arguments') ||
         stringIncludes(err.message, 'argument required') ||
         stringIncludes(err.message, 'arguments required') ||
-        stringIncludes(err.message, 'Argument not optional') || 
+        stringIncludes(err.message, 'Argument not optional') ||
         stringIncludes(err.message, 'Arguments can\'t be empty')
       ) {
         // If it failed to construct and it's not illegal or just needs
@@ -477,7 +477,9 @@
   function report(results) {
     var body = JSON.stringify(results);
     var client = new XMLHttpRequest();
-    client.open('POST', '/backend/results?for='+encodeURIComponent(location.href));
+    client.open(
+        'POST', '/backend/results?for='+encodeURIComponent(location.href)
+    );
     client.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
     client.send(body);
     client.onreadystatechange = function() {
