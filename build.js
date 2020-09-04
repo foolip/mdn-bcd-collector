@@ -373,10 +373,7 @@ function validateIDL(ast) {
   return true;
 }
 
-function buildIDL(webref) {
-  const ast = flattenIDL(webref.idl, collectExtraIDL());
-  validateIDL(ast);
-
+function buildIDLTests(ast) {
   const tests = {};
 
   const interfaces = ast.filter((dfn) =>
@@ -484,6 +481,12 @@ function buildIDL(webref) {
   }
 
   return tests;
+}
+
+function buildIDL(webref) {
+  const ast = flattenIDL(webref.idl, collectExtraIDL());
+  validateIDL(ast);
+  return buildIDLTests(ast);
 }
 
 async function writeManifest(manifest) {
@@ -596,7 +599,7 @@ if (require.main === module) {
     cssPropertyToIDLAttribute,
     flattenIDL,
     getExposureSet,
-    buildIDL,
+    buildIDLTests,
     validateIDL
   };
 }
