@@ -67,6 +67,37 @@
     pending.push({name: name, code: code, scope: scope, info: info});
   }
 
+  function testConstructor(iface) {
+    var result = {};
+
+    try {
+      eval('new '+iface+'()');
+      result.result = true;
+    } catch (err) {
+      if (
+        stringIncludes(err.message, 'Illegal constructor') ||
+        stringIncludes(err.message, 'Function expected')
+      ) {
+        result.result = false;
+      } else if (
+        stringIncludes(err.message, 'Not enough arguments') ||
+        stringIncludes(err.message, 'argument required') ||
+        stringIncludes(err.message, 'arguments required') ||
+        stringIncludes(err.message, 'Argument not optional')
+      ) {
+        // If it failed to construct and it's not illegal or just needs
+        // more arguments, the constructor's good
+        result.result = true;
+      } else {
+        result.result = null;
+      }
+
+      result.message = 'threw ' + stringify(err);
+    }
+
+    return result;
+  }
+
   // eslint-disable-next-line no-unused-vars
   function testWithPrefix(data) {
     // XXX Not actively used; kept for historical purposes. Code compilation
@@ -237,7 +268,15 @@
     var result = {name: data.name, info: {}};
 
     try {
-      result.result = eval(data.code);
+      var value = eval(data.code);
+      if (typeof value === 'object' && 'result' in value) {
+        result.result = value.result;
+        if (value.message) {
+          result.message = value.message;
+        }
+      } else {
+        result.result = value;
+      }
     } catch (err) {
       result.result = null;
       result.message = 'threw ' + stringify(err);
@@ -453,6 +492,7 @@
       var result = results[i];
       response += result.name + ': <strong>' + result.result;
       if (result.prefix) response += ' (' + result.prefix + ' prefix)';
+      if (result.message) response += ' (' + result.message + ')';
       response += '</strong>\n<code>' + result.info.code + ';</code>\n\n';
     }
     updateStatus(response.replace(/\n/g, '<br />'));
@@ -515,6 +555,7 @@
   global.stringify = stringify;
 
   global.bcd = {
+    testConstructor: testConstructor,
     addTest: addTest,
     test: test,
     run: run,

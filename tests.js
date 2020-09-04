@@ -58,7 +58,7 @@ class Tests {
       if (typeof(subtest) === 'string') {
         compiledCode.push(subtest);
       } else if (subtest.property == 'constructor') {
-        compiledCode.push('new '+subtest.scope+'()');
+        compiledCode.push(`bcd.testConstructor('${subtest.scope}')`);
       } else if (subtest.scope === 'CSS.supports') {
         compiledCode.push(`CSS.supports("${subtest.property}", "inherit");`);
       } else if (subtest.property.startsWith('Symbol.')) {
