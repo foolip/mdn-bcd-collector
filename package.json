@@ -21,7 +21,8 @@
     "start": "node app.js",
     "coverage": "NODE_ENV=test nyc mocha --recursive test --exclude test/puppeteer/*",
     "puppeteer": "NODE_ENV=test mocha test/puppeteer --timeout 30000 --slow 10000",
-    "test": "npm run coverage && npm run puppeteer",
+    "unittest": "npm run coverage && npm run puppeteer",
+    "test": "npm run lint && npm run unittest",
     "selenium": "mocha selenium",
     "update-bcd": "node update-bcd.js"
   },
