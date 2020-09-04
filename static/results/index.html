@@ -16,7 +16,7 @@ Unless required by applicable law or agreed to in writing, software distributed 
   <span id="status">Loading page...</span> <a id="link"></a>
 </div>
 <div>
-  <a href="/api/results">Download results JSON</a>
+  <a href="/backend/results">Download results JSON</a>
 </div>
 <div>
   <a href="/">Back to start page</a>
@@ -27,7 +27,7 @@ function exportGitHub() {
   var status = document.getElementById('status');
   var link = document.getElementById('link');
   var client = new XMLHttpRequest();
-  client.open('POST', '/api/results/export/github', true);
+  client.open('POST', '/backend/results/export/github', true);
   client.send();
   status.textContent = 'Exporting...';
   client.onreadystatechange = function() {

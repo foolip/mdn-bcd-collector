@@ -121,13 +121,13 @@ app.use(express.json({limit: '32mb'}));
 app.use(express.static('static'));
 app.use(express.static('generated'));
 
-app.get('/api/tests', (req, res) => {
+app.get('/backend/tests', (req, res) => {
   const list = tests.listEndpoints();
   const individualList = tests.listIndividual();
   res.json([list, individualList]);
 });
 
-app.post('/api/results', (req, res) => {
+app.post('/backend/results', (req, res) => {
   if (!req.is('json')) {
     res.status(400).end();
     return;
@@ -163,7 +163,7 @@ app.post('/api/results', (req, res) => {
       .catch(/* istanbul ignore next */ (err) => catchError(err, res));
 });
 
-app.get('/api/results', (req, res) => {
+app.get('/backend/results', (req, res) => {
   storage.getAll(req.sessionID)
       .then((results) => {
         res.status(200).json(results);
@@ -172,7 +172,7 @@ app.get('/api/results', (req, res) => {
 });
 
 /* istanbul ignore next: we don't want to create lots of dummy PRs */
-app.post('/api/results/export/github', (req, res) => {
+app.post('/backend/results/export/github', (req, res) => {
   storage.getAll(req.sessionID)
       .then(async (results) => {
         const userAgent = req.get('User-Agent');

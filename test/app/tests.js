@@ -22,9 +22,9 @@ chai.use(chaiHttp);
 const agent = chai.request.agent(app);
 const assert = chai.assert;
 
-describe('/api/tests', () => {
+describe('/backend/tests', () => {
   it('list tests', async () => {
-    const res = await agent.get('/api/tests');
+    const res = await agent.get('/backend/tests');
     assert.equal(res.status, 200);
     assert.isArray(res.body);
     assert.isArray(res.body[0]);
