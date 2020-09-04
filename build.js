@@ -572,17 +572,17 @@ async function build(webref, bcd) {
         let endpoint = '';
         switch (scope) {
           case 'Window':
-            endpoint = '/api/interfaces';
+            endpoint = '/tests/api/interfaces';
             break;
           case 'Worker':
           case 'DedicatedWorker':
-            endpoint = '/api/workerinterfaces';
+            endpoint = '/tests/api/workerinterfaces';
             break;
           case 'ServiceWorker':
-            endpoint = '/api/serviceworkerinterfaces';
+            endpoint = '/tests/api/serviceworkerinterfaces';
             break;
           case 'CSS':
-            endpoint = '/css/properties';
+            endpoint = '/tests/css/properties';
             break;
         }
 
@@ -600,11 +600,11 @@ async function build(webref, bcd) {
         }
       }
 
-      let url = '';
+      let url = '/tests';
       for (const part of ident.split('.')) {
         url += '/' + part;
 
-        if (['/api', '/css', '/css/properties'].includes(url)) {
+        if (['/tests/api', '/tests/css', '/tests/css/properties'].includes(url)) {
           // Ignore things tested in main endpoints
           continue;
         }

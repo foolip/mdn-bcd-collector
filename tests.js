@@ -74,9 +74,9 @@ class Tests {
   }
 
   listIndividual() {
-    return Object.keys(this.individualEndpoints).map((item) => {
-      return [item.substr(1).replace(/\//g, '.'), item];
-    });
+    return Object.keys(this.individualEndpoints).map((item) => (
+      [item.substr(1).replace('tests/', '').replace(/\//g, '.'), item]
+    ));
   }
 }
 
