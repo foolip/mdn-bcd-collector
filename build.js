@@ -439,7 +439,7 @@ function collectCSSPropertiesFromBCD(bcd, propertySet) {
   }
 }
 
-function collectCSSPropertiesFromReffy(webref, propertySet) {
+function collectCSSPropertiesFromWebref(webref, propertySet) {
   for (const data of Object.values(webref.css)) {
     for (const prop of Object.keys(data.properties)) {
       propertySet.add(prop);
@@ -470,7 +470,7 @@ function cssPropertyToIDLAttribute(property, lowercaseFirst) {
 function buildCSS(webref, bcd) {
   const propertySet = new Set;
   collectCSSPropertiesFromBCD(bcd, propertySet);
-  collectCSSPropertiesFromReffy(webref, propertySet);
+  collectCSSPropertiesFromWebref(webref, propertySet);
 
   const tests = {};
 
@@ -615,7 +615,7 @@ if (require.main === module) {
     buildIDLTests,
     validateIDL,
     collectCSSPropertiesFromBCD,
-    collectCSSPropertiesFromReffy,
+    collectCSSPropertiesFromWebref,
     cssPropertyToIDLAttribute,
     buildCSS
   };

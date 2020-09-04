@@ -33,7 +33,7 @@ const {
   validateIDL,
   buildIDLTests,
   collectCSSPropertiesFromBCD,
-  collectCSSPropertiesFromReffy,
+  collectCSSPropertiesFromWebref,
   cssPropertyToIDLAttribute,
   buildCSS
 } = proxyquire('../../build', {
@@ -323,7 +323,7 @@ describe('build', () => {
     });
   });
 
-  it('collectCSSPropertiesFromReffy', () => {
+  it('collectCSSPropertiesFromWebref', () => {
     const webref = {
       css: {
         'css-fonts': {
@@ -340,7 +340,7 @@ describe('build', () => {
       }
     };
     const propertySet = new Set();
-    collectCSSPropertiesFromReffy(webref, propertySet);
+    collectCSSPropertiesFromWebref(webref, propertySet);
     const properties = Array.from(propertySet);
     assert.deepEqual(properties, ['font-family', 'font-weight', 'grid']);
   });
