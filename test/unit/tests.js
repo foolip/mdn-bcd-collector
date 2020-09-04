@@ -19,8 +19,34 @@ const Tests = require('../../tests');
 
 const MANIFEST = {
   tests: {
-    'api.AbortController': true,
-    'api.AbortController.controller': false,
+    'api.AbortController': {
+      "test": {
+        "property": "AbortController",
+        "scope": "self"
+      },
+      "combinator": "and",
+      "scope": [
+        "Window",
+        "Worker"
+      ]
+    },
+    'api.AbortController.signal': {
+      "test": [
+        {
+          "property": "AbortController",
+          "scope": "self"
+        },
+        {
+          "property": "signal",
+          "scope": "AbortController"
+        }
+      ],
+      "combinator": "and",
+      "scope": [
+        "Window",
+        "Worker"
+      ]
+    },
     'api.FooBar': null
   },
   endpoints: {
@@ -30,24 +56,29 @@ const MANIFEST = {
         httpsOnly: false,
         entries: [
           'api.AbortController',
-          'api.AbortController.controller'
+          'api.AbortController.signal'
+        ]
+      },
+      '/api/workerinterfaces': {
+        scope: 'Worker',
+        httpsOnly: true,
+        entries: [
+          'api.AbortController'
         ]
       },
       '/api/serviceworkerinterfaces': {
         scope: 'ServiceWorker',
         httpsOnly: true,
-        entries: [
-          'api.AbortController'
-        ]
+        entries: []
       }
     },
     individual: {
       '/api/AbortController': [
         'api.AbortController',
-        'api.AbortController.controller'
+        'api.AbortController.signal'
       ],
-      '/api/AbortController/controller': [
-        'api.AbortController.controller'
+      '/api/AbortController/signal': [
+        'api.AbortController.signal'
       ]
     }
   }
@@ -61,11 +92,23 @@ describe('Tests', () => {
 
   it('getTests', () => {
     assert.deepEqual(tests.getTests('/api/interfaces'), {
-      'api.AbortController': true,
-      'api.AbortController.controller': false
+      'api.AbortController': {
+        "test": '"AbortController" in self',
+        "combinator": "and",
+        "scope": ["Window", "Worker"]
+      },
+      'api.AbortController.signal': {
+        "test": '"AbortController" in self && "signal" in AbortController',
+        "combinator": "and",
+        "scope": ["Window", "Worker"]
+      }
     });
-    assert.deepEqual(tests.getTests('/api/serviceworkerinterfaces'), {
-      'api.AbortController': true
+    assert.deepEqual(tests.getTests('/api/workerinterfaces'), {
+      'api.AbortController': {
+        "test": '"AbortController" in self',
+        "combinator": "and",
+        "scope": ["Window", "Worker"]
+      }
     });
   });
 
@@ -78,6 +121,7 @@ describe('Tests', () => {
   it('listEndpoints', () => {
     assert.deepEqual(tests.listEndpoints(), [
       '/api/interfaces',
+      '/api/workerinterfaces',
       '/api/serviceworkerinterfaces'
     ]);
   });
@@ -85,7 +129,7 @@ describe('Tests', () => {
   it('listIndividual', () => {
     assert.deepEqual(tests.listIndividual(), [
       ['api.AbortController', '/api/AbortController'],
-      ['api.AbortController.controller', '/api/AbortController/controller']
+      ['api.AbortController.signal', '/api/AbortController/signal']
     ]);
   });
 });

@@ -38,8 +38,7 @@ describe('harness.js', function() {
       assert.deepStrictEqual(results, [{
         name: 'name',
         result: true,
-        info: {code: 'true', scope: 'test'},
-        prefix: ''
+        info: {code: 'true', scope: 'test'}
       }]);
       done();
     });
@@ -60,12 +59,12 @@ describe('harness.js', function() {
   it('return null', function(done) {
     bcd.addTest('name', 'null', 'test');
     bcd.run('Window', function(results) {
+      console.log(results);
       assert.deepStrictEqual(results, [{
         name: 'name',
         result: null,
         message: 'returned null',
-        info: {code: 'null', scope: 'test'},
-        prefix: ''
+        info: {code: 'null', scope: 'test'}
       }]);
       done();
     });
@@ -81,8 +80,7 @@ describe('harness.js', function() {
         name: 'name',
         result: null,
         message: 'returned Symbol(bar)',
-        info: {code: 'Symbol(\'bar\')', scope: 'test'},
-        prefix: ''
+        info: {code: 'Symbol(\'bar\')', scope: 'test'}
       }]);
       done();
     });
@@ -95,8 +93,7 @@ describe('harness.js', function() {
         name: 'name',
         result: null,
         message: 'returned undefined',
-        info: {code: 'undefined', scope: 'test'},
-        prefix: ''
+        info: {code: 'undefined', scope: 'test'}
       }]);
       done();
     });
@@ -133,8 +130,7 @@ describe('harness.js', function() {
       assert.deepEqual(results, [{
         name: 'first',
         result: true,
-        info: {code: 'true', scope: 'test', a: 1},
-        prefix: ''
+        info: {code: 'true', scope: 'test', a: 1}
       }, {
         name: 'second',
         result: false,
