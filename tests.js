@@ -52,8 +52,9 @@ class Tests {
 
   compileTest(test) {
     const compiledCode = [];
+    const subtests = Array.isArray(test.test) ? test.test : [test.test];
 
-    for (const subtest of test.test) {
+    for (const subtest of subtests) {
       if (typeof(subtest) === 'string') {
         compiledCode.push(subtest);
       } else if (subtest.property == 'constructor') {
@@ -67,7 +68,7 @@ class Tests {
       }
     }
 
-    return compiledCode.join(test.comparator == 'and' ? ' && ' : ' || ');
+    return compiledCode.join(test.combinator == 'and' ? ' && ' : ' || ');
   }
 
   getTests(endpoint) {
