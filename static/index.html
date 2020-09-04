@@ -24,7 +24,7 @@ function getTests() {
   var button = document.getElementById('start');
   var dropdown = document.getElementById('tests');
   var client = new XMLHttpRequest();
-  client.open('GET', '/backend/tests', true);
+  client.open('GET', '/api/tests', true);
   client.send();
   client.onreadystatechange = function() {
     if (client.readyState == 4) {

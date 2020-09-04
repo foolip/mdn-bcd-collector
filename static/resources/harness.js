@@ -477,9 +477,7 @@
   function report(results) {
     var body = JSON.stringify(results);
     var client = new XMLHttpRequest();
-    client.open(
-        'POST', '/backend/results?for='+encodeURIComponent(location.href)
-    );
+    client.open('POST', '/api/results?for='+encodeURIComponent(location.href));
     client.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
     client.send(body);
     client.onreadystatechange = function() {

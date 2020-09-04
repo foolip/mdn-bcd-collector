@@ -25,22 +25,22 @@ chai.use(chaiHttp);
 const agent = chai.request.agent(app);
 const assert = chai.assert;
 
-describe('/backend/results', () => {
+describe('/api/results', () => {
   it('missing `Content-Type` header', async () => {
-    const res = await agent.post('/backend/results')
+    const res = await agent.post('/api/results')
         .set('Content-Type', 'text/plain')
         .send('string');
     assert.equal(res.status, 400);
   });
 
   it('missing `for` param', async () => {
-    const res = await agent.post('/backend/results')
+    const res = await agent.post('/api/results')
         .send({});
     assert.equal(res.status, 400);
   });
 
   it('list results before', async () => {
-    const res = await agent.get('/backend/results');
+    const res = await agent.get('/api/results');
     assert.equal(res.status, 200);
     assert.deepEqual(res.body, {});
   });
@@ -49,7 +49,7 @@ describe('/backend/results', () => {
   const testURL2 = `https://host.test${manifestItems[manifestItems.length - 1][0]}`;
 
   it('submit valid results', async () => {
-    const res = await agent.post('/backend/results')
+    const res = await agent.post('/api/results')
         .query({for: testURL})
         .send({x: 1});
     assert.equal(res.status, 201);
@@ -59,7 +59,7 @@ describe('/backend/results', () => {
   });
 
   it('list results after valid', async () => {
-    const res = await agent.get('/backend/results');
+    const res = await agent.get('/api/results');
     assert.equal(res.status, 200);
     assert.deepEqual(res.body, {
       '__version': version,
@@ -68,14 +68,14 @@ describe('/backend/results', () => {
   });
 
   it('submit duplicate results', async () => {
-    const res = await agent.post('/backend/results')
+    const res = await agent.post('/api/results')
         .query({for: testURL})
         .send({x: 2});
     assert.equal(res.status, 201);
   });
 
   it('list results after duplicate', async () => {
-    const res = await agent.get('/backend/results');
+    const res = await agent.get('/api/results');
     assert.equal(res.status, 200);
     assert.deepEqual(res.body, {
       '__version': version,
@@ -84,7 +84,7 @@ describe('/backend/results', () => {
   });
 
   it('submit results for new/last manifest', async () => {
-    const res = await agent.post('/backend/results')
+    const res = await agent.post('/api/results')
         .query({for: testURL2})
         .send({y: 3});
     assert.equal(res.status, 201);
@@ -92,7 +92,7 @@ describe('/backend/results', () => {
   });
 
   it('list results after new/last manifest', async () => {
-    const res = await agent.get('/backend/results');
+    const res = await agent.get('/api/results');
     assert.equal(res.status, 200);
     assert.deepEqual(res.body, {
       '__version': version,
@@ -102,7 +102,7 @@ describe('/backend/results', () => {
   });
 
   it('submit invalid results', async () => {
-    const res = await agent.post('/backend/results')
+    const res = await agent.post('/api/results')
         .query({for: testURL})
         .send('my bad results');
     assert.equal(res.status, 400);
