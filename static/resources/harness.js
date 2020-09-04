@@ -422,7 +422,7 @@
     };
   }
 
-  function finishIndividual(results) {
+  function finishAndDisplay(results) {
     var response = '';
     for (var i=0; i<results.length; i++) {
       var result = results[i];
@@ -493,6 +493,6 @@
     addTest: addTest,
     test: test,
     run: run,
-    finishIndividual: finishIndividual
+    finishAndDisplay: finishAndDisplay
   };
 })(this);
