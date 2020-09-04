@@ -60,7 +60,7 @@ class Tests {
         compiledCode.push('new '+subtest.scope+'()');
       } else if (subtest.scope === 'CSS.supports') {
         compiledCode.push(`CSS.supports("${subtest.property}", "inherit");`);
-      } else if (stringStartsWith(subtest.property, 'Symbol.')) {
+      } else if (subtest.property.startsWith('Symbol.')) {
         compiledCode.push(`${subtest.property} in ${subtest.scope}`);
       } else {
         compiledCode.push(`"${subtest.property}" in ${subtest.scope}`);
