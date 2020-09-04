@@ -551,6 +551,7 @@ async function build(webref, bcd) {
             endpoint = '/api/interfaces';
             break;
           case 'Worker':
+          case 'DedicatedWorker':
             endpoint = '/api/workerinterfaces';
             break;
           case 'ServiceWorker':
