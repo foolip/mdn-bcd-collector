@@ -18,6 +18,7 @@ const winston = require('winston');
 const {LoggingWinston} = require('@google-cloud/logging-winston');
 
 function getTransport() {
+  /* istanbul ignore if */
   if (process.env.NODE_ENV === 'production' ||
       process.env.GOOGLE_APPLICATION_CREDENTIALS) {
     return new LoggingWinston();

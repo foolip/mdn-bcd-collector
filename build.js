@@ -433,6 +433,7 @@ function buildIDLTests(ast) {
   return tests;
 }
 
+/* istanbul ignore next */
 function buildIDL(webref) {
   const ast = flattenIDL(webref.idl, collectExtraIDL());
   validateIDL(ast);
@@ -516,6 +517,7 @@ function buildCSS(webref, bcd) {
   return tests;
 }
 
+/* istanbul ignore next */
 async function copyResources() {
   const resources = [
     ['json3/lib/json3.min.js', 'resources'],

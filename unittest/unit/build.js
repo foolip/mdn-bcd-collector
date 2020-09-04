@@ -54,6 +54,11 @@ describe('build', () => {
       assert.fileContent(filepath, 'foo\nbar\nbaz\n');
     });
 
+    it('dictionary', async () => {
+      await writeFile(filepath, {'foo': ['bar', 'baz']});
+      assert.fileContent(filepath, '{\n  "foo": [\n    "bar",\n    "baz"\n  ]\n}\n');
+    });
+
     afterEach(() => {
       fs.unlinkSync(filepath);
     });

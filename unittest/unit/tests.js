@@ -100,6 +100,7 @@ describe('Tests', () => {
       '/api/AbortController/signal'
     ]);
   });
+
   it('getTests', () => {
     assert.deepEqual(tests.getTests('/api/interfaces'), {
       'api.AbortController': {

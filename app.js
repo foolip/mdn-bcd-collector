@@ -23,16 +23,19 @@ const logger = require('./logger');
 const appversion = require('./package.json').version;
 
 const PORT = process.env.PORT || 8080;
+const host = process.env.NODE_ENV === 'production' ?
+      'mdn-bcd-collector.appspot.com' :
+      `localhost:${PORT}`;
+
+const secrets = process.env.NODE_ENV === 'test' ?
+    require('./secrets.sample.json') :
+    require('./secrets.json');
 
 // TODO: none of this setup is pretty
 const {CloudStorage, MemoryStorage} = require('./storage');
 const storage = process.env.NODE_ENV === 'production' ?
    new CloudStorage :
    new MemoryStorage;
-
-const secrets = process.env.NODE_ENV === 'test' ?
-    require('./secrets.sample.json') :
-    require('./secrets.json');
 
 const github = require('./github')(
   secrets.github.token ?
@@ -43,9 +46,7 @@ const github = require('./github')(
 const Tests = require('./tests');
 const tests = new Tests({
   manifest: require('./MANIFEST.json'),
-  host: process.env.NODE_ENV === 'production' ?
-      'mdn-bcd-collector.appspot.com' :
-      `localhost:${PORT}`,
+  host: host,
   httpOnly: process.env.NODE_ENV !== 'production'
 });
 
