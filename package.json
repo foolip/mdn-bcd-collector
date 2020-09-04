@@ -19,10 +19,10 @@
     "gcp-build": "npm run build",
     "deploy": "gcloud app deploy",
     "start": "node app.js",
-    "coverage": "NODE_ENV=test nyc mocha --recursive test --exclude test/puppeteer/* --exclude test/selenium/*",
+    "coverage": "NODE_ENV=test nyc mocha --recursive test --exclude test/puppeteer/*",
     "puppeteer": "NODE_ENV=test mocha test/puppeteer --timeout 30000 --slow 10000",
     "test": "npm run coverage && npm run puppeteer",
-    "selenium": "mocha test/selenium",
+    "selenium": "mocha selenium",
     "update-bcd": "node update-bcd.js"
   },
   "dependencies": {

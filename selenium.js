@@ -50,7 +50,7 @@ if (process.env.BROWSER) {
   browsersToTest = {[process.env.BROWSER]: browsersToTest[process.env.BROWSER]};
 }
 
-const secrets = require('../../secrets.json');
+const secrets = require('./secrets.json');
 
 const host = process.env.NODE_ENV === 'test' ?
       `http://localhost:8080` :
