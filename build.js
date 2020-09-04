@@ -17,8 +17,10 @@
 const fs = require('fs-extra');
 const path = require('path');
 const WebIDL2 = require('webidl2');
+const bcd = require('mdn-browser-compat-data');
 
 const customTests = require('./custom-tests.json');
+const webref = require('./webref');
 
 const generatedDir = path.join(__dirname, 'generated');
 
@@ -587,8 +589,6 @@ async function build(webref, bcd) {
 
 /* istanbul ignore if */
 if (require.main === module) {
-  const bcd = require('mdn-browser-compat-data');
-  const webref = require('./webref');
   build(webref, bcd).catch((reason) => {
     console.error(reason);
     process.exit(1);
