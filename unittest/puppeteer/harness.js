@@ -16,6 +16,7 @@
 
 const assert = require('assert');
 const puppeteer = require('puppeteer');
+const pti = require('puppeteer-to-istanbul');
 
 const {app} = require('../../app');
 
@@ -41,6 +42,8 @@ describe('/resources/harness.js', () => {
       after(() => browser.close());
 
       const page = await browser.newPage();
+      if (product == 'chrome') await page.coverage.startJSCoverage();
+
       const reportPromise = new Promise((resolve, reject) => {
         page.on('console', (msg) => {
           if (msg.type() === consoleLogType[product]) {
@@ -49,9 +52,16 @@ describe('/resources/harness.js', () => {
         });
         page.on('error', reject);
       });
+
       await page.goto(`http://localhost:${port}/unittest/#reporter=json`);
       const report = await reportPromise;
+
+      if (product == 'chrome') {
+        const jsCoverage = await page.coverage.stopJSCoverage();
+        pti.write([...jsCoverage], { includeHostname: false, storagePath: './.nyc_output' })
+      }
+
       assert.equal(report.stats.failures, 0);
-    });
+    }).slow(10000).timeout(30000);
   }
 });

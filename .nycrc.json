@@ -3,6 +3,7 @@
   "exclude": [
     "**/generated/**",
     "**/static/**",
-    "**/unittest/**"
+    "**/unittest/**",
+    "**/json3.min.js"
   ]
 }
