@@ -50,27 +50,6 @@ class Tests {
     }
   }
 
-  compileTest(test) {
-    const compiledCode = [];
-    const subtests = Array.isArray(test.test) ? test.test : [test.test];
-
-    for (const subtest of subtests) {
-      if (typeof(subtest) === 'string') {
-        compiledCode.push(subtest);
-      } else if (subtest.property == 'constructor') {
-        compiledCode.push(`bcd.testConstructor('${subtest.scope}')`);
-      } else if (subtest.scope === 'CSS.supports') {
-        compiledCode.push(`CSS.supports("${subtest.property}", "inherit");`);
-      } else if (subtest.property.startsWith('Symbol.')) {
-        compiledCode.push(`${subtest.property} in ${subtest.scope}`);
-      } else {
-        compiledCode.push(`"${subtest.property}" in ${subtest.scope}`);
-      }
-    }
-
-    return compiledCode.join(test.combinator == 'and' ? ' && ' : ' || ');
-  }
-
   getTests(endpoint) {
     const idents = this.endpoints[endpoint] ?
         this.endpoints[endpoint].entries :
@@ -78,9 +57,7 @@ class Tests {
     const tests = {};
 
     for (const ident of idents) {
-      const test = this.tests[ident];
-      test.test = this.compileTest(test);
-      tests[ident] = test;
+      tests[ident] = this.tests[ident];
     }
 
     return tests;

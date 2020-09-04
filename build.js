@@ -68,6 +68,29 @@ function getCustomTestCSS(name) {
       `(function() {${customTests.css.properties[name]}})()`;
 }
 
+function compileTest(test) {
+  const newTest = test;
+  const compiledCode = [];
+  const subtests = Array.isArray(test.code) ? test.code : [test.code];
+
+  for (const subtest of subtests) {
+    if (typeof(subtest) === 'string') {
+      compiledCode.push(subtest);
+    } else if (subtest.property == 'constructor') {
+      compiledCode.push(`bcd.testConstructor('${subtest.scope}')`);
+    } else if (subtest.scope === 'CSS.supports') {
+      compiledCode.push(`CSS.supports("${subtest.property}", "inherit");`);
+    } else if (subtest.property.startsWith('Symbol.')) {
+      compiledCode.push(`${subtest.property} in ${subtest.scope}`);
+    } else {
+      compiledCode.push(`"${subtest.property}" in ${subtest.scope}`);
+    }
+  }
+
+  newTest.code = compiledCode.join(test.combinator == 'and' ? ' && ' : ' || ');
+  return newTest;
+}
+
 /* istanbul ignore next */
 function collectExtraIDL() {
   const idl = fs.readFileSync('./non-standard.idl', 'utf8');
@@ -318,11 +341,11 @@ function buildIDLTests(ast) {
     const isGlobal = !!getExtAttr(iface, 'Global');
     const customIfaceTest = getCustomTestAPI(iface.name);
 
-    tests[`api.${iface.name}`] = {
-      'test': customIfaceTest || {property: iface.name, scope: 'self'},
+    tests[`api.${iface.name}`] = compileTest({
+      'code': customIfaceTest || {property: iface.name, scope: 'self'},
       'combinator': 'and',
       'scope': Array.from(exposureSet)
-    };
+    });
 
     const members = flattenMembers(iface);
 
@@ -394,11 +417,11 @@ function buildIDLTests(ast) {
         }
       }
 
-      tests[`api.${iface.name}.${member.name}`] = {
-        'test': expr,
+      tests[`api.${iface.name}.${member.name}`] = compileTest({
+        'code': expr,
         'combinator': 'and',
         'scope': Array.from(exposureSet)
-      };
+      });
       handledMemberNames.add(member.name);
     }
   }
@@ -476,14 +499,14 @@ function buildCSS(webref, bcd) {
 
   for (const name of Array.from(propertySet).sort()) {
     const attrName = cssPropertyToIDLAttribute(name, name.startsWith('-'));
-    tests[`css.properties.${name}`] = {
-      'test': getCustomTestCSS(name) || [
+    tests[`css.properties.${name}`] = compileTest({
+      'code': getCustomTestCSS(name) || [
         {property: attrName, scope: 'document.body.style'},
         {property: name, scope: 'CSS.supports'}
       ],
       'combinator': 'or',
       'scope': ['CSS']
-    };
+    });
   }
 
   return tests;

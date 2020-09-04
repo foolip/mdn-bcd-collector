@@ -98,7 +98,7 @@ function generateTestPage(endpoint) {
         individual = true;
       }
       if (scope == testScope) {
-        lines.push(`bcd.addTest("${ident}", ${JSON.stringify(test.test)}, "${scope}");`);
+        lines.push(`bcd.addTest("${ident}", ${JSON.stringify(test.code)}, "${scope}");`);
       }
     }
   }
