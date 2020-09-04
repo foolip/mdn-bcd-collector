@@ -51,8 +51,9 @@ class Tests {
   }
 
   getTests(endpoint) {
-    const idents = this.endpoints[endpoint].entries
-        || this.individualEndpoints[endpoint];
+    const idents = this.endpoints[endpoint] ? 
+        this.endpoints[endpoint].entries :
+        this.individualEndpoints[endpoint];
     const tests = {};
 
     for (const ident of idents) {

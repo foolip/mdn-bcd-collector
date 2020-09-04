@@ -66,7 +66,8 @@ function catchError(err, res) {
 
 function generateTestPage(endpoint) {
   const theseTests = tests.getTests(endpoint);
-  const testScope = tests.getScope(endpoint);
+  let testScope = tests.getScope(endpoint);
+  let individual = false;
 
   const lines = [
     '<!DOCTYPE html>',
@@ -91,16 +92,21 @@ function generateTestPage(endpoint) {
 
   for (const [ident, test] of Object.entries(theseTests)) {
     for (const scope of test.scope) {
-      if (testScope && scope == testScope) {
+      if (!testScope) {
+        // Set scope to the first found scope if it's an individual test
+        testScope = scope;
+        individual = true;
+      }
+      if (scope == testScope) {
         lines.push(`bcd.addTest("${ident}", ${JSON.stringify(test.test)}, "${scope}");`);
       }
     }
   }
 
-  if (testScope) {
-    lines.push(`bcd.run('${testScope}');`);
+  if (individual) {
+    lines.push(`bcd.run('${testScope}', bcd.finishAndDisplay);`);
   } else {
-    lines.push(`bcd.run('', bcd.finishAndDisplay);`);
+    lines.push(`bcd.run('${testScope}');`);
   }
 
   lines.push('</script>', '</body>', '</html>');
