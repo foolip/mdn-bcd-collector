@@ -73,8 +73,8 @@ app.use(express.static('generated'));
 
 app.get('/api/tests', (req, res) => {
   const {after, limit} = req.query;
-  const list = tests.list(after, limit ? +limit : 0);
-  const individualList = tests.listIndividual(after, limit ? +limit : 0);
+  const list = tests.listEndpoints();
+  const individualList = tests.listIndividual();
   res.json([list, individualList]);
 });
 
@@ -96,7 +96,7 @@ app.post('/api/results', (req, res) => {
 
   // Include next test in response as a convenience.
   try {
-    const next = tests.list(forURL, 1)[0];
+    const next = tests.next(forURL);
     if (next) {
       response.next = next;
     }

@@ -16,45 +16,38 @@
 
 class Tests {
   constructor(options) {
-    this.items = options.manifest.items
-        .filter((item) => !options.httpOnly || item.protocol === 'http');
-    this.individualItems = options.manifest.individualItems;
+    this.tests = options.manifest.tests;
+    this.endpoints = options.manifest.endpoints.main;
+    this.individualEndpoints = options.manifest.endpoints.individual;
     this.host = options.host;
   }
 
-  list(after, limit) {
-    let begin; let end;
-    if (after) {
-      const afterURL = new URL(after);
-      const afterIndex = this.items.findIndex((item) => {
-        const itemURL = new URL(`${item.protocol}://${this.host}${item.pathname}`);
-        return itemURL.pathname === afterURL.pathname &&
-            itemURL.protocol === afterURL.protocol;
-      });
-
-      if (afterIndex === -1) {
-        throw new Error(`${after} not found in test manifest`);
-      }
-
-      begin = afterIndex + 1;
-      if (limit) {
-        end = afterIndex + 1 + limit;
-      }
+  next(after) {
+    const afterURL = new URL(after);
+    if (afterURL.protocol === 'http') {
+      return `https://${this.host}${afterURL.pathname}`;
     } else {
-      begin = 0;
-      if (limit) {
-        end = limit;
-      }
-    }
+      const endpoints = Object.keys(this.endpoints);
+      const endpoint = endpoints[endpoints.findIndex((item) => {
+        return item === afterURL.pathname;
+      })];
 
-    return this.items.slice(begin, end).map((item) => {
-      return `${item.protocol}://${this.host}${item.pathname}`;
-    });
+      return `http://${this.host}${endpoint}`;
+    }
+  }
+
+  getTests(endpoint) {
+    return this.endpoints[endpoint] || this.individualEndpoints[endpoint];
+  }
+
+  listEndpoints() {
+    return Object.keys(this.endpoints);
   }
 
   listIndividual() {
-    return Object.entries(this.individualItems)
-        .sort((a, b) => (a[0].localeCompare(b[0])));
+    return Object.keys(this.individualEndpoints).map((item) => {
+      return [item.substr(1).replace(/\//g, '.'), item];
+    });
   }
 }
 
