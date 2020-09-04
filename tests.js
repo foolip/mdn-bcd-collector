@@ -20,19 +20,33 @@ class Tests {
     this.endpoints = options.manifest.endpoints.main;
     this.individualEndpoints = options.manifest.endpoints.individual;
     this.host = options.host;
+    this.httpOnly = options.httpOnly;
   }
 
   next(after) {
     const afterURL = new URL(after);
-    if (afterURL.protocol === 'http') {
+    if (!this.httpOnly && afterURL.protocol === 'http:') {
       return `https://${this.host}${afterURL.pathname}`;
     } else {
-      const endpoints = Object.keys(this.endpoints);
-      const endpoint = endpoints[endpoints.findIndex((item) => {
+      const endpoints = this.listEndpoints();
+      const index = endpoints.findIndex((item) => {
         return item === afterURL.pathname;
-      })];
+      }) + 1;
 
-      return `http://${this.host}${endpoint}`;
+      if (index >= endpoints.length) {
+        return null;
+      }
+
+      if (this.endpoints[endpoints[index]].httpsOnly) {
+        if (this.httpOnly) {
+          // Skip this endpoint and go to the next
+          return next(endpoints[index]);
+        } else {
+          return `https://${this.host}${endpoints[index]}`;
+        }
+      }
+
+      return `http://${this.host}${endpoints[index]}`;
     }
   }
 
