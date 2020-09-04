@@ -157,19 +157,17 @@ function buildCSS(webref, bcd) {
   collectCSSPropertiesFromBCD(bcd, propertySet);
   collectCSSPropertiesFromReffy(webref, propertySet);
 
-  const tests = [];
+  const tests = {};
 
   for (const name of Array.from(propertySet).sort()) {
-    const ident = `css.properties.${name}`;
-    const customExpr = getCustomTestCSS(name);
-
-    if (customExpr) {
-      tests.push(ident, customExpr, "CSS", []);
-    } else {
-      const attrName = cssPropertyToIDLAttribute(name, name.startsWith('-'));
-      tests.push(ident, {property: attrName, scope: 'document.body.style'}, "CSS", []);
-      tests.push(ident, {property: name, scope: 'CSS.supports'}, "CSS", []);
-    }
+    const attrName = cssPropertyToIDLAttribute(name, name.startsWith('-'));
+    tests[`css.properties.${name}`] = {
+      "test": getCustomTestCSS(name) || [
+        {property: attrName, scope: 'document.body.style'},
+        {property: name, scope: 'CSS.supports'}
+      ],
+      "scope": "CSS"
+    };
   }
 
   return tests;
@@ -412,7 +410,7 @@ function buildIDL(webref) {
   const ast = flattenIDL(webref.idl, collectExtraIDL());
   validateIDL(ast);
 
-  const tests = [];
+  const tests = {};
 
   const interfaces = ast.filter((dfn) =>
     dfn.type === 'interface' ||
@@ -432,6 +430,12 @@ function buildIDL(webref) {
     const exposureSet = getExposureSet(iface);
     const isGlobal = !!getExtAttr(iface, 'Global');
     const customIfaceTest = getCustomTestAPI(iface.name);
+
+    tests[`api.${iface.name}`] = {
+      "test": customIfaceTest || {property: iface.name, scope: 'self'},
+      "scope": Array.from(exposureSet)
+    };
+
     const members = flattenMembers(iface);
     const memberTests = [];
 
@@ -503,26 +507,18 @@ function buildIDL(webref) {
         }
       }
 
-      memberTests.push([`${member.name}`, expr]);
+      tests[`api.${iface.name}.${member.name}`] = {
+        "test": expr,
+        "scope": Array.from(exposureSet)
+      };
       handledMemberNames.add(member.name);
     }
-
-    tests.push([
-      iface.name,
-      customIfaceTest || {property: iface.name, scope: 'self'},
-      exposureSet,
-      memberTests
-    ]);
   }
 
   return tests;
 }
 
 async function writeManifest(manifest) {
-  manifest.items.sort((a, b) => {
-    return a.pathname.localeCompare(b.pathname) ||
-           a.protocol.localeCompare(b.protocol);
-  });
   writeText('MANIFEST.json', JSON.stringify(manifest, null, '  '));
 }
 
@@ -565,12 +561,21 @@ function copyResources() {
 
 async function build(webref, bcd) {
   const manifest = {
-    items: [],
-    individualItems: {}
+    tests: {},
+    endpoints: {
+      main: {},
+      individual: {}
+    }
   };
 
-  for (const buildFunc of [buildCSS, buildIDL]) {
-    const [items, individualItems] = buildFunc(webref, bcd);
+  for (const buildFunc of [buildIDL, buildCSS]) {
+    const tests = buildFunc(webref, bcd);
+    manifest.tests = Object.assign(manifest.tests, tests);
+    for (const [test] in Object.entries(tests)) {
+      console.log(test);
+    }
+
+    continue; // XXX convert code below
     for (let [protocol, pathname] of items) {
       if (!pathname.startsWith('/')) {
         pathname = `/${pathname}`;
@@ -583,6 +588,7 @@ async function build(webref, bcd) {
       }
     }
   }
+
   await writeManifest(manifest);
   copyResources();
 }
@@ -604,7 +610,7 @@ if (require.main === module) {
     cssPropertyToIDLAttribute,
     flattenIDL,
     getExposureSet,
-    buildIDLTests,
+    buildIDL,
     validateIDL
   };
 }
