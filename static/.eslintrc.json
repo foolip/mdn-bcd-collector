@@ -1,6 +1,5 @@
 {
     "extends": ["eslint:recommended", "google"],
-    "plugins": ["prettier"],
     "parserOptions": {
         "ecmaVersion": 3
     },
@@ -9,7 +8,16 @@
         "require-jsdoc": "off",
         "no-var": "off",
         "guard-for-in": "off",
-        "no-invalid-this": "off"
+        "no-invalid-this": "off",
+        "max-len": ["error", {
+            "code": 80,
+            "tabWidth": 2,
+            "ignoreStrings": true,
+            "ignoreTemplateLiterals": true,
+            "ignoreRegExpLiterals": true,
+            "ignoreUrls": true,
+            "ignorePattern": "goog.(module|require)"
+        }]
     },
     "root": true
 }
