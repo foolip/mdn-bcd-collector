@@ -166,6 +166,7 @@ function buildCSS(webref, bcd) {
         {property: attrName, scope: 'document.body.style'},
         {property: name, scope: 'CSS.supports'}
       ],
+      "combinator": "or",
       "scope": "CSS"
     };
   }
@@ -433,6 +434,7 @@ function buildIDL(webref) {
 
     tests[`api.${iface.name}`] = {
       "test": customIfaceTest || {property: iface.name, scope: 'self'},
+      "combinator": "and",
       "scope": Array.from(exposureSet)
     };
 
@@ -509,6 +511,7 @@ function buildIDL(webref) {
 
       tests[`api.${iface.name}.${member.name}`] = {
         "test": expr,
+        "combinator": "and",
         "scope": Array.from(exposureSet)
       };
       handledMemberNames.add(member.name);
@@ -571,8 +574,8 @@ async function build(webref, bcd) {
   for (const buildFunc of [buildIDL, buildCSS]) {
     const tests = buildFunc(webref, bcd);
     manifest.tests = Object.assign(manifest.tests, tests);
-    for (const [test] in Object.entries(tests)) {
-      console.log(test);
+    for (const [ident, test] of Object.entries(tests)) {
+      console.log(ident, test);
     }
 
     continue; // XXX convert code below
