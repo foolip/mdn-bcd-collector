@@ -24,8 +24,6 @@ const webref = require('./webref');
 
 const generatedDir = path.join(__dirname, 'generated');
 
-const copyright = ['<!--Copyright 2020 Google LLC', '', 'Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at', '', '     https://www.apache.org/licenses/LICENSE-2.0', '', 'Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.-->'];
-
 function writeText(filename, content) {
   if (Array.isArray(content)) {
     content = content.join('\n');
@@ -33,29 +31,6 @@ function writeText(filename, content) {
   content = content.trimEnd() + '\n';
   fs.ensureDirSync(path.dirname(filename));
   fs.writeFileSync(filename, content, 'utf8');
-}
-
-function writeTestFile(filename, lines) {
-  const content = [
-    '<!DOCTYPE html>',
-    '<html>',
-    '<head>',
-    ...copyright,
-    '<meta charset="utf-8">',
-    '<script src="/resources/json3.min.js"></script>',
-    '<script src="/resources/harness.js"></script>',
-    '<script src="/resources/core.js"></script>',
-    '</head>',
-    '<body>',
-    '<p id="status">Running tests...</p>',
-    '<script>',
-    ...lines,
-    '</script>',
-    '</body>',
-    '</html>'
-  ];
-
-  writeText(filename, content);
 }
 
 function getCustomTestAPI(name, member) {
@@ -162,12 +137,12 @@ function buildCSS(webref, bcd) {
   for (const name of Array.from(propertySet).sort()) {
     const attrName = cssPropertyToIDLAttribute(name, name.startsWith('-'));
     tests[`css.properties.${name}`] = {
-      "test": getCustomTestCSS(name) || [
+      'test': getCustomTestCSS(name) || [
         {property: attrName, scope: 'document.body.style'},
         {property: name, scope: 'CSS.supports'}
       ],
-      "combinator": "or",
-      "scope": "CSS"
+      'combinator': 'or',
+      'scope': 'CSS'
     };
   }
 
@@ -433,13 +408,12 @@ function buildIDL(webref) {
     const customIfaceTest = getCustomTestAPI(iface.name);
 
     tests[`api.${iface.name}`] = {
-      "test": customIfaceTest || {property: iface.name, scope: 'self'},
-      "combinator": "and",
-      "scope": Array.from(exposureSet)
+      'test': customIfaceTest || {property: iface.name, scope: 'self'},
+      'combinator': 'and',
+      'scope': Array.from(exposureSet)
     };
 
     const members = flattenMembers(iface);
-    const memberTests = [];
 
     // Avoid generating duplicate tests for operations.
     const handledMemberNames = new Set();
@@ -510,9 +484,9 @@ function buildIDL(webref) {
       }
 
       tests[`api.${iface.name}.${member.name}`] = {
-        "test": expr,
-        "combinator": "and",
-        "scope": Array.from(exposureSet)
+        'test': expr,
+        'combinator': 'and',
+        'scope': Array.from(exposureSet)
       };
       handledMemberNames.add(member.name);
     }
@@ -624,7 +598,6 @@ if (require.main === module) {
 } else {
   module.exports = {
     writeText,
-    loadCustomTests,
     getCustomTestAPI,
     getCustomTestCSS,
     collectCSSPropertiesFromBCD,
