@@ -4,6 +4,7 @@
     "**/generated/**",
     "**/static/**",
     "**/unittest/**",
-    "**/json3.min.js"
+    "**/json3.min.js",
+    "**/coverage/**"
   ]
 }
