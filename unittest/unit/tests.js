@@ -84,21 +84,21 @@ describe('Tests', () => {
   describe('next', () => {
     it('normal', () => {
       assert.equal(
-        tests.next('http://host.test/tests/api/interfaces'),
-        'https://host.test/tests/api/interfaces'
+          tests.next('http://host.test/tests/api/interfaces'),
+          'https://host.test/tests/api/interfaces'
       );
       assert.equal(
-        tests.next('https://host.test/tests/api/interfaces'),
-        'http://host.test/tests/api/workerinterfaces'
+          tests.next('https://host.test/tests/api/interfaces'),
+          'http://host.test/tests/api/workerinterfaces'
       );
       assert.equal(
-        tests.next('https://host.test/tests/api/workerinterfaces'),
-        'https://host.test/tests/api/serviceworkerinterfaces'
+          tests.next('https://host.test/tests/api/workerinterfaces'),
+          'https://host.test/tests/api/serviceworkerinterfaces'
       );
 
       assert.equal(
-        tests.next('https://host.test/tests/css/properties'),
-        null
+          tests.next('https://host.test/tests/css/properties'),
+          null
       );
     });
 
@@ -110,17 +110,17 @@ describe('Tests', () => {
       });
 
       assert.equal(
-        theseTests.next('http://host.test/tests/api/interfaces'),
-        'http://host.test/tests/api/workerinterfaces'
+          theseTests.next('http://host.test/tests/api/interfaces'),
+          'http://host.test/tests/api/workerinterfaces'
       );
       assert.equal(
-        theseTests.next('http://host.test/tests/api/workerinterfaces'),
-        'http://host.test/tests/css/properties'
+          theseTests.next('http://host.test/tests/api/workerinterfaces'),
+          'http://host.test/tests/css/properties'
       );
 
       assert.equal(
-        theseTests.next('http://host.test/tests/css/properties'),
-        null
+          theseTests.next('http://host.test/tests/css/properties'),
+          null
       );
     });
   });
