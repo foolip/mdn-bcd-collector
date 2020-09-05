@@ -13,6 +13,9 @@ Unless required by applicable law or agreed to in writing, software distributed 
 <script src="/resources/json3.min.js"></script>
 </head>
 <body>
+<h1>mdn-bcd-collector</h1>
+<p>Data collection service for <a href="https://github.com/mdn/browser-compat-data">mdn/browser-compat-data</a>. This website provides automatic feature detection for Web APIs and CSS properties, to assist in obtaining data for the BCD project.</p>
+
 <div>
   <select id="tests" disabled>
     <option value="">Loading tests...</option>
@@ -63,6 +66,14 @@ function getTests() {
 getTests();
 </script>
 
+
+<p>Note: this website is in beta; not all feature detection is accurate yet. If you find any errors, please file an issue on the GitHub page.</p>
+<p>Known caveats:</p>
+<ul>
+  <li>Detection for features under prefixes or alt. names is not yet supported</li>
+  <li>In older browsers, some attributes aren't initialized in the API prototypes, resulting in false negatives</li>
+  <li>Some APIs are accessed through other APIs and aren't exposed on their own; custom tests have not been written for them all</li>
+</ul>
 
 <p><a href="https://github.com/foolip/mdn-bcd-collector">Source on GitHub</a></p>
 </body>
