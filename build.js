@@ -113,7 +113,7 @@ function compileTest(test) {
     compiledCode.push(compileTestCode(subtest, ''));
   }
 
-  newTest.code = compiledCode.join(test.raw.combinator == 'and' ? ' && ' : ' || ');
+  newTest.code = compiledCode.join(` ${test.raw.combinator} `);
   return newTest;
 }
 
@@ -369,7 +369,7 @@ function buildIDLTests(ast) {
     tests[`api.${iface.name}`] = compileTest({
       'raw': {
         'code': customIfaceTest || {property: iface.name, scope: 'self'},
-        'combinator': 'and',
+        'combinator': '&&',
       },
       'scope': Array.from(exposureSet)
     });
@@ -444,7 +444,7 @@ function buildIDLTests(ast) {
       tests[`api.${iface.name}.${member.name}`] = compileTest({
         'raw': {
           'code': expr,
-          'combinator': 'and',
+          'combinator': '&&',
         },
         'scope': Array.from(exposureSet)
       });
@@ -531,7 +531,7 @@ function buildCSS(webref, bcd) {
           {property: attrName, scope: 'document.body.style'},
           {property: name, scope: 'CSS.supports'}
         ],
-        'combinator': 'or',
+        'combinator': '||',
       },
       'scope': ['CSS']
     });
