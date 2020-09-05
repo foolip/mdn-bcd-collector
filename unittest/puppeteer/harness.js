@@ -28,7 +28,7 @@ const consoleLogType = {
   firefox: 'verbose'
 };
 
-describe('/resources/harness.js', () => {
+describe('harness.js', () => {
   const port = process.env.PORT || 8081;
   let server;
   before(() => {
