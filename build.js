@@ -95,7 +95,6 @@ function compileTest(test) {
   return newTest;
 }
 
-/* istanbul ignore next */
 function collectExtraIDL() {
   const idl = fs.readFileSync('./non-standard.idl', 'utf8');
   return WebIDL2.parse(idl);
@@ -433,7 +432,6 @@ function buildIDLTests(ast) {
   return tests;
 }
 
-/* istanbul ignore next */
 function buildIDL(webref) {
   const ast = flattenIDL(webref.idl, collectExtraIDL());
   validateIDL(ast);
@@ -619,6 +617,7 @@ function buildManifest(tests) {
   return manifest;
 }
 
+/* istanbul ignore next */
 async function build(webref, bcd) {
   const IDLTests = buildIDL(webref);
   const CSSTests = buildCSS(webref, bcd);
@@ -639,13 +638,16 @@ if (require.main === module) {
     writeFile,
     getCustomTestAPI,
     getCustomTestCSS,
+    collectExtraIDL,
     flattenIDL,
     getExposureSet,
     buildIDLTests,
+    buildIDL,
     validateIDL,
     collectCSSPropertiesFromBCD,
     collectCSSPropertiesFromWebref,
     cssPropertyToIDLAttribute,
-    buildCSS
+    buildCSS,
+    buildManifest
   };
 }

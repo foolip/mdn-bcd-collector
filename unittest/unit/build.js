@@ -30,12 +30,15 @@ const {
   writeFile,
   flattenIDL,
   getExposureSet,
+  collectExtraIDL,
   validateIDL,
   buildIDLTests,
+  buildIDL,
   collectCSSPropertiesFromBCD,
   collectCSSPropertiesFromWebref,
   cssPropertyToIDLAttribute,
-  buildCSS
+  buildCSS,
+  buildManifest
 } = proxyquire('../../build', {
   './custom-tests.json': {'api': {}, 'css': {}}
 });
@@ -354,6 +357,15 @@ describe('build', () => {
     assert.equal(cssPropertyToIDLAttribute('line-height'), 'lineHeight');
     assert.equal(cssPropertyToIDLAttribute('-webkit-line-clamp', true),
         'webkitLineClamp');
+  });
+
+  it('collectExtraIDL', () => {
+    assert.typeOf(collectExtraIDL(), 'array');
+  });
+
+  it('buildIDL', () => {
+    const webref = require('../../webref');
+    assert.typeOf(buildIDL(webref), 'object');
   });
 
   describe('flattenIDL', () => {
@@ -1110,5 +1122,73 @@ describe('build', () => {
         'scope': ['CSS']
       }
     });
+  });
+
+  it('buildManifest', () => {
+    const tests = {
+      'api.Attr': {
+        'code': '"Attr" in self',
+        'scope': ['Window', 'Worker', 'ServiceWorker']
+      },
+      'api.Attr.name': {
+        'code': '"Attr" in self && "name" in Attr.prototype',
+        'scope': ['Window', 'Worker']
+      },
+      'css.properties.font-family': {
+        'code': '"fontFamily" in document.body.style || CSS.supports("font-family", "inherit")',
+        'scope': ['CSS']
+      }
+    };
+    const expectedManifest = {
+      'endpoints': {
+        'individual': {
+          '/tests/api/Attr': ['api.Attr', 'api.Attr.name'],
+          '/tests/api/Attr/name': ['api.Attr.name'],
+          '/tests/css/properties/font-family': [
+            'css.properties.font-family'
+          ]
+        },
+        'main': {
+          '/tests/api/interfaces': {
+            'entries': ['api.Attr', 'api.Attr.name'],
+            'httpsOnly': false,
+            'scope': 'Window'
+          },
+          '/tests/api/serviceworkerinterfaces': {
+            'entries': ['api.Attr'],
+            'httpsOnly': true,
+            'scope': 'ServiceWorker'
+          },
+          '/tests/api/workerinterfaces': {
+            'entries': ['api.Attr', 'api.Attr.name'],
+            'httpsOnly': false,
+            'scope': 'Worker'
+          },
+          '/tests/css/properties': {
+            'entries': ['css.properties.font-family'],
+            'httpsOnly': false,
+            'scope': 'CSS'
+          }
+        }
+      },
+      'tests': {
+        'api.Attr': {
+          'code': '"Attr" in self',
+          'scope': ['Window', 'Worker', 'ServiceWorker']
+        },
+        'api.Attr.name': {
+          'code': '"Attr" in self && "name" in Attr.prototype',
+          'scope': ['Window', 'Worker']
+        },
+        'css.properties.font-family': {
+          'code': '"fontFamily" in document.body.style || CSS.supports("font-family", "inherit")',
+          'scope': ['CSS']
+        }
+      }
+    };
+
+    const manifest = buildManifest(tests);
+
+    assert.deepEqual(manifest, expectedManifest);
   });
 });
