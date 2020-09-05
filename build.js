@@ -84,7 +84,7 @@ function compileTestCode(test, prefix) {
   if (typeof(test) === 'string') {
     return test.replace(/PREFIX/g, prefix);
   } else if (test.property == 'constructor') {
-    return `bcd.testConstructor("${prefix}${test.scope}")`;
+    return `${prefix}${test.scope} in self && bcd.testConstructor("${prefix}${test.scope}")`;
   } else if (test.scope === 'CSS.supports') {
     const thisPrefix = prefix ? `-${prefix}-` : '';
     return `CSS.supports("${thisPrefix}${test.property}", "inherit")`;
@@ -426,10 +426,7 @@ function buildIDLTests(ast) {
             }
             break;
           case 'constructor':
-            expr = [
-              {property: iface.name, scope: 'self'},
-              {property: 'constructor', scope: iface.name}
-            ];
+            expr = {property: 'constructor', scope: iface.name};
             break;
           case 'symbol':
             // eslint-disable-next-line no-case-declarations
