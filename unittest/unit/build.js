@@ -1214,32 +1214,4 @@ describe('build', () => {
 
     assert.deepEqual(manifest, expectedManifest);
   });
-
-//   describe('copyResources', () => {
-//     // XXX Cannot test with mock; see:
-//     // https://github.com/tschaub/mock-fs/issues/142
-//
-//     beforeEach(() => {
-//       mockFs({
-//         'generated': {}
-//       });
-//     });
-//
-//     it('main', async () => {
-//       await copyResources();
-//       assert.notIsEmptyDirectory('generated');
-//     });
-//
-//     it('core.js map rename', async () => {
-//       await copyResources();
-//       assert.fileContentMatch(
-//           'generated/resources/core.js',
-//           /sourceMappingURL=core\.js\.map/
-//       );
-//     });
-//
-//     afterEach(() => {
-//       mockFs.restore();
-//     });
-//   });
 });
