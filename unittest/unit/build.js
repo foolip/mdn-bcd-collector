@@ -538,11 +538,61 @@ describe('build', () => {
       const ast = WebIDL2.parse(`interface Attr { attribute any name; };`);
       assert.deepEqual(buildIDLTests(ast), {
         'api.Attr': {
-          'code': '"Attr" in self',
+          'tests': [
+            {
+              'code': '"Attr" in self',
+              'prefix': ''
+            },
+            {
+              'code': '"webkitAttr" in self',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"WebKitAttr" in self',
+              'prefix': 'WebKit'
+            }
+          ],
           'scope': ['Window']
         },
         'api.Attr.name': {
-          'code': '"Attr" in self && "name" in Attr.prototype',
+          'tests': [
+            {
+              'code': '"Attr" in self && "name" in Attr.prototype',
+              'prefix': ''
+            },
+            {
+              'code': '"Attr" in self && "webkitName" in Attr.prototype',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"Attr" in self && "WebKitName" in Attr.prototype',
+              'prefix': 'WebKit'
+            },
+            {
+              'code': '"webkitAttr" in self && "name" in webkitAttr.prototype',
+              'prefix': ''
+            },
+            {
+              'code': '"webkitAttr" in self && "webkitName" in webkitAttr.prototype',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"webkitAttr" in self && "WebKitName" in webkitAttr.prototype',
+              'prefix': 'WebKit'
+            },
+            {
+              'code': '"WebKitAttr" in self && "name" in WebKitAttr.prototype',
+              'prefix': ''
+            },
+            {
+              'code': '"WebKitAttr" in self && "webkitName" in WebKitAttr.prototype',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"WebKitAttr" in self && "WebKitName" in WebKitAttr.prototype',
+              'prefix': 'WebKit'
+            }
+          ],
           'scope': ['Window']
         }
       });
@@ -555,11 +605,61 @@ describe('build', () => {
            };`);
       assert.deepEqual(buildIDLTests(ast), {
         'api.Node': {
-          'code': '"Node" in self',
+          'tests': [
+            {
+              'code': '"Node" in self',
+              'prefix': ''
+            },
+            {
+              'code': '"webkitNode" in self',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"WebKitNode" in self',
+              'prefix': 'WebKit'
+            }
+          ],
           'scope': ['Window']
         },
         'api.Node.contains': {
-          'code': '"Node" in self && "contains" in Node.prototype',
+          'tests': [
+            {
+              'code': '"Node" in self && "contains" in Node.prototype',
+              'prefix': ''
+            },
+            {
+              'code': '"Node" in self && "webkitContains" in Node.prototype',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"Node" in self && "WebKitContains" in Node.prototype',
+              'prefix': 'WebKit'
+            },
+            {
+              'code': '"webkitNode" in self && "contains" in webkitNode.prototype',
+              'prefix': ''
+            },
+            {
+              'code': '"webkitNode" in self && "webkitContains" in webkitNode.prototype',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"webkitNode" in self && "WebKitContains" in webkitNode.prototype',
+              'prefix': 'WebKit'
+            },
+            {
+              'code': '"WebKitNode" in self && "contains" in WebKitNode.prototype',
+              'prefix': ''
+            },
+            {
+              'code': '"WebKitNode" in self && "webkitContains" in WebKitNode.prototype',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"WebKitNode" in self && "WebKitContains" in WebKitNode.prototype',
+              'prefix': 'WebKit'
+            }
+          ],
           'scope': ['Window']
         }
       });
@@ -573,11 +673,61 @@ describe('build', () => {
 
       assert.deepEqual(buildIDLTests(ast), {
         'api.MediaSource': {
-          'code': '"MediaSource" in self',
+          'tests': [
+            {
+              'code': '"MediaSource" in self',
+              'prefix': ''
+            },
+            {
+              'code': '"webkitMediaSource" in self',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"WebKitMediaSource" in self',
+              'prefix': 'WebKit'
+            }
+          ],
           'scope': ['Window']
         },
         'api.MediaSource.isTypeSupported': {
-          'code': '"MediaSource" in self && "isTypeSupported" in MediaSource',
+          'tests': [
+            {
+              'code': '"MediaSource" in self && "isTypeSupported" in MediaSource',
+              'prefix': ''
+            },
+            {
+              'code': '"MediaSource" in self && "webkitIsTypeSupported" in MediaSource',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"MediaSource" in self && "WebKitIsTypeSupported" in MediaSource',
+              'prefix': 'WebKit'
+            },
+            {
+              'code': '"webkitMediaSource" in self && "isTypeSupported" in webkitMediaSource',
+              'prefix': ''
+            },
+            {
+              'code': '"webkitMediaSource" in self && "webkitIsTypeSupported" in webkitMediaSource',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"webkitMediaSource" in self && "WebKitIsTypeSupported" in webkitMediaSource',
+              'prefix': 'WebKit'
+            },
+            {
+              'code': '"WebKitMediaSource" in self && "isTypeSupported" in WebKitMediaSource',
+              'prefix': ''
+            },
+            {
+              'code': '"WebKitMediaSource" in self && "webkitIsTypeSupported" in WebKitMediaSource',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"WebKitMediaSource" in self && "WebKitIsTypeSupported" in WebKitMediaSource',
+              'prefix': 'WebKit'
+            }
+          ],
           'scope': ['Window']
         }
       });
@@ -591,11 +741,61 @@ describe('build', () => {
 
       assert.deepEqual(buildIDLTests(ast), {
         'api.Window': {
-          'code': '"Window" in self',
+          'tests': [
+            {
+              'code': '"Window" in self',
+              'prefix': ''
+            },
+            {
+              'code': '"webkitWindow" in self',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"WebKitWindow" in self',
+              'prefix': 'WebKit'
+            }
+          ],
           'scope': ['Window']
         },
         'api.Window.isWindow': {
-          'code': '"Window" in self && "isWindow" in Window',
+          'tests': [
+            {
+              'code': '"Window" in self && "isWindow" in Window',
+              'prefix': ''
+            },
+            {
+              'code': '"Window" in self && "webkitIsWindow" in Window',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"Window" in self && "WebKitIsWindow" in Window',
+              'prefix': 'WebKit'
+            },
+            {
+              'code': '"webkitWindow" in self && "isWindow" in webkitWindow',
+              'prefix': ''
+            },
+            {
+              'code': '"webkitWindow" in self && "webkitIsWindow" in webkitWindow',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"webkitWindow" in self && "WebKitIsWindow" in webkitWindow',
+              'prefix': 'WebKit'
+            },
+            {
+              'code': '"WebKitWindow" in self && "isWindow" in WebKitWindow',
+              'prefix': ''
+            },
+            {
+              'code': '"WebKitWindow" in self && "webkitIsWindow" in WebKitWindow',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"WebKitWindow" in self && "WebKitIsWindow" in WebKitWindow',
+              'prefix': 'WebKit'
+            }
+          ],
           'scope': ['Window']
         }
       });
@@ -632,15 +832,30 @@ describe('build', () => {
 
       assert.deepEqual(buildIDLTests(ast), {
         'api.ANGLE_instanced_arrays': {
-          'code': '(function() {var canvas = document.createElement(\'canvas\'); var gl = canvas.getContext(\'webgl\'); var instance = gl.getExtension(\'ANGLE_instanced_arrays\');return !!instance;})()',
+          'tests': [
+            {
+              'code': '(function() {var canvas = document.createElement(\'canvas\'); var gl = canvas.getContext(\'webgl\'); var instance = gl.getExtension(\'ANGLE_instanced_arrays\');return !!instance;})()',
+              'prefix': ''
+            }
+          ],
           'scope': ['Window']
         },
         'api.ANGLE_instanced_arrays.drawArraysInstancedANGLE': {
-          'code': '(function() {var canvas = document.createElement(\'canvas\'); var gl = canvas.getContext(\'webgl\'); var instance = gl.getExtension(\'ANGLE_instanced_arrays\');return true && instance && \'drawArraysInstancedANGLE\' in instance;})()',
+          'tests': [
+            {
+              'code': '(function() {var canvas = document.createElement(\'canvas\'); var gl = canvas.getContext(\'webgl\'); var instance = gl.getExtension(\'ANGLE_instanced_arrays\');return true && instance && \'drawArraysInstancedANGLE\' in instance;})()',
+              'prefix': ''
+            }
+          ],
           'scope': ['Window']
         },
         'api.ANGLE_instanced_arrays.drawElementsInstancedANGLE': {
-          'code': '(function() {var canvas = document.createElement(\'canvas\'); var gl = canvas.getContext(\'webgl\'); var instance = gl.getExtension(\'ANGLE_instanced_arrays\');return instance && \'drawElementsInstancedANGLE\' in instance;})()',
+          'tests': [
+            {
+              'code': '(function() {var canvas = document.createElement(\'canvas\'); var gl = canvas.getContext(\'webgl\'); var instance = gl.getExtension(\'ANGLE_instanced_arrays\');return instance && \'drawElementsInstancedANGLE\' in instance;})()',
+              'prefix': ''
+            }
+          ],
           'scope': ['Window']
         }
       });
@@ -660,15 +875,54 @@ describe('build', () => {
 
       assert.deepEqual(buildIDLTests(ast), {
         'api.WindowOrWorkerGlobalScope': {
-          'code': '"WindowOrWorkerGlobalScope" in self',
+          'tests': [
+            {
+              'code': '"WindowOrWorkerGlobalScope" in self',
+              'prefix': ''
+            },
+            {
+              'code': '"webkitWindowOrWorkerGlobalScope" in self',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"WebKitWindowOrWorkerGlobalScope" in self',
+              'prefix': 'WebKit'
+            }
+          ],
           'scope': ['Window']
         },
         'api.WindowOrWorkerGlobalScope.active': {
-          'code': '"active" in self',
+          'tests': [
+            {
+              'code': '"active" in self',
+              'prefix': ''
+            },
+            {
+              'code': '"webkitActive" in self',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"WebKitActive" in self',
+              'prefix': 'WebKit'
+            }
+          ],
           'scope': ['Window']
         },
         'api.WindowOrWorkerGlobalScope.isLoaded': {
-          'code': '"isLoaded" in self',
+          'tests': [
+            {
+              'code': '"isLoaded" in self',
+              'prefix': ''
+            },
+            {
+              'code': '"webkitIsLoaded" in self',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"WebKitIsLoaded" in self',
+              'prefix': 'WebKit'
+            }
+          ],
           'scope': ['Window']
         }
       });
@@ -681,11 +935,37 @@ describe('build', () => {
 
       assert.deepEqual(buildIDLTests(ast), {
         'api.Number': {
-          'code': '"Number" in self',
+          'tests': [
+            {
+              'code': '"Number" in self',
+              'prefix': ''
+            },
+            {
+              'code': '"webkitNumber" in self',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"WebKitNumber" in self',
+              'prefix': 'WebKit'
+            }
+          ],
           'scope': ['Window']
         },
         'api.Number.Number': {
-          'code': '"Number" in self && bcd.testConstructor("Number")',
+          'tests': [
+            {
+              'code': '"Number" in self && bcd.testConstructor("Number")',
+              'prefix': ''
+            },
+            {
+              'code': '"webkitNumber" in self && bcd.testConstructor("webkitNumber")',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"WebKitNumber" in self && bcd.testConstructor("WebKitNumber")',
+              'prefix': 'WebKit'
+            }
+          ],
           'scope': ['Window']
         }
       });
@@ -696,11 +976,37 @@ describe('build', () => {
         interface Number {};`);
       assert.deepEqual(buildIDLTests(ast), {
         'api.Number': {
-          'code': '"Number" in self',
+          'tests': [
+            {
+              'code': '"Number" in self',
+              'prefix': ''
+            },
+            {
+              'code': '"webkitNumber" in self',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"WebKitNumber" in self',
+              'prefix': 'WebKit'
+            }
+          ],
           'scope': ['Window']
         },
         'api.Number.Number': {
-          'code': '"Number" in self && bcd.testConstructor("Number")',
+          'tests': [
+            {
+              'code': '"Number" in self && bcd.testConstructor("Number")',
+              'prefix': ''
+            },
+            {
+              'code': '"webkitNumber" in self && bcd.testConstructor("webkitNumber")',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"WebKitNumber" in self && bcd.testConstructor("WebKitNumber")',
+              'prefix': 'WebKit'
+            }
+          ],
           'scope': ['Window']
         }
       });
@@ -712,27 +1018,201 @@ describe('build', () => {
       };`);
       assert.deepEqual(buildIDLTests(ast), {
         'api.DoubleList': {
-          'code': '"DoubleList" in self',
+          'tests': [
+            {
+              'code': '"DoubleList" in self',
+              'prefix': ''
+            },
+            {
+              'code': '"webkitDoubleList" in self',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"WebKitDoubleList" in self',
+              'prefix': 'WebKit'
+            }
+          ],
           'scope': ['Window']
         },
         'api.DoubleList.@@iterator': {
-          'code': '"DoubleList" in self && "Symbol" in self && "iterator" in Symbol && Symbol.iterator in DoubleList.prototype',
+          'tests': [
+            {
+              'code': '"DoubleList" in self && "Symbol" in self && "iterator" in Symbol && Symbol.iterator in DoubleList.prototype',
+              'prefix': ''
+            },
+            {
+              'code': '"webkitDoubleList" in self && "Symbol" in self && "iterator" in Symbol && Symbol.iterator in webkitDoubleList.prototype',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"WebKitDoubleList" in self && "Symbol" in self && "iterator" in Symbol && Symbol.iterator in WebKitDoubleList.prototype',
+              'prefix': 'WebKit'
+            }
+          ],
           'scope': ['Window']
         },
         'api.DoubleList.entries': {
-          'code': '"DoubleList" in self && "entries" in DoubleList.prototype',
+          'tests': [
+            {
+              'code': '"DoubleList" in self && "entries" in DoubleList.prototype',
+              'prefix': ''
+            },
+            {
+              'code': '"DoubleList" in self && "webkitEntries" in DoubleList.prototype',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"DoubleList" in self && "WebKitEntries" in DoubleList.prototype',
+              'prefix': 'WebKit'
+            },
+            {
+              'code': '"webkitDoubleList" in self && "entries" in webkitDoubleList.prototype',
+              'prefix': ''
+            },
+            {
+              'code': '"webkitDoubleList" in self && "webkitEntries" in webkitDoubleList.prototype',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"webkitDoubleList" in self && "WebKitEntries" in webkitDoubleList.prototype',
+              'prefix': 'WebKit'
+            },
+            {
+              'code': '"WebKitDoubleList" in self && "entries" in WebKitDoubleList.prototype',
+              'prefix': ''
+            },
+            {
+              'code': '"WebKitDoubleList" in self && "webkitEntries" in WebKitDoubleList.prototype',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"WebKitDoubleList" in self && "WebKitEntries" in WebKitDoubleList.prototype',
+              'prefix': 'WebKit'
+            }
+          ],
           'scope': ['Window']
         },
         'api.DoubleList.forEach': {
-          'code': '"DoubleList" in self && "forEach" in DoubleList.prototype',
+          'tests': [
+            {
+              'code': '"DoubleList" in self && "forEach" in DoubleList.prototype',
+              'prefix': ''
+            },
+            {
+              'code': '"DoubleList" in self && "webkitForEach" in DoubleList.prototype',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"DoubleList" in self && "WebKitForEach" in DoubleList.prototype',
+              'prefix': 'WebKit'
+            },
+            {
+              'code': '"webkitDoubleList" in self && "forEach" in webkitDoubleList.prototype',
+              'prefix': ''
+            },
+            {
+              'code': '"webkitDoubleList" in self && "webkitForEach" in webkitDoubleList.prototype',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"webkitDoubleList" in self && "WebKitForEach" in webkitDoubleList.prototype',
+              'prefix': 'WebKit'
+            },
+            {
+              'code': '"WebKitDoubleList" in self && "forEach" in WebKitDoubleList.prototype',
+              'prefix': ''
+            },
+            {
+              'code': '"WebKitDoubleList" in self && "webkitForEach" in WebKitDoubleList.prototype',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"WebKitDoubleList" in self && "WebKitForEach" in WebKitDoubleList.prototype',
+              'prefix': 'WebKit'
+            }
+          ],
           'scope': ['Window']
         },
         'api.DoubleList.keys': {
-          'code': '"DoubleList" in self && "keys" in DoubleList.prototype',
+          'tests': [
+            {
+              'code': '"DoubleList" in self && "keys" in DoubleList.prototype',
+              'prefix': ''
+            },
+            {
+              'code': '"DoubleList" in self && "webkitKeys" in DoubleList.prototype',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"DoubleList" in self && "WebKitKeys" in DoubleList.prototype',
+              'prefix': 'WebKit'
+            },
+            {
+              'code': '"webkitDoubleList" in self && "keys" in webkitDoubleList.prototype',
+              'prefix': ''
+            },
+            {
+              'code': '"webkitDoubleList" in self && "webkitKeys" in webkitDoubleList.prototype',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"webkitDoubleList" in self && "WebKitKeys" in webkitDoubleList.prototype',
+              'prefix': 'WebKit'
+            },
+            {
+              'code': '"WebKitDoubleList" in self && "keys" in WebKitDoubleList.prototype',
+              'prefix': ''
+            },
+            {
+              'code': '"WebKitDoubleList" in self && "webkitKeys" in WebKitDoubleList.prototype',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"WebKitDoubleList" in self && "WebKitKeys" in WebKitDoubleList.prototype',
+              'prefix': 'WebKit'
+            }
+          ],
           'scope': ['Window']
         },
         'api.DoubleList.values': {
-          'code': '"DoubleList" in self && "values" in DoubleList.prototype',
+          'tests': [
+            {
+              'code': '"DoubleList" in self && "values" in DoubleList.prototype',
+              'prefix': ''
+            },
+            {
+              'code': '"DoubleList" in self && "webkitValues" in DoubleList.prototype',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"DoubleList" in self && "WebKitValues" in DoubleList.prototype',
+              'prefix': 'WebKit'
+            },
+            {
+              'code': '"webkitDoubleList" in self && "values" in webkitDoubleList.prototype',
+              'prefix': ''
+            },
+            {
+              'code': '"webkitDoubleList" in self && "webkitValues" in webkitDoubleList.prototype',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"webkitDoubleList" in self && "WebKitValues" in webkitDoubleList.prototype',
+              'prefix': 'WebKit'
+            },
+            {
+              'code': '"WebKitDoubleList" in self && "values" in WebKitDoubleList.prototype',
+              'prefix': ''
+            },
+            {
+              'code': '"WebKitDoubleList" in self && "webkitValues" in WebKitDoubleList.prototype',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"WebKitDoubleList" in self && "WebKitValues" in WebKitDoubleList.prototype',
+              'prefix': 'WebKit'
+            }
+          ],
           'scope': ['Window']
         }
       });
@@ -744,47 +1224,430 @@ describe('build', () => {
       };`);
       assert.deepEqual(buildIDLTests(ast), {
         'api.DoubleMap': {
-          'code': '"DoubleMap" in self',
+          'tests': [
+            {
+              'code': '"DoubleMap" in self',
+              'prefix': ''
+            },
+            {
+              'code': '"webkitDoubleMap" in self',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"WebKitDoubleMap" in self',
+              'prefix': 'WebKit'
+            }
+          ],
           'scope': ['Window']
         },
         'api.DoubleMap.clear': {
-          'code': '"DoubleMap" in self && "clear" in DoubleMap.prototype',
+          'tests': [
+            {
+              'code': '"DoubleMap" in self && "clear" in DoubleMap.prototype',
+              'prefix': ''
+            },
+            {
+              'code': '"DoubleMap" in self && "webkitClear" in DoubleMap.prototype',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"DoubleMap" in self && "WebKitClear" in DoubleMap.prototype',
+              'prefix': 'WebKit'
+            },
+            {
+              'code': '"webkitDoubleMap" in self && "clear" in webkitDoubleMap.prototype',
+              'prefix': ''
+            },
+            {
+              'code': '"webkitDoubleMap" in self && "webkitClear" in webkitDoubleMap.prototype',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"webkitDoubleMap" in self && "WebKitClear" in webkitDoubleMap.prototype',
+              'prefix': 'WebKit'
+            },
+            {
+              'code': '"WebKitDoubleMap" in self && "clear" in WebKitDoubleMap.prototype',
+              'prefix': ''
+            },
+            {
+              'code': '"WebKitDoubleMap" in self && "webkitClear" in WebKitDoubleMap.prototype',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"WebKitDoubleMap" in self && "WebKitClear" in WebKitDoubleMap.prototype',
+              'prefix': 'WebKit'
+            }
+          ],
           'scope': ['Window']
         },
         'api.DoubleMap.delete': {
-          'code': '"DoubleMap" in self && "delete" in DoubleMap.prototype',
+          'tests': [
+            {
+              'code': '"DoubleMap" in self && "delete" in DoubleMap.prototype',
+              'prefix': ''
+            },
+            {
+              'code': '"DoubleMap" in self && "webkitDelete" in DoubleMap.prototype',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"DoubleMap" in self && "WebKitDelete" in DoubleMap.prototype',
+              'prefix': 'WebKit'
+            },
+            {
+              'code': '"webkitDoubleMap" in self && "delete" in webkitDoubleMap.prototype',
+              'prefix': ''
+            },
+            {
+              'code': '"webkitDoubleMap" in self && "webkitDelete" in webkitDoubleMap.prototype',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"webkitDoubleMap" in self && "WebKitDelete" in webkitDoubleMap.prototype',
+              'prefix': 'WebKit'
+            },
+            {
+              'code': '"WebKitDoubleMap" in self && "delete" in WebKitDoubleMap.prototype',
+              'prefix': ''
+            },
+            {
+              'code': '"WebKitDoubleMap" in self && "webkitDelete" in WebKitDoubleMap.prototype',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"WebKitDoubleMap" in self && "WebKitDelete" in WebKitDoubleMap.prototype',
+              'prefix': 'WebKit'
+            }
+          ],
           'scope': ['Window']
         },
         'api.DoubleMap.entries': {
-          'code': '"DoubleMap" in self && "entries" in DoubleMap.prototype',
+          'tests': [
+            {
+              'code': '"DoubleMap" in self && "entries" in DoubleMap.prototype',
+              'prefix': ''
+            },
+            {
+              'code': '"DoubleMap" in self && "webkitEntries" in DoubleMap.prototype',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"DoubleMap" in self && "WebKitEntries" in DoubleMap.prototype',
+              'prefix': 'WebKit'
+            },
+            {
+              'code': '"webkitDoubleMap" in self && "entries" in webkitDoubleMap.prototype',
+              'prefix': ''
+            },
+            {
+              'code': '"webkitDoubleMap" in self && "webkitEntries" in webkitDoubleMap.prototype',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"webkitDoubleMap" in self && "WebKitEntries" in webkitDoubleMap.prototype',
+              'prefix': 'WebKit'
+            },
+            {
+              'code': '"WebKitDoubleMap" in self && "entries" in WebKitDoubleMap.prototype',
+              'prefix': ''
+            },
+            {
+              'code': '"WebKitDoubleMap" in self && "webkitEntries" in WebKitDoubleMap.prototype',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"WebKitDoubleMap" in self && "WebKitEntries" in WebKitDoubleMap.prototype',
+              'prefix': 'WebKit'
+            }
+          ],
           'scope': ['Window']
         },
         'api.DoubleMap.forEach': {
-          'code': '"DoubleMap" in self && "forEach" in DoubleMap.prototype',
+          'tests': [
+            {
+              'code': '"DoubleMap" in self && "forEach" in DoubleMap.prototype',
+              'prefix': ''
+            },
+            {
+              'code': '"DoubleMap" in self && "webkitForEach" in DoubleMap.prototype',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"DoubleMap" in self && "WebKitForEach" in DoubleMap.prototype',
+              'prefix': 'WebKit'
+            },
+            {
+              'code': '"webkitDoubleMap" in self && "forEach" in webkitDoubleMap.prototype',
+              'prefix': ''
+            },
+            {
+              'code': '"webkitDoubleMap" in self && "webkitForEach" in webkitDoubleMap.prototype',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"webkitDoubleMap" in self && "WebKitForEach" in webkitDoubleMap.prototype',
+              'prefix': 'WebKit'
+            },
+            {
+              'code': '"WebKitDoubleMap" in self && "forEach" in WebKitDoubleMap.prototype',
+              'prefix': ''
+            },
+            {
+              'code': '"WebKitDoubleMap" in self && "webkitForEach" in WebKitDoubleMap.prototype',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"WebKitDoubleMap" in self && "WebKitForEach" in WebKitDoubleMap.prototype',
+              'prefix': 'WebKit'
+            }
+          ],
           'scope': ['Window']
         },
         'api.DoubleMap.get': {
-          'code': '"DoubleMap" in self && "get" in DoubleMap.prototype',
+          'tests': [
+            {
+              'code': '"DoubleMap" in self && "get" in DoubleMap.prototype',
+              'prefix': ''
+            },
+            {
+              'code': '"DoubleMap" in self && "webkitGet" in DoubleMap.prototype',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"DoubleMap" in self && "WebKitGet" in DoubleMap.prototype',
+              'prefix': 'WebKit'
+            },
+            {
+              'code': '"webkitDoubleMap" in self && "get" in webkitDoubleMap.prototype',
+              'prefix': ''
+            },
+            {
+              'code': '"webkitDoubleMap" in self && "webkitGet" in webkitDoubleMap.prototype',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"webkitDoubleMap" in self && "WebKitGet" in webkitDoubleMap.prototype',
+              'prefix': 'WebKit'
+            },
+            {
+              'code': '"WebKitDoubleMap" in self && "get" in WebKitDoubleMap.prototype',
+              'prefix': ''
+            },
+            {
+              'code': '"WebKitDoubleMap" in self && "webkitGet" in WebKitDoubleMap.prototype',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"WebKitDoubleMap" in self && "WebKitGet" in WebKitDoubleMap.prototype',
+              'prefix': 'WebKit'
+            }
+          ],
           'scope': ['Window']
         },
         'api.DoubleMap.has': {
-          'code': '"DoubleMap" in self && "has" in DoubleMap.prototype',
+          'tests': [
+            {
+              'code': '"DoubleMap" in self && "has" in DoubleMap.prototype',
+              'prefix': ''
+            },
+            {
+              'code': '"DoubleMap" in self && "webkitHas" in DoubleMap.prototype',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"DoubleMap" in self && "WebKitHas" in DoubleMap.prototype',
+              'prefix': 'WebKit'
+            },
+            {
+              'code': '"webkitDoubleMap" in self && "has" in webkitDoubleMap.prototype',
+              'prefix': ''
+            },
+            {
+              'code': '"webkitDoubleMap" in self && "webkitHas" in webkitDoubleMap.prototype',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"webkitDoubleMap" in self && "WebKitHas" in webkitDoubleMap.prototype',
+              'prefix': 'WebKit'
+            },
+            {
+              'code': '"WebKitDoubleMap" in self && "has" in WebKitDoubleMap.prototype',
+              'prefix': ''
+            },
+            {
+              'code': '"WebKitDoubleMap" in self && "webkitHas" in WebKitDoubleMap.prototype',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"WebKitDoubleMap" in self && "WebKitHas" in WebKitDoubleMap.prototype',
+              'prefix': 'WebKit'
+            }
+          ],
           'scope': ['Window']
         },
         'api.DoubleMap.keys': {
-          'code': '"DoubleMap" in self && "keys" in DoubleMap.prototype',
+          'tests': [
+            {
+              'code': '"DoubleMap" in self && "keys" in DoubleMap.prototype',
+              'prefix': ''
+            },
+            {
+              'code': '"DoubleMap" in self && "webkitKeys" in DoubleMap.prototype',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"DoubleMap" in self && "WebKitKeys" in DoubleMap.prototype',
+              'prefix': 'WebKit'
+            },
+            {
+              'code': '"webkitDoubleMap" in self && "keys" in webkitDoubleMap.prototype',
+              'prefix': ''
+            },
+            {
+              'code': '"webkitDoubleMap" in self && "webkitKeys" in webkitDoubleMap.prototype',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"webkitDoubleMap" in self && "WebKitKeys" in webkitDoubleMap.prototype',
+              'prefix': 'WebKit'
+            },
+            {
+              'code': '"WebKitDoubleMap" in self && "keys" in WebKitDoubleMap.prototype',
+              'prefix': ''
+            },
+            {
+              'code': '"WebKitDoubleMap" in self && "webkitKeys" in WebKitDoubleMap.prototype',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"WebKitDoubleMap" in self && "WebKitKeys" in WebKitDoubleMap.prototype',
+              'prefix': 'WebKit'
+            }
+          ],
           'scope': ['Window']
         },
         'api.DoubleMap.set': {
-          'code': '"DoubleMap" in self && "set" in DoubleMap.prototype',
+          'tests': [
+            {
+              'code': '"DoubleMap" in self && "set" in DoubleMap.prototype',
+              'prefix': ''
+            },
+            {
+              'code': '"DoubleMap" in self && "webkitSet" in DoubleMap.prototype',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"DoubleMap" in self && "WebKitSet" in DoubleMap.prototype',
+              'prefix': 'WebKit'
+            },
+            {
+              'code': '"webkitDoubleMap" in self && "set" in webkitDoubleMap.prototype',
+              'prefix': ''
+            },
+            {
+              'code': '"webkitDoubleMap" in self && "webkitSet" in webkitDoubleMap.prototype',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"webkitDoubleMap" in self && "WebKitSet" in webkitDoubleMap.prototype',
+              'prefix': 'WebKit'
+            },
+            {
+              'code': '"WebKitDoubleMap" in self && "set" in WebKitDoubleMap.prototype',
+              'prefix': ''
+            },
+            {
+              'code': '"WebKitDoubleMap" in self && "webkitSet" in WebKitDoubleMap.prototype',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"WebKitDoubleMap" in self && "WebKitSet" in WebKitDoubleMap.prototype',
+              'prefix': 'WebKit'
+            }
+          ],
           'scope': ['Window']
         },
         'api.DoubleMap.size': {
-          'code': '"DoubleMap" in self && "size" in DoubleMap.prototype',
+          'tests': [
+            {
+              'code': '"DoubleMap" in self && "size" in DoubleMap.prototype',
+              'prefix': ''
+            },
+            {
+              'code': '"DoubleMap" in self && "webkitSize" in DoubleMap.prototype',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"DoubleMap" in self && "WebKitSize" in DoubleMap.prototype',
+              'prefix': 'WebKit'
+            },
+            {
+              'code': '"webkitDoubleMap" in self && "size" in webkitDoubleMap.prototype',
+              'prefix': ''
+            },
+            {
+              'code': '"webkitDoubleMap" in self && "webkitSize" in webkitDoubleMap.prototype',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"webkitDoubleMap" in self && "WebKitSize" in webkitDoubleMap.prototype',
+              'prefix': 'WebKit'
+            },
+            {
+              'code': '"WebKitDoubleMap" in self && "size" in WebKitDoubleMap.prototype',
+              'prefix': ''
+            },
+            {
+              'code': '"WebKitDoubleMap" in self && "webkitSize" in WebKitDoubleMap.prototype',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"WebKitDoubleMap" in self && "WebKitSize" in WebKitDoubleMap.prototype',
+              'prefix': 'WebKit'
+            }
+          ],
           'scope': ['Window']
         },
         'api.DoubleMap.values': {
-          'code': '"DoubleMap" in self && "values" in DoubleMap.prototype',
+          'tests': [
+            {
+              'code': '"DoubleMap" in self && "values" in DoubleMap.prototype',
+              'prefix': ''
+            },
+            {
+              'code': '"DoubleMap" in self && "webkitValues" in DoubleMap.prototype',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"DoubleMap" in self && "WebKitValues" in DoubleMap.prototype',
+              'prefix': 'WebKit'
+            },
+            {
+              'code': '"webkitDoubleMap" in self && "values" in webkitDoubleMap.prototype',
+              'prefix': ''
+            },
+            {
+              'code': '"webkitDoubleMap" in self && "webkitValues" in webkitDoubleMap.prototype',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"webkitDoubleMap" in self && "WebKitValues" in webkitDoubleMap.prototype',
+              'prefix': 'WebKit'
+            },
+            {
+              'code': '"WebKitDoubleMap" in self && "values" in WebKitDoubleMap.prototype',
+              'prefix': ''
+            },
+            {
+              'code': '"WebKitDoubleMap" in self && "webkitValues" in WebKitDoubleMap.prototype',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"WebKitDoubleMap" in self && "WebKitValues" in WebKitDoubleMap.prototype',
+              'prefix': 'WebKit'
+            }
+          ],
           'scope': ['Window']
         }
       });
@@ -796,39 +1659,348 @@ describe('build', () => {
       };`);
       assert.deepEqual(buildIDLTests(ast), {
         'api.DoubleSet': {
-          'code': '"DoubleSet" in self',
+          'tests': [
+            {
+              'code': '"DoubleSet" in self',
+              'prefix': ''
+            },
+            {
+              'code': '"webkitDoubleSet" in self',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"WebKitDoubleSet" in self',
+              'prefix': 'WebKit'
+            }
+          ],
           'scope': ['Window']
         },
         'api.DoubleSet.add': {
-          'code': '"DoubleSet" in self && "add" in DoubleSet.prototype',
+          'tests': [
+            {
+              'code': '"DoubleSet" in self && "add" in DoubleSet.prototype',
+              'prefix': ''
+            },
+            {
+              'code': '"DoubleSet" in self && "webkitAdd" in DoubleSet.prototype',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"DoubleSet" in self && "WebKitAdd" in DoubleSet.prototype',
+              'prefix': 'WebKit'
+            },
+            {
+              'code': '"webkitDoubleSet" in self && "add" in webkitDoubleSet.prototype',
+              'prefix': ''
+            },
+            {
+              'code': '"webkitDoubleSet" in self && "webkitAdd" in webkitDoubleSet.prototype',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"webkitDoubleSet" in self && "WebKitAdd" in webkitDoubleSet.prototype',
+              'prefix': 'WebKit'
+            },
+            {
+              'code': '"WebKitDoubleSet" in self && "add" in WebKitDoubleSet.prototype',
+              'prefix': ''
+            },
+            {
+              'code': '"WebKitDoubleSet" in self && "webkitAdd" in WebKitDoubleSet.prototype',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"WebKitDoubleSet" in self && "WebKitAdd" in WebKitDoubleSet.prototype',
+              'prefix': 'WebKit'
+            }
+          ],
           'scope': ['Window']
         },
         'api.DoubleSet.clear': {
-          'code': '"DoubleSet" in self && "clear" in DoubleSet.prototype',
+          'tests': [
+            {
+              'code': '"DoubleSet" in self && "clear" in DoubleSet.prototype',
+              'prefix': ''
+            },
+            {
+              'code': '"DoubleSet" in self && "webkitClear" in DoubleSet.prototype',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"DoubleSet" in self && "WebKitClear" in DoubleSet.prototype',
+              'prefix': 'WebKit'
+            },
+            {
+              'code': '"webkitDoubleSet" in self && "clear" in webkitDoubleSet.prototype',
+              'prefix': ''
+            },
+            {
+              'code': '"webkitDoubleSet" in self && "webkitClear" in webkitDoubleSet.prototype',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"webkitDoubleSet" in self && "WebKitClear" in webkitDoubleSet.prototype',
+              'prefix': 'WebKit'
+            },
+            {
+              'code': '"WebKitDoubleSet" in self && "clear" in WebKitDoubleSet.prototype',
+              'prefix': ''
+            },
+            {
+              'code': '"WebKitDoubleSet" in self && "webkitClear" in WebKitDoubleSet.prototype',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"WebKitDoubleSet" in self && "WebKitClear" in WebKitDoubleSet.prototype',
+              'prefix': 'WebKit'
+            }
+          ],
           'scope': ['Window']
         },
         'api.DoubleSet.delete': {
-          'code': '"DoubleSet" in self && "delete" in DoubleSet.prototype',
+          'tests': [
+            {
+              'code': '"DoubleSet" in self && "delete" in DoubleSet.prototype',
+              'prefix': ''
+            },
+            {
+              'code': '"DoubleSet" in self && "webkitDelete" in DoubleSet.prototype',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"DoubleSet" in self && "WebKitDelete" in DoubleSet.prototype',
+              'prefix': 'WebKit'
+            },
+            {
+              'code': '"webkitDoubleSet" in self && "delete" in webkitDoubleSet.prototype',
+              'prefix': ''
+            },
+            {
+              'code': '"webkitDoubleSet" in self && "webkitDelete" in webkitDoubleSet.prototype',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"webkitDoubleSet" in self && "WebKitDelete" in webkitDoubleSet.prototype',
+              'prefix': 'WebKit'
+            },
+            {
+              'code': '"WebKitDoubleSet" in self && "delete" in WebKitDoubleSet.prototype',
+              'prefix': ''
+            },
+            {
+              'code': '"WebKitDoubleSet" in self && "webkitDelete" in WebKitDoubleSet.prototype',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"WebKitDoubleSet" in self && "WebKitDelete" in WebKitDoubleSet.prototype',
+              'prefix': 'WebKit'
+            }
+          ],
           'scope': ['Window']
         },
         'api.DoubleSet.entries': {
-          'code': '"DoubleSet" in self && "entries" in DoubleSet.prototype',
+          'tests': [
+            {
+              'code': '"DoubleSet" in self && "entries" in DoubleSet.prototype',
+              'prefix': ''
+            },
+            {
+              'code': '"DoubleSet" in self && "webkitEntries" in DoubleSet.prototype',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"DoubleSet" in self && "WebKitEntries" in DoubleSet.prototype',
+              'prefix': 'WebKit'
+            },
+            {
+              'code': '"webkitDoubleSet" in self && "entries" in webkitDoubleSet.prototype',
+              'prefix': ''
+            },
+            {
+              'code': '"webkitDoubleSet" in self && "webkitEntries" in webkitDoubleSet.prototype',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"webkitDoubleSet" in self && "WebKitEntries" in webkitDoubleSet.prototype',
+              'prefix': 'WebKit'
+            },
+            {
+              'code': '"WebKitDoubleSet" in self && "entries" in WebKitDoubleSet.prototype',
+              'prefix': ''
+            },
+            {
+              'code': '"WebKitDoubleSet" in self && "webkitEntries" in WebKitDoubleSet.prototype',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"WebKitDoubleSet" in self && "WebKitEntries" in WebKitDoubleSet.prototype',
+              'prefix': 'WebKit'
+            }
+          ],
           'scope': ['Window']
         },
         'api.DoubleSet.has': {
-          'code': '"DoubleSet" in self && "has" in DoubleSet.prototype',
+          'tests': [
+            {
+              'code': '"DoubleSet" in self && "has" in DoubleSet.prototype',
+              'prefix': ''
+            },
+            {
+              'code': '"DoubleSet" in self && "webkitHas" in DoubleSet.prototype',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"DoubleSet" in self && "WebKitHas" in DoubleSet.prototype',
+              'prefix': 'WebKit'
+            },
+            {
+              'code': '"webkitDoubleSet" in self && "has" in webkitDoubleSet.prototype',
+              'prefix': ''
+            },
+            {
+              'code': '"webkitDoubleSet" in self && "webkitHas" in webkitDoubleSet.prototype',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"webkitDoubleSet" in self && "WebKitHas" in webkitDoubleSet.prototype',
+              'prefix': 'WebKit'
+            },
+            {
+              'code': '"WebKitDoubleSet" in self && "has" in WebKitDoubleSet.prototype',
+              'prefix': ''
+            },
+            {
+              'code': '"WebKitDoubleSet" in self && "webkitHas" in WebKitDoubleSet.prototype',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"WebKitDoubleSet" in self && "WebKitHas" in WebKitDoubleSet.prototype',
+              'prefix': 'WebKit'
+            }
+          ],
           'scope': ['Window']
         },
         'api.DoubleSet.keys': {
-          'code': '"DoubleSet" in self && "keys" in DoubleSet.prototype',
+          'tests': [
+            {
+              'code': '"DoubleSet" in self && "keys" in DoubleSet.prototype',
+              'prefix': ''
+            },
+            {
+              'code': '"DoubleSet" in self && "webkitKeys" in DoubleSet.prototype',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"DoubleSet" in self && "WebKitKeys" in DoubleSet.prototype',
+              'prefix': 'WebKit'
+            },
+            {
+              'code': '"webkitDoubleSet" in self && "keys" in webkitDoubleSet.prototype',
+              'prefix': ''
+            },
+            {
+              'code': '"webkitDoubleSet" in self && "webkitKeys" in webkitDoubleSet.prototype',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"webkitDoubleSet" in self && "WebKitKeys" in webkitDoubleSet.prototype',
+              'prefix': 'WebKit'
+            },
+            {
+              'code': '"WebKitDoubleSet" in self && "keys" in WebKitDoubleSet.prototype',
+              'prefix': ''
+            },
+            {
+              'code': '"WebKitDoubleSet" in self && "webkitKeys" in WebKitDoubleSet.prototype',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"WebKitDoubleSet" in self && "WebKitKeys" in WebKitDoubleSet.prototype',
+              'prefix': 'WebKit'
+            }
+          ],
           'scope': ['Window']
         },
         'api.DoubleSet.size': {
-          'code': '"DoubleSet" in self && "size" in DoubleSet.prototype',
+          'tests': [
+            {
+              'code': '"DoubleSet" in self && "size" in DoubleSet.prototype',
+              'prefix': ''
+            },
+            {
+              'code': '"DoubleSet" in self && "webkitSize" in DoubleSet.prototype',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"DoubleSet" in self && "WebKitSize" in DoubleSet.prototype',
+              'prefix': 'WebKit'
+            },
+            {
+              'code': '"webkitDoubleSet" in self && "size" in webkitDoubleSet.prototype',
+              'prefix': ''
+            },
+            {
+              'code': '"webkitDoubleSet" in self && "webkitSize" in webkitDoubleSet.prototype',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"webkitDoubleSet" in self && "WebKitSize" in webkitDoubleSet.prototype',
+              'prefix': 'WebKit'
+            },
+            {
+              'code': '"WebKitDoubleSet" in self && "size" in WebKitDoubleSet.prototype',
+              'prefix': ''
+            },
+            {
+              'code': '"WebKitDoubleSet" in self && "webkitSize" in WebKitDoubleSet.prototype',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"WebKitDoubleSet" in self && "WebKitSize" in WebKitDoubleSet.prototype',
+              'prefix': 'WebKit'
+            }
+          ],
           'scope': ['Window']
         },
         'api.DoubleSet.values': {
-          'code': '"DoubleSet" in self && "values" in DoubleSet.prototype',
+          'tests': [
+            {
+              'code': '"DoubleSet" in self && "values" in DoubleSet.prototype',
+              'prefix': ''
+            },
+            {
+              'code': '"DoubleSet" in self && "webkitValues" in DoubleSet.prototype',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"DoubleSet" in self && "WebKitValues" in DoubleSet.prototype',
+              'prefix': 'WebKit'
+            },
+            {
+              'code': '"webkitDoubleSet" in self && "values" in webkitDoubleSet.prototype',
+              'prefix': ''
+            },
+            {
+              'code': '"webkitDoubleSet" in self && "webkitValues" in webkitDoubleSet.prototype',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"webkitDoubleSet" in self && "WebKitValues" in webkitDoubleSet.prototype',
+              'prefix': 'WebKit'
+            },
+            {
+              'code': '"WebKitDoubleSet" in self && "values" in WebKitDoubleSet.prototype',
+              'prefix': ''
+            },
+            {
+              'code': '"WebKitDoubleSet" in self && "webkitValues" in WebKitDoubleSet.prototype',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"WebKitDoubleSet" in self && "WebKitValues" in WebKitDoubleSet.prototype',
+              'prefix': 'WebKit'
+            }
+          ],
           'scope': ['Window']
         }
       });
@@ -841,7 +2013,20 @@ describe('build', () => {
       };`);
       assert.deepEqual(buildIDLTests(ast), {
         'api.GetMe': {
-          'code': '"GetMe" in self',
+          'tests': [
+            {
+              'code': '"GetMe" in self',
+              'prefix': ''
+            },
+            {
+              'code': '"webkitGetMe" in self',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"WebKitGetMe" in self',
+              'prefix': 'WebKit'
+            }
+          ],
           'scope': ['Window']
         }
       });
@@ -856,19 +2041,71 @@ describe('build', () => {
       `);
       assert.deepEqual(buildIDLTests(ast), {
         'api.CSS': {
-          'code': '"CSS" in self',
+          'tests': [
+            {
+              'code': '"CSS" in self',
+              'prefix': ''
+            },
+            {
+              'code': '"webkitCSS" in self',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"WebKitCSS" in self',
+              'prefix': 'WebKit'
+            }
+          ],
           'scope': ['Window']
         },
         'api.MessageChannel': {
-          'code': '"MessageChannel" in self',
+          'tests': [
+            {
+              'code': '"MessageChannel" in self',
+              'prefix': ''
+            },
+            {
+              'code': '"webkitMessageChannel" in self',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"WebKitMessageChannel" in self',
+              'prefix': 'WebKit'
+            }
+          ],
           'scope': ['Window', 'Worker']
         },
         'api.Worker': {
-          'code': '"Worker" in self',
+          'tests': [
+            {
+              'code': '"Worker" in self',
+              'prefix': ''
+            },
+            {
+              'code': '"webkitWorker" in self',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"WebKitWorker" in self',
+              'prefix': 'WebKit'
+            }
+          ],
           'scope': ['Window']
         },
         'api.WorkerSync': {
-          'code': '"WorkerSync" in self',
+          'tests': [
+            {
+              'code': '"WorkerSync" in self',
+              'prefix': ''
+            },
+            {
+              'code': '"webkitWorkerSync" in self',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"WebKitWorkerSync" in self',
+              'prefix': 'WebKit'
+            }
+          ],
           'scope': ['Worker']
         }
       });
@@ -884,11 +2121,61 @@ describe('build', () => {
       `);
       assert.deepEqual(buildIDLTests(ast), {
         'api.AudioNode': {
-          'code': '"AudioNode" in self',
+          'tests': [
+            {
+              'code': '"AudioNode" in self',
+              'prefix': ''
+            },
+            {
+              'code': '"webkitAudioNode" in self',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"WebKitAudioNode" in self',
+              'prefix': 'WebKit'
+            }
+          ],
           'scope': ['Window']
         },
         'api.AudioNode.disconnect': {
-          'code': '"AudioNode" in self && "disconnect" in AudioNode.prototype',
+          'tests': [
+            {
+              'code': '"AudioNode" in self && "disconnect" in AudioNode.prototype',
+              'prefix': ''
+            },
+            {
+              'code': '"AudioNode" in self && "webkitDisconnect" in AudioNode.prototype',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"AudioNode" in self && "WebKitDisconnect" in AudioNode.prototype',
+              'prefix': 'WebKit'
+            },
+            {
+              'code': '"webkitAudioNode" in self && "disconnect" in webkitAudioNode.prototype',
+              'prefix': ''
+            },
+            {
+              'code': '"webkitAudioNode" in self && "webkitDisconnect" in webkitAudioNode.prototype',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"webkitAudioNode" in self && "WebKitDisconnect" in webkitAudioNode.prototype',
+              'prefix': 'WebKit'
+            },
+            {
+              'code': '"WebKitAudioNode" in self && "disconnect" in WebKitAudioNode.prototype',
+              'prefix': ''
+            },
+            {
+              'code': '"WebKitAudioNode" in self && "webkitDisconnect" in WebKitAudioNode.prototype',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"WebKitAudioNode" in self && "WebKitDisconnect" in WebKitAudioNode.prototype',
+              'prefix': 'WebKit'
+            }
+          ],
           'scope': ['Window']
         }
       });
@@ -901,11 +2188,61 @@ describe('build', () => {
            };`);
       assert.deepEqual(buildIDLTests(ast), {
         'api.CSS': {
-          'code': '"CSS" in self',
+          'tests': [
+            {
+              'code': '"CSS" in self',
+              'prefix': ''
+            },
+            {
+              'code': '"webkitCSS" in self',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"WebKitCSS" in self',
+              'prefix': 'WebKit'
+            }
+          ],
           'scope': ['Window']
         },
         'api.CSS.paintWorklet': {
-          'code': '"CSS" in self && "paintWorklet" in CSS',
+          'tests': [
+            {
+              'code': '"CSS" in self && "paintWorklet" in CSS',
+              'prefix': ''
+            },
+            {
+              'code': '"CSS" in self && "webkitPaintWorklet" in CSS',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"CSS" in self && "WebKitPaintWorklet" in CSS',
+              'prefix': 'WebKit'
+            },
+            {
+              'code': '"webkitCSS" in self && "paintWorklet" in webkitCSS',
+              'prefix': ''
+            },
+            {
+              'code': '"webkitCSS" in self && "webkitPaintWorklet" in webkitCSS',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"webkitCSS" in self && "WebKitPaintWorklet" in webkitCSS',
+              'prefix': 'WebKit'
+            },
+            {
+              'code': '"WebKitCSS" in self && "paintWorklet" in WebKitCSS',
+              'prefix': ''
+            },
+            {
+              'code': '"WebKitCSS" in self && "webkitPaintWorklet" in WebKitCSS',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"WebKitCSS" in self && "WebKitPaintWorklet" in WebKitCSS',
+              'prefix': 'WebKit'
+            }
+          ],
           'scope': ['Window']
         }
       });
@@ -918,11 +2255,61 @@ describe('build', () => {
            };`);
       assert.deepEqual(buildIDLTests(ast), {
         'api.CSS': {
-          'code': '"CSS" in self',
+          'tests': [
+            {
+              'code': '"CSS" in self',
+              'prefix': ''
+            },
+            {
+              'code': '"webkitCSS" in self',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"WebKitCSS" in self',
+              'prefix': 'WebKit'
+            }
+          ],
           'scope': ['Window']
         },
         'api.CSS.supports': {
-          'code': '"CSS" in self && "supports" in CSS',
+          'tests': [
+            {
+              'code': '"CSS" in self && "supports" in CSS',
+              'prefix': ''
+            },
+            {
+              'code': '"CSS" in self && "webkitSupports" in CSS',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"CSS" in self && "WebKitSupports" in CSS',
+              'prefix': 'WebKit'
+            },
+            {
+              'code': '"webkitCSS" in self && "supports" in webkitCSS',
+              'prefix': ''
+            },
+            {
+              'code': '"webkitCSS" in self && "webkitSupports" in webkitCSS',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"webkitCSS" in self && "WebKitSupports" in webkitCSS',
+              'prefix': 'WebKit'
+            },
+            {
+              'code': '"WebKitCSS" in self && "supports" in WebKitCSS',
+              'prefix': ''
+            },
+            {
+              'code': '"WebKitCSS" in self && "webkitSupports" in WebKitCSS',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"WebKitCSS" in self && "WebKitSupports" in WebKitCSS',
+              'prefix': 'WebKit'
+            }
+          ],
           'scope': ['Window']
         }
       });
@@ -948,11 +2335,21 @@ describe('build', () => {
 
       assert.deepEqual(buildIDLTests(ast), {
         'api.CSS': {
-          'code': '(function() {var css = CSS;return !!css;})()',
+          'tests': [
+            {
+              'code': '(function() {var css = CSS;return !!css;})()',
+              'prefix': ''
+            }
+          ],
           'scope': ['Window']
         },
         'api.CSS.paintWorklet': {
-          'code': '(function() {var css = CSS;return css && \'paintWorklet\' in css;})()',
+          'tests': [
+            {
+              'code': '(function() {var css = CSS;return css && \'paintWorklet\' in css;})()',
+              'prefix': ''
+            }
+          ],
           'scope': ['Window']
         }
       });
@@ -966,15 +2363,102 @@ describe('build', () => {
            };`);
       assert.deepEqual(buildIDLTests(ast), {
         'api.ElementRegistrationOptions': {
-          'code': '"ElementRegistrationOptions" in self',
+          'tests': [
+            {
+              'code': '"ElementRegistrationOptions" in self',
+              'prefix': ''
+            },
+            {
+              'code': '"webkitElementRegistrationOptions" in self',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"WebKitElementRegistrationOptions" in self',
+              'prefix': 'WebKit'
+            }
+          ],
           'scope': ['Window']
         },
         'api.ElementRegistrationOptions.extends': {
-          'code': '"ElementRegistrationOptions" in self && "extends" in ElementRegistrationOptions',
+          'tests': [
+            {
+              'code': '"ElementRegistrationOptions" in self && "extends" in ElementRegistrationOptions',
+              'prefix': ''
+            },
+            {
+              'code': '"ElementRegistrationOptions" in self && "webkitExtends" in ElementRegistrationOptions',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"ElementRegistrationOptions" in self && "WebKitExtends" in ElementRegistrationOptions',
+              'prefix': 'WebKit'
+            },
+            {
+              'code': '"webkitElementRegistrationOptions" in self && "extends" in webkitElementRegistrationOptions',
+              'prefix': ''
+            },
+            {
+              'code': '"webkitElementRegistrationOptions" in self && "webkitExtends" in webkitElementRegistrationOptions',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"webkitElementRegistrationOptions" in self && "WebKitExtends" in webkitElementRegistrationOptions',
+              'prefix': 'WebKit'
+            },
+            {
+              'code': '"WebKitElementRegistrationOptions" in self && "extends" in WebKitElementRegistrationOptions',
+              'prefix': ''
+            },
+            {
+              'code': '"WebKitElementRegistrationOptions" in self && "webkitExtends" in WebKitElementRegistrationOptions',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"WebKitElementRegistrationOptions" in self && "WebKitExtends" in WebKitElementRegistrationOptions',
+              'prefix': 'WebKit'
+            }
+          ],
           'scope': ['Window']
         },
         'api.ElementRegistrationOptions.prototype': {
-          'code': '"ElementRegistrationOptions" in self && "prototype" in ElementRegistrationOptions',
+          'tests': [
+            {
+              'code': '"ElementRegistrationOptions" in self && "prototype" in ElementRegistrationOptions',
+              'prefix': ''
+            },
+            {
+              'code': '"ElementRegistrationOptions" in self && "webkitPrototype" in ElementRegistrationOptions',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"ElementRegistrationOptions" in self && "WebKitPrototype" in ElementRegistrationOptions',
+              'prefix': 'WebKit'
+            },
+            {
+              'code': '"webkitElementRegistrationOptions" in self && "prototype" in webkitElementRegistrationOptions',
+              'prefix': ''
+            },
+            {
+              'code': '"webkitElementRegistrationOptions" in self && "webkitPrototype" in webkitElementRegistrationOptions',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"webkitElementRegistrationOptions" in self && "WebKitPrototype" in webkitElementRegistrationOptions',
+              'prefix': 'WebKit'
+            },
+            {
+              'code': '"WebKitElementRegistrationOptions" in self && "prototype" in WebKitElementRegistrationOptions',
+              'prefix': ''
+            },
+            {
+              'code': '"WebKitElementRegistrationOptions" in self && "webkitPrototype" in WebKitElementRegistrationOptions',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"WebKitElementRegistrationOptions" in self && "WebKitPrototype" in WebKitElementRegistrationOptions',
+              'prefix': 'WebKit'
+            }
+          ],
           'scope': ['Window']
         }
       });
@@ -998,15 +2482,30 @@ describe('build', () => {
 
       assert.deepEqual(buildIDLTests(ast), {
         'api.ElementRegistrationOptions': {
-          'code': '(function() {var instance = ElementRegistrationOptions;return !!instance;})()',
+          'tests': [
+            {
+              'code': '(function() {var instance = ElementRegistrationOptions;return !!instance;})()',
+              'prefix': ''
+            }
+          ],
           'scope': ['Window']
         },
         'api.ElementRegistrationOptions.extends': {
-          'code': '(function() {var instance = ElementRegistrationOptions;return instance && \'extends\' in instance;})()',
+          'tests': [
+            {
+              'code': '(function() {var instance = ElementRegistrationOptions;return instance && \'extends\' in instance;})()',
+              'prefix': ''
+            }
+          ],
           'scope': ['Window']
         },
         'api.ElementRegistrationOptions.prototype': {
-          'code': '(function() {var instance = ElementRegistrationOptions;return instance && \'prototype\' in instance;})()',
+          'tests': [
+            {
+              'code': '(function() {var instance = ElementRegistrationOptions;return instance && \'prototype\' in instance;})()',
+              'prefix': ''
+            }
+          ],
           'scope': ['Window']
         }
       });
@@ -1112,19 +2611,55 @@ describe('build', () => {
 
     assert.deepEqual(buildCSS(webref, bcd), {
       'css.properties.appearance': {
-        'code': '"appearance" in document.body.style || CSS.supports("appearance", "inherit")',
+        'tests': [
+          {
+            'code': '"appearance" in document.body.style || CSS.supports("appearance", "inherit")',
+            'prefix': ''
+          },
+          {
+            'code': '"webkitAppearance" in document.body.style || CSS.supports("-webkit-appearance", "inherit")',
+            'prefix': 'webkit'
+          }
+        ],
         'scope': ['CSS']
       },
       'css.properties.font-family': {
-        'code': '"fontFamily" in document.body.style || CSS.supports("font-family", "inherit")',
+        'tests': [
+          {
+            'code': '"fontFamily" in document.body.style || CSS.supports("font-family", "inherit")',
+            'prefix': ''
+          },
+          {
+            'code': '"webkitFontFamily" in document.body.style || CSS.supports("-webkit-font-family", "inherit")',
+            'prefix': 'webkit'
+          }
+        ],
         'scope': ['CSS']
       },
       'css.properties.font-weight': {
-        'code': '"fontWeight" in document.body.style || CSS.supports("font-weight", "inherit")',
+        'tests': [
+          {
+            'code': '"fontWeight" in document.body.style || CSS.supports("font-weight", "inherit")',
+            'prefix': ''
+          },
+          {
+            'code': '"webkitFontWeight" in document.body.style || CSS.supports("-webkit-font-weight", "inherit")',
+            'prefix': 'webkit'
+          }
+        ],
         'scope': ['CSS']
       },
       'css.properties.grid': {
-        'code': '"grid" in document.body.style || CSS.supports("grid", "inherit")',
+        'tests': [
+          {
+            'code': '"grid" in document.body.style || CSS.supports("grid", "inherit")',
+            'prefix': ''
+          },
+          {
+            'code': '"webkitGrid" in document.body.style || CSS.supports("-webkit-grid", "inherit")',
+            'prefix': 'webkit'
+          }
+        ],
         'scope': ['CSS']
       }
     });
