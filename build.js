@@ -563,8 +563,7 @@ function buildManifest(tests) {
   };
 
   for (const [ident, test] of Object.entries(manifest.tests)) {
-    const scopes = Array.isArray(test.scope) ? test.scope : [test.scope];
-    for (const scope of scopes) {
+    for (const scope of test.scope) {
       let endpoint = '';
       switch (scope) {
         case 'Window':

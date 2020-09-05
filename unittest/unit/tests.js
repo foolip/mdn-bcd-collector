@@ -37,7 +37,7 @@ const MANIFEST = {
   },
   endpoints: {
     main: {
-      '/api/interfaces': {
+      '/tests/api/interfaces': {
         scope: 'Window',
         httpsOnly: false,
         entries: [
@@ -45,25 +45,30 @@ const MANIFEST = {
           'api.AbortController.signal'
         ]
       },
-      '/api/workerinterfaces': {
+      '/tests/api/workerinterfaces': {
         scope: 'Worker',
-        httpsOnly: true,
+        httpsOnly: false,
         entries: [
           'api.AbortController'
         ]
       },
-      '/api/serviceworkerinterfaces': {
+      '/tests/api/serviceworkerinterfaces': {
         scope: 'ServiceWorker',
         httpsOnly: true,
+        entries: []
+      },
+      '/tests/css/properties': {
+        scope: 'CSS',
+        httpsOnly: false,
         entries: []
       }
     },
     individual: {
-      '/api/AbortController': [
+      '/tests/api/AbortController': [
         'api.AbortController',
         'api.AbortController.signal'
       ],
-      '/api/AbortController/signal': [
+      '/tests/api/AbortController/signal': [
         'api.AbortController.signal'
       ]
     }
@@ -76,33 +81,79 @@ describe('Tests', () => {
     host: 'host.test'
   });
 
+  describe('next', () => {
+    it('normal', () => {
+      assert.equal(
+        tests.next('http://host.test/tests/api/interfaces'),
+        'https://host.test/tests/api/interfaces'
+      );
+      assert.equal(
+        tests.next('https://host.test/tests/api/interfaces'),
+        'http://host.test/tests/api/workerinterfaces'
+      );
+      assert.equal(
+        tests.next('https://host.test/tests/api/workerinterfaces'),
+        'https://host.test/tests/api/serviceworkerinterfaces'
+      );
+
+      assert.equal(
+        tests.next('https://host.test/tests/css/properties'),
+        null
+      );
+    });
+
+    it('HTTP only', () => {
+      const theseTests = new Tests({
+        manifest: MANIFEST,
+        host: 'host.test',
+        httpOnly: true
+      });
+
+      assert.equal(
+        theseTests.next('http://host.test/tests/api/interfaces'),
+        'http://host.test/tests/api/workerinterfaces'
+      );
+      assert.equal(
+        theseTests.next('http://host.test/tests/api/workerinterfaces'),
+        'http://host.test/tests/css/properties'
+      );
+
+      assert.equal(
+        theseTests.next('http://host.test/tests/css/properties'),
+        null
+      );
+    });
+  });
+
   it('listMainEndpoints', () => {
     assert.deepEqual(tests.listMainEndpoints(), [
-      '/api/interfaces',
-      '/api/workerinterfaces',
-      '/api/serviceworkerinterfaces'
+      '/tests/api/interfaces',
+      '/tests/api/workerinterfaces',
+      '/tests/api/serviceworkerinterfaces',
+      '/tests/css/properties'
     ]);
   });
 
   it('listIndividual', () => {
     assert.deepEqual(tests.listIndividual(), [
-      ['api.AbortController', '/api/AbortController'],
-      ['api.AbortController.signal', '/api/AbortController/signal']
+      ['api.AbortController', '/tests/api/AbortController'],
+      ['api.AbortController.signal', '/tests/api/AbortController/signal']
     ]);
   });
 
   it('listAllEndpoints', () => {
     assert.deepEqual(tests.listAllEndpoints(), [
-      '/api/interfaces',
-      '/api/workerinterfaces',
-      '/api/serviceworkerinterfaces',
-      '/api/AbortController',
-      '/api/AbortController/signal'
+      '/tests/api/interfaces',
+      '/tests/api/workerinterfaces',
+      '/tests/api/serviceworkerinterfaces',
+      '/tests/css/properties',
+      '/tests/api/AbortController',
+      '/tests/api/AbortController/signal'
     ]);
   });
 
   it('getTests', () => {
-    assert.deepEqual(tests.getTests('/api/interfaces'), {
+    assert.deepEqual(tests.getTests('/tests/api/interfaces'), {
       'api.AbortController': {
         'code': '"AbortController" in self',
         'scope': ['Window', 'Worker']
@@ -112,7 +163,7 @@ describe('Tests', () => {
         'scope': ['Window', 'Worker']
       }
     });
-    assert.deepEqual(tests.getTests('/api/workerinterfaces'), {
+    assert.deepEqual(tests.getTests('/tests/api/workerinterfaces'), {
       'api.AbortController': {
         'code': '"AbortController" in self',
         'scope': ['Window', 'Worker']
@@ -121,8 +172,8 @@ describe('Tests', () => {
   });
 
   it('getScope', () => {
-    assert.equal(tests.getScope('/api/interfaces'), 'Window');
-    assert.equal(tests.getScope('/api/serviceworkerinterfaces'), 'ServiceWorker');
-    assert.equal(tests.getScope('/api/dummy'), '');
+    assert.equal(tests.getScope('/tests/api/interfaces'), 'Window');
+    assert.equal(tests.getScope('/tests/api/serviceworkerinterfaces'), 'ServiceWorker');
+    assert.equal(tests.getScope('/tests/api/dummy'), '');
   });
 });

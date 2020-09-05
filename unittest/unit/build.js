@@ -1143,17 +1143,32 @@ describe('build', () => {
       'css.properties.font-family': {
         'code': '"fontFamily" in document.body.style || CSS.supports("font-family", "inherit")',
         'scope': ['CSS']
+      },
+      'javascript.builtins.array': {
+        'code': '[1, 2, 3]',
+        'scope': ['JavaScript']
       }
     };
     const expectedManifest = {
-      'endpoints': {
-        'individual': {
-          '/tests/api/Attr': ['api.Attr', 'api.Attr.name'],
-          '/tests/api/Attr/name': ['api.Attr.name'],
-          '/tests/css/properties/font-family': [
-            'css.properties.font-family'
-          ]
+      'tests': {
+        'api.Attr': {
+          'code': '"Attr" in self',
+          'scope': ['Window', 'Worker', 'ServiceWorker']
         },
+        'api.Attr.name': {
+          'code': '"Attr" in self && "name" in Attr.prototype',
+          'scope': ['Window', 'Worker']
+        },
+        'css.properties.font-family': {
+          'code': '"fontFamily" in document.body.style || CSS.supports("font-family", "inherit")',
+          'scope': ['CSS']
+        },
+        'javascript.builtins.array': {
+          'code': '[1, 2, 3]',
+          'scope': ['JavaScript']
+        }
+      },
+      'endpoints': {
         'main': {
           '/tests/api/interfaces': {
             'entries': ['api.Attr', 'api.Attr.name'],
@@ -1175,20 +1190,22 @@ describe('build', () => {
             'httpsOnly': false,
             'scope': 'CSS'
           }
-        }
-      },
-      'tests': {
-        'api.Attr': {
-          'code': '"Attr" in self',
-          'scope': ['Window', 'Worker', 'ServiceWorker']
         },
-        'api.Attr.name': {
-          'code': '"Attr" in self && "name" in Attr.prototype',
-          'scope': ['Window', 'Worker']
-        },
-        'css.properties.font-family': {
-          'code': '"fontFamily" in document.body.style || CSS.supports("font-family", "inherit")',
-          'scope': ['CSS']
+        'individual': {
+          '/tests/api/Attr': ['api.Attr', 'api.Attr.name'],
+          '/tests/api/Attr/name': ['api.Attr.name'],
+          '/tests/css/properties/font-family': [
+            'css.properties.font-family'
+          ],
+          '/tests/javascript': [
+            'javascript.builtins.array'
+          ],
+          '/tests/javascript/builtins': [
+            'javascript.builtins.array'
+          ],
+          '/tests/javascript/builtins/array': [
+            'javascript.builtins.array'
+          ]
         }
       }
     };
