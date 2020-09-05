@@ -555,72 +555,76 @@ async function copyResources() {
   });
 }
 
-async function build(webref, bcd) {
+function buildManifest(tests) {
   const manifest = {
-    tests: {},
+    tests: tests,
     endpoints: {
       main: {},
       individual: {}
     }
   };
 
-  for (const buildFunc of [buildIDL, buildCSS]) {
-    const tests = buildFunc(webref, bcd);
-    manifest.tests = Object.assign(manifest.tests, tests);
-    for (const [ident, test] of Object.entries(tests)) {
-      const scopes = Array.isArray(test.scope) ? test.scope : [test.scope];
-      for (const scope of scopes) {
-        let endpoint = '';
-        switch (scope) {
-          case 'Window':
-            endpoint = '/tests/api/interfaces';
-            break;
-          case 'Worker':
-          case 'DedicatedWorker':
-            endpoint = '/tests/api/workerinterfaces';
-            break;
-          case 'ServiceWorker':
-            endpoint = '/tests/api/serviceworkerinterfaces';
-            break;
-          case 'CSS':
-            endpoint = '/tests/css/properties';
-            break;
-        }
-
-        if (endpoint) {
-          if (!(endpoint in manifest.endpoints.main)) {
-            manifest.endpoints.main[endpoint] = {
-              scope: scope,
-              httpsOnly: scope === 'ServiceWorker',
-              entries: []
-            };
-          }
-          if (!(ident in manifest.endpoints.main[endpoint].entries)) {
-            manifest.endpoints.main[endpoint].entries.push(ident);
-          }
-        }
+  for (const [ident, test] of Object.entries(manifest.tests)) {
+    const scopes = Array.isArray(test.scope) ? test.scope : [test.scope];
+    for (const scope of scopes) {
+      let endpoint = '';
+      switch (scope) {
+        case 'Window':
+          endpoint = '/tests/api/interfaces';
+          break;
+        case 'Worker':
+        case 'DedicatedWorker':
+          endpoint = '/tests/api/workerinterfaces';
+          break;
+        case 'ServiceWorker':
+          endpoint = '/tests/api/serviceworkerinterfaces';
+          break;
+        case 'CSS':
+          endpoint = '/tests/css/properties';
+          break;
       }
 
-      let url = '/tests';
-      for (const part of ident.split('.')) {
-        url += '/' + part;
+      if (endpoint) {
+        if (!(endpoint in manifest.endpoints.main)) {
+          manifest.endpoints.main[endpoint] = {
+            scope: scope,
+            httpsOnly: scope === 'ServiceWorker',
+            entries: []
+          };
+        }
+        if (!(ident in manifest.endpoints.main[endpoint].entries)) {
+          manifest.endpoints.main[endpoint].entries.push(ident);
+        }
+      }
+    }
 
-        if (['/tests/api', '/tests/css', '/tests/css/properties'].includes(url)) {
-          // Ignore things tested in main endpoints
-          continue;
-        }
+    let url = '/tests';
+    for (const part of ident.split('.')) {
+      url += '/' + part;
 
-        if (!(url in manifest.endpoints.individual)) {
-          manifest.endpoints.individual[url] = [];
-        }
-        if (!(ident in manifest.endpoints.individual[url])) {
-          manifest.endpoints.individual[url].push(ident);
-        }
+      if (['/tests/api', '/tests/css', '/tests/css/properties'].includes(url)) {
+        // Ignore things tested in main endpoints
+        continue;
+      }
+
+      if (!(url in manifest.endpoints.individual)) {
+        manifest.endpoints.individual[url] = [];
+      }
+      if (!(ident in manifest.endpoints.individual[url])) {
+        manifest.endpoints.individual[url].push(ident);
       }
     }
   }
 
-  await writeFile('MANIFEST.json', manifest);
+  return manifest;
+}
+
+async function build(webref, bcd) {
+  const IDLTests = buildIDL(webref);
+  const CSSTests = buildCSS(webref, bcd);
+  const tests = Object.assign(IDLTests, CSSTests);
+
+  await writeFile('MANIFEST.json', buildManifest(tests));
   await copyResources();
 }
 
