@@ -2685,63 +2685,43 @@ describe('build', () => {
       }
     };
     const expectedManifest = {
-      'tests': {
-        'api.Attr': {
-          'code': '"Attr" in self',
-          'scope': ['Window', 'Worker', 'ServiceWorker']
+      'main': {
+        '/tests/api/interfaces': {
+          'entries': ['api.Attr', 'api.Attr.name'],
+          'httpsOnly': false,
+          'scope': 'Window'
         },
-        'api.Attr.name': {
-          'code': '"Attr" in self && "name" in Attr.prototype',
-          'scope': ['Window', 'Worker']
+        '/tests/api/serviceworkerinterfaces': {
+          'entries': ['api.Attr'],
+          'httpsOnly': true,
+          'scope': 'ServiceWorker'
         },
-        'css.properties.font-family': {
-          'code': '"fontFamily" in document.body.style || CSS.supports("font-family", "inherit")',
-          'scope': ['CSS']
+        '/tests/api/workerinterfaces': {
+          'entries': ['api.Attr', 'api.Attr.name'],
+          'httpsOnly': false,
+          'scope': 'Worker'
         },
-        'javascript.builtins.array': {
-          'code': '[1, 2, 3]',
-          'scope': ['JavaScript']
+        '/tests/css/properties': {
+          'entries': ['css.properties.font-family'],
+          'httpsOnly': false,
+          'scope': 'CSS'
         }
       },
-      'endpoints': {
-        'main': {
-          '/tests/api/interfaces': {
-            'entries': ['api.Attr', 'api.Attr.name'],
-            'httpsOnly': false,
-            'scope': 'Window'
-          },
-          '/tests/api/serviceworkerinterfaces': {
-            'entries': ['api.Attr'],
-            'httpsOnly': true,
-            'scope': 'ServiceWorker'
-          },
-          '/tests/api/workerinterfaces': {
-            'entries': ['api.Attr', 'api.Attr.name'],
-            'httpsOnly': false,
-            'scope': 'Worker'
-          },
-          '/tests/css/properties': {
-            'entries': ['css.properties.font-family'],
-            'httpsOnly': false,
-            'scope': 'CSS'
-          }
-        },
-        'individual': {
-          '/tests/api/Attr': ['api.Attr', 'api.Attr.name'],
-          '/tests/api/Attr/name': ['api.Attr.name'],
-          '/tests/css/properties/font-family': [
-            'css.properties.font-family'
-          ],
-          '/tests/javascript': [
-            'javascript.builtins.array'
-          ],
-          '/tests/javascript/builtins': [
-            'javascript.builtins.array'
-          ],
-          '/tests/javascript/builtins/array': [
-            'javascript.builtins.array'
-          ]
-        }
+      'individual': {
+        '/tests/api/Attr': ['api.Attr', 'api.Attr.name'],
+        '/tests/api/Attr/name': ['api.Attr.name'],
+        '/tests/css/properties/font-family': [
+          'css.properties.font-family'
+        ],
+        '/tests/javascript': [
+          'javascript.builtins.array'
+        ],
+        '/tests/javascript/builtins': [
+          'javascript.builtins.array'
+        ],
+        '/tests/javascript/builtins/array': [
+          'javascript.builtins.array'
+        ]
       }
     };
 

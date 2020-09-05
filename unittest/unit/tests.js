@@ -17,66 +17,65 @@
 const assert = require('assert');
 const Tests = require('../../tests');
 
-const MANIFEST = {
-  tests: {
-    'api.AbortController': {
-      'code': '"AbortController" in self',
-      'scope': [
-        'Window',
-        'Worker'
-      ]
-    },
-    'api.AbortController.signal': {
-      'code': '"AbortController" in self && "signal" in AbortController',
-      'scope': [
-        'Window',
-        'Worker'
-      ]
-    },
-    'api.FooBar': null
+const testDatabase = {
+  'api.AbortController': {
+    'code': '"AbortController" in self',
+    'scope': [
+      'Window',
+      'Worker'
+    ]
   },
-  endpoints: {
-    main: {
-      '/tests/api/interfaces': {
-        scope: 'Window',
-        httpsOnly: false,
-        entries: [
-          'api.AbortController',
-          'api.AbortController.signal'
-        ]
-      },
-      '/tests/api/workerinterfaces': {
-        scope: 'Worker',
-        httpsOnly: false,
-        entries: [
-          'api.AbortController'
-        ]
-      },
-      '/tests/api/serviceworkerinterfaces': {
-        scope: 'ServiceWorker',
-        httpsOnly: true,
-        entries: []
-      },
-      '/tests/css/properties': {
-        scope: 'CSS',
-        httpsOnly: false,
-        entries: []
-      }
-    },
-    individual: {
-      '/tests/api/AbortController': [
+  'api.AbortController.signal': {
+    'code': '"AbortController" in self && "signal" in AbortController',
+    'scope': [
+      'Window',
+      'Worker'
+    ]
+  },
+  'api.FooBar': null
+};
+const MANIFEST = {
+  main: {
+    '/tests/api/interfaces': {
+      scope: 'Window',
+      httpsOnly: false,
+      entries: [
         'api.AbortController',
         'api.AbortController.signal'
-      ],
-      '/tests/api/AbortController/signal': [
-        'api.AbortController.signal'
       ]
+    },
+    '/tests/api/workerinterfaces': {
+      scope: 'Worker',
+      httpsOnly: false,
+      entries: [
+        'api.AbortController'
+      ]
+    },
+    '/tests/api/serviceworkerinterfaces': {
+      scope: 'ServiceWorker',
+      httpsOnly: true,
+      entries: []
+    },
+    '/tests/css/properties': {
+      scope: 'CSS',
+      httpsOnly: false,
+      entries: []
     }
+  },
+  individual: {
+    '/tests/api/AbortController': [
+      'api.AbortController',
+      'api.AbortController.signal'
+    ],
+    '/tests/api/AbortController/signal': [
+      'api.AbortController.signal'
+    ]
   }
 };
 
 describe('Tests', () => {
   const tests = new Tests({
+    tests: testDatabase,
     manifest: MANIFEST,
     host: 'host.test'
   });

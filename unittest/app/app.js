@@ -18,9 +18,9 @@ const {app, version} = require('../../app');
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 
-const manifest = require('../../MANIFEST.json');
-const mainEndpoints = Object.entries(manifest.endpoints.main);
-const individualEndpoints = Object.entries(manifest.endpoints.individual);
+const manifest = require('../../generated/MANIFEST.json');
+const mainEndpoints = Object.entries(manifest.main);
+const individualEndpoints = Object.entries(manifest.individual);
 
 chai.use(chaiHttp);
 const agent = chai.request.agent(app);
