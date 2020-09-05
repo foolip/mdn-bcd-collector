@@ -2,9 +2,8 @@
   "all": true,
   "exclude": [
     "**/generated/**",
-    "**/static/**",
     "**/unittest/**",
-    "**/json3.min.js",
-    "**/coverage/**"
+    "**/coverage/**",
+    "**/json3.min.js"
   ]
 }
