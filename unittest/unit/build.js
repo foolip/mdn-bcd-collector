@@ -22,9 +22,8 @@ const assert = chai.assert;
 const expect = chai.expect;
 
 const WebIDL2 = require('webidl2');
+const mockFs = require('mock-fs');
 const proxyquire = require('proxyquire');
-
-const fs = require('fs');
 
 const {
   writeFile,
@@ -47,6 +46,13 @@ describe('build', () => {
   describe('writeFile', () => {
     const filepath = '.testtmp';
 
+    beforeEach(() => {
+      mockFs({
+        '.testtmp': '',
+        './custom-tests.json': {'api': {}, 'css': {}}
+      });
+    });
+
     it('simple supported', async () => {
       await writeFile(filepath, 'foo\nbar');
       assert.fileContent(filepath, 'foo\nbar\n');
@@ -63,7 +69,7 @@ describe('build', () => {
     });
 
     afterEach(() => {
-      fs.unlinkSync(filepath);
+      mockFs.restore();
     });
   });
 
