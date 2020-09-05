@@ -84,14 +84,14 @@ function compileTestCode(test, prefix) {
   if (typeof(test) === 'string') {
     return test.replace(/PREFIX/g, prefix);
   } else if (test.property == 'constructor') {
-    return `${prefix}${test.scope} in self && bcd.testConstructor("${prefix}${test.scope}")`;
+    return `'${prefix}${test.scope}' in self && bcd.testConstructor('${prefix}${test.scope}')`;
   } else if (test.scope === 'CSS.supports') {
     const thisPrefix = prefix ? `-${prefix}-` : '';
     return `CSS.supports("${thisPrefix}${test.property}", "inherit")`;
   } else if (test.property.startsWith('Symbol.')) {
-    return `${prefix}${test.scope} in self && 'Symbol' in self && ${test.property.replace('Symbol.', '')} in Symbol && ${test.property} in ${prefix}${test.scope}`;
+    return `'${prefix}${test.scope}'' in self && 'Symbol' in self && '${test.property.replace('Symbol.', '')}' in Symbol && ${test.property} in ${prefix}${test.scope}`;
   } else {
-    return `"${prefix}${test.property}" in ${test.scope}`;
+    return `'${prefix}${test.property}' in ${scopePrefix}${test.scope}`;
   }
 }
 
