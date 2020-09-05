@@ -334,6 +334,12 @@
   }
 
   function finishAndDisplay(results) {
+    var css = document.createElement('link');
+    css.rel = 'stylesheet';
+    css.type = 'text/css';
+    css.href = '/resources/style.css';
+    document.head.appendChild(css);
+
     var response = '';
     for (var i=0; i<results.length; i++) {
       var result = results[i];
