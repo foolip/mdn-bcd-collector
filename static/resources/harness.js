@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/* global CSS, console, document, window, location, navigator, XMLHttpRequest,
+/* global console, document, window, location, navigator, XMLHttpRequest,
           self, Worker, Promise, setTimeout, clearTimeout */
 
 'use strict';
@@ -23,26 +23,12 @@
 (function(global) {
   var pending = [];
 
-  var prefixes = {
-    api: ['', 'moz', 'Moz', 'webkit', 'WebKit', 'webKit', 'ms', 'MS'],
-    css: ['', 'khtml', 'webkit', 'moz', 'ms']
-  };
-  // TODO Detect browser and select prefixes accordingly (along with
-  // allowing testing with alternative name)
-
   function stringify(value) {
     try {
       return String(value);
     } catch (err) {
       return 'unserializable value';
     }
-  }
-
-  function stringStartsWith(string, search) {
-    if (string.startsWith) {
-      return string.startsWith(search);
-    }
-    return string.substring(0, 0 + search.length) === search;
   }
 
   function stringIncludes(string, search) {
@@ -63,8 +49,8 @@
     }
   }
 
-  function addTest(name, code, scope, info) {
-    pending.push({name: name, code: code, scope: scope, info: info});
+  function addTest(name, tests, scope, info) {
+    pending.push({name: name, tests: tests, scope: scope, info: info});
   }
 
   function testConstructor(iface) {
@@ -99,159 +85,6 @@
     return result;
   }
 
-  // eslint-disable-next-line no-unused-vars
-  function testWithPrefix(data) {
-    // XXX Not actively used; kept for historical purposes. Code compilation
-    // has been moved to the server-side, aside from prefixes. Once prefixes
-    // are implemented, remove this code
-
-    var result = {name: data.name, info: {}};
-    var category = data.name.split('.')[0];
-
-    var prefixesToTest = [''];
-    if (category in prefixes) {
-      prefixesToTest = prefixes[category];
-    }
-
-    try {
-      var parentPrefix = '';
-      var code = data.code;
-      var compiledCode = [];
-      if (!Array.isArray(code)) {
-        code = [code];
-      }
-
-      for (var i in code) {
-        var subtest = code[i];
-
-        if (typeof(subtest) === 'string') {
-          compiledCode.push(subtest);
-          value = eval(subtest);
-          // TODO: allow callback and promise-vending funcs
-          if (typeof value === 'boolean') {
-            result.result = value;
-          } else {
-            result.result = null;
-            result.message = 'returned ' + stringify(value);
-          }
-        } else if (subtest.property == 'constructor') {
-          var iface = parentPrefix+subtest.scope;
-          compiledCode.push('new '+iface+'()');
-
-          try {
-            eval('new '+iface+'()');
-            result.result = true;
-          } catch (err) {
-            if (
-              stringIncludes(err.message, 'Illegal constructor') ||
-              stringIncludes(err.message, 'Function expected')
-            ) {
-              result.result = false;
-            } else if (
-              stringIncludes(err.message, 'Not enough arguments') ||
-              stringIncludes(err.message, 'argument required') ||
-              stringIncludes(err.message, 'arguments required') ||
-              stringIncludes(err.message, 'Argument not optional')
-            ) {
-              // If it failed to construct and it's not illegal or just needs
-              // more arguments, the constructor's good
-              result.result = true;
-            } else {
-              result.result = null;
-            }
-
-            result.message = 'threw ' + stringify(err);
-          }
-        } else {
-          var compiled = '';
-
-          for (var j in prefixesToTest) {
-            var prefix = prefixesToTest[j];
-            var property = subtest.property;
-            var value;
-            var thisCompiled = '';
-
-            if (subtest.scope === 'CSS.supports') {
-              if ('CSS' in self) {
-                if (prefix) {
-                  var prefixToAdd = '-' + prefix;
-                  if (!stringStartsWith(property, '-')) {
-                    prefixToAdd += '-';
-                  }
-                  property = prefixToAdd + property;
-                }
-
-                thisCompiled = 'CSS.supports(\'' +
-                    property + '\', \'inherit\');';
-                value = CSS.supports(property, 'inherit');
-              } else {
-                value = null;
-                result.message = 'Browser doesn\'t support CSS API';
-                break;
-              }
-            } else {
-              if (prefix) {
-                property = prefix + property.charAt(0).toUpperCase() +
-                           property.slice(1);
-              }
-
-              if (stringStartsWith(property, 'Symbol.')) {
-                thisCompiled = property+' in '+parentPrefix+subtest.scope;
-                value = eval(thisCompiled);
-              } else {
-                thisCompiled = '"'+property+'" in '+parentPrefix+subtest.scope;
-                value = eval(thisCompiled);
-              }
-
-              if (!compiled) {
-                // Set to first compiled statement in case support is false
-                compiled = thisCompiled;
-              }
-            }
-
-            result.result = value;
-            if (value === true) {
-              compiled = thisCompiled;
-
-              if (subtest.scope === 'CSS.supports') {
-                if (prefix) {
-                  parentPrefix = '-' + prefix + '-';
-                } else {
-                  parentPrefix = '';
-                }
-              } else {
-                parentPrefix = prefix;
-              }
-              break;
-            }
-          }
-
-          compiledCode.push(compiled);
-        }
-
-        if (result.result === false) {
-          break;
-          // Tests are written in hierarchy order, so if the parent (first
-          // test) is unsupported, so is the child (next test)
-        }
-
-        result.prefix = parentPrefix;
-      }
-    } catch (err) {
-      result.result = null;
-      result.message = 'threw ' + stringify(err);
-    }
-
-    if (data.info !== undefined) {
-      result.info = Object.assign({}, result.info, data.info);
-    }
-
-    result.info.code = compiledCode.join(' && ');
-    result.info.scope = data.scope;
-
-    return result;
-  }
-
   // Each test is mapped to an object like this:
   // {
   //   "name": "api.Attr.localName",
@@ -268,29 +101,39 @@
   function test(data) {
     var result = {name: data.name, info: {}};
 
-    try {
-      var value = eval(data.code);
-      if (value && typeof value === 'object' && 'result' in value) {
-        result.result = value.result;
-        if (value.message) {
-          result.message = value.message;
+    for (var i = 0; i < data.tests.length; i++) {
+      var test = data.tests[i];
+
+      try {
+        var value = eval(test.code);
+        if (value && typeof value === 'object' && 'result' in value) {
+          result.result = value.result;
+          if (value.message) {
+            result.message = value.message;
+          }
+        } else if (typeof value === 'boolean') {
+          result.result = value;
+        } else {
+          result.result = null;
+          result.message = 'returned ' + stringify(value);
         }
-      } else if (typeof value === 'boolean') {
-        result.result = value;
-      } else {
+      } catch (err) {
         result.result = null;
-        result.message = 'returned ' + stringify(value);
+        result.message = 'threw ' + stringify(err);
       }
-    } catch (err) {
-      result.result = null;
-      result.message = 'threw ' + stringify(err);
+
+      if (result.result !== false) {
+        result.info.code = test.code;
+        if (test.prefix) result.info.prefix = test.prefix;
+        break;
+      }
     }
 
     if (data.info !== undefined) {
       result.info = Object.assign({}, result.info, data.info);
     }
 
-    result.info.code = data.code;
+    if (result.result === false) result.info.code = data.tests[0].code;
     result.info.scope = data.scope;
 
     return result;

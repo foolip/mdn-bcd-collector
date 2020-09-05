@@ -33,7 +33,7 @@ describe('harness.js', function() {
   });
 
   it('return true', function(done) {
-    bcd.addTest('name', 'true', 'test');
+    bcd.addTest('name', [{code: 'true'}], 'test');
     bcd.run('Window', function(results) {
       assert.deepStrictEqual(results, [{
         name: 'name',
@@ -45,7 +45,7 @@ describe('harness.js', function() {
   });
 
   it('return false', function(done) {
-    bcd.addTest('name', 'false', 'test');
+    bcd.addTest('name', [{code: 'false'}], 'test');
     bcd.run('Window', function(results) {
       assert.deepStrictEqual(results, [{
         name: 'name',
@@ -57,7 +57,7 @@ describe('harness.js', function() {
   });
 
   it('return null', function(done) {
-    bcd.addTest('name', 'null', 'test');
+    bcd.addTest('name', [{code: 'null'}], 'test');
     bcd.run('Window', function(results) {
       assert.deepStrictEqual(results, [{
         name: 'name',
@@ -73,7 +73,7 @@ describe('harness.js', function() {
     if (typeof Symbol === 'undefined') {
       this.skip();
     }
-    bcd.addTest('name', 'Symbol(\'bar\')', 'test');
+    bcd.addTest('name', [{code: 'Symbol(\'bar\')'}], 'test');
     bcd.run('Window', function(results) {
       assert.deepStrictEqual(results, [{
         name: 'name',
@@ -86,7 +86,7 @@ describe('harness.js', function() {
   });
 
   it('return undefined', function(done) {
-    bcd.addTest('name', 'undefined', 'test');
+    bcd.addTest('name', [{code: 'undefined'}], 'test');
     bcd.run('Window', function(results) {
       assert.deepStrictEqual(results, [{
         name: 'name',
@@ -99,7 +99,7 @@ describe('harness.js', function() {
   });
 
   it('throw error', function(done) {
-    bcd.addTest('name', 'throw new Error(\'something went wrong\')', 'test');
+    bcd.addTest('name', [{code: 'throw new Error(\'something went wrong\')'}], 'test');
     bcd.run('Window', function(results) {
       assert.deepStrictEqual(results, [{
         name: 'name',
@@ -113,7 +113,7 @@ describe('harness.js', function() {
 
   it('include info', function(done) {
     var info = {'extra': 'stuff'};
-    bcd.addTest('ctx', 'true', 'test', info);
+    bcd.addTest('ctx', [{code: 'true'}], 'test', info);
     bcd.run('Window', function(results) {
       assert.deepStrictEqual(results[0].info, {
         extra: 'stuff', code: 'true', scope: 'test'
@@ -123,8 +123,8 @@ describe('harness.js', function() {
   });
 
   it('two tests', function(done) {
-    bcd.addTest('first', 'true', 'test', {a: 1});
-    bcd.addTest('second', 'false', 'test', {b: 2});
+    bcd.addTest('first', [{code: 'true'}], 'test', {a: 1});
+    bcd.addTest('second', [{code: 'false'}], 'test', {b: 2});
     bcd.run('Window', function(results) {
       assert.deepEqual(results, [{
         name: 'first',

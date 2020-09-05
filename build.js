@@ -80,7 +80,7 @@ function getCustomTestCSS(name) {
       `(function() {${customTests.css.properties[name]}})()`;
 }
 
-function compileTestCode(test, prefix) {
+function compileTestCode(test, prefix = '', scopePrefix = '') {
   if (typeof(test) === 'string') {
     return test.replace(/PREFIX/g, prefix);
   } else if (test.property == 'constructor') {
@@ -96,24 +96,36 @@ function compileTestCode(test, prefix) {
 }
 
 function compileTest(test) {
-  if (!'raw' in test && 'tests' in test) return test;
+  if (!('raw' in test) && 'tests' in test) return test;
 
-  const newTest = {'code': [], 'scope': test.scope};
-  
-  const compiledCode = [];
-  const subtests = Array.isArray(test.raw.code) ?
-      test.raw.code : [test.raw.code];
+  const newTest = {'tests': [], 'scope': test.scope};
+
   const prefixesToTest = test.scope == ['CSS'] ?
       prefixes.css : prefixes.api;
 
-  for (const i in subtests) {
-    const subtest = subtests[i];
-    const lastSubtest = i == subtests.length-1;
+  if (!Array.isArray(test.raw.code)) {
+    for (const prefix of prefixesToTest) {
+      newTest.tests.push({
+        code: compileTestCode(test.raw.code, prefix),
+        prefix: prefix
+      });
+    }
+  } else {
+    for (const prefix1 of prefixesToTest) {
+      const parentCode = compileTestCode(test.raw.code[0], prefix1);
 
-    compiledCode.push(compileTestCode(subtest, ''));
+      for (const prefix2 of prefixesToTest) {
+        newTest.tests.push({
+          code: [
+            parentCode,
+            compileTestCode(test.raw.code[1], prefix2, prefix1)
+          ].join(` ${test.raw.combinator} `),
+          prefix: prefix2
+        });
+      }
+    }
   }
 
-  newTest.code = compiledCode.join(` ${test.raw.combinator} `);
   return newTest;
 }
 
@@ -369,7 +381,7 @@ function buildIDLTests(ast) {
     tests[`api.${iface.name}`] = compileTest({
       'raw': {
         'code': customIfaceTest || {property: iface.name, scope: 'self'},
-        'combinator': '&&',
+        'combinator': '&&'
       },
       'scope': Array.from(exposureSet)
     });
@@ -439,7 +451,7 @@ function buildIDLTests(ast) {
       tests[`api.${iface.name}.${member.name}`] = compileTest({
         'raw': {
           'code': expr,
-          'combinator': '&&',
+          'combinator': '&&'
         },
         'scope': Array.from(exposureSet)
       });
@@ -526,7 +538,7 @@ function buildCSS(webref, bcd) {
           {property: attrName, scope: 'document.body.style'},
           {property: name, scope: 'CSS.supports'}
         ],
-        'combinator': '||',
+        'combinator': '||'
       },
       'scope': ['CSS']
     });

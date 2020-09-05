@@ -113,7 +113,7 @@ class Tests {
           individual = true;
         }
         if (scope == testScope) {
-          lines.push(`bcd.addTest("${ident}", ${JSON.stringify(test.code)}, "${scope}");`);
+          lines.push(`bcd.addTest("${ident}", ${JSON.stringify(test.tests)}, "${scope}");`);
         }
       }
     }
