@@ -17,6 +17,8 @@
 const assert = require('assert');
 const puppeteer = require('puppeteer');
 const pti = require('puppeteer-to-istanbul');
+const fs = require('fs');
+const path = require('path');
 
 const {app} = require('../../app');
 
@@ -58,7 +60,28 @@ describe('harness.js', () => {
 
       if (product == 'chrome') {
         const jsCoverage = await page.coverage.stopJSCoverage();
-        pti.write(jsCoverage, {includeHostname: false, storagePath: './.nyc_output'});
+        pti.write(jsCoverage, {
+          includeHostname: false,
+          storagePath: './.nyc_output'
+        });
+
+        // Slight adjustment of coverage files to point to original files
+        const coveragePath = path.join(
+            __dirname, '..', '..', '.nyc_output', 'out.json'
+        );
+        fs.readFile(coveragePath, 'utf8', function(err, data) {
+          if (err) {
+            return console.log(err);
+          }
+          const result = data.replace(
+              /\.nyc_output\/resources/g,
+              'static/resources'
+          );
+
+          fs.writeFile(coveragePath, result, 'utf8', function(err) {
+            if (err) return console.log(err);
+          });
+        });
       }
 
       assert.equal(report.stats.failures, 0);
