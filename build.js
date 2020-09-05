@@ -83,15 +83,26 @@ function getCustomTestCSS(name) {
 function compileTestCode(test, prefix = '', scopePrefix = '') {
   if (typeof(test) === 'string') {
     return test.replace(/PREFIX/g, prefix);
-  } else if (test.property == 'constructor') {
-    return `'${prefix}${test.scope}' in self && bcd.testConstructor('${prefix}${test.scope}')`;
-  } else if (test.scope === 'CSS.supports') {
-    const thisPrefix = prefix ? `-${prefix}-` : '';
-    return `CSS.supports("${thisPrefix}${test.property}", "inherit")`;
-  } else if (test.property.startsWith('Symbol.')) {
-    return `'${prefix}${test.scope}'' in self && 'Symbol' in self && '${test.property.replace('Symbol.', '')}' in Symbol && ${test.property} in ${prefix}${test.scope}`;
   } else {
-    return `'${prefix}${test.property}' in ${scopePrefix}${test.scope}`;
+    const property = prefix ?
+      prefix + test.property.charAt(0).toUpperCase() +
+      test.property.slice(1) : test.property;
+    const scopeAsProperty = prefix ?
+        prefix + test.scope.charAt(0).toUpperCase() +
+        test.scope.slice(1) : test.scope;
+    const scope = scopePrefix ?
+        scopePrefix + test.scope.charAt(0).toUpperCase() +
+        test.scope.slice(1) : test.scope;
+    if (test.property == 'constructor') {
+      return `"${scopeAsProperty}" in self && bcd.testConstructor("${scopeAsProperty}")`;
+    } else if (test.scope === 'CSS.supports') {
+      const thisPrefix = prefix ? `-${prefix}-` : '';
+      return `CSS.supports("${thisPrefix}${test.property}", "inherit")`;
+    } else if (test.property.startsWith('Symbol.')) {
+      return `"${scopeAsProperty}" in self && "Symbol" in self && "${test.property.replace('Symbol.', '')}" in Symbol && ${test.property} in ${scopeAsProperty}`;
+    } else {
+      return `"${property}" in ${scope}`;
+    }
   }
 }
 
@@ -100,14 +111,29 @@ function compileTest(test) {
 
   const newTest = {'tests': [], 'scope': test.scope};
 
-  const prefixesToTest = test.scope == ['CSS'] ?
+  const prefixesToTest = test.scope[0] == ['CSS'] ?
       prefixes.css : prefixes.api;
 
-  if (!Array.isArray(test.raw.code)) {
+  if (test.scope[0] == ['CSS']) {
+    for (const prefix of prefixesToTest) {
+      const code = (`${compileTestCode(
+          test.raw.code[0], prefix
+      )} ${test.raw.combinator} ${compileTestCode(
+          test.raw.code[1], prefix
+      )}`);
+
+      if (!newTest.tests.length || code !== newTest.tests[0].code) {
+        newTest.tests.push({
+          code: code,
+          prefix: prefix
+        });
+      }
+    }
+  } else if (!Array.isArray(test.raw.code)) {
     for (const prefix of prefixesToTest) {
       const code = compileTestCode(test.raw.code, prefix);
 
-      if (newTest.tests.length && code !== newTest.tests[0].code) {
+      if (!newTest.tests.length || code !== newTest.tests[0].code) {
         newTest.tests.push({
           code: code,
           prefix: prefix
@@ -122,7 +148,7 @@ function compileTest(test) {
         const childCode = compileTestCode(test.raw.code[1], prefix2, prefix1);
         const code = (`${parentCode} ${test.raw.combinator} ${childCode}`);
 
-        if (newTest.tests.length && code !== newTest.tests[0].code) {
+        if (!newTest.tests.length || code !== newTest.tests[0].code) {
           newTest.tests.push({
             code: code,
             prefix: prefix2
