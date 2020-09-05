@@ -1,89 +1,85 @@
 <!DOCTYPE html>
 <html>
-<head>
-<!--Copyright 2020 Google LLC
+  <head>
+    <!--Copyright 2020 Google LLC
 
-Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
+    Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with the License. You may obtain a copy of the License at
 
-     https://www.apache.org/licenses/LICENSE-2.0
+         https://www.apache.org/licenses/LICENSE-2.0
 
-Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.-->
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width">
-<script src="/resources/json3.min.js"></script>
-</head>
-<body>
-<h1>mdn-bcd-collector</h1>
-<p>Data collection service for <a href="https://github.com/mdn/browser-compat-data">mdn/browser-compat-data</a>. This website provides automatic feature detection for Web APIs and CSS properties, to assist in obtaining data for the BCD project.</p>
+    Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.-->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <link rel="stylesheet" href="/resources/style.css" />
+  </head>
+  <body>
+    <h1>mdn-bcd-collector</h1>
+    <p>Data collection service for <a href="https://github.com/mdn/browser-compat-data">mdn/browser-compat-data</a>. This website provides automatic feature detection for Web APIs and CSS properties, to assist in obtaining data for the BCD project.</p>
 
-<div>
-  <select id="tests" disabled>
-    <option value="">Loading tests...</option>
-  </select><br />
-  <button id="start" disabled>Loading tests...</button>
-</div>
-<script>
-function getTests() {
-  var button = document.getElementById('start');
-  var dropdown = document.getElementById('tests');
-  var client = new XMLHttpRequest();
-  client.open('GET', '/api/tests', true);
-  client.send();
-  client.onreadystatechange = function() {
-    if (client.readyState == 4) {
-      if (client.status >= 500) {
-        button.textContent = 'Failed to load tests';
-        dropdown.remove(0);
-        var c = document.createElement("option");
-        c.text = 'Failed to load tests';
-        c.value = '';
-        dropdown.add(c);
-      } else {
-        var response = JSON.parse(client.responseText);
-        var tests = response[0];
-        var individualItems = response[1];
-        
-        dropdown.removeAttribute('disabled');
-        dropdown.remove(0);
-        button.removeAttribute('disabled');
-        button.textContent = 'Run All Tests';
-        var c = document.createElement("option");
-        c.text = "All Tests";
-        c.value = tests[0];
-        dropdown.add(c);
-        for (var i=0; i<individualItems.length; i++) {
-          var item = individualItems[i];
-          var option = document.createElement("option");
-          option.text = item[0];
-          option.value = item[1];
-          dropdown.add(option);
-        }
+    <div>
+      <button id="start" disabled>Loading tests...</button>
+      <select id="tests" disabled>
+        <option value="">Loading tests...</option>
+      </select>
+    </div>
 
-        dropdown.onchange = function() {
-          var choice = dropdown.options[dropdown.selectedIndex].textContent;
-          button.textContent = 'Run ' + choice;
-        }
+    <p>Note: this website is in beta; not all feature detection is accurate yet. If you find any errors, please file an issue on the GitHub page.</p>
+    <p>Known caveats:</p>
+    <ul>
+      <li>Detection for features under alternative names is not yet supported</li>
+      <li>In older browsers, some attributes aren't initialized in the API prototypes, resulting in false negatives</li>
+      <li>Some APIs are accessed through other APIs and aren't exposed on their own; custom tests have not been written for them all</li>
+    </ul>
 
-        button.onclick = function() {
-          var newUrl = dropdown.options[dropdown.selectedIndex].value;
-          if (newUrl) window.location = newUrl;
+    <p><a href="https://github.com/foolip/mdn-bcd-collector">Source on GitHub</a></p>
+
+    <script src="/resources/json3.min.js"></script>
+    <script>
+    function getTests() {
+      var button = document.getElementById('start');
+      var dropdown = document.getElementById('tests');
+      var client = new XMLHttpRequest();
+      client.open('GET', '/api/tests', true);
+      client.send();
+      client.onreadystatechange = function() {
+        if (client.readyState == 4) {
+          if (client.status >= 500) {
+            button.textContent = 'Failed to load tests';
+            dropdown.remove(0);
+            var c = document.createElement("option");
+            c.text = 'Failed to load tests';
+            c.value = '';
+            dropdown.add(c);
+          } else {
+            var response = JSON.parse(client.responseText);
+            var tests = response[0];
+            var individualItems = response[1];
+            
+            dropdown.removeAttribute('disabled');
+            dropdown.remove(0);
+            button.removeAttribute('disabled');
+            button.textContent = 'Run';
+            var c = document.createElement("option");
+            c.text = "All Tests";
+            c.value = tests[0];
+            dropdown.add(c);
+            for (var i=0; i<individualItems.length; i++) {
+              var item = individualItems[i];
+              var option = document.createElement("option");
+              option.text = item[0];
+              option.value = item[1];
+              dropdown.add(option);
+            }
+
+            button.onclick = function() {
+              var newUrl = dropdown.options[dropdown.selectedIndex].value;
+              if (newUrl) window.location = newUrl;
+            }
+          }
         }
       }
     }
-  }
-}
-getTests();
-</script>
-
-
-<p>Note: this website is in beta; not all feature detection is accurate yet. If you find any errors, please file an issue on the GitHub page.</p>
-<p>Known caveats:</p>
-<ul>
-  <li>Detection for features under alternative names is not yet supported</li>
-  <li>In older browsers, some attributes aren't initialized in the API prototypes, resulting in false negatives</li>
-  <li>Some APIs are accessed through other APIs and aren't exposed on their own; custom tests have not been written for them all</li>
-</ul>
-
-<p><a href="https://github.com/foolip/mdn-bcd-collector">Source on GitHub</a></p>
-</body>
+    getTests();
+    </script>
+  </body>
 </html>

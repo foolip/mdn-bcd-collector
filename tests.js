@@ -99,6 +99,7 @@ class Tests {
       '<script src="/resources/json3.min.js"></script>',
       '<script src="/resources/harness.js"></script>',
       '<script src="/resources/core.js"></script>',
+      '<link rel="stylesheet" href="/resources/style.css" />',
       '</head>',
       '<body>',
       '<p id="status">Running tests...</p>',
