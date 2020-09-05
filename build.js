@@ -115,13 +115,9 @@ function compileTest(test) {
   const prefixesToTest = test.scope[0] == ['CSS'] ?
       prefixes.css : prefixes.api;
 
-  if (test.scope[0] == ['CSS']) {
+  if (!Array.isArray(test.raw.code)) {
     for (const prefix of prefixesToTest) {
-      const code = (`${compileTestCode(
-          test.raw.code[0], prefix
-      )} ${test.raw.combinator} ${compileTestCode(
-          test.raw.code[1], prefix
-      )}`);
+      const code = compileTestCode(test.raw.code, prefix);
 
       if (!newTest.tests.length || code !== newTest.tests[0].code) {
         newTest.tests.push({
@@ -130,9 +126,13 @@ function compileTest(test) {
         });
       }
     }
-  } else if (!Array.isArray(test.raw.code)) {
+  } else if (test.scope[0] == ['CSS']) {
     for (const prefix of prefixesToTest) {
-      const code = compileTestCode(test.raw.code, prefix);
+      const code = (`${compileTestCode(
+          test.raw.code[0], prefix
+      )} ${test.raw.combinator} ${compileTestCode(
+          test.raw.code[1], prefix
+      )}`);
 
       if (!newTest.tests.length || code !== newTest.tests[0].code) {
         newTest.tests.push({
