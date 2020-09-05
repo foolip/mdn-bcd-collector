@@ -89,7 +89,7 @@ function compileTestCode(test, prefix) {
     const thisPrefix = prefix ? `-${prefix}-` : '';
     return `CSS.supports("${thisPrefix}${test.property}", "inherit")`;
   } else if (test.property.startsWith('Symbol.')) {
-    return `${test.property} in ${test.scope}`;
+    return `${prefix}${test.scope} in self && 'Symbol' in self && ${test.property.replace('Symbol.', '')} in Symbol && ${test.property} in ${prefix}${test.scope}`;
   } else {
     return `"${prefix}${test.property}" in ${test.scope}`;
   }
@@ -431,12 +431,7 @@ function buildIDLTests(ast) {
           case 'symbol':
             // eslint-disable-next-line no-case-declarations
             const symbol = member.name.replace('@@', '');
-            expr = [
-              {property: iface.name, scope: 'self'},
-              {property: 'Symbol', scope: 'self'},
-              {property: symbol, scope: 'Symbol'},
-              {property: `Symbol.${symbol}`, scope: `${iface.name}.prototype`}
-            ];
+            expr = {property: `Symbol.${symbol}`, scope: `${iface.name}`};
             break;
         }
       }
