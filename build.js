@@ -620,14 +620,11 @@ async function copyResources() {
 
 function buildManifest(tests) {
   const manifest = {
-    tests: tests,
-    endpoints: {
-      main: {},
-      individual: {}
-    }
+    main: {},
+    individual: {}
   };
 
-  for (const [ident, test] of Object.entries(manifest.tests)) {
+  for (const [ident, test] of Object.entries(tests)) {
     for (const scope of test.scope) {
       let endpoint = '';
       switch (scope) {
@@ -647,15 +644,15 @@ function buildManifest(tests) {
       }
 
       if (endpoint) {
-        if (!(endpoint in manifest.endpoints.main)) {
-          manifest.endpoints.main[endpoint] = {
+        if (!(endpoint in manifest.main)) {
+          manifest.main[endpoint] = {
             scope: scope,
             httpsOnly: scope === 'ServiceWorker',
             entries: []
           };
         }
-        if (!(ident in manifest.endpoints.main[endpoint].entries)) {
-          manifest.endpoints.main[endpoint].entries.push(ident);
+        if (!(ident in manifest.main[endpoint].entries)) {
+          manifest.main[endpoint].entries.push(ident);
         }
       }
     }
@@ -669,11 +666,11 @@ function buildManifest(tests) {
         continue;
       }
 
-      if (!(url in manifest.endpoints.individual)) {
-        manifest.endpoints.individual[url] = [];
+      if (!(url in manifest.individual)) {
+        manifest.individual[url] = [];
       }
-      if (!(ident in manifest.endpoints.individual[url])) {
-        manifest.endpoints.individual[url].push(ident);
+      if (!(ident in manifest.individual[url])) {
+        manifest.individual[url].push(ident);
       }
     }
   }
@@ -687,7 +684,8 @@ async function build(webref, bcd) {
   const CSSTests = buildCSS(webref, bcd);
   const tests = Object.assign(IDLTests, CSSTests);
 
-  await writeFile('MANIFEST.json', buildManifest(tests));
+  await writeFile(path.join(generatedDir, 'tests.json'), tests);
+  await writeFile(path.join(generatedDir, 'manifest.json'), buildManifest(tests));
   await copyResources();
 }
 
