@@ -105,23 +105,29 @@ function compileTest(test) {
 
   if (!Array.isArray(test.raw.code)) {
     for (const prefix of prefixesToTest) {
-      newTest.tests.push({
-        code: compileTestCode(test.raw.code, prefix),
-        prefix: prefix
-      });
+      const code = compileTestCode(test.raw.code, prefix);
+
+      if (newTest.tests.length && code !== newTest.tests[0].code) {
+        newTest.tests.push({
+          code: code,
+          prefix: prefix
+        });
+      }
     }
   } else {
     for (const prefix1 of prefixesToTest) {
       const parentCode = compileTestCode(test.raw.code[0], prefix1);
 
       for (const prefix2 of prefixesToTest) {
-        newTest.tests.push({
-          code: [
-            parentCode,
-            compileTestCode(test.raw.code[1], prefix2, prefix1)
-          ].join(` ${test.raw.combinator} `),
-          prefix: prefix2
-        });
+        const childCode = compileTestCode(test.raw.code[1], prefix2, prefix1);
+        const code = (`${parentCode} ${test.raw.combinator} ${childCode}`);
+
+        if (newTest.tests.length && code !== newTest.tests[0].code) {
+          newTest.tests.push({
+            code: code,
+            prefix: prefix2
+          });
+        }
       }
     }
   }
