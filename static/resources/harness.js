@@ -340,7 +340,7 @@
     css.href = '/resources/style.css';
     try {
       document.head.appendChild(css);
-    } catch(e) {
+    } catch (e) {
       // If the CSS fails to load, oh well
     }
 
