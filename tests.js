@@ -23,20 +23,22 @@ class Tests {
     this.httpOnly = options.httpOnly;
   }
 
-  listMainEndpoints() {
-    return Object.keys(this.endpoints);
-  }
-
-  listIndividual() {
-    return Object.keys(this.individualEndpoints).map((item) => (
-      [item.substr(1).replace('tests/', '').replace(/\//g, '.'), item]
+  listMainEndpoints(urlPrefix = '') {
+    return Object.keys(this.endpoints).map((item) => (
+      `${urlPrefix}${item}`
     ));
   }
 
-  listAllEndpoints() {
+  listIndividual(urlPrefix = '') {
+    return Object.keys(this.individualEndpoints).map((item) => (
+      [item.substr(1).replace(/\//g, '.'), `${urlPrefix}${item}`]
+    ));
+  }
+
+  listAllEndpoints(urlPrefix = '') {
     return [
-      ...this.listMainEndpoints(),
-      ...this.listIndividual().map((item) => (item[1]))
+      ...this.listMainEndpoints(urlPrefix),
+      ...this.listIndividual(urlPrefix).map((item) => (item[1]))
     ];
   }
 
@@ -47,7 +49,7 @@ class Tests {
     } else {
       const endpoints = this.listMainEndpoints();
       const index = endpoints.findIndex((item) => {
-        return item === afterURL.pathname;
+        return item === afterURL.pathname.replace('/tests', '');
       }) + 1;
 
       if (index >= endpoints.length) {
@@ -55,7 +57,7 @@ class Tests {
       }
 
       if (this.endpoints[endpoints[index]].httpsOnly) {
-        const newUrl = `https://${this.host}${endpoints[index]}`;
+        const newUrl = `https://${this.host}/tests${endpoints[index]}`;
         if (this.httpOnly) {
           // Skip this endpoint and go to the next
           return this.next(newUrl);
@@ -64,7 +66,7 @@ class Tests {
         }
       }
 
-      return `http://${this.host}${endpoints[index]}`;
+      return `http://${this.host}/tests${endpoints[index]}`;
     }
   }
 

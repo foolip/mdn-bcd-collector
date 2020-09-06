@@ -138,11 +138,15 @@ app.post('/api/results/export/github', (req, res) => {
       .catch(/* istanbul ignore next */ (err) => catchError(err, res));
 });
 
-for (const endpoint of tests.listAllEndpoints()) {
-  app.get(endpoint, (req, res) => {
+app.all('/tests/*', (req, res) => {
+  const endpoint = `/${req.params['0']}`;
+
+  if (tests.listAllEndpoints().includes(endpoint)) {
     res.send(tests.generateTestPage(endpoint));
-  });
-}
+  } else {
+    res.status(404).end();
+  }
+});
 
 /* istanbul ignore if */
 if (require.main === module) {

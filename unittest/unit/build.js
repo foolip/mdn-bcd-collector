@@ -2699,40 +2699,40 @@ describe('build', () => {
     };
     const expectedManifest = {
       'main': {
-        '/tests/api/interfaces': {
+        '/api/interfaces': {
           'entries': ['api.Attr', 'api.Attr.name'],
           'httpsOnly': false,
           'scope': 'Window'
         },
-        '/tests/api/serviceworkerinterfaces': {
+        '/api/serviceworkerinterfaces': {
           'entries': ['api.Attr'],
           'httpsOnly': true,
           'scope': 'ServiceWorker'
         },
-        '/tests/api/workerinterfaces': {
+        '/api/workerinterfaces': {
           'entries': ['api.Attr', 'api.Attr.name'],
           'httpsOnly': false,
           'scope': 'Worker'
         },
-        '/tests/css/properties': {
+        '/css/properties': {
           'entries': ['css.properties.font-family'],
           'httpsOnly': false,
           'scope': 'CSS'
         }
       },
       'individual': {
-        '/tests/api/Attr': ['api.Attr', 'api.Attr.name'],
-        '/tests/api/Attr/name': ['api.Attr.name'],
-        '/tests/css/properties/font-family': [
+        '/api/Attr': ['api.Attr', 'api.Attr.name'],
+        '/api/Attr/name': ['api.Attr.name'],
+        '/css/properties/font-family': [
           'css.properties.font-family'
         ],
-        '/tests/javascript': [
+        '/javascript': [
           'javascript.builtins.array'
         ],
-        '/tests/javascript/builtins': [
+        '/javascript/builtins': [
           'javascript.builtins.array'
         ],
-        '/tests/javascript/builtins/array': [
+        '/javascript/builtins/array': [
           'javascript.builtins.array'
         ]
       }

@@ -640,17 +640,17 @@ function buildManifest(tests) {
       let endpoint = '';
       switch (scope) {
         case 'Window':
-          endpoint = '/tests/api/interfaces';
+          endpoint = '/api/interfaces';
           break;
         case 'Worker':
         case 'DedicatedWorker':
-          endpoint = '/tests/api/workerinterfaces';
+          endpoint = '/api/workerinterfaces';
           break;
         case 'ServiceWorker':
-          endpoint = '/tests/api/serviceworkerinterfaces';
+          endpoint = '/api/serviceworkerinterfaces';
           break;
         case 'CSS':
-          endpoint = '/tests/css/properties';
+          endpoint = '/css/properties';
           break;
       }
 
@@ -668,11 +668,11 @@ function buildManifest(tests) {
       }
     }
 
-    let url = '/tests';
+    let url = '';
     for (const part of ident.split('.')) {
       url += '/' + part;
 
-      if (['/tests/api', '/tests/css', '/tests/css/properties'].includes(url)) {
+      if (['/api', '/css', '/css/properties'].includes(url)) {
         // Ignore things tested in main endpoints
         continue;
       }
