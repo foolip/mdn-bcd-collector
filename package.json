@@ -24,7 +24,8 @@
     "coverage": "nyc report -r lcov && open-cli coverage/lcov-report/index.html",
     "test": "npm run lint && npm run unittest",
     "selenium": "mocha selenium",
-    "update-bcd": "node update-bcd.js"
+    "update-bcd": "node update-bcd.js",
+    "find-missing": "node find-missing.js"
   },
   "dependencies": {
     "@google-cloud/logging-winston": "4.0.0",
