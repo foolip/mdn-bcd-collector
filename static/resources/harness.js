@@ -338,7 +338,11 @@
     css.rel = 'stylesheet';
     css.type = 'text/css';
     css.href = '/resources/style.css';
-    document.head.appendChild(css);
+    try {
+      document.head.appendChild(css);
+    } catch(e) {
+      // If the CSS fails to load, oh well
+    }
 
     var response = '';
     for (var i=0; i<results.length; i++) {
