@@ -147,7 +147,7 @@ app.all('/tests/*', (req, res) => {
   if (tests.listAllEndpoints().includes(endpoint)) {
     res.send(tests.generateTestPage(endpoint));
   } else {
-    res.status(404).end();
+    res.status(404).send(`Could not find tests for ${endpoint}`);
   }
 });
 
