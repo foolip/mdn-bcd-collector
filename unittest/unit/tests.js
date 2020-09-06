@@ -36,7 +36,7 @@ const testDatabase = {
 };
 const MANIFEST = {
   main: {
-    ' /api/interfaces': {
+    '/api/interfaces': {
       scope: 'Window',
       httpsOnly: false,
       entries: [
@@ -44,30 +44,30 @@ const MANIFEST = {
         'api.AbortController.signal'
       ]
     },
-    ' /api/workerinterfaces': {
+    '/api/workerinterfaces': {
       scope: 'Worker',
       httpsOnly: false,
       entries: [
         'api.AbortController'
       ]
     },
-    ' /api/serviceworkerinterfaces': {
+    '/api/serviceworkerinterfaces': {
       scope: 'ServiceWorker',
       httpsOnly: true,
       entries: []
     },
-    ' /css/properties': {
+    '/css/properties': {
       scope: 'CSS',
       httpsOnly: false,
       entries: []
     }
   },
   individual: {
-    ' /api/AbortController': [
+    '/api/AbortController': [
       'api.AbortController',
       'api.AbortController.signal'
     ],
-    ' /api/AbortController/signal': [
+    '/api/AbortController/signal': [
       'api.AbortController.signal'
     ]
   }

@@ -46,8 +46,8 @@ describe('/api/results', () => {
     assert.deepEqual(res.body, {});
   });
 
-  const testURL = `http://localhost:8080${mainEndpoints[0][0]}`;
-  const testURL2 = `https://host.test${mainEndpoints[mainEndpoints.length - 1][0]}`;
+  const testURL = `http://localhost:8080/tests${mainEndpoints[0][0]}`;
+  const testURL2 = `https://host.test/tests${mainEndpoints[mainEndpoints.length - 1][0]}`;
 
   it('submit valid results', async () => {
     const res = await agent.post('/api/results')
@@ -55,7 +55,7 @@ describe('/api/results', () => {
         .send({x: 1});
     assert.equal(res.status, 201);
     assert.deepEqual(res.body, {
-      'next': `http://localhost:8080${mainEndpoints[1][0]}`
+      'next': `http://localhost:8080/tests${mainEndpoints[1][0]}`
     });
   });
 
@@ -115,21 +115,24 @@ describe('/api/tests', () => {
     const res = await agent.get('/api/tests');
     assert.equal(res.status, 200);
     assert.isArray(res.body);
-    assert.isArray(res.body[0]);
-    assert.isArray(res.body[1]);
-    assert.equal(res.body.length, 2);
+    assert.equal(res.body.length, individualEndpoints.length + 1);
   });
 });
 
 describe('/tests/', () => {
   it('get a main test', async () => {
-    const res = await agent.get(mainEndpoints[0][0]);
+    const res = await agent.get(`/tests${mainEndpoints[0][0]}`);
     assert.equal(res.status, 200);
   });
 
   it('get an individual test', async () => {
-    const res = await agent.get(individualEndpoints[0][0]);
+    const res = await agent.get(`/tests${individualEndpoints[0][0]}`);
     assert.equal(res.status, 200);
+  });
+
+  it('get a non-existent tests', async () => {
+    const res = await agent.get(`/tests/dummy/test`);
+    assert.equal(res.status, 404);
   });
 });
 
