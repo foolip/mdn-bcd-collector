@@ -47,17 +47,17 @@ class Tests {
     if (!this.httpOnly && afterURL.protocol === 'http:') {
       return `https://${this.host}${afterURL.pathname}`;
     } else {
-      const endpoints = this.listMainEndpoints();
+      const endpoints = this.listMainEndpoints('/tests');
       const index = endpoints.findIndex((item) => {
-        return item === afterURL.pathname.replace('/tests', '');
+        return item === afterURL.pathname;
       }) + 1;
 
       if (index >= endpoints.length) {
         return null;
       }
 
-      if (this.endpoints[endpoints[index]].httpsOnly) {
-        const newUrl = `https://${this.host}/tests${endpoints[index]}`;
+      if (this.endpoints[endpoints[index].replace('/tests', '')].httpsOnly) {
+        const newUrl = `https://${this.host}${endpoints[index]}`;
         if (this.httpOnly) {
           // Skip this endpoint and go to the next
           return this.next(newUrl);
@@ -66,7 +66,7 @@ class Tests {
         }
       }
 
-      return `http://${this.host}/tests${endpoints[index]}`;
+      return `http://${this.host}${endpoints[index]}`;
     }
   }
 
