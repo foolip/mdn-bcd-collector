@@ -1,7 +1,5 @@
 'use strict';
 
-const fs = require('fs');
-const path = require('path');
 const bcd = require('mdn-browser-compat-data');
 const tests = require('./generated/tests.json');
 
@@ -10,9 +8,9 @@ function traverseFeatures(obj, identifier) {
 
   for (const i in obj) {
     if (
-        !!obj[i] &&
-        typeof obj[i] == 'object' &&
-        i !== '__compat'
+      !!obj[i] &&
+      typeof obj[i] == 'object' &&
+      i !== '__compat'
     ) {
       if (obj.__compat) {
         features.push(`${identifier}${i}`);
