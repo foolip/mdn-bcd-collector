@@ -52,19 +52,14 @@
             dropdown.add(c);
           } else {
             var response = JSON.parse(client.responseText);
-            var tests = response[0];
-            var individualItems = response[1];
+            var tests = response;
             
             dropdown.removeAttribute('disabled');
             dropdown.remove(0);
             button.removeAttribute('disabled');
             button.textContent = 'Run';
-            var c = document.createElement("option");
-            c.text = "All Tests";
-            c.value = tests[0];
-            dropdown.add(c);
-            for (var i=0; i<individualItems.length; i++) {
-              var item = individualItems[i];
+            for (var i=0; i<tests.length; i++) {
+              var item = tests[i];
               var option = document.createElement("option");
               option.text = item[0];
               option.value = item[1];

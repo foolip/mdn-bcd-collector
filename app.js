@@ -74,7 +74,10 @@ app.use(express.static('static'));
 app.use(express.static('generated'));
 
 app.get('/api/tests', (req, res) => {
-  res.json([tests.listMainEndpoints(), tests.listIndividual()]);
+  res.json([
+    ['All Tests', tests.listMainEndpoints('/tests')[0]],
+    ...tests.listIndividual('/tests')
+  ]);
 });
 
 app.post('/api/results', (req, res) => {
