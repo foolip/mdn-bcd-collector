@@ -287,8 +287,13 @@ function flattenMembers(iface) {
         break;
     }
   }
+
+  // Add members from ExtAttrs
   if (getExtAttr(iface, 'Constructor')) {
     members.push({name: iface.name, type: 'constructor'});
+  }
+  if (getExtAttr(iface, 'Serializable')) {
+    members.push({name: 'toString', type: 'operation'});
   }
 
   return members.sort((a, b) => a.name.localeCompare(b.name));
