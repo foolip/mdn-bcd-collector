@@ -29,6 +29,7 @@ const {
   writeFile,
   flattenIDL,
   getExposureSet,
+  getName,
   collectExtraIDL,
   validateIDL,
   buildIDLTests,
@@ -530,6 +531,18 @@ describe('build', () => {
       const interfaces = ast.filter((dfn) => dfn.type === 'interface');
       const exposureSet = getExposureSet(interfaces[0]);
       assert.hasAllKeys(exposureSet, ['Window', 'Worker']);
+    });
+  });
+
+  describe('getName', () => {
+    it('main', () => {
+      const node = {name: 'foobar'};
+      assert.equal(getName(node), 'foobar');
+    });
+
+    it('console', () => {
+      const node = {name: 'console'};
+      assert.equal(getName(node), 'Console');
     });
   });
 

@@ -323,6 +323,17 @@ function getExposureSet(node) {
   return globals;
 }
 
+function getName(node) {
+  if (!('name' in node)) return false;
+
+  switch (node.name) {
+    case 'console':
+      return 'Console';
+    default:
+      return node.name;
+  }
+}
+
 function allowDuplicates(dfn, member) {
   switch (dfn.name) {
     // TODO: sort this out spec-side
@@ -411,7 +422,7 @@ function buildIDLTests(ast) {
     const isGlobal = !!getExtAttr(iface, 'Global');
     const customIfaceTest = getCustomTestAPI(iface.name);
 
-    tests[`api.${iface.name}`] = compileTest({
+    tests[`api.${getName(iface)}`] = compileTest({
       'raw': {
         'code': customIfaceTest || {property: iface.name, scope: 'self'},
         'combinator': '&&'
@@ -481,7 +492,7 @@ function buildIDLTests(ast) {
         }
       }
 
-      tests[`api.${iface.name}.${member.name}`] = compileTest({
+      tests[`api.${getName(iface)}.${member.name}`] = compileTest({
         'raw': {
           'code': expr,
           'combinator': '&&'
@@ -703,6 +714,7 @@ if (require.main === module) {
     collectExtraIDL,
     flattenIDL,
     getExposureSet,
+    getName,
     buildIDLTests,
     buildIDL,
     validateIDL,
