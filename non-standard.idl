@@ -350,7 +350,7 @@ partial interface Document {
 
 partial interface DOMMatrixReadOnly {
   void scaleNonUniformSelf(optional unrestricted double scaleX = 1, optional unrestricted double scaleY = 1);
-  void tranform();
+  void transform();
 };
 
 partial interface Element {
