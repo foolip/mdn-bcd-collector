@@ -26,7 +26,7 @@ const generatedDir = path.join(__dirname, 'generated');
 
 const prefixes = process.env.NODE_ENV === 'test' ? {
   // Shortened in tests for convenience
-  api: ['', 'webkit', 'WebKit'],
+  api: ['', 'WebKit'],
   css: ['', 'webkit']
 } : {
   api: ['', 'moz', 'Moz', 'webkit', 'WebKit', 'webKit', 'ms', 'MS'],
