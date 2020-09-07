@@ -107,7 +107,9 @@ function getCustomTestCSS(name) {
 
 function compileTestCode(test, prefix = '', scopePrefix = '') {
   if (typeof(test) === 'string') {
-    return test.replace(/PREFIX/g, prefix);
+    return test.replace(/PREFIX(.)/g, (_, p1) => (
+      `${prefix}${prefix ? p1.toUpperCase() : p1}`
+    ));
   }
 
   const property = prefix ?
