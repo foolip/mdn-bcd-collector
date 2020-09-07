@@ -652,18 +652,15 @@ const copyResources = async () => {
 
   // Fix source mapping in core-js
   const corejsPath = path.join(generatedDir, 'resources', 'core.js');
-  await fs.readFile(corejsPath, 'utf8', (err, data) => {
-    if (err) {
-      return console.log(err);
-    }
+  await fs.readFile(corejsPath, 'utf8').then((data) => {
     const result = data.replace(
         /sourceMappingURL=minified\.js\.map/g,
         'sourceMappingURL=core.js.map'
     );
 
-    fs.writeFileSync(corejsPath, result, 'utf8', (err) => {
-      if (err) return console.log(err);
-    });
+    fs.writeFile(corejsPath, result, 'utf8');
+  }).catch((err) => {
+    console.error(err);
   });
 };
 
