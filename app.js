@@ -45,8 +45,8 @@ const github = require('./github')(
 
 const Tests = require('./tests');
 const tests = new Tests({
-  tests: require('./generated/tests.json'),
-  manifest: require('./generated/manifest.json'),
+  tests: require('./manifest/tests.json'),
+  endpoints: require('./manifest/endpoints.json'),
   host: host,
   httpOnly: process.env.NODE_ENV !== 'production'
 });

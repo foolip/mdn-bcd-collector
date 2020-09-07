@@ -76,7 +76,7 @@ const MANIFEST = {
 describe('Tests', () => {
   const tests = new Tests({
     tests: testDatabase,
-    manifest: MANIFEST,
+    endpoints: MANIFEST,
     host: 'host.test'
   });
 
@@ -103,7 +103,7 @@ describe('Tests', () => {
 
     it('HTTP only', () => {
       const theseTests = new Tests({
-        manifest: MANIFEST,
+        endpoints: MANIFEST,
         host: 'host.test',
         httpOnly: true
       });

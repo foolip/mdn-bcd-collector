@@ -17,8 +17,8 @@
 class Tests {
   constructor(options) {
     this.tests = options.tests;
-    this.endpoints = options.manifest.main;
-    this.individualEndpoints = options.manifest.individual;
+    this.endpoints = options.endpoints.main;
+    this.individualEndpoints = options.endpoints.individual;
     this.host = options.host;
     this.httpOnly = options.httpOnly;
   }
