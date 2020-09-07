@@ -1,15 +1,20 @@
 {
     "extends": ["eslint:recommended", "google"],
-    "plugins": ["prettier"],
     "parserOptions": {
         "ecmaVersion": 3
     },
     "rules": {
         "comma-dangle": ["error", "never"],
-        "require-jsdoc": "off",
-        "no-var": "off",
         "guard-for-in": "off",
-        "no-invalid-this": "off"
+        "max-len": ["error", {
+            "ignoreStrings": true,
+            "ignoreTemplateLiterals": true,
+            "ignoreRegExpLiterals": true
+        }],
+        "no-invalid-this": "off",
+        "no-var": "off",
+        "prefer-arrow/prefer-arrow-functions": "off",
+        "require-jsdoc": "off"
     },
     "root": true
 }
