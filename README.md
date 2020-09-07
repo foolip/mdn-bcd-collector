@@ -22,13 +22,13 @@ Before you can run or deploy, copy `secrets.sample.json` to `secrets.json`.
 ## Running locally
 
 ```sh
-    npm start
+npm start
 ```
 
 ## Deploying to App Engine
 
 ```sh
-    npm run deploy
+npm run deploy
 ```
 
 (This step is performed automatically when a commit is pushed to `main`.)
@@ -38,7 +38,7 @@ Before you can run or deploy, copy `secrets.sample.json` to `secrets.json`.
 To test using the latest deployed version, run:
 
 ```sh
-    npm run selenium
+npm run selenium
 ```
 
 You must configure your Selenium remote in `secrets.json`; local environments
@@ -49,23 +49,23 @@ configure your WebDriver URL.
 You can also test just a single browser by defining the `BROWSER` environment variable:
 
 ```sh
-    BROWSER=chrome npm run selenium
+BROWSER=chrome npm run selenium
 ```
 
 ## Running the unit tests and linter
 
 ```sh
-    npm test
+npm test
 ```
 
 Code coverage reports can be viewed in a browser by running:
 
 ```sh
-    npm run coverage
+npm run coverage
 ```
 
 ## Cleanup generated files
 
 ```sh
-    npm run clean
+npm run clean
 ```
