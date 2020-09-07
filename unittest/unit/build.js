@@ -420,7 +420,14 @@ describe('build', () => {
   });
 
   it('collectExtraIDL', () => {
-    assert.typeOf(collectExtraIDL(), 'array');
+    const idl = 'interface Dummy {};';
+    mockFs({
+      'non-standard.idl': idl
+    });
+
+    assert.deepEqual(collectExtraIDL(), WebIDL2.parse(idl));
+
+    mockFs.restore();
   });
 
   it('buildIDL', () => {
