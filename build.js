@@ -754,6 +754,8 @@ if (require.main === module) {
     getCustomTestAPI,
     getCustomSubtestsAPI,
     getCustomTestCSS,
+    compileTestCode,
+    compileTest,
     collectExtraIDL,
     flattenIDL,
     getExposureSet,

@@ -30,6 +30,8 @@ const {
   flattenIDL,
   getExposureSet,
   getName,
+  compileTestCode,
+  compileTest,
   collectExtraIDL,
   validateIDL,
   buildIDLTests,
@@ -289,6 +291,214 @@ describe('build', () => {
       });
 
       assert.equal(getCustomTestCSS('foo'), '(function() {return 1;})()');
+    });
+  });
+
+  describe('compileTestCode', () => {
+    describe('string', () => {
+      const test = 'PREFIXfoo';
+
+      it('normal', () => {
+        assert.equal(compileTestCode(test), 'foo');
+      });
+
+      it('prefix', () => {
+        assert.equal(compileTestCode(test, 'webkit'), 'webkitFoo');
+      });
+    });
+
+    describe('constructor', () => {
+      const test = {property: 'constructor', scope: 'AudioContext'};
+
+      it('normal', () => {
+        assert.equal(compileTestCode(test), '"AudioContext" in self && bcd.testConstructor("AudioContext")');
+      });
+
+      it('prefix', () => {
+        assert.equal(compileTestCode(test, 'moz'), '"mozAudioContext" in self && bcd.testConstructor("mozAudioContext")');
+      });
+    });
+
+    describe('CSS.supports', () => {
+      const test = {property: 'font-weight', scope: 'CSS.supports'};
+
+      it('normal', () => {
+        assert.equal(compileTestCode(test), 'CSS.supports("font-weight", "inherit")');
+      });
+
+      it('prefix', () => {
+        assert.equal(compileTestCode(test, 'webkit'), 'CSS.supports("-webkit-font-weight", "inherit")');
+      });
+    });
+
+    describe('Symbol', () => {
+      const test = {property: 'Symbol.iterator', scope: 'DOMMatrixReadOnly'};
+
+      it('normal', () => {
+        assert.equal(compileTestCode(test), '"DOMMatrixReadOnly" in self && "Symbol" in self && "iterator" in Symbol && Symbol.iterator in DOMMatrixReadOnly.prototype');
+      });
+
+      it('prefix', () => {
+        assert.equal(compileTestCode(test, 'moz'), '"mozDOMMatrixReadOnly" in self && "Symbol" in self && "iterator" in Symbol && Symbol.iterator in mozDOMMatrixReadOnly.prototype');
+      });
+    });
+
+    describe('other', () => {
+      const test = {property: 'log', scope: 'console'};
+
+      it('normal', () => {
+        assert.equal(compileTestCode(test), '"log" in console');
+      });
+
+      it('prefix', () => {
+        assert.equal(compileTestCode(test, 'webkit'), '"webkitLog" in console');
+      });
+
+      it('scope prefix', () => {
+        assert.equal(compileTestCode(test, '', 'moz'), '"log" in mozConsole');
+      });
+
+      it('prefix + scope prefix', () => {
+        assert.equal(compileTestCode(test, 'webkit', 'moz'), '"webkitLog" in mozConsole');
+      });
+    });
+  });
+
+  describe('compileTest', () => {
+    it('main', () => {
+      const rawTest = {
+        'raw': {
+          'code': [
+            {property: 'Document', scope: 'self'},
+            {property: 'body', scope: `Document.prototype`}
+          ],
+          'combinator': '&&'
+        },
+        'scope': ['Window']
+      };
+
+      assert.deepEqual(compileTest(rawTest), {
+        'tests': [
+          {
+            'code': '"Document" in self && "body" in Document.prototype',
+            'prefix': ''
+          },
+          {
+            'code': '"Document" in self && "WebKitBody" in Document.prototype',
+            'prefix': 'WebKit'
+          },
+          {
+            'code': '"WebKitDocument" in self && "body" in WebKitDocument.prototype',
+            'prefix': ''
+          },
+          {
+            'code': '"WebKitDocument" in self && "WebKitBody" in WebKitDocument.prototype',
+            'prefix': 'WebKit'
+          }
+        ],
+        'scope': ['Window']
+      });
+    });
+
+    it('ignore already compiled', () => {
+      const test = {
+        'tests': [
+          {
+            'code': 'true',
+            'prefix': ''
+          }
+        ],
+        'scope': ['Window']
+      };
+
+      assert.deepEqual(compileTest(test), test);
+    });
+
+    it('no-repeated test code', () => {
+      const rawTests = [
+        {
+          'raw': {
+            'code': 'true',
+            'combinator': '&&'
+          },
+          'scope': ['Window']
+        },
+        {
+          'raw': {
+            'code': [
+              'true',
+              'true'
+            ],
+            'combinator': '||'
+          },
+          'scope': ['CSS']
+        },
+        {
+          'raw': {
+            'code': [
+              'true',
+              'true'
+            ],
+            'combinator': '&&'
+          },
+          'scope': ['Worker']
+        }
+      ];
+
+      assert.deepEqual(compileTest(rawTests[0]), {
+        'tests': [
+          {
+            'code': 'true',
+            'prefix': ''
+          }
+        ],
+        'scope': ['Window']
+      });
+      assert.deepEqual(compileTest(rawTests[1]), {
+        'tests': [
+          {
+            'code': 'true || true',
+            'prefix': ''
+          }
+        ],
+        'scope': ['CSS']
+      });
+      assert.deepEqual(compileTest(rawTests[2]), {
+        'tests': [
+          {
+            'code': 'true && true',
+            'prefix': ''
+          }
+        ],
+        'scope': ['Worker']
+      });
+    });
+
+    it('CSS scope', () => {
+      const rawTest = {
+        'raw': {
+          'code': [
+            {property: 'fontFamily', scope: 'document.body.style'},
+            {property: 'font-family', scope: 'CSS.supports'}
+          ],
+          'combinator': '||'
+        },
+        'scope': ['CSS']
+      };
+
+      assert.deepEqual(compileTest(rawTest), {
+        'tests': [
+          {
+            'code': '"fontFamily" in document.body.style || CSS.supports("font-family", "inherit")',
+            'prefix': ''
+          },
+          {
+            'code': '"webkitFontFamily" in document.body.style || CSS.supports("-webkit-font-family", "inherit")',
+            'prefix': 'webkit'
+          }
+        ],
+        'scope': ['CSS']
+      });
     });
   });
 
