@@ -7,13 +7,9 @@
         "comma-dangle": ["error", "never"],
         "guard-for-in": "off",
         "max-len": ["error", {
-            "code": 80,
-            "tabWidth": 2,
             "ignoreStrings": true,
             "ignoreTemplateLiterals": true,
-            "ignoreRegExpLiterals": true,
-            "ignoreUrls": true,
-            "ignorePattern": "goog.(module|require)"
+            "ignoreRegExpLiterals": true
         }],
         "no-invalid-this": "off",
         "no-var": "off",

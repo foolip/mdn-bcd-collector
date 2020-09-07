@@ -8,13 +8,9 @@
     "rules": {
         "comma-dangle": ["error", "never"],
         "max-len": ["error", {
-            "code": 80,
-            "tabWidth": 2,
             "ignoreStrings": true,
             "ignoreTemplateLiterals": true,
-            "ignoreRegExpLiterals": true,
-            "ignoreUrls": true,
-            "ignorePattern": "goog.(module|require)"
+            "ignoreRegExpLiterals": true
         }],
         "no-else-return": "error",
         "no-unused-vars": ["error", {"varsIgnorePattern": "^_$"}],
