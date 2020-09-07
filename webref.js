@@ -23,7 +23,7 @@ const reportsDir = path.dirname(require.resolve('webref/package.json'));
 
 // Load text (UTF-8) files from a directory and return an object mapping each
 // name (sans extension) to the parsed result of that text.
-function loadTextFiles(relativeDir, extension, parse) {
+const loadTextFiles = (relativeDir, extension, parse) => {
   const dir = path.join(reportsDir, relativeDir);
   const files = fs.readdirSync(dir);
   files.sort();
@@ -37,7 +37,7 @@ function loadTextFiles(relativeDir, extension, parse) {
     results[name] = parse(text);
   }
   return results;
-}
+};
 
 module.exports = {
   css: loadTextFiles('ed/css', '.json', JSON.parse),

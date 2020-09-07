@@ -28,7 +28,7 @@ const REPORT = {
 };
 
 const RESULT = {
-  'html_url': 'https://github.com/foolip/mdn-bcd-results/pull/42'
+  html_url: 'https://github.com/foolip/mdn-bcd-results/pull/42'
 };
 
 describe('GitHub export', () => {
@@ -38,6 +38,7 @@ describe('GitHub export', () => {
     let octokit;
     const github = proxyquire('../../github', {
       '@octokit/rest': {
+        /* eslint-disable-next-line prefer-arrow/prefer-arrow-functions */
         Octokit: function(options) {
           assert(octokit === undefined);
           octokit = new Octokit(options);
@@ -88,6 +89,7 @@ describe('GitHub export', () => {
   it('no auth token', async () => {
     const github = proxyquire('../../github', {
       '@octokit/rest': {
+        /* eslint-disable-next-line prefer-arrow/prefer-arrow-functions */
         Octokit: function(options) {
           return new Octokit(options);
         }

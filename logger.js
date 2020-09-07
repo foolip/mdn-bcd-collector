@@ -17,7 +17,7 @@
 const winston = require('winston');
 const {LoggingWinston} = require('@google-cloud/logging-winston');
 
-function getTransport() {
+const getTransport = () => {
   if (process.env.NODE_ENV === 'production' ||
       process.env.GOOGLE_APPLICATION_CREDENTIALS) {
     return new LoggingWinston();
@@ -28,7 +28,7 @@ function getTransport() {
         winston.format.simple()
     )
   });
-}
+};
 
 const logger = winston.createLogger({
   level: 'info',
