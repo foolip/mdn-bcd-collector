@@ -69,7 +69,7 @@ describe('harness.js', () => {
         const coveragePath = path.join(
             __dirname, '..', '..', '.nyc_output', 'out.json'
         );
-        fs.readFile(coveragePath, 'utf8', function(err, data) {
+        fs.readFile(coveragePath, 'utf8', (err, data) => {
           if (err) {
             return console.log(err);
           }
@@ -78,7 +78,7 @@ describe('harness.js', () => {
               'static/resources'
           );
 
-          fs.writeFile(coveragePath, result, 'utf8', function(err) {
+          fs.writeFile(coveragePath, result, 'utf8', (err) => {
             if (err) return console.log(err);
           });
         });

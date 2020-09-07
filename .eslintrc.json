@@ -1,5 +1,6 @@
 {
     "extends": ["eslint:recommended", "google"],
+    "plugins": ["prefer-arrow"],
     "parser": "babel-eslint",
     "parserOptions": {
         "ecmaVersion": 8
@@ -17,6 +18,7 @@
         }],
         "no-else-return": "error",
         "no-unused-vars": ["error", {"varsIgnorePattern": "^_$"}],
+        "prefer-arrow/prefer-arrow-functions": "error",
         "quote-props": ["error", "as-needed"],
         "require-jsdoc": "off"
     },

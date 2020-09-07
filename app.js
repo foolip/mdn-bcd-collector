@@ -51,20 +51,20 @@ const tests = new Tests({
   httpOnly: process.env.NODE_ENV !== 'production'
 });
 
-function cookieSession(req, res, next) {
+const cookieSession = (req, res, next) => {
   req.sessionID = req.cookies.sid;
   if (!req.sessionID) {
     req.sessionID = uniqueString();
     res.cookie('sid', req.sessionID);
   }
   next();
-}
+};
 
 /* istanbul ignore next */
-function catchError(err, res) {
+const catchError = (err, res) => {
   logger.error(err);
   res.status(500).end();
-}
+};
 
 const app = express();
 app.use(cookieParser());

@@ -17,6 +17,7 @@
         }],
         "no-invalid-this": "off",
         "no-var": "off",
+        "prefer-arrow/prefer-arrow-functions": "off",
         "require-jsdoc": "off"
     },
     "root": true

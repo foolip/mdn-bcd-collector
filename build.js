@@ -33,7 +33,7 @@ const prefixes = process.env.NODE_ENV === 'test' ? {
   css: ['', 'khtml', 'webkit', 'moz', 'ms']
 };
 
-async function writeFile(filename, content) {
+const writeFile = async (filename, content) => {
   if (Array.isArray(content)) {
     content = content.join('\n');
   } else if (typeof content === 'object') {
@@ -43,9 +43,9 @@ async function writeFile(filename, content) {
 
   await fs.ensureDir(path.dirname(filename));
   await fs.writeFile(filename, content, 'utf8');
-}
+};
 
-function getCustomTestAPI(name, member) {
+const getCustomTestAPI = (name, member) => {
   let test = false;
 
   if (name in customTests.api) {
@@ -78,9 +78,9 @@ function getCustomTestAPI(name, member) {
   }
 
   return test;
-}
+};
 
-function getCustomSubtestsAPI(name, member) {
+const getCustomSubtestsAPI = (name, member) => {
   const subtests = {};
 
   if (name in customTests.api) {
@@ -97,15 +97,15 @@ function getCustomSubtestsAPI(name, member) {
   }
 
   return subtests;
-}
+};
 
-function getCustomTestCSS(name) {
+const getCustomTestCSS = (name) => {
   return 'properties' in customTests.css &&
       name in customTests.css.properties &&
       `(function() {${customTests.css.properties[name]}})()`;
-}
+};
 
-function compileTestCode(test, prefix = '', scopePrefix = '') {
+const compileTestCode = (test, prefix = '', scopePrefix = '') => {
   if (typeof(test) === 'string') {
     return test.replace(/PREFIX(.)/g, (_, p1) => (
       `${prefix}${prefix ? p1.toUpperCase() : p1}`
@@ -133,9 +133,9 @@ function compileTestCode(test, prefix = '', scopePrefix = '') {
     return `"${scopeAsProperty}" in self && "Symbol" in self && "${test.property.replace('Symbol.', '')}" in Symbol && ${test.property} in ${scopeAsProperty}.prototype`;
   }
   return `"${property}" in ${scope}`;
-}
+};
 
-function compileTest(test) {
+const compileTest = (test) => {
   if (!('raw' in test) && 'tests' in test) return test;
 
   const newTest = {tests: [], scope: test.scope};
@@ -188,14 +188,14 @@ function compileTest(test) {
   }
 
   return newTest;
-}
+};
 
-function collectExtraIDL() {
+const collectExtraIDL = () => {
   const idl = fs.readFileSync('./non-standard.idl', 'utf8');
   return WebIDL2.parse(idl);
-}
+};
 
-function mergeMembers(target, source) {
+const mergeMembers = (target, source) => {
   // Check for operation overloads across partials/mixins.
   const targetOperations = new Set();
   for (const {type, name} of target.members) {
@@ -210,9 +210,9 @@ function mergeMembers(target, source) {
   }
   // Now merge members.
   target.members.push(...source.members);
-}
+};
 
-function flattenIDL(specIDLs, collectExtraIDL) {
+const flattenIDL = (specIDLs, collectExtraIDL) => {
   let ast = [];
 
   for (const idl of Object.values(specIDLs)) {
@@ -266,9 +266,9 @@ function flattenIDL(specIDLs, collectExtraIDL) {
                             dfn.type !== 'interface mixin');
 
   return ast;
-}
+};
 
-function flattenMembers(iface) {
+const flattenMembers = (iface) => {
   const members = iface.members.filter((member) => member.name);
   for (const member of iface.members.filter((member) => !member.name)) {
     switch (member.type) {
@@ -325,14 +325,14 @@ function flattenMembers(iface) {
   }
 
   return members.sort((a, b) => a.name.localeCompare(b.name));
-}
+};
 
-function getExtAttr(node, name) {
+const getExtAttr = (node, name) => {
   return node.extAttrs && node.extAttrs.find((i) => i.name === name);
-}
+};
 
 // https://heycam.github.io/webidl/#dfn-exposure-set
-function getExposureSet(node) {
+const getExposureSet = (node) => {
   // step 6-8
   const attr = getExtAttr(node, 'Exposed');
   if (!attr) {
@@ -354,9 +354,9 @@ function getExposureSet(node) {
       throw new Error(`Unexpected RHS for Exposed extended attribute`);
   }
   return globals;
-}
+};
 
-function getName(node) {
+const getName = (node) => {
   if (!('name' in node)) return false;
 
   switch (node.name) {
@@ -365,9 +365,9 @@ function getName(node) {
     default:
       return node.name;
   }
-}
+};
 
-function allowDuplicates(dfn, member) {
+const allowDuplicates = (dfn, member) => {
   switch (dfn.name) {
     // TODO: sort this out spec-side
     case 'SVGAElement':
@@ -378,9 +378,9 @@ function allowDuplicates(dfn, member) {
       return member.name === 'canvas';
   }
   return false;
-}
+};
 
-function validateIDL(ast) {
+const validateIDL = (ast) => {
   const ignoreRules = new Set([
     'constructor-member',
     'dict-arg-default',
@@ -431,9 +431,9 @@ function validateIDL(ast) {
   }
 
   return true;
-}
+};
 
-function buildIDLTests(ast) {
+const buildIDLTests = (ast) => {
   const tests = {};
 
   const interfaces = ast.filter((dfn) =>
@@ -546,15 +546,15 @@ function buildIDLTests(ast) {
   }
 
   return tests;
-}
+};
 
-function buildIDL(webref) {
+const buildIDL = (webref) => {
   const ast = flattenIDL(webref.idl, collectExtraIDL());
   validateIDL(ast);
   return buildIDLTests(ast);
-}
+};
 
-function collectCSSPropertiesFromBCD(bcd, propertySet) {
+const collectCSSPropertiesFromBCD = (bcd, propertySet) => {
   for (const [prop, data] of Object.entries(bcd.css.properties)) {
     propertySet.add(prop);
     if (!data.__compat) {
@@ -566,7 +566,7 @@ function collectCSSPropertiesFromBCD(bcd, propertySet) {
       continue;
     }
     // eslint-disable-next-line no-inner-declarations
-    function process(statement) {
+    const process = (statement) => {
       if (Array.isArray(statement)) {
         statement.forEach(process);
         return;
@@ -574,23 +574,23 @@ function collectCSSPropertiesFromBCD(bcd, propertySet) {
       if (statement.alternative_name) {
         propertySet.add(statement.alternative_name);
       }
-    }
+    };
     for (const statement of Object.values(support)) {
       process(statement);
     }
   }
-}
+};
 
-function collectCSSPropertiesFromWebref(webref, propertySet) {
+const collectCSSPropertiesFromWebref = (webref, propertySet) => {
   for (const data of Object.values(webref.css)) {
     for (const prop of Object.keys(data.properties)) {
       propertySet.add(prop);
     }
   }
-}
+};
 
 // https://drafts.csswg.org/cssom/#css-property-to-idl-attribute
-function cssPropertyToIDLAttribute(property, lowercaseFirst) {
+const cssPropertyToIDLAttribute = (property, lowercaseFirst) => {
   let output = '';
   let uppercaseNext = false;
   if (lowercaseFirst) {
@@ -607,9 +607,9 @@ function cssPropertyToIDLAttribute(property, lowercaseFirst) {
     }
   }
   return output;
-}
+};
 
-function buildCSS(webref, bcd) {
+const buildCSS = (webref, bcd) => {
   const propertySet = new Set;
   collectCSSPropertiesFromBCD(bcd, propertySet);
   collectCSSPropertiesFromWebref(webref, propertySet);
@@ -631,10 +631,10 @@ function buildCSS(webref, bcd) {
   }
 
   return tests;
-}
+};
 
 /* istanbul ignore next */
-async function copyResources() {
+const copyResources = async () => {
   const resources = [
     ['json3/lib/json3.min.js', 'resources'],
     ['core-js-bundle/minified.js', 'resources', 'core.js'],
@@ -656,7 +656,7 @@ async function copyResources() {
 
   // Fix source mapping in core-js
   const corejsPath = path.join(generatedDir, 'resources', 'core.js');
-  await fs.readFile(corejsPath, 'utf8', function(err, data) {
+  await fs.readFile(corejsPath, 'utf8', (err, data) => {
     if (err) {
       return console.log(err);
     }
@@ -665,13 +665,13 @@ async function copyResources() {
         'sourceMappingURL=core.js.map'
     );
 
-    fs.writeFileSync(corejsPath, result, 'utf8', function(err) {
+    fs.writeFileSync(corejsPath, result, 'utf8', (err) => {
       if (err) return console.log(err);
     });
   });
-}
+};
 
-function buildManifest(tests) {
+const buildManifest = (tests) => {
   const manifest = {
     main: {},
     individual: {}
@@ -729,10 +729,10 @@ function buildManifest(tests) {
   }
 
   return manifest;
-}
+};
 
 /* istanbul ignore next */
-async function build(webref, bcd) {
+const build = async (webref, bcd) => {
   const IDLTests = buildIDL(webref);
   const CSSTests = buildCSS(webref, bcd);
   const tests = Object.assign(IDLTests, CSSTests);
@@ -740,7 +740,7 @@ async function build(webref, bcd) {
   await writeFile(path.join(generatedDir, 'tests.json'), tests);
   await writeFile(path.join(generatedDir, 'manifest.json'), buildManifest(tests));
   await copyResources();
-}
+};
 
 /* istanbul ignore if */
 if (require.main === module) {

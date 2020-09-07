@@ -3,7 +3,7 @@
 const bcd = require('mdn-browser-compat-data');
 const tests = require('./generated/tests.json');
 
-function traverseFeatures(obj, identifier) {
+const traverseFeatures = (obj, identifier) => {
   const features = [];
 
   for (const i in obj) {
@@ -21,9 +21,9 @@ function traverseFeatures(obj, identifier) {
   }
 
   return features;
-}
+};
 
-function findMissing() {
+const findMissing = () => {
   const bcdEntries = [
     ...traverseFeatures(bcd.api, 'api.'),
     ...traverseFeatures(bcd.css, 'css.')
@@ -38,15 +38,18 @@ function findMissing() {
   }
 
   return missingEntries;
-}
+};
 
-function main() {
+const main = () => {
   console.log(findMissing().join('\n'));
-}
+};
 
 /* istanbul ignore if */
 if (require.main === module) {
   main();
 } else {
-  module.exports = {};
+  module.exports = {
+    traverseFeatures,
+    findMissing
+  };
 }

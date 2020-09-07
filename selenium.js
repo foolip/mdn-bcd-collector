@@ -71,7 +71,7 @@ for (const browser in browsersToTest) {
     describe(`${bcd.browsers[browser].name} ${version}`, () => {
       let driver;
 
-      beforeEach(function() {
+      beforeEach(() => {
         const capabilities = new Capabilities();
         capabilities.set(
             Capability.BROWSER_NAME,
@@ -83,11 +83,11 @@ for (const browser in browsersToTest) {
             .withCapabilities(capabilities).build();
       });
 
-      afterEach(async function() {
+      afterEach(async () => {
         await driver.quit();
       });
 
-      it('run', async function() {
+      it('run', async () => {
         await driver.get(host);
         await driver.wait(
             until.elementIsEnabled(

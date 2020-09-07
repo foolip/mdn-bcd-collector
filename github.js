@@ -25,7 +25,7 @@ const appversion = require('./package.json').version;
 module.exports = (options) => {
   const octokit = new Octokit(options);
 
-  async function exportAsPR(report) {
+  const exportAsPR = async (report) => {
     const json = stringify(report, {space: '  '}) + '\n';
     const buffer = Buffer.from(json);
     // like https://github.com/web-platform-tests/wpt.fyi/blob/26805a0122ea01076ac22c0a96313c1cf5cc30d6/results-processor/wptreport.py#L79
@@ -71,7 +71,7 @@ module.exports = (options) => {
     });
 
     return data;
-  }
+  };
 
   return {exportAsPR};
 };
