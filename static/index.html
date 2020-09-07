@@ -61,7 +61,7 @@
             for (var i=0; i<tests.length; i++) {
               var item = tests[i];
               var option = document.createElement("option");
-              option.text = item[0];
+              option.text = item[0] || 'All Tests';
               option.value = item[1];
               dropdown.add(option);
             }

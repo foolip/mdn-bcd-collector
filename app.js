@@ -75,7 +75,7 @@ app.use(express.static('generated'));
 
 app.get('/api/tests', (req, res) => {
   res.json([
-    ['All Tests', tests.listMainEndpoints('/tests')[0]],
+    ['', tests.listMainEndpoints('/tests')[0]],
     ...tests.listIndividual('/tests')
   ]);
 });
