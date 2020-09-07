@@ -193,8 +193,8 @@ describe('build', () => {
         './custom-tests.json': {
           api: {
             foo: {
-              bar: {
-                __test: 'return 1 + 1;',
+              bar: 'return 1 + 1;',
+              __additional: {
                 multiple: 'return 1 + 1 + 1;',
                 one: 'return 1;'
               }
@@ -244,16 +244,15 @@ describe('build', () => {
     });
   });
 
-  describe('getCustomSubtestAPI', () => {
+  describe('getCustomSubtestsAPI', () => {
     it('get subtests', () => {
       const {getCustomSubtestsAPI} = proxyquire('../../build', {
         './custom-tests.json': {
           api: {
             foo: {
-              bar: {
-                __test: 'return 1 + 1;',
+              __additional: {
                 multiple: 'return 1 + 1 + 1;',
-                one: 'return 1;'
+                'one.only': 'return 1;'
               }
             }
           }
@@ -264,7 +263,7 @@ describe('build', () => {
           getCustomSubtestsAPI('foo', 'bar'),
           {
             multiple: '(function() {return 1 + 1 + 1;})()',
-            one: '(function() {return 1;})()'
+            'one.only': '(function() {return 1;})()'
           }
       );
     });
@@ -1018,8 +1017,8 @@ describe('build', () => {
               drawArraysInstancedANGLE: 'return true && instance && \'drawArraysInstancedANGLE\' in instance;'
             },
             Body: {
-              loaded: {
-                loaded_is_boolean: 'return typeof body.loaded === "boolean";'
+              __additional: {
+                'loaded.loaded_is_boolean': 'return typeof body.loaded === "boolean";'
               }
             }
           }

@@ -58,13 +58,7 @@ const getCustomTestAPI = (name, member) => {
       }
     } else {
       if (member in customTests.api[name]) {
-        if (typeof customTests.api[name][member] === 'object') {
-          if ('__test' in customTests.api[name][member]) {
-            test = testbase + customTests.api[name][member].__test;
-          }
-        } else {
-          test = testbase + customTests.api[name][member];
-        }
+        test = testbase + customTests.api[name][member];
       } else {
         test = testbase ?
           testbase + `return instance && '${member}' in instance;` :
@@ -80,16 +74,15 @@ const getCustomTestAPI = (name, member) => {
   return test;
 };
 
-const getCustomSubtestsAPI = (name, member) => {
+const getCustomSubtestsAPI = (name) => {
   const subtests = {};
 
   if (name in customTests.api) {
     const testbase = customTests.api[name].__base || '';
-    if (
-      member in customTests.api[name] &&
-      typeof customTests.api[name][member] === 'object'
-    ) {
-      for (const subtest of Object.entries(customTests.api[name][member])) {
+    if ('__additional' in customTests.api[name]) {
+      for (
+        const subtest of Object.entries(customTests.api[name].__additional)
+      ) {
         if (subtest[0] == '__test') continue;
         subtests[subtest[0]] = `(function() {${testbase}${subtest[1]}})()`;
       }
@@ -534,14 +527,17 @@ const buildIDLTests = (ast) => {
         scope: Array.from(exposureSet)
       });
       handledMemberNames.add(member.name);
+    }
 
-      const subtests = getCustomSubtestsAPI(adjustedIfaceName, member.name);
-      for (const subtest of Object.entries(subtests)) {
-        tests[`api.${adjustedIfaceName}.${member.name}.${subtest[0]}`] = {
-          tests: [{code: subtest[1], prefix: ''}],
-          scope: Array.from(exposureSet)
-        };
-      }
+    const subtests = getCustomSubtestsAPI(adjustedIfaceName);
+    for (const subtest of Object.entries(subtests)) {
+      tests[`api.${adjustedIfaceName}.${subtest[0]}`] = compileTest({
+        raw: {
+          code: subtest[1],
+          combinator: '&&'
+        },
+        scope: Array.from(exposureSet)
+      });
     }
   }
 

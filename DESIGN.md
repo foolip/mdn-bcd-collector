@@ -24,7 +24,10 @@ Each API interface is written in the following structure:
 "INTERFACE_NAME": {
     "__base": "CODE_TO_REPEAT_FOR_EVERY_TEST",
     "__test": "CODE_SPECIFIC_TO_TEST_THE_INTERFACE",
-    "MEMBER": "CODE_TO_TEST_THE_MEMBER"
+    "MEMBER": "CODE_TO_TEST_THE_MEMBER",
+    "__additional": {
+      "SUBFEATURE": "CODE_TO_TEST_SUBFEATURE"
+    }
 }
 ```
 
@@ -32,9 +35,11 @@ Each API interface is written in the following structure:
 
 You can define a custom method to test the interface instance itself via `__test`.  The `__test` should be a return statement that returns `true` or `false`.  If no `__test` is defined, it will default to `return !!instance`.
 
-Each member can have a custom test by defining a property as the member name.  Like `__test`, it should be a return statement that returns `true` or `false`.  If no custom test is defined, it will default to `return instance && 'MEMBER' in instance`.  The member tests can also be an object that includes a `__test` string and various other strings for behavioral subtests (such as arguments to constructors).
+Each member can have a custom test by defining a property as the member name.  Like `__test`, it should be a return statement that returns `true` or `false`.  If no custom test is defined, it will default to `return instance && 'MEMBER' in instance`.
 
-Each test will compile into a function as follows: `function() {__base + __test/MEMBER}`
+Additional members and submembers can be defined using the `__additional` property.  If there is a subfeature to an API or one of its members, such as "api.AudioContext.AudioContext.latencyHint", that simply cannot be defined within IDL, you can include this object and specify tests for such subfeatures.
+
+Each test will compile into a function as follows: `function() {__base + __test/MEMBER/SUBFEATURE}`
 
 Example:
 
@@ -49,9 +54,8 @@ The following JSON...
       "drawArraysInstancedANGLE": "return true && instance && 'drawArraysInstancedANGLE' in instance;"
     },
     "Console": {
-      "log": {
-        "__test": "return console.log",
-        "substitution_strings": "console.log('Hello, %s.', 'Bob')" 
+      "__additional": {
+        "log.substitution_strings": "console.log('Hello, %s.', 'Bob')"
       }
     }
   },
@@ -72,7 +76,7 @@ bcd.addTest('api.ANGLE_instanced_arrays.vertexAttribDivisorANGLE', "(function() 
 bcd.addTest('api.Animation', {"property":"Animation","scope":"self"}, 'Window');
 ...
 bcd.addTest('api.Console', {"property":"console","scope":"self"}, 'Window');
-bcd.addTest('api.Console.log', "(function() {return console.log;})()", 'Window');
+bcd.addTest('api.Console.log', [{"property":"console","scope":"self"},{"property":"log","scope":"console"}], 'Window');
 bcd.addTest('api.Console.log.substitution_strings', "(function() {console.log('Hello, %s.', 'Bob')})()", 'Window');
 ```
 
