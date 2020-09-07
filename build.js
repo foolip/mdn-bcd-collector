@@ -147,7 +147,7 @@ function compileTest(test) {
     for (const prefix of prefixesToTest) {
       const code = compileTestCode(test.raw.code, prefix);
 
-      if (!newTest.tests.length || code !== newTest.tests[0].code) {
+      if (!newTest.tests.map((item) => (item.code)).includes(code)) {
         newTest.tests.push({
           code: code,
           prefix: prefix
@@ -162,7 +162,7 @@ function compileTest(test) {
           test.raw.code[1], prefix
       )}`);
 
-      if (!newTest.tests.length || code !== newTest.tests[0].code) {
+      if (!newTest.tests.map((item) => (item.code)).includes(code)) {
         newTest.tests.push({
           code: code,
           prefix: prefix
@@ -177,7 +177,7 @@ function compileTest(test) {
         const childCode = compileTestCode(test.raw.code[1], prefix2, prefix1);
         const code = (`${parentCode} ${test.raw.combinator} ${childCode}`);
 
-        if (!newTest.tests.length || code !== newTest.tests[0].code) {
+        if (!newTest.tests.map((item) => (item.code)).includes(code)) {
           newTest.tests.push({
             code: code,
             prefix: prefix2
