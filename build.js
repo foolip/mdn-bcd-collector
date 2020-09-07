@@ -728,7 +728,7 @@ const buildManifest = (tests) => {
 const build = async (webref, bcd) => {
   const IDLTests = buildIDL(webref);
   const CSSTests = buildCSS(webref, bcd);
-  const tests = Object.assign(IDLTests, CSSTests);
+  const tests = Object.assign({}, IDLTests, CSSTests);
 
   await writeFile(path.join(manifestDir, 'tests.json'), tests);
   await writeFile(path.join(manifestDir, 'endpoints.json'), buildManifest(tests));
