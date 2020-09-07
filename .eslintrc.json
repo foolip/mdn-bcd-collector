@@ -6,9 +6,6 @@
     },
     "rules": {
         "comma-dangle": ["error", "never"],
-        "require-jsdoc": "off",
-        "no-else-return": "error",
-        "no-unused-vars": ["error", {"varsIgnorePattern": "^_$"}],
         "max-len": ["error", {
             "code": 80,
             "tabWidth": 2,
@@ -18,7 +15,10 @@
             "ignoreUrls": true,
             "ignorePattern": "goog.(module|require)"
         }],
-        "quote-props": ["error", "as-needed"]
+        "no-else-return": "error",
+        "no-unused-vars": ["error", {"varsIgnorePattern": "^_$"}],
+        "quote-props": ["error", "as-needed"],
+        "require-jsdoc": "off"
     },
     "env": {
         "es6": true,

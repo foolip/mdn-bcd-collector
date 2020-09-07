@@ -5,10 +5,7 @@
     },
     "rules": {
         "comma-dangle": ["error", "never"],
-        "require-jsdoc": "off",
-        "no-var": "off",
         "guard-for-in": "off",
-        "no-invalid-this": "off",
         "max-len": ["error", {
             "code": 80,
             "tabWidth": 2,
@@ -17,7 +14,10 @@
             "ignoreRegExpLiterals": true,
             "ignoreUrls": true,
             "ignorePattern": "goog.(module|require)"
-        }]
+        }],
+        "no-invalid-this": "off",
+        "no-var": "off",
+        "require-jsdoc": "off"
     },
     "root": true
 }
