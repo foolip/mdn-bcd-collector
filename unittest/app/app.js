@@ -55,7 +55,7 @@ describe('/api/results', () => {
         .send({x: 1});
     assert.equal(res.status, 201);
     assert.deepEqual(res.body, {
-      'next': `http://localhost:8080/tests${mainEndpoints[1][0]}`
+      next: `http://localhost:8080/tests${mainEndpoints[1][0]}`
     });
   });
 
@@ -63,7 +63,7 @@ describe('/api/results', () => {
     const res = await agent.get('/api/results');
     assert.equal(res.status, 200);
     assert.deepEqual(res.body, {
-      '__version': version,
+      __version: version,
       [testURL]: {x: 1}
     });
   });
@@ -79,7 +79,7 @@ describe('/api/results', () => {
     const res = await agent.get('/api/results');
     assert.equal(res.status, 200);
     assert.deepEqual(res.body, {
-      '__version': version,
+      __version: version,
       [testURL]: {x: 2}
     });
   });
@@ -96,7 +96,7 @@ describe('/api/results', () => {
     const res = await agent.get('/api/results');
     assert.equal(res.status, 200);
     assert.deepEqual(res.body, {
-      '__version': version,
+      __version: version,
       [testURL]: {x: 2},
       [testURL2]: {y: 3}
     });

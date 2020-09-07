@@ -17,7 +17,8 @@
             "ignoreRegExpLiterals": true,
             "ignoreUrls": true,
             "ignorePattern": "goog.(module|require)"
-        }]
+        }],
+        "quote-props": ["error", "as-needed"]
     },
     "env": {
         "es6": true,

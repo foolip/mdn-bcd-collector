@@ -19,15 +19,15 @@ const Tests = require('../../tests');
 
 const testDatabase = {
   'api.AbortController': {
-    'code': '"AbortController" in self',
-    'scope': [
+    code: '"AbortController" in self',
+    scope: [
       'Window',
       'Worker'
     ]
   },
   'api.AbortController.signal': {
-    'code': '"AbortController" in self && "signal" in AbortController',
-    'scope': [
+    code: '"AbortController" in self && "signal" in AbortController',
+    scope: [
       'Window',
       'Worker'
     ]
@@ -154,18 +154,18 @@ describe('Tests', () => {
   it('getTests', () => {
     assert.deepEqual(tests.getTests('/api/interfaces'), {
       'api.AbortController': {
-        'code': '"AbortController" in self',
-        'scope': ['Window', 'Worker']
+        code: '"AbortController" in self',
+        scope: ['Window', 'Worker']
       },
       'api.AbortController.signal': {
-        'code': '"AbortController" in self && "signal" in AbortController',
-        'scope': ['Window', 'Worker']
+        code: '"AbortController" in self && "signal" in AbortController',
+        scope: ['Window', 'Worker']
       }
     });
     assert.deepEqual(tests.getTests('/api/workerinterfaces'), {
       'api.AbortController': {
-        'code': '"AbortController" in self',
-        'scope': ['Window', 'Worker']
+        code: '"AbortController" in self',
+        scope: ['Window', 'Worker']
       }
     });
   });

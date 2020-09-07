@@ -27,7 +27,7 @@ const REPORT = {
 };
 
 const RESULT = {
-  'html_url': 'https://github.com/foolip/mdn-bcd-results/pull/42'
+  html_url: 'https://github.com/foolip/mdn-bcd-results/pull/42'
 };
 
 describe('GitHub export', () => {

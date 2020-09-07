@@ -138,7 +138,7 @@ function compileTestCode(test, prefix = '', scopePrefix = '') {
 function compileTest(test) {
   if (!('raw' in test) && 'tests' in test) return test;
 
-  const newTest = {'tests': [], 'scope': test.scope};
+  const newTest = {tests: [], scope: test.scope};
 
   const prefixesToTest = test.scope[0] == ['CSS'] ?
       prefixes.css : prefixes.api;
@@ -457,11 +457,11 @@ function buildIDLTests(ast) {
     const customIfaceTest = getCustomTestAPI(adjustedIfaceName);
 
     tests[`api.${adjustedIfaceName}`] = compileTest({
-      'raw': {
-        'code': customIfaceTest || {property: iface.name, scope: 'self'},
-        'combinator': '&&'
+      raw: {
+        code: customIfaceTest || {property: iface.name, scope: 'self'},
+        combinator: '&&'
       },
-      'scope': Array.from(exposureSet)
+      scope: Array.from(exposureSet)
     });
 
     const members = flattenMembers(iface);
@@ -527,19 +527,19 @@ function buildIDLTests(ast) {
       }
 
       tests[`api.${adjustedIfaceName}.${member.name}`] = compileTest({
-        'raw': {
-          'code': expr,
-          'combinator': '&&'
+        raw: {
+          code: expr,
+          combinator: '&&'
         },
-        'scope': Array.from(exposureSet)
+        scope: Array.from(exposureSet)
       });
       handledMemberNames.add(member.name);
 
       const subtests = getCustomSubtestsAPI(adjustedIfaceName, member.name);
       for (const subtest of Object.entries(subtests)) {
         tests[`api.${adjustedIfaceName}.${member.name}.${subtest[0]}`] = {
-          'tests': [{'code': subtest[1], 'prefix': ''}],
-          'scope': Array.from(exposureSet)
+          tests: [{code: subtest[1], prefix: ''}],
+          scope: Array.from(exposureSet)
         };
       }
     }
@@ -619,14 +619,14 @@ function buildCSS(webref, bcd) {
   for (const name of Array.from(propertySet).sort()) {
     const attrName = cssPropertyToIDLAttribute(name, name.startsWith('-'));
     tests[`css.properties.${name}`] = compileTest({
-      'raw': {
-        'code': getCustomTestCSS(name) || [
+      raw: {
+        code: getCustomTestCSS(name) || [
           {property: attrName, scope: 'document.body.style'},
           {property: name, scope: 'CSS.supports'}
         ],
-        'combinator': '||'
+        combinator: '||'
       },
-      'scope': ['CSS']
+      scope: ['CSS']
     });
   }
 
