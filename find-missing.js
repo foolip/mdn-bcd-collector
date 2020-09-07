@@ -26,7 +26,7 @@ const traverseFeatures = (obj, identifier) => {
 const findMissing = () => {
   const bcdEntries = [
     ...traverseFeatures(bcd.api, 'api.'),
-    ...traverseFeatures(bcd.css, 'css.')
+    ...traverseFeatures(bcd.css.properties, 'css.properties.')
   ];
   const collectorEntries = Object.keys(tests);
   const missingEntries = [];
