@@ -32,7 +32,7 @@ Each API interface is written in the following structure:
 
 You can define a custom method to test the interface instance itself via `__test`.  The `__test` should be a return statement that returns `true` or `false`.  If no `__test` is defined, it will default to `return !!instance`.
 
-Each member can have a custom test by defining a property as the member name.  Like `__test`, it should be a return statement that returns `true` or `false`.  If no custom test is defined, it will default to `return instance && 'MEMBER' in instance`.
+Each member can have a custom test by defining a property as the member name.  Like `__test`, it should be a return statement that returns `true` or `false`.  If no custom test is defined, it will default to `return instance && 'MEMBER' in instance`.  The member tests can also be an object that includes a `__test` string and various other strings for behavioral subtests (such as arguments to constructors).
 
 Each test will compile into a function as follows: `function() {__base + __test/MEMBER}`
 
@@ -47,6 +47,12 @@ The following JSON...
       "__base": "var canvas = document.createElement('canvas'); var gl = canvas.getContext('webgl'); var instance = gl.getExtension('ANGLE_instanced_arrays');",
       "__test": "return canvas && instance;",
       "drawArraysInstancedANGLE": "return true && instance && 'drawArraysInstancedANGLE' in instance;"
+    },
+    "Console": {
+      "log": {
+        "__test": "return console.log",
+        "substitution_strings": "console.log('Hello, %s.', 'Bob')" 
+      }
     }
   },
   "css": {
@@ -64,6 +70,10 @@ bcd.addTest('api.ANGLE_instanced_arrays.drawElementsInstancedANGLE', "(function(
 bcd.addTest('api.ANGLE_instanced_arrays.VERTEX_ATTRIB_ARRAY_DIVISOR_ANGLE', "(function() {var canvas = document.createElement('canvas'); var gl = canvas.getContext('webgl'); var instance = gl.getExtension('ANGLE_instanced_arrays');return instance && 'VERTEX_ATTRIB_ARRAY_DIVISOR_ANGLE' in instance;})()", 'Window');
 bcd.addTest('api.ANGLE_instanced_arrays.vertexAttribDivisorANGLE', "(function() {var canvas = document.createElement('canvas'); var gl = canvas.getContext('webgl'); var instance = gl.getExtension('ANGLE_instanced_arrays');return instance && 'vertexAttribDivisorANGLE' in instance;})()", 'Window');
 bcd.addTest('api.Animation', {"property":"Animation","scope":"self"}, 'Window');
+...
+bcd.addTest('api.Console', {"property":"console","scope":"self"}, 'Window');
+bcd.addTest('api.Console.log', "(function() {return console.log;})()", 'Window');
+bcd.addTest('api.Console.log.substitution_strings', "(function() {console.log('Hello, %s.', 'Bob')})()", 'Window');
 ```
 
 Tips: make sure to implement thorough feature checking as to not raise exceptions.

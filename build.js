@@ -58,7 +58,13 @@ function getCustomTestAPI(name, member) {
       }
     } else {
       if (member in customTests.api[name]) {
-        test = testbase + customTests.api[name][member];
+        if (typeof customTests.api[name][member] === 'object') {
+          if ('__test' in customTests.api[name][member]) {
+            test = testbase + customTests.api[name][member].__test;
+          }
+        } else {
+          test = testbase + customTests.api[name][member];
+        }
       } else {
         test = testbase ?
           testbase + `return instance && '${member}' in instance;` :
@@ -72,6 +78,25 @@ function getCustomTestAPI(name, member) {
   }
 
   return test;
+}
+
+function getCustomSubtestsAPI(name, member) {
+  const subtests = {};
+
+  if (name in customTests.api) {
+    const testbase = customTests.api[name].__base || '';
+    if (
+      member in customTests.api[name] &&
+      typeof customTests.api[name][member] === 'object'
+    ) {
+      for (const subtest of Object.entries(customTests.api[name][member])) {
+        if (subtest[0] == '__test') continue;
+        subtests[subtest[0]] = `(function() {${testbase}${subtest[1]}})()`;
+      }
+    }
+  }
+
+  return subtests;
 }
 
 function getCustomTestCSS(name) {
@@ -425,9 +450,10 @@ function buildIDLTests(ast) {
 
     const exposureSet = getExposureSet(iface);
     const isGlobal = !!getExtAttr(iface, 'Global');
-    const customIfaceTest = getCustomTestAPI(iface.name);
+    const adjustedIfaceName = getName(iface);
+    const customIfaceTest = getCustomTestAPI(adjustedIfaceName);
 
-    tests[`api.${getName(iface)}`] = compileTest({
+    tests[`api.${adjustedIfaceName}`] = compileTest({
       'raw': {
         'code': customIfaceTest || {property: iface.name, scope: 'self'},
         'combinator': '&&'
@@ -446,7 +472,7 @@ function buildIDLTests(ast) {
       }
 
       let expr;
-      const customTestMember = getCustomTestAPI(iface.name, member.name);
+      const customTestMember = getCustomTestAPI(adjustedIfaceName, member.name);
 
       if (customTestMember) {
         expr = customIfaceTest ?
@@ -497,7 +523,7 @@ function buildIDLTests(ast) {
         }
       }
 
-      tests[`api.${getName(iface)}.${member.name}`] = compileTest({
+      tests[`api.${adjustedIfaceName}.${member.name}`] = compileTest({
         'raw': {
           'code': expr,
           'combinator': '&&'
@@ -505,6 +531,14 @@ function buildIDLTests(ast) {
         'scope': Array.from(exposureSet)
       });
       handledMemberNames.add(member.name);
+
+      const subtests = getCustomSubtestsAPI(adjustedIfaceName, member.name);
+      for (const subtest of Object.entries(subtests)) {
+        tests[`api.${adjustedIfaceName}.${member.name}.${subtest[0]}`] = {
+          'tests': [{'code': subtest[1], 'prefix': ''}],
+          'scope': Array.from(exposureSet)
+        };
+      }
     }
   }
 
@@ -715,6 +749,7 @@ if (require.main === module) {
   module.exports = {
     writeFile,
     getCustomTestAPI,
+    getCustomSubtestsAPI,
     getCustomTestCSS,
     collectExtraIDL,
     flattenIDL,

@@ -186,6 +186,33 @@ describe('build', () => {
       });
     });
 
+    describe('custom test for member with subtests', () => {
+      const {getCustomTestAPI} = proxyquire('../../build', {
+        './custom-tests.json': {
+          api: {
+            'foo': {
+              'bar': {
+                '__test': 'return 1 + 1;',
+                'multiple': 'return 1 + 1 + 1;',
+                'one': 'return 1;'
+              }
+            }
+          }
+        }
+      });
+
+      it('interface', () => {
+        assert.equal(getCustomTestAPI('foo'), false);
+      });
+
+      it('member', () => {
+        assert.equal(
+            getCustomTestAPI('foo', 'bar'),
+            '(function() {return 1 + 1;})()'
+        );
+      });
+    });
+
     describe('custom test for interface and member', () => {
       const {getCustomTestAPI} = proxyquire('../../build', {
         './custom-tests.json': {
@@ -212,6 +239,32 @@ describe('build', () => {
             '(function() {var a = 1;return a + 1;})()'
         );
       });
+    });
+  });
+
+  describe('getCustomSubtestAPI', () => {
+    it('get subtests', () => {
+      const {getCustomSubtestsAPI} = proxyquire('../../build', {
+        './custom-tests.json': {
+          api: {
+            'foo': {
+              'bar': {
+                '__test': 'return 1 + 1;',
+                'multiple': 'return 1 + 1 + 1;',
+                'one': 'return 1;'
+              }
+            }
+          }
+        }
+      });
+
+      assert.deepEqual(
+          getCustomSubtestsAPI('foo', 'bar'),
+          {
+            'multiple': '(function() {return 1 + 1 + 1;})()',
+            'one': '(function() {return 1;})()'
+          }
+      );
     });
   });
 
@@ -830,6 +883,10 @@ describe('build', () => {
               GLintptr offset,
               GLsizei primcoun
             );
+          };
+
+          interface Body {
+            readonly attribute boolean loaded;
           };`);
       const {buildIDLTests} = proxyquire('../../build', {
         './custom-tests.json': {
@@ -838,6 +895,11 @@ describe('build', () => {
               '__base': 'var canvas = document.createElement(\'canvas\'); var gl = canvas.getContext(\'webgl\'); var instance = gl.getExtension(\'ANGLE_instanced_arrays\');',
               '__test': 'return !!instance;',
               'drawArraysInstancedANGLE': 'return true && instance && \'drawArraysInstancedANGLE\' in instance;'
+            },
+            'Body': {
+              'loaded': {
+                'loaded_is_boolean': 'return typeof body.loaded === "boolean";'
+              }
             }
           }
         }
@@ -866,6 +928,73 @@ describe('build', () => {
           'tests': [
             {
               'code': '(function() {var canvas = document.createElement(\'canvas\'); var gl = canvas.getContext(\'webgl\'); var instance = gl.getExtension(\'ANGLE_instanced_arrays\');return instance && \'drawElementsInstancedANGLE\' in instance;})()',
+              'prefix': ''
+            }
+          ],
+          'scope': ['Window']
+        },
+        'api.Body': {
+          'tests': [
+            {
+              'code': '"Body" in self',
+              'prefix': ''
+            },
+            {
+              'code': '"webkitBody" in self',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"WebKitBody" in self',
+              'prefix': 'WebKit'
+            }
+          ],
+          'scope': ['Window']
+        },
+        'api.Body.loaded': {
+          'tests': [
+            {
+              'code': '"Body" in self && "loaded" in Body.prototype',
+              'prefix': ''
+            },
+            {
+              'code': '"Body" in self && "webkitLoaded" in Body.prototype',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"Body" in self && "WebKitLoaded" in Body.prototype',
+              'prefix': 'WebKit'
+            },
+            {
+              'code': '"webkitBody" in self && "loaded" in webkitBody.prototype',
+              'prefix': ''
+            },
+            {
+              'code': '"webkitBody" in self && "webkitLoaded" in webkitBody.prototype',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"webkitBody" in self && "WebKitLoaded" in webkitBody.prototype',
+              'prefix': 'WebKit'
+            },
+            {
+              'code': '"WebKitBody" in self && "loaded" in WebKitBody.prototype',
+              'prefix': ''
+            },
+            {
+              'code': '"WebKitBody" in self && "webkitLoaded" in WebKitBody.prototype',
+              'prefix': 'webkit'
+            },
+            {
+              'code': '"WebKitBody" in self && "WebKitLoaded" in WebKitBody.prototype',
+              'prefix': 'WebKit'
+            }
+          ],
+          'scope': ['Window']
+        },
+        'api.Body.loaded.loaded_is_boolean': {
+          'tests': [
+            {
+              'code': '(function() {return typeof body.loaded === "boolean";})()',
               'prefix': ''
             }
           ],
