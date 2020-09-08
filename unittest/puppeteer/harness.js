@@ -53,6 +53,6 @@ describe('/resources/harness.js', () => {
       await page.goto(`http://localhost:${port}/unittest/#reporter=json`);
       const report = await reportPromise;
       assert.equal(report.stats.failures, 0);
-    });
+    }).slow(10000).timeout(30000);
   }
 });
