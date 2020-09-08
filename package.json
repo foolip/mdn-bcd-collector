@@ -23,7 +23,8 @@
     "puppeteer": "NODE_ENV=test mocha test/puppeteer --timeout 30000 --slow 10000",
     "test": "npm run coverage && npm run puppeteer",
     "selenium": "mocha test/selenium",
-    "update-bcd": "node update-bcd.js"
+    "update-bcd": "node update-bcd.js",
+    "find-missing": "node find-missing.js"
   },
   "dependencies": {
     "@google-cloud/logging-winston": "4.0.0",
