@@ -297,6 +297,8 @@
       runWorker(function(results) {
         runServiceWorker(function(results) {
           runCSS(function(results) {
+            pending = [];
+
             clearTimeout(timeout);
             callback(results);
           }, results);
@@ -408,6 +410,7 @@
     testConstructor: testConstructor,
     addTest: addTest,
     test: test,
+    run: run,
     runAndDisplay: runAndDisplay,
     runAndReport: runAndReport
   };
