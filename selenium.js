@@ -50,7 +50,7 @@ if (process.env.BROWSER) {
   browsersToTest = {[process.env.BROWSER]: browsersToTest[process.env.BROWSER]};
 }
 
-const secrets = require('../../secrets.json');
+const secrets = require('./secrets.json');
 
 const host = process.env.NODE_ENV === 'test' ?
       `http://localhost:8080` :
@@ -61,7 +61,6 @@ const seleniumUrl = secrets.selenium.url && secrets.selenium.url
     .replace('$ACCESSKEY$', secrets.selenium.accesskey);
 
 if (!seleniumUrl) {
-  // eslint-disable-next-line max-len
   console.error('A Selenium remote WebDriver URL is not defined in secrets.json.  Please define your Selenium remote.');
   process.exit(1);
 }
