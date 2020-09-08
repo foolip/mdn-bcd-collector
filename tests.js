@@ -95,8 +95,8 @@ class Tests {
 
   generateTestPage(endpoint) {
     const theseTests = this.getTests(endpoint);
-    let testScope = this.getScope(endpoint);
-    let individual = false;
+    const testScope = this.getScope(endpoint);
+    const individual = !(endpoint in this.endpoints);
 
     const lines = [
       '<!DOCTYPE html>',
@@ -122,21 +122,16 @@ class Tests {
 
     for (const [ident, test] of Object.entries(theseTests)) {
       for (const scope of test.scope) {
-        if (!testScope) {
-          // Set scope to the first found scope if it's an individual test
-          testScope = scope;
-          individual = true;
-        }
-        if (scope == testScope) {
+        if (!testScope || scope == testScope) {
           lines.push(`bcd.addTest("${ident}", ${JSON.stringify(test.tests)}, "${scope}");`);
         }
       }
     }
 
     if (individual) {
-      lines.push(`bcd.run('${testScope}', bcd.finishAndDisplay);`);
+      lines.push(`bcd.runAndDisplay();`);
     } else {
-      lines.push(`bcd.run('${testScope}');`);
+      lines.push(`bcd.runAndReport();`);
     }
 
     lines.push('</script>', '</body>', '</html>');

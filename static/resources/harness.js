@@ -139,36 +139,31 @@
     return result;
   }
 
-  function runCSS(callback) {
-    var results = [];
-
+  function runCSS(callback, results) {
     var length = pending.length;
     for (var i = 0; i < length; i++) {
-      updateStatus('Testing ' + pending[i].name);
-      results.push(test(pending[i]));
+      if (pending[i].scope == 'CSS') {
+        updateStatus('Testing ' + pending[i].name);
+        results.push(test(pending[i]));
+      }
     }
-
-    pending = [];
 
     callback(results);
   }
 
-  function runWindow(callback) {
-    var results = [];
-
+  function runWindow(callback, results) {
     var length = pending.length;
     for (var i = 0; i < length; i++) {
-      updateStatus('Testing ' + pending[i].name);
-      results.push(test(pending[i]));
+      if (pending[i].scope == 'Window') {
+        updateStatus('Testing ' + pending[i].name);
+        results.push(test(pending[i]));
+      }
     }
-
-    pending = [];
 
     callback(results);
   }
 
-  function runWorker(callback) {
-    var results = [];
+  function runWorker(callback, results) {
     var length = pending.length;
     var i;
 
@@ -183,20 +178,20 @@
       };
 
       for (i = 0; i < length; i++) {
-        promises.push(new Promise(function(resolve) {
-          updateStatus('Testing ' + pending[i].name);
-          myWorker.postMessage(pending[i]);
+        if (pending[i].scope == 'Worker') {
+          promises.push(new Promise(function(resolve) {
+            updateStatus('Testing ' + pending[i].name);
+            myWorker.postMessage(pending[i]);
 
-          testhandlers[pending[i].name] = function(message) {
-            results.push(message);
-            resolve();
-          };
-        }));
+            testhandlers[pending[i].name] = function(message) {
+              results.push(message);
+              resolve();
+            };
+          }));
+        }
       }
 
       Promise.allSettled(promises).then(function() {
-        pending = [];
-
         callback(results);
       });
     } else {
@@ -204,28 +199,26 @@
       updateStatus('No worker support, skipping');
 
       for (i = 0; i < length; i++) {
-        var result = {
-          name: pending[i].name,
-          result: false,
-          message: 'No worker support'
-        };
+        if (pending[i].scope == 'Worker') {
+          var result = {
+            name: pending[i].name,
+            result: false,
+            message: 'No worker support'
+          };
 
-        if (pending[i].info !== undefined) {
-          result.info = pending[i].info;
+          if (pending[i].info !== undefined) {
+            result.info = pending[i].info;
+          }
+
+          results.push(result);
         }
-
-        results.push(result);
       }
-
-      pending = [];
 
       callback(results);
     }
   }
 
-  function runServiceWorker(callback) {
-    var results = [];
-
+  function runServiceWorker(callback, results) {
     if ('serviceWorker' in navigator) {
       window.__workerCleanup().then(function() {
         navigator.serviceWorker.register('/resources/serviceworker.js', {
@@ -242,21 +235,21 @@
 
           var length = pending.length;
           for (var i = 0; i < length; i++) {
-            promises.push(new Promise(function(resolve) {
-              updateStatus('Testing ' + pending[i].name);
+            if (pending[i].scope == 'ServiceWorker') {
+              promises.push(new Promise(function(resolve) {
+                updateStatus('Testing ' + pending[i].name);
 
-              reg.active.postMessage(pending[i]);
+                reg.active.postMessage(pending[i]);
 
-              testhandlers[pending[i].name] = function(message) {
-                results.push(message);
-                resolve();
-              };
-            }));
+                testhandlers[pending[i].name] = function(message) {
+                  results.push(message);
+                  resolve();
+                };
+              }));
+            }
           }
 
           Promise.allSettled(promises).then(function() {
-            pending = [];
-
             window.__workerCleanup().then(function() {
               callback(results);
             });
@@ -269,90 +262,83 @@
 
       var length = pending.length;
       for (var i = 0; i < length; i++) {
-        var result = {
-          name: pending[i].name,
-          result: false,
-          message: 'No service worker support'
-        };
+        if (pending[i].scope == 'ServiceWorker') {
+          var result = {
+            name: pending[i].name,
+            result: false,
+            message: 'No service worker support'
+          };
 
-        if (pending[i].info !== undefined) {
-          result.info = pending[i].info;
+          if (pending[i].info !== undefined) {
+            result.info = pending[i].info;
+          }
+
+          results.push(result);
         }
-
-        results.push(result);
       }
-
-      pending = [];
 
       callback(results);
     }
   }
 
-  function run(scope, callback) {
+  function run(callback) {
     var timeout = setTimeout(function() {
       updateStatus('<br />This test seems to be taking a long time; ' +
           'it may have crashed. Check the console for errors.', true);
     }, 10000);
 
-    var onfinish = function(results) {
-      clearTimeout(timeout);
-
-      if (callback) {
-        callback(results);
-      } else {
-        report(results);
-      }
-    };
-
-    if (scope === 'CSS') {
-      runCSS(onfinish);
-    } else if (scope === 'Window') {
-      runWindow(onfinish);
-    } else if (scope === 'Worker') {
-      runWorker(onfinish);
-    } else if (scope === 'ServiceWorker') {
-      runServiceWorker(onfinish);
-    } else {
-      console.error('Unknown scope specified: ' + scope);
-    }
+    runWindow(function(results) {
+      runWorker(function(results) {
+        runServiceWorker(function(results) {
+          runCSS(function(results) {
+            clearTimeout(timeout);
+            callback(results);
+          }, results);
+        }, results);
+      }, results);
+    }, []);
   }
 
-  function report(results) {
-    var body = JSON.stringify(results);
-    var client = new XMLHttpRequest();
-    client.open('POST', '/api/results?for='+encodeURIComponent(location.href));
-    client.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
-    client.send(body);
-    client.onreadystatechange = function() {
-      if (client.readyState == 4) {
-        var response = JSON.parse(client.responseText);
-        // Navigate to the next page, or /results/ if none.
-        var nextURL = response.next || '/results/';
-        window.location = nextURL;
-      }
-    };
+  function runAndReport() {
+    run(function(results) {
+      var body = JSON.stringify(results);
+      var client = new XMLHttpRequest();
+      client.open('POST', '/api/results?for='+encodeURIComponent(location.href));
+      client.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+      client.send(body);
+      client.onreadystatechange = function() {
+        if (client.readyState == 4) {
+          var response = JSON.parse(client.responseText);
+          // Navigate to the next page, or /results/ if none.
+          var nextURL = response.next || '/results/';
+          window.location = nextURL;
+        }
+      };
+    });
   }
 
-  function finishAndDisplay(results) {
-    var css = document.createElement('link');
-    css.rel = 'stylesheet';
-    css.type = 'text/css';
-    css.href = '/resources/style.css';
-    try {
-      document.head.appendChild(css);
-    } catch (e) {
-      // If the CSS fails to load, oh well
-    }
+  function runAndDisplay() {
+    run(function(results) {
+      var css = document.createElement('link');
+      css.rel = 'stylesheet';
+      css.type = 'text/css';
+      css.href = '/resources/style.css';
+      try {
+        document.head.appendChild(css);
+      } catch (e) {
+        // If the CSS fails to load, oh well
+      }
 
-    var response = '';
-    for (var i=0; i<results.length; i++) {
-      var result = results[i];
-      response += result.name + ': <strong>' + result.result;
-      if (result.prefix) response += ' (' + result.prefix + ' prefix)';
-      if (result.message) response += ' (' + result.message + ')';
-      response += '</strong>\n<code>' + result.info.code + ';</code>\n\n';
-    }
-    updateStatus(response.replace(/\n/g, '<br />'));
+      var response = '';
+      for (var i=0; i<results.length; i++) {
+        var result = results[i];
+        response += result.name + ': <strong>' + result.result;
+        if (result.prefix) response += ' (' + result.prefix + ' prefix)';
+        if (result.message) response += ' (' + result.message + ')';
+        response += '</strong>\n<code>' + result.info.code + ';</code>\n\n';
+      }
+      updateStatus(response.replace(/\n/g, '<br />'));
+    });
   }
 
   // Service Worker helpers
@@ -415,7 +401,7 @@
     testConstructor: testConstructor,
     addTest: addTest,
     test: test,
-    run: run,
-    finishAndDisplay: finishAndDisplay
+    runAndDisplay: runAndDisplay,
+    runAndReport: runAndReport
   };
 })(this);
