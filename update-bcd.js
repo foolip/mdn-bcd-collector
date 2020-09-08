@@ -137,7 +137,7 @@ const getSupportMap = (report) => {
       }
       if (supported.result !== result) {
         // This will happen for [SecureContext] APIs and APIs under multiple
-        // scopes.
+        // exposure scopes.
         // console.log(`Contradictory results for ${name}: ${JSON.stringify(
         //     results, null, '  '
         // )}`);

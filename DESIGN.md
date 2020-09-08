@@ -73,9 +73,9 @@ bcd.addTest('api.ANGLE_instanced_arrays.drawArraysInstancedANGLE', "(function() 
 bcd.addTest('api.ANGLE_instanced_arrays.drawElementsInstancedANGLE', "(function() {var canvas = document.createElement('canvas'); var gl = canvas.getContext('webgl'); var instance = gl.getExtension('ANGLE_instanced_arrays');return instance && 'drawElementsInstancedANGLE' in instance;})()", 'Window');
 bcd.addTest('api.ANGLE_instanced_arrays.VERTEX_ATTRIB_ARRAY_DIVISOR_ANGLE', "(function() {var canvas = document.createElement('canvas'); var gl = canvas.getContext('webgl'); var instance = gl.getExtension('ANGLE_instanced_arrays');return instance && 'VERTEX_ATTRIB_ARRAY_DIVISOR_ANGLE' in instance;})()", 'Window');
 bcd.addTest('api.ANGLE_instanced_arrays.vertexAttribDivisorANGLE', "(function() {var canvas = document.createElement('canvas'); var gl = canvas.getContext('webgl'); var instance = gl.getExtension('ANGLE_instanced_arrays');return instance && 'vertexAttribDivisorANGLE' in instance;})()", 'Window');
-bcd.addTest('api.Animation', {"property":"Animation","scope":"self"}, 'Window');
+bcd.addTest('api.Animation', {"property":"Animation","owner":"self"}, 'Window');
 ...
-bcd.addTest('api.DOMTokenList', {"property":"DOMTokenList","scope":"self"}, 'Window');
+bcd.addTest('api.DOMTokenList', {"property":"DOMTokenList","owner":"self"}, 'Window');
 bcd.addTest('api.DOMTokenList.remove_whitespace_and_duplicates', "(function() {var elm = document.createElement('b'); elm.className = ' foo bar foo '; elm.classList.remove('bar'); return elm.className === 'foo';})()", 'Window');
 ```
 

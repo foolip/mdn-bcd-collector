@@ -20,24 +20,24 @@ const Tests = require('../../tests');
 const testDatabase = {
   'api.AbortController': {
     code: '"AbortController" in self',
-    scope: ['Window', 'Worker', 'ServiceWorker']
+    exposure: ['Window', 'Worker', 'ServiceWorker']
   },
   'api.AbortController.signal': {
     code: '"AbortController" in self && "signal" in AbortController.prototype',
-    scope: ['Window', 'Worker']
+    exposure: ['Window', 'Worker']
   },
   'css.properties.font-family': {
     code: '"fontFamily" in document.body.style || CSS.supports("font-family", "inherit")',
-    scope: ['CSS']
+    exposure: ['CSS']
   },
   'javascript.builtins.array': {
     code: '[1, 2, 3]',
-    scope: ['JavaScript']
+    exposure: ['JavaScript']
   }
 };
 const endpoints = {
   '/api/interfaces': {
-    scope: 'Window',
+    exposure: 'Window',
     httpsOnly: false,
     entries: [
       'api.AbortController',
@@ -45,19 +45,19 @@ const endpoints = {
     ]
   },
   '/api/workerinterfaces': {
-    scope: 'Worker',
+    exposure: 'Worker',
     httpsOnly: false,
     entries: [
       'api.AbortController'
     ]
   },
   '/api/serviceworkerinterfaces': {
-    scope: 'ServiceWorker',
+    exposure: 'ServiceWorker',
     httpsOnly: true,
     entries: []
   },
   '/css/properties': {
-    scope: 'CSS',
+    exposure: 'CSS',
     httpsOnly: false,
     entries: []
   }
@@ -149,25 +149,25 @@ describe('Tests', () => {
     assert.deepEqual(tests.getTests('/api/interfaces'), {
       'api.AbortController': {
         code: '"AbortController" in self',
-        scope: ['Window', 'Worker', 'ServiceWorker']
+        exposure: ['Window', 'Worker', 'ServiceWorker']
       },
       'api.AbortController.signal': {
         code: '"AbortController" in self && "signal" in AbortController.prototype',
-        scope: ['Window', 'Worker']
+        exposure: ['Window', 'Worker']
       }
     });
     assert.deepEqual(tests.getTests('/api/serviceworkerinterfaces'), {
       'api.AbortController': {
         code: '"AbortController" in self',
-        scope: ['Window', 'Worker', 'ServiceWorker']
+        exposure: ['Window', 'Worker', 'ServiceWorker']
       }
     });
   });
 
-  it('getScope', () => {
-    assert.equal(tests.getScope('/api/interfaces'), 'Window');
-    assert.equal(tests.getScope('/api/serviceworkerinterfaces'), 'ServiceWorker');
-    assert.equal(tests.getScope('/api/dummy'), '');
+  it('getExposure', () => {
+    assert.equal(tests.getExposure('/api/interfaces'), 'Window');
+    assert.equal(tests.getExposure('/api/serviceworkerinterfaces'), 'ServiceWorker');
+    assert.equal(tests.getExposure('/api/dummy'), '');
   });
 
   it('buildEndpoints', () => {
@@ -175,22 +175,22 @@ describe('Tests', () => {
       '/api/interfaces': {
         entries: ['api.AbortController', 'api.AbortController.signal'],
         httpsOnly: false,
-        scope: 'Window'
+        exposure: 'Window'
       },
       '/api/serviceworkerinterfaces': {
         entries: ['api.AbortController'],
         httpsOnly: true,
-        scope: 'ServiceWorker'
+        exposure: 'ServiceWorker'
       },
       '/api/workerinterfaces': {
         entries: ['api.AbortController', 'api.AbortController.signal'],
         httpsOnly: false,
-        scope: 'Worker'
+        exposure: 'Worker'
       },
       '/css/properties': {
         entries: ['css.properties.font-family'],
         httpsOnly: false,
-        scope: 'CSS'
+        exposure: 'CSS'
       }
     };
 

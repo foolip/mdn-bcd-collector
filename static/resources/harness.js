@@ -51,8 +51,8 @@
     }
   }
 
-  function addTest(name, tests, scope, info) {
-    pending.push({name: name, tests: tests, scope: scope, info: info});
+  function addTest(name, tests, exposure, info) {
+    pending.push({name: name, tests: tests, exposure: exposure, info: info});
   }
 
   function testConstructor(iface) {
@@ -94,7 +94,7 @@
   //   "prefix": "",
   //   "info": {
   //     "code": "'localName' in Attr.prototype",
-  //     "scope": "Window"
+  //     "exposure": "Window"
   //   }
   // }
   //
@@ -140,7 +140,7 @@
     if (result.result === false) {
       result.info.code = data.tests[0].code;
     }
-    result.info.scope = data.scope;
+    result.info.exposure = data.exposure;
 
     return result;
   }
@@ -148,7 +148,7 @@
   function runCSS(callback, results) {
     var length = pending.length;
     for (var i = 0; i < length; i++) {
-      if (pending[i].scope == 'CSS') {
+      if (pending[i].exposure == 'CSS') {
         updateStatus('Testing ' + pending[i].name);
         results.push(test(pending[i]));
       }
@@ -160,7 +160,7 @@
   function runWindow(callback, results) {
     var length = pending.length;
     for (var i = 0; i < length; i++) {
-      if (pending[i].scope == 'Window') {
+      if (pending[i].exposure == 'Window') {
         updateStatus('Testing ' + pending[i].name);
         results.push(test(pending[i]));
       }
@@ -184,7 +184,7 @@
       };
 
       for (i = 0; i < length; i++) {
-        if (pending[i].scope == 'Worker') {
+        if (pending[i].exposure == 'Worker') {
           promises.push(new Promise(function(resolve) {
             updateStatus('Testing ' + pending[i].name);
             myWorker.postMessage(pending[i]);
@@ -205,13 +205,13 @@
       updateStatus('No worker support, skipping');
 
       for (i = 0; i < length; i++) {
-        if (pending[i].scope == 'Worker') {
+        if (pending[i].exposure == 'Worker') {
           var result = {
             name: pending[i].name,
             result: false,
             message: 'No worker support',
             info: {
-              scope: 'Worker'
+              exposure: 'Worker'
             }
           };
 
@@ -244,7 +244,7 @@
 
           var length = pending.length;
           for (var i = 0; i < length; i++) {
-            if (pending[i].scope == 'ServiceWorker') {
+            if (pending[i].exposure == 'ServiceWorker') {
               promises.push(new Promise(function(resolve) {
                 updateStatus('Testing ' + pending[i].name);
 
@@ -271,13 +271,13 @@
 
       var length = pending.length;
       for (var i = 0; i < length; i++) {
-        if (pending[i].scope == 'ServiceWorker') {
+        if (pending[i].exposure == 'ServiceWorker') {
           var result = {
             name: pending[i].name,
             result: false,
             message: 'No service worker support',
             info: {
-              scope: 'ServiceWorker'
+              exposure: 'ServiceWorker'
             }
           };
 
@@ -346,8 +346,8 @@
       var response = '';
       for (var i=0; i<results.length; i++) {
         var result = results[i];
-        response += result.name + ' (' + result.info.scope +
-            ' scope): <strong>' + result.result;
+        response += result.name + ' (' + result.info.exposure +
+            ' exposure): <strong>' + result.result;
         if (result.prefix) {
           response += ' (' + result.prefix + ' prefix)';
         }

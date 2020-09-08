@@ -38,7 +38,7 @@ describe('harness.js', function() {
       assert.deepStrictEqual(results, [{
         name: 'name',
         result: true,
-        info: {code: 'true', scope: 'Window'}
+        info: {code: 'true', exposure: 'Window'}
       }]);
       done();
     });
@@ -50,7 +50,7 @@ describe('harness.js', function() {
       assert.deepStrictEqual(results, [{
         name: 'name',
         result: false,
-        info: {code: 'false', scope: 'Window'}
+        info: {code: 'false', exposure: 'Window'}
       }]);
       done();
     });
@@ -63,7 +63,7 @@ describe('harness.js', function() {
         name: 'name',
         result: null,
         message: 'returned null',
-        info: {code: 'null', scope: 'Window'}
+        info: {code: 'null', exposure: 'Window'}
       }]);
       done();
     });
@@ -79,7 +79,7 @@ describe('harness.js', function() {
         name: 'name',
         result: null,
         message: 'returned Symbol(bar)',
-        info: {code: 'Symbol(\'bar\')', scope: 'Window'}
+        info: {code: 'Symbol(\'bar\')', exposure: 'Window'}
       }]);
       done();
     });
@@ -92,7 +92,7 @@ describe('harness.js', function() {
         name: 'name',
         result: null,
         message: 'returned undefined',
-        info: {code: 'undefined', scope: 'Window'}
+        info: {code: 'undefined', exposure: 'Window'}
       }]);
       done();
     });
@@ -105,7 +105,7 @@ describe('harness.js', function() {
         name: 'name',
         result: null,
         message: 'threw Error: something went wrong',
-        info: {code: 'throw new Error(\'something went wrong\')', scope: 'Window'}
+        info: {code: 'throw new Error(\'something went wrong\')', exposure: 'Window'}
       }]);
       done();
     });
@@ -115,7 +115,7 @@ describe('harness.js', function() {
     bcd.addTest('ctx', [{code: 'true'}], 'Window', {'extra': 'stuff'});
     bcd.run(function(results) {
       assert.deepStrictEqual(results[0].info, {
-        extra: 'stuff', code: 'true', scope: 'Window'
+        extra: 'stuff', code: 'true', exposure: 'Window'
       });
       done();
     });
@@ -128,11 +128,11 @@ describe('harness.js', function() {
       assert.deepEqual(results, [{
         name: 'first',
         result: true,
-        info: {code: 'true', scope: 'Window', a: 1}
+        info: {code: 'true', exposure: 'Window', a: 1}
       }, {
         name: 'second',
         result: false,
-        info: {code: 'false', scope: 'Window', b: 2}
+        info: {code: 'false', exposure: 'Window', b: 2}
       }]);
       done();
     });

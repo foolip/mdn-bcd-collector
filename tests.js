@@ -26,10 +26,10 @@ class Tests {
     const endpoints = {};
 
     for (const [ident, test] of Object.entries(this.tests)) {
-      for (const scope of test.scope) {
+      for (const exposure of test.exposure) {
         let endpoint = '';
         let httpsOnly = false;
-        switch (scope) {
+        switch (exposure) {
           case 'Window':
             endpoint = '/api/interfaces';
             break;
@@ -49,7 +49,7 @@ class Tests {
         if (endpoint) {
           if (!(endpoint in endpoints)) {
             endpoints[endpoint] = {
-              scope: scope,
+              exposure: exposure,
               httpsOnly: httpsOnly,
               entries: []
             };
@@ -130,17 +130,17 @@ class Tests {
     return tests;
   }
 
-  getScope(endpoint) {
+  getExposure(endpoint) {
     const e = this.endpoints[endpoint];
-    return e ? e.scope : '';
+    return e ? e.exposure : '';
   }
 
-  generateTestPage(endpoint, testScope) {
+  generateTestPage(endpoint, testExposure) {
     const theseTests = this.getTests(endpoint);
     const individual = !(endpoint in this.endpoints);
 
-    if (!testScope) {
-      testScope = individual ? '' : this.getScope(endpoint);
+    if (!testExposure) {
+      testExposure = individual ? '' : this.getExposure(endpoint);
     }
 
     const lines = [
@@ -166,9 +166,9 @@ class Tests {
     ];
 
     for (const [ident, test] of Object.entries(theseTests)) {
-      for (const scope of test.scope) {
-        if (!testScope || scope == testScope) {
-          lines.push(`bcd.addTest("${ident}", ${JSON.stringify(test.tests)}, "${scope}");`);
+      for (const exposure of test.exposure) {
+        if (!testExposure || exposure == testExposure) {
+          lines.push(`bcd.addTest("${ident}", ${JSON.stringify(test.tests)}, "${exposure}");`);
         }
       }
     }

@@ -24,13 +24,13 @@
       <br />
       <div id="individualTestOptionsBox" style="display: none;">
         <input type="checkbox" id="secureContext"> <label for="secureContext">Use HTTPS?</label>
-        <div id="limitScopeBox" style="display: none;">
-        <label for="limitScope">Limit Scope:</label>
-        <select id="limitScope">
-          <option value="">All Global Scopes</option>
-          <option value="?scope=Window">Window</option>
-          <option value="?scope=Worker">Worker</option>
-          <option value="?scope=ServiceWorker">Service Worker</option>
+        <div id="limitExposureBox" style="display: none;">
+        <label for="limitExposure">Limit Exposure:</label>
+        <select id="limitExposure">
+          <option value="">All Global Exposures</option>
+          <option value="?exposure=Window">Window</option>
+          <option value="?exposure=Worker">Worker</option>
+          <option value="?exposure=ServiceWorker">Service Worker</option>
         </select>
       </div>
     </div>
@@ -58,7 +58,7 @@
       var dropdown = document.getElementById('tests');
       var individualTestOptionsBox = document.getElementById('individualTestOptionsBox');
       var secureContext = document.getElementById('secureContext');
-      var limitScope = document.getElementById('limitScope');
+      var limitExposure = document.getElementById('limitExposure');
 
       var client = new XMLHttpRequest();
       client.open('GET', '/api/tests', true);
@@ -98,9 +98,9 @@
               }
 
               if (choice[1].indexOf('css') > -1) {
-                limitScopeBox.style.display = "none";
+                limitExposureBox.style.display = "none";
               } else {
-                limitScopeBox.style.display = "block";
+                limitExposureBox.style.display = "block";
               }
             }
 
@@ -111,7 +111,7 @@
                 var protocol = secureContext.checked ? 'https:' : 'http:';
                 newUrl = protocol + '//' + window.location.host + newUrl;
                 if (choice[1].indexOf('css.') == -1) {
-                  newUrl += getDropdownSelection(limitScope)[1];
+                  newUrl += getDropdownSelection(limitExposure)[1];
                 }
               }
               if (newUrl) window.location = newUrl;

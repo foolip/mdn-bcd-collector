@@ -97,7 +97,7 @@ const getCustomTestCSS = (name) => {
       `(function() {${customTests.css.properties[name]}})()`;
 };
 
-const compileTestCode = (test, prefix = '', scopePrefix = '') => {
+const compileTestCode = (test, prefix = '', ownerPrefix = '') => {
   if (typeof(test) === 'string') {
     return test.replace(/PREFIX(.)/g, (_, p1) => (
       `${prefix}${prefix ? p1.toUpperCase() : p1}`
@@ -107,24 +107,24 @@ const compileTestCode = (test, prefix = '', scopePrefix = '') => {
   const property = prefix ?
     prefix + test.property.charAt(0).toUpperCase() +
     test.property.slice(1) : test.property;
-  const scopeAsProperty = prefix ?
-      prefix + test.scope.charAt(0).toUpperCase() +
-      test.scope.slice(1) : test.scope;
-  const scope = scopePrefix ?
-      scopePrefix + test.scope.charAt(0).toUpperCase() +
-      test.scope.slice(1) : test.scope;
+  const ownerAsProperty = prefix ?
+      prefix + test.owner.charAt(0).toUpperCase() +
+      test.owner.slice(1) : test.owner;
+  const owner = ownerPrefix ?
+      ownerPrefix + test.owner.charAt(0).toUpperCase() +
+      test.owner.slice(1) : test.owner;
 
   if (test.property == 'constructor') {
-    return `"${scopeAsProperty}" in self && bcd.testConstructor("${scopeAsProperty}")`;
+    return `"${ownerAsProperty}" in self && bcd.testConstructor("${ownerAsProperty}")`;
   }
-  if (test.scope === 'CSS.supports') {
+  if (test.owner === 'CSS.supports') {
     const thisPrefix = prefix ? `-${prefix}-` : '';
     return `CSS.supports("${thisPrefix}${test.property}", "inherit")`;
   }
   if (test.property.startsWith('Symbol.')) {
-    return `"${scopeAsProperty}" in self && "Symbol" in self && "${test.property.replace('Symbol.', '')}" in Symbol && ${test.property} in ${scopeAsProperty}.prototype`;
+    return `"${ownerAsProperty}" in self && "Symbol" in self && "${test.property.replace('Symbol.', '')}" in Symbol && ${test.property} in ${ownerAsProperty}.prototype`;
   }
-  return `"${property}" in ${scope}`;
+  return `"${property}" in ${owner}`;
 };
 
 const compileTest = (test) => {
@@ -132,9 +132,9 @@ const compileTest = (test) => {
     return test;
   }
 
-  const newTest = {tests: [], scope: test.scope};
+  const newTest = {tests: [], exposure: test.exposure};
 
-  const prefixesToTest = test.scope[0] == ['CSS'] ?
+  const prefixesToTest = test.exposure[0] == 'CSS' ?
       prefixes.css : prefixes.api;
 
   if (!Array.isArray(test.raw.code)) {
@@ -148,7 +148,7 @@ const compileTest = (test) => {
         });
       }
     }
-  } else if (test.scope[0] == 'CSS') {
+  } else if (test.exposure[0] == 'CSS') {
     for (const prefix of prefixesToTest) {
       const code = `${compileTestCode(
           test.raw.code[0], prefix
@@ -458,10 +458,10 @@ const buildIDLTests = (ast) => {
 
     tests[`api.${adjustedIfaceName}`] = compileTest({
       raw: {
-        code: customIfaceTest || {property: iface.name, scope: 'self'},
+        code: customIfaceTest || {property: iface.name, owner: 'self'},
         combinator: '&&'
       },
-      scope: Array.from(exposureSet)
+      exposure: Array.from(exposureSet)
     });
 
     const members = flattenMembers(iface);
@@ -480,7 +480,7 @@ const buildIDLTests = (ast) => {
       if (customTestMember) {
         expr = customIfaceTest ?
                customTestMember :
-               [{property: iface.name, scope: 'self'}, customTestMember];
+               [{property: iface.name, owner: 'self'}, customTestMember];
       } else {
         const isStatic = (
           member.special === 'static' ||
@@ -492,36 +492,36 @@ const buildIDLTests = (ast) => {
           case 'operation':
           case 'field':
             if (isGlobal) {
-              expr = {property: member.name, scope: 'self'};
+              expr = {property: member.name, owner: 'self'};
             } else if (isStatic) {
               expr = [
-                {property: iface.name, scope: 'self'},
-                {property: member.name, scope: iface.name}
+                {property: iface.name, owner: 'self'},
+                {property: member.name, owner: iface.name}
               ];
             } else {
               expr = [
-                {property: iface.name, scope: 'self'},
-                {property: member.name, scope: `${iface.name}.prototype`}
+                {property: iface.name, owner: 'self'},
+                {property: member.name, owner: `${iface.name}.prototype`}
               ];
             }
             break;
           case 'const':
             if (isGlobal) {
-              expr = {property: member.name, scope: 'self'};
+              expr = {property: member.name, owner: 'self'};
             } else {
               expr = [
-                {property: iface.name, scope: 'self'},
-                {property: member.name, scope: iface.name}
+                {property: iface.name, owner: 'self'},
+                {property: member.name, owner: iface.name}
               ];
             }
             break;
           case 'constructor':
-            expr = {property: 'constructor', scope: iface.name};
+            expr = {property: 'constructor', owner: iface.name};
             break;
           case 'symbol':
             // eslint-disable-next-line no-case-declarations
             const symbol = member.name.replace('@@', '');
-            expr = {property: `Symbol.${symbol}`, scope: `${iface.name}`};
+            expr = {property: `Symbol.${symbol}`, owner: `${iface.name}`};
             break;
         }
       }
@@ -531,7 +531,7 @@ const buildIDLTests = (ast) => {
           code: expr,
           combinator: '&&'
         },
-        scope: Array.from(exposureSet)
+        exposure: Array.from(exposureSet)
       });
       handledMemberNames.add(member.name);
     }
@@ -543,7 +543,7 @@ const buildIDLTests = (ast) => {
           code: subtest[1],
           combinator: '&&'
         },
-        scope: Array.from(exposureSet)
+        exposure: Array.from(exposureSet)
       });
     }
   }
@@ -624,12 +624,12 @@ const buildCSS = (webref, bcd) => {
     tests[`css.properties.${name}`] = compileTest({
       raw: {
         code: getCustomTestCSS(name) || [
-          {property: attrName, scope: 'document.body.style'},
-          {property: name, scope: 'CSS.supports'}
+          {property: attrName, owner: 'document.body.style'},
+          {property: name, owner: 'CSS.supports'}
         ],
         combinator: '||'
       },
-      scope: ['CSS']
+      exposure: ['CSS']
     });
   }
 
