@@ -49,35 +49,31 @@ const isEquivalent = (a, b) => {
 };
 
 // https://github.com/mdn/browser-compat-data/issues/3617
-const save = (bcd, bcdDir) => {
-  const processObject = (object, keypath) => {
-    if (keypath.length && !['api', 'css'].includes(keypath[0])) {
-      return;
-    }
-    for (const [key, value] of Object.entries(object)) {
-      const candidate = path.join(bcdDir, ...keypath, key);
+const save = (object, keypath, bcdDir) => {
+  if (keypath.length && !['api', 'css'].includes(keypath[0])) {
+    return;
+  }
+  for (const [key, value] of Object.entries(object)) {
+    const candidate = path.join(bcdDir, ...keypath, key);
 
-      if (isDirectory(candidate)) {
-        // If the path is a directory, recurse.
-        processObject(value, keypath.concat(key));
-      } else {
-        // Otherwise, write data to file.
-        const filepath = `${candidate}.json`;
-        // Add wrapping objects with keys as in keypath.
-        let wrappedValue = value;
-        const keys = keypath.concat(key).reverse();
-        for (const key of keys) {
-          const wrapper = {};
-          wrapper[key] = wrappedValue;
-          wrappedValue = wrapper;
-        }
-        const json = JSON.stringify(wrappedValue, null, '  ') + '\n';
-        fs.writeFileSync(filepath, json);
+    if (isDirectory(candidate)) {
+      // If the path is a directory, recurse.
+      save(value, keypath.concat(key), bcdDir);
+    } else {
+      // Otherwise, write data to file.
+      const filepath = `${candidate}.json`;
+      // Add wrapping objects with keys as in keypath.
+      let wrappedValue = value;
+      const keys = keypath.concat(key).reverse();
+      for (const key of keys) {
+        const wrapper = {};
+        wrapper[key] = wrappedValue;
+        wrappedValue = wrapper;
       }
+      const json = JSON.stringify(wrappedValue, null, '  ') + '\n';
+      fs.writeFileSync(filepath, json);
     }
-  };
-
-  processObject(bcd, []);
+  }
 };
 
 const getBrowserAndVersion = (userAgent, browsers) => {
@@ -395,7 +391,7 @@ const main = (reportFiles) => {
   const reports = loadFiles(reportFiles);
   const supportMatrix = getSupportMatrix(bcd, reports);
   update(bcd, supportMatrix);
-  save(bcd, BCD_DIR);
+  save(bcd, [], BCD_DIR);
 };
 
 /* istanbul ignore if */
