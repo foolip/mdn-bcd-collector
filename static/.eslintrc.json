@@ -7,9 +7,10 @@
         "comma-dangle": ["error", "never"],
         "guard-for-in": "off",
         "max-len": ["error", {
+            "ignoreRegExpLiterals": true,
             "ignoreStrings": true,
             "ignoreTemplateLiterals": true,
-            "ignoreRegExpLiterals": true
+            "ignoreUrls": true
         }],
         "no-invalid-this": "off",
         "no-var": "off",
