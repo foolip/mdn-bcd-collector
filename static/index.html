@@ -21,6 +21,10 @@
       <select id="tests" disabled>
         <option value="">Loading tests...</option>
       </select>
+      <br />
+      <div id="secureContextBox" style="display: none;">
+        <input type="checkbox" id="secureContext" disabled> <label for="secureContext">Use HTTPS?</label>
+      </div>
     </div>
 
     <p>Note: this website is in beta; not all feature detection is accurate yet. If you find any errors, please file an issue on the GitHub page.</p>
@@ -38,6 +42,8 @@
     function getTests() {
       var button = document.getElementById('start');
       var dropdown = document.getElementById('tests');
+      var secureContext = document.getElementById('secureContext');
+      var secureContextBox = document.getElementById('secureContextBox');
       var client = new XMLHttpRequest();
       client.open('GET', '/api/tests', true);
       client.send();
@@ -66,8 +72,20 @@
               dropdown.add(option);
             }
 
+            dropdown.onchange = function() {
+              if (dropdown.selectedIndex == 0) {
+                secureContextBox.style.display = "none";
+              } else {
+                secureContextBox.style.display = "block";
+              }
+            }
+
             button.onclick = function() {
               var newUrl = dropdown.options[dropdown.selectedIndex].value;
+              if (dropdown.selectedIndex > 0) {
+                var protocol = secureContext.checked ? 'https:' : 'http:';
+                newUrl = protocol + '//' + window.location.host + newUrl;
+              }
               if (newUrl) window.location = newUrl;
             }
           }
