@@ -128,12 +128,7 @@ class Tests {
       }
     }
 
-    if (individual) {
-      lines.push(`bcd.runAndDisplay();`);
-    } else {
-      lines.push(`bcd.runAndReport();`);
-    }
-
+    lines.push(individual ? 'bcd.runAndDisplay();' : 'bcd.runAndReport();');
     lines.push('</script>', '</body>', '</html>');
 
     return lines.join('\n');
