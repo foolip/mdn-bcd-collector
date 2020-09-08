@@ -22,8 +22,16 @@
         <option value="">Loading tests...</option>
       </select>
       <br />
-      <div id="secureContextBox" style="display: none;">
-        <input type="checkbox" id="secureContext" disabled> <label for="secureContext">Use HTTPS?</label>
+      <div id="individualTestOptionsBox" style="display: none;">
+        <input type="checkbox" id="secureContext"> <label for="secureContext">Use HTTPS?</label>
+        <div id="limitScopeBox" style="display: none;">
+        <label for="limitScope">Limit Scope:</label>
+        <select id="limitScope">
+          <option value="">All Scopes</option>
+          <option value="?scope=Window">Window</option>
+          <option value="?scope=Worker">Worker</option>
+          <option value="?scope=ServiceWorker">Service Worker</option>
+        </select>
       </div>
     </div>
 
@@ -39,11 +47,19 @@
 
     <script src="/resources/json3.min.js"></script>
     <script>
+    function getDropdownSelection(dropdown) {
+      var index = dropdown.selectedIndex;
+      var choice = dropdown.options[index].value;
+      return [index, choice];
+    };
+
     function getTests() {
       var button = document.getElementById('start');
       var dropdown = document.getElementById('tests');
+      var individualTestOptionsBox = document.getElementById('individualTestOptionsBox');
       var secureContext = document.getElementById('secureContext');
-      var secureContextBox = document.getElementById('secureContextBox');
+      var limitScope = document.getElementById('limitScope');
+
       var client = new XMLHttpRequest();
       client.open('GET', '/api/tests', true);
       client.send();
@@ -73,18 +89,30 @@
             }
 
             dropdown.onchange = function() {
-              if (dropdown.selectedIndex == 0) {
-                secureContextBox.style.display = "none";
+              var choice = getDropdownSelection(dropdown);
+
+              if (choice[0] == 0) {
+                individualTestOptionsBox.style.display = "none";
               } else {
-                secureContextBox.style.display = "block";
+                individualTestOptionsBox.style.display = "block";
+              }
+
+              if (choice[1].indexOf('css') > -1) {
+                limitScopeBox.style.display = "none";
+              } else {
+                limitScopeBox.style.display = "block";
               }
             }
 
             button.onclick = function() {
-              var newUrl = dropdown.options[dropdown.selectedIndex].value;
-              if (dropdown.selectedIndex > 0) {
+              var choice = getDropdownSelection(dropdown);
+              var newUrl = choice[1];
+              if (choice[0] > 0) {
                 var protocol = secureContext.checked ? 'https:' : 'http:';
                 newUrl = protocol + '//' + window.location.host + newUrl;
+                if (choice[1].indexOf('css.') == -1) {
+                  newUrl += getDropdownSelection(limitScope)[1];
+                }
               }
               if (newUrl) window.location = newUrl;
             }
