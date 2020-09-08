@@ -213,6 +213,9 @@ interface MutationEvent : Event {
 };
 
 partial interface Navigator {
+  // https://www.w3.org/TR/2016/WD-screen-capture-20160714/#navigatorusermedia-additions
+  Promise<MediaStream> getDisplayMedia(optional DisplayMediaStreamConstraints constraints = {});
+  // Chromium has navigator.webkitGetUserMedia
   void webkitGetUserMedia(MediaStreamConstraints constraints,
                           NavigatorUserMediaSuccessCallback successCallback,
                           NavigatorUserMediaErrorCallback errorCallback);
