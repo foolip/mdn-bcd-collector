@@ -1,6 +1,55 @@
 // Manually maintained definitions for features not in any specification, like
 // non-standard features and features that have been removed or renamed.
 
+// https://trac.webkit.org/changeset/205065/webkit
+partial interface AudioBufferSourceNode {
+  attribute boolean looping;
+  void noteOn(double when);
+  void noteGrainOn(double when, double grainOffset, double grainDuration);
+  void noteOff(double when);
+};
+
+partial interface AudioContext {
+  GainNode createGainNode();
+  DelayNode createDelayNode(optional double maxDelayTime = 1.0);
+  ScriptProcessorNode createJavaScriptNode(unsigned long bufferSize, optional unsigned long numberOfInputChannels = 2, optional unsigned long numberOfOutputChannels = 2);
+};
+
+partial interface AudioParam {
+  void setTargetValueAtTime(float targetValue, float time, float timeConstant);
+};
+
+partial interface BiquadFilterNode {
+  const unsigned short LOWPASS = 0;
+  const unsigned short HIGHPASS = 1;
+  const unsigned short BANDPASS = 2;
+  const unsigned short LOWSHELF = 3;
+  const unsigned short HIGHSHELF = 4;
+  const unsigned short PEAKING = 5;
+  const unsigned short NOTCH = 6;
+  const unsigned short ALLPASS = 7;
+};
+
+partial interface OscillatorNode {
+  const unsigned short SINE = 0;
+  const unsigned short SQUARE = 1;
+  const unsigned short SAWTOOTH = 2;
+  const unsigned short TRIANGLE = 3;
+  const unsigned short CUSTOM = 4;
+
+  void noteOn(double when);
+  void noteOff(double when);
+};
+
+partial interface PannerNode {
+  const unsigned short EQUALPOWER = 0;
+  const unsigned short HRTF = 1;
+  const unsigned short SOUNDFIELD = 2;
+  const unsigned short LINEAR_DISTANCE = 0;
+  const unsigned short INVERSE_DISTANCE = 1;
+  const unsigned short EXPONENTIAL_DISTANCE = 2;
+};
+
 // https://chromium.googlesource.com/chromium/src/+/4260025dd80eed380e0c1fff0e4be2bdd0ae0e8a
 // https://chromium.googlesource.com/chromium/src/+/f5e8986bdcd359c7ca82d83907c81642dd01f55e
 partial interface AudioParam {
