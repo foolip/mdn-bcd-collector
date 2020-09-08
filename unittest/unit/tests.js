@@ -20,19 +20,20 @@ const Tests = require('../../tests');
 const testDatabase = {
   'api.AbortController': {
     code: '"AbortController" in self',
-    scope: [
-      'Window',
-      'Worker'
-    ]
+    scope: ['Window', 'Worker', 'ServiceWorker']
   },
   'api.AbortController.signal': {
-    code: '"AbortController" in self && "signal" in AbortController',
-    scope: [
-      'Window',
-      'Worker'
-    ]
+    code: '"AbortController" in self && "signal" in AbortController.prototype',
+    scope: ['Window', 'Worker']
   },
-  'api.FooBar': null
+  'css.properties.font-family': {
+    code: '"fontFamily" in document.body.style || CSS.supports("font-family", "inherit")',
+    scope: ['CSS']
+  },
+  'javascript.builtins.array': {
+    code: '[1, 2, 3]',
+    scope: ['JavaScript']
+  }
 };
 const endpoints = {
   '/api/interfaces': {
@@ -92,7 +93,7 @@ describe('Tests', () => {
 
     it('HTTP only', () => {
       const theseTests = new Tests({
-        endpoints: endpoints,
+        tests: testDatabase,
         host: 'host.test',
         httpOnly: true
       });
@@ -126,7 +127,8 @@ describe('Tests', () => {
     assert.deepEqual(tests.listIndividual(), [
       ['api.AbortController', '/api/AbortController'],
       ['api.AbortController.signal', '/api/AbortController/signal'],
-      ['api.FooBar', '/api/FooBar']
+      ['css.properties.font-family', '/css/properties/font-family'],
+      ['javascript.builtins.array', '/javascript/builtins/array']
     ]);
   });
 
@@ -138,7 +140,8 @@ describe('Tests', () => {
       ['', '/css/properties'],
       ['api.AbortController', '/api/AbortController'],
       ['api.AbortController.signal', '/api/AbortController/signal'],
-      ['api.FooBar', '/api/FooBar']
+      ['css.properties.font-family', '/css/properties/font-family'],
+      ['javascript.builtins.array', '/javascript/builtins/array']
     ]);
   });
 
@@ -146,17 +149,17 @@ describe('Tests', () => {
     assert.deepEqual(tests.getTests('/api/interfaces'), {
       'api.AbortController': {
         code: '"AbortController" in self',
-        scope: ['Window', 'Worker']
+        scope: ['Window', 'Worker', 'ServiceWorker']
       },
       'api.AbortController.signal': {
-        code: '"AbortController" in self && "signal" in AbortController',
+        code: '"AbortController" in self && "signal" in AbortController.prototype',
         scope: ['Window', 'Worker']
       }
     });
-    assert.deepEqual(tests.getTests('/api/workerinterfaces'), {
+    assert.deepEqual(tests.getTests('/api/serviceworkerinterfaces'), {
       'api.AbortController': {
         code: '"AbortController" in self',
-        scope: ['Window', 'Worker']
+        scope: ['Window', 'Worker', 'ServiceWorker']
       }
     });
   });
