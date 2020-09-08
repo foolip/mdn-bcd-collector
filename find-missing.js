@@ -1,7 +1,7 @@
 'use strict';
 
 const bcd = require('mdn-browser-compat-data');
-const tests = require('./generated/tests.json');
+const tests = require('./tests.json');
 
 const traverseFeatures = (obj, identifier) => {
   const features = [];
