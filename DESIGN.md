@@ -53,11 +53,11 @@ The following JSON...
       "__test": "return canvas && instance;",
       "drawArraysInstancedANGLE": "return true && instance && 'drawArraysInstancedANGLE' in instance;"
     },
-    "Console": {
+    "DOMTokenList": {
       "__additional": {
-        "log.substitution_strings": "console.log('Hello, %s.', 'Bob')"
+        "remove_whitespace_and_duplicates": "var elm = document.createElement('b'); elm.className = ' foo bar foo '; elm.classList.remove('bar'); return elm.className === 'foo';"
       }
-    }
+    },
   },
   "css": {
 
@@ -75,9 +75,8 @@ bcd.addTest('api.ANGLE_instanced_arrays.VERTEX_ATTRIB_ARRAY_DIVISOR_ANGLE', "(fu
 bcd.addTest('api.ANGLE_instanced_arrays.vertexAttribDivisorANGLE', "(function() {var canvas = document.createElement('canvas'); var gl = canvas.getContext('webgl'); var instance = gl.getExtension('ANGLE_instanced_arrays');return instance && 'vertexAttribDivisorANGLE' in instance;})()", 'Window');
 bcd.addTest('api.Animation', {"property":"Animation","scope":"self"}, 'Window');
 ...
-bcd.addTest('api.Console', {"property":"console","scope":"self"}, 'Window');
-bcd.addTest('api.Console.log', [{"property":"console","scope":"self"},{"property":"log","scope":"console"}], 'Window');
-bcd.addTest('api.Console.log.substitution_strings', "(function() {console.log('Hello, %s.', 'Bob')})()", 'Window');
+bcd.addTest('api.DOMTokenList', {"property":"DOMTokenList","scope":"self"}, 'Window');
+bcd.addTest('api.DOMTokenList.remove_whitespace_and_duplicates', "(function() {var elm = document.createElement('b'); elm.className = ' foo bar foo '; elm.classList.remove('bar'); return elm.className === 'foo';})()", 'Window');
 ```
 
 Tips: make sure to implement thorough feature checking as to not raise exceptions.
