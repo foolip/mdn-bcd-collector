@@ -5,6 +5,7 @@
     },
     "rules": {
         "comma-dangle": ["error", "never"],
+        "curly": ["error", "all"],
         "guard-for-in": "off",
         "max-len": ["error", {
             "ignoreRegExpLiterals": true,

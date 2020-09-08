@@ -729,7 +729,9 @@ const copyResources = () => {
     );
 
     fs.writeFile(corejsPath, result, 'utf8', (err) => {
-      if (err) return console.log(err);
+      if (err) {
+        return console.log(err);
+      }
     });
   });
 };

@@ -54,7 +54,9 @@
 
   function updateStatus(newStatus, append) {
     var statusElement = document.getElementById('status');
-    if (!statusElement) return;
+    if (!statusElement) {
+      return;
+    }
 
     if (append) {
       statusElement.innerHTML = statusElement.innerHTML + newStatus;
@@ -427,7 +429,9 @@
     for (var i=0; i<results.length; i++) {
       var result = results[i];
       response += result.name + ': <strong>' + result.result;
-      if (result.prefix) response += ' (' + result.prefix + ' prefix)';
+      if (result.prefix) {
+        response += ' (' + result.prefix + ' prefix)';
+      }
       response += '</strong>\n<code>' + result.info.code + ';</code>\n\n';
     }
     updateStatus(response.replace(/\n/g, '<br />'));

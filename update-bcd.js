@@ -108,7 +108,9 @@ const getSupportMap = (report) => {
   // Transform `report` to map from test name (BCD path) to array of results.
   const testMap = new Map;
   for (const [url, results] of Object.entries(report.results)) {
-    if (url === '__version') continue;
+    if (url === '__version') {
+      continue;
+    }
     for (const test of results) {
       const tests = testMap.get(test.name) || [];
       tests.push({url, result: test.result, prefix: test.prefix});
