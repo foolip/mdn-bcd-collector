@@ -141,7 +141,7 @@ const compileTest = (test) => {
     for (const prefix of prefixesToTest) {
       const code = compileTestCode(test.raw.code, prefix);
 
-      if (!newTest.tests.map((item) => (item.code)).includes(code)) {
+      if (!newTest.tests.some((item) => item.code === code)) {
         newTest.tests.push({
           code: code,
           prefix: prefix
@@ -150,13 +150,13 @@ const compileTest = (test) => {
     }
   } else if (test.scope[0] == 'CSS') {
     for (const prefix of prefixesToTest) {
-      const code = (`${compileTestCode(
+      const code = `${compileTestCode(
           test.raw.code[0], prefix
       )} ${test.raw.combinator} ${compileTestCode(
           test.raw.code[1], prefix
-      )}`);
+      )}`;
 
-      if (!newTest.tests.map((item) => (item.code)).includes(code)) {
+      if (!newTest.tests.some((item) => item.code === code)) {
         newTest.tests.push({
           code: code,
           prefix: prefix
@@ -169,9 +169,9 @@ const compileTest = (test) => {
 
       for (const prefix2 of prefixesToTest) {
         const childCode = compileTestCode(test.raw.code[1], prefix2, prefix1);
-        const code = (`${parentCode} ${test.raw.combinator} ${childCode}`);
+        const code = `${parentCode} ${test.raw.combinator} ${childCode}`;
 
-        if (!newTest.tests.map((item) => (item.code)).includes(code)) {
+        if (!newTest.tests.some((item) => item.code === code)) {
           newTest.tests.push({
             code: code,
             prefix: prefix2
