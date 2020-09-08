@@ -40,7 +40,7 @@ const {
   collectCSSPropertiesFromWebref,
   cssPropertyToIDLAttribute,
   buildCSS,
-  buildManifest
+  buildEndpoints
 } = proxyquire('../../build', {
   './custom-tests.json': {api: {}, css: {}}
 });
@@ -2283,7 +2283,7 @@ describe('build', () => {
     });
   });
 
-  it('buildManifest', () => {
+  it('buildEndpoints', () => {
     const tests = {
       'api.Attr': {
         code: '"Attr" in self',
@@ -2302,7 +2302,6 @@ describe('build', () => {
         scope: ['JavaScript']
       }
     };
-    const expectedManifest = {
       main: {
         '/api/interfaces': {
           entries: ['api.Attr', 'api.Attr.name'],
@@ -2324,6 +2323,7 @@ describe('build', () => {
           httpsOnly: false,
           scope: 'CSS'
         }
+    const expectedEndpoints = {
       },
       individual: {
         '/api/Attr': ['api.Attr', 'api.Attr.name'],
@@ -2343,8 +2343,8 @@ describe('build', () => {
       }
     };
 
-    const manifest = buildManifest(tests);
+    const endpoints = buildEndpoints(tests);
 
-    assert.deepEqual(manifest, expectedManifest);
+    assert.deepEqual(endpoints, expectedEndpoints);
   });
 });

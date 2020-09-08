@@ -665,7 +665,7 @@ const copyResources = async () => {
   });
 };
 
-const buildManifest = (tests) => {
+const buildEndpoints = (tests) => {
   const manifest = {};
 
   for (const [ident, test] of Object.entries(tests)) {
@@ -714,7 +714,10 @@ const build = async (webref, bcd) => {
   const tests = Object.assign({}, IDLTests, CSSTests);
 
   await writeFile(path.join(manifestDir, 'tests.json'), tests);
-  await writeFile(path.join(manifestDir, 'endpoints.json'), buildManifest(tests));
+  await writeFile(
+    path.join(manifestDir, 'endpoints.json'),
+    buildEndpoints(tests)
+  );
   await copyResources();
 };
 
@@ -743,6 +746,6 @@ if (require.main === module) {
     collectCSSPropertiesFromWebref,
     cssPropertyToIDLAttribute,
     buildCSS,
-    buildManifest
+    buildEndpoints
   };
 }
