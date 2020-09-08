@@ -54,7 +54,7 @@ class Tests {
               entries: []
             };
           }
-          if (!(ident in endpoints[endpoint].entries)) {
+          if (!endpoints[endpoint].entries.includes(ident)) {
             endpoints[endpoint].entries.push(ident);
           }
         }
@@ -93,7 +93,7 @@ class Tests {
       return item[1] === afterURL.pathname;
     }) + 1;
 
-    if (index >= endpoints.length) {
+    if (index == 0 || index >= endpoints.length) {
       return null;
     }
 
@@ -112,7 +112,7 @@ class Tests {
   }
 
   getTests(endpoint) {
-    let idents = [];
+    let idents;
     if (endpoint in this.endpoints) {
       idents = this.endpoints[endpoint].entries;
     } else {

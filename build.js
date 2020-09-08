@@ -148,7 +148,7 @@ const compileTest = (test) => {
         });
       }
     }
-  } else if (test.scope[0] == ['CSS']) {
+  } else if (test.scope[0] == 'CSS') {
     for (const prefix of prefixesToTest) {
       const code = (`${compileTestCode(
           test.raw.code[0], prefix
@@ -267,6 +267,8 @@ const flattenMembers = (iface) => {
   for (const member of iface.members.filter((member) => !member.name)) {
     switch (member.type) {
       case 'constructor':
+        // Test generation doesn't use constructor arguments, so they aren't
+        // copied
         members.push({name: iface.name, type: 'constructor'});
         break;
       case 'iterable':
@@ -316,6 +318,7 @@ const flattenMembers = (iface) => {
 
   // Add members from ExtAttrs
   if (getExtAttr(iface, 'Constructor')) {
+    // Test generation doesn't use constructor arguments, so they aren't copied
     members.push({name: iface.name, type: 'constructor'});
   }
 
@@ -353,7 +356,7 @@ const getExposureSet = (node) => {
 
 const getName = (node) => {
   if (!('name' in node)) {
-    return false;
+    return undefined;
   }
 
   switch (node.name) {
@@ -656,16 +659,11 @@ const copyResources = async () => {
 
   // Fix source mapping in core-js
   const corejsPath = path.join(generatedDir, 'resources', 'core.js');
-  await fs.readFile(corejsPath, 'utf8').then((data) => {
-    const result = data.replace(
-        /sourceMappingURL=minified\.js\.map/g,
-        'sourceMappingURL=core.js.map'
-    );
-
-    fs.writeFile(corejsPath, result, 'utf8');
-  }).catch((err) => {
-    console.error(err);
-  });
+  const corejsData = await fs.readFile(corejsPath, 'utf8');
+  await fs.writeFile(corejsPath, corejsData.replace(
+      /sourceMappingURL=minified\.js\.map/g,
+      'sourceMappingURL=core.js.map'
+  ), 'utf8');
 };
 
 /* istanbul ignore next */
