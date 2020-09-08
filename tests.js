@@ -24,7 +24,7 @@ class Tests {
 
   listMainEndpoints(urlPrefix = '') {
     return Object.keys(this.endpoints).map((item) => (
-      `${urlPrefix}${item}`
+      ['', `${urlPrefix}${item}`]
     ));
   }
 
@@ -37,7 +37,7 @@ class Tests {
   listAllEndpoints(urlPrefix = '') {
     return [
       ...this.listMainEndpoints(urlPrefix),
-      ...this.listIndividual(urlPrefix).map((item) => (item[1]))
+      ...this.listIndividual(urlPrefix)
     ];
   }
 

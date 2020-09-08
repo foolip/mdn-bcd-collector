@@ -75,7 +75,7 @@ app.use(express.static('generated'));
 
 app.get('/api/tests', (req, res) => {
   res.json([
-    ['', tests.listMainEndpoints('/tests')[0]],
+    tests.listMainEndpoints('/tests')[0],
     ...tests.listIndividual('/tests')
   ]);
 });
@@ -138,7 +138,7 @@ app.post('/api/results/export/github', (req, res) => {
 app.all('/tests/*', (req, res) => {
   const endpoint = `/${req.params['0']}`;
 
-  if (tests.listAllEndpoints().includes(endpoint)) {
+  if (tests.listAllEndpoints().map((item) => (item[1])).includes(endpoint)) {
     res.send(tests.generateTestPage(endpoint));
   } else {
     res.status(404).send(`Could not find tests for ${endpoint}`);
