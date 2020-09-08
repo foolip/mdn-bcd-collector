@@ -203,11 +203,14 @@
           var result = {
             name: pending[i].name,
             result: false,
-            message: 'No worker support'
+            message: 'No worker support',
+            info: {
+              scope: 'Worker'
+            }
           };
 
           if (pending[i].info !== undefined) {
-            result.info = pending[i].info;
+            result.info = Object.assign({}, result.info, pending[i].info);
           }
 
           results.push(result);
@@ -266,11 +269,14 @@
           var result = {
             name: pending[i].name,
             result: false,
-            message: 'No service worker support'
+            message: 'No service worker support',
+            info: {
+              scope: 'ServiceWorker'
+            }
           };
 
           if (pending[i].info !== undefined) {
-            result.info = pending[i].info;
+            result.info = Object.assign({}, result.info, pending[i].info);
           }
 
           results.push(result);
@@ -332,7 +338,8 @@
       var response = '';
       for (var i=0; i<results.length; i++) {
         var result = results[i];
-        response += result.name + ': <strong>' + result.result;
+        response += result.name + ' (' + result.info.scope +
+            ' scope): <strong>' + result.result;
         if (result.prefix) response += ' (' + result.prefix + ' prefix)';
         if (result.message) response += ' (' + result.message + ')';
         response += '</strong>\n<code>' + result.info.code + ';</code>\n\n';
