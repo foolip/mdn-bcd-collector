@@ -28,6 +28,34 @@ partial interface Document {
   attribute EventHandler onbeforecut;
   attribute EventHandler onbeforepaste;
   attribute EventHandler onsearch;
+
+  boolean contains();
+  Touch createTouch();
+  TouchList createTouchList();
+  readonly attribute nsIURI documentURIObject;
+  void enableStyleSheetsForSet(DOMString? name);
+  boolean execCommandShowHelp(DOMString name);
+  readonly attribute long fileSize;
+  nsIBoxObject getBoxObjectFor(DOMElement element);
+  readonly attribute long height;
+  readonly attribute DOMString? lastStyleSheetSet;
+  void loadOverlay(DOMString url, nsIObserver observer);
+  void mozSetImageElement(DOMString imageElementId, DOMElement imageElement);
+  readonly attribute boolean mozSyntheticDocument;
+  void normalizeDocument();
+  attribute EventHandler onafterscriptexecute;
+  attribute EventHandler onbeforescriptexecute;
+  readonly attribute DOMString? origin;
+  readonly attribute Node? popupNode;
+  readonly attribute DOMString? preferredStyleSheetSet;
+  void queryCommandText();
+  void releaseCapture();
+  void routeEvent();
+  readonly attribute DOMString? selectedStyleSheetSet;
+  readonly attribute FrozenArray<DOMElement> styleSheetSets;
+  readonly attribute XULTooltip tooltipNode;
+  attribute UndoManager undoManager;
+  readonly attribute long width;
 };
 
 partial interface Element {
@@ -43,10 +71,25 @@ partial interface Element {
   attribute EventHandler onbeforepaste;
   attribute EventHandler onsearch;
   attribute EventHandler onbeforematch;
+
+  readonly attribute DOMString? accessKey;
+  readonly attribute DOMString? attributeStyleMap;
+  readonly attribute DOMString? currentStyle;
+  readonly attribute DOMString? name;
+  readonly attribute boolean openOrClosedShadowRoot;
+  readonly attribute DOMString? runtimeStyle;
+  readonly attribute Number? scrollLeftMax;
+  void setCapture(optional boolean retargetToElement);
+  readonly attribute boolean tabStop;
 };
 
 partial interface Event {
   readonly attribute object path;
+  readonly attribute Element? explicitOriginalTarget;
+  boolean getPreventDefault();
+  readonly attribute Element? originalTarget;
+  attribute boolean preventBubble;
+  attribute boolean preventCapture;
 };
 
 partial interface File {
@@ -312,68 +355,47 @@ partial interface DataTransfer {
   void addElement(Element el);
 };
 
-[Exposed=Window]
-interface DirectoryEntrySync {};
-
-[Exposed=Window]
-interface DirectoryReaderSync {};
-
-partial interface Document {
-  boolean contains();
-  Touch createTouch();
-  TouchList createTouchList();
-  readonly attribute nsIURI documentURIObject;
-  void enableStyleSheetsForSet(DOMString? name);
-  boolean execCommandShowHelp(DOMString name);
-  readonly attribute long fileSize;
-  nsIBoxObject getBoxObjectFor(DOMElement element);
-  readonly attribute long height;
-  readonly attribute DOMString? lastStyleSheetSet;
-  void loadOverlay(DOMString url, nsIObserver observer);
-  void mozSetImageElement(DOMString imageElementId, DOMElement imageElement);
-  readonly attribute boolean mozSyntheticDocument;
-  void normalizeDocument();
-  attribute EventHandler onafterscriptexecute;
-  attribute EventHandler onbeforescriptexecute;
-  readonly attribute DOMString? origin;
-  readonly attribute Node? popupNode;
-  readonly attribute DOMString? preferredStyleSheetSet;
-  void queryCommandText();
-  void releaseCapture();
-  void routeEvent();
-  readonly attribute DOMString? selectedStyleSheetSet;
-  readonly attribute FrozenArray<DOMElement> styleSheetSets;
-  readonly attribute XULTooltip tooltipNode;
-  attribute UndoManager undoManager;
-  readonly attribute long width;
-};
+[Exposed=Window] interface DirectoryEntrySync {};
+[Exposed=Window] interface DirectoryReaderSync {};
 
 partial interface DOMMatrixReadOnly {
   void scaleNonUniformSelf(optional unrestricted double scaleX = 1, optional unrestricted double scaleY = 1);
-  void tranform();
+  void transform();
 };
 
-partial interface Element {
-  readonly attribute DOMString? accessKey;
-  readonly attribute DOMString? attributeStyleMap;
-  readonly attribute DOMString? currentStyle;
-  readonly attribute DOMString? name;
-  readonly attribute boolean openOrClosedShadowRoot;
-  readonly attribute DOMString? runtimeStyle;
-  readonly attribute Number? scrollLeftMax;
-  void setCapture(optional boolean retargetToElement);
-  readonly attribute boolean tabStop;
+[Exposed=Window] interface EntrySync {};
+
+partial interface FetchEvent {
+  readonly attribute Client client;
+  readonly attribute boolean isReload;
+  Promise<NavigationPreloadManager> navigationPreload();
+  readonly attribute DOMString targetClientId;
 };
 
-[Exposed=Window]
-interface EntrySync {};
+partial interface File {
+  readonly attribute DOMString type;
+};
 
-partial interface Event {
-  readonly attribute Element? explicitOriginalTarget;
-  boolean getPreventDefault();
-  readonly attribute Element? originalTarget;
-  attribute boolean preventBubble;
-  attribute boolean preventCapture;
+[Exposed=Window] interface FileEntrySync {};
+[Exposed=Window] interface FileError {};
+[Exposed=Window] interface FileException {};
+
+partial interface FileSystemEntry {
+  void getMetadata(MetadataCallback successCallback, optional ErrorCallback? errorCallback);
+  void moveTo(DirectoryEntry parent, optional DOMString? name, optional EntryCallback? successCallback, optional ErrorCallback? errorCallback);
+  void copyTo(DirectoryEntry parent, optional DOMString? name, optional EntryCallback? successCallback, optional ErrorCallback? errorCallback);
+  DOMString toURL();
+  void remove(VoidCallback successCallback, optional ErrorCallback? errorCallback);
+};
+
+partial interface FileSystemFileEntry {
+  void createWriter(FileWriterCallback successCallback,
+                    optional ErrorCallback? errorCallback);
+};
+
+[Exposed=Window] interface FileSystemSync {
+  readonly attribute DOMString name;
+  readonly attribute DirectoryEntry root;
 };
 
 // https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/modules/payments/abort_payment_event.idl;drc=c2e7d4f0b24814b0d1c51a964db34ec5b4930756
@@ -768,4 +790,14 @@ interface UserDataHandler {
   const unsigned short NODE_ADOPTED = 5;
 
   void handle(unsigned short operation, DOMString key, DOMUserData data, Node src, Node dst);
+};
+
+// https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/core/feature_policy/feature_policy.idl;drc=56a02023a0c4c3d513bf7cd972cf616eb25f73bc
+
+[Exposed=Window]
+interface FeaturePolicy {
+  [MeasureAs=FeaturePolicyJSAPI, CallWith=ScriptState] boolean allowsFeature(DOMString feature, optional DOMString origin);
+  [HighEntropy=Direct, MeasureAs=FeaturePolicyJSAPI, CallWith=ScriptState] sequence<DOMString> features();
+  [MeasureAs=FeaturePolicyJSAPI, CallWith=ScriptState] sequence<DOMString> allowedFeatures();
+  [MeasureAs=FeaturePolicyJSAPI, CallWith=ScriptState] sequence<DOMString> getAllowlistForFeature(DOMString feature);
 };
