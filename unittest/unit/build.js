@@ -641,7 +641,7 @@ describe('build', () => {
   it('buildIDL', () => {
     const webref = require('../../webref');
     assert.typeOf(buildIDL(webref), 'object');
-  });
+  }).timeout(5000);
 
   describe('flattenIDL', () => {
     const historicalIDL = WebIDL2.parse(`interface DOMError {};`);
