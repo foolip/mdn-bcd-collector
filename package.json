@@ -20,7 +20,7 @@
     "deploy": "gcloud app deploy",
     "start": "node app.js",
     "unittest": "NODE_ENV=test nyc mocha --recursive unittest",
-    "test": "npm run unittest",
+    "test": "npm run lint && npm run unittest",
     "selenium": "mocha selenium",
     "update-bcd": "node update-bcd.js"
   },
