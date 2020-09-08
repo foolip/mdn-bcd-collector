@@ -36,10 +36,9 @@ const getHost = () => {
   return `localhost:${PORT}`;
 };
 
-// TODO: none of this setup is pretty
 const {CloudStorage, MemoryStorage} = require('./storage');
 const storage = process.env.NODE_ENV === 'production' ?
-   new CloudStorage :
+   new CloudStorage(process.env.GOOGLE_CLOUD_PROJECT) :
    new MemoryStorage;
 
 const secrets = process.env.NODE_ENV === 'test' ?
