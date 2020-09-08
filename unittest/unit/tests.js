@@ -166,4 +166,33 @@ describe('Tests', () => {
     assert.equal(tests.getScope('/api/serviceworkerinterfaces'), 'ServiceWorker');
     assert.equal(tests.getScope('/api/dummy'), '');
   });
+
+  it('buildEndpoints', () => {
+    const expectedEndpoints = {
+      '/api/interfaces': {
+        entries: ['api.AbortController', 'api.AbortController.signal'],
+        httpsOnly: false,
+        scope: 'Window'
+      },
+      '/api/serviceworkerinterfaces': {
+        entries: ['api.AbortController'],
+        httpsOnly: true,
+        scope: 'ServiceWorker'
+      },
+      '/api/workerinterfaces': {
+        entries: ['api.AbortController', 'api.AbortController.signal'],
+        httpsOnly: false,
+        scope: 'Worker'
+      },
+      '/css/properties': {
+        entries: ['css.properties.font-family'],
+        httpsOnly: false,
+        scope: 'CSS'
+      }
+    };
+
+    const endpoints = tests.buildEndpoints(tests);
+
+    assert.deepEqual(endpoints, expectedEndpoints);
+  });
 });

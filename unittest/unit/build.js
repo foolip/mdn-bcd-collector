@@ -39,8 +39,7 @@ const {
   collectCSSPropertiesFromBCD,
   collectCSSPropertiesFromWebref,
   cssPropertyToIDLAttribute,
-  buildCSS,
-  buildEndpoints
+  buildCSS
 } = proxyquire('../../build', {
   './custom-tests.json': {api: {}, css: {}}
 });
@@ -2281,52 +2280,5 @@ describe('build', () => {
         scope: ['CSS']
       }
     });
-  });
-
-  it('buildEndpoints', () => {
-    const tests = {
-      'api.Attr': {
-        code: '"Attr" in self',
-        scope: ['Window', 'Worker', 'ServiceWorker']
-      },
-      'api.Attr.name': {
-        code: '"Attr" in self && "name" in Attr.prototype',
-        scope: ['Window', 'Worker']
-      },
-      'css.properties.font-family': {
-        code: '"fontFamily" in document.body.style || CSS.supports("font-family", "inherit")',
-        scope: ['CSS']
-      },
-      'javascript.builtins.array': {
-        code: '[1, 2, 3]',
-        scope: ['JavaScript']
-      }
-    };
-    const expectedEndpoints = {
-      '/api/interfaces': {
-        entries: ['api.Attr', 'api.Attr.name'],
-        httpsOnly: false,
-        scope: 'Window'
-      },
-      '/api/serviceworkerinterfaces': {
-        entries: ['api.Attr'],
-        httpsOnly: true,
-        scope: 'ServiceWorker'
-      },
-      '/api/workerinterfaces': {
-        entries: ['api.Attr', 'api.Attr.name'],
-        httpsOnly: false,
-        scope: 'Worker'
-      },
-      '/css/properties': {
-        entries: ['css.properties.font-family'],
-        httpsOnly: false,
-        scope: 'CSS'
-      }
-    };
-
-    const endpoints = buildEndpoints(tests);
-
-    assert.deepEqual(endpoints, expectedEndpoints);
   });
 });

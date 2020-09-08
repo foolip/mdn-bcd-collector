@@ -17,9 +17,51 @@
 class Tests {
   constructor(options) {
     this.tests = options.tests;
-    this.endpoints = options.endpoints;
+    this.endpoints = this.buildEndpoints();
     this.host = options.host;
     this.httpOnly = options.httpOnly;
+  }
+
+  buildEndpoints() {
+    const endpoints = {};
+
+    for (const [ident, test] of Object.entries(this.tests)) {
+      for (const scope of test.scope) {
+        let endpoint = '';
+        let httpsOnly = false;
+        switch (scope) {
+          case 'Window':
+            endpoint = '/api/interfaces';
+            break;
+          case 'Worker':
+          case 'DedicatedWorker':
+            endpoint = '/api/workerinterfaces';
+            break;
+          case 'ServiceWorker':
+            endpoint = '/api/serviceworkerinterfaces';
+            httpsOnly = true;
+            break;
+          case 'CSS':
+            endpoint = '/css/properties';
+            break;
+        }
+
+        if (endpoint) {
+          if (!(endpoint in endpoints)) {
+            endpoints[endpoint] = {
+              scope: scope,
+              httpsOnly: httpsOnly,
+              entries: []
+            };
+          }
+          if (!(ident in endpoints[endpoint].entries)) {
+            endpoints[endpoint].entries.push(ident);
+          }
+        }
+      }
+    }
+
+    return endpoints;
   }
 
   listMainEndpoints(urlPrefix = '') {

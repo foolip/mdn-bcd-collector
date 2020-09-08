@@ -665,48 +665,6 @@ const copyResources = async () => {
   });
 };
 
-const buildEndpoints = (tests) => {
-  const manifest = {};
-
-  for (const [ident, test] of Object.entries(tests)) {
-    for (const scope of test.scope) {
-      let endpoint = '';
-      let httpsOnly = false;
-      switch (scope) {
-        case 'Window':
-          endpoint = '/api/interfaces';
-          break;
-        case 'Worker':
-        case 'DedicatedWorker':
-          endpoint = '/api/workerinterfaces';
-          break;
-        case 'ServiceWorker':
-          endpoint = '/api/serviceworkerinterfaces';
-          httpsOnly = true;
-          break;
-        case 'CSS':
-          endpoint = '/css/properties';
-          break;
-      }
-
-      if (endpoint) {
-        if (!(endpoint in manifest)) {
-          manifest[endpoint] = {
-            scope: scope,
-            httpsOnly: httpsOnly,
-            entries: []
-          };
-        }
-        if (!(ident in manifest[endpoint].entries)) {
-          manifest[endpoint].entries.push(ident);
-        }
-      }
-    }
-  }
-
-  return manifest;
-};
-
 /* istanbul ignore next */
 const build = async (webref, bcd) => {
   const IDLTests = buildIDL(webref);
@@ -714,10 +672,6 @@ const build = async (webref, bcd) => {
   const tests = Object.assign({}, IDLTests, CSSTests);
 
   await writeFile(path.join(manifestDir, 'tests.json'), tests);
-  await writeFile(
-      path.join(manifestDir, 'endpoints.json'),
-      buildEndpoints(tests)
-  );
   await copyResources();
 };
 
@@ -745,7 +699,6 @@ if (require.main === module) {
     collectCSSPropertiesFromBCD,
     collectCSSPropertiesFromWebref,
     cssPropertyToIDLAttribute,
-    buildCSS,
-    buildEndpoints
+    buildCSS
   };
 }
