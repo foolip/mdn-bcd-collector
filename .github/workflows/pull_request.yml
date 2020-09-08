@@ -12,7 +12,6 @@ jobs:
     - run: npm ci
     - run: npm run lint
     - run: npm run build
-    - run: npm run coverage
-    - run: npm run puppeteer
+    - run: npm run unittest
 env:
   FORCE_COLOR: 3

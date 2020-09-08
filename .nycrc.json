@@ -1,0 +1,9 @@
+{
+  "all": true,
+  "exclude": [
+    "**/generated/**",
+    "**/unittest/**",
+    "**/coverage/**",
+    "**/json3.min.js"
+  ]
+}
