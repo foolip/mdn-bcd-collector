@@ -2,7 +2,7 @@
 coverage.lcov
 coverage/
 generated/
-manifest/
 node_modules/
 secrets.json
+tests.json
 .testtmp

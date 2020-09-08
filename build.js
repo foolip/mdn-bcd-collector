@@ -23,7 +23,6 @@ const customTests = require('./custom-tests.json');
 const webref = require('./webref');
 
 const generatedDir = path.join(__dirname, 'generated');
-const manifestDir = path.join(__dirname, 'manifest');
 
 /* istanbul ignore next */
 const prefixes = process.env.NODE_ENV === 'test' ? {
@@ -675,7 +674,7 @@ const build = async (webref, bcd) => {
   const CSSTests = buildCSS(webref, bcd);
   const tests = Object.assign({}, IDLTests, CSSTests);
 
-  await writeFile(path.join(manifestDir, 'tests.json'), tests);
+  await writeFile(path.join(__dirname, 'tests.json'), tests);
   await copyResources();
 };
 

@@ -18,8 +18,7 @@ const {app, version} = require('../../app');
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 
-const endpoints = Object.entries(require('../../manifest/endpoints.json'));
-const tests = Object.entries(require('../../manifest/tests.json'));
+const tests = Object.entries(require('../../tests.json'));
 
 chai.use(chaiHttp);
 const agent = chai.request.agent(app);
@@ -45,8 +44,8 @@ describe('/api/results', () => {
     assert.deepEqual(res.body, {});
   });
 
-  const testURL = `http://localhost:8080/tests${endpoints[0][0]}`;
-  const testURL2 = `https://host.test/tests${endpoints[endpoints.length - 1][0]}`;
+  const testURL = `http://localhost:8080/tests/api/interfaces`;
+  const testURL2 = `https://host.test/tests/css/properties`;
 
   it('submit valid results', async () => {
     const res = await agent.post('/api/results')
@@ -54,7 +53,7 @@ describe('/api/results', () => {
         .send({x: 1});
     assert.equal(res.status, 201);
     assert.deepEqual(res.body, {
-      next: `http://localhost:8080/tests${endpoints[1][0]}`
+      next: `http://localhost:8080/tests/api/workerinterfaces`
     });
   });
 
@@ -120,7 +119,7 @@ describe('/api/tests', () => {
 
 describe('/tests/', () => {
   it('get a main test', async () => {
-    const res = await agent.get(`/tests${endpoints[0][0]}`);
+    const res = await agent.get(`/tests/api/interfaces`);
     assert.equal(res.status, 200);
   });
 
