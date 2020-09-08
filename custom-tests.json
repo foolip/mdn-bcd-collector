@@ -9,6 +9,11 @@
     "AudioBufferSourceNode": {
       "__base": "var audioCtx = new (window.AudioContext || window.webkitAudioContext)(); if (!audioCtx) {return false}; var instance = audioCtx.createBufferSource();"
     },
+    "DOMTokenList": {
+      "__additional": {
+        "remove_whitespace_and_duplicates": "var elm = document.createElement('b'); elm.className = ' foo bar foo '; elm.classList.remove('bar'); return elm.className === 'foo';"
+      }
+    },
     "EXT_blend_minmax": {
       "__base": "var canvas = document.createElement('canvas'); if (!canvas) {return false}; var gl = canvas.getContext('webgl'); if (!gl) {return false}; var instance = gl.getExtension('EXT_blend_minmax');"
     },
