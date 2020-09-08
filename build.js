@@ -25,6 +25,7 @@ const webref = require('./webref');
 const generatedDir = path.join(__dirname, 'generated');
 const manifestDir = path.join(__dirname, 'manifest');
 
+/* istanbul ignore next */
 const prefixes = process.env.NODE_ENV === 'test' ? {
   // Shortened in tests for convenience
   api: ['', 'WebKit'],

@@ -23,20 +23,24 @@ const logger = require('./logger');
 const appversion = require('./package.json').version;
 
 const PORT = process.env.PORT || 8080;
+/* istanbul ignore next */
 const host = process.env.NODE_ENV === 'production' ?
       'mdn-bcd-collector.appspot.com' :
       `localhost:${PORT}`;
 
+/* istanbul ignore next */
 const secrets = process.env.NODE_ENV === 'test' ?
     require('./secrets.sample.json') :
     require('./secrets.json');
 
 // TODO: none of this setup is pretty
 const {CloudStorage, MemoryStorage} = require('./storage');
+/* istanbul ignore next */
 const storage = process.env.NODE_ENV === 'production' ?
    new CloudStorage :
    new MemoryStorage;
 
+/* istanbul ignore next */
 const github = require('./github')(
   secrets.github.token ?
   {auth: `token ${secrets.github.token}`} :
