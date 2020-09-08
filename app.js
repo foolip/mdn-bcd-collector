@@ -23,10 +23,6 @@ const logger = require('./logger');
 const appversion = require('./package.json').version;
 
 const PORT = process.env.PORT || 8080;
-/* istanbul ignore next */
-const host = process.env.NODE_ENV === 'production' ?
-      'mdn-bcd-collector.appspot.com' :
-      `localhost:${PORT}`;
 
 /* istanbul ignore next */
 const secrets = process.env.NODE_ENV === 'test' ?
