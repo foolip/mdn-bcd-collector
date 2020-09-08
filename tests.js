@@ -48,15 +48,17 @@ class Tests {
     }
     const endpoints = this.listMainEndpoints('/tests');
     const index = endpoints.findIndex((item) => {
-      return item === afterURL.pathname;
+      return item[1] === afterURL.pathname;
     }) + 1;
 
     if (index >= endpoints.length) {
       return null;
     }
 
-    if (this.endpoints[endpoints[index].replace('/tests', '')].httpsOnly) {
-      const newUrl = `https://${this.host}${endpoints[index]}`;
+    const endpoint = endpoints[index][1];
+
+    if (this.endpoints[endpoint.replace('/tests', '')].httpsOnly) {
+      const newUrl = `https://${this.host}${endpoint}`;
       if (this.httpOnly) {
         // Skip this endpoint and go to the next
         return this.next(newUrl);
@@ -64,7 +66,7 @@ class Tests {
       return newUrl;
     }
 
-    return `http://${this.host}${endpoints[index]}`;
+    return `http://${this.host}${endpoint}`;
   }
 
   getTests(endpoint) {

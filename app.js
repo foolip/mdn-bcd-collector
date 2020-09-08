@@ -97,15 +97,9 @@ app.post('/api/results', (req, res) => {
   const response = {};
 
   // Include next test in response as a convenience.
-  try {
-    const next = tests.next(forURL);
-    if (next) {
-      response.next = next;
-    }
-  } catch (err) {
-    /* istanbul ignore next */
-    logger.warn(`Results submitted for URL not in manifest: ${forURL}`);
-    // note: indistinguishable from finishing last test to client
+  const next = tests.next(forURL);
+  if (next) {
+    response.next = next;
   }
 
   Promise.all([
