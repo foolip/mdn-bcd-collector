@@ -25,9 +25,10 @@ const appversion = require('./package.json').version;
 module.exports = (options) => {
   const octokit = new Octokit(options);
 
-  async function exportAsPR(report) {
+  const exportAsPR = async (report) => {
     const json = stringify(report, {space: '  '}) + '\n';
     const buffer = Buffer.from(json);
+    /* eslint-disable-next-line max-len */
     // like https://github.com/web-platform-tests/wpt.fyi/blob/26805a0122ea01076ac22c0a96313c1cf5cc30d6/results-processor/wptreport.py#L79
     const hash = crypto.createHash('sha1');
     const digest = hash.update(buffer).digest('hex').substr(0, 10);
@@ -71,7 +72,7 @@ module.exports = (options) => {
     });
 
     return data;
-  }
+  };
 
   return {exportAsPR};
 };

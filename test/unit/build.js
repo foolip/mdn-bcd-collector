@@ -76,9 +76,9 @@ describe('build', () => {
       beforeEach(() => {
         loadCustomTests({
           api: {
-            'foo': {
-              '__base': 'var a = 1;',
-              '__test': 'return a;'
+            foo: {
+              __base: 'var a = 1;',
+              __test: 'return a;'
             }
           },
           css: {}
@@ -104,8 +104,8 @@ describe('build', () => {
       beforeEach(() => {
         loadCustomTests({
           api: {
-            'foo': {
-              '__test': 'return 1;'
+            foo: {
+              __test: 'return 1;'
             }
           },
           css: {}
@@ -125,9 +125,9 @@ describe('build', () => {
       beforeEach(() => {
         loadCustomTests({
           api: {
-            'foo': {
-              '__base': 'var a = 1;',
-              'bar': 'return a + 1;'
+            foo: {
+              __base: 'var a = 1;',
+              bar: 'return a + 1;'
             }
           },
           css: {}
@@ -153,8 +153,8 @@ describe('build', () => {
       beforeEach(() => {
         loadCustomTests({
           api: {
-            'foo': {
-              'bar': 'return 1 + 1;'
+            foo: {
+              bar: 'return 1 + 1;'
             }
           },
           css: {}
@@ -177,10 +177,10 @@ describe('build', () => {
       beforeEach(() => {
         loadCustomTests({
           api: {
-            'foo': {
-              '__base': 'var a = 1;',
-              '__test': 'return a;',
-              'bar': 'return a + 1;'
+            foo: {
+              __base: 'var a = 1;',
+              __test: 'return a;',
+              bar: 'return a + 1;'
             }
           },
           css: {}
@@ -333,7 +333,7 @@ describe('build', () => {
         },
         'css-grid': {
           properties: {
-            'grid': {}
+            grid: {}
           }
         }
       }
@@ -589,16 +589,16 @@ describe('build', () => {
             );
           };`);
       loadCustomTests({
-        'api': {
-          'ANGLE_instanced_arrays': {
+        api: {
+          ANGLE_instanced_arrays: {
             // eslint-disable-next-line max-len
-            '__base': 'var canvas = document.createElement(\'canvas\'); var gl = canvas.getContext(\'webgl\'); var instance = gl.getExtension(\'ANGLE_instanced_arrays\');',
-            '__test': 'return !!instance;',
+            __base: 'var canvas = document.createElement(\'canvas\'); var gl = canvas.getContext(\'webgl\'); var instance = gl.getExtension(\'ANGLE_instanced_arrays\');',
+            __test: 'return !!instance;',
             // eslint-disable-next-line max-len
-            'drawArraysInstancedANGLE': 'return instance && \'drawArraysInstancedANGLE\' in instance;'
+            drawArraysInstancedANGLE: 'return instance && \'drawArraysInstancedANGLE\' in instance;'
           }
         },
-        'css': {}
+        css: {}
       });
       assert.deepEqual(buildIDLTests(ast), [
         // eslint-disable-next-line max-len
@@ -626,23 +626,23 @@ describe('build', () => {
         [
           'WindowOrWorkerGlobalScope',
           {
-            'property': 'WindowOrWorkerGlobalScope',
-            'scope': 'self'
+            property: 'WindowOrWorkerGlobalScope',
+            scope: 'self'
           },
           new Set(['Window']),
           [
             [
               'active',
               {
-                'property': 'active',
-                'scope': 'self'
+                property: 'active',
+                scope: 'self'
               }
             ],
             [
               'isLoaded',
               {
-                'property': 'isLoaded',
-                'scope': 'self'
+                property: 'isLoaded',
+                scope: 'self'
               }
             ]
           ]
@@ -658,8 +658,8 @@ describe('build', () => {
         [
           'Number',
           {
-            'property': 'Number',
-            'scope': 'self'
+            property: 'Number',
+            scope: 'self'
           },
           new Set(['Window']),
           [
@@ -667,12 +667,12 @@ describe('build', () => {
               'Number',
               [
                 {
-                  'property': 'Number',
-                  'scope': 'self'
+                  property: 'Number',
+                  scope: 'self'
                 },
                 {
-                  'property': 'constructor',
-                  'scope': 'Number'
+                  property: 'constructor',
+                  scope: 'Number'
                 }
               ]
             ]
@@ -688,8 +688,8 @@ describe('build', () => {
         [
           'Number',
           {
-            'property': 'Number',
-            'scope': 'self'
+            property: 'Number',
+            scope: 'self'
           },
           new Set(['Window']),
           [
@@ -697,12 +697,12 @@ describe('build', () => {
               'Number',
               [
                 {
-                  'property': 'Number',
-                  'scope': 'self'
+                  property: 'Number',
+                  scope: 'self'
                 },
                 {
-                  'property': 'constructor',
-                  'scope': 'Number'
+                  property: 'constructor',
+                  scope: 'Number'
                 }
               ]
             ]
@@ -719,8 +719,8 @@ describe('build', () => {
         [
           'DoubleList',
           {
-            'property': 'DoubleList',
-            'scope': 'self'
+            property: 'DoubleList',
+            scope: 'self'
           },
           new Set(['Window']),
           [
@@ -728,20 +728,20 @@ describe('build', () => {
               '@@iterator',
               [
                 {
-                  'property': 'DoubleList',
-                  'scope': 'self'
+                  property: 'DoubleList',
+                  scope: 'self'
                 },
                 {
-                  'property': 'Symbol',
-                  'scope': 'self'
+                  property: 'Symbol',
+                  scope: 'self'
                 },
                 {
-                  'property': 'iterator',
-                  'scope': 'Symbol'
+                  property: 'iterator',
+                  scope: 'Symbol'
                 },
                 {
-                  'property': 'Symbol.iterator',
-                  'scope': 'DoubleList.prototype'
+                  property: 'Symbol.iterator',
+                  scope: 'DoubleList.prototype'
                 }
               ]
             ],
@@ -749,12 +749,12 @@ describe('build', () => {
               'entries',
               [
                 {
-                  'property': 'DoubleList',
-                  'scope': 'self'
+                  property: 'DoubleList',
+                  scope: 'self'
                 },
                 {
-                  'property': 'entries',
-                  'scope': 'DoubleList.prototype'
+                  property: 'entries',
+                  scope: 'DoubleList.prototype'
                 }
               ]
             ],
@@ -762,12 +762,12 @@ describe('build', () => {
               'forEach',
               [
                 {
-                  'property': 'DoubleList',
-                  'scope': 'self'
+                  property: 'DoubleList',
+                  scope: 'self'
                 },
                 {
-                  'property': 'forEach',
-                  'scope': 'DoubleList.prototype'
+                  property: 'forEach',
+                  scope: 'DoubleList.prototype'
                 }
               ]
             ],
@@ -775,12 +775,12 @@ describe('build', () => {
               'keys',
               [
                 {
-                  'property': 'DoubleList',
-                  'scope': 'self'
+                  property: 'DoubleList',
+                  scope: 'self'
                 },
                 {
-                  'property': 'keys',
-                  'scope': 'DoubleList.prototype'
+                  property: 'keys',
+                  scope: 'DoubleList.prototype'
                 }
               ]
             ],
@@ -788,12 +788,12 @@ describe('build', () => {
               'values',
               [
                 {
-                  'property': 'DoubleList',
-                  'scope': 'self'
+                  property: 'DoubleList',
+                  scope: 'self'
                 },
                 {
-                  'property': 'values',
-                  'scope': 'DoubleList.prototype'
+                  property: 'values',
+                  scope: 'DoubleList.prototype'
                 }
               ]
             ]
@@ -810,8 +810,8 @@ describe('build', () => {
         [
           'DoubleMap',
           {
-            'property': 'DoubleMap',
-            'scope': 'self'
+            property: 'DoubleMap',
+            scope: 'self'
           },
           new Set(['Window']),
           [
@@ -819,12 +819,12 @@ describe('build', () => {
               'clear',
               [
                 {
-                  'property': 'DoubleMap',
-                  'scope': 'self'
+                  property: 'DoubleMap',
+                  scope: 'self'
                 },
                 {
-                  'property': 'clear',
-                  'scope': 'DoubleMap.prototype'
+                  property: 'clear',
+                  scope: 'DoubleMap.prototype'
                 }
               ]
             ],
@@ -832,12 +832,12 @@ describe('build', () => {
               'delete',
               [
                 {
-                  'property': 'DoubleMap',
-                  'scope': 'self'
+                  property: 'DoubleMap',
+                  scope: 'self'
                 },
                 {
-                  'property': 'delete',
-                  'scope': 'DoubleMap.prototype'
+                  property: 'delete',
+                  scope: 'DoubleMap.prototype'
                 }
               ]
             ],
@@ -845,12 +845,12 @@ describe('build', () => {
               'entries',
               [
                 {
-                  'property': 'DoubleMap',
-                  'scope': 'self'
+                  property: 'DoubleMap',
+                  scope: 'self'
                 },
                 {
-                  'property': 'entries',
-                  'scope': 'DoubleMap.prototype'
+                  property: 'entries',
+                  scope: 'DoubleMap.prototype'
                 }
               ]
             ],
@@ -858,12 +858,12 @@ describe('build', () => {
               'forEach',
               [
                 {
-                  'property': 'DoubleMap',
-                  'scope': 'self'
+                  property: 'DoubleMap',
+                  scope: 'self'
                 },
                 {
-                  'property': 'forEach',
-                  'scope': 'DoubleMap.prototype'
+                  property: 'forEach',
+                  scope: 'DoubleMap.prototype'
                 }
               ]
             ],
@@ -871,12 +871,12 @@ describe('build', () => {
               'get',
               [
                 {
-                  'property': 'DoubleMap',
-                  'scope': 'self'
+                  property: 'DoubleMap',
+                  scope: 'self'
                 },
                 {
-                  'property': 'get',
-                  'scope': 'DoubleMap.prototype'
+                  property: 'get',
+                  scope: 'DoubleMap.prototype'
                 }
               ]
             ],
@@ -884,12 +884,12 @@ describe('build', () => {
               'has',
               [
                 {
-                  'property': 'DoubleMap',
-                  'scope': 'self'
+                  property: 'DoubleMap',
+                  scope: 'self'
                 },
                 {
-                  'property': 'has',
-                  'scope': 'DoubleMap.prototype'
+                  property: 'has',
+                  scope: 'DoubleMap.prototype'
                 }
               ]
             ],
@@ -897,12 +897,12 @@ describe('build', () => {
               'keys',
               [
                 {
-                  'property': 'DoubleMap',
-                  'scope': 'self'
+                  property: 'DoubleMap',
+                  scope: 'self'
                 },
                 {
-                  'property': 'keys',
-                  'scope': 'DoubleMap.prototype'
+                  property: 'keys',
+                  scope: 'DoubleMap.prototype'
                 }
               ]
             ],
@@ -910,12 +910,12 @@ describe('build', () => {
               'set',
               [
                 {
-                  'property': 'DoubleMap',
-                  'scope': 'self'
+                  property: 'DoubleMap',
+                  scope: 'self'
                 },
                 {
-                  'property': 'set',
-                  'scope': 'DoubleMap.prototype'
+                  property: 'set',
+                  scope: 'DoubleMap.prototype'
                 }
               ]
             ],
@@ -923,12 +923,12 @@ describe('build', () => {
               'size',
               [
                 {
-                  'property': 'DoubleMap',
-                  'scope': 'self'
+                  property: 'DoubleMap',
+                  scope: 'self'
                 },
                 {
-                  'property': 'size',
-                  'scope': 'DoubleMap.prototype'
+                  property: 'size',
+                  scope: 'DoubleMap.prototype'
                 }
               ]
             ],
@@ -936,12 +936,12 @@ describe('build', () => {
               'values',
               [
                 {
-                  'property': 'DoubleMap',
-                  'scope': 'self'
+                  property: 'DoubleMap',
+                  scope: 'self'
                 },
                 {
-                  'property': 'values',
-                  'scope': 'DoubleMap.prototype'
+                  property: 'values',
+                  scope: 'DoubleMap.prototype'
                 }
               ]
             ]
@@ -958,8 +958,8 @@ describe('build', () => {
         [
           'DoubleSet',
           {
-            'property': 'DoubleSet',
-            'scope': 'self'
+            property: 'DoubleSet',
+            scope: 'self'
           },
           new Set(['Window']),
           [
@@ -967,12 +967,12 @@ describe('build', () => {
               'add',
               [
                 {
-                  'property': 'DoubleSet',
-                  'scope': 'self'
+                  property: 'DoubleSet',
+                  scope: 'self'
                 },
                 {
-                  'property': 'add',
-                  'scope': 'DoubleSet.prototype'
+                  property: 'add',
+                  scope: 'DoubleSet.prototype'
                 }
               ]
             ],
@@ -980,12 +980,12 @@ describe('build', () => {
               'clear',
               [
                 {
-                  'property': 'DoubleSet',
-                  'scope': 'self'
+                  property: 'DoubleSet',
+                  scope: 'self'
                 },
                 {
-                  'property': 'clear',
-                  'scope': 'DoubleSet.prototype'
+                  property: 'clear',
+                  scope: 'DoubleSet.prototype'
                 }
               ]
             ],
@@ -993,12 +993,12 @@ describe('build', () => {
               'delete',
               [
                 {
-                  'property': 'DoubleSet',
-                  'scope': 'self'
+                  property: 'DoubleSet',
+                  scope: 'self'
                 },
                 {
-                  'property': 'delete',
-                  'scope': 'DoubleSet.prototype'
+                  property: 'delete',
+                  scope: 'DoubleSet.prototype'
                 }
               ]
             ],
@@ -1006,12 +1006,12 @@ describe('build', () => {
               'entries',
               [
                 {
-                  'property': 'DoubleSet',
-                  'scope': 'self'
+                  property: 'DoubleSet',
+                  scope: 'self'
                 },
                 {
-                  'property': 'entries',
-                  'scope': 'DoubleSet.prototype'
+                  property: 'entries',
+                  scope: 'DoubleSet.prototype'
                 }
               ]
             ],
@@ -1019,12 +1019,12 @@ describe('build', () => {
               'has',
               [
                 {
-                  'property': 'DoubleSet',
-                  'scope': 'self'
+                  property: 'DoubleSet',
+                  scope: 'self'
                 },
                 {
-                  'property': 'has',
-                  'scope': 'DoubleSet.prototype'
+                  property: 'has',
+                  scope: 'DoubleSet.prototype'
                 }
               ]
             ],
@@ -1032,12 +1032,12 @@ describe('build', () => {
               'keys',
               [
                 {
-                  'property': 'DoubleSet',
-                  'scope': 'self'
+                  property: 'DoubleSet',
+                  scope: 'self'
                 },
                 {
-                  'property': 'keys',
-                  'scope': 'DoubleSet.prototype'
+                  property: 'keys',
+                  scope: 'DoubleSet.prototype'
                 }
               ]
             ],
@@ -1045,12 +1045,12 @@ describe('build', () => {
               'size',
               [
                 {
-                  'property': 'DoubleSet',
-                  'scope': 'self'
+                  property: 'DoubleSet',
+                  scope: 'self'
                 },
                 {
-                  'property': 'size',
-                  'scope': 'DoubleSet.prototype'
+                  property: 'size',
+                  scope: 'DoubleSet.prototype'
                 }
               ]
             ],
@@ -1058,12 +1058,12 @@ describe('build', () => {
               'values',
               [
                 {
-                  'property': 'DoubleSet',
-                  'scope': 'self'
+                  property: 'DoubleSet',
+                  scope: 'self'
                 },
                 {
-                  'property': 'values',
-                  'scope': 'DoubleSet.prototype'
+                  property: 'values',
+                  scope: 'DoubleSet.prototype'
                 }
               ]
             ]
@@ -1081,8 +1081,8 @@ describe('build', () => {
         [
           'GetMe',
           {
-            'property': 'GetMe',
-            'scope': 'self'
+            property: 'GetMe',
+            scope: 'self'
           },
           new Set(['Window']),
           []
@@ -1179,14 +1179,14 @@ describe('build', () => {
              readonly attribute any paintWorklet;
            };`);
       loadCustomTests({
-        'api': {
-          'CSS': {
-            '__base': 'var css = CSS;',
-            '__test': 'return !!css;',
-            'paintWorklet': 'return css && \'paintWorklet\' in css;'
+        api: {
+          CSS: {
+            __base: 'var css = CSS;',
+            __test: 'return !!css;',
+            paintWorklet: 'return css && \'paintWorklet\' in css;'
           }
         },
-        'css': {}
+        css: {}
       });
       assert.deepEqual(buildIDLTests(ast), [
         // eslint-disable-next-line max-len
@@ -1234,15 +1234,15 @@ describe('build', () => {
               DOMString? extends = null;
            };`);
       loadCustomTests({
-        'api': {
-          'ElementRegistrationOptions': {
-            '__base': 'var ers = ElementRegistrationOptions;',
-            '__test': 'return !!ers;',
-            'extends': 'return ers && \'extends\' in ers;',
-            'prototype': 'return ers && \'prototype\' in ers;'
+        api: {
+          ElementRegistrationOptions: {
+            __base: 'var ers = ElementRegistrationOptions;',
+            __test: 'return !!ers;',
+            extends: 'return ers && \'extends\' in ers;',
+            prototype: 'return ers && \'prototype\' in ers;'
           }
         },
-        'css': {}
+        css: {}
       });
       assert.deepEqual(buildIDLTests(ast), [
         // eslint-disable-next-line max-len

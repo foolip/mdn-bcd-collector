@@ -39,11 +39,11 @@ const filterVersions = (data, earliestVersion) => {
 
 // TODO: IE and pre-Blink Edge have issues with automated runtime
 let browsersToTest = {
-  'chrome': filterVersions(bcd.browsers.chrome.releases, 40),
-  'edge': filterVersions(bcd.browsers.edge.releases, 12),
-  'firefox': filterVersions(bcd.browsers.firefox.releases, 35),
-  'ie': filterVersions(bcd.browsers.ie.releases, 11),
-  'safari': filterVersions(bcd.browsers.safari.releases, 9)
+  chrome: filterVersions(bcd.browsers.chrome.releases, 40),
+  edge: filterVersions(bcd.browsers.edge.releases, 12),
+  firefox: filterVersions(bcd.browsers.firefox.releases, 35),
+  ie: filterVersions(bcd.browsers.ie.releases, 11),
+  safari: filterVersions(bcd.browsers.safari.releases, 9)
 };
 
 if (process.env.BROWSER) {
@@ -72,7 +72,7 @@ for (const browser in browsersToTest) {
     describe(`${bcd.browsers[browser].name} ${version}`, () => {
       let driver;
 
-      beforeEach(function() {
+      beforeEach(() => {
         const capabilities = new Capabilities();
         capabilities.set(
             Capability.BROWSER_NAME,
@@ -84,11 +84,11 @@ for (const browser in browsersToTest) {
             .withCapabilities(capabilities).build();
       });
 
-      afterEach(async function() {
+      afterEach(async () => {
         await driver.quit();
       });
 
-      it('run', async function() {
+      it('run', async () => {
         await driver.get(host);
         await driver.wait(
             until.elementIsEnabled(

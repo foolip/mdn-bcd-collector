@@ -7,24 +7,24 @@ const uaParser = require('ua-parser-js');
 
 const overrides = require('./overrides').filter(Array.isArray);
 
-function findEntry(bcd, path) {
+const findEntry = (bcd, path) => {
   const keys = path.split('.');
   let entry = bcd;
   while (entry && keys.length) {
     entry = entry[keys.shift()];
   }
   return entry;
-}
+};
 
-function isDirectory(fp) {
+const isDirectory = (fp) => {
   try {
     return fs.statSync(fp).isDirectory();
   } catch (e) {
     return false;
   }
-}
+};
 
-function isEquivalent(a, b) {
+const isEquivalent = (a, b) => {
   // Create arrays of property names
   const aProps = Object.getOwnPropertyNames(a);
   const bProps = Object.getOwnPropertyNames(b);
@@ -46,11 +46,11 @@ function isEquivalent(a, b) {
   // If we made it this far, objects
   // are considered equivalent
   return true;
-}
+};
 
 // https://github.com/mdn/browser-compat-data/issues/3617
-function save(bcd, bcdDir) {
-  function processObject(object, keypath) {
+const save = (bcd, bcdDir) => {
+  const processObject = (object, keypath) => {
     if (keypath.length && !['api', 'css'].includes(keypath[0])) {
       return;
     }
@@ -75,12 +75,12 @@ function save(bcd, bcdDir) {
         fs.writeFileSync(filepath, json);
       }
     }
-  }
+  };
 
   processObject(bcd, []);
-}
+};
 
-function getBrowserAndVersion(userAgent, browsers) {
+const getBrowserAndVersion = (userAgent, browsers) => {
   const ua = uaParser(userAgent);
 
   let browser = ua.browser.name.toLowerCase();
@@ -104,11 +104,11 @@ function getBrowserAndVersion(userAgent, browsers) {
   }
 
   return [browser, version];
-}
+};
 
 // Get support map from BCD path to test result(null/true/false) for a single
 // report.
-function getSupportMap(report) {
+const getSupportMap = (report) => {
   // Transform `report` to map from test name (BCD path) to array of results.
   const testMap = new Map;
   for (const [url, results] of Object.entries(report.results)) {
@@ -153,11 +153,11 @@ function getSupportMap(report) {
     supportMap.set(name, supported);
   }
   return supportMap;
-}
+};
 
 // Load all reports and build a map from BCD path to browser + version
 // and test result (null/true/false) for that version.
-function getSupportMatrix(bcd, reports) {
+const getSupportMatrix = (bcd, reports) => {
   // TODO catch prefixed support
   const supportMatrix = new Map;
 
@@ -218,9 +218,9 @@ function getSupportMatrix(bcd, reports) {
   }
 
   return supportMatrix;
-}
+};
 
-function inferSupportStatements(versionMap) {
+const inferSupportStatements = (versionMap) => {
   const versions = Array.from(versionMap.keys()).sort(compareVersions);
 
   const statements = [];
@@ -283,9 +283,9 @@ function inferSupportStatements(versionMap) {
   }
 
   return statements;
-}
+};
 
-function update(bcd, supportMatrix) {
+const update = (bcd, supportMatrix) => {
   for (const [path, browserMap] of supportMatrix.entries()) {
     const entry = findEntry(bcd, path);
     if (!entry || !entry.__compat) {
@@ -350,18 +350,18 @@ function update(bcd, supportMatrix) {
       }
     }
   }
-}
+};
 
-function loadFile(reportFile) {
+const loadFile = (reportFile) => {
   try {
     return JSON.parse(fs.readFileSync(reportFile));
   } catch (e) {
     console.warn(`Could not parse ${reportFile}; skipping`);
     return null;
   }
-}
+};
 
-function loadFiles(files, root = '') {
+const loadFiles = (files, root = '') => {
   const reports = [];
 
   for (const filename of files) {
@@ -386,9 +386,9 @@ function loadFiles(files, root = '') {
   }
 
   return reports;
-}
+};
 
-function main(reportFiles) {
+const main = (reportFiles) => {
   const BCD_DIR = process.env.BCD_DIR || `../browser-compat-data`;
   const bcd = require(BCD_DIR);
 
@@ -396,7 +396,7 @@ function main(reportFiles) {
   const supportMatrix = getSupportMatrix(bcd, reports);
   update(bcd, supportMatrix);
   save(bcd, BCD_DIR);
-}
+};
 
 /* istanbul ignore if */
 if (require.main === module) {
