@@ -304,7 +304,11 @@ const flattenMembers = (iface) => {
         );
         break;
       case 'operation':
-        // We don't care about setter/getter functions
+        switch (member.special) {
+          case 'stringifier':
+            members.push({name: 'toString', type: 'operation'});
+            break;
+        }
         break;
     }
   }
@@ -312,9 +316,6 @@ const flattenMembers = (iface) => {
   // Add members from ExtAttrs
   if (getExtAttr(iface, 'Constructor')) {
     members.push({name: iface.name, type: 'constructor'});
-  }
-  if (getExtAttr(iface, 'Serializable')) {
-    members.push({name: 'toString', type: 'operation'});
   }
 
   return members.sort((a, b) => a.name.localeCompare(b.name));
