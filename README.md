@@ -22,8 +22,10 @@ Before you can run or deploy, copy `secrets.sample.json` to `secrets.json`.
 ## Running locally
 
 ```sh
-npm start
+npm start-dev
 ```
+
+(`start-dev` as opposed to `start` will automatically reload the server on file changes.)
 
 ## Deploying to App Engine
 
