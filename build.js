@@ -666,14 +666,12 @@ const copyResources = async () => {
 };
 
 const buildManifest = (tests) => {
-  const manifest = {
-    main: {},
-    individual: {}
-  };
+  const manifest = {};
 
   for (const [ident, test] of Object.entries(tests)) {
     for (const scope of test.scope) {
       let endpoint = '';
+      let httpsOnly = false;
       switch (scope) {
         case 'Window':
           endpoint = '/api/interfaces';
@@ -684,6 +682,7 @@ const buildManifest = (tests) => {
           break;
         case 'ServiceWorker':
           endpoint = '/api/serviceworkerinterfaces';
+          httpsOnly = true;
           break;
         case 'CSS':
           endpoint = '/css/properties';
@@ -691,33 +690,16 @@ const buildManifest = (tests) => {
       }
 
       if (endpoint) {
-        if (!(endpoint in manifest.main)) {
-          manifest.main[endpoint] = {
+        if (!(endpoint in manifest)) {
+          manifest[endpoint] = {
             scope: scope,
-            httpsOnly: scope === 'ServiceWorker',
+            httpsOnly: httpsOnly,
             entries: []
           };
         }
-        if (!(ident in manifest.main[endpoint].entries)) {
-          manifest.main[endpoint].entries.push(ident);
+        if (!(ident in manifest[endpoint].entries)) {
+          manifest[endpoint].entries.push(ident);
         }
-      }
-    }
-
-    let url = '';
-    for (const part of ident.split('.')) {
-      url += '/' + part;
-
-      if (['/api', '/css', '/css/properties'].includes(url)) {
-        // Ignore things tested in main endpoints
-        continue;
-      }
-
-      if (!(url in manifest.individual)) {
-        manifest.individual[url] = [];
-      }
-      if (!(ident in manifest.individual[url])) {
-        manifest.individual[url].push(ident);
       }
     }
   }

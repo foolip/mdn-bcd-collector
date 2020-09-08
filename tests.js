@@ -17,8 +17,7 @@
 class Tests {
   constructor(options) {
     this.tests = options.tests;
-    this.endpoints = options.endpoints.main;
-    this.individualEndpoints = options.endpoints.individual;
+    this.endpoints = options.endpoints;
     this.host = options.host;
     this.httpOnly = options.httpOnly;
   }
@@ -30,8 +29,8 @@ class Tests {
   }
 
   listIndividual(urlPrefix = '') {
-    return Object.keys(this.individualEndpoints).map((item) => (
-      [item.substr(1).replace(/\//g, '.'), `${urlPrefix}${item}`]
+    return Object.keys(this.tests).map((item) => (
+      [item, `${urlPrefix}/${item.replace(/\./g, '/')}`]
     ));
   }
 
@@ -69,9 +68,15 @@ class Tests {
   }
 
   getTests(endpoint) {
-    const idents = this.endpoints[endpoint] ?
-        this.endpoints[endpoint].entries :
-        this.individualEndpoints[endpoint];
+    let idents = [];
+    if (endpoint in this.endpoints) {
+      idents = this.endpoints[endpoint].entries;
+    } else {
+      idents = Object.keys(this.tests).filter(
+        (ident) => ident.startsWith(endpoint.substr(1).replace(/\//g, '.'))
+      );
+    };
+
     const tests = {};
 
     for (const ident of idents) {
