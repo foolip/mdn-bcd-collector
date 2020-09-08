@@ -93,10 +93,13 @@ class Tests {
     return e ? e.scope : '';
   }
 
-  generateTestPage(endpoint) {
+  generateTestPage(endpoint, testScope) {
     const theseTests = this.getTests(endpoint);
-    const testScope = this.getScope(endpoint);
     const individual = !(endpoint in this.endpoints);
+
+    if (!testScope) {
+      testScope = individual ? '' : this.getScope(endpoint);
+    }
 
     const lines = [
       '<!DOCTYPE html>',

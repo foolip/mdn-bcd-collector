@@ -143,7 +143,7 @@ app.all('/tests/*', (req, res) => {
   const endpoint = `/${req.params['0']}`;
 
   if (tests.listAllEndpoints().map((item) => (item[1])).includes(endpoint)) {
-    res.send(tests.generateTestPage(endpoint));
+    res.send(tests.generateTestPage(endpoint, req.query.scope));
   } else {
     res.status(404).send(`Could not find tests for ${endpoint}`);
   }
