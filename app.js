@@ -33,11 +33,22 @@ const secrets = process.env.NODE_ENV === 'test' ?
     require('./secrets.sample.json') :
     require('./secrets.json');
 
-// TODO: none of this setup is pretty
+const getHost = () => {
+  const project = process.env.GOOGLE_CLOUD_PROJECT;
+  if (project) {
+    const version = process.env.GAE_VERSION;
+    if (version === 'production') {
+      return `${project}.appspot.com`;
+    }
+    return `${version}-dot-${project}.appspot.com`;
+  }
+  return `localhost:${PORT}`;
+};
+
 const {CloudStorage, MemoryStorage} = require('./storage');
 /* istanbul ignore next */
 const storage = process.env.NODE_ENV === 'production' ?
-   new CloudStorage :
+   new CloudStorage(process.env.GOOGLE_CLOUD_PROJECT) :
    new MemoryStorage;
 
 /* istanbul ignore next */
@@ -50,7 +61,7 @@ const github = require('./github')(
 const Tests = require('./tests');
 const tests = new Tests({
   tests: require('./tests.json'),
-  host: host,
+  host: getHost(),
   httpOnly: process.env.NODE_ENV !== 'production'
 });
 
