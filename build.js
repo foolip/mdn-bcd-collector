@@ -84,7 +84,6 @@ const getCustomSubtestsAPI = (name) => {
       for (
         const subtest of Object.entries(customTests.api[name].__additional)
       ) {
-        if (subtest[0] == '__test') continue;
         subtests[subtest[0]] = `(function() {${testbase}${subtest[1]}})()`;
       }
     }
