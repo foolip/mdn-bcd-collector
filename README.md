@@ -11,8 +11,8 @@ See [DESIGN.md](./DESIGN.md) for details of how this service works.
 ## Setup
 
 ```sh
-    npm install
-    npm run build
+npm install
+npm run build
 ```
 
 Before you can run or deploy, copy `secrets.sample.json` to `secrets.json`.
