@@ -19,8 +19,8 @@ const assert = require('assert');
 const {Storage} = require('@google-cloud/storage');
 
 class CloudStorage {
-  constructor() {
-    const storage = new Storage({projectId: 'mdn-bcd-collector'});
+  constructor(projectId) {
+    const storage = new Storage({projectId});
     this._bucket = storage.bucket('mdn-bcd-buffer');
   }
 

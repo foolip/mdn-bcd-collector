@@ -24,10 +24,21 @@ const appversion = require('./package.json').version;
 
 const PORT = process.env.PORT || 8080;
 
-// TODO: none of this setup is pretty
+const getHost = () => {
+  const project = process.env.GOOGLE_CLOUD_PROJECT;
+  if (project) {
+    const version = process.env.GAE_VERSION;
+    if (version === 'production') {
+      return `${project}.appspot.com`;
+    }
+    return `${version}-dot-${project}.appspot.com`;
+  }
+  return `localhost:${PORT}`;
+};
+
 const {CloudStorage, MemoryStorage} = require('./storage');
 const storage = process.env.NODE_ENV === 'production' ?
-   new CloudStorage :
+   new CloudStorage(process.env.GOOGLE_CLOUD_PROJECT) :
    new MemoryStorage;
 
 const secrets = process.env.NODE_ENV === 'test' ?
@@ -43,9 +54,7 @@ const github = require('./github')(
 const Tests = require('./tests');
 const tests = new Tests({
   manifest: require('./MANIFEST.json'),
-  host: process.env.NODE_ENV === 'production' ?
-      'mdn-bcd-collector.appspot.com' :
-      `localhost:${PORT}`,
+  host: getHost(),
   httpOnly: process.env.NODE_ENV !== 'production'
 });
 
