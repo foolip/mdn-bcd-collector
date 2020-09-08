@@ -75,9 +75,9 @@ class Tests {
       idents = this.endpoints[endpoint].entries;
     } else {
       idents = Object.keys(this.tests).filter(
-        (ident) => ident.startsWith(endpoint.substr(1).replace(/\//g, '.'))
+          (ident) => ident.startsWith(endpoint.substr(1).replace(/\//g, '.'))
       );
-    };
+    }
 
     const tests = {};
 

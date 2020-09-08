@@ -715,8 +715,8 @@ const build = async (webref, bcd) => {
 
   await writeFile(path.join(manifestDir, 'tests.json'), tests);
   await writeFile(
-    path.join(manifestDir, 'endpoints.json'),
-    buildEndpoints(tests)
+      path.join(manifestDir, 'endpoints.json'),
+      buildEndpoints(tests)
   );
   await copyResources();
 };
