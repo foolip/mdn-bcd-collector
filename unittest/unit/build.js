@@ -2302,44 +2302,26 @@ describe('build', () => {
         scope: ['JavaScript']
       }
     };
-      main: {
-        '/api/interfaces': {
-          entries: ['api.Attr', 'api.Attr.name'],
-          httpsOnly: false,
-          scope: 'Window'
-        },
-        '/api/serviceworkerinterfaces': {
-          entries: ['api.Attr'],
-          httpsOnly: true,
-          scope: 'ServiceWorker'
-        },
-        '/api/workerinterfaces': {
-          entries: ['api.Attr', 'api.Attr.name'],
-          httpsOnly: false,
-          scope: 'Worker'
-        },
-        '/css/properties': {
-          entries: ['css.properties.font-family'],
-          httpsOnly: false,
-          scope: 'CSS'
-        }
     const expectedEndpoints = {
+      '/api/interfaces': {
+        entries: ['api.Attr', 'api.Attr.name'],
+        httpsOnly: false,
+        scope: 'Window'
       },
-      individual: {
-        '/api/Attr': ['api.Attr', 'api.Attr.name'],
-        '/api/Attr/name': ['api.Attr.name'],
-        '/css/properties/font-family': [
-          'css.properties.font-family'
-        ],
-        '/javascript': [
-          'javascript.builtins.array'
-        ],
-        '/javascript/builtins': [
-          'javascript.builtins.array'
-        ],
-        '/javascript/builtins/array': [
-          'javascript.builtins.array'
-        ]
+      '/api/serviceworkerinterfaces': {
+        entries: ['api.Attr'],
+        httpsOnly: true,
+        scope: 'ServiceWorker'
+      },
+      '/api/workerinterfaces': {
+        entries: ['api.Attr', 'api.Attr.name'],
+        httpsOnly: false,
+        scope: 'Worker'
+      },
+      '/css/properties': {
+        entries: ['css.properties.font-family'],
+        httpsOnly: false,
+        scope: 'CSS'
       }
     };
 

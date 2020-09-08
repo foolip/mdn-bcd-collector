@@ -18,9 +18,8 @@ const {app, version} = require('../../app');
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 
-const manifest = require('../../manifest/endpoints.json');
-const mainEndpoints = Object.entries(manifest.main);
-const individualEndpoints = Object.entries(manifest.individual);
+const endpoints = Object.entries(require('../../manifest/endpoints.json'));
+const tests = Object.entries(require('../../manifest/tests.json'));
 
 chai.use(chaiHttp);
 const agent = chai.request.agent(app);
@@ -46,8 +45,8 @@ describe('/api/results', () => {
     assert.deepEqual(res.body, {});
   });
 
-  const testURL = `http://localhost:8080/tests${mainEndpoints[0][0]}`;
-  const testURL2 = `https://host.test/tests${mainEndpoints[mainEndpoints.length - 1][0]}`;
+  const testURL = `http://localhost:8080/tests${endpoints[0][0]}`;
+  const testURL2 = `https://host.test/tests${endpoints[endpoints.length - 1][0]}`;
 
   it('submit valid results', async () => {
     const res = await agent.post('/api/results')
@@ -55,7 +54,7 @@ describe('/api/results', () => {
         .send({x: 1});
     assert.equal(res.status, 201);
     assert.deepEqual(res.body, {
-      next: `http://localhost:8080/tests${mainEndpoints[1][0]}`
+      next: `http://localhost:8080/tests${endpoints[1][0]}`
     });
   });
 
@@ -115,18 +114,20 @@ describe('/api/tests', () => {
     const res = await agent.get('/api/tests');
     assert.equal(res.status, 200);
     assert.isArray(res.body);
-    assert.equal(res.body.length, individualEndpoints.length + 1);
+    assert.equal(res.body.length, tests.length + 1);
   });
 });
 
 describe('/tests/', () => {
   it('get a main test', async () => {
-    const res = await agent.get(`/tests${mainEndpoints[0][0]}`);
+    const res = await agent.get(`/tests${endpoints[0][0]}`);
     assert.equal(res.status, 200);
   });
 
   it('get an individual test', async () => {
-    const res = await agent.get(`/tests${individualEndpoints[0][0]}`);
+    const res = await agent.get(`/tests/${
+      tests[1][0].replace(/\./g, '/')
+    }`);
     assert.equal(res.status, 200);
   });
 

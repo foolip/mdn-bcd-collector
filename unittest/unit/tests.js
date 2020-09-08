@@ -34,49 +34,38 @@ const testDatabase = {
   },
   'api.FooBar': null
 };
-const MANIFEST = {
-  main: {
-    '/api/interfaces': {
-      scope: 'Window',
-      httpsOnly: false,
-      entries: [
-        'api.AbortController',
-        'api.AbortController.signal'
-      ]
-    },
-    '/api/workerinterfaces': {
-      scope: 'Worker',
-      httpsOnly: false,
-      entries: [
-        'api.AbortController'
-      ]
-    },
-    '/api/serviceworkerinterfaces': {
-      scope: 'ServiceWorker',
-      httpsOnly: true,
-      entries: []
-    },
-    '/css/properties': {
-      scope: 'CSS',
-      httpsOnly: false,
-      entries: []
-    }
-  },
-  individual: {
-    '/api/AbortController': [
+const endpoints = {
+  '/api/interfaces': {
+    scope: 'Window',
+    httpsOnly: false,
+    entries: [
       'api.AbortController',
       'api.AbortController.signal'
-    ],
-    '/api/AbortController/signal': [
-      'api.AbortController.signal'
     ]
+  },
+  '/api/workerinterfaces': {
+    scope: 'Worker',
+    httpsOnly: false,
+    entries: [
+      'api.AbortController'
+    ]
+  },
+  '/api/serviceworkerinterfaces': {
+    scope: 'ServiceWorker',
+    httpsOnly: true,
+    entries: []
+  },
+  '/css/properties': {
+    scope: 'CSS',
+    httpsOnly: false,
+    entries: []
   }
 };
 
 describe('Tests', () => {
   const tests = new Tests({
     tests: testDatabase,
-    endpoints: MANIFEST,
+    endpoints: endpoints,
     host: 'host.test'
   });
 
@@ -103,7 +92,7 @@ describe('Tests', () => {
 
     it('HTTP only', () => {
       const theseTests = new Tests({
-        endpoints: MANIFEST,
+        endpoints: endpoints,
         host: 'host.test',
         httpOnly: true
       });
@@ -126,28 +115,30 @@ describe('Tests', () => {
 
   it('listMainEndpoints', () => {
     assert.deepEqual(tests.listMainEndpoints(), [
-      '/api/interfaces',
-      '/api/workerinterfaces',
-      '/api/serviceworkerinterfaces',
-      '/css/properties'
+      ['', '/api/interfaces'],
+      ['', '/api/workerinterfaces'],
+      ['', '/api/serviceworkerinterfaces'],
+      ['', '/css/properties']
     ]);
   });
 
   it('listIndividual', () => {
     assert.deepEqual(tests.listIndividual(), [
       ['api.AbortController', '/api/AbortController'],
-      ['api.AbortController.signal', '/api/AbortController/signal']
+      ['api.AbortController.signal', '/api/AbortController/signal'],
+      ['api.FooBar', '/api/FooBar']
     ]);
   });
 
   it('listAllEndpoints', () => {
     assert.deepEqual(tests.listAllEndpoints(), [
-      '/api/interfaces',
-      '/api/workerinterfaces',
-      '/api/serviceworkerinterfaces',
-      '/css/properties',
-      '/api/AbortController',
-      '/api/AbortController/signal'
+      ['', '/api/interfaces'],
+      ['', '/api/workerinterfaces'],
+      ['', '/api/serviceworkerinterfaces'],
+      ['', '/css/properties'],
+      ['api.AbortController', '/api/AbortController'],
+      ['api.AbortController.signal', '/api/AbortController/signal'],
+      ['api.FooBar', '/api/FooBar']
     ]);
   });
 
