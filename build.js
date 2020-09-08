@@ -129,7 +129,9 @@ const compileTestCode = (test, prefix = '', scopePrefix = '') => {
 };
 
 const compileTest = (test) => {
-  if (!('raw' in test) && 'tests' in test) return test;
+  if (!('raw' in test) && 'tests' in test) {
+    return test;
+  }
 
   const newTest = {tests: [], scope: test.scope};
 
@@ -351,7 +353,9 @@ const getExposureSet = (node) => {
 };
 
 const getName = (node) => {
-  if (!('name' in node)) return false;
+  if (!('name' in node)) {
+    return false;
+  }
 
   switch (node.name) {
     case 'console':

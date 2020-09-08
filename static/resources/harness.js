@@ -40,7 +40,9 @@
 
   function updateStatus(newStatus, append) {
     var statusElement = document.getElementById('status');
-    if (!statusElement) return;
+    if (!statusElement) {
+      return;
+    }
 
     if (append) {
       statusElement.innerHTML = statusElement.innerHTML + newStatus;
@@ -124,7 +126,9 @@
 
       if (result.result !== false) {
         result.info.code = test.code;
-        if (test.prefix) result.info.prefix = test.prefix;
+        if (test.prefix) {
+          result.info.prefix = test.prefix;
+        }
         break;
       }
     }
@@ -133,7 +137,9 @@
       result.info = Object.assign({}, result.info, data.info);
     }
 
-    if (result.result === false) result.info.code = data.tests[0].code;
+    if (result.result === false) {
+      result.info.code = data.tests[0].code;
+    }
     result.info.scope = data.scope;
 
     return result;
@@ -342,8 +348,12 @@
         var result = results[i];
         response += result.name + ' (' + result.info.scope +
             ' scope): <strong>' + result.result;
-        if (result.prefix) response += ' (' + result.prefix + ' prefix)';
-        if (result.message) response += ' (' + result.message + ')';
+        if (result.prefix) {
+          response += ' (' + result.prefix + ' prefix)';
+        }
+        if (result.message) {
+          response += ' (' + result.message + ')';
+        }
         response += '</strong>\n<code>' + result.info.code + ';</code>\n\n';
       }
       updateStatus(response.replace(/\n/g, '<br />'));
