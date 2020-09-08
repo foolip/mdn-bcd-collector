@@ -340,7 +340,7 @@
       try {
         document.head.appendChild(css);
       } catch (e) {
-        // If the CSS fails to load, oh well
+        // If we fail to import the CSS, it's not a big deal
       }
 
       var response = '';
