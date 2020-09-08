@@ -44,7 +44,9 @@ describe('harness.js', () => {
       after(() => browser.close());
 
       const page = await browser.newPage();
-      if (product == 'chrome') await page.coverage.startJSCoverage();
+      if (product == 'chrome') {
+        await page.coverage.startJSCoverage();
+      }
 
       const reportPromise = new Promise((resolve, reject) => {
         page.on('console', (msg) => {
@@ -79,7 +81,9 @@ describe('harness.js', () => {
           );
 
           fs.writeFile(coveragePath, result, 'utf8', (err) => {
-            if (err) return console.log(err);
+            if (err) {
+              return console.log(err);
+            }
           });
         });
       }

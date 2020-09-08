@@ -32,7 +32,7 @@ jobs:
       env:
         SECRETS_JSON: ${{ secrets.SECRETS_JSON }}
     - if: ${{ github.ref == 'refs/heads/main' }}
-      run: gcloud app deploy
+      run: gcloud app deploy --version=production --promote
     - if: ${{ github.ref == 'refs/heads/staging' }}
       run: gcloud app deploy --version=staging --no-promote
 env:

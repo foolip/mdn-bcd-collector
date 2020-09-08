@@ -7,10 +7,12 @@
     },
     "rules": {
         "comma-dangle": ["error", "never"],
+        "curly": ["error", "all"],
         "max-len": ["error", {
+            "ignoreRegExpLiterals": true,
             "ignoreStrings": true,
             "ignoreTemplateLiterals": true,
-            "ignoreRegExpLiterals": true
+            "ignoreUrls": true
         }],
         "no-else-return": "error",
         "no-unused-vars": ["error", {"varsIgnorePattern": "^_$"}],

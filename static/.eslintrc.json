@@ -5,11 +5,13 @@
     },
     "rules": {
         "comma-dangle": ["error", "never"],
+        "curly": ["error", "all"],
         "guard-for-in": "off",
         "max-len": ["error", {
+            "ignoreRegExpLiterals": true,
             "ignoreStrings": true,
             "ignoreTemplateLiterals": true,
-            "ignoreRegExpLiterals": true
+            "ignoreUrls": true
         }],
         "no-invalid-this": "off",
         "no-var": "off",
