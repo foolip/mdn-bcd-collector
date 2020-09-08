@@ -13,6 +13,7 @@
   },
   "scripts": {
     "prepare": "if [ -d node_modules/puppeteer ]; then cd node_modules/puppeteer && PUPPETEER_PRODUCT=firefox node install.js; fi",
+    "clean": "rm -rf .nyc_output generated MANIFEST.json",
     "lint": "eslint .",
     "lint-fix": "eslint --fix .",
     "build": "node build.js",
@@ -23,7 +24,8 @@
     "coverage": "nyc report -r lcov && open-cli coverage/lcov-report/index.html",
     "test": "npm run lint && npm run unittest",
     "selenium": "mocha selenium",
-    "update-bcd": "node update-bcd.js"
+    "update-bcd": "node update-bcd.js",
+    "find-missing": "node find-missing.js"
   },
   "dependencies": {
     "@google-cloud/logging-winston": "4.0.0",
