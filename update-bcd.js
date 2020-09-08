@@ -49,7 +49,7 @@ const isEquivalent = (a, b) => {
 };
 
 // https://github.com/mdn/browser-compat-data/issues/3617
-const processObject = (object, keypath, bcdDir) => {
+const save = (object, keypath, bcdDir) => {
   if (keypath.length && !['api', 'css'].includes(keypath[0])) {
     return;
   }
@@ -58,7 +58,7 @@ const processObject = (object, keypath, bcdDir) => {
 
     if (isDirectory(candidate)) {
       // If the path is a directory, recurse.
-      processObject(value, keypath.concat(key), bcdDir);
+      save(value, keypath.concat(key), bcdDir);
     } else {
       // Otherwise, write data to file.
       const filepath = `${candidate}.json`;
@@ -74,10 +74,6 @@ const processObject = (object, keypath, bcdDir) => {
       fs.writeFileSync(filepath, json);
     }
   }
-};
-
-const save = (bcd, bcdDir) => {
-  processObject(bcd, [], bcdDir);
 };
 
 const getBrowserAndVersion = (userAgent, browsers) => {
@@ -395,7 +391,7 @@ const main = (reportFiles) => {
   const reports = loadFiles(reportFiles);
   const supportMatrix = getSupportMatrix(bcd, reports);
   update(bcd, supportMatrix);
-  save(bcd, BCD_DIR);
+  save(bcd, [], BCD_DIR);
 };
 
 /* istanbul ignore if */
