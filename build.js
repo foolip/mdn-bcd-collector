@@ -702,9 +702,9 @@ const copyResources = () => {
     ['json3/lib/json3.min.js', 'resources'],
     ['core-js-bundle/minified.js', 'resources', 'core.js'],
     ['core-js-bundle/minified.js.map', 'resources', 'core.js.map'],
-    ['chai/chai.js', 'test'],
-    ['mocha/mocha.css', 'test'],
-    ['mocha/mocha.js', 'test']
+    ['chai/chai.js', 'unittest'],
+    ['mocha/mocha.css', 'unittest'],
+    ['mocha/mocha.js', 'unittest']
   ];
   for (const [srcInModules, destInGenerated, newFilename] of resources) {
     const src = require.resolve(srcInModules);
