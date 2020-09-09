@@ -29,7 +29,10 @@
     <script src="/resources/harness.js"></script>
     <script src="/resources/core.js"></script>
     <script>
-      <%- tests %>
+      <% tests.forEach(function(test) { %>
+        bcd.addTest("<%- test.ident %>", <%- JSON.stringify(test.tests) %>, "<%- test.exposure %>");
+      <% }); %>
+      window.onload = <%- individual ? 'bcd.runAndDisplay' : 'bcd.runAndReport' %>;
     </script>
   </body>
 </html>

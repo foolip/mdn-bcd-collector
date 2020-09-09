@@ -110,50 +110,43 @@ class Tests {
     return `http://${this.host}${endpoint}`;
   }
 
-  getTests(endpoint) {
-    let idents;
-    if (endpoint in this.endpoints) {
-      idents = this.endpoints[endpoint].entries;
-    } else {
-      idents = Object.keys(this.tests).filter(
-          (ident) => ident.startsWith(endpoint.substr(1).replace(/\//g, '.'))
-      );
-    }
-
-    const tests = {};
-
-    for (const ident of idents) {
-      tests[ident] = this.tests[ident];
-    }
-
-    return tests;
-  }
-
   getExposure(endpoint) {
     const e = this.endpoints[endpoint];
     return e ? e.exposure : '';
   }
 
-  generateTestPage(endpoint, testExposure) {
-    const theseTests = this.getTests(endpoint);
-    const individual = !(endpoint in this.endpoints);
+  getIsIndividual(endpoint) {
+    return !(endpoint in this.endpoints);
+  }
+
+  getTests(endpoint, testExposure) {
+    let idents;
+    const individual = this.getIsIndividual(endpoint);
+
+    if (individual) {
+      idents = Object.keys(this.tests).filter(
+          (ident) => ident.startsWith(endpoint.substr(1).replace(/\//g, '.'))
+      );
+    } else {
+      idents = this.endpoints[endpoint].entries;
+    }
 
     if (!testExposure) {
       testExposure = individual ? '' : this.getExposure(endpoint);
     }
 
-    const lines = [];
+    const tests = [];
 
-    for (const [ident, test] of Object.entries(theseTests)) {
+    for (const ident of idents) {
+      const test = this.tests[ident];
       for (const exposure of test.exposure) {
         if (!testExposure || exposure == testExposure) {
-          lines.push(`bcd.addTest("${ident}", ${JSON.stringify(test.tests)}, "${exposure}");`);
+          tests.push({ident: ident, tests: test.tests, exposure: exposure});
         }
       }
     }
 
-    lines.push(individual ? 'bcd.runAndDisplay();' : 'bcd.runAndReport();');
-    return lines.join('\n');
+    return tests;
   }
 }
 
