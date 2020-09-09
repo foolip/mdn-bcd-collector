@@ -54,9 +54,8 @@ class Tests {
               entries: []
             };
           }
-          if (!endpoints[endpoint].entries.includes(ident)) {
-            endpoints[endpoint].entries.push(ident);
-          }
+
+          endpoints[endpoint].entries.push(ident);
         }
       }
     }
