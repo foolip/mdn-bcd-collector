@@ -37,7 +37,7 @@
     "fs-extra": "9.0.1",
     "json-stable-stringify": "1.0.1",
     "json3": "3.3.3",
-    "mdn-browser-compat-data": "1.0.35",
+    "mdn-browser-compat-data": "1.0.36",
     "slugify": "1.4.5",
     "ua-parser-js": "0.7.21",
     "unique-string": "2.0.0",
