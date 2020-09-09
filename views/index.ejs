@@ -3,9 +3,11 @@
 <p>Data collection service for <a href="https://github.com/mdn/browser-compat-data">mdn/browser-compat-data</a>. This website provides automatic feature detection for Web APIs and CSS properties, to assist in obtaining data for the BCD project.</p>
 
 <div>
-  <button id="start" disabled>Loading tests...</button>
-  <select id="tests" disabled>
-    <option value="">Loading tests...</option>
+  <button id="start">Run</button>
+  <select id="tests">
+    <% tests.forEach(function(test) { %>
+      <option value="<%- test[1] %>"><%- test[0] || 'All Tests' %></option>
+    <% }); %>
   </select>
   <br />
   <div id="individualTestOptionsBox" style="display: none;">
@@ -39,72 +41,42 @@ function getDropdownSelection(dropdown) {
   return [index, choice];
 };
 
-function getTests() {
+function main() {
   var button = document.getElementById('start');
   var dropdown = document.getElementById('tests');
   var individualTestOptionsBox = document.getElementById('individualTestOptionsBox');
   var secureContext = document.getElementById('secureContext');
   var limitExposure = document.getElementById('limitExposure');
 
-  var client = new XMLHttpRequest();
-  client.open('GET', '/api/tests', true);
-  client.send();
-  client.onreadystatechange = function() {
-    if (client.readyState == 4) {
-      if (client.status >= 500) {
-        button.textContent = 'Failed to load tests';
-        dropdown.remove(0);
-        var c = document.createElement("option");
-        c.text = 'Failed to load tests';
-        c.value = '';
-        dropdown.add(c);
-      } else {
-        var response = JSON.parse(client.responseText);
-        var tests = response;
-        
-        dropdown.removeAttribute('disabled');
-        dropdown.remove(0);
-        button.removeAttribute('disabled');
-        button.textContent = 'Run';
-        for (var i=0; i<tests.length; i++) {
-          var item = tests[i];
-          var option = document.createElement("option");
-          option.text = item[0] || 'All Tests';
-          option.value = item[1];
-          dropdown.add(option);
-        }
+  dropdown.onchange = function() {
+    var choice = getDropdownSelection(dropdown);
 
-        dropdown.onchange = function() {
-          var choice = getDropdownSelection(dropdown);
+    if (choice[0] == 0) {
+      individualTestOptionsBox.style.display = "none";
+    } else {
+      individualTestOptionsBox.style.display = "block";
+    }
 
-          if (choice[0] == 0) {
-            individualTestOptionsBox.style.display = "none";
-          } else {
-            individualTestOptionsBox.style.display = "block";
-          }
-
-          if (choice[1].indexOf('css') > -1) {
-            limitExposureBox.style.display = "none";
-          } else {
-            limitExposureBox.style.display = "block";
-          }
-        }
-
-        button.onclick = function() {
-          var choice = getDropdownSelection(dropdown);
-          var newUrl = choice[1];
-          if (choice[0] > 0) {
-            var protocol = secureContext.checked ? 'https:' : 'http:';
-            newUrl = protocol + '//' + window.location.host + newUrl;
-            if (choice[1].indexOf('css.') == -1) {
-              newUrl += getDropdownSelection(limitExposure)[1];
-            }
-          }
-          if (newUrl) window.location = newUrl;
-        }
-      }
+    if (choice[1].indexOf('css') > -1) {
+      limitExposureBox.style.display = "none";
+    } else {
+      limitExposureBox.style.display = "block";
     }
   }
+
+  button.onclick = function() {
+    var choice = getDropdownSelection(dropdown);
+    var newUrl = choice[1];
+    if (choice[0] > 0) {
+      var protocol = secureContext.checked ? 'https:' : 'http:';
+      newUrl = protocol + '//' + window.location.host + newUrl;
+      if (choice[1].indexOf('css.') == -1) {
+        newUrl += getDropdownSelection(limitExposure)[1];
+      }
+    }
+    if (newUrl) window.location = newUrl;
+  }
 }
-getTests();
+
+window.onload = main;
 </script>

@@ -84,7 +84,7 @@ const app = express();
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 app.use(expressLayouts);
-app.set("layout extractScripts", true)
+app.set('layout extractScripts', true);
 
 // Additional config
 app.use(cookieParser());
@@ -161,7 +161,11 @@ app.post('/api/results/export/github', (req, res) => {
 
 app.get('/', (req, res) => {
   res.render('index', {
-    title: 'mdn-bcd-collector'
+    title: 'mdn-bcd-collector',
+    tests: [
+      tests.listMainEndpoints('/tests')[0],
+      ...tests.listIndividual('/tests')
+    ]
   });
 });
 
