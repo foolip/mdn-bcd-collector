@@ -14,7 +14,7 @@
 
 'use strict';
 
-const {app, version} = require('../../app');
+const {app, version, getHost} = require('../../app');
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 
@@ -133,6 +133,34 @@ describe('/tests/', () => {
   it('get a non-existent tests', async () => {
     const res = await agent.get(`/tests/dummy/test`);
     assert.equal(res.status, 404);
+  });
+});
+
+describe('getHost', () => {
+  it('testing', () => {
+    process.env.GOOGLE_CLOUD_PROJECT = '';
+    process.env.GAE_VERSION = '';
+
+    assert.equal(getHost(), 'localhost:8080');
+  });
+
+  it('production', () => {
+    process.env.GOOGLE_CLOUD_PROJECT = 'testing-project';
+    process.env.GAE_VERSION = 'production';
+
+    assert.equal(getHost(), 'testing-project.appspot.com');
+  });
+
+  it('staging', () => {
+    process.env.GOOGLE_CLOUD_PROJECT = 'testing-project';
+    process.env.GAE_VERSION = 'staging';
+
+    assert.equal(getHost(), 'staging-dot-testing-project.appspot.com');
+  });
+
+  afterEach(() => {
+    delete process.env.GOOGLE_CLOUD_PROJECT;
+    delete process.env.GAE_VERSION;
   });
 });
 

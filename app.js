@@ -164,5 +164,9 @@ if (require.main === module) {
   });
 } else {
   // Export for testing
-  module.exports = {app: app, version: appversion};
+  module.exports = {
+    app: app,
+    version: appversion,
+    getHost: getHost
+  };
 }

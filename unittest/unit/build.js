@@ -808,6 +808,11 @@ describe('build', () => {
       assert.equal(getName(node), 'foobar');
     });
 
+    it('no name', () => {
+      const node = {};
+      assert.equal(getName(node), undefined);
+    });
+
     it('console', () => {
       const node = {name: 'console'};
       assert.equal(getName(node), 'Console');
@@ -1004,8 +1009,9 @@ describe('build', () => {
             );
           };
 
-          interface Body {
+          interface Document {
             readonly attribute boolean loaded;
+            readonly attribute DOMString? charset;
           };`);
       const {buildIDLTests} = proxyquire('../../build', {
         './custom-tests.json': {
@@ -1015,9 +1021,10 @@ describe('build', () => {
               __test: 'return !!instance;',
               drawArraysInstancedANGLE: 'return true && instance && \'drawArraysInstancedANGLE\' in instance;'
             },
-            Body: {
+            Document: {
+              charset: 'return document.charset == "UTF-8";',
               __additional: {
-                'loaded.loaded_is_boolean': 'return typeof body.loaded === "boolean";'
+                'loaded.loaded_is_boolean': 'return typeof document.loaded === "boolean";'
               }
             }
           }
@@ -1052,44 +1059,57 @@ describe('build', () => {
           ],
           exposure: ['Window']
         },
-        'api.Body': {
+        'api.Document': {
           tests: [
             {
-              code: '"Body" in self',
+              code: '"Document" in self',
               prefix: ''
             },
             {
-              code: '"WebKitBody" in self',
+              code: '"WebKitDocument" in self',
               prefix: 'WebKit'
             }
           ],
           exposure: ['Window']
         },
-        'api.Body.loaded': {
+        'api.Document.charset': {
           tests: [
             {
-              code: '"Body" in self && "loaded" in Body.prototype',
+              code: '"Document" in self && (function() {return document.charset == "UTF-8";})()',
               prefix: ''
             },
             {
-              code: '"Body" in self && "WebKitLoaded" in Body.prototype',
+              code: '"WebKitDocument" in self && (function() {return document.charset == "UTF-8";})()',
+              prefix: ''
+            }
+          ],
+          exposure: ['Window']
+        },
+        'api.Document.loaded': {
+          tests: [
+            {
+              code: '"Document" in self && "loaded" in Document.prototype',
+              prefix: ''
+            },
+            {
+              code: '"Document" in self && "WebKitLoaded" in Document.prototype',
               prefix: 'WebKit'
             },
             {
-              code: '"WebKitBody" in self && "loaded" in WebKitBody.prototype',
+              code: '"WebKitDocument" in self && "loaded" in WebKitDocument.prototype',
               prefix: ''
             },
             {
-              code: '"WebKitBody" in self && "WebKitLoaded" in WebKitBody.prototype',
+              code: '"WebKitDocument" in self && "WebKitLoaded" in WebKitDocument.prototype',
               prefix: 'WebKit'
             }
           ],
           exposure: ['Window']
         },
-        'api.Body.loaded.loaded_is_boolean': {
+        'api.Document.loaded.loaded_is_boolean': {
           tests: [
             {
-              code: '(function() {return typeof body.loaded === "boolean";})()',
+              code: '(function() {return typeof document.loaded === "boolean";})()',
               prefix: ''
             }
           ],

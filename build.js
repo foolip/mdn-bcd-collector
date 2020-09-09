@@ -347,8 +347,8 @@ const getExposureSet = (node) => {
         globals.add(value);
       }
       break;
+    /* istanbul ignore next */
     default:
-      /* istanbul ignore next */
       throw new Error(`Unexpected RHS for Exposed extended attribute`);
   }
   return globals;
