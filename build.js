@@ -429,6 +429,7 @@ const validateIDL = (ast) => {
   const ignoreRules = new Set([
     'constructor-member',
     'dict-arg-default',
+    'no-nointerfaceobject',
     'replace-void',
     'require-exposed'
   ]);

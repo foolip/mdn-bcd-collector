@@ -1,6 +1,65 @@
 // Manually maintained definitions for features not in any specification, like
 // non-standard features and features that have been removed or renamed.
 
+// https://trac.webkit.org/changeset/150905/webkit
+// https://trac.webkit.org/changeset/205065/webkit
+partial interface AudioBufferSourceNode {
+  attribute boolean looping;
+  void noteOn(double when);
+  void noteGrainOn(double when, double grainOffset, double grainDuration);
+  void noteOff(double when);
+  attribute EventHandler onended;
+  // start() is still in the spec (override with 3 arguments)
+  void stop(optional double when = 0);
+};
+
+partial interface AudioContext {
+  GainNode createGainNode();
+  DelayNode createDelayNode(optional double maxDelayTime = 1.0);
+  ScriptProcessorNode createJavaScriptNode(unsigned long bufferSize, optional unsigned long numberOfInputChannels = 2, optional unsigned long numberOfOutputChannels = 2);
+};
+
+partial interface AudioParam {
+  void setTargetValueAtTime(float targetValue, float time, float timeConstant);
+};
+
+partial interface BiquadFilterNode {
+  const unsigned short LOWPASS = 0;
+  const unsigned short HIGHPASS = 1;
+  const unsigned short BANDPASS = 2;
+  const unsigned short LOWSHELF = 3;
+  const unsigned short HIGHSHELF = 4;
+  const unsigned short PEAKING = 5;
+  const unsigned short NOTCH = 6;
+  const unsigned short ALLPASS = 7;
+};
+
+partial interface OscillatorNode {
+  const unsigned short SINE = 0;
+  const unsigned short SQUARE = 1;
+  const unsigned short SAWTOOTH = 2;
+  const unsigned short TRIANGLE = 3;
+  const unsigned short CUSTOM = 4;
+
+  void noteOn(double when);
+  void noteOff(double when);
+  attribute EventHandler onended;
+  void start(optional double when = 0);
+  void stop(optional double when = 0);
+};
+
+partial interface PannerNode {
+  const unsigned short EQUALPOWER = 0;
+  const unsigned short HRTF = 1;
+  const unsigned short SOUNDFIELD = 2;
+  const unsigned short LINEAR_DISTANCE = 0;
+  const unsigned short INVERSE_DISTANCE = 1;
+  const unsigned short EXPONENTIAL_DISTANCE = 2;
+
+  // https://chromium.googlesource.com/chromium/src/+/9848564877f0057f4dcbc98bce061dfa17a9202c
+  void setVelocity(float x, float y, float z);
+};
+
 // https://chromium.googlesource.com/chromium/src/+/4260025dd80eed380e0c1fff0e4be2bdd0ae0e8a
 // https://chromium.googlesource.com/chromium/src/+/f5e8986bdcd359c7ca82d83907c81642dd01f55e
 partial interface AudioParam {
@@ -139,6 +198,13 @@ partial interface IDBVersionChangeEvent {
   readonly attribute DOMString dataLossMessage;
 };
 
+partial interface MediaRecorder {
+  // https://chromium.googlesource.com/chromium/src/+/ab5ae32c6233fe7938b9a0b53cf1c74918310d7a
+  attribute boolean ignoreMutedMedia;
+  // https://hg.mozilla.org/mozilla-central/rev/1d75b63d3a00bfad31bcbfe89815efe222b65312
+  attribute EventHandler onwarning;
+};
+
 partial interface MouseEvent {
   readonly attribute Node fromElement;
   readonly attribute Node toElement;
@@ -164,6 +230,9 @@ interface MutationEvent : Event {
 };
 
 partial interface Navigator {
+  // https://www.w3.org/TR/2016/WD-screen-capture-20160714/#navigatorusermedia-additions
+  Promise<MediaStream> getDisplayMedia(optional DisplayMediaStreamConstraints constraints = {});
+  // Chromium has navigator.webkitGetUserMedia
   void webkitGetUserMedia(MediaStreamConstraints constraints,
                           NavigatorUserMediaSuccessCallback successCallback,
                           NavigatorUserMediaErrorCallback errorCallback);
@@ -255,9 +324,11 @@ partial interface AnimationEvent {
   void initAnimationEvent(DOMString type, boolean bubbles, boolean cancelable, DOMString animationName, float elapsedTime);
 };
 
+// https://chromium.googlesource.com/chromium/src/+/9848564877f0057f4dcbc98bce061dfa17a9202c
 partial interface AudioListener {
-  attribute double dopplerFactor;
-  attribute double speedOfSound;
+  attribute float dopplerFactor;
+  attribute float speedOfSound;
+  void setVelocity(float x, float y, float z);
 };
 
 [NoInterfaceObject]
@@ -300,10 +371,6 @@ partial interface DataTransfer {
   nsIVariant mozGetDataAt(optional string type, unsigned long index);
   void mozSetDataAt(optional string type, nsIVariant data, unsigned long index);
   nsIVariant mozTypesAt(unsigned long index);
-};
-
-partial interface AudioBufferSourceNode {
-  attribute EventHandler onended;
 };
 
 partial interface AudioContext {
@@ -521,7 +588,6 @@ interface BudgetState {
 // https://webaudio.github.io/web-audio-api/#AudioScheduledSourceNode
 // Modified to extend ConstantSourceNode w/out mixin stuff
 
-[Exposed=Window]
 partial interface ConstantSourceNode {
   attribute EventHandler onended;
   void start(optional double when = 0);
@@ -800,4 +866,32 @@ interface FeaturePolicy {
   [HighEntropy=Direct, MeasureAs=FeaturePolicyJSAPI, CallWith=ScriptState] sequence<DOMString> features();
   [MeasureAs=FeaturePolicyJSAPI, CallWith=ScriptState] sequence<DOMString> allowedFeatures();
   [MeasureAs=FeaturePolicyJSAPI, CallWith=ScriptState] sequence<DOMString> getAllowlistForFeature(DOMString feature);
+};
+
+// https://wiki.whatwg.org/wiki/DOM_XSLTProcessor
+
+[Exposed=Window]
+interface XSLTProcessor {
+  constructor();
+  void importStylesheet(Node style);
+  [CEReactions] DocumentFragment transformToFragment(Node source, Document output);
+  [CEReactions] Document transformToDocument(Node source);
+  void setParameter([TreatNullAs=EmptyString] DOMString namespaceURI, DOMString localName, any value);
+  any getParameter([TreatNullAs=EmptyString] DOMString namespaceURI, DOMString localName);
+  void removeParameter([TreatNullAs=EmptyString] DOMString namespaceURI, DOMString localName);
+  void clearParameters();
+  void reset();
+};
+
+// https://chromium.googlesource.com/chromium/src/+/fe14ae8caf179f194788ec029e3d274c6d849b3e/third_party/blink/renderer/core/timing/memory_info.idl
+[Exposed=Window, LegacyNoInterfaceObject]
+interface MemoryInfo {
+  readonly attribute unsigned long long totalJSHeapSize;
+  readonly attribute unsigned long long usedJSHeapSize;
+  readonly attribute unsigned long long jsHeapSizeLimit;
+};
+
+// https://chromium.googlesource.com/chromium/src/+/fe14ae8caf179f194788ec029e3d274c6d849b3e/third_party/blink/renderer/core/timing/performance.idl#68
+partial interface Performance {
+  [Exposed=Window] readonly attribute MemoryInfo memory;
 };
