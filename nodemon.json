@@ -1,4 +1,9 @@
 {
   "verbose": true,
-  "ignore": ["static/*", "coverage/*", ".nyc_output/*"]
+  "ignore": [
+    "static/*",
+    "views/*",
+    "coverage/*",
+    ".nyc_output/*"
+  ]
 }
