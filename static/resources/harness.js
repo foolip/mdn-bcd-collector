@@ -243,7 +243,6 @@
           for (var i = 0; i < length; i++) {
             if (pending[i].exposure == 'ServiceWorker') {
               promises.push(new Promise(function(resolve) {
-
                 reg.active.postMessage(pending[i]);
 
                 testhandlers[pending[i].name] = function(message) {
