@@ -149,7 +149,6 @@
     var length = pending.length;
     for (var i = 0; i < length; i++) {
       if (pending[i].exposure == 'CSS') {
-        updateStatus('Testing ' + pending[i].name);
         results.push(test(pending[i]));
       }
     }
@@ -161,7 +160,6 @@
     var length = pending.length;
     for (var i = 0; i < length; i++) {
       if (pending[i].exposure == 'Window') {
-        updateStatus('Testing ' + pending[i].name);
         results.push(test(pending[i]));
       }
     }
@@ -186,7 +184,6 @@
       for (i = 0; i < length; i++) {
         if (pending[i].exposure == 'Worker') {
           promises.push(new Promise(function(resolve) {
-            updateStatus('Testing ' + pending[i].name);
             myWorker.postMessage(pending[i]);
 
             testhandlers[pending[i].name] = function(message) {
@@ -202,7 +199,7 @@
       });
     } else {
       console.log('No worker support');
-      updateStatus('No worker support, skipping');
+      updateStatus('No worker support, skipping Worker/DedicatedWorker tests');
 
       for (i = 0; i < length; i++) {
         if (pending[i].exposure == 'Worker') {
@@ -246,7 +243,6 @@
           for (var i = 0; i < length; i++) {
             if (pending[i].exposure == 'ServiceWorker') {
               promises.push(new Promise(function(resolve) {
-                updateStatus('Testing ' + pending[i].name);
 
                 reg.active.postMessage(pending[i]);
 
@@ -267,7 +263,7 @@
       });
     } else {
       console.log('No service worker support, skipping');
-      updateStatus('No service worker support, skipping');
+      updateStatus('No service worker support, skipping ServiceWorker tests');
 
       var length = pending.length;
       for (var i = 0; i < length; i++) {
