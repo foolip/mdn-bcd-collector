@@ -117,7 +117,7 @@ class Tests {
     return e ? e.exposure : '';
   }
 
-  getIsIndividual(endpoint) {
+  isIndividual(endpoint) {
     return !(endpoint in this.endpoints);
   }
 

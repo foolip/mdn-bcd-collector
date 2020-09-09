@@ -46,10 +46,10 @@ const writeFile = async (filename, content) => {
   await fs.writeFile(filename, content, 'utf8');
 };
 
-const hasPrefix = (test) => {
+const getPrefix = (test) => {
   let name;
 
-  if (typeof(test) === 'string') {
+  if (typeof test === 'string') {
     name = test;
   } else {
     name = test.property;
@@ -68,7 +68,7 @@ const hasPrefix = (test) => {
     }
   }
 
-  return false;
+  return undefined;
 };
 
 const getCustomTestAPI = (name, member) => {

@@ -22,7 +22,7 @@ Before you can run or deploy, copy `secrets.sample.json` to `secrets.json`.
 ## Running locally
 
 ```sh
-npm start-dev
+npm run start-dev
 ```
 
 (`start-dev` as opposed to `start` will automatically reload the server on file changes.)
