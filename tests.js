@@ -142,27 +142,7 @@ class Tests {
       testExposure = individual ? '' : this.getExposure(endpoint);
     }
 
-    const lines = [
-      '<!DOCTYPE html>',
-      '<html>',
-      '<head>',
-      '<meta charset="utf-8">',
-      '<script src="/resources/json3.min.js"></script>',
-      '<script src="/resources/harness.js"></script>',
-      '<script src="/resources/core.js"></script>',
-      '<style>',
-      '@media (prefers-color-scheme: dark) {',
-      'body {',
-      'background-color: #111;',
-      'color: white;',
-      '}',
-      '}',
-      '</style>',
-      '</head>',
-      '<body>',
-      '<p id="status">Running tests...</p>',
-      '<script>'
-    ];
+    const lines = [];
 
     for (const [ident, test] of Object.entries(theseTests)) {
       for (const exposure of test.exposure) {
@@ -173,8 +153,6 @@ class Tests {
     }
 
     lines.push(individual ? 'bcd.runAndDisplay();' : 'bcd.runAndReport();');
-    lines.push('</script>', '</body>', '</html>');
-
     return lines.join('\n');
   }
 }

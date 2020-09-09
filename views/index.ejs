@@ -1,0 +1,110 @@
+<%- contentFor('body') %>
+<h1>mdn-bcd-collector</h1>
+<p>Data collection service for <a href="https://github.com/mdn/browser-compat-data">mdn/browser-compat-data</a>. This website provides automatic feature detection for Web APIs and CSS properties, to assist in obtaining data for the BCD project.</p>
+
+<div>
+  <button id="start" disabled>Loading tests...</button>
+  <select id="tests" disabled>
+    <option value="">Loading tests...</option>
+  </select>
+  <br />
+  <div id="individualTestOptionsBox" style="display: none;">
+    <input type="checkbox" id="secureContext"> <label for="secureContext">Use HTTPS?</label>
+    <div id="limitExposureBox" style="display: none;">
+    <label for="limitExposure">Limit Exposure:</label>
+    <select id="limitExposure">
+      <option value="">All Global Exposures</option>
+      <option value="?exposure=Window">Window</option>
+      <option value="?exposure=Worker">Worker</option>
+      <option value="?exposure=ServiceWorker">Service Worker</option>
+    </select>
+  </div>
+</div>
+
+<p>Note: this website is in beta; not all feature detection is accurate yet. If you find any errors, please file an issue on the GitHub page.</p>
+<p>Known caveats:</p>
+<ul>
+  <li>Detection for features under alternative names is not yet supported</li>
+  <li>In older browsers, some attributes aren't initialized in the API prototypes, resulting in false negatives (see <a href="https://github.com/foolip/mdn-bcd-collector/issues/406">#406</a>)</li>
+  <li>Some APIs are accessed through other APIs and aren't exposed on their own; custom tests have not been written for them all</li>
+</ul>
+
+<p><a href="https://github.com/foolip/mdn-bcd-collector">Source on GitHub</a></p>
+
+<script src="/resources/json3.min.js"></script>
+<script>
+function getDropdownSelection(dropdown) {
+  var index = dropdown.selectedIndex;
+  var choice = dropdown.options[index].value;
+  return [index, choice];
+};
+
+function getTests() {
+  var button = document.getElementById('start');
+  var dropdown = document.getElementById('tests');
+  var individualTestOptionsBox = document.getElementById('individualTestOptionsBox');
+  var secureContext = document.getElementById('secureContext');
+  var limitExposure = document.getElementById('limitExposure');
+
+  var client = new XMLHttpRequest();
+  client.open('GET', '/api/tests', true);
+  client.send();
+  client.onreadystatechange = function() {
+    if (client.readyState == 4) {
+      if (client.status >= 500) {
+        button.textContent = 'Failed to load tests';
+        dropdown.remove(0);
+        var c = document.createElement("option");
+        c.text = 'Failed to load tests';
+        c.value = '';
+        dropdown.add(c);
+      } else {
+        var response = JSON.parse(client.responseText);
+        var tests = response;
+        
+        dropdown.removeAttribute('disabled');
+        dropdown.remove(0);
+        button.removeAttribute('disabled');
+        button.textContent = 'Run';
+        for (var i=0; i<tests.length; i++) {
+          var item = tests[i];
+          var option = document.createElement("option");
+          option.text = item[0] || 'All Tests';
+          option.value = item[1];
+          dropdown.add(option);
+        }
+
+        dropdown.onchange = function() {
+          var choice = getDropdownSelection(dropdown);
+
+          if (choice[0] == 0) {
+            individualTestOptionsBox.style.display = "none";
+          } else {
+            individualTestOptionsBox.style.display = "block";
+          }
+
+          if (choice[1].indexOf('css') > -1) {
+            limitExposureBox.style.display = "none";
+          } else {
+            limitExposureBox.style.display = "block";
+          }
+        }
+
+        button.onclick = function() {
+          var choice = getDropdownSelection(dropdown);
+          var newUrl = choice[1];
+          if (choice[0] > 0) {
+            var protocol = secureContext.checked ? 'https:' : 'http:';
+            newUrl = protocol + '//' + window.location.host + newUrl;
+            if (choice[1].indexOf('css.') == -1) {
+              newUrl += getDropdownSelection(limitExposure)[1];
+            }
+          }
+          if (newUrl) window.location = newUrl;
+        }
+      }
+    }
+  }
+}
+getTests();
+</script>

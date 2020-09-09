@@ -14,9 +14,11 @@
 
 'use strict';
 
+const path = require('path');
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const uniqueString = require('unique-string');
+const expressLayouts = require('express-ejs-layouts');
 
 const logger = require('./logger');
 
@@ -77,11 +79,21 @@ const catchError = (err, res) => {
 };
 
 const app = express();
+
+// Layout config
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
+app.use(expressLayouts);
+app.set("layout extractScripts", true)
+
+// Additional config
 app.use(cookieParser());
 app.use(cookieSession);
 app.use(express.json({limit: '32mb'}));
 app.use(express.static('static'));
 app.use(express.static('generated'));
+
+// Backend API
 
 app.get('/api/tests', (req, res) => {
   res.json([
@@ -145,11 +157,30 @@ app.post('/api/results/export/github', (req, res) => {
       .catch(/* istanbul ignore next */ (err) => catchError(err, res));
 });
 
+// Views
+
+app.get('/', (req, res) => {
+  res.render('index', {
+    title: 'mdn-bcd-collector'
+  });
+});
+
+app.get('/results', (req, res) => {
+  res.render('results', {
+    title: 'Test Results | mdn-bcd-collector'
+  });
+});
+
 app.all('/tests/*', (req, res) => {
   const endpoint = `/${req.params['0']}`;
+  const ident = req.params['0'].replace(/\//g, '.');
 
-  if (tests.listAllEndpoints().map((item) => (item[1])).includes(endpoint)) {
-    res.send(tests.generateTestPage(endpoint, req.query.exposure));
+  if (tests.listAllEndpoints().some((item) => (item[1] === endpoint))) {
+    res.render('tests', {
+      title: `${ident} | mdn-bcd-collector`,
+      layout: false,
+      tests: tests.generateTestPage(endpoint, req.query.exposure)
+    });
   } else {
     res.status(404).send(`Could not find tests for ${endpoint}`);
   }
