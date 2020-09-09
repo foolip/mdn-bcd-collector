@@ -177,7 +177,7 @@ app.all('/tests/*', (req, res) => {
       title: `${ident} | mdn-bcd-collector`,
       layout: false,
       tests: tests.getTests(endpoint, req.query.exposure),
-      individual: tests.getIsIndividual(endpoint)
+      reportToServer: !!req.query.reportToServer
     });
   } else {
     res.status(404).send(`Could not find tests for ${endpoint}`);

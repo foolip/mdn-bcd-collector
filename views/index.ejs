@@ -73,7 +73,9 @@ function main() {
       if (choice[1].indexOf('css.') == -1) {
         newUrl += getDropdownSelection(limitExposure)[1];
       }
-    }
+    } else {
+      newUrl += "?reportToServer=true";
+    };
     if (newUrl) window.location = newUrl;
   }
 }
