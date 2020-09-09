@@ -65,6 +65,8 @@ class Tests {
 
   listMainEndpoints(urlPrefix = '') {
     return Object.keys(this.endpoints).map((item) => (
+      // The empty string is to tell the frontend this is a main test,
+      // and label the first one as "All Tests"
       ['', `${urlPrefix}${item}`]
     ));
   }
