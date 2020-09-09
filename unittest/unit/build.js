@@ -27,6 +27,7 @@ const proxyquire = require('proxyquire');
 
 const {
   writeFile,
+  hasPrefix,
   flattenIDL,
   getExposureSet,
   getName,
@@ -72,6 +73,29 @@ describe('build', () => {
 
     afterEach(() => {
       mockFs.restore();
+    });
+  });
+
+  describe('hasPrefix', () => {
+    it('no prefix', () => {
+      assert.equal(hasPrefix('foo'), false);
+      assert.equal(hasPrefix({property: 'foo', owner: 'self'}), false);
+    });
+
+    it('has prefix', () => {
+      assert.equal(hasPrefix('WebKitFoo'), 'WebKit');
+      assert.equal(hasPrefix({
+        property: 'WebKitFoo',
+        owner: 'self'
+      }), 'WebKit');
+    });
+
+    it('CSS property has prefix', () => {
+      assert.equal(hasPrefix('-webkit-foo'), 'webkit');
+      assert.equal(hasPrefix({
+        property: '-webkit-foo',
+        owner: 'self'
+      }), 'webkit');
     });
   });
 
@@ -398,6 +422,82 @@ describe('build', () => {
       });
     });
 
+    it('with prefix, single piece', () => {
+      const rawTest = {
+        raw: {
+          code: {property: 'WebKitDocument', owner: 'self'},
+          combinator: '&&'
+        },
+        exposure: ['Window']
+      };
+
+      assert.deepEqual(compileTest(rawTest), {
+        tests: [
+          {
+            code: '"WebKitDocument" in self',
+            prefix: ''
+          }
+        ],
+        exposure: ['Window']
+      });
+    });
+
+    describe('with prefix, double piece', () => {
+      it('first', () => {
+        const rawTest = {
+          raw: {
+            code: [
+              {property: 'WebKitDocument', owner: 'self'},
+              {property: 'body', owner: `WebKitDocument.prototype`}
+            ],
+            combinator: '&&'
+          },
+          exposure: ['Window']
+        };
+
+        assert.deepEqual(compileTest(rawTest), {
+          tests: [
+            {
+              code: '"WebKitDocument" in self && "body" in WebKitDocument.prototype',
+              prefix: ''
+            },
+            {
+              code: '"WebKitDocument" in self && "WebKitBody" in WebKitDocument.prototype',
+              prefix: 'WebKit'
+            }
+          ],
+          exposure: ['Window']
+        });
+      });
+
+      it('second', () => {
+        const rawTest = {
+          raw: {
+            code: [
+              {property: 'Document', owner: 'self'},
+              {property: 'WebKitBody', owner: `Document.prototype`}
+            ],
+            combinator: '&&'
+          },
+          exposure: ['Window']
+        };
+
+        assert.deepEqual(compileTest(rawTest), {
+          tests: [
+            {
+              code: '"Document" in self && "WebKitBody" in Document.prototype',
+              prefix: ''
+            },
+            {
+              code: '"WebKitDocument" in self && "WebKitBody" in WebKitDocument.prototype',
+              prefix: ''
+            }
+          ],
+          exposure: ['Window']
+        });
+      });
+    });
+
     it('ignore already compiled', () => {
       const test = {
         tests: [
@@ -493,6 +593,29 @@ describe('build', () => {
           {
             code: '"webkitFontFamily" in document.body.style || CSS.supports("-webkit-font-family", "inherit")',
             prefix: 'webkit'
+          }
+        ],
+        exposure: ['CSS']
+      });
+    });
+
+    it('CSS with prefix', () => {
+      const rawTest = {
+        raw: {
+          code: [
+            {property: 'webkitFontFamily', owner: 'document.body.style'},
+            {property: '-webkit-font-family', owner: 'CSS.supports'}
+          ],
+          combinator: '||'
+        },
+        exposure: ['CSS']
+      };
+
+      assert.deepEqual(compileTest(rawTest), {
+        tests: [
+          {
+            code: '"webkitFontFamily" in document.body.style || CSS.supports("-webkit-font-family", "inherit")',
+            prefix: ''
           }
         ],
         exposure: ['CSS']
