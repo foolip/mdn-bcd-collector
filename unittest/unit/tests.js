@@ -19,19 +19,19 @@ const Tests = require('../../tests');
 
 const testDatabase = {
   'api.AbortController': {
-    code: '"AbortController" in self',
+    tests: [{code: '"AbortController" in self', prefix: ''}],
     exposure: ['Window', 'Worker', 'ServiceWorker']
   },
   'api.AbortController.signal': {
-    code: '"AbortController" in self && "signal" in AbortController.prototype',
+    tests: [{code: '"AbortController" in self && "signal" in AbortController.prototype', prefix: ''}],
     exposure: ['Window', 'Worker']
   },
   'css.properties.font-family': {
-    code: '"fontFamily" in document.body.style || CSS.supports("font-family", "inherit")',
+    tests: [{code: '"fontFamily" in document.body.style || CSS.supports("font-family", "inherit")', prefix: ''}],
     exposure: ['CSS']
   },
   'javascript.builtins.array': {
-    code: '[1, 2, 3]',
+    tests: [{code: '[1, 2, 3]', prefix: ''}],
     exposure: ['JavaScript']
   }
 };
@@ -174,22 +174,33 @@ describe('Tests', () => {
     });
   });
 
-  it('getTests', () => {
-    assert.deepEqual(tests.getTests('/api/interfaces'), {
-      'api.AbortController': {
-        code: '"AbortController" in self',
-        exposure: ['Window', 'Worker', 'ServiceWorker']
-      },
-      'api.AbortController.signal': {
-        code: '"AbortController" in self && "signal" in AbortController.prototype',
-        exposure: ['Window', 'Worker']
-      }
+  describe('getTests', () => {
+    it('main endpoints', () => {
+      assert.deepEqual(tests.getTests('/api/interfaces'), [
+        {ident: 'api.AbortController', tests: [{code: '"AbortController" in self', prefix: ''}], exposure: 'Window'},
+        {ident: 'api.AbortController.signal', tests: [{code: '"AbortController" in self && "signal" in AbortController.prototype', prefix: ''}], exposure: 'Window'}
+      ]);
+
+      assert.deepEqual(tests.getTests('/api/serviceworkerinterfaces'), [
+        {ident: 'api.AbortController', tests: [{code: '"AbortController" in self', prefix: ''}], exposure: 'ServiceWorker'}
+      ]);
     });
-    assert.deepEqual(tests.getTests('/api/serviceworkerinterfaces'), {
-      'api.AbortController': {
-        code: '"AbortController" in self',
-        exposure: ['Window', 'Worker', 'ServiceWorker']
-      }
+
+    it('individual endpoint', () => {
+      assert.deepEqual(tests.getTests('/api/AbortController'), [
+        {ident: 'api.AbortController', tests: [{code: '"AbortController" in self', prefix: ''}], exposure: 'Window'},
+        {ident: 'api.AbortController', tests: [{code: '"AbortController" in self', prefix: ''}], exposure: 'Worker'},
+        {ident: 'api.AbortController', tests: [{code: '"AbortController" in self', prefix: ''}], exposure: 'ServiceWorker'},
+        {ident: 'api.AbortController.signal', tests: [{code: '"AbortController" in self && "signal" in AbortController.prototype', prefix: ''}], exposure: 'Window'},
+        {ident: 'api.AbortController.signal', tests: [{code: '"AbortController" in self && "signal" in AbortController.prototype', prefix: ''}], exposure: 'Worker'}
+      ]);
+    });
+
+    it('limited scope', () => {
+      assert.deepEqual(tests.getTests('/api/AbortController', 'Window'), [
+        {ident: 'api.AbortController', tests: [{code: '"AbortController" in self', prefix: ''}], exposure: 'Window'},
+        {ident: 'api.AbortController.signal', tests: [{code: '"AbortController" in self && "signal" in AbortController.prototype', prefix: ''}], exposure: 'Window'}
+      ]);
     });
   });
 
@@ -197,40 +208,5 @@ describe('Tests', () => {
     assert.equal(tests.getExposure('/api/interfaces'), 'Window');
     assert.equal(tests.getExposure('/api/serviceworkerinterfaces'), 'ServiceWorker');
     assert.equal(tests.getExposure('/api/dummy'), '');
-  });
-
-  describe('generateTestPage', () => {
-    it('main endpoint', () => {
-      const page = tests.generateTestPage('/api/interfaces');
-      const expected = [
-        'bcd.addTest("api.AbortController", undefined, "Window");',
-        'bcd.addTest("api.AbortController.signal", undefined, "Window");',
-        'bcd.runAndReport();'
-      ];
-      assert.equal(page, expected.join('\n'));
-    });
-
-    it('individual endpoint', () => {
-      const page = tests.generateTestPage('/api/AbortController');
-      const expected = [
-        'bcd.addTest("api.AbortController", undefined, "Window");',
-        'bcd.addTest("api.AbortController", undefined, "Worker");',
-        'bcd.addTest("api.AbortController", undefined, "ServiceWorker");',
-        'bcd.addTest("api.AbortController.signal", undefined, "Window");',
-        'bcd.addTest("api.AbortController.signal", undefined, "Worker");',
-        'bcd.runAndDisplay();'
-      ];
-      assert.equal(page, expected.join('\n'));
-    });
-
-    it('limited scope', () => {
-      const page = tests.generateTestPage('/api/AbortController', 'Window');
-      const expected = [
-        'bcd.addTest("api.AbortController", undefined, "Window");',
-        'bcd.addTest("api.AbortController.signal", undefined, "Window");',
-        'bcd.runAndDisplay();'
-      ];
-      assert.equal(page, expected.join('\n'));
-    });
   });
 });
