@@ -1,12 +1,14 @@
 // Manually maintained definitions for features not in any specification, like
 // non-standard features and features that have been removed or renamed.
 
+// https://trac.webkit.org/changeset/150905/webkit
 // https://trac.webkit.org/changeset/205065/webkit
 partial interface AudioBufferSourceNode {
   attribute boolean looping;
   void noteOn(double when);
   void noteGrainOn(double when, double grainOffset, double grainDuration);
   void noteOff(double when);
+  attribute EventHandler onended;
 };
 
 partial interface AudioContext {
@@ -39,6 +41,7 @@ partial interface OscillatorNode {
 
   void noteOn(double when);
   void noteOff(double when);
+  attribute EventHandler onended;
 };
 
 partial interface PannerNode {
@@ -352,10 +355,6 @@ partial interface DataTransfer {
   nsIVariant mozGetDataAt(optional string type, unsigned long index);
   void mozSetDataAt(optional string type, nsIVariant data, unsigned long index);
   nsIVariant mozTypesAt(unsigned long index);
-};
-
-partial interface AudioBufferSourceNode {
-  attribute EventHandler onended;
 };
 
 partial interface AudioContext {
