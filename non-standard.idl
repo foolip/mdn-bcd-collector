@@ -9,6 +9,8 @@ partial interface AudioBufferSourceNode {
   void noteGrainOn(double when, double grainOffset, double grainDuration);
   void noteOff(double when);
   attribute EventHandler onended;
+  // start() is still in the spec (override with 3 arguments)
+  void stop(optional double when = 0);
 };
 
 partial interface AudioContext {
@@ -42,6 +44,8 @@ partial interface OscillatorNode {
   void noteOn(double when);
   void noteOff(double when);
   attribute EventHandler onended;
+  void start(optional double when = 0);
+  void stop(optional double when = 0);
 };
 
 partial interface PannerNode {
@@ -572,7 +576,6 @@ interface BudgetState {
 // https://webaudio.github.io/web-audio-api/#AudioScheduledSourceNode
 // Modified to extend ConstantSourceNode w/out mixin stuff
 
-[Exposed=Window]
 partial interface ConstantSourceNode {
   attribute EventHandler onended;
   void start(optional double when = 0);
