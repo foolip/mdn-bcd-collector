@@ -46,6 +46,31 @@ const writeFile = async (filename, content) => {
   await fs.writeFile(filename, content, 'utf8');
 };
 
+const hasPrefix = (test) => {
+  let name;
+
+  if (typeof(test) === 'string') {
+    name = test;
+  } else {
+    name = test.property;
+  }
+
+  if (name.startsWith('-')) {
+    name = name.slice(1);
+  }
+
+  for (const prefix of [
+    ...prefixes.api.slice(1),
+    ...prefixes.css.slice(1)
+  ]) {
+    if (name.startsWith(prefix)) {
+      return prefix;
+    }
+  }
+
+  return false;
+};
+
 const getCustomTestAPI = (name, member) => {
   let test = false;
 
@@ -147,6 +172,11 @@ const compileTest = (test) => {
           prefix: prefix
         });
       }
+
+      if (hasPrefix(test.raw.code)) {
+        // Don't generate prefix variations if prefix already exists
+        break;
+      }
     }
   } else if (test.exposure[0] == 'CSS') {
     for (const prefix of prefixesToTest) {
@@ -161,6 +191,11 @@ const compileTest = (test) => {
           code: code,
           prefix: prefix
         });
+      }
+
+      if (hasPrefix(test.raw.code[0])) {
+        // Don't generate prefix variations if prefix already exists
+        break;
       }
     }
   } else {
@@ -177,6 +212,16 @@ const compileTest = (test) => {
             prefix: prefix2
           });
         }
+
+        if (hasPrefix(test.raw.code[1])) {
+          // Don't generate prefix variations if prefix already exists
+          break;
+        }
+      }
+
+      if (hasPrefix(test.raw.code[0])) {
+        // Don't generate prefix variations if prefix already exists
+        break;
       }
     }
   }
@@ -685,6 +730,7 @@ if (require.main === module) {
 } else {
   module.exports = {
     writeFile,
+    hasPrefix,
     getCustomTestAPI,
     getCustomSubtestsAPI,
     getCustomTestCSS,
