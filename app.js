@@ -95,13 +95,6 @@ app.use(express.static('generated'));
 
 // Backend API
 
-app.get('/api/tests', (req, res) => {
-  res.json([
-    tests.listMainEndpoints('/tests')[0],
-    ...tests.listIndividual('/tests')
-  ]);
-});
-
 app.post('/api/results', (req, res) => {
   if (!req.is('json')) {
     res.status(400).end();
