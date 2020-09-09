@@ -70,6 +70,66 @@ describe('Tests', () => {
     host: 'host.test'
   });
 
+  it('buildEndpoints', () => {
+    const expectedEndpoints = {
+      '/api/interfaces': {
+        entries: ['api.AbortController', 'api.AbortController.signal'],
+        httpsOnly: false,
+        exposure: 'Window'
+      },
+      '/api/serviceworkerinterfaces': {
+        entries: ['api.AbortController'],
+        httpsOnly: true,
+        exposure: 'ServiceWorker'
+      },
+      '/api/workerinterfaces': {
+        entries: ['api.AbortController', 'api.AbortController.signal'],
+        httpsOnly: false,
+        exposure: 'Worker'
+      },
+      '/css/properties': {
+        entries: ['css.properties.font-family'],
+        httpsOnly: false,
+        exposure: 'CSS'
+      }
+    };
+
+    const endpoints = tests.buildEndpoints(tests);
+
+    assert.deepEqual(endpoints, expectedEndpoints);
+  });
+
+  it('listMainEndpoints', () => {
+    assert.deepEqual(tests.listMainEndpoints(), [
+      ['', '/api/interfaces'],
+      ['', '/api/workerinterfaces'],
+      ['', '/api/serviceworkerinterfaces'],
+      ['', '/css/properties']
+    ]);
+  });
+
+  it('listIndividual', () => {
+    assert.deepEqual(tests.listIndividual(), [
+      ['api.AbortController', '/api/AbortController'],
+      ['api.AbortController.signal', '/api/AbortController/signal'],
+      ['css.properties.font-family', '/css/properties/font-family'],
+      ['javascript.builtins.array', '/javascript/builtins/array']
+    ]);
+  });
+
+  it('listAllEndpoints', () => {
+    assert.deepEqual(tests.listAllEndpoints(), [
+      ['', '/api/interfaces'],
+      ['', '/api/workerinterfaces'],
+      ['', '/api/serviceworkerinterfaces'],
+      ['', '/css/properties'],
+      ['api.AbortController', '/api/AbortController'],
+      ['api.AbortController.signal', '/api/AbortController/signal'],
+      ['css.properties.font-family', '/css/properties/font-family'],
+      ['javascript.builtins.array', '/javascript/builtins/array']
+    ]);
+  });
+
   describe('next', () => {
     it('normal', () => {
       assert.equal(
@@ -114,37 +174,6 @@ describe('Tests', () => {
     });
   });
 
-  it('listMainEndpoints', () => {
-    assert.deepEqual(tests.listMainEndpoints(), [
-      ['', '/api/interfaces'],
-      ['', '/api/workerinterfaces'],
-      ['', '/api/serviceworkerinterfaces'],
-      ['', '/css/properties']
-    ]);
-  });
-
-  it('listIndividual', () => {
-    assert.deepEqual(tests.listIndividual(), [
-      ['api.AbortController', '/api/AbortController'],
-      ['api.AbortController.signal', '/api/AbortController/signal'],
-      ['css.properties.font-family', '/css/properties/font-family'],
-      ['javascript.builtins.array', '/javascript/builtins/array']
-    ]);
-  });
-
-  it('listAllEndpoints', () => {
-    assert.deepEqual(tests.listAllEndpoints(), [
-      ['', '/api/interfaces'],
-      ['', '/api/workerinterfaces'],
-      ['', '/api/serviceworkerinterfaces'],
-      ['', '/css/properties'],
-      ['api.AbortController', '/api/AbortController'],
-      ['api.AbortController.signal', '/api/AbortController/signal'],
-      ['css.properties.font-family', '/css/properties/font-family'],
-      ['javascript.builtins.array', '/javascript/builtins/array']
-    ]);
-  });
-
   it('getTests', () => {
     assert.deepEqual(tests.getTests('/api/interfaces'), {
       'api.AbortController': {
@@ -170,32 +199,38 @@ describe('Tests', () => {
     assert.equal(tests.getExposure('/api/dummy'), '');
   });
 
-  it('buildEndpoints', () => {
-    const expectedEndpoints = {
-      '/api/interfaces': {
-        entries: ['api.AbortController', 'api.AbortController.signal'],
-        httpsOnly: false,
-        exposure: 'Window'
-      },
-      '/api/serviceworkerinterfaces': {
-        entries: ['api.AbortController'],
-        httpsOnly: true,
-        exposure: 'ServiceWorker'
-      },
-      '/api/workerinterfaces': {
-        entries: ['api.AbortController', 'api.AbortController.signal'],
-        httpsOnly: false,
-        exposure: 'Worker'
-      },
-      '/css/properties': {
-        entries: ['css.properties.font-family'],
-        httpsOnly: false,
-        exposure: 'CSS'
-      }
-    };
+  describe('generateTestPage', () => {
+    it('main endpoint', () => {
+      const page = tests.generateTestPage('/api/interfaces');
+      const expected = [
+        'bcd.addTest("api.AbortController", undefined, "Window");',
+        'bcd.addTest("api.AbortController.signal", undefined, "Window");',
+        'bcd.runAndReport();'
+      ];
+      assert.equal(page, expected.join('\n'));
+    });
 
-    const endpoints = tests.buildEndpoints(tests);
+    it('individual endpoint', () => {
+      const page = tests.generateTestPage('/api/AbortController');
+      const expected = [
+        'bcd.addTest("api.AbortController", undefined, "Window");',
+        'bcd.addTest("api.AbortController", undefined, "Worker");',
+        'bcd.addTest("api.AbortController", undefined, "ServiceWorker");',
+        'bcd.addTest("api.AbortController.signal", undefined, "Window");',
+        'bcd.addTest("api.AbortController.signal", undefined, "Worker");',
+        'bcd.runAndDisplay();'
+      ];
+      assert.equal(page, expected.join('\n'));
+    });
 
-    assert.deepEqual(endpoints, expectedEndpoints);
+    it('limited scope', () => {
+      const page = tests.generateTestPage('/api/AbortController', 'Window');
+      const expected = [
+        'bcd.addTest("api.AbortController", undefined, "Window");',
+        'bcd.addTest("api.AbortController.signal", undefined, "Window");',
+        'bcd.runAndDisplay();'
+      ];
+      assert.equal(page, expected.join('\n'));
+    });
   });
 });

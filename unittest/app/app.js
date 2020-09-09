@@ -108,12 +108,15 @@ describe('/api/results', () => {
   });
 });
 
-describe('/api/tests', () => {
-  it('list tests', async () => {
-    const res = await agent.get('/api/tests');
+describe('rendered pages', () => {
+  it('/', async () => {
+    const res = await agent.get(`/`);
     assert.equal(res.status, 200);
-    assert.isArray(res.body);
-    assert.equal(res.body.length, tests.length + 1);
+  });
+
+  it('/results', async () => {
+    const res = await agent.get(`/results`);
+    assert.equal(res.status, 200);
   });
 });
 
