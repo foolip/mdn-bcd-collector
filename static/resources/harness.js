@@ -21,11 +21,7 @@
 // on any modern JavaScript features.
 
 (function(global) {
-  var pending = {
-    'Window': [],
-    'Worker': [],
-    'ServiceWorker': []
-  };
+  var pending = {};
 
   function stringify(value) {
     try {
@@ -56,14 +52,16 @@
   }
 
   function addTest(name, tests, exposure, info) {
-    if (exposure in pending) {
-      pending[exposure].push({
-        name: name,
-        tests: tests,
-        exposure: exposure,
-        info: info
-      });
+    if (!(exposure in pending)) {
+      pending[exposure] = [];
     }
+
+    pending[exposure].push({
+      name: name,
+      tests: tests,
+      exposure: exposure,
+      info: info
+    });
   }
 
   function testConstructor(iface) {
@@ -176,7 +174,7 @@
     } else {
       console.log('No worker support');
       updateStatus('No worker support, skipping Worker/DedicatedWorker tests');
- 
+
       for (var i = 0; i < pending.Worker.length; i++) {
         var result = {
           name: pending.Worker[i].name,
@@ -229,7 +227,7 @@
 
         if (pending.ServiceWorker[i].info !== undefined) {
           result.info = Object.assign(
-            {}, result.info, pending.ServiceWorker[i].info
+              {}, result.info, pending.ServiceWorker[i].info
           );
         }
 
