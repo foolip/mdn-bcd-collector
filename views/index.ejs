@@ -9,7 +9,8 @@
       <option value="<%- test[1] %>"><%- test[0] || 'All Tests' %></option>
     <% }); %>
   </select>
-  <br />
+  <br /><br />
+  <input type="checkbox" id="reportToServer" checked disabled /><label for="reportToServer">Submit results to Git repo after completion?</label><br />
   <div id="limitExposureBox" style="display: none;">
     <label for="limitExposure">Limit Exposure:</label>
     <select id="limitExposure">
@@ -44,9 +45,17 @@
     var dropdown = document.getElementById('tests');
     var limitExposure = document.getElementById('limitExposure');
     var limitExposureBox = document.getElementById('limitExposureBox');
+    var reportToServer = document.getElementById('reportToServer');
 
     dropdown.onchange = function() {
       var choice = getDropdownSelection(dropdown);
+
+      if (choice[0] == 0) {
+        reportToServer.setAttribute('disabled', '');
+        reportToServer.checked = true;
+      } else {
+        reportToServer.removeAttribute('disabled');
+      }
 
       if (choice[0] == 0 || choice[2].indexOf('css') == 0) {
         limitExposureBox.style.display = "none";
@@ -63,9 +72,14 @@
         if (choice[1].indexOf('css.') == -1) {
           newUrl += getDropdownSelection(limitExposure)[1];
         }
-      } else {
-        newUrl += "?reportToServer";
-      };
+      }
+      if (choice[0] == 0 || reportToServer.checked) {
+        if (newUrl.indexOf('?') == -1) {
+          newUrl += "?reportToServer";
+        } else {
+          newUrl += "&reportToServer";
+        }
+      }
       if (newUrl) window.location = newUrl;
     }
   }
