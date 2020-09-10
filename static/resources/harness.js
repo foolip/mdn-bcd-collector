@@ -145,17 +145,6 @@
     return result;
   }
 
-  function runCSS(callback, results) {
-    var length = pending.length;
-    for (var i = 0; i < length; i++) {
-      if (pending[i].exposure == 'CSS') {
-        results.push(test(pending[i]));
-      }
-    }
-
-    callback(results);
-  }
-
   function runWindow(callback, results) {
     var length = pending.length;
     for (var i = 0; i < length; i++) {
@@ -297,12 +286,10 @@
     runWindow(function(results) {
       runWorker(function(results) {
         runServiceWorker(function(results) {
-          runCSS(function(results) {
-            pending = [];
+          pending = [];
 
-            clearTimeout(timeout);
-            callback(results);
-          }, results);
+          clearTimeout(timeout);
+          callback(results);
         }, results);
       }, results);
     }, []);
@@ -341,8 +328,11 @@
       var response = '';
       for (var i=0; i<results.length; i++) {
         var result = results[i];
-        response += result.name + ' (' + result.info.exposure +
-            ' exposure): <strong>' + result.result;
+        response += result.name;
+        if (result.name.indexOf('css.') != 0) {
+          response += ' (' + result.info.exposure + ' exposure)';
+        }
+        response += ': <strong>' + result.result;
         if (result.prefix) {
           response += ' (' + result.prefix + ' prefix)';
         }

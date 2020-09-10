@@ -675,7 +675,7 @@ const buildCSS = (webref, bcd) => {
         ],
         combinator: '||'
       },
-      exposure: ['CSS']
+      exposure: ['Window']
     });
   }
 

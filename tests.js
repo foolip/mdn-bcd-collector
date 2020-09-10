@@ -31,7 +31,8 @@ class Tests {
         let httpsOnly = false;
         switch (exposure) {
           case 'Window':
-            endpoint = '/api/interfaces';
+            endpoint = ident.startsWith('css') ?
+                '/css/properties' : '/api/interfaces';
             break;
           case 'Worker':
           case 'DedicatedWorker':
@@ -40,9 +41,6 @@ class Tests {
           case 'ServiceWorker':
             endpoint = '/api/serviceworkerinterfaces';
             httpsOnly = true;
-            break;
-          case 'CSS':
-            endpoint = '/css/properties';
             break;
         }
 
