@@ -24,8 +24,10 @@ self.onmessage = function(event) {
   var pending = event.data;
   var results = [];
 
-  for (var i = 0; i < pending.length; i++) {
-    results.push(bcd.test(pending[i]));
+  if (pending) {
+    for (var i = 0; i < pending.length; i++) {
+      results.push(bcd.test(pending[i]));
+    }
   }
 
   self.postMessage(results);

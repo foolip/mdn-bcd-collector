@@ -155,8 +155,10 @@
   }
 
   function runWindow(callback, results) {
-    for (var i = 0; i < pending.Window.length; i++) {
-      results.push(test(pending.Window[i]));
+    if (pending.Window) {
+      for (var i = 0; i < pending.Window.length; i++) {
+        results.push(test(pending.Window[i]));
+      }
     }
 
     callback(results);
