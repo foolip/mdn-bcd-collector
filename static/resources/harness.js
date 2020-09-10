@@ -21,7 +21,11 @@
 // on any modern JavaScript features.
 
 (function(global) {
-  var pending = [];
+  var pending = {
+    'Window': [],
+    'Worker': [],
+    'ServiceWorker': []
+  };
 
   function stringify(value) {
     try {
@@ -52,7 +56,14 @@
   }
 
   function addTest(name, tests, exposure, info) {
-    pending.push({name: name, tests: tests, exposure: exposure, info: info});
+    if (exposure in pending) {
+      pending[exposure].push({
+        name: name,
+        tests: tests,
+        exposure: exposure,
+        info: info
+      });
+    }
   }
 
   function testConstructor(iface) {
@@ -146,67 +157,41 @@
   }
 
   function runWindow(callback, results) {
-    var length = pending.length;
-    for (var i = 0; i < length; i++) {
-      if (pending[i].exposure == 'Window') {
-        results.push(test(pending[i]));
-      }
+    for (var i = 0; i < pending.Window.length; i++) {
+      results.push(test(pending.Window[i]));
     }
 
     callback(results);
   }
 
   function runWorker(callback, results) {
-    var length = pending.length;
-    var i;
-
     if ('Worker' in self) {
       var myWorker = new Worker('/resources/worker.js');
 
-      var promises = [];
-      var testhandlers = {};
-
       myWorker.onmessage = function(event) {
-        testhandlers[event.data.name](event.data);
+        callback(results.concat(event.data));
       };
 
-      for (i = 0; i < length; i++) {
-        if (pending[i].exposure == 'Worker') {
-          promises.push(new Promise(function(resolve) {
-            myWorker.postMessage(pending[i]);
-
-            testhandlers[pending[i].name] = function(message) {
-              results.push(message);
-              resolve();
-            };
-          }));
-        }
-      }
-
-      Promise.allSettled(promises).then(function() {
-        callback(results);
-      });
+      myWorker.postMessage(pending.Worker);
     } else {
       console.log('No worker support');
       updateStatus('No worker support, skipping Worker/DedicatedWorker tests');
-
-      for (i = 0; i < length; i++) {
-        if (pending[i].exposure == 'Worker') {
-          var result = {
-            name: pending[i].name,
-            result: false,
-            message: 'No worker support',
-            info: {
-              exposure: 'Worker'
-            }
-          };
-
-          if (pending[i].info !== undefined) {
-            result.info = Object.assign({}, result.info, pending[i].info);
+ 
+      for (var i = 0; i < pending.Worker.length; i++) {
+        var result = {
+          name: pending.Worker[i].name,
+          result: false,
+          message: 'No worker support',
+          info: {
+            exposure: 'Worker'
           }
+        };
 
-          results.push(result);
+        if (pending.Worker[i].info !== undefined) {
+          result.info = Object.assign({}, result.info, pending.Worker[i].info);
         }
+
+        results.push(result);
       }
 
       callback(results);
@@ -221,56 +206,34 @@
         }).then(function(reg) {
           return window.__waitForSWState(reg, 'activated');
         }).then(navigator.serviceWorker.ready).then(function(reg) {
-          var promises = [];
-          var testhandlers = {};
-
           navigator.serviceWorker.onmessage = function(event) {
-            testhandlers[event.data.name](event.data);
+            callback(results.concat(event.data));
           };
 
-          var length = pending.length;
-          for (var i = 0; i < length; i++) {
-            if (pending[i].exposure == 'ServiceWorker') {
-              promises.push(new Promise(function(resolve) {
-                reg.active.postMessage(pending[i]);
-
-                testhandlers[pending[i].name] = function(message) {
-                  results.push(message);
-                  resolve();
-                };
-              }));
-            }
-          }
-
-          Promise.allSettled(promises).then(function() {
-            window.__workerCleanup().then(function() {
-              callback(results);
-            });
-          });
+          reg.active.postMessage(pending.ServiceWorker);
         });
       });
     } else {
       console.log('No service worker support, skipping');
       updateStatus('No service worker support, skipping ServiceWorker tests');
 
-      var length = pending.length;
-      for (var i = 0; i < length; i++) {
-        if (pending[i].exposure == 'ServiceWorker') {
-          var result = {
-            name: pending[i].name,
-            result: false,
-            message: 'No service worker support',
-            info: {
-              exposure: 'ServiceWorker'
-            }
-          };
-
-          if (pending[i].info !== undefined) {
-            result.info = Object.assign({}, result.info, pending[i].info);
+      for (var i = 0; i < pending.ServiceWorker.length; i++) {
+        var result = {
+          name: pending.ServiceWorker[i].name,
+          result: false,
+          message: 'No service worker support',
+          info: {
+            exposure: 'ServiceWorker'
           }
+        };
 
-          results.push(result);
+        if (pending.ServiceWorker[i].info !== undefined) {
+          result.info = Object.assign(
+            {}, result.info, pending.ServiceWorker[i].info
+          );
         }
+
+        results.push(result);
       }
 
       callback(results);

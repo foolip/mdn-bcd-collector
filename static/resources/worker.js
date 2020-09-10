@@ -21,6 +21,12 @@ var window = {};
 self.importScripts('harness.js');
 
 self.onmessage = function(event) {
-  var result = bcd.test(event.data);
-  self.postMessage(result);
+  var pending = event.data;
+  var results = [];
+
+  for (var i = 0; i < pending.length; i++) {
+    results.push(bcd.test(pending[i]));
+  }
+
+  self.postMessage(results);
 };

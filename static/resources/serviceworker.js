@@ -32,5 +32,12 @@ self.addEventListener('install', function(event) {
 });
 
 self.addEventListener('message', function(event) {
-  event.source.postMessage(bcd.test(event.data));
+  var pending = event.data;
+  var results = [];
+
+  for (var i = 0; i < pending.length; i++) {
+    results.push(bcd.test(pending[i]));
+  }
+
+  event.source.postMessage(results);
 });
