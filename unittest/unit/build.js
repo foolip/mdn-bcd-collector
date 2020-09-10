@@ -396,6 +396,7 @@ describe('build', () => {
           ],
           combinator: '&&'
         },
+        category: 'api',
         exposure: ['Window']
       };
 
@@ -418,6 +419,7 @@ describe('build', () => {
             prefix: 'WebKit'
           }
         ],
+        category: 'api',
         exposure: ['Window']
       });
     });
@@ -428,6 +430,7 @@ describe('build', () => {
           code: {property: 'WebKitDocument', owner: 'self'},
           combinator: '&&'
         },
+        category: 'api',
         exposure: ['Window']
       };
 
@@ -438,6 +441,7 @@ describe('build', () => {
             prefix: ''
           }
         ],
+        category: 'api',
         exposure: ['Window']
       });
     });
@@ -452,6 +456,7 @@ describe('build', () => {
             ],
             combinator: '&&'
           },
+          category: 'api',
           exposure: ['Window']
         };
 
@@ -466,6 +471,7 @@ describe('build', () => {
               prefix: 'WebKit'
             }
           ],
+          category: 'api',
           exposure: ['Window']
         });
       });
@@ -479,6 +485,7 @@ describe('build', () => {
             ],
             combinator: '&&'
           },
+          category: 'api',
           exposure: ['Window']
         };
 
@@ -493,6 +500,7 @@ describe('build', () => {
               prefix: ''
             }
           ],
+          category: 'api',
           exposure: ['Window']
         });
       });
@@ -506,6 +514,7 @@ describe('build', () => {
             prefix: ''
           }
         ],
+        category: 'api',
         exposure: ['Window']
       };
 
@@ -519,6 +528,7 @@ describe('build', () => {
             code: 'true',
             combinator: '&&'
           },
+          category: 'api',
           exposure: ['Window']
         },
         {
@@ -529,7 +539,8 @@ describe('build', () => {
             ],
             combinator: '||'
           },
-          exposure: ['CSS']
+          category: 'api',
+          exposure: ['Window']
         },
         {
           raw: {
@@ -539,6 +550,7 @@ describe('build', () => {
             ],
             combinator: '&&'
           },
+          category: 'api',
           exposure: ['Worker']
         }
       ];
@@ -550,6 +562,7 @@ describe('build', () => {
             prefix: ''
           }
         ],
+        category: 'api',
         exposure: ['Window']
       });
       assert.deepEqual(compileTest(rawTests[1]), {
@@ -559,7 +572,8 @@ describe('build', () => {
             prefix: ''
           }
         ],
-        exposure: ['CSS']
+        category: 'api',
+        exposure: ['Window']
       });
       assert.deepEqual(compileTest(rawTests[2]), {
         tests: [
@@ -568,6 +582,7 @@ describe('build', () => {
             prefix: ''
           }
         ],
+        category: 'api',
         exposure: ['Worker']
       });
     });
@@ -581,7 +596,8 @@ describe('build', () => {
           ],
           combinator: '||'
         },
-        exposure: ['CSS']
+        category: 'css',
+        exposure: ['Window']
       };
 
       assert.deepEqual(compileTest(rawTest), {
@@ -595,7 +611,8 @@ describe('build', () => {
             prefix: 'webkit'
           }
         ],
-        exposure: ['CSS']
+        category: 'css',
+        exposure: ['Window']
       });
     });
 
@@ -608,7 +625,8 @@ describe('build', () => {
           ],
           combinator: '||'
         },
-        exposure: ['CSS']
+        category: 'css',
+        exposure: ['Window']
       };
 
       assert.deepEqual(compileTest(rawTest), {
@@ -618,7 +636,8 @@ describe('build', () => {
             prefix: ''
           }
         ],
-        exposure: ['CSS']
+        category: 'css',
+        exposure: ['Window']
       });
     });
   });
@@ -957,6 +976,7 @@ describe('build', () => {
               prefix: 'WebKit'
             }
           ],
+          category: 'api',
           exposure: ['Window']
         },
         'api.Attr.name': {
@@ -978,6 +998,7 @@ describe('build', () => {
               prefix: 'WebKit'
             }
           ],
+          category: 'api',
           exposure: ['Window']
         }
       });
@@ -1000,6 +1021,7 @@ describe('build', () => {
               prefix: 'WebKit'
             }
           ],
+          category: 'api',
           exposure: ['Window']
         },
         'api.Node.contains': {
@@ -1021,6 +1043,7 @@ describe('build', () => {
               prefix: 'WebKit'
             }
           ],
+          category: 'api',
           exposure: ['Window']
         }
       });
@@ -1044,6 +1067,7 @@ describe('build', () => {
               prefix: 'WebKit'
             }
           ],
+          category: 'api',
           exposure: ['Window']
         },
         'api.MediaSource.isTypeSupported': {
@@ -1065,6 +1089,7 @@ describe('build', () => {
               prefix: 'WebKit'
             }
           ],
+          category: 'api',
           exposure: ['Window']
         }
       });
@@ -1088,6 +1113,7 @@ describe('build', () => {
               prefix: 'WebKit'
             }
           ],
+          category: 'api',
           exposure: ['Window']
         },
         'api.Window.isWindow': {
@@ -1109,6 +1135,7 @@ describe('build', () => {
               prefix: 'WebKit'
             }
           ],
+          category: 'api',
           exposure: ['Window']
         }
       });
@@ -1162,6 +1189,7 @@ describe('build', () => {
               prefix: ''
             }
           ],
+          category: 'api',
           exposure: ['Window']
         },
         'api.ANGLE_instanced_arrays.drawArraysInstancedANGLE': {
@@ -1171,6 +1199,7 @@ describe('build', () => {
               prefix: ''
             }
           ],
+          category: 'api',
           exposure: ['Window']
         },
         'api.ANGLE_instanced_arrays.drawElementsInstancedANGLE': {
@@ -1180,6 +1209,7 @@ describe('build', () => {
               prefix: ''
             }
           ],
+          category: 'api',
           exposure: ['Window']
         },
         'api.Document': {
@@ -1193,6 +1223,7 @@ describe('build', () => {
               prefix: 'WebKit'
             }
           ],
+          category: 'api',
           exposure: ['Window']
         },
         'api.Document.charset': {
@@ -1206,6 +1237,7 @@ describe('build', () => {
               prefix: ''
             }
           ],
+          category: 'api',
           exposure: ['Window']
         },
         'api.Document.loaded': {
@@ -1227,6 +1259,7 @@ describe('build', () => {
               prefix: 'WebKit'
             }
           ],
+          category: 'api',
           exposure: ['Window']
         },
         'api.Document.loaded.loaded_is_boolean': {
@@ -1236,6 +1269,7 @@ describe('build', () => {
               prefix: ''
             }
           ],
+          category: 'api',
           exposure: ['Window']
         }
       });
@@ -1265,6 +1299,7 @@ describe('build', () => {
               prefix: 'WebKit'
             }
           ],
+          category: 'api',
           exposure: ['Window']
         },
         'api.WindowOrWorkerGlobalScope.active': {
@@ -1278,6 +1313,7 @@ describe('build', () => {
               prefix: 'WebKit'
             }
           ],
+          category: 'api',
           exposure: ['Window']
         },
         'api.WindowOrWorkerGlobalScope.isLoaded': {
@@ -1291,6 +1327,7 @@ describe('build', () => {
               prefix: 'WebKit'
             }
           ],
+          category: 'api',
           exposure: ['Window']
         }
       });
@@ -1313,6 +1350,7 @@ describe('build', () => {
               prefix: 'WebKit'
             }
           ],
+          category: 'api',
           exposure: ['Window']
         },
         'api.Number.Number': {
@@ -1326,6 +1364,7 @@ describe('build', () => {
               prefix: 'WebKit'
             }
           ],
+          category: 'api',
           exposure: ['Window']
         }
       });
@@ -1346,6 +1385,7 @@ describe('build', () => {
               prefix: 'WebKit'
             }
           ],
+          category: 'api',
           exposure: ['Window']
         },
         'api.Number.Number': {
@@ -1359,6 +1399,7 @@ describe('build', () => {
               prefix: 'WebKit'
             }
           ],
+          category: 'api',
           exposure: ['Window']
         }
       });
@@ -1380,6 +1421,7 @@ describe('build', () => {
               prefix: 'WebKit'
             }
           ],
+          category: 'api',
           exposure: ['Window']
         },
         'api.DoubleList.@@iterator': {
@@ -1393,6 +1435,7 @@ describe('build', () => {
               prefix: 'WebKit'
             }
           ],
+          category: 'api',
           exposure: ['Window']
         },
         'api.DoubleList.entries': {
@@ -1414,6 +1457,7 @@ describe('build', () => {
               prefix: 'WebKit'
             }
           ],
+          category: 'api',
           exposure: ['Window']
         },
         'api.DoubleList.forEach': {
@@ -1435,6 +1479,7 @@ describe('build', () => {
               prefix: 'WebKit'
             }
           ],
+          category: 'api',
           exposure: ['Window']
         },
         'api.DoubleList.keys': {
@@ -1456,6 +1501,7 @@ describe('build', () => {
               prefix: 'WebKit'
             }
           ],
+          category: 'api',
           exposure: ['Window']
         },
         'api.DoubleList.values': {
@@ -1477,6 +1523,7 @@ describe('build', () => {
               prefix: 'WebKit'
             }
           ],
+          category: 'api',
           exposure: ['Window']
         }
       });
@@ -1498,6 +1545,7 @@ describe('build', () => {
               prefix: 'WebKit'
             }
           ],
+          category: 'api',
           exposure: ['Window']
         },
         'api.DoubleMap.clear': {
@@ -1519,6 +1567,7 @@ describe('build', () => {
               prefix: 'WebKit'
             }
           ],
+          category: 'api',
           exposure: ['Window']
         },
         'api.DoubleMap.delete': {
@@ -1540,6 +1589,7 @@ describe('build', () => {
               prefix: 'WebKit'
             }
           ],
+          category: 'api',
           exposure: ['Window']
         },
         'api.DoubleMap.entries': {
@@ -1561,6 +1611,7 @@ describe('build', () => {
               prefix: 'WebKit'
             }
           ],
+          category: 'api',
           exposure: ['Window']
         },
         'api.DoubleMap.forEach': {
@@ -1582,6 +1633,7 @@ describe('build', () => {
               prefix: 'WebKit'
             }
           ],
+          category: 'api',
           exposure: ['Window']
         },
         'api.DoubleMap.get': {
@@ -1603,6 +1655,7 @@ describe('build', () => {
               prefix: 'WebKit'
             }
           ],
+          category: 'api',
           exposure: ['Window']
         },
         'api.DoubleMap.has': {
@@ -1624,6 +1677,7 @@ describe('build', () => {
               prefix: 'WebKit'
             }
           ],
+          category: 'api',
           exposure: ['Window']
         },
         'api.DoubleMap.keys': {
@@ -1645,6 +1699,7 @@ describe('build', () => {
               prefix: 'WebKit'
             }
           ],
+          category: 'api',
           exposure: ['Window']
         },
         'api.DoubleMap.set': {
@@ -1666,6 +1721,7 @@ describe('build', () => {
               prefix: 'WebKit'
             }
           ],
+          category: 'api',
           exposure: ['Window']
         },
         'api.DoubleMap.size': {
@@ -1687,6 +1743,7 @@ describe('build', () => {
               prefix: 'WebKit'
             }
           ],
+          category: 'api',
           exposure: ['Window']
         },
         'api.DoubleMap.values': {
@@ -1708,6 +1765,7 @@ describe('build', () => {
               prefix: 'WebKit'
             }
           ],
+          category: 'api',
           exposure: ['Window']
         }
       });
@@ -1729,6 +1787,7 @@ describe('build', () => {
               prefix: 'WebKit'
             }
           ],
+          category: 'api',
           exposure: ['Window']
         },
         'api.DoubleSet.add': {
@@ -1750,6 +1809,7 @@ describe('build', () => {
               prefix: 'WebKit'
             }
           ],
+          category: 'api',
           exposure: ['Window']
         },
         'api.DoubleSet.clear': {
@@ -1771,6 +1831,7 @@ describe('build', () => {
               prefix: 'WebKit'
             }
           ],
+          category: 'api',
           exposure: ['Window']
         },
         'api.DoubleSet.delete': {
@@ -1792,6 +1853,7 @@ describe('build', () => {
               prefix: 'WebKit'
             }
           ],
+          category: 'api',
           exposure: ['Window']
         },
         'api.DoubleSet.entries': {
@@ -1813,6 +1875,7 @@ describe('build', () => {
               prefix: 'WebKit'
             }
           ],
+          category: 'api',
           exposure: ['Window']
         },
         'api.DoubleSet.has': {
@@ -1834,6 +1897,7 @@ describe('build', () => {
               prefix: 'WebKit'
             }
           ],
+          category: 'api',
           exposure: ['Window']
         },
         'api.DoubleSet.keys': {
@@ -1855,6 +1919,7 @@ describe('build', () => {
               prefix: 'WebKit'
             }
           ],
+          category: 'api',
           exposure: ['Window']
         },
         'api.DoubleSet.size': {
@@ -1876,6 +1941,7 @@ describe('build', () => {
               prefix: 'WebKit'
             }
           ],
+          category: 'api',
           exposure: ['Window']
         },
         'api.DoubleSet.values': {
@@ -1897,6 +1963,7 @@ describe('build', () => {
               prefix: 'WebKit'
             }
           ],
+          category: 'api',
           exposure: ['Window']
         }
       });
@@ -1919,6 +1986,7 @@ describe('build', () => {
               prefix: 'WebKit'
             }
           ],
+          category: 'api',
           exposure: ['Window']
         }
       });
@@ -1943,6 +2011,7 @@ describe('build', () => {
               prefix: 'WebKit'
             }
           ],
+          category: 'api',
           exposure: ['Window']
         },
         'api.MessageChannel': {
@@ -1956,6 +2025,7 @@ describe('build', () => {
               prefix: 'WebKit'
             }
           ],
+          category: 'api',
           exposure: ['Window', 'Worker']
         },
         'api.Worker': {
@@ -1969,6 +2039,7 @@ describe('build', () => {
               prefix: 'WebKit'
             }
           ],
+          category: 'api',
           exposure: ['Window']
         },
         'api.WorkerSync': {
@@ -1982,6 +2053,7 @@ describe('build', () => {
               prefix: 'WebKit'
             }
           ],
+          category: 'api',
           exposure: ['Worker']
         }
       });
@@ -2007,6 +2079,7 @@ describe('build', () => {
               prefix: 'WebKit'
             }
           ],
+          category: 'api',
           exposure: ['Window']
         },
         'api.AudioNode.disconnect': {
@@ -2028,6 +2101,7 @@ describe('build', () => {
               prefix: 'WebKit'
             }
           ],
+          category: 'api',
           exposure: ['Window']
         }
       });
@@ -2050,6 +2124,7 @@ describe('build', () => {
               prefix: 'WebKit'
             }
           ],
+          category: 'api',
           exposure: ['Window']
         },
         'api.CSS.paintWorklet': {
@@ -2071,6 +2146,7 @@ describe('build', () => {
               prefix: 'WebKit'
             }
           ],
+          category: 'api',
           exposure: ['Window']
         }
       });
@@ -2093,6 +2169,7 @@ describe('build', () => {
               prefix: 'WebKit'
             }
           ],
+          category: 'api',
           exposure: ['Window']
         },
         'api.CSS.supports': {
@@ -2114,6 +2191,7 @@ describe('build', () => {
               prefix: 'WebKit'
             }
           ],
+          category: 'api',
           exposure: ['Window']
         }
       });
@@ -2145,6 +2223,7 @@ describe('build', () => {
               prefix: ''
             }
           ],
+          category: 'api',
           exposure: ['Window']
         },
         'api.CSS.paintWorklet': {
@@ -2154,6 +2233,7 @@ describe('build', () => {
               prefix: ''
             }
           ],
+          category: 'api',
           exposure: ['Window']
         }
       });
@@ -2177,6 +2257,7 @@ describe('build', () => {
               prefix: 'WebKit'
             }
           ],
+          category: 'api',
           exposure: ['Window']
         },
         'api.ElementRegistrationOptions.extends': {
@@ -2198,6 +2279,7 @@ describe('build', () => {
               prefix: 'WebKit'
             }
           ],
+          category: 'api',
           exposure: ['Window']
         },
         'api.ElementRegistrationOptions.prototype': {
@@ -2219,6 +2301,7 @@ describe('build', () => {
               prefix: 'WebKit'
             }
           ],
+          category: 'api',
           exposure: ['Window']
         }
       });
@@ -2248,6 +2331,7 @@ describe('build', () => {
               prefix: ''
             }
           ],
+          category: 'api',
           exposure: ['Window']
         },
         'api.ElementRegistrationOptions.extends': {
@@ -2257,6 +2341,7 @@ describe('build', () => {
               prefix: ''
             }
           ],
+          category: 'api',
           exposure: ['Window']
         },
         'api.ElementRegistrationOptions.prototype': {
@@ -2266,6 +2351,7 @@ describe('build', () => {
               prefix: ''
             }
           ],
+          category: 'api',
           exposure: ['Window']
         }
       });
@@ -2381,7 +2467,8 @@ describe('build', () => {
             prefix: 'webkit'
           }
         ],
-        exposure: ['CSS']
+        category: 'css',
+        exposure: ['Window']
       },
       'css.properties.font-family': {
         tests: [
@@ -2394,7 +2481,8 @@ describe('build', () => {
             prefix: 'webkit'
           }
         ],
-        exposure: ['CSS']
+        category: 'css',
+        exposure: ['Window']
       },
       'css.properties.font-weight': {
         tests: [
@@ -2407,7 +2495,8 @@ describe('build', () => {
             prefix: 'webkit'
           }
         ],
-        exposure: ['CSS']
+        category: 'css',
+        exposure: ['Window']
       },
       'css.properties.grid': {
         tests: [
@@ -2420,7 +2509,8 @@ describe('build', () => {
             prefix: 'webkit'
           }
         ],
-        exposure: ['CSS']
+        category: 'css',
+        exposure: ['Window']
       }
     });
   });

@@ -20,53 +20,29 @@ const Tests = require('../../tests');
 const testDatabase = {
   'api.AbortController': {
     tests: [{code: '"AbortController" in self', prefix: ''}],
+    category: 'api',
     exposure: ['Window', 'Worker', 'ServiceWorker']
   },
   'api.AbortController.signal': {
     tests: [{code: '"AbortController" in self && "signal" in AbortController.prototype', prefix: ''}],
+    category: 'api',
     exposure: ['Window', 'Worker']
   },
   'css.properties.font-family': {
     tests: [{code: '"fontFamily" in document.body.style || CSS.supports("font-family", "inherit")', prefix: ''}],
-    exposure: ['CSS']
+    category: 'css',
+    exposure: ['Window']
   },
   'javascript.builtins.array': {
     tests: [{code: '[1, 2, 3]', prefix: ''}],
+    category: 'javascript',
     exposure: ['JavaScript']
-  }
-};
-const endpoints = {
-  '/api/interfaces': {
-    exposure: 'Window',
-    httpsOnly: false,
-    entries: [
-      'api.AbortController',
-      'api.AbortController.signal'
-    ]
-  },
-  '/api/workerinterfaces': {
-    exposure: 'Worker',
-    httpsOnly: false,
-    entries: [
-      'api.AbortController'
-    ]
-  },
-  '/api/serviceworkerinterfaces': {
-    exposure: 'ServiceWorker',
-    httpsOnly: true,
-    entries: []
-  },
-  '/css/properties': {
-    exposure: 'CSS',
-    httpsOnly: false,
-    entries: []
   }
 };
 
 describe('Tests', () => {
   const tests = new Tests({
     tests: testDatabase,
-    endpoints: endpoints,
     host: 'host.test'
   });
 
@@ -90,7 +66,7 @@ describe('Tests', () => {
       '/css/properties': {
         entries: ['css.properties.font-family'],
         httpsOnly: false,
-        exposure: 'CSS'
+        exposure: 'Window'
       }
     };
 
