@@ -15,9 +15,6 @@
 /* global self */
 /* global bcd */
 
-// eslint-disable-next-line no-unused-vars
-var window = {};
-
 self.importScripts('harness.js');
 
 self.onmessage = function(event) {
