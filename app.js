@@ -172,6 +172,11 @@ app.all('/tests/*', (req, res) => {
   const endpoint = `/${req.params['0']}`;
   const ident = req.params['0'].replace(/\//g, '.');
 
+  if (endpoint == '/') {
+    // Temporary until main endpoints are removed entirely
+    res.redirect(`${tests.listMainEndpoints('/tests')[0][1]}?reportToServer`);
+  };
+
   if (tests.listAllEndpoints().some((item) => (item[1] === endpoint))) {
     res.render('tests', {
       title: `${ident} | mdn-bcd-collector`,

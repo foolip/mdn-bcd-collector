@@ -26,6 +26,7 @@ class Tests {
     const endpoints = {};
 
     for (const [ident, test] of Object.entries(this.tests)) {
+      // Main endpoints (removal expected soon)
       for (const exposure of test.exposure) {
         let endpoint = '';
         let httpsOnly = false;
@@ -33,20 +34,20 @@ class Tests {
           case 'api':
             switch (exposure) {
               case 'Window':
-                endpoint = '/api/interfaces';
+                endpoint = '/main/api/interfaces';
                 break;
               case 'Worker':
               case 'DedicatedWorker':
-                endpoint = '/api/workerinterfaces';
+                endpoint = '/main/api/workerinterfaces';
                 break;
               case 'ServiceWorker':
-                endpoint = '/api/serviceworkerinterfaces';
+                endpoint = '/main/api/serviceworkerinterfaces';
                 httpsOnly = true;
                 break;
             }
             break;
           case 'css':
-            endpoint = '/css/properties';
+            endpoint = '/main/css/properties';
             break;
         }
 
@@ -68,7 +69,9 @@ class Tests {
   }
 
   listMainEndpoints(urlPrefix = '') {
-    return Object.keys(this.endpoints).map((item) => (
+    return Object.keys(this.endpoints).filter((item) => (
+      item.startsWith('/main')
+    )).map((item) => (
       // The empty string is to tell the frontend this is a main test,
       // and label the first one as "All Tests"
       ['', `${urlPrefix}${item}`]
