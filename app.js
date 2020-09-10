@@ -164,7 +164,7 @@ app.all('/tests/*', (req, res) => {
 
   if (tests.listEndpoints().some((item) => (item[1] === endpoint))) {
     res.render('tests', {
-      title: `${ident} | mdn-bcd-collector`,
+      title: `${ident || 'All Tests'} | mdn-bcd-collector`,
       layout: false,
       tests: tests.getTests(endpoint, req.query.exposure)
     });
