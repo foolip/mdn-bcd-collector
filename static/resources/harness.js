@@ -289,7 +289,7 @@
           pending = [];
 
           clearTimeout(timeout);
-          if (callback) {
+          if (typeof callback == 'function') {
             callback(results);
           } else {
             report(results);
