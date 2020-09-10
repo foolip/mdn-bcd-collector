@@ -29,18 +29,25 @@ class Tests {
       for (const exposure of test.exposure) {
         let endpoint = '';
         let httpsOnly = false;
-        switch (exposure) {
-          case 'Window':
-            endpoint = ident.startsWith('css') ?
-                '/css/properties' : '/api/interfaces';
+        switch (test.category) {
+          case 'css':
+            endpoint = '/css/properties';
             break;
-          case 'Worker':
-          case 'DedicatedWorker':
-            endpoint = '/api/workerinterfaces';
-            break;
-          case 'ServiceWorker':
-            endpoint = '/api/serviceworkerinterfaces';
-            httpsOnly = true;
+          case 'api':
+            switch (exposure) {
+              case 'Window':
+                endpoint = test.category == 'css' ?
+                    '/css/properties' : '/api/interfaces';
+                break;
+              case 'Worker':
+              case 'DedicatedWorker':
+                endpoint = '/api/workerinterfaces';
+                break;
+              case 'ServiceWorker':
+                endpoint = '/api/serviceworkerinterfaces';
+                httpsOnly = true;
+                break;
+            }
             break;
         }
 

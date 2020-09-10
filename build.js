@@ -157,10 +157,13 @@ const compileTest = (test) => {
     return test;
   }
 
-  const newTest = {tests: [], exposure: test.exposure};
+  const newTest = {
+    tests: [],
+    category: test.category,
+    exposure: test.exposure
+  };
 
-  const prefixesToTest = test.exposure[0] == 'CSS' ?
-      prefixes.css : prefixes.api;
+  const prefixesToTest = prefixes[test.category];
 
   if (!Array.isArray(test.raw.code)) {
     for (const prefix of prefixesToTest) {
@@ -178,7 +181,7 @@ const compileTest = (test) => {
         break;
       }
     }
-  } else if (test.exposure[0] == 'CSS') {
+  } else if (test.category == 'css') {
     for (const prefix of prefixesToTest) {
       const code = `${compileTestCode(
           test.raw.code[0], prefix
@@ -507,6 +510,7 @@ const buildIDLTests = (ast) => {
         code: customIfaceTest || {property: iface.name, owner: 'self'},
         combinator: '&&'
       },
+      category: 'api',
       exposure: Array.from(exposureSet)
     });
 
@@ -577,6 +581,7 @@ const buildIDLTests = (ast) => {
           code: expr,
           combinator: '&&'
         },
+        category: 'api',
         exposure: Array.from(exposureSet)
       });
       handledMemberNames.add(member.name);
@@ -589,6 +594,7 @@ const buildIDLTests = (ast) => {
           code: subtest[1],
           combinator: '&&'
         },
+        category: 'api',
         exposure: Array.from(exposureSet)
       });
     }
@@ -675,6 +681,7 @@ const buildCSS = (webref, bcd) => {
         ],
         combinator: '||'
       },
+      category: 'css',
       exposure: ['Window']
     });
   }
