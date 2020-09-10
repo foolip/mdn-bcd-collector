@@ -73,7 +73,7 @@ const run = async (browser, version) => {
   );
   capabilities.set(Capability.VERSION, version);
 
-  let driver = new Builder().usingServer(seleniumUrl)
+  const driver = new Builder().usingServer(seleniumUrl)
       .withCapabilities(capabilities).build();
 
   await driver.get(`${host}/tests/`);
@@ -101,8 +101,9 @@ const runAll = async () => {
       await run(browser, version);
     }
   }
-}
+};
 
+/* istanbul ignore if */
 if (require.main === module) {
   runAll();
 } else {
