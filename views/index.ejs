@@ -32,43 +32,43 @@
 <p><a href="https://github.com/foolip/mdn-bcd-collector">Source on GitHub</a></p>
 
 <script>
-function getDropdownSelection(dropdown) {
-  var index = dropdown.selectedIndex;
-  var choice = dropdown.options[index].value;
-  var label = dropdown.options[index].textContent;
-  return [index, choice, label];
-};
+  function getDropdownSelection(dropdown) {
+    var index = dropdown.selectedIndex;
+    var choice = dropdown.options[index].value;
+    var label = dropdown.options[index].textContent;
+    return [index, choice, label];
+  };
 
-function main() {
-  var button = document.getElementById('start');
-  var dropdown = document.getElementById('tests');
-  var limitExposure = document.getElementById('limitExposure');
-  var limitExposureBox = document.getElementById('limitExposureBox');
+  function main() {
+    var button = document.getElementById('start');
+    var dropdown = document.getElementById('tests');
+    var limitExposure = document.getElementById('limitExposure');
+    var limitExposureBox = document.getElementById('limitExposureBox');
 
-  dropdown.onchange = function() {
-    var choice = getDropdownSelection(dropdown);
+    dropdown.onchange = function() {
+      var choice = getDropdownSelection(dropdown);
 
-    if (choice[0] == 0 || choice[2].indexOf('css') == 0) {
-      limitExposureBox.style.display = "none";
-    } else {
-      limitExposureBox.style.display = "block";
+      if (choice[0] == 0 || choice[2].indexOf('css') == 0) {
+        limitExposureBox.style.display = "none";
+      } else {
+        limitExposureBox.style.display = "block";
+      }
+    }
+
+    button.onclick = function() {
+      var choice = getDropdownSelection(dropdown);
+      var newUrl = choice[1];
+      if (choice[0] > 0) {
+        newUrl = window.location.protocol + '//' + window.location.host + newUrl;
+        if (choice[1].indexOf('css.') == -1) {
+          newUrl += getDropdownSelection(limitExposure)[1];
+        }
+      } else {
+        newUrl += "?reportToServer";
+      };
+      if (newUrl) window.location = newUrl;
     }
   }
 
-  button.onclick = function() {
-    var choice = getDropdownSelection(dropdown);
-    var newUrl = choice[1];
-    if (choice[0] > 0) {
-      newUrl = window.location.protocol + '//' + window.location.host + newUrl;
-      if (choice[1].indexOf('css.') == -1) {
-        newUrl += getDropdownSelection(limitExposure)[1];
-      }
-    } else {
-      newUrl += "?reportToServer";
-    };
-    if (newUrl) window.location = newUrl;
-  }
-}
-
-window.onload = main;
+  window.onload = main;
 </script>
