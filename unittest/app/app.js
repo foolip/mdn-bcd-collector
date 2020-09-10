@@ -44,17 +44,15 @@ describe('/api/results', () => {
     assert.deepEqual(res.body, {});
   });
 
-  const testURL = `http://localhost:8080/tests/main/api/interfaces`;
-  const testURL2 = `https://host.test/tests/main/css/properties`;
+  const testURL = `http://localhost:8080/tests/api`;
+  const testURL2 = `https://host.test/tests/css`;
 
   it('submit valid results', async () => {
     const res = await agent.post('/api/results')
         .query({for: testURL})
         .send({x: 1});
     assert.equal(res.status, 201);
-    assert.deepEqual(res.body, {
-      next: `http://localhost:8080/tests/main/api/workerinterfaces?reportToServer`
-    });
+    assert.deepEqual(res.body, {});
   });
 
   it('list results after valid', async () => {
@@ -82,7 +80,7 @@ describe('/api/results', () => {
     });
   });
 
-  it('submit results for new/last manifest', async () => {
+  it('submit valid results for new URL', async () => {
     const res = await agent.post('/api/results')
         .query({for: testURL2})
         .send({y: 3});
@@ -90,7 +88,7 @@ describe('/api/results', () => {
     assert.deepEqual(res.body, {});
   });
 
-  it('list results after new/last manifest', async () => {
+  it('list results after new valid', async () => {
     const res = await agent.get('/api/results');
     assert.equal(res.status, 200);
     assert.deepEqual(res.body, {
@@ -121,12 +119,7 @@ describe('rendered pages', () => {
 });
 
 describe('/tests/', () => {
-  it('get a main test', async () => {
-    const res = await agent.get(`/tests/main/api/interfaces`);
-    assert.equal(res.status, 200);
-  });
-
-  it('get an individual test', async () => {
+  it('get a test', async () => {
     const res = await agent.get(`/tests/${
       tests[1][0].replace(/\./g, '/')
     }`);

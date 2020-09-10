@@ -30,7 +30,7 @@ class Tests {
       }
     };
 
-    for (const [ident, test] of Object.entries(this.tests)) {
+    for (const ident of Object.keys(this.tests)) {
       if (!endpoints['/'].entries.includes(ident)) {
         endpoints['/'].entries.push(ident);
       }
@@ -49,129 +49,21 @@ class Tests {
           endpoints[endpoint].entries.push(ident);
         }
       }
-
-      // Main endpoints (removal expected soon)
-      for (const exposure of test.exposure) {
-        let endpoint = '';
-        let httpsOnly = false;
-        switch (test.category) {
-          case 'api':
-            switch (exposure) {
-              case 'Window':
-                endpoint = '/main/api/interfaces';
-                break;
-              case 'Worker':
-              case 'DedicatedWorker':
-                endpoint = '/main/api/workerinterfaces';
-                break;
-              case 'ServiceWorker':
-                endpoint = '/main/api/serviceworkerinterfaces';
-                httpsOnly = true;
-                break;
-            }
-            break;
-          case 'css':
-            endpoint = '/main/css/properties';
-            break;
-        }
-
-        if (endpoint) {
-          if (!(endpoint in endpoints)) {
-            endpoints[endpoint] = {
-              exposure: exposure,
-              httpsOnly: httpsOnly,
-              entries: []
-            };
-          }
-
-          endpoints[endpoint].entries.push(ident);
-        }
-      }
     }
 
     return endpoints;
   }
 
-  listMainEndpoints(urlPrefix = '') {
-    return Object.keys(this.endpoints).filter((item) => (
-      item.startsWith('/main')
-    )).map((item) => (
-      // The empty string is to tell the frontend this is a main test,
-      // and label the first one as "All Tests"
-      ['', `${urlPrefix}${item}`]
-    ));
-  }
-
-  listIndividualEndpoints(urlPrefix = '') {
-    return Object.keys(this.endpoints).filter((item) => (
-      !item.startsWith('/main')
-    )).map((item) => (
+  listEndpoints(urlPrefix = '') {
+    return Object.keys(this.endpoints).map((item) => (
       [item.substr(1).replace(/\//g, '.'), `${urlPrefix}${item}`]
     ));
   }
 
-  listAllEndpoints(urlPrefix = '') {
-    return [
-      ...this.listMainEndpoints(urlPrefix),
-      ...this.listIndividualEndpoints(urlPrefix)
-    ];
-  }
-
-  next(after) {
-    const afterURL = new URL(after);
-    if (!this.httpOnly && afterURL.protocol === 'http:') {
-      return `https://${this.host}${afterURL.pathname}?reportToServer`;
-    }
-    const endpoints = this.listMainEndpoints('/tests');
-    const index = endpoints.findIndex((item) => {
-      return item[1] === afterURL.pathname;
-    }) + 1;
-
-    if (index == 0 || index >= endpoints.length) {
-      return null;
-    }
-
-    const endpoint = endpoints[index][1];
-
-    if (this.endpoints[endpoint.replace('/tests', '')].httpsOnly) {
-      const newUrl = `https://${this.host}${endpoint}?reportToServer`;
-      if (this.httpOnly) {
-        // Skip this endpoint and go to the next
-        return this.next(newUrl);
-      }
-      return newUrl;
-    }
-
-    return `http://${this.host}${endpoint}?reportToServer`;
-  }
-
-  getExposure(endpoint) {
-    const e = this.endpoints[endpoint];
-    return e ? e.exposure : '';
-  }
-
-  isIndividual(endpoint) {
-    return !(endpoint in this.endpoints);
-  }
-
   getTests(endpoint, testExposure) {
-    let idents;
-    const individual = this.isIndividual(endpoint);
-
-    if (individual) {
-      idents = Object.keys(this.tests).filter(
-          (ident) => ident.startsWith(endpoint.substr(1).replace(/\//g, '.'))
-      );
-    } else {
-      idents = this.endpoints[endpoint].entries;
-    }
-
-    if (!testExposure) {
-      testExposure = individual ? '' : this.getExposure(endpoint);
-    }
+    const idents = this.endpoints[endpoint].entries;
 
     const tests = [];
-
     for (const ident of idents) {
       const test = this.tests[ident];
       for (const exposure of test.exposure) {

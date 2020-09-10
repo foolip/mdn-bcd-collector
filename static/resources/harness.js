@@ -289,60 +289,66 @@
           pending = [];
 
           clearTimeout(timeout);
-          callback(results);
+          if (callback) {
+            callback(results);
+          } else {
+            report(results);
+          }
         }, results);
       }, results);
     }, []);
   }
 
-  function runAndReport() {
-    run(function(results) {
-      var body = JSON.stringify(results);
-      var client = new XMLHttpRequest();
-      client.open('POST', '/api/results?for='+encodeURIComponent(location.href));
-      client.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
-      client.send(body);
-      client.onreadystatechange = function() {
-        if (client.readyState == 4) {
-          var response = JSON.parse(client.responseText);
-          // Navigate to the next page, or /results/ if none.
-          var nextURL = response.next || '/results/';
-          window.location = nextURL;
-        }
-      };
-    });
-  }
+  function report(results) {
+    var css = document.createElement('link');
+    css.rel = 'stylesheet';
+    css.type = 'text/css';
+    css.href = '/resources/style.css';
+    try {
+      document.head.appendChild(css);
+    } catch (e) {
+      // If we fail to import the CSS, it's not a big deal
+    }
 
-  function runAndDisplay() {
-    run(function(results) {
-      var css = document.createElement('link');
-      css.rel = 'stylesheet';
-      css.type = 'text/css';
-      css.href = '/resources/style.css';
-      try {
-        document.head.appendChild(css);
-      } catch (e) {
-        // If we fail to import the CSS, it's not a big deal
-      }
+    updateStatus('Posting results to server...');
 
-      var response = '';
-      for (var i=0; i<results.length; i++) {
-        var result = results[i];
-        response += result.name;
-        if (result.name.indexOf('css.') != 0) {
-          response += ' (' + result.info.exposure + ' exposure)';
-        }
-        response += ': <strong>' + result.result;
-        if (result.prefix) {
-          response += ' (' + result.prefix + ' prefix)';
-        }
-        if (result.message) {
-          response += ' (' + result.message + ')';
-        }
-        response += '</strong>\n<code>' + result.info.code + ';</code>\n\n';
+    var response = '';
+    for (var i=0; i<results.length; i++) {
+      var result = results[i];
+      response += result.name;
+      if (result.name.indexOf('css.') != 0) {
+        response += ' (' + result.info.exposure + ' exposure)';
       }
-      updateStatus(response.replace(/\n/g, '<br />'));
-    });
+      response += ': <strong>' + result.result;
+      if (result.prefix) {
+        response += ' (' + result.prefix + ' prefix)';
+      }
+      if (result.message) {
+        response += ' (' + result.message + ')';
+      }
+      response += '</strong>\n<code>' + result.info.code + ';</code>\n\n';
+    }
+
+    var resultsEl = document.getElementById('results');
+    if (resultsEl) {
+      resultsEl.innerHTML = '<hr />' + response
+          .replace(/\n/g, '<br />');
+    }
+
+    var body = JSON.stringify(results);
+    var client = new XMLHttpRequest();
+    client.open('POST', '/api/results?for='+encodeURIComponent(location.href));
+    client.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+    client.send(body);
+    client.onreadystatechange = function() {
+      if (client.readyState == 4) {
+        if (client.status >= 500) {
+          updateStatus('Failed to upload results.');
+        } else {
+          updateStatus('Results uploaded. <a href="/results">Submit to GitHub</a>');
+        }
+      }
+    };
   }
 
   // Service Worker helpers
@@ -405,8 +411,6 @@
     testConstructor: testConstructor,
     addTest: addTest,
     test: test,
-    run: run,
-    runAndDisplay: runAndDisplay,
-    runAndReport: runAndReport
+    run: run
   };
 })(this);

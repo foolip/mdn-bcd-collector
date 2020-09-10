@@ -111,19 +111,12 @@ app.post('/api/results', (req, res) => {
 
   const response = {};
 
-  // Include next test in response as a convenience.
-  const next = tests.next(forURL);
-  if (next) {
-    response.next = next;
-  }
-
   Promise.all([
     storage.put(req.sessionID, '__version', appversion),
     storage.put(req.sessionID, forURL, req.body)
   ]).then(() => {
     res.status(201).json(response);
-  })
-      .catch(/* istanbul ignore next */ (err) => catchError(err, res));
+  }).catch(/* istanbul ignore next */ (err) => catchError(err, res));
 });
 
 app.get('/api/results', (req, res) => {
@@ -155,7 +148,7 @@ app.post('/api/results/export/github', (req, res) => {
 app.get('/', (req, res) => {
   res.render('index', {
     title: 'mdn-bcd-collector',
-    tests: tests.listIndividualEndpoints('/tests')
+    tests: tests.listEndpoints('/tests')
   });
 });
 
@@ -169,17 +162,11 @@ app.all('/tests/*', (req, res) => {
   const endpoint = `/${req.params['0']}`;
   const ident = req.params['0'].replace(/\//g, '.');
 
-  if (endpoint == '/') {
-    // Temporary until main endpoints are removed entirely
-    res.redirect(`${tests.listMainEndpoints('/tests')[0][1]}?reportToServer`);
-  }
-
-  if (tests.listAllEndpoints().some((item) => (item[1] === endpoint))) {
+  if (tests.listEndpoints().some((item) => (item[1] === endpoint))) {
     res.render('tests', {
       title: `${ident} | mdn-bcd-collector`,
       layout: false,
-      tests: tests.getTests(endpoint, req.query.exposure),
-      reportToServer: 'reportToServer' in req.query
+      tests: tests.getTests(endpoint, req.query.exposure)
     });
   } else {
     res.status(404).send(`Could not find tests for ${endpoint}`);

@@ -17,6 +17,7 @@
   </head>
   <body>
     <p id="status">Running tests...</p>
+    <p id="results"></p>
     
     <!-- TODO: https://github.com/foolip/mdn-bcd-collector/issues/407 -->
     <script src="/resources/json3.min.js"></script>
@@ -26,7 +27,7 @@
       <% tests.forEach(function(test) { %>
         bcd.addTest("<%- test.ident %>", <%- JSON.stringify(test.tests) %>, "<%- test.exposure %>");
       <% }); %>
-      window.onload = <%- reportToServer ? 'bcd.runAndReport' : 'bcd.runAndDisplay' %>;
+      window.onload = bcd.run;
     </script>
   </body>
 </html>
