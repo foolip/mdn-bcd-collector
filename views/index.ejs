@@ -10,9 +10,7 @@
     <% }); %>
   </select>
   <br />
-  <div id="individualTestOptionsBox" style="display: none;">
-    <input type="checkbox" id="secureContext"> <label for="secureContext">Use HTTPS?</label>
-    <div id="limitExposureBox" style="display: none;">
+  <div id="limitExposureBox" style="display: none;">
     <label for="limitExposure">Limit Exposure:</label>
     <select id="limitExposure">
       <option value="">All Global Exposures</option>
@@ -37,26 +35,20 @@
 function getDropdownSelection(dropdown) {
   var index = dropdown.selectedIndex;
   var choice = dropdown.options[index].value;
-  return [index, choice];
+  var label = dropdown.options[index].textContent;
+  return [index, choice, label];
 };
 
 function main() {
   var button = document.getElementById('start');
   var dropdown = document.getElementById('tests');
-  var individualTestOptionsBox = document.getElementById('individualTestOptionsBox');
-  var secureContext = document.getElementById('secureContext');
   var limitExposure = document.getElementById('limitExposure');
+  var limitExposureBox = document.getElementById('limitExposureBox');
 
   dropdown.onchange = function() {
     var choice = getDropdownSelection(dropdown);
 
-    if (choice[0] == 0) {
-      individualTestOptionsBox.style.display = "none";
-    } else {
-      individualTestOptionsBox.style.display = "block";
-    }
-
-    if (choice[1].indexOf('css') == 0) {
+    if (choice[0] == 0 || choice[2].indexOf('css') == 0) {
       limitExposureBox.style.display = "none";
     } else {
       limitExposureBox.style.display = "block";
@@ -67,8 +59,7 @@ function main() {
     var choice = getDropdownSelection(dropdown);
     var newUrl = choice[1];
     if (choice[0] > 0) {
-      var protocol = secureContext.checked ? 'https:' : 'http:';
-      newUrl = protocol + '//' + window.location.host + newUrl;
+      newUrl = window.location.protocol + '//' + window.location.host + newUrl;
       if (choice[1].indexOf('css.') == -1) {
         newUrl += getDropdownSelection(limitExposure)[1];
       }
