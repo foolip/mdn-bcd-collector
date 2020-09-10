@@ -27,7 +27,7 @@ const proxyquire = require('proxyquire');
 
 const {
   writeFile,
-  hasPrefix,
+  getPrefix,
   flattenIDL,
   getExposureSet,
   getName,
@@ -76,23 +76,23 @@ describe('build', () => {
     });
   });
 
-  describe('hasPrefix', () => {
+  describe('getPrefix', () => {
     it('no prefix', () => {
-      assert.equal(hasPrefix('foo'), false);
-      assert.equal(hasPrefix({property: 'foo', owner: 'self'}), false);
+      assert.equal(getPrefix('foo'), undefined);
+      assert.equal(getPrefix({property: 'foo', owner: 'self'}), undefined);
     });
 
     it('has prefix', () => {
-      assert.equal(hasPrefix('WebKitFoo'), 'WebKit');
-      assert.equal(hasPrefix({
+      assert.equal(getPrefix('WebKitFoo'), 'WebKit');
+      assert.equal(getPrefix({
         property: 'WebKitFoo',
         owner: 'self'
       }), 'WebKit');
     });
 
     it('CSS property has prefix', () => {
-      assert.equal(hasPrefix('-webkit-foo'), 'webkit');
-      assert.equal(hasPrefix({
+      assert.equal(getPrefix('-webkit-foo'), 'webkit');
+      assert.equal(getPrefix({
         property: '-webkit-foo',
         owner: 'self'
       }), 'webkit');

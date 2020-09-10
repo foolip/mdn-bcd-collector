@@ -173,7 +173,7 @@ const compileTest = (test) => {
         });
       }
 
-      if (hasPrefix(test.raw.code)) {
+      if (getPrefix(test.raw.code)) {
         // Don't generate prefix variations if prefix already exists
         break;
       }
@@ -193,7 +193,7 @@ const compileTest = (test) => {
         });
       }
 
-      if (hasPrefix(test.raw.code[0])) {
+      if (getPrefix(test.raw.code[0])) {
         // Don't generate prefix variations if prefix already exists
         break;
       }
@@ -213,13 +213,13 @@ const compileTest = (test) => {
           });
         }
 
-        if (hasPrefix(test.raw.code[1])) {
+        if (getPrefix(test.raw.code[1])) {
           // Don't generate prefix variations if prefix already exists
           break;
         }
       }
 
-      if (hasPrefix(test.raw.code[0])) {
+      if (getPrefix(test.raw.code[0])) {
         // Don't generate prefix variations if prefix already exists
         break;
       }
@@ -731,7 +731,7 @@ if (require.main === module) {
 } else {
   module.exports = {
     writeFile,
-    hasPrefix,
+    getPrefix,
     getCustomTestAPI,
     getCustomSubtestsAPI,
     getCustomTestCSS,

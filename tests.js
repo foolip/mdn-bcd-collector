@@ -87,7 +87,7 @@ class Tests {
   next(after) {
     const afterURL = new URL(after);
     if (!this.httpOnly && afterURL.protocol === 'http:') {
-      return `https://${this.host}${afterURL.pathname}?reportToServer=true`;
+      return `https://${this.host}${afterURL.pathname}?reportToServer`;
     }
     const endpoints = this.listMainEndpoints('/tests');
     const index = endpoints.findIndex((item) => {
@@ -101,7 +101,7 @@ class Tests {
     const endpoint = endpoints[index][1];
 
     if (this.endpoints[endpoint.replace('/tests', '')].httpsOnly) {
-      const newUrl = `https://${this.host}${endpoint}?reportToServer=true`;
+      const newUrl = `https://${this.host}${endpoint}?reportToServer`;
       if (this.httpOnly) {
         // Skip this endpoint and go to the next
         return this.next(newUrl);
@@ -109,7 +109,7 @@ class Tests {
       return newUrl;
     }
 
-    return `http://${this.host}${endpoint}?reportToServer=true`;
+    return `http://${this.host}${endpoint}?reportToServer`;
   }
 
   getExposure(endpoint) {
@@ -123,7 +123,7 @@ class Tests {
 
   getTests(endpoint, testExposure) {
     let idents;
-    const individual = this.getIsIndividual(endpoint);
+    const individual = this.isIndividual(endpoint);
 
     if (individual) {
       idents = Object.keys(this.tests).filter(
