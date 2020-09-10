@@ -345,7 +345,7 @@
         if (client.status >= 500) {
           updateStatus('Failed to upload results.');
         } else {
-          updateStatus('Results uploaded. <a href="/results">Submit to GitHub</a>');
+          updateStatus('Results uploaded. <a href="/results" id="submit">Submit to GitHub</a>');
         }
       }
     };
