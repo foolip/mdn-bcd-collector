@@ -172,7 +172,7 @@ app.all('/tests/*', (req, res) => {
   if (endpoint == '/') {
     // Temporary until main endpoints are removed entirely
     res.redirect(`${tests.listMainEndpoints('/tests')[0][1]}?reportToServer`);
-  };
+  }
 
   if (tests.listAllEndpoints().some((item) => (item[1] === endpoint))) {
     res.render('tests', {
