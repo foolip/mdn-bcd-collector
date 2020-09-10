@@ -31,9 +31,7 @@ class Tests {
     };
 
     for (const ident of Object.keys(this.tests)) {
-      if (!endpoints['/'].entries.includes(ident)) {
-        endpoints['/'].entries.push(ident);
-      }
+      endpoints['/'].entries.push(ident);
 
       let endpoint = '';
       for (const part of ident.split('.')) {

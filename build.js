@@ -189,12 +189,10 @@ const compileTest = (test) => {
           test.raw.code[1], prefix
       )}`;
 
-      if (!newTest.tests.some((item) => item.code === code)) {
-        newTest.tests.push({
-          code: code,
-          prefix: prefix
-        });
-      }
+      newTest.tests.push({
+        code: code,
+        prefix: prefix
+      });
 
       if (getPrefix(test.raw.code[0])) {
         // Don't generate prefix variations if prefix already exists
