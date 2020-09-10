@@ -88,15 +88,14 @@ for (const browser in browsersToTest) {
       });
 
       it('run', async () => {
-        await driver.get(host);
+        await driver.get(`${host}/tests/`);
         await driver.wait(
-            until.elementIsEnabled(
-                await driver.findElement(By.id('start')), 'Run'
+            until.elementTextContains(
+                await driver.findElement(By.id('status')), 'uploaded'
             ),
-            10000
+            30000
         );
-        await driver.findElement(By.id('start')).click();
-        await driver.wait(until.urlIs(`${host}/results/`), 60000);
+        await driver.findElement(By.id('submit')).click();
         await driver.wait(
             until.elementTextContains(
                 await driver.findElement(By.id('status')), 'to'
