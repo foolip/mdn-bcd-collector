@@ -44,8 +44,8 @@ describe('/api/results', () => {
     assert.deepEqual(res.body, {});
   });
 
-  const testURL = `http://localhost:8080/tests/api/interfaces`;
-  const testURL2 = `https://host.test/tests/css/properties`;
+  const testURL = `http://localhost:8080/tests/main/api/interfaces`;
+  const testURL2 = `https://host.test/tests/main/css/properties`;
 
   it('submit valid results', async () => {
     const res = await agent.post('/api/results')
@@ -53,7 +53,7 @@ describe('/api/results', () => {
         .send({x: 1});
     assert.equal(res.status, 201);
     assert.deepEqual(res.body, {
-      next: `http://localhost:8080/tests/api/workerinterfaces?reportToServer`
+      next: `http://localhost:8080/tests/main/api/workerinterfaces?reportToServer`
     });
   });
 
@@ -122,7 +122,7 @@ describe('rendered pages', () => {
 
 describe('/tests/', () => {
   it('get a main test', async () => {
-    const res = await agent.get(`/tests/api/interfaces`);
+    const res = await agent.get(`/tests/main/api/interfaces`);
     assert.equal(res.status, 200);
   });
 

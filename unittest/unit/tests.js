@@ -48,22 +48,67 @@ describe('Tests', () => {
 
   it('buildEndpoints', () => {
     const expectedEndpoints = {
-      '/api/interfaces': {
+      '/': {
+        entries: [
+          'api.AbortController',
+          'api.AbortController.signal',
+          'css.properties.font-family',
+          'javascript.builtins.array'
+        ],
+        httpsOnly: false
+      },
+      '/api': {
+        entries: ['api.AbortController', 'api.AbortController.signal'],
+        httpsOnly: false
+      },
+      '/api/AbortController': {
+        entries: ['api.AbortController', 'api.AbortController.signal'],
+        httpsOnly: false
+      },
+      '/api/AbortController/signal': {
+        entries: ['api.AbortController.signal'],
+        httpsOnly: false
+      },
+      '/css': {
+        entries: ['css.properties.font-family'],
+        httpsOnly: false
+      },
+      '/css/properties': {
+        entries: ['css.properties.font-family'],
+        httpsOnly: false
+      },
+      '/css/properties/font-family': {
+        entries: ['css.properties.font-family'],
+        httpsOnly: false
+      },
+      '/javascript': {
+        entries: ['javascript.builtins.array'],
+        httpsOnly: false
+      },
+      '/javascript/builtins': {
+        entries: ['javascript.builtins.array'],
+        httpsOnly: false
+      },
+      '/javascript/builtins/array': {
+        entries: ['javascript.builtins.array'],
+        httpsOnly: false
+      },
+      '/main/api/interfaces': {
         entries: ['api.AbortController', 'api.AbortController.signal'],
         httpsOnly: false,
         exposure: 'Window'
       },
-      '/api/serviceworkerinterfaces': {
+      '/main/api/serviceworkerinterfaces': {
         entries: ['api.AbortController'],
         httpsOnly: true,
         exposure: 'ServiceWorker'
       },
-      '/api/workerinterfaces': {
+      '/main/api/workerinterfaces': {
         entries: ['api.AbortController', 'api.AbortController.signal'],
         httpsOnly: false,
         exposure: 'Worker'
       },
-      '/css/properties': {
+      '/main/css/properties': {
         entries: ['css.properties.font-family'],
         httpsOnly: false,
         exposure: 'Window'
@@ -77,31 +122,43 @@ describe('Tests', () => {
 
   it('listMainEndpoints', () => {
     assert.deepEqual(tests.listMainEndpoints(), [
-      ['', '/api/interfaces'],
-      ['', '/api/workerinterfaces'],
-      ['', '/api/serviceworkerinterfaces'],
-      ['', '/css/properties']
+      ['', '/main/api/interfaces'],
+      ['', '/main/api/workerinterfaces'],
+      ['', '/main/api/serviceworkerinterfaces'],
+      ['', '/main/css/properties']
     ]);
   });
 
   it('listIndividual', () => {
     assert.deepEqual(tests.listIndividual(), [
+      ['', '/'],
+      ['api', '/api'],
       ['api.AbortController', '/api/AbortController'],
       ['api.AbortController.signal', '/api/AbortController/signal'],
+      ['css', '/css'],
+      ['css.properties', '/css/properties'],
       ['css.properties.font-family', '/css/properties/font-family'],
+      ['javascript', '/javascript'],
+      ['javascript.builtins', '/javascript/builtins'],
       ['javascript.builtins.array', '/javascript/builtins/array']
     ]);
   });
 
   it('listAllEndpoints', () => {
     assert.deepEqual(tests.listAllEndpoints(), [
-      ['', '/api/interfaces'],
-      ['', '/api/workerinterfaces'],
-      ['', '/api/serviceworkerinterfaces'],
-      ['', '/css/properties'],
+      ['', '/main/api/interfaces'],
+      ['', '/main/api/workerinterfaces'],
+      ['', '/main/api/serviceworkerinterfaces'],
+      ['', '/main/css/properties'],
+      ['', '/'],
+      ['api', '/api'],
       ['api.AbortController', '/api/AbortController'],
       ['api.AbortController.signal', '/api/AbortController/signal'],
+      ['css', '/css'],
+      ['css.properties', '/css/properties'],
       ['css.properties.font-family', '/css/properties/font-family'],
+      ['javascript', '/javascript'],
+      ['javascript.builtins', '/javascript/builtins'],
       ['javascript.builtins.array', '/javascript/builtins/array']
     ]);
   });
@@ -109,20 +166,20 @@ describe('Tests', () => {
   describe('next', () => {
     it('normal', () => {
       assert.equal(
-          tests.next('http://host.test/tests/api/interfaces'),
-          'https://host.test/tests/api/interfaces?reportToServer'
+          tests.next('http://host.test/tests/main/api/interfaces'),
+          'https://host.test/tests/main/api/interfaces?reportToServer'
       );
       assert.equal(
-          tests.next('https://host.test/tests/api/interfaces'),
-          'http://host.test/tests/api/workerinterfaces?reportToServer'
+          tests.next('https://host.test/tests/main/api/interfaces'),
+          'http://host.test/tests/main/api/workerinterfaces?reportToServer'
       );
       assert.equal(
-          tests.next('https://host.test/tests/api/workerinterfaces'),
-          'https://host.test/tests/api/serviceworkerinterfaces?reportToServer'
+          tests.next('https://host.test/tests/main/api/workerinterfaces'),
+          'https://host.test/tests/main/api/serviceworkerinterfaces?reportToServer'
       );
 
       assert.equal(
-          tests.next('https://host.test/tests/css/properties'),
+          tests.next('https://host.test/tests/main/css/properties'),
           null
       );
     });
@@ -135,16 +192,16 @@ describe('Tests', () => {
       });
 
       assert.equal(
-          theseTests.next('http://host.test/tests/api/interfaces'),
-          'http://host.test/tests/api/workerinterfaces?reportToServer'
+          theseTests.next('http://host.test/tests/main/api/interfaces'),
+          'http://host.test/tests/main/api/workerinterfaces?reportToServer'
       );
       assert.equal(
-          theseTests.next('http://host.test/tests/api/workerinterfaces'),
-          'http://host.test/tests/css/properties?reportToServer'
+          theseTests.next('http://host.test/tests/main/api/workerinterfaces'),
+          'http://host.test/tests/main/css/properties?reportToServer'
       );
 
       assert.equal(
-          theseTests.next('http://host.test/tests/css/properties'),
+          theseTests.next('http://host.test/tests/main/css/properties'),
           null
       );
     });
@@ -152,12 +209,12 @@ describe('Tests', () => {
 
   describe('getTests', () => {
     it('main endpoints', () => {
-      assert.deepEqual(tests.getTests('/api/interfaces'), [
+      assert.deepEqual(tests.getTests('/main/api/interfaces'), [
         {ident: 'api.AbortController', tests: [{code: '"AbortController" in self', prefix: ''}], exposure: 'Window'},
         {ident: 'api.AbortController.signal', tests: [{code: '"AbortController" in self && "signal" in AbortController.prototype', prefix: ''}], exposure: 'Window'}
       ]);
 
-      assert.deepEqual(tests.getTests('/api/serviceworkerinterfaces'), [
+      assert.deepEqual(tests.getTests('/main/api/serviceworkerinterfaces'), [
         {ident: 'api.AbortController', tests: [{code: '"AbortController" in self', prefix: ''}], exposure: 'ServiceWorker'}
       ]);
     });
@@ -181,8 +238,8 @@ describe('Tests', () => {
   });
 
   it('getExposure', () => {
-    assert.equal(tests.getExposure('/api/interfaces'), 'Window');
-    assert.equal(tests.getExposure('/api/serviceworkerinterfaces'), 'ServiceWorker');
+    assert.equal(tests.getExposure('/main/api/interfaces'), 'Window');
+    assert.equal(tests.getExposure('/main/api/serviceworkerinterfaces'), 'ServiceWorker');
     assert.equal(tests.getExposure('/api/dummy'), '');
   });
 });
