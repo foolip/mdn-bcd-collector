@@ -126,6 +126,11 @@ describe('/tests/', () => {
     assert.equal(res.status, 200);
   });
 
+  it('get all tests', async () => {
+    const res = await agent.get('/tests/');
+    assert.equal(res.status, 200);
+  });
+
   it('get a non-existent tests', async () => {
     const res = await agent.get(`/tests/dummy/test`);
     assert.equal(res.status, 404);
