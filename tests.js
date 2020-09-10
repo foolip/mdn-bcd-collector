@@ -30,14 +30,10 @@ class Tests {
         let endpoint = '';
         let httpsOnly = false;
         switch (test.category) {
-          case 'css':
-            endpoint = '/css/properties';
-            break;
           case 'api':
             switch (exposure) {
               case 'Window':
-                endpoint = test.category == 'css' ?
-                    '/css/properties' : '/api/interfaces';
+                endpoint = '/api/interfaces';
                 break;
               case 'Worker':
               case 'DedicatedWorker':
@@ -48,6 +44,9 @@ class Tests {
                 httpsOnly = true;
                 break;
             }
+            break;
+          case 'css':
+            endpoint = '/css/properties';
             break;
         }
 
