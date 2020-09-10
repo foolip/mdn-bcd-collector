@@ -102,7 +102,7 @@ class Tests {
     ));
   }
 
-  listIndividual(urlPrefix = '') {
+  listIndividualEndpoints(urlPrefix = '') {
     return Object.keys(this.endpoints).filter((item) => (
       !item.startsWith('/main')
     )).map((item) => (
@@ -113,7 +113,7 @@ class Tests {
   listAllEndpoints(urlPrefix = '') {
     return [
       ...this.listMainEndpoints(urlPrefix),
-      ...this.listIndividual(urlPrefix)
+      ...this.listIndividualEndpoints(urlPrefix)
     ];
   }
 

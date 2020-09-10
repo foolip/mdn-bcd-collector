@@ -129,8 +129,8 @@ describe('Tests', () => {
     ]);
   });
 
-  it('listIndividual', () => {
-    assert.deepEqual(tests.listIndividual(), [
+  it('listIndividualEndpoints', () => {
+    assert.deepEqual(tests.listIndividualEndpoints(), [
       ['', '/'],
       ['api', '/api'],
       ['api.AbortController', '/api/AbortController'],
