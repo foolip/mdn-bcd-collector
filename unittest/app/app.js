@@ -110,11 +110,13 @@ describe('rendered pages', () => {
   it('/', async () => {
     const res = await agent.get(`/`);
     assert.equal(res.status, 200);
+    assert.include(res.text, 'mdn-bcd-collector');
   });
 
   it('/results', async () => {
     const res = await agent.get(`/results`);
     assert.equal(res.status, 200);
+    assert.include(res.text, 'Download results JSON');
   });
 });
 
