@@ -24,27 +24,21 @@ class Tests {
 
   buildEndpoints() {
     const endpoints = {
-      '/': {
-        httpsOnly: false,
-        entries: []
-      }
+      '/': []
     };
 
     for (const ident of Object.keys(this.tests)) {
-      endpoints['/'].entries.push(ident);
+      endpoints['/'].push(ident);
 
       let endpoint = '';
       for (const part of ident.split('.')) {
         endpoint += '/' + part;
         if (!(endpoint in endpoints)) {
-          endpoints[endpoint] = {
-            httpsOnly: false,
-            entries: []
-          };
+          endpoints[endpoint] = [];
         }
 
-        if (!endpoints[endpoint].entries.includes(ident)) {
-          endpoints[endpoint].entries.push(ident);
+        if (!endpoints[endpoint].includes(ident)) {
+          endpoints[endpoint].push(ident);
         }
       }
     }
@@ -59,7 +53,7 @@ class Tests {
   }
 
   getTests(endpoint, testExposure) {
-    const idents = this.endpoints[endpoint].entries;
+    const idents = this.endpoints[endpoint];
 
     const tests = [];
     for (const ident of idents) {

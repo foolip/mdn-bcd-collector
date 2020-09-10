@@ -48,51 +48,24 @@ describe('Tests', () => {
 
   it('buildEndpoints', () => {
     const expectedEndpoints = {
-      '/': {
-        entries: [
-          'api.AbortController',
-          'api.AbortController.signal',
-          'css.properties.font-family',
-          'javascript.builtins.array'
-        ],
-        httpsOnly: false
-      },
-      '/api': {
-        entries: ['api.AbortController', 'api.AbortController.signal'],
-        httpsOnly: false
-      },
-      '/api/AbortController': {
-        entries: ['api.AbortController', 'api.AbortController.signal'],
-        httpsOnly: false
-      },
-      '/api/AbortController/signal': {
-        entries: ['api.AbortController.signal'],
-        httpsOnly: false
-      },
-      '/css': {
-        entries: ['css.properties.font-family'],
-        httpsOnly: false
-      },
-      '/css/properties': {
-        entries: ['css.properties.font-family'],
-        httpsOnly: false
-      },
-      '/css/properties/font-family': {
-        entries: ['css.properties.font-family'],
-        httpsOnly: false
-      },
-      '/javascript': {
-        entries: ['javascript.builtins.array'],
-        httpsOnly: false
-      },
-      '/javascript/builtins': {
-        entries: ['javascript.builtins.array'],
-        httpsOnly: false
-      },
-      '/javascript/builtins/array': {
-        entries: ['javascript.builtins.array'],
-        httpsOnly: false
-      }
+      '/': [
+        'api.AbortController',
+        'api.AbortController.signal',
+        'css.properties.font-family',
+        'javascript.builtins.array'
+      ],
+      '/api': ['api.AbortController', 'api.AbortController.signal'],
+      '/api/AbortController': [
+        'api.AbortController',
+        'api.AbortController.signal'
+      ],
+      '/api/AbortController/signal': ['api.AbortController.signal'],
+      '/css': ['css.properties.font-family'],
+      '/css/properties': ['css.properties.font-family'],
+      '/css/properties/font-family': ['css.properties.font-family'],
+      '/javascript': ['javascript.builtins.array'],
+      '/javascript/builtins': ['javascript.builtins.array'],
+      '/javascript/builtins/array': ['javascript.builtins.array']
     };
 
     const endpoints = tests.buildEndpoints(tests);
