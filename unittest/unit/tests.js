@@ -134,15 +134,15 @@ describe('Tests', () => {
     it('normal', () => {
       assert.equal(
           tests.next('http://host.test/tests/api/interfaces'),
-          'https://host.test/tests/api/interfaces?reportToServer=true'
+          'https://host.test/tests/api/interfaces?reportToServer'
       );
       assert.equal(
           tests.next('https://host.test/tests/api/interfaces'),
-          'http://host.test/tests/api/workerinterfaces?reportToServer=true'
+          'http://host.test/tests/api/workerinterfaces?reportToServer'
       );
       assert.equal(
           tests.next('https://host.test/tests/api/workerinterfaces'),
-          'https://host.test/tests/api/serviceworkerinterfaces?reportToServer=true'
+          'https://host.test/tests/api/serviceworkerinterfaces?reportToServer'
       );
 
       assert.equal(
@@ -160,11 +160,11 @@ describe('Tests', () => {
 
       assert.equal(
           theseTests.next('http://host.test/tests/api/interfaces'),
-          'http://host.test/tests/api/workerinterfaces?reportToServer=true'
+          'http://host.test/tests/api/workerinterfaces?reportToServer'
       );
       assert.equal(
           theseTests.next('http://host.test/tests/api/workerinterfaces'),
-          'http://host.test/tests/css/properties?reportToServer=true'
+          'http://host.test/tests/css/properties?reportToServer'
       );
 
       assert.equal(

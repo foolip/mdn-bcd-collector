@@ -53,7 +53,7 @@ describe('/api/results', () => {
         .send({x: 1});
     assert.equal(res.status, 201);
     assert.deepEqual(res.body, {
-      next: `http://localhost:8080/tests/api/workerinterfaces?reportToServer=true`
+      next: `http://localhost:8080/tests/api/workerinterfaces?reportToServer`
     });
   });
 
