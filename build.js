@@ -691,8 +691,6 @@ const buildCSS = (webref, bcd) => {
 const copyResources = async () => {
   const resources = [
     ['json3/lib/json3.min.js', 'resources'],
-    ['core-js-bundle/minified.js', 'resources', 'core.js'],
-    ['core-js-bundle/minified.js.map', 'resources', 'core.js.map'],
     ['chai/chai.js', 'unittest'],
     ['mocha/mocha.css', 'unittest'],
     ['mocha/mocha.js', 'unittest']
@@ -707,14 +705,6 @@ const copyResources = async () => {
       await fs.rename(dest, path.join(destDir, newFilename));
     }
   }
-
-  // Fix source mapping in core-js
-  const corejsPath = path.join(generatedDir, 'resources', 'core.js');
-  const corejsData = await fs.readFile(corejsPath, 'utf8');
-  await fs.writeFile(corejsPath, corejsData.replace(
-      /sourceMappingURL=minified\.js\.map/g,
-      'sourceMappingURL=core.js.map'
-  ), 'utf8');
 };
 
 /* istanbul ignore next */

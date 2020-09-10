@@ -22,7 +22,6 @@
     <!-- TODO: https://github.com/foolip/mdn-bcd-collector/issues/407 -->
     <script src="/resources/json3.min.js"></script>
     <script src="/resources/harness.js"></script>
-    <script src="/resources/core.js"></script>
     <script>
       <% tests.forEach(function(test) { %>
         bcd.addTest("<%- test.ident %>", <%- JSON.stringify(test.tests) %>, "<%- test.exposure %>");
