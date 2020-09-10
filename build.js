@@ -38,7 +38,7 @@ const writeFile = async (filename, content) => {
   if (Array.isArray(content)) {
     content = content.join('\n');
   } else if (typeof content === 'object') {
-    content = JSON.stringify(content, null, '  ');
+    content = JSON.stringify(content);
   }
   content = content.trimEnd() + '\n';
 

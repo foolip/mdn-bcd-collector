@@ -68,7 +68,7 @@ describe('build', () => {
 
     it('dictionary', async () => {
       await writeFile(filepath, {foo: ['bar', 'baz']});
-      assert.fileContent(filepath, '{\n  "foo": [\n    "bar",\n    "baz"\n  ]\n}\n');
+      assert.fileContent(filepath, '{"foo":["bar","baz"]}\n');
     });
 
     afterEach(() => {
