@@ -155,10 +155,7 @@ app.post('/api/results/export/github', (req, res) => {
 app.get('/', (req, res) => {
   res.render('index', {
     title: 'mdn-bcd-collector',
-    tests: [
-      tests.listMainEndpoints('/tests')[0],
-      ...tests.listIndividual('/tests')
-    ]
+    tests: tests.listIndividual('/tests')
   });
 });
 

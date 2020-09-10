@@ -23,9 +23,33 @@ class Tests {
   }
 
   buildEndpoints() {
-    const endpoints = {};
+    const endpoints = {
+      '/': {
+        httpsOnly: false,
+        entries: []
+      }
+    };
 
     for (const [ident, test] of Object.entries(this.tests)) {
+      if (!endpoints['/'].entries.includes(ident)) {
+        endpoints['/'].entries.push(ident);
+      }
+
+      let endpoint = '';
+      for (const part of ident.split('.')) {
+        endpoint += '/' + part;
+        if (!(endpoint in endpoints)) {
+          endpoints[endpoint] = {
+            httpsOnly: false,
+            entries: []
+          };
+        }
+
+        if (!endpoints[endpoint].entries.includes(ident)) {
+          endpoints[endpoint].entries.push(ident);
+        }
+      }
+
       // Main endpoints (removal expected soon)
       for (const exposure of test.exposure) {
         let endpoint = '';
@@ -79,8 +103,10 @@ class Tests {
   }
 
   listIndividual(urlPrefix = '') {
-    return Object.keys(this.tests).map((item) => (
-      [item, `${urlPrefix}/${item.replace(/\./g, '/')}`]
+    return Object.keys(this.endpoints).filter((item) => (
+      !item.startsWith('/main')
+    )).map((item) => (
+      [item.substr(1).replace(/\//g, '.'), `${urlPrefix}${item}`]
     ));
   }
 
