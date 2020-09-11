@@ -36,6 +36,10 @@ button:disabled, button:disabled:hover, select:disabled:hover {
   background-color: #636363;
 }
 
+input::placeholder {
+  color: #ccc;
+}
+
 @media (prefers-color-scheme: dark) {
   body {
     background-color: #111;
@@ -44,9 +48,5 @@ button:disabled, button:disabled:hover, select:disabled:hover {
 
   a {
     color: #99f;
-  }
-
-  input::placeholder {
-    color: #ccc;
   }
 }
