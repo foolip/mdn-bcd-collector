@@ -54,7 +54,7 @@ const secrets = require('./secrets.json');
 
 const host = process.env.NODE_ENV === 'test' ?
       `http://localhost:8080` :
-      'http://mdn-bcd-collector.appspot.com';
+      'https://mdn-bcd-collector.appspot.com';
 
 const seleniumUrl = secrets.selenium.url && secrets.selenium.url
     .replace('$USERNAME$', secrets.selenium.username)
