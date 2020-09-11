@@ -130,13 +130,17 @@ app.get('/api/results', (req, res) => {
 app.post('/api/results/export/github', (req, res) => {
   storage.getAll(req.sessionID)
       .then(async (results) => {
+        if (Object.entries(results).length === 0) {
+          res.json({error: 'No results to export'});
+        };
+
         const userAgent = req.get('User-Agent');
         const report = {results, userAgent};
         const response = await github.exportAsPR(report);
         if (response) {
           res.json(response);
         } else {
-          res.status(500).end();
+          res.status(500).json({error: 'Server error'});
         }
       })
       .catch(/* istanbul ignore next */ (err) => catchError(err, res));

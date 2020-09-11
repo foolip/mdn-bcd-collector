@@ -19,10 +19,10 @@ function exportGitHub() {
   status.textContent = 'Exporting...';
   client.onreadystatechange = function() {
     if (client.readyState == 4) {
-      if (client.status >= 500) {
-        status.textContent = 'Failed to export';
+      var response = JSON.parse(client.responseText);
+      if (response.error) {
+        status.textContent = 'Failed to export: ' + response.error;
       } else {
-        var response = JSON.parse(client.responseText);
         status.textContent = 'Exported to';
         link.href = link.textContent = response.html_url;
       }
