@@ -24,15 +24,16 @@ class Tests {
 
   buildEndpoints() {
     const endpoints = {
-      '/': []
+      '': []
     };
 
     for (const ident of Object.keys(this.tests)) {
-      endpoints['/'].push(ident);
+      endpoints[''].push(ident);
 
       let endpoint = '';
       for (const part of ident.split('.')) {
-        endpoint += '/' + part;
+        endpoint += (endpoint ? '.' : '') + part;
+
         if (!(endpoint in endpoints)) {
           endpoints[endpoint] = [];
         }
@@ -46,10 +47,8 @@ class Tests {
     return endpoints;
   }
 
-  listEndpoints(urlPrefix = '') {
-    return Object.keys(this.endpoints).map((item) => (
-      [item.substr(1).replace(/\//g, '.'), `${urlPrefix}${item}`]
-    ));
+  listEndpoints() {
+    return Object.keys(this.endpoints);
   }
 
   getTests(endpoint, testExposure) {

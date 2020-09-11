@@ -6,7 +6,7 @@
   <button id="start">Run</button>
   <datalist id="tests">
     <% tests.forEach(function(test) { %>
-      <option value="<%- test[0] %>"></option>
+      <option value="<%- test %>"></option>
     <% }); %>
   </datalist>
   <input id="testSelection" list="tests" placeholder="All Tests" />

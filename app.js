@@ -158,14 +158,13 @@ app.get('/results', (req, res) => {
 });
 
 app.all('/tests/*', (req, res) => {
-  const endpoint = `/${req.params['0']}`;
   const ident = req.params['0'].replace(/\//g, '.');
 
-  if (tests.listEndpoints().some((item) => (item[1] === endpoint))) {
+  if (tests.listEndpoints().some((item) => (item === ident))) {
     res.render('tests', {
       title: `${ident || 'All Tests'}`,
       layout: false,
-      tests: tests.getTests(endpoint, req.query.exposure)
+      tests: tests.getTests(ident, req.query.exposure)
     });
   } else {
     res.status(404).render('error', {
