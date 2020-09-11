@@ -165,77 +165,89 @@
   }
 
   function runWorker(callback, results) {
-    if ('Worker' in self) {
-      var myWorker = new Worker('/resources/worker.js');
+    if (pending.Worker) {
+      if ('Worker' in self) {
+        var myWorker = new Worker('/resources/worker.js');
 
-      myWorker.onmessage = function(event) {
-        callback(results.concat(event.data));
-      };
-
-      myWorker.postMessage(pending.Worker);
-    } else {
-      console.log('No worker support');
-      updateStatus('No worker support, skipping Worker/DedicatedWorker tests');
-
-      for (var i = 0; i < pending.Worker.length; i++) {
-        var result = {
-          name: pending.Worker[i].name,
-          result: false,
-          message: 'No worker support',
-          info: {
-            exposure: 'Worker'
-          }
+        myWorker.onmessage = function(event) {
+          callback(results.concat(event.data));
         };
 
-        if (pending.Worker[i].info !== undefined) {
-          result.info = Object.assign({}, result.info, pending.Worker[i].info);
+        myWorker.postMessage(pending.Worker);
+      } else {
+        console.log('No worker support');
+        updateStatus('No worker support, skipping Worker/DedicatedWorker tests');
+
+        for (var i = 0; i < pending.Worker.length; i++) {
+          var result = {
+            name: pending.Worker[i].name,
+            result: false,
+            message: 'No worker support',
+            info: {
+              exposure: 'Worker'
+            }
+          };
+
+          if (pending.Worker[i].info !== undefined) {
+            result.info = Object.assign(
+                {},
+                result.info,
+                pending.Worker[i].info
+            );
+          }
+
+          results.push(result);
         }
 
-        results.push(result);
+        callback(results);
       }
-
+    } else {
       callback(results);
     }
   }
 
   function runServiceWorker(callback, results) {
-    if ('serviceWorker' in navigator) {
-      window.__workerCleanup().then(function() {
-        navigator.serviceWorker.register('/resources/serviceworker.js', {
-          scope: '/resources/'
-        }).then(function(reg) {
-          return window.__waitForSWState(reg, 'activated');
-        }).then(navigator.serviceWorker.ready).then(function(reg) {
-          navigator.serviceWorker.onmessage = function(event) {
-            callback(results.concat(event.data));
+    if (pending.ServiceWorker) {
+      if ('serviceWorker' in navigator) {
+        window.__workerCleanup().then(function() {
+          navigator.serviceWorker.register('/resources/serviceworker.js', {
+            scope: '/resources/'
+          }).then(function(reg) {
+            return window.__waitForSWState(reg, 'activated');
+          }).then(navigator.serviceWorker.ready).then(function(reg) {
+            navigator.serviceWorker.onmessage = function(event) {
+              callback(results.concat(event.data));
+            };
+
+            reg.active.postMessage(pending.ServiceWorker);
+          });
+        });
+      } else {
+        console.log('No service worker support, skipping');
+        updateStatus('No service worker support, skipping ServiceWorker tests');
+
+        for (var i = 0; i < pending.ServiceWorker.length; i++) {
+          var result = {
+            name: pending.ServiceWorker[i].name,
+            result: false,
+            message: 'No service worker support',
+            info: {
+              exposure: 'ServiceWorker'
+            }
           };
 
-          reg.active.postMessage(pending.ServiceWorker);
-        });
-      });
-    } else {
-      console.log('No service worker support, skipping');
-      updateStatus('No service worker support, skipping ServiceWorker tests');
-
-      for (var i = 0; i < pending.ServiceWorker.length; i++) {
-        var result = {
-          name: pending.ServiceWorker[i].name,
-          result: false,
-          message: 'No service worker support',
-          info: {
-            exposure: 'ServiceWorker'
+          if (pending.ServiceWorker[i].info !== undefined) {
+            result.info = Object.assign(
+                {}, result.info, pending.ServiceWorker[i].info
+            );
           }
-        };
 
-        if (pending.ServiceWorker[i].info !== undefined) {
-          result.info = Object.assign(
-              {}, result.info, pending.ServiceWorker[i].info
-          );
+          results.push(result);
         }
 
-        results.push(result);
+        callback(results);
       }
-
+    } else {
       callback(results);
     }
   }
