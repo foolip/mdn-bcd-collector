@@ -77,20 +77,26 @@ const run = async (browser, version) => {
       .withCapabilities(capabilities).build();
 
   await driver.get(host);
-  await driver.wait(
-      until.elementIsEnabled(
-          await driver.findElement(By.id('start')), 'Run'
-      ),
-      10000
-  );
-  await driver.findElement(By.id('start')).click();
-  await driver.wait(until.urlIs(`${host}/results/`), 60000);
-  await driver.wait(
-      until.elementTextContains(
-          await driver.findElement(By.id('status')), 'to'
-      ),
-      30000
-  );
+  
+  try {
+    await driver.wait(
+        until.elementIsEnabled(
+            await driver.findElement(By.id('start')), 'Run'
+        ),
+        10000
+    );
+    await driver.findElement(By.id('start')).click();
+    await driver.wait(until.urlIs(`${host}/results/`), 60000);
+    await driver.wait(
+        until.elementTextContains(
+            await driver.findElement(By.id('status')), 'to'
+        ),
+        30000
+    );
+  } catch(e) {
+    console.error(e);
+  }
+
   await driver.quit();
 };
 
