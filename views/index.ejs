@@ -4,11 +4,12 @@
 
 <div>
   <button id="start">Run</button>
-  <select id="tests">
+  <datalist id="tests">
     <% tests.forEach(function(test) { %>
-      <option value="<%- test[1] %>"><%- test[0] || 'All Tests' %></option>
+      <option value="<%- test[0] %>"></option>
     <% }); %>
-  </select>
+  </datalist>
+  <input id="testSelection" list="tests" placeholder="All Tests" />
   <br /><br />
   <div id="limitExposureBox">
     <label for="limitExposure">Limit Exposure:</label>
@@ -32,23 +33,14 @@
 <p><a href="https://github.com/foolip/mdn-bcd-collector">Source on GitHub</a></p>
 
 <script>
-  function getDropdownSelection(dropdown) {
-    var index = dropdown.selectedIndex;
-    var choice = dropdown.options[index].value;
-    var label = dropdown.options[index].textContent;
-    return [index, choice, label];
-  };
-
   function main() {
     var button = document.getElementById('start');
-    var dropdown = document.getElementById('tests');
+    var testSelection = document.getElementById('testSelection');
     var limitExposure = document.getElementById('limitExposure');
     var limitExposureBox = document.getElementById('limitExposureBox');
 
-    dropdown.onchange = function() {
-      var choice = getDropdownSelection(dropdown);
-
-      if (choice[0] == 0 || choice[2].indexOf('api') == 0) {
+    testSelection.onchange = function() {
+      if (testSelection.value == '' || testSelection.value.indexOf('api') == 0) {
         limitExposureBox.style.display = "block";
       } else {
         limitExposureBox.style.display = "block";
@@ -56,12 +48,11 @@
     }
 
     button.onclick = function() {
-      var choice = getDropdownSelection(dropdown);
-      var newUrl = choice[1];
-      if (choice[0] > 0) {
+      var newUrl = '/tests/' + testSelection.value.replace(/\./g, '/');
+      if (testSelection.value) {
         newUrl = window.location.protocol + '//' + window.location.host + newUrl;
-        if (choice[0] == 0 || choice[2].indexOf('api') == 0) {
-          newUrl += getDropdownSelection(limitExposure)[1];
+        if (testSelection.value == '' || testSelection.value.indexOf('api') == 0) {
+          newUrl += limitExposure.options[limitExposure.selectedIndex].value;
         }
       }
 
