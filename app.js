@@ -162,12 +162,12 @@ app.get('/results', (req, res) => {
 
 app.all('/tests/*', (req, res) => {
   const ident = req.params['0'].replace(/\//g, '.');
-
-  if (tests.listEndpoints().some((item) => (item === ident))) {
+  const foundTests = tests.getTests(ident, req.query.exposure);
+  if (foundTests && foundTests.length) {
     res.render('tests', {
       title: `${ident || 'All Tests'}`,
       layout: false,
-      tests: tests.getTests(ident, req.query.exposure)
+      tests: foundTests
     });
   } else {
     res.status(404).render('error', {

@@ -52,6 +52,10 @@ class Tests {
   }
 
   getTests(endpoint, testExposure) {
+    if (!(endpoint in this.endpoints)) {
+      return [];
+    }
+
     const idents = this.endpoints[endpoint];
 
     const tests = [];
