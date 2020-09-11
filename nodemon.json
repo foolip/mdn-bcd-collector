@@ -3,7 +3,9 @@
   "ignore": [
     "static/*",
     "views/*",
-    "coverage/*",
-    ".nyc_output/*"
+    "find-missing.js",
+    "selenium.js",
+    "update-bcd.js",
+    "webref.js"
   ]
 }
