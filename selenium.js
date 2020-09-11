@@ -103,7 +103,11 @@ const runAll = async () => {
   for (const browser in browsersToTest) {
     for (const version of browsersToTest[browser]) {
       console.log(`Running ${bcd.browsers[browser].name} ${version}...`);
-      await run(browser, version);
+      try {
+        await run(browser, version);
+      } catch (e) {
+        console.error(e);
+      }
     }
   }
 };
