@@ -127,7 +127,6 @@ app.get('/api/results', (req, res) => {
       .catch(/* istanbul ignore next */ (err) => catchError(err, res));
 });
 
-/* istanbul ignore next: we don't want to create lots of dummy PRs */
 app.post('/api/results/export/github', (req, res) => {
   storage.getAll(req.sessionID)
       .then(async (results) => {
