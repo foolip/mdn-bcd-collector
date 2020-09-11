@@ -76,20 +76,25 @@ const run = async (browser, version) => {
   const driver = new Builder().usingServer(seleniumUrl)
       .withCapabilities(capabilities).build();
 
-  await driver.get(`${host}/tests/`);
-  await driver.wait(
-      until.elementTextContains(
-          await driver.findElement(By.id('status')), 'uploaded'
-      ),
-      30000
-  );
-  await driver.findElement(By.id('submit')).click();
-  await driver.wait(
-      until.elementTextContains(
-          await driver.findElement(By.id('status')), 'to'
-      ),
-      30000
-  );
+  try {
+    await driver.get(`${host}/tests/`);
+    await driver.wait(
+        until.elementTextContains(
+            await driver.findElement(By.id('status')), 'uploaded'
+        ),
+        30000
+    );
+    await driver.findElement(By.id('submit')).click();
+    await driver.wait(
+        until.elementTextContains(
+            await driver.findElement(By.id('status')), 'to'
+        ),
+        30000
+    );
+  } catch (e) {
+    console.error(e);
+  }
+
   await driver.quit();
 };
 
