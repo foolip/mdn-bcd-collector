@@ -77,7 +77,7 @@ const run = async (browser, version) => {
       .withCapabilities(capabilities).build();
 
   await driver.get(host);
-  
+
   try {
     await driver.wait(
         until.elementIsEnabled(
@@ -93,7 +93,7 @@ const run = async (browser, version) => {
         ),
         30000
     );
-  } catch(e) {
+  } catch (e) {
     console.error(e);
   }
 
