@@ -453,6 +453,52 @@ describe('build', () => {
       });
     });
 
+    it('prefixes for custom tests with no prefix support', () => {
+      describe('one item', () => {
+        const rawTest = {
+          raw: {
+            code: 'foo',
+            combinator: '&&'
+          },
+          category: 'api',
+          exposure: ['Window']
+        };
+
+        assert.deepEqual(compileTest(rawTest, ['', 'WebKit']), {
+          tests: [
+            {
+              code: 'foo',
+              prefix: ''
+            }
+          ],
+          category: 'api',
+          exposure: ['Window']
+        });
+      });
+
+      describe('two items', () => {
+        const rawTest = {
+          raw: {
+            code: ['foo', foo],
+            combinator: '&&'
+          },
+          category: 'api',
+          exposure: ['Window']
+        };
+
+        assert.deepEqual(compileTest(rawTest, ['', 'WebKit']), {
+          tests: [
+            {
+              code: 'foo && foo',
+              prefix: ''
+            }
+          ],
+          category: 'api',
+          exposure: ['Window']
+        });
+      });
+    });
+
     it('ignore already compiled', () => {
       const test = {
         tests: [

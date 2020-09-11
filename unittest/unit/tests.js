@@ -54,7 +54,7 @@ describe('Tests', () => {
         'css.properties.font-family',
         'javascript.builtins.array'
       ],
-      api: ['api.AbortController', 'api.AbortController.signal'],
+      'api': ['api.AbortController', 'api.AbortController.signal'],
       'api.AbortController': [
         'api.AbortController',
         'api.AbortController.signal'
