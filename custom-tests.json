@@ -46,6 +46,9 @@
     },
     "EXT_texture_filter_anisotropic": {
       "__base": "var canvas = document.createElement('canvas'); if (!canvas) {return false}; var gl = canvas.getContext('webgl'); if (!gl) {return false}; var instance = gl.getExtension('EXT_texture_filter_anisotropic');"
+    },
+    "MediaDevices": {
+      "__base": "var instance = navigator.mediaDevices;"
     }
   },
   "css": {
