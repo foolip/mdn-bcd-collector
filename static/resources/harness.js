@@ -316,56 +316,58 @@
 
   // Service Worker helpers
   if ('serviceWorker' in navigator) {
-    window.__waitForSWState = function(registration, desiredState) {
-      return new Promise(function(resolve, reject) {
-        var serviceWorker = registration.installing;
+    if ('window' in self) {
+      window.__waitForSWState = function(registration, desiredState) {
+        return new Promise(function(resolve, reject) {
+          var serviceWorker = registration.installing;
 
-        if (!serviceWorker) {
-          // If the service worker isn't installing, it was probably
-          // interrupted during a test.
-          window.location.reload();
+          if (!serviceWorker) {
+            // If the service worker isn't installing, it was probably
+            // interrupted during a test.
+            window.location.reload();
 
-          return reject(new Error('The service worker is not installing. ' +
-            'Is the test environment clean?'));
-        }
-
-        function stateListener(evt) {
-          if (evt.target.state === desiredState) {
-            serviceWorker.removeEventListener('statechange', stateListener);
-            return resolve(registration);
+            return reject(new Error('The service worker is not installing. ' +
+              'Is the test environment clean?'));
           }
 
-          if (evt.target.state === 'redundant') {
-            serviceWorker.removeEventListener('statechange', stateListener);
+          function stateListener(evt) {
+            if (evt.target.state === desiredState) {
+              serviceWorker.removeEventListener('statechange', stateListener);
+              return resolve(registration);
+            }
 
-            return reject(
-                new Error('Installing service worker became redundant')
-            );
+            if (evt.target.state === 'redundant') {
+              serviceWorker.removeEventListener('statechange', stateListener);
+
+              return reject(
+                  new Error('Installing service worker became redundant')
+              );
+            }
           }
-        }
 
-        serviceWorker.addEventListener('statechange', stateListener);
-      });
-    };
+          serviceWorker.addEventListener('statechange', stateListener);
+        });
+      };
 
-    window.__workerCleanup = function() {
-      if ('getRegistrations' in navigator.serviceWorker) {
-        return navigator.serviceWorker.getRegistrations()
-            .then(function(registrations) {
-              var unregisterPromise = registrations.map(function(registration) {
-                return registration.unregister();
+      window.__workerCleanup = function() {
+        if ('getRegistrations' in navigator.serviceWorker) {
+          return navigator.serviceWorker.getRegistrations()
+              .then(function(registrations) {
+                var unregisterPromise = registrations.map(function(registration) {
+                  return registration.unregister();
+                });
+                return Promise.all(unregisterPromise);
               });
-              return Promise.all(unregisterPromise);
-            });
-      } else {
-        return navigator.serviceWorker.getRegistration('/resources/')
-            .then(function(registration) {
-              if (registration) {
-                return registration.unregister();
-              }
-            });
-      }
-    };
+        } else {
+          return navigator.serviceWorker.getRegistration('/resources/')
+              .then(function(registration) {
+                if (registration) {
+                  return registration.unregister();
+                }
+              });
+        }
+      };
+    }
   }
 
   global.stringify = stringify;
