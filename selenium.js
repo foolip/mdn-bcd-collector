@@ -65,45 +65,51 @@ if (!seleniumUrl) {
   process.exit(1);
 }
 
-// eslint-disable-next-line guard-for-in
-for (const browser in browsersToTest) {
-  for (const version of browsersToTest[browser]) {
-    describe(`${bcd.browsers[browser].name} ${version}`, () => {
-      let driver;
+const run = async (browser, version) => {
+  const capabilities = new Capabilities();
+  capabilities.set(
+      Capability.BROWSER_NAME,
+      Browser[browser.toUpperCase()]
+  );
+  capabilities.set(Capability.VERSION, version);
 
-      beforeEach(() => {
-        const capabilities = new Capabilities();
-        capabilities.set(
-            Capability.BROWSER_NAME,
-            Browser[browser.toUpperCase()]
-        );
-        capabilities.set(Capability.VERSION, version);
+  const driver = new Builder().usingServer(seleniumUrl)
+      .withCapabilities(capabilities).build();
 
-        driver = new Builder().usingServer(seleniumUrl)
-            .withCapabilities(capabilities).build();
-      });
+  await driver.get(host);
+  await driver.wait(
+      until.elementIsEnabled(
+          await driver.findElement(By.id('start')), 'Run'
+      ),
+      10000
+  );
+  await driver.findElement(By.id('start')).click();
+  await driver.wait(until.urlIs(`${host}/results/`), 60000);
+  await driver.wait(
+      until.elementTextContains(
+          await driver.findElement(By.id('status')), 'to'
+      ),
+      30000
+  );
+  await driver.quit();
+};
 
-      afterEach(async () => {
-        await driver.quit();
-      });
-
-      it('run', async () => {
-        await driver.get(host);
-        await driver.wait(
-            until.elementIsEnabled(
-                await driver.findElement(By.id('start')), 'Run'
-            ),
-            10000
-        );
-        await driver.findElement(By.id('start')).click();
-        await driver.wait(until.urlIs(`${host}/results/`), 60000);
-        await driver.wait(
-            until.elementTextContains(
-                await driver.findElement(By.id('status')), 'to'
-            ),
-            30000
-        );
-      }).slow(30000).timeout(60000);
-    });
+const runAll = async () => {
+  // eslint-disable-next-line guard-for-in
+  for (const browser in browsersToTest) {
+    for (const version of browsersToTest[browser]) {
+      console.log(`Running ${bcd.browsers[browser].name} ${version}...`);
+      await run(browser, version);
+    }
   }
+};
+
+/* istanbul ignore if */
+if (require.main === module) {
+  runAll();
+} else {
+  module.exports = {
+    run,
+    runAll
+  };
 }
