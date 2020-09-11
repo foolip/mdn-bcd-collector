@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/* global CSS, console, document, window, location, navigator, XMLHttpRequest,
+/* global console, document, window, location, navigator, XMLHttpRequest,
           self, Worker, Promise, setTimeout, clearTimeout */
 
 'use strict';
@@ -21,14 +21,7 @@
 // on any modern JavaScript features.
 
 (function(global) {
-  var pending = [];
-
-  var prefixes = {
-    api: ['', 'moz', 'Moz', 'webkit', 'WebKit', 'webKit', 'ms', 'MS'],
-    css: ['', 'khtml', 'webkit', 'moz', 'ms']
-  };
-  // TODO Detect browser and select prefixes accordingly (along with
-  // allowing testing with alternative name)
+  var pending = {};
 
   function stringify(value) {
     try {
@@ -36,13 +29,6 @@
     } catch (err) {
       return 'unserializable value';
     }
-  }
-
-  function stringStartsWith(string, search) {
-    if (string.startsWith) {
-      return string.startsWith(search);
-    }
-    return string.substring(0, 0 + search.length) === search;
   }
 
   function stringIncludes(string, search) {
@@ -65,8 +51,49 @@
     }
   }
 
-  function addTest(name, code, scope, info) {
-    pending.push({name: name, code: code, scope: scope, info: info});
+  function addTest(name, tests, exposure, info) {
+    if (!(exposure in pending)) {
+      pending[exposure] = [];
+    }
+
+    pending[exposure].push({
+      name: name,
+      tests: tests,
+      exposure: exposure,
+      info: info
+    });
+  }
+
+  function testConstructor(iface) {
+    var result = {};
+
+    try {
+      eval('new '+iface+'()');
+      result.result = true;
+    } catch (err) {
+      if (
+        stringIncludes(err.message, 'Illegal constructor') ||
+        stringIncludes(err.message, 'Function expected')
+      ) {
+        result.result = false;
+      } else if (
+        stringIncludes(err.message, 'Not enough arguments') ||
+        stringIncludes(err.message, 'argument required') ||
+        stringIncludes(err.message, 'arguments required') ||
+        stringIncludes(err.message, 'Argument not optional') ||
+        stringIncludes(err.message, 'Arguments can\'t be empty')
+      ) {
+        // If it failed to construct and it's not illegal or just needs
+        // more arguments, the constructor's good
+        result.result = true;
+      } else {
+        result.result = null;
+      }
+
+      result.message = 'threw ' + stringify(err);
+    }
+
+    return result;
   }
 
   // Each test is mapped to an object like this:
@@ -76,7 +103,7 @@
   //   "prefix": "",
   //   "info": {
   //     "code": "'localName' in Attr.prototype",
-  //     "scope": "Window"
+  //     "exposure": "Window"
   //   }
   // }
   //
@@ -84,239 +111,94 @@
   // be null and a `message` property is set to an explanation.
   function test(data) {
     var result = {name: data.name, info: {}};
-    var category = data.name.split('.')[0];
 
-    var prefixesToTest = [''];
-    if (category in prefixes) {
-      prefixesToTest = prefixes[category];
-    }
+    for (var i = 0; i < data.tests.length; i++) {
+      var test = data.tests[i];
 
-    try {
-      var parentPrefix = '';
-      var code = data.code;
-      var compiledCode = [];
-      if (!Array.isArray(code)) {
-        code = [code];
-      }
-
-      for (var i in code) {
-        var subtest = code[i];
-
-        if (typeof(subtest) === 'string') {
-          compiledCode.push(subtest);
-          value = eval(subtest);
-          // TODO: allow callback and promise-vending funcs
-          if (typeof value === 'boolean') {
-            result.result = value;
-          } else {
-            result.result = null;
-            result.message = 'returned ' + stringify(value);
+      try {
+        var value = eval(test.code);
+        if (value && typeof value === 'object' && 'result' in value) {
+          result.result = value.result;
+          if (value.message) {
+            result.message = value.message;
           }
-        } else if (subtest.property == 'constructor') {
-          var iface = parentPrefix+subtest.scope;
-          compiledCode.push('new '+iface+'()');
-
-          try {
-            eval('new '+iface+'()');
-            result.result = true;
-          } catch (err) {
-            if (
-              stringIncludes(err.message, 'Illegal constructor') ||
-              stringIncludes(err.message, 'Function expected')
-            ) {
-              result.result = false;
-            } else if (
-              stringIncludes(err.message, 'Not enough arguments') ||
-              stringIncludes(err.message, 'argument required') ||
-              stringIncludes(err.message, 'arguments required') ||
-              stringIncludes(err.message, 'Argument not optional')
-            ) {
-              // If it failed to construct and it's not illegal or just needs
-              // more arguments, the constructor's good
-              result.result = true;
-            } else {
-              result.result = null;
-            }
-
-            result.message = 'threw ' + stringify(err);
-          }
+        } else if (typeof value === 'boolean') {
+          result.result = value;
         } else {
-          var compiled = '';
-
-          for (var j in prefixesToTest) {
-            var prefix = prefixesToTest[j];
-            var property = subtest.property;
-            var value;
-            var thisCompiled = '';
-
-            if (subtest.scope === 'CSS.supports') {
-              if ('CSS' in self) {
-                if (prefix) {
-                  var prefixToAdd = '-' + prefix;
-                  if (!stringStartsWith(property, '-')) {
-                    prefixToAdd += '-';
-                  }
-                  property = prefixToAdd + property;
-                }
-
-                thisCompiled = 'CSS.supports(\'' +
-                    property + '\', \'inherit\');';
-                value = CSS.supports(property, 'inherit');
-              } else {
-                value = null;
-                result.message = 'Browser doesn\'t support CSS API';
-                break;
-              }
-            } else {
-              if (prefix) {
-                property = prefix + property.charAt(0).toUpperCase() +
-                           property.slice(1);
-              }
-
-              if (stringStartsWith(property, 'Symbol.')) {
-                thisCompiled = property+' in '+parentPrefix+subtest.scope;
-                value = eval(thisCompiled);
-              } else {
-                thisCompiled = '"'+property+'" in '+parentPrefix+subtest.scope;
-                value = eval(thisCompiled);
-              }
-
-              if (!compiled) {
-                // Set to first compiled statement in case support is false
-                compiled = thisCompiled;
-              }
-            }
-
-            result.result = value;
-            if (value === true) {
-              compiled = thisCompiled;
-
-              if (subtest.scope === 'CSS.supports') {
-                if (prefix) {
-                  parentPrefix = '-' + prefix + '-';
-                } else {
-                  parentPrefix = '';
-                }
-              } else {
-                parentPrefix = prefix;
-              }
-              break;
-            }
-          }
-
-          compiledCode.push(compiled);
+          result.result = null;
+          result.message = 'returned ' + stringify(value);
         }
-
-        if (result.result === false) {
-          break;
-          // Tests are written in hierarchy order, so if the parent (first
-          // test) is unsupported, so is the child (next test)
-        }
-
-        result.prefix = parentPrefix;
+      } catch (err) {
+        result.result = null;
+        result.message = 'threw ' + stringify(err);
       }
-    } catch (err) {
-      result.result = null;
-      result.message = 'threw ' + stringify(err);
+
+      if (result.result !== false) {
+        result.info.code = test.code;
+        if (test.prefix) {
+          result.info.prefix = test.prefix;
+        }
+        break;
+      }
     }
 
     if (data.info !== undefined) {
       result.info = Object.assign({}, result.info, data.info);
     }
 
-    result.info.code = compiledCode.join(' && ');
-    result.info.scope = data.scope;
+    if (result.result === false) {
+      result.info.code = data.tests[0].code;
+    }
+    result.info.exposure = data.exposure;
 
     return result;
   }
 
-  function runCSS(callback) {
-    var results = [];
-
-    var length = pending.length;
-    for (var i = 0; i < length; i++) {
-      updateStatus('Testing ' + pending[i].name);
-      results.push(test(pending[i]));
+  function runWindow(callback, results) {
+    if (pending.Window) {
+      for (var i = 0; i < pending.Window.length; i++) {
+        results.push(test(pending.Window[i]));
+      }
     }
-
-    pending = [];
 
     callback(results);
   }
 
-  function runWindow(callback) {
-    var results = [];
-
-    var length = pending.length;
-    for (var i = 0; i < length; i++) {
-      updateStatus('Testing ' + pending[i].name);
-      results.push(test(pending[i]));
-    }
-
-    pending = [];
-
-    callback(results);
-  }
-
-  function runWorker(callback) {
-    var results = [];
-    var length = pending.length;
-    var i;
-
+  function runWorker(callback, results) {
     if ('Worker' in self) {
       var myWorker = new Worker('/resources/worker.js');
 
-      var promises = [];
-      var testhandlers = {};
-
       myWorker.onmessage = function(event) {
-        testhandlers[event.data.name](event.data);
+        callback(results.concat(event.data));
       };
 
-      for (i = 0; i < length; i++) {
-        promises.push(new Promise(function(resolve) {
-          updateStatus('Testing ' + pending[i].name);
-          myWorker.postMessage(pending[i]);
-
-          testhandlers[pending[i].name] = function(message) {
-            results.push(message);
-            resolve();
-          };
-        }));
-      }
-
-      Promise.allSettled(promises).then(function() {
-        pending = [];
-
-        callback(results);
-      });
+      myWorker.postMessage(pending.Worker);
     } else {
       console.log('No worker support');
-      updateStatus('No worker support, skipping');
+      updateStatus('No worker support, skipping Worker/DedicatedWorker tests');
 
-      for (i = 0; i < length; i++) {
+      for (var i = 0; i < pending.Worker.length; i++) {
         var result = {
-          name: pending[i].name,
+          name: pending.Worker[i].name,
           result: false,
-          message: 'No worker support'
+          message: 'No worker support',
+          info: {
+            exposure: 'Worker'
+          }
         };
 
-        if (pending[i].info !== undefined) {
-          result.info = pending[i].info;
+        if (pending.Worker[i].info !== undefined) {
+          result.info = Object.assign({}, result.info, pending.Worker[i].info);
         }
 
         results.push(result);
       }
 
-      pending = [];
-
       callback(results);
     }
   }
 
-  function runServiceWorker(callback) {
-    var results = [];
-
+  function runServiceWorker(callback, results) {
     if ('serviceWorker' in navigator) {
       window.__workerCleanup().then(function() {
         navigator.serviceWorker.register('/resources/serviceworker.js', {
@@ -324,91 +206,98 @@
         }).then(function(reg) {
           return window.__waitForSWState(reg, 'activated');
         }).then(navigator.serviceWorker.ready).then(function(reg) {
-          var promises = [];
-          var testhandlers = {};
-
           navigator.serviceWorker.onmessage = function(event) {
-            testhandlers[event.data.name](event.data);
+            callback(results.concat(event.data));
           };
 
-          var length = pending.length;
-          for (var i = 0; i < length; i++) {
-            promises.push(new Promise(function(resolve) {
-              updateStatus('Testing ' + pending[i].name);
-
-              reg.active.postMessage(pending[i]);
-
-              testhandlers[pending[i].name] = function(message) {
-                results.push(message);
-                resolve();
-              };
-            }));
-          }
-
-          Promise.allSettled(promises).then(function() {
-            pending = [];
-
-            window.__workerCleanup().then(function() {
-              callback(results);
-            });
-          });
+          reg.active.postMessage(pending.ServiceWorker);
         });
       });
     } else {
       console.log('No service worker support, skipping');
-      updateStatus('No service worker support, skipping');
+      updateStatus('No service worker support, skipping ServiceWorker tests');
 
-      var length = pending.length;
-      for (var i = 0; i < length; i++) {
+      for (var i = 0; i < pending.ServiceWorker.length; i++) {
         var result = {
-          name: pending[i].name,
+          name: pending.ServiceWorker[i].name,
           result: false,
-          message: 'No service worker support'
+          message: 'No service worker support',
+          info: {
+            exposure: 'ServiceWorker'
+          }
         };
 
-        if (pending[i].info !== undefined) {
-          result.info = pending[i].info;
+        if (pending.ServiceWorker[i].info !== undefined) {
+          result.info = Object.assign(
+              {}, result.info, pending.ServiceWorker[i].info
+          );
         }
 
         results.push(result);
       }
 
-      pending = [];
-
       callback(results);
     }
   }
 
-  function run(scope, callback) {
+  function run(callback) {
     var timeout = setTimeout(function() {
       updateStatus('<br />This test seems to be taking a long time; ' +
           'it may have crashed. Check the console for errors.', true);
     }, 10000);
 
-    var onfinish = function(results) {
-      clearTimeout(timeout);
+    runWindow(function(results) {
+      runWorker(function(results) {
+        runServiceWorker(function(results) {
+          pending = [];
 
-      if (callback) {
-        callback(results);
-      } else {
-        report(results);
-      }
-    };
-
-    if (scope === 'CSS') {
-      runCSS(onfinish);
-    } else if (scope === 'Window') {
-      runWindow(onfinish);
-    } else if (scope === 'Worker') {
-      runWorker(onfinish);
-    } else if (scope === 'ServiceWorker') {
-      runServiceWorker(onfinish);
-    } else {
-      console.error('Unknown scope specified: ' + scope);
-    }
+          clearTimeout(timeout);
+          if (typeof callback == 'function') {
+            callback(results);
+          } else {
+            report(results);
+          }
+        }, results);
+      }, results);
+    }, []);
   }
 
   function report(results) {
+    var css = document.createElement('link');
+    css.rel = 'stylesheet';
+    css.type = 'text/css';
+    css.href = '/resources/style.css';
+    try {
+      document.head.appendChild(css);
+    } catch (e) {
+      // If we fail to import the CSS, it's not a big deal
+    }
+
+    updateStatus('Posting results to server...');
+
+    var response = '';
+    for (var i=0; i<results.length; i++) {
+      var result = results[i];
+      response += result.name;
+      if (result.name.indexOf('css.') != 0) {
+        response += ' (' + result.info.exposure + ' exposure)';
+      }
+      response += ': <strong>' + result.result;
+      if (result.prefix) {
+        response += ' (' + result.prefix + ' prefix)';
+      }
+      if (result.message) {
+        response += ' (' + result.message + ')';
+      }
+      response += '</strong>\n<code>' + result.info.code + ';</code>\n\n';
+    }
+
+    var resultsEl = document.getElementById('results');
+    if (resultsEl) {
+      resultsEl.innerHTML = '<hr />' + response
+          .replace(/\n/g, '<br />');
+    }
+
     var body = JSON.stringify(results);
     var client = new XMLHttpRequest();
     client.open('POST', '/api/results?for='+encodeURIComponent(location.href));
@@ -416,25 +305,13 @@
     client.send(body);
     client.onreadystatechange = function() {
       if (client.readyState == 4) {
-        var response = JSON.parse(client.responseText);
-        // Navigate to the next page, or /results/ if none.
-        var nextURL = response.next || '/results/';
-        window.location = nextURL;
+        if (client.status >= 500) {
+          updateStatus('Failed to upload results.');
+        } else {
+          updateStatus('Results uploaded. <a href="/results" id="submit">Submit to GitHub</a>');
+        }
       }
     };
-  }
-
-  function finishIndividual(results) {
-    var response = '';
-    for (var i=0; i<results.length; i++) {
-      var result = results[i];
-      response += result.name + ': <strong>' + result.result;
-      if (result.prefix) {
-        response += ' (' + result.prefix + ' prefix)';
-      }
-      response += '</strong>\n<code>' + result.info.code + ';</code>\n\n';
-    }
-    updateStatus(response.replace(/\n/g, '<br />'));
   }
 
   // Service Worker helpers
@@ -494,9 +371,9 @@
   global.stringify = stringify;
 
   global.bcd = {
+    testConstructor: testConstructor,
     addTest: addTest,
     test: test,
-    run: run,
-    finishIndividual: finishIndividual
+    run: run
   };
 })(this);

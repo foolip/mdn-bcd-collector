@@ -1,0 +1,52 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&family=Roboto+Mono&display=swap');
+
+body {
+  font-family: 'Roboto', Arial, sans-serif;
+}
+
+code {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 12px;
+}
+
+button, select, input {
+  background-color: #3d8a3f;
+  border: none;
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+  transition: background-color 0.2s;
+  padding: 8px 8px 8px 16px;
+}
+
+input {
+  text-align: left;
+  margin-left: -2px;
+}
+
+button:hover, select:hover {
+  cursor: pointer;
+  background-color: #4caf50;
+}
+
+button:disabled, button:disabled:hover, select:disabled:hover {
+  cursor: not-allowed;
+  background-color: #636363;
+}
+
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #111;
+    color: white;
+  }
+
+  a {
+    color: #99f;
+  }
+
+  input::placeholder {
+    color: #ccc;
+  }
+}

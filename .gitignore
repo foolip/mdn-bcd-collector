@@ -1,8 +1,8 @@
 .nyc_output/
-MANIFEST.json
 coverage.lcov
 coverage/
 generated/
 node_modules/
 secrets.json
+tests.json
 .testtmp

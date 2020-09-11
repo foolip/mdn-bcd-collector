@@ -22,45 +22,63 @@ const assert = chai.assert;
 const expect = chai.expect;
 
 const WebIDL2 = require('webidl2');
-const fs = require('fs');
+const mockFs = require('mock-fs');
+const proxyquire = require('proxyquire');
 
 const {
-  writeText,
-  loadCustomTests,
-  getCustomTestAPI,
-  getCustomTestCSS,
-  collectCSSPropertiesFromBCD,
-  collectCSSPropertiesFromReffy,
-  cssPropertyToIDLAttribute,
+  writeFile,
   flattenIDL,
   getExposureSet,
+  getName,
+  compileTestCode,
+  compileTest,
+  collectExtraIDL,
+  validateIDL,
   buildIDLTests,
-  validateIDL
-} = require('../../build');
+  buildIDL,
+  collectCSSPropertiesFromBCD,
+  collectCSSPropertiesFromWebref,
+  cssPropertyToIDLAttribute,
+  buildCSS
+} = proxyquire('../../build', {
+  './custom-tests.json': {api: {}, css: {}}
+});
 
 describe('build', () => {
-  describe('writeText', () => {
+  describe('writeFile', () => {
     const filepath = '.testtmp';
 
-    it('simple supported', () => {
-      writeText(filepath, 'foo\nbar');
+    beforeEach(() => {
+      mockFs({
+        '.testtmp': '',
+        './custom-tests.json': {api: {}, css: {}}
+      });
+    });
+
+    it('simple supported', async () => {
+      await writeFile(filepath, 'foo\nbar');
       assert.fileContent(filepath, 'foo\nbar\n');
     });
 
-    it('array', () => {
-      writeText(filepath, ['foo', 'bar', 'baz']);
+    it('array', async () => {
+      await writeFile(filepath, ['foo', 'bar', 'baz']);
       assert.fileContent(filepath, 'foo\nbar\nbaz\n');
     });
 
+    it('dictionary', async () => {
+      await writeFile(filepath, {foo: ['bar', 'baz']});
+      assert.fileContent(filepath, '{"foo":["bar","baz"]}\n');
+    });
+
     afterEach(() => {
-      fs.unlinkSync(filepath);
+      mockFs.restore();
     });
   });
 
   describe('getCustomTestAPI', () => {
     describe('no custom tests', () => {
-      beforeEach(() => {
-        loadCustomTests({api: {}, css: {}});
+      const {getCustomTestAPI} = proxyquire('../../build', {
+        './custom-tests.json': {api: {}, css: {}}
       });
 
       it('interface', () => {
@@ -73,16 +91,15 @@ describe('build', () => {
     });
 
     describe('custom test for interface only', () => {
-      beforeEach(() => {
-        loadCustomTests({
+      const {getCustomTestAPI} = proxyquire('../../build', {
+        './custom-tests.json': {
           api: {
             foo: {
               __base: 'var a = 1;',
               __test: 'return a;'
             }
-          },
-          css: {}
-        });
+          }
+        }
       });
 
       it('interface', () => {
@@ -101,15 +118,14 @@ describe('build', () => {
     });
 
     describe('custom test for interface only, no base', () => {
-      beforeEach(() => {
-        loadCustomTests({
+      const {getCustomTestAPI} = proxyquire('../../build', {
+        './custom-tests.json': {
           api: {
             foo: {
               __test: 'return 1;'
             }
-          },
-          css: {}
-        });
+          }
+        }
       });
 
       it('interface', () => {
@@ -122,16 +138,15 @@ describe('build', () => {
     });
 
     describe('custom test for member only', () => {
-      beforeEach(() => {
-        loadCustomTests({
+      const {getCustomTestAPI} = proxyquire('../../build', {
+        './custom-tests.json': {
           api: {
             foo: {
               __base: 'var a = 1;',
               bar: 'return a + 1;'
             }
-          },
-          css: {}
-        });
+          }
+        }
       });
 
       it('interface', () => {
@@ -150,15 +165,41 @@ describe('build', () => {
     });
 
     describe('custom test for member only, no __base', () => {
-      beforeEach(() => {
-        loadCustomTests({
+      const {getCustomTestAPI} = proxyquire('../../build', {
+        './custom-tests.json': {
           api: {
             foo: {
               bar: 'return 1 + 1;'
             }
-          },
-          css: {}
-        });
+          }
+        }
+      });
+
+      it('interface', () => {
+        assert.equal(getCustomTestAPI('foo'), false);
+      });
+
+      it('member', () => {
+        assert.equal(
+            getCustomTestAPI('foo', 'bar'),
+            '(function() {return 1 + 1;})()'
+        );
+      });
+    });
+
+    describe('custom test for member with subtests', () => {
+      const {getCustomTestAPI} = proxyquire('../../build', {
+        './custom-tests.json': {
+          api: {
+            foo: {
+              bar: 'return 1 + 1;',
+              __additional: {
+                multiple: 'return 1 + 1 + 1;',
+                one: 'return 1;'
+              }
+            }
+          }
+        }
       });
 
       it('interface', () => {
@@ -174,17 +215,16 @@ describe('build', () => {
     });
 
     describe('custom test for interface and member', () => {
-      beforeEach(() => {
-        loadCustomTests({
+      const {getCustomTestAPI} = proxyquire('../../build', {
+        './custom-tests.json': {
           api: {
             foo: {
               __base: 'var a = 1;',
               __test: 'return a;',
               bar: 'return a + 1;'
             }
-          },
-          css: {}
-        });
+          }
+        }
       });
 
       it('interface', () => {
@@ -203,23 +243,395 @@ describe('build', () => {
     });
   });
 
+  describe('getCustomSubtestsAPI', () => {
+    it('get subtests', () => {
+      const {getCustomSubtestsAPI} = proxyquire('../../build', {
+        './custom-tests.json': {
+          api: {
+            foo: {
+              __additional: {
+                multiple: 'return 1 + 1 + 1;',
+                'one.only': 'return 1;'
+              }
+            }
+          }
+        }
+      });
+
+      assert.deepEqual(
+          getCustomSubtestsAPI('foo', 'bar'),
+          {
+            multiple: '(function() {return 1 + 1 + 1;})()',
+            'one.only': '(function() {return 1;})()'
+          }
+      );
+    });
+  });
+
   describe('getCustomTestCSS', () => {
     it('no custom tests', () => {
-      loadCustomTests({api: {}, css: {}});
+      const {getCustomTestCSS} = proxyquire('../../build', {
+        './custom-tests.json': {api: {}, css: {}}
+      });
+
       assert.equal(getCustomTestCSS('foo'), false);
     });
 
     it('custom test for property', () => {
-      loadCustomTests({
-        api: {},
-        css: {
-          properties: {
-            foo: 'return 1;'
+      const {getCustomTestCSS} = proxyquire('../../build', {
+        './custom-tests.json': {
+          css: {
+            properties: {
+              foo: 'return 1;'
+            }
           }
         }
       });
 
       assert.equal(getCustomTestCSS('foo'), '(function() {return 1;})()');
+    });
+  });
+
+  describe('compileTestCode', () => {
+    describe('string', () => {
+      const test = 'PREFIXfoo';
+
+      it('normal', () => {
+        assert.equal(compileTestCode(test), 'foo');
+      });
+
+      it('prefix', () => {
+        assert.equal(compileTestCode(test, 'webkit'), 'webkitFoo');
+      });
+    });
+
+    describe('constructor', () => {
+      const test = {property: 'constructor', owner: 'AudioContext'};
+
+      it('normal', () => {
+        assert.equal(compileTestCode(test), '"AudioContext" in self && bcd.testConstructor("AudioContext")');
+      });
+
+      it('prefix', () => {
+        assert.equal(compileTestCode(test, 'moz'), '"mozAudioContext" in self && bcd.testConstructor("mozAudioContext")');
+      });
+    });
+
+    describe('CSS.supports', () => {
+      const test = {property: 'font-weight', owner: 'CSS.supports'};
+
+      it('normal', () => {
+        assert.equal(compileTestCode(test), 'CSS.supports("font-weight", "inherit")');
+      });
+
+      it('prefix', () => {
+        assert.equal(compileTestCode(test, 'webkit'), 'CSS.supports("-webkit-font-weight", "inherit")');
+      });
+    });
+
+    describe('Symbol', () => {
+      const test = {property: 'Symbol.iterator', owner: 'DOMMatrixReadOnly'};
+
+      it('normal', () => {
+        assert.equal(compileTestCode(test), '"DOMMatrixReadOnly" in self && "Symbol" in self && "iterator" in Symbol && Symbol.iterator in DOMMatrixReadOnly.prototype');
+      });
+
+      it('prefix', () => {
+        assert.equal(compileTestCode(test, 'moz'), '"mozDOMMatrixReadOnly" in self && "Symbol" in self && "iterator" in Symbol && Symbol.iterator in mozDOMMatrixReadOnly.prototype');
+      });
+    });
+
+    describe('other', () => {
+      const test = {property: 'log', owner: 'console'};
+
+      it('normal', () => {
+        assert.equal(compileTestCode(test), '"log" in console');
+      });
+
+      it('prefix', () => {
+        assert.equal(compileTestCode(test, 'webkit'), '"webkitLog" in console');
+      });
+
+      it('owner prefix', () => {
+        assert.equal(compileTestCode(test, '', 'moz'), '"log" in mozConsole');
+      });
+
+      it('prefix + owner prefix', () => {
+        assert.equal(compileTestCode(test, 'webkit', 'moz'), '"webkitLog" in mozConsole');
+      });
+    });
+  });
+
+  describe('compileTest', () => {
+    it('main', () => {
+      const rawTest = {
+        raw: {
+          code: [
+            {property: 'Document', owner: 'self'},
+            {property: 'body', owner: `Document.prototype`}
+          ],
+          combinator: '&&'
+        },
+        category: 'api',
+        exposure: ['Window']
+      };
+
+      assert.deepEqual(compileTest(rawTest), {
+        tests: [
+          {
+            code: '"Document" in self && "body" in Document.prototype',
+            prefix: ''
+          }
+        ],
+        category: 'api',
+        exposure: ['Window']
+      });
+    });
+
+    it('with prefixes, single piece', () => {
+      const rawTest = {
+        raw: {
+          code: {property: 'Document', owner: 'self'},
+          combinator: '&&'
+        },
+        category: 'api',
+        exposure: ['Window']
+      };
+
+      assert.deepEqual(compileTest(rawTest, ['', 'WebKit']), {
+        tests: [
+          {
+            code: '"Document" in self',
+            prefix: ''
+          },
+          {
+            code: '"WebKitDocument" in self',
+            prefix: 'WebKit'
+          }
+        ],
+        category: 'api',
+        exposure: ['Window']
+      });
+    });
+
+    describe('with prefixes, double piece', () => {
+      it('first', () => {
+        const rawTest = {
+          raw: {
+            code: [
+              {property: 'Document', owner: 'self'},
+              {property: 'body', owner: `Document.prototype`}
+            ],
+            combinator: '&&'
+          },
+          category: 'api',
+          exposure: ['Window']
+        };
+
+        assert.deepEqual(compileTest(rawTest, ['', 'WebKit']), {
+          tests: [
+            {
+              code: '"Document" in self && "body" in Document.prototype',
+              prefix: ''
+            },
+            {
+              code: '"Document" in self && "WebKitBody" in Document.prototype',
+              prefix: 'WebKit'
+            },
+            {
+              code: '"WebKitDocument" in self && "body" in WebKitDocument.prototype',
+              prefix: ''
+            },
+            {
+              code: '"WebKitDocument" in self && "WebKitBody" in WebKitDocument.prototype',
+              prefix: 'WebKit'
+            }
+          ],
+          category: 'api',
+          exposure: ['Window']
+        });
+      });
+    });
+
+    it('prefixes for custom tests with no prefix support', () => {
+      describe('one item', () => {
+        const rawTest = {
+          raw: {
+            code: 'foo',
+            combinator: '&&'
+          },
+          category: 'api',
+          exposure: ['Window']
+        };
+
+        assert.deepEqual(compileTest(rawTest, ['', 'WebKit']), {
+          tests: [
+            {
+              code: 'foo',
+              prefix: ''
+            }
+          ],
+          category: 'api',
+          exposure: ['Window']
+        });
+      });
+
+      describe('two items', () => {
+        const rawTest = {
+          raw: {
+            code: ['foo', 'foo'],
+            combinator: '&&'
+          },
+          category: 'api',
+          exposure: ['Window']
+        };
+
+        assert.deepEqual(compileTest(rawTest, ['', 'WebKit']), {
+          tests: [
+            {
+              code: 'foo && foo',
+              prefix: ''
+            }
+          ],
+          category: 'api',
+          exposure: ['Window']
+        });
+      });
+    });
+
+    it('ignore already compiled', () => {
+      const test = {
+        tests: [
+          {
+            code: 'true',
+            prefix: ''
+          }
+        ],
+        category: 'api',
+        exposure: ['Window']
+      };
+
+      assert.deepEqual(compileTest(test), test);
+    });
+
+    it('no-repeated test code', () => {
+      const rawTests = [
+        {
+          raw: {
+            code: 'true',
+            combinator: '&&'
+          },
+          category: 'api',
+          exposure: ['Window']
+        },
+        {
+          raw: {
+            code: [
+              'true',
+              'true'
+            ],
+            combinator: '||'
+          },
+          category: 'api',
+          exposure: ['Window']
+        },
+        {
+          raw: {
+            code: [
+              'true',
+              'true'
+            ],
+            combinator: '&&'
+          },
+          category: 'api',
+          exposure: ['Worker']
+        }
+      ];
+
+      assert.deepEqual(compileTest(rawTests[0]), {
+        tests: [
+          {
+            code: 'true',
+            prefix: ''
+          }
+        ],
+        category: 'api',
+        exposure: ['Window']
+      });
+      assert.deepEqual(compileTest(rawTests[1]), {
+        tests: [
+          {
+            code: 'true || true',
+            prefix: ''
+          }
+        ],
+        category: 'api',
+        exposure: ['Window']
+      });
+      assert.deepEqual(compileTest(rawTests[2]), {
+        tests: [
+          {
+            code: 'true && true',
+            prefix: ''
+          }
+        ],
+        category: 'api',
+        exposure: ['Worker']
+      });
+    });
+
+    it('CSS', () => {
+      const rawTest = {
+        raw: {
+          code: [
+            {property: 'fontFamily', owner: 'document.body.style'},
+            {property: 'font-family', owner: 'CSS.supports'}
+          ],
+          combinator: '||'
+        },
+        category: 'css',
+        exposure: ['Window']
+      };
+
+      assert.deepEqual(compileTest(rawTest), {
+        tests: [
+          {
+            code: '"fontFamily" in document.body.style || CSS.supports("font-family", "inherit")',
+            prefix: ''
+          }
+        ],
+        category: 'css',
+        exposure: ['Window']
+      });
+    });
+
+    it('CSS with prefix', () => {
+      const rawTest = {
+        raw: {
+          code: [
+            {property: 'fontFamily', owner: 'document.body.style'},
+            {property: 'font-family', owner: 'CSS.supports'}
+          ],
+          combinator: '||'
+        },
+        category: 'css',
+        exposure: ['Window']
+      };
+
+      assert.deepEqual(compileTest(rawTest, ['', 'webkit']), {
+        tests: [
+          {
+            code: '"fontFamily" in document.body.style || CSS.supports("font-family", "inherit")',
+            prefix: ''
+          },
+          {
+            code: '"webkitFontFamily" in document.body.style || CSS.supports("-webkit-font-family", "inherit")',
+            prefix: 'webkit'
+          }
+        ],
+        category: 'css',
+        exposure: ['Window']
+      });
     });
   });
 
@@ -322,7 +734,7 @@ describe('build', () => {
     });
   });
 
-  it('collectCSSPropertiesFromReffy', () => {
+  it('collectCSSPropertiesFromWebref', () => {
     const webref = {
       css: {
         'css-fonts': {
@@ -339,7 +751,7 @@ describe('build', () => {
       }
     };
     const propertySet = new Set();
-    collectCSSPropertiesFromReffy(webref, propertySet);
+    collectCSSPropertiesFromWebref(webref, propertySet);
     const properties = Array.from(propertySet);
     assert.deepEqual(properties, ['font-family', 'font-weight', 'grid']);
   });
@@ -349,6 +761,22 @@ describe('build', () => {
     assert.equal(cssPropertyToIDLAttribute('-webkit-line-clamp', true),
         'webkitLineClamp');
   });
+
+  it('collectExtraIDL', () => {
+    const idl = 'interface Dummy {};';
+    mockFs({
+      'non-standard.idl': idl
+    });
+
+    assert.deepEqual(collectExtraIDL(), WebIDL2.parse(idl));
+
+    mockFs.restore();
+  });
+
+  it('buildIDL', () => {
+    const webref = require('../../webref');
+    assert.typeOf(buildIDL(webref), 'object');
+  }).timeout(5000);
 
   describe('flattenIDL', () => {
     const historicalIDL = WebIDL2.parse(`interface DOMError {};`);
@@ -423,7 +851,6 @@ describe('build', () => {
 
       expect(() => {
         flattenIDL(specIDLs, historicalIDL);
-      // eslint-disable-next-line max-len
       }).to.throw('Target DummyError not found for interface mixin DummyErrorHelper');
     });
 
@@ -437,7 +864,6 @@ describe('build', () => {
 
       expect(() => {
         flattenIDL(specIDLs, historicalIDL);
-      // eslint-disable-next-line max-len
       }).to.throw('Interface mixin DummyErrorHelper not found for target DummyError');
     });
 
@@ -455,7 +881,6 @@ describe('build', () => {
       };
       expect(() => {
         flattenIDL(specIDLs, historicalIDL);
-      // eslint-disable-next-line max-len
       }).to.throw('Operation overloading across partials/mixins for CSS.supports');
     });
 
@@ -512,17 +937,48 @@ describe('build', () => {
     });
   });
 
+  describe('getName', () => {
+    it('main', () => {
+      const node = {name: 'foobar'};
+      assert.equal(getName(node), 'foobar');
+    });
+
+    it('no name', () => {
+      const node = {};
+      assert.equal(getName(node), undefined);
+    });
+
+    it('console', () => {
+      const node = {name: 'console'};
+      assert.equal(getName(node), 'Console');
+    });
+  });
+
   describe('buildIDLTests', () => {
     it('interface with attribute', () => {
       const ast = WebIDL2.parse(`interface Attr { attribute any name; };`);
-      assert.deepEqual(buildIDLTests(ast), [
-        ['Attr', {property: 'Attr', scope: 'self'}, new Set(['Window']), [
-          ['name', [
-            {property: 'Attr', scope: 'self'},
-            {property: 'name', scope: 'Attr.prototype'}
-          ]]
-        ]
-        ]]);
+      assert.deepEqual(buildIDLTests(ast), {
+        'api.Attr': {
+          tests: [
+            {
+              code: '"Attr" in self',
+              prefix: ''
+            }
+          ],
+          category: 'api',
+          exposure: ['Window']
+        },
+        'api.Attr.name': {
+          tests: [
+            {
+              code: '"Attr" in self && "name" in Attr.prototype',
+              prefix: ''
+            }
+          ],
+          category: 'api',
+          exposure: ['Window']
+        }
+      });
     });
 
     it('interface with method', () => {
@@ -530,14 +986,28 @@ describe('build', () => {
           `interface Node {
              boolean contains(Node? other);
            };`);
-      assert.deepEqual(buildIDLTests(ast), [
-        ['Node', {property: 'Node', scope: 'self'}, new Set(['Window']), [
-          ['contains', [
-            {property: 'Node', scope: 'self'},
-            {property: 'contains', scope: 'Node.prototype'}
-          ]]
-        ]
-        ]]);
+      assert.deepEqual(buildIDLTests(ast), {
+        'api.Node': {
+          tests: [
+            {
+              code: '"Node" in self',
+              prefix: ''
+            }
+          ],
+          category: 'api',
+          exposure: ['Window']
+        },
+        'api.Node.contains': {
+          tests: [
+            {
+              code: '"Node" in self && "contains" in Node.prototype',
+              prefix: ''
+            }
+          ],
+          category: 'api',
+          exposure: ['Window']
+        }
+      });
     });
 
     it('interface with static method', () => {
@@ -545,15 +1015,29 @@ describe('build', () => {
           `interface MediaSource {
              static boolean isTypeSupported(DOMString type);
            };`);
-      assert.deepEqual(buildIDLTests(ast), [
-        ['MediaSource', {property: 'MediaSource', scope: 'self'},
-          new Set(['Window']), [
-            ['isTypeSupported', [
-              {property: 'MediaSource', scope: 'self'},
-              {property: 'isTypeSupported', scope: 'MediaSource'}
-            ]]
-          ]
-        ]]);
+
+      assert.deepEqual(buildIDLTests(ast), {
+        'api.MediaSource': {
+          tests: [
+            {
+              code: '"MediaSource" in self',
+              prefix: ''
+            }
+          ],
+          category: 'api',
+          exposure: ['Window']
+        },
+        'api.MediaSource.isTypeSupported': {
+          tests: [
+            {
+              code: '"MediaSource" in self && "isTypeSupported" in MediaSource',
+              prefix: ''
+            }
+          ],
+          category: 'api',
+          exposure: ['Window']
+        }
+      });
     });
 
     it('interface with const', () => {
@@ -561,14 +1045,29 @@ describe('build', () => {
           `interface Window {
              const boolean isWindow = true;
            };`);
-      assert.deepEqual(buildIDLTests(ast), [
-        ['Window', {property: 'Window', scope: 'self'}, new Set(['Window']), [
-          ['isWindow', [
-            {property: 'Window', scope: 'self'},
-            {property: 'isWindow', scope: 'Window'}
-          ]]
-        ]
-        ]]);
+
+      assert.deepEqual(buildIDLTests(ast), {
+        'api.Window': {
+          tests: [
+            {
+              code: '"Window" in self',
+              prefix: ''
+            }
+          ],
+          category: 'api',
+          exposure: ['Window']
+        },
+        'api.Window.isWindow': {
+          tests: [
+            {
+              code: '"Window" in self && "isWindow" in Window',
+              prefix: ''
+            }
+          ],
+          category: 'api',
+          exposure: ['Window']
+        }
+      });
     });
 
     it('interface with custom test', () => {
@@ -587,33 +1086,107 @@ describe('build', () => {
               GLintptr offset,
               GLsizei primcoun
             );
+          };
+
+          interface Document {
+            readonly attribute boolean loaded;
+            readonly attribute DOMString? charset;
           };`);
-      loadCustomTests({
-        api: {
-          ANGLE_instanced_arrays: {
-            // eslint-disable-next-line max-len
-            __base: 'var canvas = document.createElement(\'canvas\'); var gl = canvas.getContext(\'webgl\'); var instance = gl.getExtension(\'ANGLE_instanced_arrays\');',
-            __test: 'return !!instance;',
-            // eslint-disable-next-line max-len
-            drawArraysInstancedANGLE: 'return instance && \'drawArraysInstancedANGLE\' in instance;'
+      const {buildIDLTests} = proxyquire('../../build', {
+        './custom-tests.json': {
+          api: {
+            ANGLE_instanced_arrays: {
+              __base: 'var canvas = document.createElement(\'canvas\'); var gl = canvas.getContext(\'webgl\'); var instance = gl.getExtension(\'ANGLE_instanced_arrays\');',
+              __test: 'return !!instance;',
+              drawArraysInstancedANGLE: 'return true && instance && \'drawArraysInstancedANGLE\' in instance;'
+            },
+            Document: {
+              charset: 'return document.charset == "UTF-8";',
+              __additional: {
+                'loaded.loaded_is_boolean': 'return typeof document.loaded === "boolean";'
+              }
+            }
           }
-        },
-        css: {}
+        }
       });
-      assert.deepEqual(buildIDLTests(ast), [
-        // eslint-disable-next-line max-len
-        ['ANGLE_instanced_arrays', '(function() {var canvas = document.createElement(\'canvas\'); var gl = canvas.getContext(\'webgl\'); var instance = gl.getExtension(\'ANGLE_instanced_arrays\');return !!instance;})()', new Set(['Window']), [
-          // eslint-disable-next-line max-len
-          ['drawArraysInstancedANGLE', '(function() {var canvas = document.createElement(\'canvas\'); var gl = canvas.getContext(\'webgl\'); var instance = gl.getExtension(\'ANGLE_instanced_arrays\');return instance && \'drawArraysInstancedANGLE\' in instance;})()'],
-          // eslint-disable-next-line max-len
-          ['drawElementsInstancedANGLE', '(function() {var canvas = document.createElement(\'canvas\'); var gl = canvas.getContext(\'webgl\'); var instance = gl.getExtension(\'ANGLE_instanced_arrays\');return instance && \'drawElementsInstancedANGLE\' in instance;})()']
-        ]
-        ]]);
+
+      assert.deepEqual(buildIDLTests(ast), {
+        'api.ANGLE_instanced_arrays': {
+          tests: [
+            {
+              code: '(function() {var canvas = document.createElement(\'canvas\'); var gl = canvas.getContext(\'webgl\'); var instance = gl.getExtension(\'ANGLE_instanced_arrays\');return !!instance;})()',
+              prefix: ''
+            }
+          ],
+          category: 'api',
+          exposure: ['Window']
+        },
+        'api.ANGLE_instanced_arrays.drawArraysInstancedANGLE': {
+          tests: [
+            {
+              code: '(function() {var canvas = document.createElement(\'canvas\'); var gl = canvas.getContext(\'webgl\'); var instance = gl.getExtension(\'ANGLE_instanced_arrays\');return true && instance && \'drawArraysInstancedANGLE\' in instance;})()',
+              prefix: ''
+            }
+          ],
+          category: 'api',
+          exposure: ['Window']
+        },
+        'api.ANGLE_instanced_arrays.drawElementsInstancedANGLE': {
+          tests: [
+            {
+              code: '(function() {var canvas = document.createElement(\'canvas\'); var gl = canvas.getContext(\'webgl\'); var instance = gl.getExtension(\'ANGLE_instanced_arrays\');return instance && \'drawElementsInstancedANGLE\' in instance;})()',
+              prefix: ''
+            }
+          ],
+          category: 'api',
+          exposure: ['Window']
+        },
+        'api.Document': {
+          tests: [
+            {
+              code: '"Document" in self',
+              prefix: ''
+            }
+          ],
+          category: 'api',
+          exposure: ['Window']
+        },
+        'api.Document.charset': {
+          tests: [
+            {
+              code: '"Document" in self && (function() {return document.charset == "UTF-8";})()',
+              prefix: ''
+            }
+          ],
+          category: 'api',
+          exposure: ['Window']
+        },
+        'api.Document.loaded': {
+          tests: [
+            {
+              code: '"Document" in self && "loaded" in Document.prototype',
+              prefix: ''
+            }
+          ],
+          category: 'api',
+          exposure: ['Window']
+        },
+        'api.Document.loaded.loaded_is_boolean': {
+          tests: [
+            {
+              code: '(function() {return typeof document.loaded === "boolean";})()',
+              prefix: ''
+            }
+          ],
+          category: 'api',
+          exposure: ['Window']
+        }
+      });
     });
 
     it('interface with legacy namespace', () => {
       const ast = WebIDL2.parse(`[LegacyNamespace] interface Legacy {};`);
-      assert.deepEqual(buildIDLTests(ast), []);
+      assert.deepEqual(buildIDLTests(ast), {});
     });
 
     it('global interface', () => {
@@ -622,454 +1195,379 @@ describe('build', () => {
         attribute boolean isLoaded;
         const boolean active = true;
       };`);
-      assert.deepEqual(buildIDLTests(ast), [
-        [
-          'WindowOrWorkerGlobalScope',
-          {
-            property: 'WindowOrWorkerGlobalScope',
-            scope: 'self'
-          },
-          new Set(['Window']),
-          [
-            [
-              'active',
-              {
-                property: 'active',
-                scope: 'self'
-              }
-            ],
-            [
-              'isLoaded',
-              {
-                property: 'isLoaded',
-                scope: 'self'
-              }
-            ]
-          ]
-        ]
-      ]);
+
+      assert.deepEqual(buildIDLTests(ast), {
+        'api.WindowOrWorkerGlobalScope': {
+          tests: [
+            {
+              code: '"WindowOrWorkerGlobalScope" in self',
+              prefix: ''
+            }
+          ],
+          category: 'api',
+          exposure: ['Window']
+        },
+        'api.WindowOrWorkerGlobalScope.active': {
+          tests: [
+            {
+              code: '"active" in self',
+              prefix: ''
+            }
+          ],
+          category: 'api',
+          exposure: ['Window']
+        },
+        'api.WindowOrWorkerGlobalScope.isLoaded': {
+          tests: [
+            {
+              code: '"isLoaded" in self',
+              prefix: ''
+            }
+          ],
+          category: 'api',
+          exposure: ['Window']
+        }
+      });
     });
 
     it('interface with constructor operation', () => {
       const ast = WebIDL2.parse(`interface Number {
         constructor(optional any value);
       };`);
-      assert.deepEqual(buildIDLTests(ast), [
-        [
-          'Number',
-          {
-            property: 'Number',
-            scope: 'self'
-          },
-          new Set(['Window']),
-          [
-            [
-              'Number',
-              [
-                {
-                  property: 'Number',
-                  scope: 'self'
-                },
-                {
-                  property: 'constructor',
-                  scope: 'Number'
-                }
-              ]
-            ]
-          ]
-        ]
-      ]);
+
+      assert.deepEqual(buildIDLTests(ast), {
+        'api.Number': {
+          tests: [
+            {
+              code: '"Number" in self',
+              prefix: ''
+            }
+          ],
+          category: 'api',
+          exposure: ['Window']
+        },
+        'api.Number.Number': {
+          tests: [
+            {
+              code: '"Number" in self && bcd.testConstructor("Number")',
+              prefix: ''
+            }
+          ],
+          category: 'api',
+          exposure: ['Window']
+        }
+      });
     });
 
     it('interface with constructor in ExtAttr', () => {
       const ast = WebIDL2.parse(`[Constructor(optional any value)]
         interface Number {};`);
-      assert.deepEqual(buildIDLTests(ast), [
-        [
-          'Number',
-          {
-            property: 'Number',
-            scope: 'self'
-          },
-          new Set(['Window']),
-          [
-            [
-              'Number',
-              [
-                {
-                  property: 'Number',
-                  scope: 'self'
-                },
-                {
-                  property: 'constructor',
-                  scope: 'Number'
-                }
-              ]
-            ]
-          ]
-        ]
-      ]);
+      assert.deepEqual(buildIDLTests(ast), {
+        'api.Number': {
+          tests: [
+            {
+              code: '"Number" in self',
+              prefix: ''
+            }
+          ],
+          category: 'api',
+          exposure: ['Window']
+        },
+        'api.Number.Number': {
+          tests: [
+            {
+              code: '"Number" in self && bcd.testConstructor("Number")',
+              prefix: ''
+            }
+          ],
+          category: 'api',
+          exposure: ['Window']
+        }
+      });
     });
 
     it('iterable interface', () => {
       const ast = WebIDL2.parse(`interface DoubleList {
         iterable<double>;
       };`);
-      assert.deepEqual(buildIDLTests(ast), [
-        [
-          'DoubleList',
-          {
-            property: 'DoubleList',
-            scope: 'self'
-          },
-          new Set(['Window']),
-          [
-            [
-              '@@iterator',
-              [
-                {
-                  property: 'DoubleList',
-                  scope: 'self'
-                },
-                {
-                  property: 'Symbol',
-                  scope: 'self'
-                },
-                {
-                  property: 'iterator',
-                  scope: 'Symbol'
-                },
-                {
-                  property: 'Symbol.iterator',
-                  scope: 'DoubleList.prototype'
-                }
-              ]
-            ],
-            [
-              'entries',
-              [
-                {
-                  property: 'DoubleList',
-                  scope: 'self'
-                },
-                {
-                  property: 'entries',
-                  scope: 'DoubleList.prototype'
-                }
-              ]
-            ],
-            [
-              'forEach',
-              [
-                {
-                  property: 'DoubleList',
-                  scope: 'self'
-                },
-                {
-                  property: 'forEach',
-                  scope: 'DoubleList.prototype'
-                }
-              ]
-            ],
-            [
-              'keys',
-              [
-                {
-                  property: 'DoubleList',
-                  scope: 'self'
-                },
-                {
-                  property: 'keys',
-                  scope: 'DoubleList.prototype'
-                }
-              ]
-            ],
-            [
-              'values',
-              [
-                {
-                  property: 'DoubleList',
-                  scope: 'self'
-                },
-                {
-                  property: 'values',
-                  scope: 'DoubleList.prototype'
-                }
-              ]
-            ]
-          ]
-        ]
-      ]);
+      assert.deepEqual(buildIDLTests(ast), {
+        'api.DoubleList': {
+          tests: [
+            {
+              code: '"DoubleList" in self',
+              prefix: ''
+            }
+          ],
+          category: 'api',
+          exposure: ['Window']
+        },
+        'api.DoubleList.@@iterator': {
+          tests: [
+            {
+              code: '"DoubleList" in self && "Symbol" in self && "iterator" in Symbol && Symbol.iterator in DoubleList.prototype',
+              prefix: ''
+            }
+          ],
+          category: 'api',
+          exposure: ['Window']
+        },
+        'api.DoubleList.entries': {
+          tests: [
+            {
+              code: '"DoubleList" in self && "entries" in DoubleList.prototype',
+              prefix: ''
+            }
+          ],
+          category: 'api',
+          exposure: ['Window']
+        },
+        'api.DoubleList.forEach': {
+          tests: [
+            {
+              code: '"DoubleList" in self && "forEach" in DoubleList.prototype',
+              prefix: ''
+            }
+          ],
+          category: 'api',
+          exposure: ['Window']
+        },
+        'api.DoubleList.keys': {
+          tests: [
+            {
+              code: '"DoubleList" in self && "keys" in DoubleList.prototype',
+              prefix: ''
+            }
+          ],
+          category: 'api',
+          exposure: ['Window']
+        },
+        'api.DoubleList.values': {
+          tests: [
+            {
+              code: '"DoubleList" in self && "values" in DoubleList.prototype',
+              prefix: ''
+            }
+          ],
+          category: 'api',
+          exposure: ['Window']
+        }
+      });
     });
 
     it('maplike interface', () => {
       const ast = WebIDL2.parse(`interface DoubleMap {
         maplike<DOMString, double>;
       };`);
-      assert.deepEqual(buildIDLTests(ast), [
-        [
-          'DoubleMap',
-          {
-            property: 'DoubleMap',
-            scope: 'self'
-          },
-          new Set(['Window']),
-          [
-            [
-              'clear',
-              [
-                {
-                  property: 'DoubleMap',
-                  scope: 'self'
-                },
-                {
-                  property: 'clear',
-                  scope: 'DoubleMap.prototype'
-                }
-              ]
-            ],
-            [
-              'delete',
-              [
-                {
-                  property: 'DoubleMap',
-                  scope: 'self'
-                },
-                {
-                  property: 'delete',
-                  scope: 'DoubleMap.prototype'
-                }
-              ]
-            ],
-            [
-              'entries',
-              [
-                {
-                  property: 'DoubleMap',
-                  scope: 'self'
-                },
-                {
-                  property: 'entries',
-                  scope: 'DoubleMap.prototype'
-                }
-              ]
-            ],
-            [
-              'forEach',
-              [
-                {
-                  property: 'DoubleMap',
-                  scope: 'self'
-                },
-                {
-                  property: 'forEach',
-                  scope: 'DoubleMap.prototype'
-                }
-              ]
-            ],
-            [
-              'get',
-              [
-                {
-                  property: 'DoubleMap',
-                  scope: 'self'
-                },
-                {
-                  property: 'get',
-                  scope: 'DoubleMap.prototype'
-                }
-              ]
-            ],
-            [
-              'has',
-              [
-                {
-                  property: 'DoubleMap',
-                  scope: 'self'
-                },
-                {
-                  property: 'has',
-                  scope: 'DoubleMap.prototype'
-                }
-              ]
-            ],
-            [
-              'keys',
-              [
-                {
-                  property: 'DoubleMap',
-                  scope: 'self'
-                },
-                {
-                  property: 'keys',
-                  scope: 'DoubleMap.prototype'
-                }
-              ]
-            ],
-            [
-              'set',
-              [
-                {
-                  property: 'DoubleMap',
-                  scope: 'self'
-                },
-                {
-                  property: 'set',
-                  scope: 'DoubleMap.prototype'
-                }
-              ]
-            ],
-            [
-              'size',
-              [
-                {
-                  property: 'DoubleMap',
-                  scope: 'self'
-                },
-                {
-                  property: 'size',
-                  scope: 'DoubleMap.prototype'
-                }
-              ]
-            ],
-            [
-              'values',
-              [
-                {
-                  property: 'DoubleMap',
-                  scope: 'self'
-                },
-                {
-                  property: 'values',
-                  scope: 'DoubleMap.prototype'
-                }
-              ]
-            ]
-          ]
-        ]
-      ]);
+      assert.deepEqual(buildIDLTests(ast), {
+        'api.DoubleMap': {
+          tests: [
+            {
+              code: '"DoubleMap" in self',
+              prefix: ''
+            }
+          ],
+          category: 'api',
+          exposure: ['Window']
+        },
+        'api.DoubleMap.clear': {
+          tests: [
+            {
+              code: '"DoubleMap" in self && "clear" in DoubleMap.prototype',
+              prefix: ''
+            }
+          ],
+          category: 'api',
+          exposure: ['Window']
+        },
+        'api.DoubleMap.delete': {
+          tests: [
+            {
+              code: '"DoubleMap" in self && "delete" in DoubleMap.prototype',
+              prefix: ''
+            }
+          ],
+          category: 'api',
+          exposure: ['Window']
+        },
+        'api.DoubleMap.entries': {
+          tests: [
+            {
+              code: '"DoubleMap" in self && "entries" in DoubleMap.prototype',
+              prefix: ''
+            }
+          ],
+          category: 'api',
+          exposure: ['Window']
+        },
+        'api.DoubleMap.forEach': {
+          tests: [
+            {
+              code: '"DoubleMap" in self && "forEach" in DoubleMap.prototype',
+              prefix: ''
+            }
+          ],
+          category: 'api',
+          exposure: ['Window']
+        },
+        'api.DoubleMap.get': {
+          tests: [
+            {
+              code: '"DoubleMap" in self && "get" in DoubleMap.prototype',
+              prefix: ''
+            }
+          ],
+          category: 'api',
+          exposure: ['Window']
+        },
+        'api.DoubleMap.has': {
+          tests: [
+            {
+              code: '"DoubleMap" in self && "has" in DoubleMap.prototype',
+              prefix: ''
+            }
+          ],
+          category: 'api',
+          exposure: ['Window']
+        },
+        'api.DoubleMap.keys': {
+          tests: [
+            {
+              code: '"DoubleMap" in self && "keys" in DoubleMap.prototype',
+              prefix: ''
+            }
+          ],
+          category: 'api',
+          exposure: ['Window']
+        },
+        'api.DoubleMap.set': {
+          tests: [
+            {
+              code: '"DoubleMap" in self && "set" in DoubleMap.prototype',
+              prefix: ''
+            }
+          ],
+          category: 'api',
+          exposure: ['Window']
+        },
+        'api.DoubleMap.size': {
+          tests: [
+            {
+              code: '"DoubleMap" in self && "size" in DoubleMap.prototype',
+              prefix: ''
+            }
+          ],
+          category: 'api',
+          exposure: ['Window']
+        },
+        'api.DoubleMap.values': {
+          tests: [
+            {
+              code: '"DoubleMap" in self && "values" in DoubleMap.prototype',
+              prefix: ''
+            }
+          ],
+          category: 'api',
+          exposure: ['Window']
+        }
+      });
     });
 
     it('setlike interface', () => {
       const ast = WebIDL2.parse(`interface DoubleSet {
         setlike<double>;
       };`);
-      assert.deepEqual(buildIDLTests(ast), [
-        [
-          'DoubleSet',
-          {
-            property: 'DoubleSet',
-            scope: 'self'
-          },
-          new Set(['Window']),
-          [
-            [
-              'add',
-              [
-                {
-                  property: 'DoubleSet',
-                  scope: 'self'
-                },
-                {
-                  property: 'add',
-                  scope: 'DoubleSet.prototype'
-                }
-              ]
-            ],
-            [
-              'clear',
-              [
-                {
-                  property: 'DoubleSet',
-                  scope: 'self'
-                },
-                {
-                  property: 'clear',
-                  scope: 'DoubleSet.prototype'
-                }
-              ]
-            ],
-            [
-              'delete',
-              [
-                {
-                  property: 'DoubleSet',
-                  scope: 'self'
-                },
-                {
-                  property: 'delete',
-                  scope: 'DoubleSet.prototype'
-                }
-              ]
-            ],
-            [
-              'entries',
-              [
-                {
-                  property: 'DoubleSet',
-                  scope: 'self'
-                },
-                {
-                  property: 'entries',
-                  scope: 'DoubleSet.prototype'
-                }
-              ]
-            ],
-            [
-              'has',
-              [
-                {
-                  property: 'DoubleSet',
-                  scope: 'self'
-                },
-                {
-                  property: 'has',
-                  scope: 'DoubleSet.prototype'
-                }
-              ]
-            ],
-            [
-              'keys',
-              [
-                {
-                  property: 'DoubleSet',
-                  scope: 'self'
-                },
-                {
-                  property: 'keys',
-                  scope: 'DoubleSet.prototype'
-                }
-              ]
-            ],
-            [
-              'size',
-              [
-                {
-                  property: 'DoubleSet',
-                  scope: 'self'
-                },
-                {
-                  property: 'size',
-                  scope: 'DoubleSet.prototype'
-                }
-              ]
-            ],
-            [
-              'values',
-              [
-                {
-                  property: 'DoubleSet',
-                  scope: 'self'
-                },
-                {
-                  property: 'values',
-                  scope: 'DoubleSet.prototype'
-                }
-              ]
-            ]
-          ]
-        ]
-      ]);
+      assert.deepEqual(buildIDLTests(ast), {
+        'api.DoubleSet': {
+          tests: [
+            {
+              code: '"DoubleSet" in self',
+              prefix: ''
+            }
+          ],
+          category: 'api',
+          exposure: ['Window']
+        },
+        'api.DoubleSet.add': {
+          tests: [
+            {
+              code: '"DoubleSet" in self && "add" in DoubleSet.prototype',
+              prefix: ''
+            }
+          ],
+          category: 'api',
+          exposure: ['Window']
+        },
+        'api.DoubleSet.clear': {
+          tests: [
+            {
+              code: '"DoubleSet" in self && "clear" in DoubleSet.prototype',
+              prefix: ''
+            }
+          ],
+          category: 'api',
+          exposure: ['Window']
+        },
+        'api.DoubleSet.delete': {
+          tests: [
+            {
+              code: '"DoubleSet" in self && "delete" in DoubleSet.prototype',
+              prefix: ''
+            }
+          ],
+          category: 'api',
+          exposure: ['Window']
+        },
+        'api.DoubleSet.entries': {
+          tests: [
+            {
+              code: '"DoubleSet" in self && "entries" in DoubleSet.prototype',
+              prefix: ''
+            }
+          ],
+          category: 'api',
+          exposure: ['Window']
+        },
+        'api.DoubleSet.has': {
+          tests: [
+            {
+              code: '"DoubleSet" in self && "has" in DoubleSet.prototype',
+              prefix: ''
+            }
+          ],
+          category: 'api',
+          exposure: ['Window']
+        },
+        'api.DoubleSet.keys': {
+          tests: [
+            {
+              code: '"DoubleSet" in self && "keys" in DoubleSet.prototype',
+              prefix: ''
+            }
+          ],
+          category: 'api',
+          exposure: ['Window']
+        },
+        'api.DoubleSet.size': {
+          tests: [
+            {
+              code: '"DoubleSet" in self && "size" in DoubleSet.prototype',
+              prefix: ''
+            }
+          ],
+          category: 'api',
+          exposure: ['Window']
+        },
+        'api.DoubleSet.values': {
+          tests: [
+            {
+              code: '"DoubleSet" in self && "values" in DoubleSet.prototype',
+              prefix: ''
+            }
+          ],
+          category: 'api',
+          exposure: ['Window']
+        }
+      });
     });
 
     it('interface with getter/setter', () => {
@@ -1077,47 +1575,69 @@ describe('build', () => {
         getter GetMe (unsigned long index);
         setter void (GetMe data, optional unsigned long index);
       };`);
-      assert.deepEqual(buildIDLTests(ast), [
-        [
-          'GetMe',
-          {
-            property: 'GetMe',
-            scope: 'self'
-          },
-          new Set(['Window']),
-          []
-        ]
-      ]);
+      assert.deepEqual(buildIDLTests(ast), {
+        'api.GetMe': {
+          tests: [
+            {
+              code: '"GetMe" in self',
+              prefix: ''
+            }
+          ],
+          category: 'api',
+          exposure: ['Window']
+        }
+      });
     });
 
-    it('varied scopes', () => {
+    it('varied exposure', () => {
       const ast = WebIDL2.parse(`
         [Exposed=Window] interface Worker {};
         [Exposed=Worker] interface WorkerSync {};
         [Exposed=(Window,Worker)] interface MessageChannel {};
         namespace CSS {};
       `);
-      assert.deepEqual(buildIDLTests(ast), [
-        ['CSS', {property: 'CSS', scope: 'self'}, new Set(['Window']), []],
-        [
-          'MessageChannel',
-          {property: 'MessageChannel', scope: 'self'},
-          new Set(['Window', 'Worker']),
-          []
-        ],
-        [
-          'Worker',
-          {property: 'Worker', scope: 'self'},
-          new Set(['Window']),
-          []
-        ],
-        [
-          'WorkerSync',
-          {property: 'WorkerSync', scope: 'self'},
-          new Set(['Worker']),
-          []
-        ]
-      ]);
+      assert.deepEqual(buildIDLTests(ast), {
+        'api.CSS': {
+          tests: [
+            {
+              code: '"CSS" in self',
+              prefix: ''
+            }
+          ],
+          category: 'api',
+          exposure: ['Window']
+        },
+        'api.MessageChannel': {
+          tests: [
+            {
+              code: '"MessageChannel" in self',
+              prefix: ''
+            }
+          ],
+          category: 'api',
+          exposure: ['Window', 'Worker']
+        },
+        'api.Worker': {
+          tests: [
+            {
+              code: '"Worker" in self',
+              prefix: ''
+            }
+          ],
+          category: 'api',
+          exposure: ['Window']
+        },
+        'api.WorkerSync': {
+          tests: [
+            {
+              code: '"WorkerSync" in self',
+              prefix: ''
+            }
+          ],
+          category: 'api',
+          exposure: ['Worker']
+        }
+      });
     });
 
     it('operator variations', () => {
@@ -1128,19 +1648,28 @@ describe('build', () => {
           void disconnect (AudioNode destinationNode);
         };
       `);
-      assert.deepEqual(buildIDLTests(ast), [
-        [
-          'AudioNode',
-          {property: 'AudioNode', scope: 'self'},
-          new Set(['Window']),
-          [
-            ['disconnect', [
-              {property: 'AudioNode', scope: 'self'},
-              {property: 'disconnect', scope: 'AudioNode.prototype'}
-            ]]
-          ]
-        ]
-      ]);
+      assert.deepEqual(buildIDLTests(ast), {
+        'api.AudioNode': {
+          tests: [
+            {
+              code: '"AudioNode" in self',
+              prefix: ''
+            }
+          ],
+          category: 'api',
+          exposure: ['Window']
+        },
+        'api.AudioNode.disconnect': {
+          tests: [
+            {
+              code: '"AudioNode" in self && "disconnect" in AudioNode.prototype',
+              prefix: ''
+            }
+          ],
+          category: 'api',
+          exposure: ['Window']
+        }
+      });
     });
 
     it('namespace with attribute', () => {
@@ -1148,14 +1677,28 @@ describe('build', () => {
           `namespace CSS {
              readonly attribute any paintWorklet;
            };`);
-      assert.deepEqual(buildIDLTests(ast), [
-        ['CSS', {property: 'CSS', scope: 'self'}, new Set(['Window']), [
-          ['paintWorklet', [
-            {property: 'CSS', scope: 'self'},
-            {property: 'paintWorklet', scope: 'CSS'}
-          ]]
-        ]
-        ]]);
+      assert.deepEqual(buildIDLTests(ast), {
+        'api.CSS': {
+          tests: [
+            {
+              code: '"CSS" in self',
+              prefix: ''
+            }
+          ],
+          category: 'api',
+          exposure: ['Window']
+        },
+        'api.CSS.paintWorklet': {
+          tests: [
+            {
+              code: '"CSS" in self && "paintWorklet" in CSS',
+              prefix: ''
+            }
+          ],
+          category: 'api',
+          exposure: ['Window']
+        }
+      });
     });
 
     it('namespace with method', () => {
@@ -1163,14 +1706,28 @@ describe('build', () => {
           `namespace CSS {
              boolean supports(CSSOMString property, CSSOMString value);
            };`);
-      assert.deepEqual(buildIDLTests(ast), [
-        ['CSS', {property: 'CSS', scope: 'self'}, new Set(['Window']), [
-          ['supports', [
-            {property: 'CSS', scope: 'self'},
-            {property: 'supports', scope: 'CSS'}
-          ]]
-        ]
-        ]]);
+      assert.deepEqual(buildIDLTests(ast), {
+        'api.CSS': {
+          tests: [
+            {
+              code: '"CSS" in self',
+              prefix: ''
+            }
+          ],
+          category: 'api',
+          exposure: ['Window']
+        },
+        'api.CSS.supports': {
+          tests: [
+            {
+              code: '"CSS" in self && "supports" in CSS',
+              prefix: ''
+            }
+          ],
+          category: 'api',
+          exposure: ['Window']
+        }
+      });
     });
 
     it('namespace with custom test', () => {
@@ -1178,28 +1735,41 @@ describe('build', () => {
           `namespace CSS {
              readonly attribute any paintWorklet;
            };`);
-      loadCustomTests({
-        api: {
-          CSS: {
-            __base: 'var css = CSS;',
-            __test: 'return !!css;',
-            paintWorklet: 'return css && \'paintWorklet\' in css;'
+
+      const {buildIDLTests} = proxyquire('../../build', {
+        './custom-tests.json': {
+          api: {
+            CSS: {
+              __base: 'var css = CSS;',
+              __test: 'return !!css;',
+              paintWorklet: 'return css && \'paintWorklet\' in css;'
+            }
           }
-        },
-        css: {}
+        }
       });
-      assert.deepEqual(buildIDLTests(ast), [
-        // eslint-disable-next-line max-len
-        [
-          'CSS',
-          '(function() {var css = CSS;return !!css;})()',
-          new Set(['Window']),
-          [
-            // eslint-disable-next-line max-len
-            ['paintWorklet', '(function() {var css = CSS;return css && \'paintWorklet\' in css;})()']
-          ]
-        ]
-      ]);
+
+      assert.deepEqual(buildIDLTests(ast), {
+        'api.CSS': {
+          tests: [
+            {
+              code: '(function() {var css = CSS;return !!css;})()',
+              prefix: ''
+            }
+          ],
+          category: 'api',
+          exposure: ['Window']
+        },
+        'api.CSS.paintWorklet': {
+          tests: [
+            {
+              code: '(function() {var css = CSS;return css && \'paintWorklet\' in css;})()',
+              prefix: ''
+            }
+          ],
+          category: 'api',
+          exposure: ['Window']
+        }
+      });
     });
 
     it('dictionary', () => {
@@ -1208,23 +1778,38 @@ describe('build', () => {
               object? prototype = null;
               DOMString? extends = null;
            };`);
-      assert.deepEqual(buildIDLTests(ast), [
-        [
-          'ElementRegistrationOptions',
-          {property: 'ElementRegistrationOptions', scope: 'self'},
-          new Set(['Window']),
-          [
-            ['extends', [
-              {property: 'ElementRegistrationOptions', scope: 'self'},
-              {property: 'extends', scope: 'ElementRegistrationOptions'}
-            ]],
-            ['prototype', [
-              {property: 'ElementRegistrationOptions', scope: 'self'},
-              {property: 'prototype', scope: 'ElementRegistrationOptions'}
-            ]]
-          ]
-        ]
-      ]);
+      assert.deepEqual(buildIDLTests(ast), {
+        'api.ElementRegistrationOptions': {
+          tests: [
+            {
+              code: '"ElementRegistrationOptions" in self',
+              prefix: ''
+            }
+          ],
+          category: 'api',
+          exposure: ['Window']
+        },
+        'api.ElementRegistrationOptions.extends': {
+          tests: [
+            {
+              code: '"ElementRegistrationOptions" in self && "extends" in ElementRegistrationOptions',
+              prefix: ''
+            }
+          ],
+          category: 'api',
+          exposure: ['Window']
+        },
+        'api.ElementRegistrationOptions.prototype': {
+          tests: [
+            {
+              code: '"ElementRegistrationOptions" in self && "prototype" in ElementRegistrationOptions',
+              prefix: ''
+            }
+          ],
+          category: 'api',
+          exposure: ['Window']
+        }
+      });
     });
 
     it('dictionary with custom test', () => {
@@ -1233,26 +1818,48 @@ describe('build', () => {
               object? prototype = null;
               DOMString? extends = null;
            };`);
-      loadCustomTests({
-        api: {
-          ElementRegistrationOptions: {
-            __base: 'var ers = ElementRegistrationOptions;',
-            __test: 'return !!ers;',
-            extends: 'return ers && \'extends\' in ers;',
-            prototype: 'return ers && \'prototype\' in ers;'
+      const {buildIDLTests} = proxyquire('../../build', {
+        './custom-tests.json': {
+          api: {
+            ElementRegistrationOptions: {
+              __base: 'var instance = ElementRegistrationOptions;'
+            }
           }
-        },
-        css: {}
+        }
       });
-      assert.deepEqual(buildIDLTests(ast), [
-        // eslint-disable-next-line max-len
-        ['ElementRegistrationOptions', '(function() {var ers = ElementRegistrationOptions;return !!ers;})()', new Set(['Window']), [
-          // eslint-disable-next-line max-len
-          ['extends', '(function() {var ers = ElementRegistrationOptions;return ers && \'extends\' in ers;})()'],
-          // eslint-disable-next-line max-len
-          ['prototype', '(function() {var ers = ElementRegistrationOptions;return ers && \'prototype\' in ers;})()']
-        ]
-        ]]);
+
+      assert.deepEqual(buildIDLTests(ast), {
+        'api.ElementRegistrationOptions': {
+          tests: [
+            {
+              code: '(function() {var instance = ElementRegistrationOptions;return !!instance;})()',
+              prefix: ''
+            }
+          ],
+          category: 'api',
+          exposure: ['Window']
+        },
+        'api.ElementRegistrationOptions.extends': {
+          tests: [
+            {
+              code: '(function() {var instance = ElementRegistrationOptions;return instance && \'extends\' in instance;})()',
+              prefix: ''
+            }
+          ],
+          category: 'api',
+          exposure: ['Window']
+        },
+        'api.ElementRegistrationOptions.prototype': {
+          tests: [
+            {
+              code: '(function() {var instance = ElementRegistrationOptions;return instance && \'prototype\' in instance;})()',
+              prefix: ''
+            }
+          ],
+          category: 'api',
+          exposure: ['Window']
+        }
+      });
     });
   });
 
@@ -1321,6 +1928,79 @@ describe('build', () => {
       expect(() => {
         validateIDL(ast);
       }).to.throw();
+    });
+  });
+
+  it('buildCSS', () => {
+    const bcd = {
+      css: {
+        properties: {
+          appearance: {
+            __compat: {
+              support: {}
+            }
+          }
+        }
+      }
+    };
+
+    const webref = {
+      css: {
+        'css-fonts': {
+          properties: {
+            'font-family': {},
+            'font-weight': {}
+          }
+        },
+        'css-grid': {
+          properties: {
+            grid: {}
+          }
+        }
+      }
+    };
+
+    assert.deepEqual(buildCSS(webref, bcd), {
+      'css.properties.appearance': {
+        tests: [
+          {
+            code: '"appearance" in document.body.style || CSS.supports("appearance", "inherit")',
+            prefix: ''
+          }
+        ],
+        category: 'css',
+        exposure: ['Window']
+      },
+      'css.properties.font-family': {
+        tests: [
+          {
+            code: '"fontFamily" in document.body.style || CSS.supports("font-family", "inherit")',
+            prefix: ''
+          }
+        ],
+        category: 'css',
+        exposure: ['Window']
+      },
+      'css.properties.font-weight': {
+        tests: [
+          {
+            code: '"fontWeight" in document.body.style || CSS.supports("font-weight", "inherit")',
+            prefix: ''
+          }
+        ],
+        category: 'css',
+        exposure: ['Window']
+      },
+      'css.properties.grid': {
+        tests: [
+          {
+            code: '"grid" in document.body.style || CSS.supports("grid", "inherit")',
+            prefix: ''
+          }
+        ],
+        category: 'css',
+        exposure: ['Window']
+      }
     });
   });
 });

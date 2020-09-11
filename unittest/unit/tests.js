@@ -17,76 +17,93 @@
 const assert = require('assert');
 const Tests = require('../../tests');
 
-const MANIFEST = {
-  items: [{
-    pathname: '/a/test.html',
-    protocol: 'http'
-  }, {
-    pathname: '/b/test.html',
-    protocol: 'http'
-  }, {
-    pathname: '/b/test.html',
-    protocol: 'https'
-  }, {
-    pathname: '/c/test.html',
-    protocol: 'https'
-  }]
+const testDatabase = {
+  'api.AbortController': {
+    tests: [{code: '"AbortController" in self', prefix: ''}],
+    category: 'api',
+    exposure: ['Window', 'Worker', 'ServiceWorker']
+  },
+  'api.AbortController.signal': {
+    tests: [{code: '"AbortController" in self && "signal" in AbortController.prototype', prefix: ''}],
+    category: 'api',
+    exposure: ['Window', 'Worker']
+  },
+  'css.properties.font-family': {
+    tests: [{code: '"fontFamily" in document.body.style || CSS.supports("font-family", "inherit")', prefix: ''}],
+    category: 'css',
+    exposure: ['Window']
+  },
+  'javascript.builtins.array': {
+    tests: [{code: '[1, 2, 3]', prefix: ''}],
+    category: 'javascript',
+    exposure: ['JavaScript']
+  }
 };
 
 describe('Tests', () => {
   const tests = new Tests({
-    manifest: MANIFEST,
+    tests: testDatabase,
     host: 'host.test'
   });
 
-  it('list all tests', () => {
-    assert.deepEqual(tests.list(), [
-      'http://host.test/a/test.html',
-      'http://host.test/b/test.html',
-      'https://host.test/b/test.html',
-      'https://host.test/c/test.html'
+  it('buildEndpoints', () => {
+    const expectedEndpoints = {
+      '': [
+        'api.AbortController',
+        'api.AbortController.signal',
+        'css.properties.font-family',
+        'javascript.builtins.array'
+      ],
+      api: ['api.AbortController', 'api.AbortController.signal'],
+      'api.AbortController': [
+        'api.AbortController',
+        'api.AbortController.signal'
+      ],
+      'api.AbortController.signal': ['api.AbortController.signal'],
+      css: ['css.properties.font-family'],
+      'css.properties': ['css.properties.font-family'],
+      'css.properties.font-family': ['css.properties.font-family'],
+      javascript: ['javascript.builtins.array'],
+      'javascript.builtins': ['javascript.builtins.array'],
+      'javascript.builtins.array': ['javascript.builtins.array']
+    };
+
+    const endpoints = tests.buildEndpoints(tests);
+
+    assert.deepEqual(endpoints, expectedEndpoints);
+  });
+
+  it('listEndpoints', () => {
+    assert.deepEqual(tests.listEndpoints(), [
+      '',
+      'api',
+      'api.AbortController',
+      'api.AbortController.signal',
+      'css',
+      'css.properties',
+      'css.properties.font-family',
+      'javascript',
+      'javascript.builtins',
+      'javascript.builtins.array'
     ]);
   });
 
-  it('list first test', () => {
-    assert.deepEqual(tests.list(undefined, 1), [
-      'http://host.test/a/test.html'
-    ]);
-  });
-
-  it('list middle two tests', () => {
-    assert.deepEqual(tests.list('http://host.test/a/test.html', 2), [
-      'http://host.test/b/test.html',
-      'https://host.test/b/test.html'
-    ]);
-  });
-
-  it('list last two tests', () => {
-    assert.deepEqual(tests.list('http://host.test/b/test.html'), [
-      'https://host.test/b/test.html',
-      'https://host.test/c/test.html'
-    ]);
-  });
-
-  it('list after last test', () => {
-    assert.deepEqual(tests.list('https://host.test/c/test.html'), []);
-  });
-
-  it('list after non-existent test', () => {
-    assert.throws(() => {
-      tests.list('https://host.test/not/a/test.html');
-    }, Error);
-  });
-
-  it('list HTTP-only tests', () => {
-    const httpTests = new Tests({
-      manifest: MANIFEST,
-      host: 'host.test',
-      httpOnly: true
+  describe('getTests', () => {
+    it('individual endpoint', () => {
+      assert.deepEqual(tests.getTests('api.AbortController'), [
+        {ident: 'api.AbortController', tests: [{code: '"AbortController" in self', prefix: ''}], exposure: 'Window'},
+        {ident: 'api.AbortController', tests: [{code: '"AbortController" in self', prefix: ''}], exposure: 'Worker'},
+        {ident: 'api.AbortController', tests: [{code: '"AbortController" in self', prefix: ''}], exposure: 'ServiceWorker'},
+        {ident: 'api.AbortController.signal', tests: [{code: '"AbortController" in self && "signal" in AbortController.prototype', prefix: ''}], exposure: 'Window'},
+        {ident: 'api.AbortController.signal', tests: [{code: '"AbortController" in self && "signal" in AbortController.prototype', prefix: ''}], exposure: 'Worker'}
+      ]);
     });
-    assert.deepEqual(httpTests.list(), [
-      'http://host.test/a/test.html',
-      'http://host.test/b/test.html'
-    ]);
+
+    it('limited scope', () => {
+      assert.deepEqual(tests.getTests('api.AbortController', 'Window'), [
+        {ident: 'api.AbortController', tests: [{code: '"AbortController" in self', prefix: ''}], exposure: 'Window'},
+        {ident: 'api.AbortController.signal', tests: [{code: '"AbortController" in self && "signal" in AbortController.prototype', prefix: ''}], exposure: 'Window'}
+      ]);
+    });
   });
 });

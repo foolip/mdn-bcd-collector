@@ -26,46 +26,44 @@ var assert = chai.assert;
 
 describe('harness.js', function() {
   it('no tests', function(done) {
-    bcd.run('Window', function(results) {
+    bcd.run(function(results) {
       assert.isEmpty(results);
       done();
     });
   });
 
   it('return true', function(done) {
-    bcd.addTest('name', 'true', 'test');
-    bcd.run('Window', function(results) {
+    bcd.addTest('name', [{code: 'true'}], 'Window');
+    bcd.run(function(results) {
       assert.deepStrictEqual(results, [{
         name: 'name',
         result: true,
-        info: {code: 'true', scope: 'test'},
-        prefix: ''
+        info: {code: 'true', exposure: 'Window'}
       }]);
       done();
     });
   });
 
   it('return false', function(done) {
-    bcd.addTest('name', 'false', 'test');
-    bcd.run('Window', function(results) {
+    bcd.addTest('name', [{code: 'false'}], 'Window');
+    bcd.run(function(results) {
       assert.deepStrictEqual(results, [{
         name: 'name',
         result: false,
-        info: {code: 'false', scope: 'test'}
+        info: {code: 'false', exposure: 'Window'}
       }]);
       done();
     });
   });
 
   it('return null', function(done) {
-    bcd.addTest('name', 'null', 'test');
-    bcd.run('Window', function(results) {
+    bcd.addTest('name', [{code: 'null'}], 'Window');
+    bcd.run(function(results) {
       assert.deepStrictEqual(results, [{
         name: 'name',
         result: null,
         message: 'returned null',
-        info: {code: 'null', scope: 'test'},
-        prefix: ''
+        info: {code: 'null', exposure: 'Window'}
       }]);
       done();
     });
@@ -75,70 +73,66 @@ describe('harness.js', function() {
     if (typeof Symbol === 'undefined') {
       this.skip();
     }
-    bcd.addTest('name', 'Symbol(\'bar\')', 'test');
-    bcd.run('Window', function(results) {
+    bcd.addTest('name', [{code: 'Symbol(\'bar\')'}], 'Window');
+    bcd.run(function(results) {
       assert.deepStrictEqual(results, [{
         name: 'name',
         result: null,
         message: 'returned Symbol(bar)',
-        info: {code: 'Symbol(\'bar\')', scope: 'test'},
-        prefix: ''
+        info: {code: 'Symbol(\'bar\')', exposure: 'Window'}
       }]);
       done();
     });
   });
 
   it('return undefined', function(done) {
-    bcd.addTest('name', 'undefined', 'test');
-    bcd.run('Window', function(results) {
+    bcd.addTest('name', [{code: 'undefined'}], 'Window');
+    bcd.run(function(results) {
       assert.deepStrictEqual(results, [{
         name: 'name',
         result: null,
         message: 'returned undefined',
-        info: {code: 'undefined', scope: 'test'},
-        prefix: ''
+        info: {code: 'undefined', exposure: 'Window'}
       }]);
       done();
     });
   });
 
   it('throw error', function(done) {
-    bcd.addTest('name', 'throw new Error(\'something went wrong\')', 'test');
-    bcd.run('Window', function(results) {
+    bcd.addTest('name', [{code: 'throw new Error(\'something went wrong\')'}], 'Window');
+    bcd.run(function(results) {
       assert.deepStrictEqual(results, [{
         name: 'name',
         result: null,
         message: 'threw Error: something went wrong',
-        info: {code: 'throw new Error(\'something went wrong\')', scope: 'test'}
+        info: {code: 'throw new Error(\'something went wrong\')', exposure: 'Window'}
       }]);
       done();
     });
   });
 
   it('include info', function(done) {
-    var info = {'extra': 'stuff'};
-    bcd.addTest('ctx', 'true', 'test', info);
-    bcd.run('Window', function(results) {
+    bcd.addTest('ctx', [{code: 'true'}], 'Window', {'extra': 'stuff'});
+    bcd.run(function(results) {
       assert.deepStrictEqual(results[0].info, {
-        extra: 'stuff', code: 'true', scope: 'test'
+        extra: 'stuff', code: 'true', exposure: 'Window'
       });
       done();
     });
   });
 
   it('two tests', function(done) {
-    bcd.addTest('first', 'true', 'test', {a: 1});
-    bcd.addTest('second', 'false', 'test', {b: 2});
-    bcd.run('Window', function(results) {
+    bcd.addTest('first', [{code: 'true'}], 'Window', {a: 1});
+    bcd.addTest('second', [{code: 'false'}], 'Window', {b: 2});
+    bcd.run(function(results) {
       assert.deepEqual(results, [{
         name: 'first',
         result: true,
-        info: {code: 'true', scope: 'test', a: 1},
-        prefix: ''
+        info: {code: 'true', exposure: 'Window', a: 1}
       }, {
         name: 'second',
         result: false,
-        info: {code: 'false', scope: 'test', b: 2}
+        info: {code: 'false', exposure: 'Window', b: 2}
       }]);
       done();
     });

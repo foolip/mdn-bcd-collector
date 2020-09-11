@@ -29,6 +29,7 @@ const loadTextFiles = (relativeDir, extension, parse) => {
   files.sort();
   const results = {};
   for (const file of files) {
+    /* istanbul ignore next */
     if (path.extname(file) !== extension) {
       continue;
     }

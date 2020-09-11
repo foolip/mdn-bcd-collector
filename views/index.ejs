@@ -1,0 +1,64 @@
+<%- contentFor('body') %>
+<h1>mdn-bcd-collector</h1>
+<p>Data collection service for <a href="https://github.com/mdn/browser-compat-data">mdn/browser-compat-data</a>. This website provides automatic feature detection for Web APIs and CSS properties, to assist in obtaining data for the BCD project.</p>
+
+<div>
+  <button id="start">Run</button>
+  <datalist id="tests">
+    <% tests.forEach(function(test) { %>
+      <option value="<%- test %>"></option>
+    <% }); %>
+  </datalist>
+  <input id="testSelection" list="tests" placeholder="All Tests" size="40" />
+  <br /><br />
+  <div id="limitExposureBox">
+    <label for="limitExposure">Limit Exposure:</label>
+    <select id="limitExposure">
+      <option value="">All Global Exposures</option>
+      <option value="?exposure=Window">Window</option>
+      <option value="?exposure=Worker">Worker</option>
+      <option value="?exposure=ServiceWorker">Service Worker</option>
+    </select>
+  </div>
+</div>
+
+<p>Note: this website is in beta; not all feature detection is accurate yet. If you find any errors, please file an issue on the GitHub page.</p>
+<p>Known caveats:</p>
+<ul>
+  <li>Detection for features under alternative names is not yet supported</li>
+  <li>In older browsers, some attributes aren't initialized in the API prototypes, resulting in false negatives (see <a href="https://github.com/foolip/mdn-bcd-collector/issues/406">#406</a>)</li>
+  <li>Some APIs are accessed through other APIs and aren't exposed on their own; custom tests have not been written for them all</li>
+</ul>
+
+<p><a href="https://github.com/foolip/mdn-bcd-collector">Source on GitHub</a></p>
+
+<script>
+  function main() {
+    var button = document.getElementById('start');
+    var testSelection = document.getElementById('testSelection');
+    var limitExposure = document.getElementById('limitExposure');
+    var limitExposureBox = document.getElementById('limitExposureBox');
+
+    testSelection.onchange = function() {
+      if (testSelection.value == '' || testSelection.value.indexOf('api') == 0) {
+        limitExposureBox.style.display = "block";
+      } else {
+        limitExposureBox.style.display = "block";
+      }
+    }
+
+    button.onclick = function() {
+      var newUrl = '/tests/' + testSelection.value.replace(/\./g, '/');
+      if (testSelection.value) {
+        newUrl = window.location.protocol + '//' + window.location.host + newUrl;
+        if (testSelection.value == '' || testSelection.value.indexOf('api') == 0) {
+          newUrl += limitExposure.options[limitExposure.selectedIndex].value;
+        }
+      }
+
+      if (newUrl) window.location = newUrl;
+    }
+  }
+
+  window.onload = main;
+</script>

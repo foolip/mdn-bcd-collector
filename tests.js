@@ -16,45 +16,55 @@
 
 class Tests {
   constructor(options) {
-    this.items = options.manifest.items
-        .filter((item) => !options.httpOnly || item.protocol === 'http');
-    this.individualItems = options.manifest.individualItems;
+    this.tests = options.tests;
+    this.endpoints = this.buildEndpoints();
     this.host = options.host;
+    this.httpOnly = options.httpOnly;
   }
 
-  list(after, limit) {
-    let begin; let end;
-    if (after) {
-      const afterURL = new URL(after);
-      const afterIndex = this.items.findIndex((item) => {
-        const itemURL = new URL(`${item.protocol}://${this.host}${item.pathname}`);
-        return itemURL.pathname === afterURL.pathname &&
-            itemURL.protocol === afterURL.protocol;
-      });
+  buildEndpoints() {
+    const endpoints = {
+      '': []
+    };
 
-      if (afterIndex === -1) {
-        throw new Error(`${after} not found in test manifest`);
-      }
+    for (const ident of Object.keys(this.tests)) {
+      endpoints[''].push(ident);
 
-      begin = afterIndex + 1;
-      if (limit) {
-        end = afterIndex + 1 + limit;
-      }
-    } else {
-      begin = 0;
-      if (limit) {
-        end = limit;
+      let endpoint = '';
+      for (const part of ident.split('.')) {
+        endpoint += (endpoint ? '.' : '') + part;
+
+        if (!(endpoint in endpoints)) {
+          endpoints[endpoint] = [];
+        }
+
+        if (!endpoints[endpoint].includes(ident)) {
+          endpoints[endpoint].push(ident);
+        }
       }
     }
 
-    return this.items.slice(begin, end).map((item) => {
-      return `${item.protocol}://${this.host}${item.pathname}`;
-    });
+    return endpoints;
   }
 
-  listIndividual() {
-    return Object.entries(this.individualItems)
-        .sort((a, b) => (a[0].localeCompare(b[0])));
+  listEndpoints() {
+    return Object.keys(this.endpoints);
+  }
+
+  getTests(endpoint, testExposure) {
+    const idents = this.endpoints[endpoint];
+
+    const tests = [];
+    for (const ident of idents) {
+      const test = this.tests[ident];
+      for (const exposure of test.exposure) {
+        if (!testExposure || exposure == testExposure) {
+          tests.push({ident: ident, tests: test.tests, exposure: exposure});
+        }
+      }
+    }
+
+    return tests;
   }
 }
 

@@ -23,7 +23,6 @@ const appversion = require('../../package.json').version;
 
 const REPORT = {
   results: {},
-  // eslint-disable-next-line max-len
   userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.0 Safari/605.1.15'
 };
 
@@ -58,7 +57,6 @@ describe('GitHub export', () => {
 
     mock.git.expects('createRef').once().withArgs({
       owner: 'foolip',
-      // eslint-disable-next-line max-len
       ref: `refs/heads/collector/${appversion}-safari-12.0-mac-os-10.14-afd516a15d`,
       repo: 'mdn-bcd-results',
       sha: '753c6ed8e991e9729353a63d650ff0f5bd902b69'

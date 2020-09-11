@@ -15,12 +15,17 @@
 /* global self */
 /* global bcd */
 
-// eslint-disable-next-line no-unused-vars
-var window = {};
-
 self.importScripts('harness.js');
 
 self.onmessage = function(event) {
-  var result = bcd.test(event.data);
-  self.postMessage(result);
+  var pending = event.data;
+  var results = [];
+
+  if (pending) {
+    for (var i = 0; i < pending.length; i++) {
+      results.push(bcd.test(pending[i]));
+    }
+  }
+
+  self.postMessage(results);
 };

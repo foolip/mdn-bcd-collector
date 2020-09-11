@@ -14,15 +14,22 @@
 
 'use strict';
 
+const path = require('path');
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const uniqueString = require('unique-string');
+const expressLayouts = require('express-ejs-layouts');
 
 const logger = require('./logger');
 
 const appversion = require('./package.json').version;
 
 const PORT = process.env.PORT || 8080;
+
+/* istanbul ignore next */
+const secrets = process.env.NODE_ENV === 'test' ?
+    require('./secrets.sample.json') :
+    require('./secrets.json');
 
 const getHost = () => {
   const project = process.env.GOOGLE_CLOUD_PROJECT;
@@ -37,14 +44,12 @@ const getHost = () => {
 };
 
 const {CloudStorage, MemoryStorage} = require('./storage');
+/* istanbul ignore next */
 const storage = process.env.NODE_ENV === 'production' ?
    new CloudStorage(process.env.GOOGLE_CLOUD_PROJECT) :
    new MemoryStorage;
 
-const secrets = process.env.NODE_ENV === 'test' ?
-    require('./secrets.sample.json') :
-    require('./secrets.json');
-
+/* istanbul ignore next */
 const github = require('./github')(
   secrets.github.token ?
   {auth: `token ${secrets.github.token}`} :
@@ -53,7 +58,7 @@ const github = require('./github')(
 
 const Tests = require('./tests');
 const tests = new Tests({
-  manifest: require('./MANIFEST.json'),
+  tests: require('./tests.json'),
   host: getHost(),
   httpOnly: process.env.NODE_ENV !== 'production'
 });
@@ -74,18 +79,21 @@ const catchError = (err, res) => {
 };
 
 const app = express();
+
+// Layout config
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'ejs');
+app.use(expressLayouts);
+app.set('layout extractScripts', true);
+
+// Additional config
 app.use(cookieParser());
 app.use(cookieSession);
 app.use(express.json({limit: '32mb'}));
 app.use(express.static('static'));
 app.use(express.static('generated'));
 
-app.get('/api/tests', (req, res) => {
-  const {after, limit} = req.query;
-  const list = tests.list(after, limit ? +limit : 0);
-  const individualList = tests.listIndividual(after, limit ? +limit : 0);
-  res.json([list, individualList]);
-});
+// Backend API
 
 app.post('/api/results', (req, res) => {
   if (!req.is('json')) {
@@ -103,24 +111,12 @@ app.post('/api/results', (req, res) => {
 
   const response = {};
 
-  // Include next test in response as a convenience.
-  try {
-    const next = tests.list(forURL, 1)[0];
-    if (next) {
-      response.next = next;
-    }
-  } catch (err) {
-    logger.warn(`Results submitted for URL not in manifest: ${forURL}`);
-    // note: indistinguishable from finishing last test to client
-  }
-
   Promise.all([
     storage.put(req.sessionID, '__version', appversion),
     storage.put(req.sessionID, forURL, req.body)
   ]).then(() => {
     res.status(201).json(response);
-  })
-      .catch(/* istanbul ignore next */ (err) => catchError(err, res));
+  }).catch(/* istanbul ignore next */ (err) => catchError(err, res));
 });
 
 app.get('/api/results', (req, res) => {
@@ -131,20 +127,64 @@ app.get('/api/results', (req, res) => {
       .catch(/* istanbul ignore next */ (err) => catchError(err, res));
 });
 
-/* istanbul ignore next: we don't want to create lots of dummy PRs */
 app.post('/api/results/export/github', (req, res) => {
   storage.getAll(req.sessionID)
       .then(async (results) => {
+        if (Object.entries(results).length === 0) {
+          res.json({error: 'No results to export'});
+        }
+
         const userAgent = req.get('User-Agent');
         const report = {results, userAgent};
         const response = await github.exportAsPR(report);
         if (response) {
           res.json(response);
         } else {
-          res.status(500).end();
+          res.status(500).json({error: 'Server error'});
         }
       })
       .catch(/* istanbul ignore next */ (err) => catchError(err, res));
+});
+
+// Views
+
+app.get('/', (req, res) => {
+  res.render('index', {
+    tests: tests.listEndpoints('/tests')
+  });
+});
+
+app.get('/results', (req, res) => {
+  res.render('results', {
+    title: 'Test Results'
+  });
+});
+
+app.all('/tests/*', (req, res) => {
+  const ident = req.params['0'].replace(/\//g, '.');
+
+  if (tests.listEndpoints().some((item) => (item === ident))) {
+    res.render('tests', {
+      title: `${ident || 'All Tests'}`,
+      layout: false,
+      tests: tests.getTests(ident, req.query.exposure)
+    });
+  } else {
+    res.status(404).render('error', {
+      title: `Tests Not Found`,
+      message: `Could not find tests for ${ident}.`,
+      url: req.url
+    });
+  }
+});
+
+// Page Not Found Handler
+app.use((req, res) => {
+  res.status(404).render('error', {
+    title: `Page Not Found`,
+    message: 'The requested page was not found.',
+    url: req.url
+  });
 });
 
 /* istanbul ignore if */
@@ -156,5 +196,9 @@ if (require.main === module) {
   });
 } else {
   // Export for testing
-  module.exports = {app: app, version: appversion};
+  module.exports = {
+    app: app,
+    version: appversion,
+    getHost: getHost
+  };
 }

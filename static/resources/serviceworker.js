@@ -15,9 +15,6 @@
 /* global self, caches, Request, Response */
 /* global bcd */
 
-// eslint-disable-next-line no-unused-vars
-var window = {};
-
 self.importScripts('harness.js');
 
 self.addEventListener('install', function(event) {
@@ -32,5 +29,14 @@ self.addEventListener('install', function(event) {
 });
 
 self.addEventListener('message', function(event) {
-  event.source.postMessage(bcd.test(event.data));
+  var pending = event.data;
+  var results = [];
+
+  if (pending) {
+    for (var i = 0; i < pending.length; i++) {
+      results.push(bcd.test(pending[i]));
+    }
+  }
+
+  event.source.postMessage(results);
 });

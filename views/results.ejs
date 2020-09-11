@@ -1,0 +1,33 @@
+<%- contentFor('body') %>
+<div>
+  <span id="status">Loading page...</span> <a id="link"></a>
+</div>
+<div>
+  <a href="/api/results">Download results JSON</a>
+</div>
+<div>
+  <a href="/">Back to start page</a>
+</div>
+<script src="/resources/json3.min.js"></script>
+<script>
+function exportGitHub() {
+  var status = document.getElementById('status');
+  var link = document.getElementById('link');
+  var client = new XMLHttpRequest();
+  client.open('POST', '/api/results/export/github', true);
+  client.send();
+  status.textContent = 'Exporting...';
+  client.onreadystatechange = function() {
+    if (client.readyState == 4) {
+      var response = JSON.parse(client.responseText);
+      if (response.error) {
+        status.textContent = 'Failed to export: ' + response.error;
+      } else {
+        status.textContent = 'Exported to';
+        link.href = link.textContent = response.html_url;
+      }
+    }
+  }
+}
+exportGitHub();
+</script>

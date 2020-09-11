@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title><%= title %></title>
+
+    <style>
+      @media (prefers-color-scheme: dark) {
+        body {
+          background-color: #111;
+          color: white;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <p id="status">Running tests...</p>
+    <p id="results"></p>
+
+    <!-- TODO: https://github.com/foolip/mdn-bcd-collector/issues/407 -->
+    <script src="/resources/json3.min.js"></script>
+    <script src="/resources/harness.js"></script>
+    <script>
+      <% tests.forEach(function(test) { %>
+        bcd.addTest("<%- test.ident %>", <%- JSON.stringify(test.tests) %>, "<%- test.exposure %>");
+      <% }); %>
+      window.onload = bcd.run;
+    </script>
+  </body>
+</html>

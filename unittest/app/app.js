@@ -14,12 +14,11 @@
 
 'use strict';
 
-const {app, version} = require('../../app');
+const {app, version, getHost} = require('../../app');
 const chai = require('chai');
 const chaiHttp = require('chai-http');
 
-const manifest = require('../../MANIFEST.json');
-const manifestItems = manifest.items.filter((item) => item.protocol === 'http');
+const tests = Object.entries(require('../../tests.json'));
 
 chai.use(chaiHttp);
 const agent = chai.request.agent(app);
@@ -45,17 +44,15 @@ describe('/api/results', () => {
     assert.deepEqual(res.body, {});
   });
 
-  const testURL = `http://localhost:8080${manifestItems[0].pathname}`;
-  const testURL2 = `https://host.test${manifestItems[1].pathname}`;
+  const testURL = `http://localhost:8080/tests/api`;
+  const testURL2 = `https://host.test/tests/css`;
 
   it('submit valid results', async () => {
     const res = await agent.post('/api/results')
         .query({for: testURL})
         .send({x: 1});
     assert.equal(res.status, 201);
-    assert.deepEqual(res.body, {
-      next: `http://localhost:8080${manifestItems[1].pathname}`
-    });
+    assert.deepEqual(res.body, {});
   });
 
   it('list results after valid', async () => {
@@ -83,7 +80,7 @@ describe('/api/results', () => {
     });
   });
 
-  it('submit results for new/last manifest', async () => {
+  it('submit valid results for new URL', async () => {
     const res = await agent.post('/api/results')
         .query({for: testURL2})
         .send({y: 3});
@@ -91,7 +88,7 @@ describe('/api/results', () => {
     assert.deepEqual(res.body, {});
   });
 
-  it('list results after new/last manifest', async () => {
+  it('list results after new valid', async () => {
     const res = await agent.get('/api/results');
     assert.equal(res.status, 200);
     assert.deepEqual(res.body, {
@@ -106,6 +103,70 @@ describe('/api/results', () => {
         .query({for: testURL})
         .send('my bad results');
     assert.equal(res.status, 400);
+  });
+});
+
+describe('rendered pages', () => {
+  it('/', async () => {
+    const res = await agent.get(`/`);
+    assert.equal(res.status, 200);
+    assert.include(res.text, 'mdn-bcd-collector');
+  });
+
+  it('/results', async () => {
+    const res = await agent.get(`/results`);
+    assert.equal(res.status, 200);
+    assert.include(res.text, 'Download results JSON');
+  });
+
+  it('404', async () => {
+    const res = await agent.get('/fakepage');
+    assert.equal(res.status, 404);
+  });
+});
+
+describe('/tests/', () => {
+  it('get a test', async () => {
+    const res = await agent.get(`/tests/${tests[1][0].replace(/\./g, '/')}`);
+    assert.equal(res.status, 200);
+  });
+
+  it('get all tests', async () => {
+    const res = await agent.get('/tests/');
+    assert.equal(res.status, 200);
+  });
+
+  it('get a non-existent tests', async () => {
+    const res = await agent.get(`/tests/dummy/test`);
+    assert.equal(res.status, 404);
+  });
+});
+
+describe('getHost', () => {
+  it('testing', () => {
+    process.env.GOOGLE_CLOUD_PROJECT = '';
+    process.env.GAE_VERSION = '';
+
+    assert.equal(getHost(), 'localhost:8080');
+  });
+
+  it('production', () => {
+    process.env.GOOGLE_CLOUD_PROJECT = 'testing-project';
+    process.env.GAE_VERSION = 'production';
+
+    assert.equal(getHost(), 'testing-project.appspot.com');
+  });
+
+  it('staging', () => {
+    process.env.GOOGLE_CLOUD_PROJECT = 'testing-project';
+    process.env.GAE_VERSION = 'staging';
+
+    assert.equal(getHost(), 'staging-dot-testing-project.appspot.com');
+  });
+
+  afterEach(() => {
+    delete process.env.GOOGLE_CLOUD_PROJECT;
+    delete process.env.GAE_VERSION;
   });
 });
 
