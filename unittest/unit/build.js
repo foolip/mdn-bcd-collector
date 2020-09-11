@@ -479,7 +479,7 @@ describe('build', () => {
       describe('two items', () => {
         const rawTest = {
           raw: {
-            code: ['foo', foo],
+            code: ['foo', 'foo'],
             combinator: '&&'
           },
           category: 'api',
