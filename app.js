@@ -147,14 +147,13 @@ app.post('/api/results/export/github', (req, res) => {
 
 app.get('/', (req, res) => {
   res.render('index', {
-    title: 'mdn-bcd-collector',
     tests: tests.listEndpoints('/tests')
   });
 });
 
 app.get('/results', (req, res) => {
   res.render('results', {
-    title: 'Test Results | mdn-bcd-collector'
+    title: 'Test Results'
   });
 });
 
@@ -164,13 +163,26 @@ app.all('/tests/*', (req, res) => {
 
   if (tests.listEndpoints().some((item) => (item[1] === endpoint))) {
     res.render('tests', {
-      title: `${ident || 'All Tests'} | mdn-bcd-collector`,
+      title: `${ident || 'All Tests'}`,
       layout: false,
       tests: tests.getTests(endpoint, req.query.exposure)
     });
   } else {
-    res.status(404).send(`Could not find tests for ${endpoint}`);
+    res.status(404).render('error', {
+      title: `Tests Not Found`,
+      message: `Could not find tests for ${ident}.`,
+      url: req.url
+    });
   }
+});
+
+// Page Not Found Handler
+app.use((req, res) => {
+  res.status(404).render('error', {
+    title: `Page Not Found`,
+    message: 'The requested page was not found.',
+    url: req.url
+  });
 });
 
 /* istanbul ignore if */

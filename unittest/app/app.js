@@ -118,6 +118,11 @@ describe('rendered pages', () => {
     assert.equal(res.status, 200);
     assert.include(res.text, 'Download results JSON');
   });
+
+  it('404', async () => {
+    const res = await agent.get('/fakepage');
+    assert.equal(res.status, 404);
+  });
 });
 
 describe('/tests/', () => {

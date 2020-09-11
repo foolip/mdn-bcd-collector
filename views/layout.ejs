@@ -11,7 +11,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
 
-    <title><%= title %></title>
+    <title><% if (locals.title) {%><%= title %> | <% } %>mdn-bcd-collector</title>
 
     <link rel="stylesheet" type="text/css" href="/resources/style.css" />
   </head>
