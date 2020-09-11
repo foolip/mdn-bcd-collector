@@ -48,24 +48,24 @@ describe('Tests', () => {
 
   it('buildEndpoints', () => {
     const expectedEndpoints = {
-      '/': [
+      '': [
         'api.AbortController',
         'api.AbortController.signal',
         'css.properties.font-family',
         'javascript.builtins.array'
       ],
-      '/api': ['api.AbortController', 'api.AbortController.signal'],
-      '/api/AbortController': [
+      api: ['api.AbortController', 'api.AbortController.signal'],
+      'api.AbortController': [
         'api.AbortController',
         'api.AbortController.signal'
       ],
-      '/api/AbortController/signal': ['api.AbortController.signal'],
-      '/css': ['css.properties.font-family'],
-      '/css/properties': ['css.properties.font-family'],
-      '/css/properties/font-family': ['css.properties.font-family'],
-      '/javascript': ['javascript.builtins.array'],
-      '/javascript/builtins': ['javascript.builtins.array'],
-      '/javascript/builtins/array': ['javascript.builtins.array']
+      'api.AbortController.signal': ['api.AbortController.signal'],
+      css: ['css.properties.font-family'],
+      'css.properties': ['css.properties.font-family'],
+      'css.properties.font-family': ['css.properties.font-family'],
+      javascript: ['javascript.builtins.array'],
+      'javascript.builtins': ['javascript.builtins.array'],
+      'javascript.builtins.array': ['javascript.builtins.array']
     };
 
     const endpoints = tests.buildEndpoints(tests);
@@ -75,22 +75,22 @@ describe('Tests', () => {
 
   it('listEndpoints', () => {
     assert.deepEqual(tests.listEndpoints(), [
-      ['', '/'],
-      ['api', '/api'],
-      ['api.AbortController', '/api/AbortController'],
-      ['api.AbortController.signal', '/api/AbortController/signal'],
-      ['css', '/css'],
-      ['css.properties', '/css/properties'],
-      ['css.properties.font-family', '/css/properties/font-family'],
-      ['javascript', '/javascript'],
-      ['javascript.builtins', '/javascript/builtins'],
-      ['javascript.builtins.array', '/javascript/builtins/array']
+      '',
+      'api',
+      'api.AbortController',
+      'api.AbortController.signal',
+      'css',
+      'css.properties',
+      'css.properties.font-family',
+      'javascript',
+      'javascript.builtins',
+      'javascript.builtins.array'
     ]);
   });
 
   describe('getTests', () => {
     it('individual endpoint', () => {
-      assert.deepEqual(tests.getTests('/api/AbortController'), [
+      assert.deepEqual(tests.getTests('api.AbortController'), [
         {ident: 'api.AbortController', tests: [{code: '"AbortController" in self', prefix: ''}], exposure: 'Window'},
         {ident: 'api.AbortController', tests: [{code: '"AbortController" in self', prefix: ''}], exposure: 'Worker'},
         {ident: 'api.AbortController', tests: [{code: '"AbortController" in self', prefix: ''}], exposure: 'ServiceWorker'},
@@ -100,7 +100,7 @@ describe('Tests', () => {
     });
 
     it('limited scope', () => {
-      assert.deepEqual(tests.getTests('/api/AbortController', 'Window'), [
+      assert.deepEqual(tests.getTests('api.AbortController', 'Window'), [
         {ident: 'api.AbortController', tests: [{code: '"AbortController" in self', prefix: ''}], exposure: 'Window'},
         {ident: 'api.AbortController.signal', tests: [{code: '"AbortController" in self && "signal" in AbortController.prototype', prefix: ''}], exposure: 'Window'}
       ]);
