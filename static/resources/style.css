@@ -9,7 +9,7 @@ code {
   font-size: 12px;
 }
 
-button, select {
+button, select, input {
   background-color: #3d8a3f;
   border: none;
   color: white;
@@ -18,14 +18,11 @@ button, select {
   display: inline-block;
   font-size: 14px;
   transition: background-color 0.2s;
-}
-
-button {
   padding: 8px 8px 8px 16px;
 }
 
-select {
-  padding: 7px 16px 7px 8px;
+input {
+  text-align: left;
   margin-left: -2px;
 }
 
@@ -47,5 +44,9 @@ button:disabled, button:disabled:hover, select:disabled:hover {
 
   a {
     color: #99f;
+  }
+
+  input::placeholder {
+    color: #ccc;
   }
 }
