@@ -232,7 +232,7 @@ const inferSupportStatements = (versionMap) => {
     if (supported === true) {
       if (!lastStatement) {
         statements.push({
-          version_added: (lastWasNull && lastKnown.support === false) ?
+          version_added: (lastWasNull || lastKnown.support === false) ?
               true : version,
           ...(prefix && {prefix: prefix})
         });
