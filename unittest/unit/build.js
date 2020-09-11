@@ -27,7 +27,6 @@ const proxyquire = require('proxyquire');
 
 const {
   writeFile,
-  getPrefix,
   flattenIDL,
   getExposureSet,
   getName,
@@ -73,29 +72,6 @@ describe('build', () => {
 
     afterEach(() => {
       mockFs.restore();
-    });
-  });
-
-  describe('getPrefix', () => {
-    it('no prefix', () => {
-      assert.equal(getPrefix('foo'), undefined);
-      assert.equal(getPrefix({property: 'foo', owner: 'self'}), undefined);
-    });
-
-    it('has prefix', () => {
-      assert.equal(getPrefix('WebKitFoo'), 'WebKit');
-      assert.equal(getPrefix({
-        property: 'WebKitFoo',
-        owner: 'self'
-      }), 'WebKit');
-    });
-
-    it('CSS property has prefix', () => {
-      assert.equal(getPrefix('-webkit-foo'), 'webkit');
-      assert.equal(getPrefix({
-        property: '-webkit-foo',
-        owner: 'self'
-      }), 'webkit');
     });
   });
 
@@ -405,18 +381,6 @@ describe('build', () => {
           {
             code: '"Document" in self && "body" in Document.prototype',
             prefix: ''
-          },
-          {
-            code: '"Document" in self && "WebKitBody" in Document.prototype',
-            prefix: 'WebKit'
-          },
-          {
-            code: '"WebKitDocument" in self && "body" in WebKitDocument.prototype',
-            prefix: ''
-          },
-          {
-            code: '"WebKitDocument" in self && "WebKitBody" in WebKitDocument.prototype',
-            prefix: 'WebKit'
           }
         ],
         category: 'api',
@@ -424,21 +388,25 @@ describe('build', () => {
       });
     });
 
-    it('with prefix, single piece', () => {
+    it('with prefixes, single piece', () => {
       const rawTest = {
         raw: {
-          code: {property: 'WebKitDocument', owner: 'self'},
+          code: {property: 'Document', owner: 'self'},
           combinator: '&&'
         },
         category: 'api',
         exposure: ['Window']
       };
 
-      assert.deepEqual(compileTest(rawTest), {
+      assert.deepEqual(compileTest(rawTest, ['', 'WebKit']), {
         tests: [
           {
-            code: '"WebKitDocument" in self',
+            code: '"Document" in self',
             prefix: ''
+          },
+          {
+            code: '"WebKitDocument" in self',
+            prefix: 'WebKit'
           }
         ],
         category: 'api',
@@ -446,13 +414,13 @@ describe('build', () => {
       });
     });
 
-    describe('with prefix, double piece', () => {
+    describe('with prefixes, double piece', () => {
       it('first', () => {
         const rawTest = {
           raw: {
             code: [
-              {property: 'WebKitDocument', owner: 'self'},
-              {property: 'body', owner: `WebKitDocument.prototype`}
+              {property: 'Document', owner: 'self'},
+              {property: 'body', owner: `Document.prototype`}
             ],
             combinator: '&&'
           },
@@ -460,8 +428,16 @@ describe('build', () => {
           exposure: ['Window']
         };
 
-        assert.deepEqual(compileTest(rawTest), {
+        assert.deepEqual(compileTest(rawTest, ['', 'WebKit']), {
           tests: [
+            {
+              code: '"Document" in self && "body" in Document.prototype',
+              prefix: ''
+            },
+            {
+              code: '"Document" in self && "WebKitBody" in Document.prototype',
+              prefix: 'WebKit'
+            },
             {
               code: '"WebKitDocument" in self && "body" in WebKitDocument.prototype',
               prefix: ''
@@ -469,35 +445,6 @@ describe('build', () => {
             {
               code: '"WebKitDocument" in self && "WebKitBody" in WebKitDocument.prototype',
               prefix: 'WebKit'
-            }
-          ],
-          category: 'api',
-          exposure: ['Window']
-        });
-      });
-
-      it('second', () => {
-        const rawTest = {
-          raw: {
-            code: [
-              {property: 'Document', owner: 'self'},
-              {property: 'WebKitBody', owner: `Document.prototype`}
-            ],
-            combinator: '&&'
-          },
-          category: 'api',
-          exposure: ['Window']
-        };
-
-        assert.deepEqual(compileTest(rawTest), {
-          tests: [
-            {
-              code: '"Document" in self && "WebKitBody" in Document.prototype',
-              prefix: ''
-            },
-            {
-              code: '"WebKitDocument" in self && "WebKitBody" in WebKitDocument.prototype',
-              prefix: ''
             }
           ],
           category: 'api',
@@ -605,10 +552,6 @@ describe('build', () => {
           {
             code: '"fontFamily" in document.body.style || CSS.supports("font-family", "inherit")',
             prefix: ''
-          },
-          {
-            code: '"webkitFontFamily" in document.body.style || CSS.supports("-webkit-font-family", "inherit")',
-            prefix: 'webkit'
           }
         ],
         category: 'css',
@@ -620,8 +563,8 @@ describe('build', () => {
       const rawTest = {
         raw: {
           code: [
-            {property: 'webkitFontFamily', owner: 'document.body.style'},
-            {property: '-webkit-font-family', owner: 'CSS.supports'}
+            {property: 'fontFamily', owner: 'document.body.style'},
+            {property: 'font-family', owner: 'CSS.supports'}
           ],
           combinator: '||'
         },
@@ -629,11 +572,15 @@ describe('build', () => {
         exposure: ['Window']
       };
 
-      assert.deepEqual(compileTest(rawTest), {
+      assert.deepEqual(compileTest(rawTest, ['', 'webkit']), {
         tests: [
           {
-            code: '"webkitFontFamily" in document.body.style || CSS.supports("-webkit-font-family", "inherit")',
+            code: '"fontFamily" in document.body.style || CSS.supports("font-family", "inherit")',
             prefix: ''
+          },
+          {
+            code: '"webkitFontFamily" in document.body.style || CSS.supports("-webkit-font-family", "inherit")',
+            prefix: 'webkit'
           }
         ],
         category: 'css',
@@ -970,10 +917,6 @@ describe('build', () => {
             {
               code: '"Attr" in self',
               prefix: ''
-            },
-            {
-              code: '"WebKitAttr" in self',
-              prefix: 'WebKit'
             }
           ],
           category: 'api',
@@ -984,18 +927,6 @@ describe('build', () => {
             {
               code: '"Attr" in self && "name" in Attr.prototype',
               prefix: ''
-            },
-            {
-              code: '"Attr" in self && "WebKitName" in Attr.prototype',
-              prefix: 'WebKit'
-            },
-            {
-              code: '"WebKitAttr" in self && "name" in WebKitAttr.prototype',
-              prefix: ''
-            },
-            {
-              code: '"WebKitAttr" in self && "WebKitName" in WebKitAttr.prototype',
-              prefix: 'WebKit'
             }
           ],
           category: 'api',
@@ -1015,10 +946,6 @@ describe('build', () => {
             {
               code: '"Node" in self',
               prefix: ''
-            },
-            {
-              code: '"WebKitNode" in self',
-              prefix: 'WebKit'
             }
           ],
           category: 'api',
@@ -1029,18 +956,6 @@ describe('build', () => {
             {
               code: '"Node" in self && "contains" in Node.prototype',
               prefix: ''
-            },
-            {
-              code: '"Node" in self && "WebKitContains" in Node.prototype',
-              prefix: 'WebKit'
-            },
-            {
-              code: '"WebKitNode" in self && "contains" in WebKitNode.prototype',
-              prefix: ''
-            },
-            {
-              code: '"WebKitNode" in self && "WebKitContains" in WebKitNode.prototype',
-              prefix: 'WebKit'
             }
           ],
           category: 'api',
@@ -1061,10 +976,6 @@ describe('build', () => {
             {
               code: '"MediaSource" in self',
               prefix: ''
-            },
-            {
-              code: '"WebKitMediaSource" in self',
-              prefix: 'WebKit'
             }
           ],
           category: 'api',
@@ -1075,18 +986,6 @@ describe('build', () => {
             {
               code: '"MediaSource" in self && "isTypeSupported" in MediaSource',
               prefix: ''
-            },
-            {
-              code: '"MediaSource" in self && "WebKitIsTypeSupported" in MediaSource',
-              prefix: 'WebKit'
-            },
-            {
-              code: '"WebKitMediaSource" in self && "isTypeSupported" in WebKitMediaSource',
-              prefix: ''
-            },
-            {
-              code: '"WebKitMediaSource" in self && "WebKitIsTypeSupported" in WebKitMediaSource',
-              prefix: 'WebKit'
             }
           ],
           category: 'api',
@@ -1107,10 +1006,6 @@ describe('build', () => {
             {
               code: '"Window" in self',
               prefix: ''
-            },
-            {
-              code: '"WebKitWindow" in self',
-              prefix: 'WebKit'
             }
           ],
           category: 'api',
@@ -1121,18 +1016,6 @@ describe('build', () => {
             {
               code: '"Window" in self && "isWindow" in Window',
               prefix: ''
-            },
-            {
-              code: '"Window" in self && "WebKitIsWindow" in Window',
-              prefix: 'WebKit'
-            },
-            {
-              code: '"WebKitWindow" in self && "isWindow" in WebKitWindow',
-              prefix: ''
-            },
-            {
-              code: '"WebKitWindow" in self && "WebKitIsWindow" in WebKitWindow',
-              prefix: 'WebKit'
             }
           ],
           category: 'api',
@@ -1217,10 +1100,6 @@ describe('build', () => {
             {
               code: '"Document" in self',
               prefix: ''
-            },
-            {
-              code: '"WebKitDocument" in self',
-              prefix: 'WebKit'
             }
           ],
           category: 'api',
@@ -1230,10 +1109,6 @@ describe('build', () => {
           tests: [
             {
               code: '"Document" in self && (function() {return document.charset == "UTF-8";})()',
-              prefix: ''
-            },
-            {
-              code: '"WebKitDocument" in self && (function() {return document.charset == "UTF-8";})()',
               prefix: ''
             }
           ],
@@ -1245,18 +1120,6 @@ describe('build', () => {
             {
               code: '"Document" in self && "loaded" in Document.prototype',
               prefix: ''
-            },
-            {
-              code: '"Document" in self && "WebKitLoaded" in Document.prototype',
-              prefix: 'WebKit'
-            },
-            {
-              code: '"WebKitDocument" in self && "loaded" in WebKitDocument.prototype',
-              prefix: ''
-            },
-            {
-              code: '"WebKitDocument" in self && "WebKitLoaded" in WebKitDocument.prototype',
-              prefix: 'WebKit'
             }
           ],
           category: 'api',
@@ -1293,10 +1156,6 @@ describe('build', () => {
             {
               code: '"WindowOrWorkerGlobalScope" in self',
               prefix: ''
-            },
-            {
-              code: '"WebKitWindowOrWorkerGlobalScope" in self',
-              prefix: 'WebKit'
             }
           ],
           category: 'api',
@@ -1307,10 +1166,6 @@ describe('build', () => {
             {
               code: '"active" in self',
               prefix: ''
-            },
-            {
-              code: '"WebKitActive" in self',
-              prefix: 'WebKit'
             }
           ],
           category: 'api',
@@ -1321,10 +1176,6 @@ describe('build', () => {
             {
               code: '"isLoaded" in self',
               prefix: ''
-            },
-            {
-              code: '"WebKitIsLoaded" in self',
-              prefix: 'WebKit'
             }
           ],
           category: 'api',
@@ -1344,10 +1195,6 @@ describe('build', () => {
             {
               code: '"Number" in self',
               prefix: ''
-            },
-            {
-              code: '"WebKitNumber" in self',
-              prefix: 'WebKit'
             }
           ],
           category: 'api',
@@ -1358,10 +1205,6 @@ describe('build', () => {
             {
               code: '"Number" in self && bcd.testConstructor("Number")',
               prefix: ''
-            },
-            {
-              code: '"WebKitNumber" in self && bcd.testConstructor("WebKitNumber")',
-              prefix: 'WebKit'
             }
           ],
           category: 'api',
@@ -1379,10 +1222,6 @@ describe('build', () => {
             {
               code: '"Number" in self',
               prefix: ''
-            },
-            {
-              code: '"WebKitNumber" in self',
-              prefix: 'WebKit'
             }
           ],
           category: 'api',
@@ -1393,10 +1232,6 @@ describe('build', () => {
             {
               code: '"Number" in self && bcd.testConstructor("Number")',
               prefix: ''
-            },
-            {
-              code: '"WebKitNumber" in self && bcd.testConstructor("WebKitNumber")',
-              prefix: 'WebKit'
             }
           ],
           category: 'api',
@@ -1415,10 +1250,6 @@ describe('build', () => {
             {
               code: '"DoubleList" in self',
               prefix: ''
-            },
-            {
-              code: '"WebKitDoubleList" in self',
-              prefix: 'WebKit'
             }
           ],
           category: 'api',
@@ -1429,10 +1260,6 @@ describe('build', () => {
             {
               code: '"DoubleList" in self && "Symbol" in self && "iterator" in Symbol && Symbol.iterator in DoubleList.prototype',
               prefix: ''
-            },
-            {
-              code: '"WebKitDoubleList" in self && "Symbol" in self && "iterator" in Symbol && Symbol.iterator in WebKitDoubleList.prototype',
-              prefix: 'WebKit'
             }
           ],
           category: 'api',
@@ -1443,18 +1270,6 @@ describe('build', () => {
             {
               code: '"DoubleList" in self && "entries" in DoubleList.prototype',
               prefix: ''
-            },
-            {
-              code: '"DoubleList" in self && "WebKitEntries" in DoubleList.prototype',
-              prefix: 'WebKit'
-            },
-            {
-              code: '"WebKitDoubleList" in self && "entries" in WebKitDoubleList.prototype',
-              prefix: ''
-            },
-            {
-              code: '"WebKitDoubleList" in self && "WebKitEntries" in WebKitDoubleList.prototype',
-              prefix: 'WebKit'
             }
           ],
           category: 'api',
@@ -1465,18 +1280,6 @@ describe('build', () => {
             {
               code: '"DoubleList" in self && "forEach" in DoubleList.prototype',
               prefix: ''
-            },
-            {
-              code: '"DoubleList" in self && "WebKitForEach" in DoubleList.prototype',
-              prefix: 'WebKit'
-            },
-            {
-              code: '"WebKitDoubleList" in self && "forEach" in WebKitDoubleList.prototype',
-              prefix: ''
-            },
-            {
-              code: '"WebKitDoubleList" in self && "WebKitForEach" in WebKitDoubleList.prototype',
-              prefix: 'WebKit'
             }
           ],
           category: 'api',
@@ -1487,18 +1290,6 @@ describe('build', () => {
             {
               code: '"DoubleList" in self && "keys" in DoubleList.prototype',
               prefix: ''
-            },
-            {
-              code: '"DoubleList" in self && "WebKitKeys" in DoubleList.prototype',
-              prefix: 'WebKit'
-            },
-            {
-              code: '"WebKitDoubleList" in self && "keys" in WebKitDoubleList.prototype',
-              prefix: ''
-            },
-            {
-              code: '"WebKitDoubleList" in self && "WebKitKeys" in WebKitDoubleList.prototype',
-              prefix: 'WebKit'
             }
           ],
           category: 'api',
@@ -1509,18 +1300,6 @@ describe('build', () => {
             {
               code: '"DoubleList" in self && "values" in DoubleList.prototype',
               prefix: ''
-            },
-            {
-              code: '"DoubleList" in self && "WebKitValues" in DoubleList.prototype',
-              prefix: 'WebKit'
-            },
-            {
-              code: '"WebKitDoubleList" in self && "values" in WebKitDoubleList.prototype',
-              prefix: ''
-            },
-            {
-              code: '"WebKitDoubleList" in self && "WebKitValues" in WebKitDoubleList.prototype',
-              prefix: 'WebKit'
             }
           ],
           category: 'api',
@@ -1539,10 +1318,6 @@ describe('build', () => {
             {
               code: '"DoubleMap" in self',
               prefix: ''
-            },
-            {
-              code: '"WebKitDoubleMap" in self',
-              prefix: 'WebKit'
             }
           ],
           category: 'api',
@@ -1553,18 +1328,6 @@ describe('build', () => {
             {
               code: '"DoubleMap" in self && "clear" in DoubleMap.prototype',
               prefix: ''
-            },
-            {
-              code: '"DoubleMap" in self && "WebKitClear" in DoubleMap.prototype',
-              prefix: 'WebKit'
-            },
-            {
-              code: '"WebKitDoubleMap" in self && "clear" in WebKitDoubleMap.prototype',
-              prefix: ''
-            },
-            {
-              code: '"WebKitDoubleMap" in self && "WebKitClear" in WebKitDoubleMap.prototype',
-              prefix: 'WebKit'
             }
           ],
           category: 'api',
@@ -1575,18 +1338,6 @@ describe('build', () => {
             {
               code: '"DoubleMap" in self && "delete" in DoubleMap.prototype',
               prefix: ''
-            },
-            {
-              code: '"DoubleMap" in self && "WebKitDelete" in DoubleMap.prototype',
-              prefix: 'WebKit'
-            },
-            {
-              code: '"WebKitDoubleMap" in self && "delete" in WebKitDoubleMap.prototype',
-              prefix: ''
-            },
-            {
-              code: '"WebKitDoubleMap" in self && "WebKitDelete" in WebKitDoubleMap.prototype',
-              prefix: 'WebKit'
             }
           ],
           category: 'api',
@@ -1597,18 +1348,6 @@ describe('build', () => {
             {
               code: '"DoubleMap" in self && "entries" in DoubleMap.prototype',
               prefix: ''
-            },
-            {
-              code: '"DoubleMap" in self && "WebKitEntries" in DoubleMap.prototype',
-              prefix: 'WebKit'
-            },
-            {
-              code: '"WebKitDoubleMap" in self && "entries" in WebKitDoubleMap.prototype',
-              prefix: ''
-            },
-            {
-              code: '"WebKitDoubleMap" in self && "WebKitEntries" in WebKitDoubleMap.prototype',
-              prefix: 'WebKit'
             }
           ],
           category: 'api',
@@ -1619,18 +1358,6 @@ describe('build', () => {
             {
               code: '"DoubleMap" in self && "forEach" in DoubleMap.prototype',
               prefix: ''
-            },
-            {
-              code: '"DoubleMap" in self && "WebKitForEach" in DoubleMap.prototype',
-              prefix: 'WebKit'
-            },
-            {
-              code: '"WebKitDoubleMap" in self && "forEach" in WebKitDoubleMap.prototype',
-              prefix: ''
-            },
-            {
-              code: '"WebKitDoubleMap" in self && "WebKitForEach" in WebKitDoubleMap.prototype',
-              prefix: 'WebKit'
             }
           ],
           category: 'api',
@@ -1641,18 +1368,6 @@ describe('build', () => {
             {
               code: '"DoubleMap" in self && "get" in DoubleMap.prototype',
               prefix: ''
-            },
-            {
-              code: '"DoubleMap" in self && "WebKitGet" in DoubleMap.prototype',
-              prefix: 'WebKit'
-            },
-            {
-              code: '"WebKitDoubleMap" in self && "get" in WebKitDoubleMap.prototype',
-              prefix: ''
-            },
-            {
-              code: '"WebKitDoubleMap" in self && "WebKitGet" in WebKitDoubleMap.prototype',
-              prefix: 'WebKit'
             }
           ],
           category: 'api',
@@ -1663,18 +1378,6 @@ describe('build', () => {
             {
               code: '"DoubleMap" in self && "has" in DoubleMap.prototype',
               prefix: ''
-            },
-            {
-              code: '"DoubleMap" in self && "WebKitHas" in DoubleMap.prototype',
-              prefix: 'WebKit'
-            },
-            {
-              code: '"WebKitDoubleMap" in self && "has" in WebKitDoubleMap.prototype',
-              prefix: ''
-            },
-            {
-              code: '"WebKitDoubleMap" in self && "WebKitHas" in WebKitDoubleMap.prototype',
-              prefix: 'WebKit'
             }
           ],
           category: 'api',
@@ -1685,18 +1388,6 @@ describe('build', () => {
             {
               code: '"DoubleMap" in self && "keys" in DoubleMap.prototype',
               prefix: ''
-            },
-            {
-              code: '"DoubleMap" in self && "WebKitKeys" in DoubleMap.prototype',
-              prefix: 'WebKit'
-            },
-            {
-              code: '"WebKitDoubleMap" in self && "keys" in WebKitDoubleMap.prototype',
-              prefix: ''
-            },
-            {
-              code: '"WebKitDoubleMap" in self && "WebKitKeys" in WebKitDoubleMap.prototype',
-              prefix: 'WebKit'
             }
           ],
           category: 'api',
@@ -1707,18 +1398,6 @@ describe('build', () => {
             {
               code: '"DoubleMap" in self && "set" in DoubleMap.prototype',
               prefix: ''
-            },
-            {
-              code: '"DoubleMap" in self && "WebKitSet" in DoubleMap.prototype',
-              prefix: 'WebKit'
-            },
-            {
-              code: '"WebKitDoubleMap" in self && "set" in WebKitDoubleMap.prototype',
-              prefix: ''
-            },
-            {
-              code: '"WebKitDoubleMap" in self && "WebKitSet" in WebKitDoubleMap.prototype',
-              prefix: 'WebKit'
             }
           ],
           category: 'api',
@@ -1729,18 +1408,6 @@ describe('build', () => {
             {
               code: '"DoubleMap" in self && "size" in DoubleMap.prototype',
               prefix: ''
-            },
-            {
-              code: '"DoubleMap" in self && "WebKitSize" in DoubleMap.prototype',
-              prefix: 'WebKit'
-            },
-            {
-              code: '"WebKitDoubleMap" in self && "size" in WebKitDoubleMap.prototype',
-              prefix: ''
-            },
-            {
-              code: '"WebKitDoubleMap" in self && "WebKitSize" in WebKitDoubleMap.prototype',
-              prefix: 'WebKit'
             }
           ],
           category: 'api',
@@ -1751,18 +1418,6 @@ describe('build', () => {
             {
               code: '"DoubleMap" in self && "values" in DoubleMap.prototype',
               prefix: ''
-            },
-            {
-              code: '"DoubleMap" in self && "WebKitValues" in DoubleMap.prototype',
-              prefix: 'WebKit'
-            },
-            {
-              code: '"WebKitDoubleMap" in self && "values" in WebKitDoubleMap.prototype',
-              prefix: ''
-            },
-            {
-              code: '"WebKitDoubleMap" in self && "WebKitValues" in WebKitDoubleMap.prototype',
-              prefix: 'WebKit'
             }
           ],
           category: 'api',
@@ -1781,10 +1436,6 @@ describe('build', () => {
             {
               code: '"DoubleSet" in self',
               prefix: ''
-            },
-            {
-              code: '"WebKitDoubleSet" in self',
-              prefix: 'WebKit'
             }
           ],
           category: 'api',
@@ -1795,18 +1446,6 @@ describe('build', () => {
             {
               code: '"DoubleSet" in self && "add" in DoubleSet.prototype',
               prefix: ''
-            },
-            {
-              code: '"DoubleSet" in self && "WebKitAdd" in DoubleSet.prototype',
-              prefix: 'WebKit'
-            },
-            {
-              code: '"WebKitDoubleSet" in self && "add" in WebKitDoubleSet.prototype',
-              prefix: ''
-            },
-            {
-              code: '"WebKitDoubleSet" in self && "WebKitAdd" in WebKitDoubleSet.prototype',
-              prefix: 'WebKit'
             }
           ],
           category: 'api',
@@ -1817,18 +1456,6 @@ describe('build', () => {
             {
               code: '"DoubleSet" in self && "clear" in DoubleSet.prototype',
               prefix: ''
-            },
-            {
-              code: '"DoubleSet" in self && "WebKitClear" in DoubleSet.prototype',
-              prefix: 'WebKit'
-            },
-            {
-              code: '"WebKitDoubleSet" in self && "clear" in WebKitDoubleSet.prototype',
-              prefix: ''
-            },
-            {
-              code: '"WebKitDoubleSet" in self && "WebKitClear" in WebKitDoubleSet.prototype',
-              prefix: 'WebKit'
             }
           ],
           category: 'api',
@@ -1839,18 +1466,6 @@ describe('build', () => {
             {
               code: '"DoubleSet" in self && "delete" in DoubleSet.prototype',
               prefix: ''
-            },
-            {
-              code: '"DoubleSet" in self && "WebKitDelete" in DoubleSet.prototype',
-              prefix: 'WebKit'
-            },
-            {
-              code: '"WebKitDoubleSet" in self && "delete" in WebKitDoubleSet.prototype',
-              prefix: ''
-            },
-            {
-              code: '"WebKitDoubleSet" in self && "WebKitDelete" in WebKitDoubleSet.prototype',
-              prefix: 'WebKit'
             }
           ],
           category: 'api',
@@ -1861,18 +1476,6 @@ describe('build', () => {
             {
               code: '"DoubleSet" in self && "entries" in DoubleSet.prototype',
               prefix: ''
-            },
-            {
-              code: '"DoubleSet" in self && "WebKitEntries" in DoubleSet.prototype',
-              prefix: 'WebKit'
-            },
-            {
-              code: '"WebKitDoubleSet" in self && "entries" in WebKitDoubleSet.prototype',
-              prefix: ''
-            },
-            {
-              code: '"WebKitDoubleSet" in self && "WebKitEntries" in WebKitDoubleSet.prototype',
-              prefix: 'WebKit'
             }
           ],
           category: 'api',
@@ -1883,18 +1486,6 @@ describe('build', () => {
             {
               code: '"DoubleSet" in self && "has" in DoubleSet.prototype',
               prefix: ''
-            },
-            {
-              code: '"DoubleSet" in self && "WebKitHas" in DoubleSet.prototype',
-              prefix: 'WebKit'
-            },
-            {
-              code: '"WebKitDoubleSet" in self && "has" in WebKitDoubleSet.prototype',
-              prefix: ''
-            },
-            {
-              code: '"WebKitDoubleSet" in self && "WebKitHas" in WebKitDoubleSet.prototype',
-              prefix: 'WebKit'
             }
           ],
           category: 'api',
@@ -1905,18 +1496,6 @@ describe('build', () => {
             {
               code: '"DoubleSet" in self && "keys" in DoubleSet.prototype',
               prefix: ''
-            },
-            {
-              code: '"DoubleSet" in self && "WebKitKeys" in DoubleSet.prototype',
-              prefix: 'WebKit'
-            },
-            {
-              code: '"WebKitDoubleSet" in self && "keys" in WebKitDoubleSet.prototype',
-              prefix: ''
-            },
-            {
-              code: '"WebKitDoubleSet" in self && "WebKitKeys" in WebKitDoubleSet.prototype',
-              prefix: 'WebKit'
             }
           ],
           category: 'api',
@@ -1927,18 +1506,6 @@ describe('build', () => {
             {
               code: '"DoubleSet" in self && "size" in DoubleSet.prototype',
               prefix: ''
-            },
-            {
-              code: '"DoubleSet" in self && "WebKitSize" in DoubleSet.prototype',
-              prefix: 'WebKit'
-            },
-            {
-              code: '"WebKitDoubleSet" in self && "size" in WebKitDoubleSet.prototype',
-              prefix: ''
-            },
-            {
-              code: '"WebKitDoubleSet" in self && "WebKitSize" in WebKitDoubleSet.prototype',
-              prefix: 'WebKit'
             }
           ],
           category: 'api',
@@ -1949,18 +1516,6 @@ describe('build', () => {
             {
               code: '"DoubleSet" in self && "values" in DoubleSet.prototype',
               prefix: ''
-            },
-            {
-              code: '"DoubleSet" in self && "WebKitValues" in DoubleSet.prototype',
-              prefix: 'WebKit'
-            },
-            {
-              code: '"WebKitDoubleSet" in self && "values" in WebKitDoubleSet.prototype',
-              prefix: ''
-            },
-            {
-              code: '"WebKitDoubleSet" in self && "WebKitValues" in WebKitDoubleSet.prototype',
-              prefix: 'WebKit'
             }
           ],
           category: 'api',
@@ -1980,10 +1535,6 @@ describe('build', () => {
             {
               code: '"GetMe" in self',
               prefix: ''
-            },
-            {
-              code: '"WebKitGetMe" in self',
-              prefix: 'WebKit'
             }
           ],
           category: 'api',
@@ -2005,10 +1556,6 @@ describe('build', () => {
             {
               code: '"CSS" in self',
               prefix: ''
-            },
-            {
-              code: '"WebKitCSS" in self',
-              prefix: 'WebKit'
             }
           ],
           category: 'api',
@@ -2019,10 +1566,6 @@ describe('build', () => {
             {
               code: '"MessageChannel" in self',
               prefix: ''
-            },
-            {
-              code: '"WebKitMessageChannel" in self',
-              prefix: 'WebKit'
             }
           ],
           category: 'api',
@@ -2033,10 +1576,6 @@ describe('build', () => {
             {
               code: '"Worker" in self',
               prefix: ''
-            },
-            {
-              code: '"WebKitWorker" in self',
-              prefix: 'WebKit'
             }
           ],
           category: 'api',
@@ -2047,10 +1586,6 @@ describe('build', () => {
             {
               code: '"WorkerSync" in self',
               prefix: ''
-            },
-            {
-              code: '"WebKitWorkerSync" in self',
-              prefix: 'WebKit'
             }
           ],
           category: 'api',
@@ -2073,10 +1608,6 @@ describe('build', () => {
             {
               code: '"AudioNode" in self',
               prefix: ''
-            },
-            {
-              code: '"WebKitAudioNode" in self',
-              prefix: 'WebKit'
             }
           ],
           category: 'api',
@@ -2087,18 +1618,6 @@ describe('build', () => {
             {
               code: '"AudioNode" in self && "disconnect" in AudioNode.prototype',
               prefix: ''
-            },
-            {
-              code: '"AudioNode" in self && "WebKitDisconnect" in AudioNode.prototype',
-              prefix: 'WebKit'
-            },
-            {
-              code: '"WebKitAudioNode" in self && "disconnect" in WebKitAudioNode.prototype',
-              prefix: ''
-            },
-            {
-              code: '"WebKitAudioNode" in self && "WebKitDisconnect" in WebKitAudioNode.prototype',
-              prefix: 'WebKit'
             }
           ],
           category: 'api',
@@ -2118,10 +1637,6 @@ describe('build', () => {
             {
               code: '"CSS" in self',
               prefix: ''
-            },
-            {
-              code: '"WebKitCSS" in self',
-              prefix: 'WebKit'
             }
           ],
           category: 'api',
@@ -2132,18 +1647,6 @@ describe('build', () => {
             {
               code: '"CSS" in self && "paintWorklet" in CSS',
               prefix: ''
-            },
-            {
-              code: '"CSS" in self && "WebKitPaintWorklet" in CSS',
-              prefix: 'WebKit'
-            },
-            {
-              code: '"WebKitCSS" in self && "paintWorklet" in WebKitCSS',
-              prefix: ''
-            },
-            {
-              code: '"WebKitCSS" in self && "WebKitPaintWorklet" in WebKitCSS',
-              prefix: 'WebKit'
             }
           ],
           category: 'api',
@@ -2163,10 +1666,6 @@ describe('build', () => {
             {
               code: '"CSS" in self',
               prefix: ''
-            },
-            {
-              code: '"WebKitCSS" in self',
-              prefix: 'WebKit'
             }
           ],
           category: 'api',
@@ -2177,18 +1676,6 @@ describe('build', () => {
             {
               code: '"CSS" in self && "supports" in CSS',
               prefix: ''
-            },
-            {
-              code: '"CSS" in self && "WebKitSupports" in CSS',
-              prefix: 'WebKit'
-            },
-            {
-              code: '"WebKitCSS" in self && "supports" in WebKitCSS',
-              prefix: ''
-            },
-            {
-              code: '"WebKitCSS" in self && "WebKitSupports" in WebKitCSS',
-              prefix: 'WebKit'
             }
           ],
           category: 'api',
@@ -2251,10 +1738,6 @@ describe('build', () => {
             {
               code: '"ElementRegistrationOptions" in self',
               prefix: ''
-            },
-            {
-              code: '"WebKitElementRegistrationOptions" in self',
-              prefix: 'WebKit'
             }
           ],
           category: 'api',
@@ -2265,18 +1748,6 @@ describe('build', () => {
             {
               code: '"ElementRegistrationOptions" in self && "extends" in ElementRegistrationOptions',
               prefix: ''
-            },
-            {
-              code: '"ElementRegistrationOptions" in self && "WebKitExtends" in ElementRegistrationOptions',
-              prefix: 'WebKit'
-            },
-            {
-              code: '"WebKitElementRegistrationOptions" in self && "extends" in WebKitElementRegistrationOptions',
-              prefix: ''
-            },
-            {
-              code: '"WebKitElementRegistrationOptions" in self && "WebKitExtends" in WebKitElementRegistrationOptions',
-              prefix: 'WebKit'
             }
           ],
           category: 'api',
@@ -2287,18 +1758,6 @@ describe('build', () => {
             {
               code: '"ElementRegistrationOptions" in self && "prototype" in ElementRegistrationOptions',
               prefix: ''
-            },
-            {
-              code: '"ElementRegistrationOptions" in self && "WebKitPrototype" in ElementRegistrationOptions',
-              prefix: 'WebKit'
-            },
-            {
-              code: '"WebKitElementRegistrationOptions" in self && "prototype" in WebKitElementRegistrationOptions',
-              prefix: ''
-            },
-            {
-              code: '"WebKitElementRegistrationOptions" in self && "WebKitPrototype" in WebKitElementRegistrationOptions',
-              prefix: 'WebKit'
             }
           ],
           category: 'api',
@@ -2461,10 +1920,6 @@ describe('build', () => {
           {
             code: '"appearance" in document.body.style || CSS.supports("appearance", "inherit")',
             prefix: ''
-          },
-          {
-            code: '"webkitAppearance" in document.body.style || CSS.supports("-webkit-appearance", "inherit")',
-            prefix: 'webkit'
           }
         ],
         category: 'css',
@@ -2475,10 +1930,6 @@ describe('build', () => {
           {
             code: '"fontFamily" in document.body.style || CSS.supports("font-family", "inherit")',
             prefix: ''
-          },
-          {
-            code: '"webkitFontFamily" in document.body.style || CSS.supports("-webkit-font-family", "inherit")',
-            prefix: 'webkit'
           }
         ],
         category: 'css',
@@ -2489,10 +1940,6 @@ describe('build', () => {
           {
             code: '"fontWeight" in document.body.style || CSS.supports("font-weight", "inherit")',
             prefix: ''
-          },
-          {
-            code: '"webkitFontWeight" in document.body.style || CSS.supports("-webkit-font-weight", "inherit")',
-            prefix: 'webkit'
           }
         ],
         category: 'css',
@@ -2503,10 +1950,6 @@ describe('build', () => {
           {
             code: '"grid" in document.body.style || CSS.supports("grid", "inherit")',
             prefix: ''
-          },
-          {
-            code: '"webkitGrid" in document.body.style || CSS.supports("-webkit-grid", "inherit")',
-            prefix: 'webkit'
           }
         ],
         category: 'css',

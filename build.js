@@ -24,16 +24,6 @@ const webref = require('./webref');
 
 const generatedDir = path.join(__dirname, 'generated');
 
-/* istanbul ignore next */
-const prefixes = process.env.NODE_ENV === 'test' ? {
-  // Shortened in tests for convenience
-  api: ['', 'WebKit'],
-  css: ['', 'webkit']
-} : {
-  api: ['', 'moz', 'Moz', 'webkit', 'WebKit', 'webKit', 'ms', 'MS'],
-  css: ['', 'khtml', 'webkit', 'moz', 'ms']
-};
-
 const writeFile = async (filename, content) => {
   if (Array.isArray(content)) {
     content = content.join('\n');
@@ -44,31 +34,6 @@ const writeFile = async (filename, content) => {
 
   await fs.ensureDir(path.dirname(filename));
   await fs.writeFile(filename, content, 'utf8');
-};
-
-const getPrefix = (test) => {
-  let name;
-
-  if (typeof test === 'string') {
-    name = test;
-  } else {
-    name = test.property;
-  }
-
-  if (name.startsWith('-')) {
-    name = name.slice(1);
-  }
-
-  for (const prefix of [
-    ...prefixes.api.slice(1),
-    ...prefixes.css.slice(1)
-  ]) {
-    if (name.startsWith(prefix)) {
-      return prefix;
-    }
-  }
-
-  return undefined;
 };
 
 const getCustomTestAPI = (name, member) => {
@@ -152,7 +117,7 @@ const compileTestCode = (test, prefix = '', ownerPrefix = '') => {
   return `"${property}" in ${owner}`;
 };
 
-const compileTest = (test) => {
+const compileTest = (test, prefixesToTest = ['']) => {
   if (!('raw' in test) && 'tests' in test) {
     return test;
   }
@@ -163,8 +128,6 @@ const compileTest = (test) => {
     exposure: test.exposure
   };
 
-  const prefixesToTest = prefixes[test.category];
-
   if (!Array.isArray(test.raw.code)) {
     for (const prefix of prefixesToTest) {
       const code = compileTestCode(test.raw.code, prefix);
@@ -174,11 +137,6 @@ const compileTest = (test) => {
           code: code,
           prefix: prefix
         });
-      }
-
-      if (getPrefix(test.raw.code)) {
-        // Don't generate prefix variations if prefix already exists
-        break;
       }
     }
   } else if (test.category == 'css') {
@@ -193,11 +151,6 @@ const compileTest = (test) => {
         code: code,
         prefix: prefix
       });
-
-      if (getPrefix(test.raw.code[0])) {
-        // Don't generate prefix variations if prefix already exists
-        break;
-      }
     }
   } else {
     for (const prefix1 of prefixesToTest) {
@@ -213,16 +166,6 @@ const compileTest = (test) => {
             prefix: prefix2
           });
         }
-
-        if (getPrefix(test.raw.code[1])) {
-          // Don't generate prefix variations if prefix already exists
-          break;
-        }
-      }
-
-      if (getPrefix(test.raw.code[0])) {
-        // Don't generate prefix variations if prefix already exists
-        break;
       }
     }
   }
@@ -726,7 +669,6 @@ if (require.main === module) {
 } else {
   module.exports = {
     writeFile,
-    getPrefix,
     getCustomTestAPI,
     getCustomSubtestsAPI,
     getCustomTestCSS,
