@@ -1,0 +1,12 @@
+partial interface Navigator {
+  // Gecko has navigator.mozGetUserMedia
+  void mozGetUserMedia(MediaStreamConstraints constraints,
+                       MozGetUserMediaDevicesSuccessCallback onsuccess,
+                       NavigatorUserMediaErrorCallback onerror,
+                       optional unsigned long long innerWindowID = 0,
+                       optional DOMString callID = "");
+  // Chromium has navigator.webkitGetUserMedia
+  void webkitGetUserMedia(MediaStreamConstraints constraints,
+                          NavigatorUserMediaSuccessCallback successCallback,
+                          NavigatorUserMediaErrorCallback errorCallback);
+};

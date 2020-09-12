@@ -1,0 +1,6 @@
+partial interface MediaRecorder {
+  // https://chromium.googlesource.com/chromium/src/+/ab5ae32c6233fe7938b9a0b53cf1c74918310d7a
+  attribute boolean ignoreMutedMedia;
+  // https://hg.mozilla.org/mozilla-central/rev/1d75b63d3a00bfad31bcbfe89815efe222b65312
+  attribute EventHandler onwarning;
+};

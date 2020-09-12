@@ -1,0 +1,13 @@
+partial interface RTCDataChannel {
+  readonly attribute boolean reliable;
+};
+
+partial interface RTCPeerConnection {
+  sequence<MediaStream> getLocalStreams();
+  sequence<MediaStream> getRemoteStreams();
+  void addStream(MediaStream stream, optional any mediaConstraints);
+  void removeStream(MediaStream stream);
+  RTCDTMFSender createDTMFSender(MediaStreamTrack track);
+  attribute EventHandler onaddstream;
+  attribute EventHandler onremovestream;
+};

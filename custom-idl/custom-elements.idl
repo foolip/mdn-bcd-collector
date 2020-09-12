@@ -1,0 +1,8 @@
+dictionary ElementRegistrationOptions {
+  object? prototype = null;
+  DOMString? extends = null;
+};
+
+partial interface Document {
+  any registerElement(DOMString type, optional ElementRegistrationOptions options = {});
+};

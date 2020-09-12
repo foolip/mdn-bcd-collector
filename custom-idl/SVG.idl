@@ -1,0 +1,8 @@
+
+// https://www.w3.org/TR/2016/CR-SVG2-20160915/interact.html#InterfaceSVGCursorElement
+[Exposed=Window]
+interface SVGCursorElement : SVGElement {
+  [SameObject] readonly attribute SVGAnimatedLength x;
+  [SameObject] readonly attribute SVGAnimatedLength y;
+};
+SVGCursorElement includes SVGURIReference;

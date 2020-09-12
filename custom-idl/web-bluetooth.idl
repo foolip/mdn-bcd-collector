@@ -1,0 +1,24 @@
+// https://developer.mozilla.org/en-US/docs/Web/API/BluetoothAdvertisingData
+
+[Exposed=Window]
+interface BluetoothAdvertisingData {
+  readonly attribute unsigned short? appearance;
+  readonly attribute byte? txPower;
+  readonly attribute byte? rssi;
+  readonly attribute Map manufacturerData;
+  readonly attribute Map serviceData;
+};
+
+partial interface BluetoothDevice {
+  readonly attribute BluetoothAdvertisingData adData;
+  Promise<BluetoothGATTRemoteServer> connectGATT();
+  readonly attribute long deviceClass;
+  BluetoothGATTRemoteServer? gattServer();
+  readonly attribute boolean paired;
+  readonly attribute short productVersion;
+  readonly attribute short productID;
+  void unwatchAdvertisements();
+  readonly attribute FrozenArray<long> uuids;
+  readonly attribute long vendorID;
+  readonly attribute long vendorIDSource;
+};

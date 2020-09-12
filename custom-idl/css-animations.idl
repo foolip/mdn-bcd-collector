@@ -1,0 +1,9 @@
+partial interface AnimationEvent {
+  void initAnimationEvent(DOMString type, boolean bubbles, boolean cancelable, DOMString animationName, float elapsedTime);
+};
+
+// https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/core/animation/css/css_animation.idl;drc=607fff17f2f1b469b94b3b31288f3bfb78fed648
+[Exposed=Window]
+interface CSSAnimation : Animation {
+  readonly attribute CSSOMString animationName;
+};

@@ -1,0 +1,7 @@
+// https://rniwa.github.io/undo-api/
+// https://whsieh.github.io/UndoManager/
+
+// TODO: Add the interfaces defined by the spec. This is something else.
+partial interface Document {
+  attribute UndoManager undoManager;
+};

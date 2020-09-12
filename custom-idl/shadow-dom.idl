@@ -1,0 +1,13 @@
+partial interface Element {
+  ShadowRoot createShadowRoot();
+  NodeList getDestinationInsertionPoints();
+  readonly attribute boolean openOrClosedShadowRoot;
+};
+
+partial interface Event {
+  readonly attribute object path;
+};
+
+partial interface Text {
+  NodeList getDestinationInsertionPoints();
+};

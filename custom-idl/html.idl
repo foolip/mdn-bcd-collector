@@ -1,0 +1,43 @@
+partial interface CanvasRenderingContext2D {
+  void addHitRegion(optional HitRegionOptions options);
+  void removeHitRegion(DOMString id);
+  void clearHitRegions();
+
+  attribute DOMMatrix currentTransform;
+  void drawWidgetAsOnScreen(Window window);
+  void drawWindow(Window window, double x, double y, double w, double h, DOMString bgColor, optional byte flags);
+};
+
+partial interface CloseEvent {
+  CloseEvent initCloseEvent();
+};
+
+partial interface HTMLFrameSetElement {
+  attribute EventHandler onorientationchange;
+};
+
+partial interface HTMLInputElement {
+  attribute boolean incremental;
+};
+
+partial interface HTMLMediaElement {
+  readonly attribute unsigned long long webkitAudioDecodedByteCount;
+  readonly attribute unsigned long long webkitVideoDecodedByteCount;
+};
+
+partial interface HTMLVideoElement {
+  readonly attribute boolean webkitSupportsFullscreen;
+  readonly attribute boolean webkitDisplayingFullscreen;
+  void webkitEnterFullscreen();
+  void webkitExitFullscreen();
+  void webkitEnterFullScreen();
+  void webkitExitFullScreen();
+  readonly attribute unsigned long webkitDecodedFrameCount;
+  readonly attribute unsigned long webkitDroppedFrameCount;
+};
+
+partial interface Window {
+  readonly attribute Navigator clientInformation;
+  long webkitRequestAnimationFrame(FrameRequestCallback callback);
+  void webkitCancelAnimationFrame(long id);
+};

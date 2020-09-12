@@ -1,0 +1,10 @@
+partial interface Selection {
+  readonly attribute Node? baseNode;
+  readonly attribute unsigned long baseOffset;
+  readonly attribute Node? extentNode;
+  readonly attribute unsigned long extentOffset;
+
+  void modify(optional DOMString alter = "",
+              optional DOMString direction = "",
+              optional DOMString granularity = "");
+};

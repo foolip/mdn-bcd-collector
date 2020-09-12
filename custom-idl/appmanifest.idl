@@ -1,0 +1,9 @@
+// https://github.com/w3c/manifest/pull/836
+// https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/modules/app_banner/before_install_prompt_event.idl;drc=af69d93ec0d5334cdc03316058660a37116f32b3
+[Exposed=Window]
+interface BeforeInstallPromptEvent : Event {
+  constructor(DOMString type, optional BeforeInstallPromptEventInit eventInitDict = {});
+  readonly attribute FrozenArray<DOMString> platforms;
+  readonly attribute Promise<AppBannerPromptResult> userChoice;
+  Promise<void> prompt();
+};

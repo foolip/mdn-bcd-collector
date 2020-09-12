@@ -1,0 +1,39 @@
+
+partial interface CompositionEvent {
+  attribute DOMString locale;
+  // https://w3c.github.io/uievents/#idl-interface-CompositionEvent-initializers
+  CompositionEvent initCompositionEvent();
+};
+
+partial interface MouseEvent {
+  readonly attribute Node fromElement;
+  readonly attribute Node toElement;
+  readonly attribute long layerX;
+  readonly attribute long layerY;
+};
+
+// https://w3c.github.io/uievents/#legacy-mutationevent-events
+[Exposed=Window]
+interface MutationEvent : Event {
+  const unsigned short MODIFICATION = 1;
+  const unsigned short ADDITION = 2;
+  const unsigned short REMOVAL = 3;
+
+  readonly attribute Node? relatedNode;
+  readonly attribute DOMString prevValue;
+  readonly attribute DOMString newValue;
+  readonly attribute DOMString attrName;
+  readonly attribute unsigned short attrChange;
+
+  void initMutationEvent(DOMString type, boolean bubbles, boolean cancelable, Node? relatedNode, DOMString prevValue, DOMString newValue, DOMString attrName, unsigned short attrChange);
+};
+
+partial interface WheelEvent {
+  readonly attribute long wheelDeltaX;
+  readonly attribute long wheelDeltaY;
+  readonly attribute long wheelDelta;
+};
+
+partial interface Window {
+  attribute object WebKitMutationObserver;
+};

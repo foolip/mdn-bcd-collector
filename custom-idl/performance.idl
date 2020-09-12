@@ -1,0 +1,12 @@
+// https://chromium.googlesource.com/chromium/src/+/fe14ae8caf179f194788ec029e3d274c6d849b3e/third_party/blink/renderer/core/timing/performance.idl#68
+partial interface Performance {
+  [Exposed=Window] readonly attribute MemoryInfo memory;
+};
+
+// https://chromium.googlesource.com/chromium/src/+/fe14ae8caf179f194788ec029e3d274c6d849b3e/third_party/blink/renderer/core/timing/memory_info.idl
+[Exposed=Window, LegacyNoInterfaceObject]
+interface MemoryInfo {
+  readonly attribute unsigned long long totalJSHeapSize;
+  readonly attribute unsigned long long usedJSHeapSize;
+  readonly attribute unsigned long long jsHeapSizeLimit;
+};

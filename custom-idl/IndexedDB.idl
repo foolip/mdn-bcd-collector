@@ -1,0 +1,5 @@
+
+partial interface IDBVersionChangeEvent {
+  readonly attribute IDBDataLossAmount dataLoss;
+  readonly attribute DOMString dataLossMessage;
+};
