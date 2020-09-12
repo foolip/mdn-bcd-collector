@@ -165,7 +165,7 @@
   }
 
   function runWorker(callback, results) {
-    if (pending.Worker) {
+    if ('Worker' in pending) {
       if ('Worker' in self) {
         var myWorker = new Worker('/resources/worker.js');
 
@@ -207,7 +207,7 @@
   }
 
   function runServiceWorker(callback, results) {
-    if (pending.ServiceWorker) {
+    if ('ServiceWorker' in pending) {
       if ('serviceWorker' in navigator) {
         window.__workerCleanup().then(function() {
           navigator.serviceWorker.register('/resources/serviceworker.js', {
