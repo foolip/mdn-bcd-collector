@@ -73,8 +73,9 @@ const run = async (browser, version) => {
   );
   capabilities.set(Capability.VERSION, version);
 
-  const driver = new Builder().usingServer(seleniumUrl)
-      .withCapabilities(capabilities).build();
+  const driverBuilder = new Builder().usingServer(seleniumUrl)
+      .withCapabilities(capabilities);
+  const driver = await driverBuilder.build();
 
   try {
     await driver.get(`${host}`);
