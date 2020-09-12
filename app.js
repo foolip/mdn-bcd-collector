@@ -76,10 +76,16 @@ const cookieSession = (req, res, next) => {
 const catchError = (err, res, method) => {
   logger.error(err);
   res.status(500);
+
+  let errorToDisplay = err;
+  if (process.env.NODE_ENV === 'production') {
+    errorToDisplay = 'Server error';
+  }
+
   if (method === 'json') {
-    res.json({error: 'Server error'});
+    res.json({error: errorToDisplay});
   } else {
-    res.text('Server error');
+    res.text(errorToDisplay);
   }
 };
 
