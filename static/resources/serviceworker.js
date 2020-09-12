@@ -38,5 +38,5 @@ self.addEventListener('message', function(event) {
     }
   }
 
-  event.source.postMessage(results);
+  event.ports[0].postMessage(results);
 });

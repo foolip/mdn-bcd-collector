@@ -215,11 +215,17 @@
           }).then(function(reg) {
             return window.__waitForSWState(reg, 'activated');
           }).then(navigator.serviceWorker.ready).then(function(reg) {
-            navigator.serviceWorker.onmessage = function(event) {
+            var messageChannel = new MessageChannel();
+
+            messageChannel.port1.onmessage = function(event) {
+              console.log(event);
               callback(results.concat(event.data));
             };
 
-            reg.active.postMessage(pending.ServiceWorker);
+            reg.active.postMessage(
+              pending.ServiceWorker,
+              [messageChannel.port2]
+            );
           });
         });
       } else {
