@@ -77,7 +77,13 @@ const run = async (browser, version) => {
       .withCapabilities(capabilities).build();
 
   try {
-    await driver.get(`${host}/tests/`);
+    await driver.get(`${host}`);
+    await driver.wait(() => {
+      return driver.executeScript('return document.readyState')
+          .then((readyState) => (readyState === 'complete'));
+    });
+    await driver.executeScript('return document.readyState');
+    await driver.findElement(By.id('start')).click();
     await driver.wait(
         until.elementTextContains(
             await driver.findElement(By.id('status')), 'uploaded'

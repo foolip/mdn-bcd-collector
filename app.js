@@ -73,9 +73,20 @@ const cookieSession = (req, res, next) => {
 };
 
 /* istanbul ignore next */
-const catchError = (err, res) => {
+const catchError = (err, res, method) => {
   logger.error(err);
-  res.status(500).end();
+  res.status(500);
+
+  let errorToDisplay = err;
+  if (process.env.NODE_ENV === 'production') {
+    errorToDisplay = 'Server error';
+  }
+
+  if (method === 'json') {
+    res.json({error: errorToDisplay});
+  } else {
+    res.text(errorToDisplay);
+  }
 };
 
 const app = express();
@@ -132,6 +143,7 @@ app.post('/api/results/export/github', (req, res) => {
       .then(async (results) => {
         if (Object.entries(results).length === 0) {
           res.json({error: 'No results to export'});
+          return;
         }
 
         const userAgent = req.get('User-Agent');
@@ -143,7 +155,7 @@ app.post('/api/results/export/github', (req, res) => {
           res.status(500).json({error: 'Server error'});
         }
       })
-      .catch(/* istanbul ignore next */ (err) => catchError(err, res));
+      .catch(/* istanbul ignore next */ (err) => catchError(err, res, 'json'));
 });
 
 // Views
