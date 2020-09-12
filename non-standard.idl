@@ -337,7 +337,6 @@ partial interface AudioListener {
   void setVelocity(float x, float y, float z);
 };
 
-[NoInterfaceObject]
 interface mixin CanvasHitRegion {
   void addHitRegion(optional HitRegionOptions options);
   void removeHitRegion(DOMString id);
@@ -517,7 +516,7 @@ interface EXT_disjoint_timer_query {
 
   WebGLTimerQueryEXT? createQueryEXT();
   void deleteQueryEXT(WebGLTimerQueryEXT? query);
-  [WebGLHandlesContextLoss] boolean isQueryEXT(WebGLTimerQueryEXT? query);
+  boolean isQueryEXT(WebGLTimerQueryEXT? query);
   void beginQueryEXT(GLenum target, WebGLTimerQueryEXT query);
   void endQueryEXT(GLenum target);
   void queryCounterEXT(WebGLTimerQueryEXT query, GLenum target);
@@ -557,14 +556,12 @@ interface EXT_texture_filter_anisotropic {
 
 // https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/modules/app_banner/before_install_prompt_event.idl;drc=af69d93ec0d5334cdc03316058660a37116f32b3
 
-[
-  ActiveScriptWrappable,
-  Exposed=Window
-] interface BeforeInstallPromptEvent : Event {
-  [CallWith=ExecutionContext] constructor(DOMString type, optional BeforeInstallPromptEventInit eventInitDict = {});
+[Exposed=Window]
+interface BeforeInstallPromptEvent : Event {
+  constructor(DOMString type, optional BeforeInstallPromptEventInit eventInitDict = {});
   readonly attribute FrozenArray<DOMString> platforms;
-  [CallWith=ScriptState, RaisesException] readonly attribute Promise<AppBannerPromptResult> userChoice;
-  [CallWith=ScriptState, RaisesException] Promise<void> prompt();
+  readonly attribute Promise<AppBannerPromptResult> userChoice;
+  Promise<void> prompt();
 };
 
 // https://developer.mozilla.org/en-US/docs/Web/API/BluetoothAdvertisingData
@@ -612,12 +609,11 @@ interface CSSAnimation : Animation {
 
 // https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/core/css/cssom/css_position_value.idl;drc=c2e7d4f0b24814b0d1c51a964db34ec5b4930756
 
-[
-  Exposed=(Window,LayoutWorklet,PaintWorklet)
-] interface CSSPositionValue : CSSStyleValue {
-  [RaisesException] constructor(CSSNumericValue x, CSSNumericValue y);
-  [RaisesException=Setter] attribute CSSNumericValue x;
-  [RaisesException=Setter] attribute CSSNumericValue y;
+[Exposed=(Window,LayoutWorklet,PaintWorklet)]
+interface CSSPositionValue : CSSStyleValue {
+  constructor(CSSNumericValue x, CSSNumericValue y);
+  attribute CSSNumericValue x;
+  attribute CSSNumericValue y;
 };
 
 // https://www.w3.org/TR/DOM-Level-2-Style/css.html
@@ -871,10 +867,10 @@ interface UserDataHandler {
 
 [Exposed=Window]
 interface FeaturePolicy {
-  [MeasureAs=FeaturePolicyJSAPI, CallWith=ScriptState] boolean allowsFeature(DOMString feature, optional DOMString origin);
-  [HighEntropy=Direct, MeasureAs=FeaturePolicyJSAPI, CallWith=ScriptState] sequence<DOMString> features();
-  [MeasureAs=FeaturePolicyJSAPI, CallWith=ScriptState] sequence<DOMString> allowedFeatures();
-  [MeasureAs=FeaturePolicyJSAPI, CallWith=ScriptState] sequence<DOMString> getAllowlistForFeature(DOMString feature);
+  boolean allowsFeature(DOMString feature, optional DOMString origin);
+  sequence<DOMString> features();
+  sequence<DOMString> allowedFeatures();
+  sequence<DOMString> getAllowlistForFeature(DOMString feature);
 };
 
 // https://wiki.whatwg.org/wiki/DOM_XSLTProcessor
