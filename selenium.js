@@ -85,6 +85,7 @@ const run = async (browser, version) => {
     });
     await driver.executeScript('return document.readyState');
     await driver.findElement(By.id('start')).click();
+    await driver.wait(until.urlIs(`${host}/tests/`));
     await driver.wait(
         until.elementTextContains(
             await driver.findElement(By.id('status')), 'uploaded'
@@ -92,6 +93,7 @@ const run = async (browser, version) => {
         30000
     );
     await driver.findElement(By.id('submit')).click();
+    await driver.wait(until.urlIs(`${host}/results`));
     await driver.wait(
         until.elementTextContains(
             await driver.findElement(By.id('status')), 'to'
