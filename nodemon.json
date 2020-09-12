@@ -5,7 +5,6 @@
     "views/*",
     "find-missing.js",
     "selenium.js",
-    "update-bcd.js",
-    "webref.js"
+    "update-bcd.js"
   ]
 }

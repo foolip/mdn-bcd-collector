@@ -20,7 +20,7 @@ const WebIDL2 = require('webidl2');
 const bcd = require('mdn-browser-compat-data');
 
 const customTests = require('./custom-tests.json');
-const webref = require('./webref');
+const specData = require('./spec-data');
 
 const generatedDir = path.join(__dirname, 'generated');
 
@@ -173,11 +173,6 @@ const compileTest = (test, prefixesToTest = ['']) => {
   return newTest;
 };
 
-const collectExtraIDL = () => {
-  const idl = fs.readFileSync('./non-standard.idl', 'utf8');
-  return WebIDL2.parse(idl);
-};
-
 const mergeMembers = (target, source) => {
   // Check for operation overloads across partials/mixins.
   const targetOperations = new Set();
@@ -195,14 +190,16 @@ const mergeMembers = (target, source) => {
   target.members.push(...source.members);
 };
 
-const flattenIDL = (specIDLs, collectExtraIDL) => {
+const flattenIDL = (specIDLs, customIDLs) => {
   let ast = [];
 
   for (const idl of Object.values(specIDLs)) {
     ast.push(...idl);
   }
 
-  ast.push(...collectExtraIDL);
+  for (const idl of Object.values(customIDLs)) {
+    ast.push(...idl);
+  }
 
   // merge partials (O^2 but still fast)
   ast = ast.filter((dfn) => {
@@ -544,8 +541,8 @@ const buildIDLTests = (ast) => {
   return tests;
 };
 
-const buildIDL = (webref) => {
-  const ast = flattenIDL(webref.idl, collectExtraIDL());
+const buildIDL = (webrefIDLs, customIDLs) => {
+  const ast = flattenIDL(webrefIDLs, customIDLs);
   validateIDL(ast);
   return buildIDLTests(ast);
 };
@@ -577,8 +574,8 @@ const collectCSSPropertiesFromBCD = (bcd, propertySet) => {
   }
 };
 
-const collectCSSPropertiesFromWebref = (webref, propertySet) => {
-  for (const data of Object.values(webref.css)) {
+const collectCSSPropertiesFromWebref = (webrefCSS, propertySet) => {
+  for (const data of Object.values(webrefCSS)) {
     for (const prop of Object.keys(data.properties)) {
       propertySet.add(prop);
     }
@@ -605,10 +602,10 @@ const cssPropertyToIDLAttribute = (property, lowercaseFirst) => {
   return output;
 };
 
-const buildCSS = (webref, bcd) => {
+const buildCSS = (webrefCSS, bcd) => {
   const propertySet = new Set;
   collectCSSPropertiesFromBCD(bcd, propertySet);
-  collectCSSPropertiesFromWebref(webref, propertySet);
+  collectCSSPropertiesFromWebref(webrefCSS, propertySet);
 
   const tests = {};
 
@@ -651,9 +648,9 @@ const copyResources = async () => {
 };
 
 /* istanbul ignore next */
-const build = async (webref, bcd) => {
-  const IDLTests = buildIDL(webref);
-  const CSSTests = buildCSS(webref, bcd);
+const build = async (specData, bcd) => {
+  const IDLTests = buildIDL(specData.webref.idl, specData.custom.idl);
+  const CSSTests = buildCSS(specData.webref.css, bcd);
   const tests = Object.assign({}, IDLTests, CSSTests);
 
   await writeFile(path.join(__dirname, 'tests.json'), tests);
@@ -662,7 +659,7 @@ const build = async (webref, bcd) => {
 
 /* istanbul ignore if */
 if (require.main === module) {
-  build(webref, bcd).catch((reason) => {
+  build(specData, bcd).catch((reason) => {
     console.error(reason);
     process.exit(1);
   });
@@ -674,7 +671,6 @@ if (require.main === module) {
     getCustomTestCSS,
     compileTestCode,
     compileTest,
-    collectExtraIDL,
     flattenIDL,
     getExposureSet,
     getName,

@@ -16,19 +16,19 @@
 
 const assert = require('assert');
 
-describe('webref', () => {
-  let webref;
+describe('spec-data', () => {
+  let specData;
 
   it('require module', () => {
-    webref = require('../../webref');
+    specData = require('../../spec-data');
   });
 
-  it('has some CSS data', () => {
-    assert('white-space' in webref.css['css-text'].properties);
+  it('has webref CSS data', () => {
+    assert('white-space' in specData.webref.css['css-text'].properties);
   });
 
-  it('has some IDL data', () => {
-    const iface = webref.idl.dom.find((node) => node.name === 'Attr');
+  it('has webref IDL data', () => {
+    const iface = specData.webref.idl.dom.find((node) => node.name === 'Attr');
     assert(iface);
     const member = iface.members.find((m) => m.name === 'specified');
     assert(member);
