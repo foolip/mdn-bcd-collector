@@ -73,9 +73,14 @@ const cookieSession = (req, res, next) => {
 };
 
 /* istanbul ignore next */
-const catchError = (err, res) => {
+const catchError = (err, res, method) => {
   logger.error(err);
-  res.status(500).end();
+  res.status(500);
+  if (method === 'json') {
+    res.json({error: 'Server error'});
+  } else {
+    res.text('Server error');
+  }
 };
 
 const app = express();
@@ -144,9 +149,7 @@ app.post('/api/results/export/github', (req, res) => {
           res.status(500).json({error: 'Server error'});
         }
       })
-      .catch(/* istanbul ignore next */ (err) => res.status(500).json(
-          {error: err}
-      ));
+      .catch(/* istanbul ignore next */ (err) => catchError(err, res, 'json'));
 });
 
 // Views
