@@ -132,6 +132,7 @@ app.post('/api/results/export/github', (req, res) => {
       .then(async (results) => {
         if (Object.entries(results).length === 0) {
           res.json({error: 'No results to export'});
+          return;
         }
 
         const userAgent = req.get('User-Agent');
