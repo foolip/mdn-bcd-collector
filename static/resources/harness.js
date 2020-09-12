@@ -13,7 +13,7 @@
 // limitations under the License.
 
 /* global console, document, window, location, navigator, XMLHttpRequest,
-          self, Worker, Promise, setTimeout, clearTimeout */
+          self, Worker, Promise, setTimeout, clearTimeout, MessageChannel */
 
 'use strict';
 
@@ -223,8 +223,8 @@
             };
 
             reg.active.postMessage(
-              pending.ServiceWorker,
-              [messageChannel.port2]
+                pending.ServiceWorker,
+                [messageChannel.port2]
             );
           });
         });
