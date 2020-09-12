@@ -145,7 +145,7 @@ app.post('/api/results/export/github', (req, res) => {
         }
       })
       .catch(/* istanbul ignore next */ (err) => res.status(500).json(
-        {error: 'Server error'}
+        {error: err}
       ));
 });
 
