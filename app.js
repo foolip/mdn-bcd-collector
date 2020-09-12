@@ -144,7 +144,9 @@ app.post('/api/results/export/github', (req, res) => {
           res.status(500).json({error: 'Server error'});
         }
       })
-      .catch(/* istanbul ignore next */ (err) => catchError(err, res));
+      .catch(/* istanbul ignore next */ (err) => res.status(500).json(
+        {error: 'Server error'}
+      ));
 });
 
 // Views
