@@ -49,6 +49,12 @@
     },
     "MediaDevices": {
       "__base": "var instance = navigator.mediaDevices;"
+    },
+    "NodeIterator": {
+      "__base": "var instance = document.createNodeIterator(document);"
+    },
+    "TreeWalker": {
+      "__base": "var instance = document.createTreeWalker(document);"
     }
   },
   "css": {
