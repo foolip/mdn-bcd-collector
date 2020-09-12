@@ -426,11 +426,9 @@ const validateIDL = (ast) => {
 const buildIDLTests = (ast) => {
   const tests = {};
 
-  const interfaces = ast.filter((dfn) =>
-    dfn.type === 'interface' ||
-    dfn.type === 'namespace' ||
-    dfn.type === 'dictionary'
-  );
+  const interfaces = ast.filter((dfn) => {
+    return dfn.type === 'interface' || dfn.type === 'namespace';
+  });
   interfaces.sort((a, b) => a.name.localeCompare(b.name));
 
   for (const iface of interfaces) {
@@ -473,11 +471,8 @@ const buildIDLTests = (ast) => {
                customTestMember :
                [{property: iface.name, owner: 'self'}, customTestMember];
       } else {
-        const isStatic = (
-          member.special === 'static' ||
-          iface.type === 'namespace' ||
-          iface.type === 'dictionary'
-        );
+        const isStatic = member.special === 'static' ||
+                         iface.type === 'namespace';
         switch (member.type) {
           case 'attribute':
           case 'operation':
