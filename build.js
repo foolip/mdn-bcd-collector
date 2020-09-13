@@ -51,8 +51,13 @@ const getCustomTestAPI = (name, member) => {
       if (member in customTests.api[name]) {
         test = testbase + customTests.api[name][member];
       } else {
-        test = testbase ?
-          testbase + `return instance && '${member}' in instance;` : false;
+        if (name === member) {
+          // Constructors need special testing
+          test = false;
+        } else {
+          test = testbase ?
+            testbase + `return instance && '${member}' in instance;` : false;
+        }
       }
     }
   }
