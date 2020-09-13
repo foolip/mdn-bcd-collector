@@ -1,0 +1,6 @@
+partial interface FetchEvent {
+  readonly attribute Client client;
+  readonly attribute boolean isReload;
+  Promise<NavigationPreloadManager> navigationPreload();
+  readonly attribute DOMString targetClientId;
+};

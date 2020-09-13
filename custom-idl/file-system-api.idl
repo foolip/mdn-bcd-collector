@@ -1,0 +1,30 @@
+// https://www.w3.org/TR/2012/WD-file-system-api-20120417/
+
+// TODO: this is incomplete
+
+[Exposed=Window] interface DirectoryEntrySync {};
+[Exposed=Window] interface DirectoryReaderSync {};
+
+[Exposed=Window] interface EntrySync {};
+
+[Exposed=Window] interface FileEntrySync {};
+[Exposed=Window] interface FileError {};
+[Exposed=Window] interface FileException {};
+
+partial interface FileSystemEntry {
+  void getMetadata(MetadataCallback successCallback, optional ErrorCallback? errorCallback);
+  void moveTo(DirectoryEntry parent, optional DOMString? name, optional EntryCallback? successCallback, optional ErrorCallback? errorCallback);
+  void copyTo(DirectoryEntry parent, optional DOMString? name, optional EntryCallback? successCallback, optional ErrorCallback? errorCallback);
+  DOMString toURL();
+  void remove(VoidCallback successCallback, optional ErrorCallback? errorCallback);
+};
+
+partial interface FileSystemFileEntry {
+  void createWriter(FileWriterCallback successCallback,
+                    optional ErrorCallback? errorCallback);
+};
+
+[Exposed=Window] interface FileSystemSync {
+  readonly attribute DOMString name;
+  readonly attribute DirectoryEntry root;
+};

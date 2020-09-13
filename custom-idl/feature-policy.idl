@@ -1,0 +1,13 @@
+// https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/core/feature_policy/feature_policy.idl;drc=56a02023a0c4c3d513bf7cd972cf616eb25f73bc
+
+partial interface Document {
+  readonly attribute FeaturePolicy featurePolicy;
+};
+
+[Exposed=Window]
+interface FeaturePolicy {
+  boolean allowsFeature(DOMString feature, optional DOMString origin);
+  sequence<DOMString> features();
+  sequence<DOMString> allowedFeatures();
+  sequence<DOMString> getAllowlistForFeature(DOMString feature);
+};

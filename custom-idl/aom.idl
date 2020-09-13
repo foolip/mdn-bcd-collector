@@ -1,0 +1,5 @@
+partial interface Element {
+  readonly attribute DOMString? computedRole;
+  readonly attribute DOMString? computedName;
+  readonly attribute AccessibleNode? accessibleNode;
+};

@@ -1,0 +1,7 @@
+
+partial namespace console {
+  void exception(any msg);
+  void profile(optional DOMString profileName);
+  void profileEnd(optional DOMString profileName);
+  void timeStamp(DOMString label);
+};

@@ -19,12 +19,11 @@ const path = require('path');
 const WebIDL2 = require('webidl2');
 
 // Note: package.json is just a file that we know exists, it's not used.
-const reportsDir = path.dirname(require.resolve('webref/package.json'));
+const webrefDir = path.dirname(require.resolve('webref/package.json'));
 
 // Load text (UTF-8) files from a directory and return an object mapping each
 // name (sans extension) to the parsed result of that text.
-const loadTextFiles = (relativeDir, extension, parse) => {
-  const dir = path.join(reportsDir, relativeDir);
+const loadTextFiles = (dir, extension, parse) => {
   const files = fs.readdirSync(dir);
   files.sort();
   const results = {};
@@ -41,6 +40,11 @@ const loadTextFiles = (relativeDir, extension, parse) => {
 };
 
 module.exports = {
-  css: loadTextFiles('ed/css', '.json', JSON.parse),
-  idl: loadTextFiles('ed/idl', '.idl', WebIDL2.parse)
+  webref: {
+    css: loadTextFiles(path.join(webrefDir, 'ed/css'), '.json', JSON.parse),
+    idl: loadTextFiles(path.join(webrefDir, 'ed/idl'), '.idl', WebIDL2.parse)
+  },
+  custom: {
+    idl: loadTextFiles(path.join(__dirname, 'custom-idl'), '.idl', WebIDL2.parse)
+  }
 };

@@ -1,0 +1,4 @@
+partial interface Document {
+  Touch createTouch();
+  TouchList createTouchList();
+};

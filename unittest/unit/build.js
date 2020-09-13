@@ -32,7 +32,6 @@ const {
   getName,
   compileTestCode,
   compileTest,
-  collectExtraIDL,
   validateIDL,
   buildIDLTests,
   buildIDL,
@@ -735,23 +734,21 @@ describe('build', () => {
   });
 
   it('collectCSSPropertiesFromWebref', () => {
-    const webref = {
-      css: {
-        'css-fonts': {
-          properties: {
-            'font-family': {},
-            'font-weight': {}
-          }
-        },
-        'css-grid': {
-          properties: {
-            grid: {}
-          }
+    const webrefCSS = {
+      'css-fonts': {
+        properties: {
+          'font-family': {},
+          'font-weight': {}
+        }
+      },
+      'css-grid': {
+        properties: {
+          grid: {}
         }
       }
     };
     const propertySet = new Set();
-    collectCSSPropertiesFromWebref(webref, propertySet);
+    collectCSSPropertiesFromWebref(webrefCSS, propertySet);
     const properties = Array.from(propertySet);
     assert.deepEqual(properties, ['font-family', 'font-weight', 'grid']);
   });
@@ -762,41 +759,33 @@ describe('build', () => {
         'webkitLineClamp');
   });
 
-  it('collectExtraIDL', () => {
-    const idl = 'interface Dummy {};';
-    mockFs({
-      'non-standard.idl': idl
-    });
-
-    assert.deepEqual(collectExtraIDL(), WebIDL2.parse(idl));
-
-    mockFs.restore();
-  });
-
   it('buildIDL', () => {
-    const webref = require('../../webref');
-    assert.typeOf(buildIDL(webref), 'object');
+    const specData = require('../../spec-data');
+    assert.typeOf(buildIDL(specData.webref.idl, specData.custom.idl), 'object');
   }).timeout(5000);
 
   describe('flattenIDL', () => {
-    const historicalIDL = WebIDL2.parse(`interface DOMError {};`);
+    const customIDLs = {
+      first: WebIDL2.parse(`interface DOMError {};`),
+      second: WebIDL2.parse(`interface XSLTProcessor {};`)
+    };
 
     it('interface + mixin', () => {
       const specIDLs = {
         first: WebIDL2.parse(`interface DummyError : Error {
                readonly attribute boolean imadumdum;
              };`),
-        secnd: WebIDL2.parse(
+        second: WebIDL2.parse(
             `interface mixin DummyErrorHelper {
                DummyError geterror();
              };
 
              DummyError includes DummyErrorHelper;`)
       };
-      const ast = flattenIDL(specIDLs, historicalIDL);
+      const ast = flattenIDL(specIDLs, customIDLs);
 
       const interfaces = ast.filter((dfn) => dfn.type === 'interface');
-      assert.lengthOf(interfaces, 2);
+      assert.lengthOf(interfaces, 3);
 
       assert.equal(interfaces[0].name, 'DummyError');
       assert.lengthOf(interfaces[0].members, 2);
@@ -810,6 +799,7 @@ describe('build', () => {
       });
 
       assert.equal(interfaces[1].name, 'DOMError');
+      assert.equal(interfaces[2].name, 'XSLTProcessor');
     });
 
     it('namespace + partial namespace', () => {
@@ -820,7 +810,7 @@ describe('build', () => {
                readonly attribute any paintWorklet;
              };`)
       };
-      const ast = flattenIDL(specIDLs, historicalIDL);
+      const ast = flattenIDL(specIDLs, customIDLs);
 
       const namespaces = ast.filter((dfn) => dfn.type === 'namespace');
       assert.lengthOf(namespaces, 1);
@@ -837,8 +827,9 @@ describe('build', () => {
       });
 
       const interfaces = ast.filter((dfn) => dfn.type === 'interface');
-      assert.lengthOf(interfaces, 1);
+      assert.lengthOf(interfaces, 2);
       assert.equal(interfaces[0].name, 'DOMError');
+      assert.equal(interfaces[1].name, 'XSLTProcessor');
     });
 
     it('mixin missing', () => {
@@ -850,7 +841,7 @@ describe('build', () => {
       };
 
       expect(() => {
-        flattenIDL(specIDLs, historicalIDL);
+        flattenIDL(specIDLs, customIDLs);
       }).to.throw('Target DummyError not found for interface mixin DummyErrorHelper');
     });
 
@@ -863,7 +854,7 @@ describe('build', () => {
       };
 
       expect(() => {
-        flattenIDL(specIDLs, historicalIDL);
+        flattenIDL(specIDLs, customIDLs);
       }).to.throw('Interface mixin DummyErrorHelper not found for target DummyError');
     });
 
@@ -880,7 +871,7 @@ describe('build', () => {
              };`)
       };
       expect(() => {
-        flattenIDL(specIDLs, historicalIDL);
+        flattenIDL(specIDLs, customIDLs);
       }).to.throw('Operation overloading across partials/mixins for CSS.supports');
     });
 
@@ -892,13 +883,14 @@ describe('build', () => {
              };`)
       };
       expect(() => {
-        flattenIDL(specIDLs, historicalIDL);
+        flattenIDL(specIDLs, customIDLs);
       }).to.throw('Original definition not found for partial namespace CSS');
     });
   });
 
   describe('getExposureSet', () => {
-    const historicalIDL = WebIDL2.parse(`interface DOMError {};`);
+    // Combining spec and custom IDL is not important to these tests.
+    const customIDLs = {};
 
     it('no defined exposure set', () => {
       const specIDLs = {
@@ -906,7 +898,7 @@ describe('build', () => {
                readonly attribute boolean imadumdum;
              };`)
       };
-      const ast = flattenIDL(specIDLs, historicalIDL);
+      const ast = flattenIDL(specIDLs, customIDLs);
       const interfaces = ast.filter((dfn) => dfn.type === 'interface');
       const exposureSet = getExposureSet(interfaces[0]);
       assert.hasAllKeys(exposureSet, ['Window']);
@@ -918,7 +910,7 @@ describe('build', () => {
                readonly attribute boolean imadumdum;
              };`)
       };
-      const ast = flattenIDL(specIDLs, historicalIDL);
+      const ast = flattenIDL(specIDLs, customIDLs);
       const interfaces = ast.filter((dfn) => dfn.type === 'interface');
       const exposureSet = getExposureSet(interfaces[0]);
       assert.hasAllKeys(exposureSet, ['Worker']);
@@ -930,7 +922,7 @@ describe('build', () => {
                readonly attribute boolean imadumdum;
              };`)
       };
-      const ast = flattenIDL(specIDLs, historicalIDL);
+      const ast = flattenIDL(specIDLs, customIDLs);
       const interfaces = ast.filter((dfn) => dfn.type === 'interface');
       const exposureSet = getExposureSet(interfaces[0]);
       assert.hasAllKeys(exposureSet, ['Window', 'Worker']);
@@ -1944,23 +1936,21 @@ describe('build', () => {
       }
     };
 
-    const webref = {
-      css: {
-        'css-fonts': {
-          properties: {
-            'font-family': {},
-            'font-weight': {}
-          }
-        },
-        'css-grid': {
-          properties: {
-            grid: {}
-          }
+    const webrefCSS = {
+      'css-fonts': {
+        properties: {
+          'font-family': {},
+          'font-weight': {}
+        }
+      },
+      'css-grid': {
+        properties: {
+          grid: {}
         }
       }
     };
 
-    assert.deepEqual(buildCSS(webref, bcd), {
+    assert.deepEqual(buildCSS(webrefCSS, bcd), {
       'css.properties.appearance': {
         tests: [
           {
