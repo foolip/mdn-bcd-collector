@@ -37,6 +37,8 @@ You can define a custom method to test the interface instance itself via `__test
 
 Each member can have a custom test by defining a property as the member name.  Like `__test`, it should be a return statement that returns `true` or `false`.  If no custom test is defined, it will default to `return instance && 'MEMBER' in instance`.
 
+Note: If an interface with a `__base` has a constructor test, but a custom test isn't defined for the constructor, the code will default to normal generation.
+
 Additional members and submembers can be defined using the `__additional` property.  If there is a subfeature to an API or one of its members, such as "api.AudioContext.AudioContext.latencyHint", that simply cannot be defined within IDL, you can include this object and specify tests for such subfeatures.
 
 Each test will compile into a function as follows: `function() {__base + __test/MEMBER/SUBFEATURE}`
