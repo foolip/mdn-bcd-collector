@@ -84,6 +84,9 @@ const getBrowserAndVersion = (userAgent, browsers) => {
   if (browser === 'mobile safari') {
     browser = 'safari_ios';
   }
+  if (browser === 'samsung browser') {
+    browser = 'samsunginternet';
+  }
   if (os === 'android') {
     browser += '_android';
   }
