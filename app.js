@@ -46,7 +46,8 @@ const getHost = () => {
 const {CloudStorage, MemoryStorage} = require('./storage');
 /* istanbul ignore next */
 const storage = process.env.NODE_ENV === 'production' ?
-   new CloudStorage(process.env.GOOGLE_CLOUD_PROJECT) :
+   new CloudStorage(process.env.GOOGLE_CLOUD_PROJECT,
+       process.env.GCLOUD_STORAGE_BUCKET) :
    new MemoryStorage;
 
 /* istanbul ignore next */
