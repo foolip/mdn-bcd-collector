@@ -13,6 +13,5 @@
 # limitations under the License.
 
 runtime: nodejs12
-service: staging
 env_variables:
   GCLOUD_STORAGE_BUCKET: mdn-bcd-buffer-staging

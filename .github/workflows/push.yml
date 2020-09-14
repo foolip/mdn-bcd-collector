@@ -32,8 +32,8 @@ jobs:
       env:
         SECRETS_JSON: ${{ secrets.SECRETS_JSON }}
     - if: ${{ github.ref == 'refs/heads/main' }}
-      run: gcloud app deploy app.staging.yaml
+      run: gcloud app deploy app.staging.yaml --version=staging --no-promote
     - if: ${{ github.ref == 'refs/heads/prod' }}
-      run: gcloud app deploy app.yaml
+      run: gcloud app deploy app.yaml --version=production --promote
 env:
   FORCE_COLOR: 3
