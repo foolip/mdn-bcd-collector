@@ -142,6 +142,8 @@ const run = async (browser, version) => {
         entries.forEach((entry) => {
           console.log('[Browser Logger: %s] %s', entry.level.name, entry.message);
         });
+      }).catch(() => {
+        // Ignore when browser logs couldn't be obtained
       });
 
   await driver.quit();
