@@ -61,28 +61,25 @@ const seleniumUrl = secrets.selenium.url && secrets.selenium.url
     .replace('$USERNAME$', secrets.selenium.username)
     .replace('$ACCESSKEY$', secrets.selenium.accesskey);
 
-const setSafariOS = (version, capabilities) => {
+const getSafariOS = (version) => {
   // Sauce Labs differentiates 10.0 vs. 10.1 in the OS version. This
   // function sets the appropriate OS version accordingly.
 
-  let platform;
   switch (version) {
     case '10':
-      platform = 'OS X 10.11';
+      return 'OS X 10.11';
       break;
     case '11':
-      platform = 'macOS 10.12';
+      return 'macOS 10.12';
       break;
     case '12':
-      platform = 'macOS 10.13';
+      return 'macOS 10.13';
       break;
     case '13':
-      platform = 'macOS 10.14';
+      return 'macOS 10.14';
       break;
-  }
-
-  if (platform) {
-    capabilities.set('platformName', platform);
+    default:
+      return undefined;
   }
 };
 
@@ -92,19 +89,19 @@ const run = async (browser, version) => {
       Capability.BROWSER_NAME,
       Browser[browser.toUpperCase()]
   );
+  capabilities.set(Capability.VERSION, version);
   capabilities.set(
       'name',
       `mdn-bcd-collector: ${bcd.browsers[browser].name} ${version}`
   );
 
   if (browser === 'safari') {
-    setSafariOS(version, capabilities);
+    const platform = getSafariOS(version);
+    capabilities.set('platformName', platform);
   }
 
   const prefs = new logging.Preferences();
   prefs.setLevel(logging.Type.BROWSER, logging.Level.SEVERE);
-
-  capabilities.set(Capability.VERSION, version);
   capabilities.setLoggingPrefs(prefs);
 
   const driverBuilder = new Builder().usingServer(seleniumUrl)
