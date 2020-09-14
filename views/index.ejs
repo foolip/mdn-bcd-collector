@@ -2,8 +2,8 @@
 <h1>mdn-bcd-collector</h1>
 <p>Data collection service for <a href="https://github.com/mdn/browser-compat-data">mdn/browser-compat-data</a>. This website provides automatic feature detection for Web APIs and CSS properties, to assist in obtaining data for the BCD project.</p>
 
-<div>
-  <button id="start">Run</button>
+<form id="testForm">
+  <input type="submit" id="start" value="Run" />
   <datalist id="tests">
     <% tests.forEach(function(test) { %>
       <option value="<%- test %>"></option>
@@ -20,7 +20,7 @@
       <option value="?exposure=ServiceWorker">Service Worker</option>
     </select>
   </div>
-</div>
+</form>
 
 <p>Note: this website is in beta; not all feature detection is accurate yet. If you find any errors, please file an issue on the GitHub page.</p>
 <p>Known caveats:</p>
@@ -34,7 +34,7 @@
 
 <script>
   function main() {
-    var button = document.getElementById('start');
+    var form = document.getElementById('testForm');
     var testSelection = document.getElementById('testSelection');
     var limitExposure = document.getElementById('limitExposure');
     var limitExposureBox = document.getElementById('limitExposureBox');
@@ -47,7 +47,9 @@
       }
     }
 
-    button.onclick = function() {
+    form.onsubmit = function(event) {
+      event.preventDefault();
+      
       var newUrl = '/tests/' + testSelection.value.replace(/\./g, '/');
       if (testSelection.value) {
         newUrl = window.location.protocol + '//' + window.location.host + newUrl;
