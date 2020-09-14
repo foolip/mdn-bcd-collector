@@ -111,7 +111,7 @@ describe('build', () => {
       it('member', () => {
         assert.equal(
             getCustomTestAPI('foo', 'bar'),
-            '(function() {var a = 1;return instance && \'bar\' in instance;})()'
+            '(function() {var a = 1;return \'bar\' in instance;})()'
         );
       });
 
@@ -312,11 +312,11 @@ describe('build', () => {
       const test = {property: 'constructor', owner: 'AudioContext'};
 
       it('normal', () => {
-        assert.equal(compileTestCode(test), '"AudioContext" in self && bcd.testConstructor("AudioContext")');
+        assert.equal(compileTestCode(test), 'bcd.testConstructor("AudioContext")');
       });
 
       it('prefix', () => {
-        assert.equal(compileTestCode(test, 'moz'), '"mozAudioContext" in self && bcd.testConstructor("mozAudioContext")');
+        assert.equal(compileTestCode(test, 'moz'), 'bcd.testConstructor("mozAudioContext")');
       });
     });
 
@@ -336,11 +336,11 @@ describe('build', () => {
       const test = {property: 'Symbol.iterator', owner: 'DOMMatrixReadOnly'};
 
       it('normal', () => {
-        assert.equal(compileTestCode(test), '"DOMMatrixReadOnly" in self && "Symbol" in self && "iterator" in Symbol && Symbol.iterator in DOMMatrixReadOnly.prototype');
+        assert.equal(compileTestCode(test), '"Symbol" in self && "iterator" in Symbol && Symbol.iterator in DOMMatrixReadOnly.prototype');
       });
 
       it('prefix', () => {
-        assert.equal(compileTestCode(test, 'moz'), '"mozDOMMatrixReadOnly" in self && "Symbol" in self && "iterator" in Symbol && Symbol.iterator in mozDOMMatrixReadOnly.prototype');
+        assert.equal(compileTestCode(test, 'moz'), '"Symbol" in self && "iterator" in Symbol && Symbol.iterator in mozDOMMatrixReadOnly.prototype');
       });
     });
 
@@ -967,7 +967,7 @@ describe('build', () => {
         'api.Attr.name': {
           tests: [
             {
-              code: '"Attr" in self && "name" in Attr.prototype',
+              code: '"name" in Attr.prototype',
               prefix: ''
             }
           ],
@@ -996,7 +996,7 @@ describe('build', () => {
         'api.Node.contains': {
           tests: [
             {
-              code: '"Node" in self && "contains" in Node.prototype',
+              code: '"contains" in Node.prototype',
               prefix: ''
             }
           ],
@@ -1026,7 +1026,7 @@ describe('build', () => {
         'api.MediaSource.isTypeSupported': {
           tests: [
             {
-              code: '"MediaSource" in self && "isTypeSupported" in MediaSource',
+              code: '"isTypeSupported" in MediaSource',
               prefix: ''
             }
           ],
@@ -1056,7 +1056,7 @@ describe('build', () => {
         'api.Window.isWindow': {
           tests: [
             {
-              code: '"Window" in self && "isWindow" in Window',
+              code: '"isWindow" in Window',
               prefix: ''
             }
           ],
@@ -1130,7 +1130,7 @@ describe('build', () => {
         'api.ANGLE_instanced_arrays.drawElementsInstancedANGLE': {
           tests: [
             {
-              code: '(function() {var canvas = document.createElement(\'canvas\'); var gl = canvas.getContext(\'webgl\'); var instance = gl.getExtension(\'ANGLE_instanced_arrays\');return instance && \'drawElementsInstancedANGLE\' in instance;})()',
+              code: '(function() {var canvas = document.createElement(\'canvas\'); var gl = canvas.getContext(\'webgl\'); var instance = gl.getExtension(\'ANGLE_instanced_arrays\');return \'drawElementsInstancedANGLE\' in instance;})()',
               prefix: ''
             }
           ],
@@ -1150,7 +1150,7 @@ describe('build', () => {
         'api.Document.charset': {
           tests: [
             {
-              code: '"Document" in self && (function() {return document.charset == "UTF-8";})()',
+              code: '(function() {return document.charset == "UTF-8";})()',
               prefix: ''
             }
           ],
@@ -1160,7 +1160,7 @@ describe('build', () => {
         'api.Document.loaded': {
           tests: [
             {
-              code: '"Document" in self && "loaded" in Document.prototype',
+              code: '"loaded" in Document.prototype',
               prefix: ''
             }
           ],
@@ -1245,7 +1245,7 @@ describe('build', () => {
         'api.Number.Number': {
           tests: [
             {
-              code: '"Number" in self && bcd.testConstructor("Number")',
+              code: 'bcd.testConstructor("Number")',
               prefix: ''
             }
           ],
@@ -1272,7 +1272,7 @@ describe('build', () => {
         'api.Number.Number': {
           tests: [
             {
-              code: '"Number" in self && bcd.testConstructor("Number")',
+              code: 'bcd.testConstructor("Number")',
               prefix: ''
             }
           ],
@@ -1300,7 +1300,7 @@ describe('build', () => {
         'api.DoubleList.@@iterator': {
           tests: [
             {
-              code: '"DoubleList" in self && "Symbol" in self && "iterator" in Symbol && Symbol.iterator in DoubleList.prototype',
+              code: '"Symbol" in self && "iterator" in Symbol && Symbol.iterator in DoubleList.prototype',
               prefix: ''
             }
           ],
@@ -1310,7 +1310,7 @@ describe('build', () => {
         'api.DoubleList.entries': {
           tests: [
             {
-              code: '"DoubleList" in self && "entries" in DoubleList.prototype',
+              code: '"entries" in DoubleList.prototype',
               prefix: ''
             }
           ],
@@ -1320,7 +1320,7 @@ describe('build', () => {
         'api.DoubleList.forEach': {
           tests: [
             {
-              code: '"DoubleList" in self && "forEach" in DoubleList.prototype',
+              code: '"forEach" in DoubleList.prototype',
               prefix: ''
             }
           ],
@@ -1330,7 +1330,7 @@ describe('build', () => {
         'api.DoubleList.keys': {
           tests: [
             {
-              code: '"DoubleList" in self && "keys" in DoubleList.prototype',
+              code: '"keys" in DoubleList.prototype',
               prefix: ''
             }
           ],
@@ -1340,7 +1340,7 @@ describe('build', () => {
         'api.DoubleList.values': {
           tests: [
             {
-              code: '"DoubleList" in self && "values" in DoubleList.prototype',
+              code: '"values" in DoubleList.prototype',
               prefix: ''
             }
           ],
@@ -1368,7 +1368,7 @@ describe('build', () => {
         'api.DoubleMap.clear': {
           tests: [
             {
-              code: '"DoubleMap" in self && "clear" in DoubleMap.prototype',
+              code: '"clear" in DoubleMap.prototype',
               prefix: ''
             }
           ],
@@ -1378,7 +1378,7 @@ describe('build', () => {
         'api.DoubleMap.delete': {
           tests: [
             {
-              code: '"DoubleMap" in self && "delete" in DoubleMap.prototype',
+              code: '"delete" in DoubleMap.prototype',
               prefix: ''
             }
           ],
@@ -1388,7 +1388,7 @@ describe('build', () => {
         'api.DoubleMap.entries': {
           tests: [
             {
-              code: '"DoubleMap" in self && "entries" in DoubleMap.prototype',
+              code: '"entries" in DoubleMap.prototype',
               prefix: ''
             }
           ],
@@ -1398,7 +1398,7 @@ describe('build', () => {
         'api.DoubleMap.forEach': {
           tests: [
             {
-              code: '"DoubleMap" in self && "forEach" in DoubleMap.prototype',
+              code: '"forEach" in DoubleMap.prototype',
               prefix: ''
             }
           ],
@@ -1408,7 +1408,7 @@ describe('build', () => {
         'api.DoubleMap.get': {
           tests: [
             {
-              code: '"DoubleMap" in self && "get" in DoubleMap.prototype',
+              code: '"get" in DoubleMap.prototype',
               prefix: ''
             }
           ],
@@ -1418,7 +1418,7 @@ describe('build', () => {
         'api.DoubleMap.has': {
           tests: [
             {
-              code: '"DoubleMap" in self && "has" in DoubleMap.prototype',
+              code: '"has" in DoubleMap.prototype',
               prefix: ''
             }
           ],
@@ -1428,7 +1428,7 @@ describe('build', () => {
         'api.DoubleMap.keys': {
           tests: [
             {
-              code: '"DoubleMap" in self && "keys" in DoubleMap.prototype',
+              code: '"keys" in DoubleMap.prototype',
               prefix: ''
             }
           ],
@@ -1438,7 +1438,7 @@ describe('build', () => {
         'api.DoubleMap.set': {
           tests: [
             {
-              code: '"DoubleMap" in self && "set" in DoubleMap.prototype',
+              code: '"set" in DoubleMap.prototype',
               prefix: ''
             }
           ],
@@ -1448,7 +1448,7 @@ describe('build', () => {
         'api.DoubleMap.size': {
           tests: [
             {
-              code: '"DoubleMap" in self && "size" in DoubleMap.prototype',
+              code: '"size" in DoubleMap.prototype',
               prefix: ''
             }
           ],
@@ -1458,7 +1458,7 @@ describe('build', () => {
         'api.DoubleMap.values': {
           tests: [
             {
-              code: '"DoubleMap" in self && "values" in DoubleMap.prototype',
+              code: '"values" in DoubleMap.prototype',
               prefix: ''
             }
           ],
@@ -1486,7 +1486,7 @@ describe('build', () => {
         'api.DoubleSet.add': {
           tests: [
             {
-              code: '"DoubleSet" in self && "add" in DoubleSet.prototype',
+              code: '"add" in DoubleSet.prototype',
               prefix: ''
             }
           ],
@@ -1496,7 +1496,7 @@ describe('build', () => {
         'api.DoubleSet.clear': {
           tests: [
             {
-              code: '"DoubleSet" in self && "clear" in DoubleSet.prototype',
+              code: '"clear" in DoubleSet.prototype',
               prefix: ''
             }
           ],
@@ -1506,7 +1506,7 @@ describe('build', () => {
         'api.DoubleSet.delete': {
           tests: [
             {
-              code: '"DoubleSet" in self && "delete" in DoubleSet.prototype',
+              code: '"delete" in DoubleSet.prototype',
               prefix: ''
             }
           ],
@@ -1516,7 +1516,7 @@ describe('build', () => {
         'api.DoubleSet.entries': {
           tests: [
             {
-              code: '"DoubleSet" in self && "entries" in DoubleSet.prototype',
+              code: '"entries" in DoubleSet.prototype',
               prefix: ''
             }
           ],
@@ -1526,7 +1526,7 @@ describe('build', () => {
         'api.DoubleSet.has': {
           tests: [
             {
-              code: '"DoubleSet" in self && "has" in DoubleSet.prototype',
+              code: '"has" in DoubleSet.prototype',
               prefix: ''
             }
           ],
@@ -1536,7 +1536,7 @@ describe('build', () => {
         'api.DoubleSet.keys': {
           tests: [
             {
-              code: '"DoubleSet" in self && "keys" in DoubleSet.prototype',
+              code: '"keys" in DoubleSet.prototype',
               prefix: ''
             }
           ],
@@ -1546,7 +1546,7 @@ describe('build', () => {
         'api.DoubleSet.size': {
           tests: [
             {
-              code: '"DoubleSet" in self && "size" in DoubleSet.prototype',
+              code: '"size" in DoubleSet.prototype',
               prefix: ''
             }
           ],
@@ -1556,7 +1556,7 @@ describe('build', () => {
         'api.DoubleSet.values': {
           tests: [
             {
-              code: '"DoubleSet" in self && "values" in DoubleSet.prototype',
+              code: '"values" in DoubleSet.prototype',
               prefix: ''
             }
           ],
@@ -1658,7 +1658,7 @@ describe('build', () => {
         'api.AudioNode.disconnect': {
           tests: [
             {
-              code: '"AudioNode" in self && "disconnect" in AudioNode.prototype',
+              code: '"disconnect" in AudioNode.prototype',
               prefix: ''
             }
           ],
@@ -1687,7 +1687,7 @@ describe('build', () => {
         'api.CSS.paintWorklet': {
           tests: [
             {
-              code: '"CSS" in self && "paintWorklet" in CSS',
+              code: '"paintWorklet" in CSS',
               prefix: ''
             }
           ],
@@ -1716,7 +1716,7 @@ describe('build', () => {
         'api.CSS.supports': {
           tests: [
             {
-              code: '"CSS" in self && "supports" in CSS',
+              code: '"supports" in CSS',
               prefix: ''
             }
           ],
