@@ -18,6 +18,7 @@ const {
   By,
   Capabilities,
   Capability,
+  logging,
   until
 } = require('selenium-webdriver');
 const bcd = require('mdn-browser-compat-data');
@@ -71,7 +72,12 @@ const run = async (browser, version) => {
       Capability.BROWSER_NAME,
       Browser[browser.toUpperCase()]
   );
+
+  const prefs = new logging.Preferences();
+  prefs.setLevel(logging.Type.BROWSER, logging.Level.SEVERE);
+
   capabilities.set(Capability.VERSION, version);
+  capabilities.setLoggingPrefs(prefs);
 
   const driverBuilder = new Builder().usingServer(seleniumUrl)
       .withCapabilities(capabilities);
@@ -103,6 +109,13 @@ const run = async (browser, version) => {
   } catch (e) {
     console.error(e);
   }
+
+  driver.manage().logs().get(logging.Type.BROWSER)
+     .then((entries) => {
+        entries.forEach((entry) => {
+          console.log('[Browser Logger: %s] %s', entry.level.name, entry.message);
+        });
+     });
 
   await driver.quit();
 };
