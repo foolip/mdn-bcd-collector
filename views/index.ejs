@@ -49,7 +49,7 @@
 
     form.onsubmit = function(event) {
       event.preventDefault();
-      
+
       var newUrl = '/tests/' + testSelection.value.replace(/\./g, '/');
       if (testSelection.value) {
         newUrl = window.location.protocol + '//' + window.location.host + newUrl;
