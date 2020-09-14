@@ -68,14 +68,11 @@ const getSafariOS = (version) => {
   switch (version) {
     case '10':
       return 'OS X 10.11';
-      break;
     case '11':
       return 'macOS 10.12';
-      break;
     case '12':
     case '13':
       return 'macOS 10.13';
-      break;
     default:
       return undefined;
   }
