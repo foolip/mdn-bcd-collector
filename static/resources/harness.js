@@ -323,10 +323,10 @@
     client.send(body);
     client.onreadystatechange = function() {
       if (client.readyState == 4) {
-        if (client.status >= 400) {
-          updateStatus('Failed to upload results.');
-        } else {
+        if (client.status == 200) {
           updateStatus('Results uploaded. <a href="/results" id="submit">Submit to GitHub</a>');
+        } else {
+          updateStatus('Failed to upload results.');
         }
       }
     };
