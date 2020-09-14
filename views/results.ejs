@@ -23,7 +23,9 @@ function exportGitHub() {
 
       try {
         response = JSON.parse(client.responseText);
-      } catch (e) {}
+      } catch (e) {
+        response.error = client.responseText;
+      }
 
       if (response.error) {
         status.textContent = 'Failed to export: ' + response.error;
