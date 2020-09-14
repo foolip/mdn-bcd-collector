@@ -110,14 +110,14 @@ const compileTestCode = (test, prefix = '', ownerPrefix = '') => {
       test.owner.slice(1) : test.owner;
 
   if (test.property == 'constructor') {
-    return `"${ownerAsProperty}" in self && bcd.testConstructor("${ownerAsProperty}")`;
+    return `"bcd.testConstructor("${ownerAsProperty}")`;
   }
   if (test.owner === 'CSS.supports') {
     const thisPrefix = prefix ? `-${prefix}-` : '';
     return `CSS.supports("${thisPrefix}${test.property}", "inherit")`;
   }
   if (test.property.startsWith('Symbol.')) {
-    return `"${ownerAsProperty}" in self && "Symbol" in self && "${test.property.replace('Symbol.', '')}" in Symbol && ${test.property} in ${ownerAsProperty}.prototype`;
+    return `""Symbol" in self && "${test.property.replace('Symbol.', '')}" in Symbol && ${test.property} in ${ownerAsProperty}.prototype`;
   }
   return `"${property}" in ${owner}`;
 };
@@ -482,25 +482,16 @@ const buildIDLTests = (ast) => {
             if (isGlobal) {
               expr = {property: member.name, owner: 'self'};
             } else if (isStatic) {
-              expr = [
-                {property: iface.name, owner: 'self'},
-                {property: member.name, owner: iface.name}
-              ];
+              expr = {property: member.name, owner: iface.name};
             } else {
-              expr = [
-                {property: iface.name, owner: 'self'},
-                {property: member.name, owner: `${iface.name}.prototype`}
-              ];
+              expr = {property: member.name, owner: `${iface.name}.prototype`};
             }
             break;
           case 'const':
             if (isGlobal) {
               expr = {property: member.name, owner: 'self'};
             } else {
-              expr = [
-                {property: iface.name, owner: 'self'},
-                {property: member.name, owner: iface.name}
-              ];
+              expr = {property: member.name, owner: iface.name};
             }
             break;
           case 'constructor':
