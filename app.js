@@ -32,18 +32,6 @@ const secrets = process.env.NODE_ENV === 'test' ?
     require('./secrets.sample.json') :
     require('./secrets.json');
 
-const getHost = () => {
-  const project = process.env.GOOGLE_CLOUD_PROJECT;
-  if (project) {
-    const version = process.env.GAE_VERSION;
-    if (version === 'production') {
-      return `${project}.appspot.com`;
-    }
-    return `${version}-dot-${project}.appspot.com`;
-  }
-  return `localhost:${PORT}`;
-};
-
 /* istanbul ignore next */
 const github = require('./github')(
   secrets.github.token ?
@@ -54,7 +42,6 @@ const github = require('./github')(
 const Tests = require('./tests');
 const tests = new Tests({
   tests: require('./tests.json'),
-  host: getHost(),
   httpOnly: process.env.NODE_ENV !== 'production'
 });
 
@@ -205,7 +192,6 @@ if (require.main === module) {
   // Export for testing
   module.exports = {
     app: app,
-    version: appversion,
-    getHost: getHost
+    version: appversion
   };
 }

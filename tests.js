@@ -18,7 +18,6 @@ class Tests {
   constructor(options) {
     this.tests = options.tests;
     this.endpoints = this.buildEndpoints();
-    this.host = options.host;
     this.httpOnly = options.httpOnly;
   }
 
