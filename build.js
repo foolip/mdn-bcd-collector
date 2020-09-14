@@ -56,7 +56,7 @@ const getCustomTestAPI = (name, member) => {
           test = false;
         } else {
           test = testbase ?
-            testbase + `return instance && '${member}' in instance;` : false;
+            testbase + `return '${member}' in instance;` : false;
         }
       }
     }
