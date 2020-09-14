@@ -82,7 +82,7 @@ const setSafariOS = (version, capabilities) => {
   };
 
   if (platform) {
-    capabilities.set(Capability.PLATFORM_NAME, platform);
+    capabilities.set("platformName", platform);
   }
 };
 
