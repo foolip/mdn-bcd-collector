@@ -68,21 +68,21 @@ const setSafariOS = (version, capabilities) => {
   let platform;
   switch (version) {
     case '10':
-      platform = "OS X 10.11";
+      platform = 'OS X 10.11';
       break;
     case '11':
-      platform = "macOS 10.12";
+      platform = 'macOS 10.12';
       break;
     case '12':
-      platform = "macOS 10.13";
+      platform = 'macOS 10.13';
       break;
     case '13':
-      platform = "macOS 10.14";
+      platform = 'macOS 10.14';
       break;
-  };
+  }
 
   if (platform) {
-    capabilities.set("platformName", platform);
+    capabilities.set('platformName', platform);
   }
 };
 
@@ -97,7 +97,9 @@ const run = async (browser, version) => {
       `mdn-bcd-collector: ${bcd.browsers[browser].name} ${version}`
   );
 
-  if (browser === 'safari') setSafariOS(version, capabilities);
+  if (browser === 'safari') {
+    setSafariOS(version, capabilities);
+  }
 
   const prefs = new logging.Preferences();
   prefs.setLevel(logging.Type.BROWSER, logging.Level.SEVERE);
@@ -172,7 +174,7 @@ const runAll = async () => {
 if (require.main === module) {
   if (runAll() === false) {
     process.exit(1);
-  };
+  }
 } else {
   module.exports = {
     run,
