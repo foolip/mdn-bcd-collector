@@ -61,10 +61,6 @@ const seleniumUrl = secrets.selenium.url && secrets.selenium.url
     .replace('$USERNAME$', secrets.selenium.username)
     .replace('$ACCESSKEY$', secrets.selenium.accesskey);
 
-if (!seleniumUrl) {
-  console.error('A Selenium remote WebDriver URL is not defined in secrets.json.  Please define your Selenium remote.');
-  process.exit(1);
-}
 
 const run = async (browser, version) => {
   const capabilities = new Capabilities();
@@ -127,6 +123,11 @@ const run = async (browser, version) => {
 };
 
 const runAll = async () => {
+  if (!seleniumUrl) {
+    console.error('A Selenium remote WebDriver URL is not defined in secrets.json.  Please define your Selenium remote.');
+    return false;
+  }
+
   // eslint-disable-next-line guard-for-in
   for (const browser in browsersToTest) {
     for (const version of browsersToTest[browser]) {
@@ -138,11 +139,14 @@ const runAll = async () => {
       }
     }
   }
+  return true;
 };
 
 /* istanbul ignore if */
 if (require.main === module) {
-  runAll();
+  if (runAll() === false) {
+    process.exit(1);
+  };
 } else {
   module.exports = {
     run,
