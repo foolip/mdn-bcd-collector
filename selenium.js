@@ -73,8 +73,8 @@ const run = async (browser, version) => {
       Browser[browser.toUpperCase()]
   );
   capabilities.set(
-    'name',
-    `mdn-bcd-collector: ${bcd.browsers[browser].name} ${version}`
+      'name',
+      `mdn-bcd-collector: ${bcd.browsers[browser].name} ${version}`
   );
 
   const prefs = new logging.Preferences();
@@ -117,11 +117,11 @@ const run = async (browser, version) => {
   }
 
   driver.manage().logs().get(logging.Type.BROWSER)
-     .then((entries) => {
+      .then((entries) => {
         entries.forEach((entry) => {
           console.log('[Browser Logger: %s] %s', entry.level.name, entry.message);
         });
-     });
+      });
 
   await driver.quit();
 };
