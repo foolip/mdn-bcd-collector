@@ -67,9 +67,11 @@ describe('storage', () => {
       let storage = null;
 
       beforeEach(() => {
-        storage = new StorageClass;
         if (StorageClass === CloudStorage) {
+          storage = new CloudStorage('fake-project', 'fake-bucket');
           storage._bucket = new FakeBucket;
+        } else {
+          storage = new StorageClass;
         }
       });
 
