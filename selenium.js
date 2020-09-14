@@ -61,10 +61,22 @@ const seleniumUrl = secrets.selenium.url && secrets.selenium.url
     .replace('$USERNAME$', secrets.selenium.username)
     .replace('$ACCESSKEY$', secrets.selenium.accesskey);
 
-if (!seleniumUrl) {
-  console.error('A Selenium remote WebDriver URL is not defined in secrets.json.  Please define your Selenium remote.');
-  process.exit(1);
-}
+const getSafariOS = (version) => {
+  // Sauce Labs differentiates 10.0 vs. 10.1 in the OS version. This
+  // function sets the appropriate OS version accordingly.
+
+  switch (version) {
+    case '10':
+      return 'OS X 10.11';
+    case '11':
+      return 'macOS 10.12';
+    case '12':
+    case '13':
+      return 'macOS 10.13';
+    default:
+      return undefined;
+  }
+};
 
 const run = async (browser, version) => {
   const capabilities = new Capabilities();
@@ -72,15 +84,19 @@ const run = async (browser, version) => {
       Capability.BROWSER_NAME,
       Browser[browser.toUpperCase()]
   );
+  capabilities.set(Capability.VERSION, version);
   capabilities.set(
       'name',
       `mdn-bcd-collector: ${bcd.browsers[browser].name} ${version}`
   );
 
+  if (browser === 'safari') {
+    const platform = getSafariOS(version);
+    capabilities.set('platform', platform);
+  }
+
   const prefs = new logging.Preferences();
   prefs.setLevel(logging.Type.BROWSER, logging.Level.SEVERE);
-
-  capabilities.set(Capability.VERSION, version);
   capabilities.setLoggingPrefs(prefs);
 
   const driverBuilder = new Builder().usingServer(seleniumUrl)
@@ -116,17 +132,24 @@ const run = async (browser, version) => {
     console.error(e);
   }
 
-  driver.manage().logs().get(logging.Type.BROWSER)
-      .then((entries) => {
-        entries.forEach((entry) => {
-          console.log('[Browser Logger: %s] %s', entry.level.name, entry.message);
-        });
-      });
+  try {
+    const logs = await driver.manage().logs().get(logging.Type.BROWSER);
+    logs.forEach((entry) => {
+      console.log('[Browser Logger: %s] %s', entry.level.name, entry.message);
+    });
+  } catch (e) {
+    // If we couldn't get the browser logs, ignore and continue
+  }
 
   await driver.quit();
 };
 
 const runAll = async () => {
+  if (!seleniumUrl) {
+    console.error('A Selenium remote WebDriver URL is not defined in secrets.json.  Please define your Selenium remote.');
+    return false;
+  }
+
   // eslint-disable-next-line guard-for-in
   for (const browser in browsersToTest) {
     for (const version of browsersToTest[browser]) {
@@ -138,11 +161,14 @@ const runAll = async () => {
       }
     }
   }
+  return true;
 };
 
 /* istanbul ignore if */
 if (require.main === module) {
-  runAll();
+  if (runAll() === false) {
+    process.exit(1);
+  }
 } else {
   module.exports = {
     run,
