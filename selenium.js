@@ -97,7 +97,7 @@ const run = async (browser, version) => {
 
   if (browser === 'safari') {
     const platform = getSafariOS(version);
-    capabilities.set('platformName', platform);
+    capabilities.set('platform', platform);
   }
 
   const prefs = new logging.Preferences();
