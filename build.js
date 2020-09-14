@@ -469,9 +469,7 @@ const buildIDLTests = (ast) => {
       const customTestMember = getCustomTestAPI(adjustedIfaceName, member.name);
 
       if (customTestMember) {
-        expr = customIfaceTest ?
-               customTestMember :
-               [{property: iface.name, owner: 'self'}, customTestMember];
+        expr = customTestMember;
       } else {
         const isStatic = member.special === 'static' ||
                          iface.type === 'namespace';
