@@ -110,14 +110,14 @@ const compileTestCode = (test, prefix = '', ownerPrefix = '') => {
       test.owner.slice(1) : test.owner;
 
   if (test.property == 'constructor') {
-    return `"bcd.testConstructor("${ownerAsProperty}")`;
+    return `bcd.testConstructor("${ownerAsProperty}")`;
   }
   if (test.owner === 'CSS.supports') {
     const thisPrefix = prefix ? `-${prefix}-` : '';
     return `CSS.supports("${thisPrefix}${test.property}", "inherit")`;
   }
   if (test.property.startsWith('Symbol.')) {
-    return `""Symbol" in self && "${test.property.replace('Symbol.', '')}" in Symbol && ${test.property} in ${ownerAsProperty}.prototype`;
+    return `"Symbol" in self && "${test.property.replace('Symbol.', '')}" in Symbol && ${test.property} in ${ownerAsProperty}.prototype`;
   }
   return `"${property}" in ${owner}`;
 };
