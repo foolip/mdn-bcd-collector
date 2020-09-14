@@ -9,6 +9,9 @@
     "AudioBufferSourceNode": {
       "__base": "var audioCtx = new (window.AudioContext || window.webkitAudioContext)(); if (!audioCtx) {return false}; var instance = audioCtx.createBufferSource();"
     },
+    "Document": {
+      "__base": "var instance = document;"
+    },
     "DOMTokenList": {
       "__additional": {
         "remove_whitespace_and_duplicates": "var elm = document.createElement('b'); elm.className = ' foo bar foo '; elm.classList.remove('bar'); return elm.className === 'foo';"
@@ -50,11 +53,17 @@
     "MediaDevices": {
       "__base": "var instance = navigator.mediaDevices;"
     },
+    "Navigator": {
+      "__base": "var instance = window.navigator;"
+    },
     "NodeIterator": {
       "__base": "var instance = document.createNodeIterator(document);"
     },
     "TreeWalker": {
       "__base": "var instance = document.createTreeWalker(document);"
+    },
+    "Window": {
+      "__base": "var instance = window;"
     }
   },
   "css": {
