@@ -2,7 +2,7 @@ on:
   push:
     branches:
     - main
-    - staging
+    - prod
 name: Push
 jobs:
   test:
@@ -32,8 +32,8 @@ jobs:
       env:
         SECRETS_JSON: ${{ secrets.SECRETS_JSON }}
     - if: ${{ github.ref == 'refs/heads/main' }}
-      run: gcloud app deploy --version=production --promote
-    - if: ${{ github.ref == 'refs/heads/staging' }}
       run: gcloud app deploy --version=staging --no-promote
+    - if: ${{ github.ref == 'refs/heads/prod' }}
+      run: gcloud app deploy --version=production --promote
 env:
   FORCE_COLOR: 3
