@@ -21,6 +21,7 @@ const uniqueString = require('unique-string');
 const expressLayouts = require('express-ejs-layouts');
 
 const logger = require('./logger');
+const storage = require('./storage').getStorage();
 
 const appversion = require('./package.json').version;
 
@@ -42,13 +43,6 @@ const getHost = () => {
   }
   return `localhost:${PORT}`;
 };
-
-const {CloudStorage, MemoryStorage} = require('./storage');
-/* istanbul ignore next */
-const storage = process.env.NODE_ENV === 'production' ?
-   new CloudStorage(process.env.GOOGLE_CLOUD_PROJECT,
-       process.env.GCLOUD_STORAGE_BUCKET) :
-   new MemoryStorage;
 
 /* istanbul ignore next */
 const github = require('./github')(

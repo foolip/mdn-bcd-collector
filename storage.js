@@ -73,4 +73,20 @@ class MemoryStorage {
   }
 }
 
-module.exports = {CloudStorage, MemoryStorage};
+const getStorage = () => {
+  // Use CloudStorage on Google AppEngine.
+  const project = process.env.GOOGLE_CLOUD_PROJECT;
+  if (project) {
+    // Use GCLOUD_STORAGE_BUCKET or GCLOUD_STORAGE_BUCKET_STAGING from app.yaml,
+    // depending on the version we're running.
+    const bucketName = process.env.GAE_VERSION == 'production' ?
+                       process.env.GCLOUD_STORAGE_BUCKET :
+                       process.env.GCLOUD_STORAGE_BUCKET_STAGING;
+    return new CloudStorage(project, bucketName);
+  }
+
+  // Use MemoryStorage storage for local deployment and testing.
+  return new MemoryStorage;
+};
+
+module.exports = {CloudStorage, MemoryStorage, getStorage};
