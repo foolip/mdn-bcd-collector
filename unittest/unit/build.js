@@ -114,6 +114,10 @@ describe('build', () => {
             '(function() {var a = 1;return instance && \'bar\' in instance;})()'
         );
       });
+
+      it('constructor', () => {
+        assert.equal(getCustomTestAPI('foo', 'foo'), false);
+      });
     });
 
     describe('custom test for interface only, no base', () => {
