@@ -83,6 +83,8 @@ const run = async (browser, version) => {
       .withCapabilities(capabilities);
   const driver = await driverBuilder.build();
 
+  let statusEl;
+
   try {
     await driver.get(`${host}`);
     await driver.wait(() => {
@@ -91,21 +93,21 @@ const run = async (browser, version) => {
     });
     await driver.executeScript('return document.readyState');
     await driver.findElement(By.id('start')).click();
+
     await driver.wait(until.urlIs(`${host}/tests/`));
-    await driver.wait(
-        until.elementTextContains(
-            await driver.findElement(By.id('status')), 'uploaded'
-        ),
-        30000
-    );
+    statusEl = await driver.findElement(By.id('status'));
+    await driver.wait(until.elementTextContains(statusEl, 'upload'), 30000);
+    if ((await statusEl.getText()).search('Failed') !== -1) {
+      throw new Error('Results failed to upload');
+    }
     await driver.findElement(By.id('submit')).click();
+
     await driver.wait(until.urlIs(`${host}/results`));
-    await driver.wait(
-        until.elementTextContains(
-            await driver.findElement(By.id('status')), 'to'
-        ),
-        30000
-    );
+    statusEl = await driver.findElement(By.id('status'));
+    await driver.wait(until.elementTextContains(statusEl, 'to'));
+    if ((await statusEl.getText()).search('Failed') !== -1) {
+      throw new Error('Pull request failed to submit');
+    }
   } catch (e) {
     console.error(e);
   }
