@@ -18,6 +18,7 @@ const {
   By,
   Capabilities,
   Capability,
+  logging,
   until
 } = require('selenium-webdriver');
 const bcd = require('mdn-browser-compat-data');
@@ -71,11 +72,22 @@ const run = async (browser, version) => {
       Capability.BROWSER_NAME,
       Browser[browser.toUpperCase()]
   );
+  capabilities.set(
+      'name',
+      `mdn-bcd-collector: ${bcd.browsers[browser].name} ${version}`
+  );
+
+  const prefs = new logging.Preferences();
+  prefs.setLevel(logging.Type.BROWSER, logging.Level.SEVERE);
+
   capabilities.set(Capability.VERSION, version);
+  capabilities.setLoggingPrefs(prefs);
 
   const driverBuilder = new Builder().usingServer(seleniumUrl)
       .withCapabilities(capabilities);
   const driver = await driverBuilder.build();
+
+  let statusEl;
 
   try {
     await driver.get(`${host}`);
@@ -85,24 +97,31 @@ const run = async (browser, version) => {
     });
     await driver.executeScript('return document.readyState');
     await driver.findElement(By.id('start')).click();
+
     await driver.wait(until.urlIs(`${host}/tests/`));
-    await driver.wait(
-        until.elementTextContains(
-            await driver.findElement(By.id('status')), 'uploaded'
-        ),
-        30000
-    );
+    statusEl = await driver.findElement(By.id('status'));
+    await driver.wait(until.elementTextContains(statusEl, 'upload'), 30000);
+    if ((await statusEl.getText()).search('Failed') !== -1) {
+      throw new Error('Results failed to upload');
+    }
     await driver.findElement(By.id('submit')).click();
+
     await driver.wait(until.urlIs(`${host}/results`));
-    await driver.wait(
-        until.elementTextContains(
-            await driver.findElement(By.id('status')), 'to'
-        ),
-        30000
-    );
+    statusEl = await driver.findElement(By.id('status'));
+    await driver.wait(until.elementTextContains(statusEl, 'to'));
+    if ((await statusEl.getText()).search('Failed') !== -1) {
+      throw new Error('Pull request failed to submit');
+    }
   } catch (e) {
     console.error(e);
   }
+
+  driver.manage().logs().get(logging.Type.BROWSER)
+      .then((entries) => {
+        entries.forEach((entry) => {
+          console.log('[Browser Logger: %s] %s', entry.level.name, entry.message);
+        });
+      });
 
   await driver.quit();
 };
