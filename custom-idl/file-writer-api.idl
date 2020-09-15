@@ -1,0 +1,12 @@
+// https://www.w3.org/TR/2012/WD-file-writer-api-20120417/
+
+// TODO: this is incomplete
+
+[Exposed=Window]
+interface BlobBuilder {
+  constructor();
+  Blob getBlob (optional DOMString contentType);
+  void append (DOMString text, optional DOMString endings);
+  void append (Blob data);
+  void append (ArrayBuffer data);
+};

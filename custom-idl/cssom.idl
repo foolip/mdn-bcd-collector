@@ -1,0 +1,84 @@
+// https://www.w3.org/TR/DOM-Level-2-Style/css.html
+
+[Exposed=Window]
+interface CSSPrimitiveValue : CSSValue {
+  const unsigned short CSS_UNKNOWN = 0;
+  const unsigned short CSS_NUMBER = 1;
+  const unsigned short CSS_PERCENTAGE = 2;
+  const unsigned short CSS_EMS = 3;
+  const unsigned short CSS_EXS = 4;
+  const unsigned short CSS_PX = 5;
+  const unsigned short CSS_CM = 6;
+  const unsigned short CSS_MM = 7;
+  const unsigned short CSS_IN = 8;
+  const unsigned short CSS_PT = 9;
+  const unsigned short CSS_PC = 10;
+  const unsigned short CSS_DEG = 11;
+  const unsigned short CSS_RAD = 12;
+  const unsigned short CSS_GRAD = 13;
+  const unsigned short CSS_MS = 14;
+  const unsigned short CSS_S = 15;
+  const unsigned short CSS_HZ = 16;
+  const unsigned short CSS_KHZ = 17;
+  const unsigned short CSS_DIMENSION = 18;
+  const unsigned short CSS_STRING = 19;
+  const unsigned short CSS_URI = 20;
+  const unsigned short CSS_IDENT = 21;
+  const unsigned short CSS_ATTR = 22;
+  const unsigned short CSS_COUNTER = 23;
+  const unsigned short CSS_RECT = 24;
+  const unsigned short CSS_RGBCOLOR = 25;
+
+  readonly attribute unsigned short primitiveType;
+  void setFloatValue(unsigned short unitType, float floatValue);
+  float getFloatValue(unsigned short unitType);
+  void setStringValue(unsigned short stringType, DOMString stringValue);
+  DOMString getStringValue();
+  Counter getCounterValue();
+  Rect getRectValue();
+  RGBColor getRGBColorValue();
+};
+
+[Exposed=Window]
+interface CSSValue {
+  const unsigned short CSS_INHERIT = 0;
+  const unsigned short CSS_PRIMITIVE_VALUE = 1;
+  const unsigned short CSS_VALUE_LIST = 2;
+  const unsigned short CSS_CUSTOM = 3;
+
+  attribute DOMString cssText;
+  readonly attribute unsigned short cssValueType;
+};
+
+[Exposed=Window]
+interface CSSValueList : CSSValue {
+  readonly attribute unsigned long length;
+  CSSValue item(unsigned long index);
+};
+
+partial interface CSSStyleDeclaration {
+  CSSValue getPropertyCSSValue(DOMString property);
+};
+
+// Non-standard stuff
+
+partial interface Document {
+  // https://www.w3.org/Bugs/Public/show_bug.cgi?id=29471
+  attribute DOMString? selectedStyleSheetSet;
+  readonly attribute DOMString? lastStyleSheetSet;
+  readonly attribute DOMString? preferredStyleSheetSet;
+  readonly attribute FrozenArray<DOMString> styleSheetSets;
+  void enableStyleSheetsForSet(DOMString? name);
+
+  // https://developer.mozilla.org/en-US/docs/Web/API/Document/width
+  readonly attribute long width;
+  // https://developer.mozilla.org/en-US/docs/Web/API/Document/height
+  readonly attribute long height;
+};
+
+partial interface Element {
+  // https://docs.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/aa703980(v=vs.85)
+  readonly attribute MSCurrentStyleCSSProperties? currentStyle;
+  // https://docs.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/aa703996(v=vs.85)
+  readonly attribute MSStyleCSSProperties? runtimeStyle;
+};

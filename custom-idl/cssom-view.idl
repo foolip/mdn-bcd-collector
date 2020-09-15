@@ -1,5 +1,15 @@
+partial interface Document {
+  // https://www.w3.org/Bugs/Public/show_bug.cgi?id=27626
+  Range caretRangeFromPoint(optional long x = 0, optional long y = 0);
+};
+
 partial interface Element {
   void scrollIntoViewIfNeeded(optional boolean centerIfNeeded);
+
+  // https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollLeftMax
+  readonly attribute long scrollLeftMax;
+  // https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollTopMax
+  readonly attribute long scrollTopMax;
 };
 
 partial interface Screen {

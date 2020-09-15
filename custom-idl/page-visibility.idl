@@ -1,0 +1,4 @@
+partial interface Document {
+  readonly attribute DOMString webkitVisibilityState;
+  readonly attribute boolean webkitHidden;
+};

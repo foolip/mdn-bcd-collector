@@ -12,11 +12,48 @@ partial interface CloseEvent {
   CloseEvent initCloseEvent();
 };
 
+// https://hg.mozilla.org/mozilla-central/file/a451ebba378efcce0967e508a8107ab14dd5edcb/dom/webidl/DataTransfer.webidl#l44
+partial interface DataTransfer {
+  void addElement(Element element);
+  readonly attribute unsigned long mozItemCount;
+  attribute DOMString mozCursor;
+  DOMStringList mozTypesAt(unsigned long index);
+  void mozClearDataAt(DOMString format, unsigned long index);
+  void mozSetDataAt(DOMString format, any data, unsigned long index);
+  any mozGetDataAt(DOMString format, unsigned long index);
+  readonly attribute boolean mozUserCancelled;
+  readonly attribute Node? mozSourceNode;
+};
+
+partial interface Document {
+  // https://github.com/whatwg/html/pull/1103
+  attribute EventHandler onafterscriptexecute;
+  attribute EventHandler onbeforescriptexecute;
+
+  // https://github.com/whatwg/html/issues/667
+  attribute EventHandler onsearch;
+
+  // https://github.com/whatwg/html/pull/951
+  readonly attribute DOMString origin;
+};
+
+partial interface Element {
+  // https://github.com/mdn/browser-compat-data/issues/6697
+  readonly attribute DOMString accessKey;
+
+  // https://github.com/mdn/browser-compat-data/issues/6683
+  readonly attribute DOMString name;
+
+  // https://github.com/whatwg/html/issues/667
+  attribute EventHandler onsearch;
+};
+
 partial interface HTMLFrameSetElement {
   attribute EventHandler onorientationchange;
 };
 
 partial interface HTMLInputElement {
+  // https://github.com/whatwg/html/issues/667
   attribute boolean incremental;
 };
 
@@ -37,7 +74,30 @@ partial interface HTMLVideoElement {
 };
 
 partial interface Window {
-  readonly attribute Navigator clientInformation;
   long webkitRequestAnimationFrame(FrameRequestCallback callback);
   void webkitCancelAnimationFrame(long id);
+
+  // https://github.com/whatwg/html/issues/2379
+  readonly attribute Navigator clientInformation;
+
+  // https://docs.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/aa741363(v=vs.85)
+  // https://bugs.chromium.org/p/chromium/issues/detail?id=692835
+  attribute DOMString defaultStatus;
+  attribute DOMString defaultstatus;
+
+  // https://github.com/whatwg/html/issues/3539
+  boolean find(optional DOMString string = "",
+               optional boolean caseSensitive = false,
+               optional boolean backwards = false,
+               optional boolean wrap = false,
+               optional boolean wholeWord = false,
+               optional boolean searchInFrames = false,
+               optional boolean showDialog = false);
+
+  // https://docs.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/aa741479(v=vs.85)
+  // https://bugs.chromium.org/p/chromium/issues/detail?id=438370
+  readonly attribute boolean offscreenBuffering;
+
+  // https://github.com/whatwg/html/issues/667
+  attribute EventHandler onsearch;
 };

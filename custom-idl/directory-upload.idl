@@ -1,0 +1,5 @@
+// https://wicg.github.io/directory-upload/proposal.html#drag-and-drop
+partial interface DataTransfer {
+  Promise<sequence<(File or Directory)>> getFilesAndDirectories();
+  Promise<sequence<File>> getFiles(optional boolean recursiveFlag=false);
+};
