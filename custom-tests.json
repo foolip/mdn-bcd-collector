@@ -14,7 +14,8 @@
     },
     "DOMTokenList": {
       "__additional": {
-        "remove_whitespace_and_duplicates": "var elm = document.createElement('b'); elm.className = ' foo bar foo '; elm.classList.remove('bar'); return elm.className === 'foo';"
+        "trim_whitespace": "var elm = document.createElement('b'); elm.className = ' foo bar foo '; elm.classList.remove('bar'); return elm.className === 'foo foo' || elm.className === 'foo';",
+        "remove_duplicates": "var elm = document.createElement('b'); elm.className = ' foo bar foo '; elm.classList.remove('bar'); return elm.className === 'foo';"
       }
     },
     "EXT_blend_minmax": {
