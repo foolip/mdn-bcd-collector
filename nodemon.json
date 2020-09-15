@@ -1,8 +1,10 @@
 {
   "verbose": true,
   "ignore": [
+    "generated/*",
     "static/*",
     "views/*",
+    "tests.json",
     "find-missing.js",
     "selenium.js",
     "update-bcd.js"
