@@ -23,6 +23,8 @@ partial interface Document {
   readonly attribute DOMString xmlVersion;
   attribute boolean strictErrorChecking;
   readonly attribute DOMConfiguration domConfig;
+  void normalizeDocument();
+  Node renameNode(Node n, DOMString namespaceURI, DOMString qualifiedName);
 };
 
 partial interface DocumentType {
@@ -37,8 +39,6 @@ interface DOMConfiguration {
   DOMUserData getParameter(DOMString name);
   boolean canSetParameter(DOMString name, DOMUserData value);
   readonly attribute DOMStringList parameterNames;
-  void normalizeDocument();
-  Node renameNode(Node n, DOMString namespaceURI, DOMString qualifiedName);
 };
 
 [Exposed=Window]
