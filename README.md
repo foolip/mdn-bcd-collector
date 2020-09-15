@@ -10,7 +10,6 @@ See [DESIGN.md](./DESIGN.md) for details of how this service works.
 
 ```sh
 npm install
-npm run build
 ```
 
 Before you can run or deploy, copy `secrets.sample.json` to `secrets.json`.
@@ -23,7 +22,7 @@ Before you can run or deploy, copy `secrets.sample.json` to `secrets.json`.
 npm run start-dev
 ```
 
-(`start-dev` as opposed to `start` will automatically reload the server on file changes.)
+(`start-dev`, as opposed to `start`, will automatically rebuild the tests and reload the server on file changes.)
 
 ## Deploying to App Engine
 
