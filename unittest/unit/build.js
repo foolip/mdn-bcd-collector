@@ -1845,13 +1845,13 @@ describe('build', () => {
       };
 
       interface WebGLRenderingContext {
-        attribute Canvas canvas;
-        attribute Canvas canvas;
+        attribute object canvas;
+        attribute object canvas;
       };
 
       interface WebGL2RenderingContext {
-        attribute Canvas canvas;
-        attribute Canvas canvas;
+        attribute object canvas;
+        attribute object canvas;
       };`);
       expect(() => {
         validateIDL(ast);
@@ -1866,6 +1866,24 @@ describe('build', () => {
       expect(() => {
         validateIDL(ast);
       }).to.throw();
+    });
+
+    it('unknown types', () => {
+      const ast = WebIDL2.parse(`interface Dummy {
+        attribute Dumdum imadumdum;
+      };`);
+      expect(() => {
+        validateIDL(ast);
+      }).to.throw();
+    });
+
+    it('ignored unknown types', () => {
+      const ast = WebIDL2.parse(`interface Dummy {
+        attribute CSSOMString style;
+      };`);
+      expect(() => {
+        validateIDL(ast);
+      }).to.not.throw();
     });
   });
 

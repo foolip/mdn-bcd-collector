@@ -98,6 +98,9 @@ partial interface Document {
   readonly attribute long height;
 };
 
+[Exposed=Window] interface MSCurrentStyleCSSProperties {};
+[Exposed=Window] interface MSStyleCSSProperties {};
+
 partial interface Element {
   // https://docs.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/aa703980(v=vs.85)
   readonly attribute MSCurrentStyleCSSProperties? currentStyle;

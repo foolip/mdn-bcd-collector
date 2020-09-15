@@ -1,4 +1,19 @@
+// https://github.com/whatwg/html/pull/1942
+dictionary HitRegionOptions {
+  Path2D? path = null;
+  CanvasFillRule fillRule = "nonzero";
+  DOMString id = "";
+  DOMString? parentID = null;
+  DOMString cursor = "inherit";
+  // for control-backed regions:
+  Element? control = null;
+  // for unbacked regions:
+  DOMString? label = null;
+  DOMString? role = null;
+};
+
 partial interface CanvasRenderingContext2D {
+  // https://github.com/whatwg/html/pull/1942
   void addHitRegion(optional HitRegionOptions options);
   void removeHitRegion(DOMString id);
   void clearHitRegions();

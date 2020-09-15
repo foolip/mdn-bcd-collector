@@ -421,6 +421,88 @@ const validateIDL = (ast) => {
     }
   }
 
+  // Validate that there are no unknown types. There are types in lots of
+  // places in the AST (interface members, arguments, return types) and rather
+  // than trying to cover them all, walk the whole AST looking for "idlType".
+  const usedTypes = new Set();
+  // Serialize and reparse the ast to not have to worry about own properties
+  // vs enumerable properties on the prototypes, etc.
+  const pending = [JSON.parse(JSON.stringify(ast))];
+  while (pending.length) {
+    const node = pending.pop();
+    for (const [key, value] of Object.entries(node)) {
+      if (key === 'idlType' && typeof value === 'string') {
+        usedTypes.add(value);
+      } else if (typeof value === 'object' && value !== null) {
+        pending.push(value);
+      }
+    }
+  }
+  // These are the types defined by Web IDL itself.
+  const knownTypes = new Set([
+    'any', // https://heycam.github.io/webidl/#idl-any
+    'ArrayBuffer', // https://heycam.github.io/webidl/#idl-ArrayBuffer
+    'boolean', // https://heycam.github.io/webidl/#idl-boolean
+    'byte', // https://heycam.github.io/webidl/#idl-byte
+    'ByteString', // https://heycam.github.io/webidl/#idl-ByteString
+    'DataView', // https://heycam.github.io/webidl/#idl-DataView
+    'DOMString', // https://heycam.github.io/webidl/#idl-DOMString
+    'double', // https://heycam.github.io/webidl/#idl-double
+    'float', // https://heycam.github.io/webidl/#idl-float
+    'Float32Array', // https://heycam.github.io/webidl/#idl-Float32Array
+    'Float64Array', // https://heycam.github.io/webidl/#idl-Float64Array
+    'Int16Array', // https://heycam.github.io/webidl/#idl-Int16Array
+    'Int32Array', // https://heycam.github.io/webidl/#idl-Int32Array
+    'Int8Array', // https://heycam.github.io/webidl/#idl-Int8Array
+    'long long', // https://heycam.github.io/webidl/#idl-long-long
+    'long', // https://heycam.github.io/webidl/#idl-long
+    'object', // https://heycam.github.io/webidl/#idl-object
+    'octet', // https://heycam.github.io/webidl/#idl-octet
+    'short', // https://heycam.github.io/webidl/#idl-short
+    'symbol', // https://heycam.github.io/webidl/#idl-symbol
+    'Uint16Array', // https://heycam.github.io/webidl/#idl-Uint16Array
+    'Uint32Array', // https://heycam.github.io/webidl/#idl-Uint32Array
+    'Uint8Array', // https://heycam.github.io/webidl/#idl-Uint8Array
+    'Uint8ClampedArray', // https://heycam.github.io/webidl/#idl-Uint8ClampedArray
+    'unrestricted double', // https://heycam.github.io/webidl/#idl-unrestricted-double
+    'unrestricted float', // https://heycam.github.io/webidl/#idl-unrestricted-float
+    'unsigned long long', // https://heycam.github.io/webidl/#idl-unsigned-long-long
+    'unsigned long', // https://heycam.github.io/webidl/#idl-unsigned-long
+    'unsigned short', // https://heycam.github.io/webidl/#idl-unsigned-short
+    'USVString', // https://heycam.github.io/webidl/#idl-USVString
+    'void' // https://heycam.github.io/webidl/#idl-undefined (renamed)
+  ]);
+  // Add any types defined by the (flattened) spec and custom IDL.
+  for (const dfn of ast) {
+    knownTypes.add(dfn.name);
+  }
+  // Ignore some types that aren't defined. Most of these should be fixed.
+  const ignoreTypes = new Set([
+    'AccessibleNode', // TODO: aom.idl
+    'Animatable', // TODO: this is a mixin used as a union type
+    'BluetoothGATTRemoteServer', // TODO: web-bluetooth.idl
+    'CSSOMString', // https://drafts.csswg.org/cssom/#cssomstring-type
+    'Date', // TODO: deprecation-reporting.idl
+    'Directory', // TODO: file-system-api.idl
+    'DirectoryEntry', // TODO: file-system-api.idl
+    'EntryCallback', // TODO: file-system-api.idl
+    'FileWriterCallback', // TODO: file-system-api.idl
+    'MetadataCallback', // TODO: file-system-api.idl
+    'PermissionName', // TODO: https://github.com/w3c/webref/issues/62
+    'Region', // https://github.com/w3c/csswg-drafts/issues/5519
+    'UndoManager', // TODO: undo-api.idl
+    'VoidCallback', // // TODO: file-system-api.idl
+    'WindowProxy' // https://html.spec.whatwg.org/multipage/window-object.html#windowproxy
+  ]);
+  for (const usedType of usedTypes) {
+    if (!knownTypes.has(usedType) && !ignoreTypes.has(usedType)) {
+      validations.push({
+        ruleName: 'unknown-type',
+        message: `Validation error: Unknown type ${usedType}`
+      });
+    }
+  }
+
   const validationErrors = [];
   for (const {ruleName, message} of validations) {
     if (ignoreRules.has(ruleName)) {

@@ -1,4 +1,21 @@
 // https://github.com/w3c/manifest/pull/836
+
+// https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/modules/app_banner/app_banner_prompt_result.idl;drc=0aee4434a4dba42a42abaea9bfbc0cd196a63bc1
+enum AppBannerPromptOutcome {
+  "accepted",
+  "dismissed"
+};
+
+dictionary AppBannerPromptResult {
+  required DOMString platform;
+  required AppBannerPromptOutcome outcome;
+};
+
+// https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/modules/app_banner/before_install_prompt_event_init.idl;drc=0aee4434a4dba42a42abaea9bfbc0cd196a63bc1
+dictionary BeforeInstallPromptEventInit : EventInit {
+  sequence<DOMString> platforms;
+};
+
 // https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/modules/app_banner/before_install_prompt_event.idl;drc=af69d93ec0d5334cdc03316058660a37116f32b3
 [Exposed=Window]
 interface BeforeInstallPromptEvent : Event {
