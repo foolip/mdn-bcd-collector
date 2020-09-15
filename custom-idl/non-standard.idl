@@ -26,7 +26,6 @@ partial interface Document {
   void loadOverlay(DOMString url, nsIObserver observer);
   void mozSetImageElement(DOMString imageElementId, DOMElement imageElement);
   readonly attribute boolean mozSyntheticDocument;
-  void normalizeDocument();
   attribute EventHandler onafterscriptexecute;
   attribute EventHandler onbeforescriptexecute;
   readonly attribute DOMString? origin;
