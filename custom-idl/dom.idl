@@ -1,3 +1,23 @@
+// https://www.w3.org/TR/1998/WD-DOM-Level-2-19981228/idl-definitions.html
+
+// routeEvent() was on an EventCapturer interface together with captureEvent()
+// and releaseEvent(). Those are on Document and Window, so do the same here.
+
+partial interface Document {
+  void routeEvent();
+};
+
+partial interface Window {
+  void routeEvent();
+};
+
+// https://www.w3.org/TR/1999/WD-DOM-Level-2-19990719/idl-definitions.html
+
+partial interface Event {
+  void preventBubble();
+  void preventCapture();
+};
+
 // https://www.w3.org/TR/DOM-Level-2-Traversal-Range/idl-definitions.html
 partial interface NodeIterator {
   readonly attribute boolean expandEntityReferences;
@@ -159,7 +179,46 @@ interface UserDataHandler {
   void handle(unsigned short operation, DOMString key, DOMUserData data, Node src, Node dst);
 };
 
-// Other stuff
+// Non-standard stuff
+
+partial interface Document {
+  // https://developer.mozilla.org/en-US/docs/Web/API/Document#Non-standard_extensions
+  readonly attribute USVString? documentURIObject;
+  readonly attribute Node? popupNode;
+  readonly attribute Node? tooltipNode;
+  object getBoxObjectFor(DOMElement element);
+  void loadOverlay(DOMString url, object observer);
+  void queryCommandText();
+
+  // https://docs.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/jj160755(v%3Dvs.85)
+  boolean execCommandShowHelp(DOMString name);
+  // https://docs.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/aa752589(v=vs.85)
+  readonly attribute long fileSize;
+  boolean contains();
+
+  // https://developer.mozilla.org/en-US/docs/Web/API/Document/mozSetImageElement
+  void mozSetImageElement(DOMString imageElementId, Element? imageElement);
+
+  // https://developer.mozilla.org/en-US/docs/Web/API/Document/mozSyntheticDocument
+  readonly attribute boolean mozSyntheticDocument;
+
+  // https://www.w3.org/Bugs/Public/show_bug.cgi?id=14600
+  void releaseCapture();
+};
+
+partial interface Element {
+  // https://www.w3.org/Bugs/Public/show_bug.cgi?id=14600
+  void setCapture(optional boolean retargetToElement);
+};
+
+partial interface Event {
+  // https://developer.mozilla.org/en-US/docs/Web/API/Event/explicitOriginalTarget
+  readonly attribute EventTarget? explicitOriginalTarget;
+  // https://developer.mozilla.org/en-US/docs/Web/API/Event/originalTarget
+  readonly attribute EventTarget? originalTarget;
+  // https://bugzilla.mozilla.org/show_bug.cgi?id=691151
+  boolean getPreventDefault();
+};
 
 partial interface Range {
   void expand(optional DOMString unit = "");

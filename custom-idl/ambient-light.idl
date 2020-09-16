@@ -1,0 +1,15 @@
+// https://www.w3.org/TR/2015/WD-ambient-light-20150903/#device-light
+
+partial interface Window {
+  attribute EventHandler ondevicelight;
+};
+
+dictionary DeviceLightEventInit : EventInit {
+  unrestricted double value;
+};
+
+[Exposed=Window]
+interface DeviceLightEvent : Event {
+  constructor(DOMString type, optional DeviceLightEventInit eventInitDict = {});
+  readonly attribute unrestricted double value;
+};

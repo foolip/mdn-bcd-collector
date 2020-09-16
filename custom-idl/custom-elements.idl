@@ -6,3 +6,7 @@ dictionary ElementRegistrationOptions {
 partial interface Document {
   any registerElement(DOMString type, optional ElementRegistrationOptions options = {});
 };
+
+partial interface Element {
+  readonly attribute boolean tabStop;
+};

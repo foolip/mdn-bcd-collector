@@ -1,0 +1,5 @@
+// https://github.com/WICG/display-locking/
+
+partial interface Element {
+  attribute EventHandler onbeforematch;
+};
