@@ -12,6 +12,21 @@
     "AudioBufferSourceNode": {
       "__base": "var audioCtx = new (window.AudioContext || window.webkitAudioContext)(); if (!audioCtx) {return false}; var instance = audioCtx.createBufferSource();"
     },
+    "AudioContext": {
+      "__base": "var instance = new (window.AudioContext || window.webkitAudioContext)();"
+    },
+    "AudioDestinationNode": {
+      "__base": "var audioCtx = new (window.AudioContext || window.webkitAudioContext)(); if (!audioCtx) {return false}; var instance = audioCtx.destination;"
+    },
+    "AudioListener": {
+      "__base": "var audioCtx = new (window.AudioContext || window.webkitAudioContext)(); if (!audioCtx) {return false}; var instance = audioCtx.listener;"
+    },
+    "AudioNode": {
+      "__base": "var audioCtx = new (window.AudioContext || window.webkitAudioContext)(); if (!audioCtx) {return false}; var instance = audioCtx.createAnalyser();"
+    },
+    "AudioParam": {
+      "__base": "var audioCtx = new (window.AudioContext || window.webkitAudioContext)(); if (!audioCtx) {return false}; var gainNode = audioCtx.createGain(); var instance = gainNode.gain;"
+    },
     "BiquadFilterNode": {
       "__base": "var audioCtx = new (window.AudioContext || window.webkitAudioContext)(); if (!audioCtx) {return false}; var instance = audioCtx.createBiquadFilter();"
     },
