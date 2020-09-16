@@ -57,7 +57,7 @@ The following JSON...
     },
     "DOMTokenList": {
       "__additional": {
-        "remove_whitespace_and_duplicates": "var elm = document.createElement('b'); elm.className = ' foo bar foo '; elm.classList.remove('bar'); return elm.className === 'foo';"
+        "remove_duplicates": "var elm = document.createElement('b'); elm.className = ' foo bar foo '; elm.classList.remove('bar'); return elm.className === 'foo';"
       }
     },
   },
@@ -78,7 +78,7 @@ bcd.addTest('api.ANGLE_instanced_arrays.vertexAttribDivisorANGLE', "(function() 
 bcd.addTest('api.Animation', {"property":"Animation","owner":"self"}, 'Window');
 ...
 bcd.addTest('api.DOMTokenList', {"property":"DOMTokenList","owner":"self"}, 'Window');
-bcd.addTest('api.DOMTokenList.remove_whitespace_and_duplicates', "(function() {var elm = document.createElement('b'); elm.className = ' foo bar foo '; elm.classList.remove('bar'); return elm.className === 'foo';})()", 'Window');
+bcd.addTest('api.DOMTokenList.remove_duplicates', "(function() {var elm = document.createElement('b'); elm.className = ' foo bar foo '; elm.classList.remove('bar'); return elm.className === 'foo';})()", 'Window');
 ```
 
 Tips: make sure to implement thorough feature checking as to not raise exceptions.
