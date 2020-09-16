@@ -3,6 +3,9 @@
     "ANGLE_instanced_arrays": {
       "__base": "var canvas = document.createElement('canvas'); if (!canvas) {return false}; var gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl'); if (!gl) {return false}; var instance = gl.getExtension('ANGLE_instanced_arrays');"
     },
+    "AnalyserNode": {
+      "__base": "var audioCtx = new (window.AudioContext || window.webkitAudioContext)(); if (!audioCtx) {return false}; var instance = audioCtx.createAnalyser();"
+    },
     "AudioBuffer": {
       "__base": "var audioCtx = new (window.AudioContext || window.webkitAudioContext)(); if (!audioCtx) {return false}; var instance = audioCtx.createBuffer(2, audioCtx.sampleRate * 3, audioCtx.sampleRate);"
     },
