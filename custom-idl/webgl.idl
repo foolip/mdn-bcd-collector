@@ -1,5 +1,10 @@
 // https://www.khronos.org/registry/webgl/extensions/
 
+// TODO: https://github.com/w3c/browser-specs/issues/156
+
+// https://www.khronos.org/registry/webgl/extensions/ANGLE_instanced_arrays/
+
+[LegacyNoInterfaceObject]
 interface ANGLE_instanced_arrays {
   const GLenum VERTEX_ATTRIB_ARRAY_DIVISOR_ANGLE = 0x88FE;
   void drawArraysInstancedANGLE(GLenum mode, GLint first, GLsizei count, GLsizei primcount);
@@ -7,13 +12,23 @@ interface ANGLE_instanced_arrays {
   void vertexAttribDivisorANGLE(GLuint index, GLuint divisor);
 };
 
+// https://www.khronos.org/registry/webgl/extensions/EXT_blend_minmax/
+
+[LegacyNoInterfaceObject]
 interface EXT_blend_minmax {
   const GLenum MIN_EXT = 0x8007;
   const GLenum MAX_EXT = 0x8008;
 };
 
-interface EXT_color_buffer_float {};
+// https://www.khronos.org/registry/webgl/extensions/EXT_color_buffer_float/
 
+[LegacyNoInterfaceObject]
+interface EXT_color_buffer_float {
+};
+
+// https://www.khronos.org/registry/webgl/extensions/EXT_color_buffer_half_float/
+
+[LegacyNoInterfaceObject]
 interface EXT_color_buffer_half_float {
   const GLenum RGBA16F_EXT = 0x881A;
   const GLenum RGB16F_EXT = 0x881B;
@@ -21,6 +36,15 @@ interface EXT_color_buffer_half_float {
   const GLenum UNSIGNED_NORMALIZED_EXT = 0x8C17;
 };
 
+// https://www.khronos.org/registry/webgl/extensions/EXT_disjoint_timer_query/
+
+typedef unsigned long long GLuint64EXT;
+
+[LegacyNoInterfaceObject]
+interface WebGLTimerQueryEXT : WebGLObject {
+};
+
+[LegacyNoInterfaceObject]
 interface EXT_disjoint_timer_query {
   const GLenum QUERY_COUNTER_BITS_EXT = 0x8864;
   const GLenum CURRENT_QUERY_EXT = 0x8865;
@@ -40,10 +64,27 @@ interface EXT_disjoint_timer_query {
   any getQueryObjectEXT(WebGLTimerQueryEXT query, GLenum pname);
 };
 
-interface EXT_float_blend {};
-interface EXT_frag_depth {};
-interface EXT_shader_texture_lod {};
+// https://www.khronos.org/registry/webgl/extensions/EXT_float_blend/
 
+[LegacyNoInterfaceObject]
+  interface EXT_float_blend {
+};
+
+// https://www.khronos.org/registry/webgl/extensions/EXT_frag_depth/
+
+[LegacyNoInterfaceObject]
+  interface EXT_frag_depth {
+};
+
+// https://www.khronos.org/registry/webgl/extensions/EXT_shader_texture_lod/
+
+[LegacyNoInterfaceObject]
+  interface EXT_shader_texture_lod {
+};
+
+// https://www.khronos.org/registry/webgl/extensions/EXT_sRGB/
+
+[LegacyNoInterfaceObject]
 interface EXT_sRGB {
   const GLenum SRGB_EXT = 0x8C40;
   const GLenum SRGB_ALPHA_EXT = 0x8C42;
@@ -51,6 +92,9 @@ interface EXT_sRGB {
   const GLenum FRAMEBUFFER_ATTACHMENT_COLOR_ENCODING_EXT = 0x8210;
 };
 
+// https://www.khronos.org/registry/webgl/extensions/EXT_texture_compression_bptc/
+
+[LegacyNoInterfaceObject]
 interface EXT_texture_compression_bptc {
   const GLenum COMPRESSED_RGBA_BPTC_UNORM_EXT = 0x8E8C;
   const GLenum COMPRESSED_SRGB_ALPHA_BPTC_UNORM_EXT = 0x8E8D;
@@ -58,6 +102,9 @@ interface EXT_texture_compression_bptc {
   const GLenum COMPRESSED_RGB_BPTC_UNSIGNED_FLOAT_EXT = 0x8E8F;
 };
 
+// https://www.khronos.org/registry/webgl/extensions/EXT_texture_compression_rgtc/
+
+[LegacyNoInterfaceObject]
 interface EXT_texture_compression_rgtc {
   const GLenum COMPRESSED_RED_RGTC1_EXT = 0x8DBB;
   const GLenum COMPRESSED_SIGNED_RED_RGTC1_EXT = 0x8DBC;
@@ -65,6 +112,9 @@ interface EXT_texture_compression_rgtc {
   const GLenum COMPRESSED_SIGNED_RED_GREEN_RGTC2_EXT = 0x8DBE;
 };
 
+// https://www.khronos.org/registry/webgl/extensions/EXT_texture_filter_anisotropic/
+
+[LegacyNoInterfaceObject]
 interface EXT_texture_filter_anisotropic {
   const GLenum TEXTURE_MAX_ANISOTROPY_EXT = 0x84FE;
   const GLenum MAX_TEXTURE_MAX_ANISOTROPY_EXT = 0x84FF;
