@@ -36,6 +36,11 @@ const writeFile = async (filename, content) => {
   await fs.writeFile(filename, content, 'utf8');
 };
 
+const wrapInFunction = (code) => {
+  return `(function() {${code}})()`.replace(/{/g, '{\n')
+      .replace(/; ?/g, ';\n');
+};
+
 const getCustomTestAPI = (name, member) => {
   let test = false;
 
@@ -74,8 +79,7 @@ const getCustomTestAPI = (name, member) => {
     });
 
     // Wrap in a function and format
-    test = `(function() {${test}})()`.replace(/{/g, '{\n')
-        .replace(/; ?/g, ';\n');
+    test = wrapInFunction(test);
   }
 
   return test;
@@ -90,7 +94,7 @@ const getCustomSubtestsAPI = (name) => {
       for (
         const subtest of Object.entries(customTests.api[name].__additional)
       ) {
-        subtests[subtest[0]] = `(function() {\n${testbase}${subtest[1]}\n})()`;
+        subtests[subtest[0]] = wrapInFunction(`${testbase}${subtest[1]}`);
       }
     }
   }
@@ -101,7 +105,7 @@ const getCustomSubtestsAPI = (name) => {
 const getCustomTestCSS = (name) => {
   return 'properties' in customTests.css &&
       name in customTests.css.properties &&
-      `(function() {\n${customTests.css.properties[name]}\n})()`;
+      wrapInFunction(customTests.css.properties[name]);
 };
 
 const compileTestCode = (test, prefix = '', ownerPrefix = '') => {
