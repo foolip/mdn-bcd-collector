@@ -1,3 +1,9 @@
+// https://bugs.chromium.org/p/chromium/issues/detail?id=711586
+
+enum IDBDataLossAmount {
+  "none",
+  "total"
+};
 
 partial interface IDBVersionChangeEvent {
   readonly attribute IDBDataLossAmount dataLoss;
