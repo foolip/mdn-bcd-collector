@@ -272,7 +272,7 @@ describe('build', () => {
       it('invalid import', () => {
         assert.equal(
             getCustomTestAPI('bad'),
-            '(function() {\nthrow \'Test is malformed; <%api.foobar:apple%> is an invalid reference\';\nreturn !!instance;\n})()'
+            '(function() {\nthrow \'Test is malformed: <%api.foobar:apple%> is an invalid reference\';\nreturn !!instance;\n})()'
         );
       });
     });
@@ -1124,7 +1124,7 @@ describe('build', () => {
         './custom-tests.json': {
           api: {
             ANGLE_instanced_arrays: {
-              __base: 'var canvas = document.createElement(\'canvas\');\nvar gl = canvas.getContext(\'webgl\');\nvar instance = gl.getExtension(\'ANGLE_instanced_arrays\');',
+              __base: 'var canvas = document.createElement(\'canvas\'); var gl = canvas.getContext(\'webgl\'); var instance = gl.getExtension(\'ANGLE_instanced_arrays\');',
               __test: 'return !!instance;',
               drawArraysInstancedANGLE: 'return true && instance && \'drawArraysInstancedANGLE\' in instance;'
             },

@@ -40,8 +40,7 @@ const getCustomTestAPI = (name, member) => {
   let test = false;
 
   if (name in customTests.api) {
-    const testbase = customTests.api[name].__base ?
-      customTests.api[name].__base + '\n' : '';
+    const testbase = customTests.api[name].__base || '';
     if (member === undefined) {
       if ('__test' in customTests.api[name]) {
         test = testbase + customTests.api[name].__test;
@@ -66,16 +65,17 @@ const getCustomTestAPI = (name, member) => {
   if (test) {
     // Import code from other tests
     test = test.replace(/<%(\w+)\.(\w+):(\w+)%> ?/g, (match, category, name, instancevar) => {
-      if (!(name in customTests.api)) {
-        return `throw 'Test is malformed; ${match} is an invalid reference';`;
+      if (!(name in customTests.api && '__base' in customTests.api[name])) {
+        return `throw 'Test is malformed: ${match} is an invalid reference';`;
       }
-      return (customTests.api[name].__base + '\n').replace(
+      return customTests.api[name].__base.replace(
           /var instance/g, `var ${instancevar}`
       );
     });
 
-    // Wrap in a function
-    test = `(function() {\n${test}\n})()`;
+    // Wrap in a function and format
+    test = `(function() {${test}})()`.replace(/{/g, '{\n')
+        .replace(/; ?/g, ';\n');
   }
 
   return test;
