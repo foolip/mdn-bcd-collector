@@ -36,9 +36,30 @@ const writeFile = async (filename, content) => {
   await fs.writeFile(filename, content, 'utf8');
 };
 
-const wrapInFunction = (code) => {
-  return `(function() {${code}})()`.replace(/{/g, '{\n')
+const compileCustomTest = (code) => {
+  // Import code from other tests
+  code = code.replace(/<%(\w+)\.(\w+)(?:.(\w+))?:(\w+)%> ?/g, (match, category, name, member, instancevar) => {
+    if (category === 'api') {
+      if (!(name in customTests.api && '__base' in customTests.api[name])) {
+        return `throw 'Test is malformed: ${match} is an invalid reference';`;
+      }
+      return customTests.api[name].__base.replace(
+          /var instance/g, `var ${instancevar}`
+      );
+    }
+
+    // TODO: add CSS category
+    return `throw 'Test is malformed: import ${match}, category ${category} is not importable';`;
+  });
+
+  // Wrap in a function
+  code = `(function() {${code}})()`;
+
+  // Format (TODO: replace with Prettier)
+  code = code.replace(/{/g, '{\n')
       .replace(/; ?/g, ';\n');
+
+  return code;
 };
 
 const getCustomTestAPI = (name, member) => {
@@ -67,22 +88,12 @@ const getCustomTestAPI = (name, member) => {
     }
   }
 
-  if (test) {
-    // Import code from other tests
-    test = test.replace(/<%(\w+)\.(\w+):(\w+)%> ?/g, (match, category, name, instancevar) => {
-      if (!(name in customTests.api && '__base' in customTests.api[name])) {
-        return `throw 'Test is malformed: ${match} is an invalid reference';`;
-      }
-      return customTests.api[name].__base.replace(
-          /var instance/g, `var ${instancevar}`
-      );
-    });
-
-    // Wrap in a function and format
-    test = wrapInFunction(test);
+  if (!test) {
+    return false;
   }
 
-  return test;
+
+  return compileCustomTest(test);
 };
 
 const getCustomSubtestsAPI = (name) => {
@@ -94,7 +105,7 @@ const getCustomSubtestsAPI = (name) => {
       for (
         const subtest of Object.entries(customTests.api[name].__additional)
       ) {
-        subtests[subtest[0]] = wrapInFunction(`${testbase}${subtest[1]}`);
+        subtests[subtest[0]] = compileCustomTest(`${testbase}${subtest[1]}`);
       }
     }
   }
@@ -105,7 +116,7 @@ const getCustomSubtestsAPI = (name) => {
 const getCustomTestCSS = (name) => {
   return 'properties' in customTests.css &&
       name in customTests.css.properties &&
-      wrapInFunction(customTests.css.properties[name]);
+      compileCustomTest(customTests.css.properties[name]);
 };
 
 const compileTestCode = (test, prefix = '', ownerPrefix = '') => {
