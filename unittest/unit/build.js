@@ -325,6 +325,21 @@ describe('build', () => {
 
       assert.equal(getCustomTestCSS('foo'), '(function() {\nreturn 1;\n})()');
     });
+
+    it('import (not implemented)', () => {
+      const {getCustomTestCSS} = proxyquire('../../build', {
+        './custom-tests.json': {
+          css: {
+            properties: {
+              foo: 'return 1;',
+              bar: '<%css.properties.foo:a%>'
+            }
+          }
+        }
+      });
+
+      assert.equal(getCustomTestCSS('bar'), '(function() {\nthrow \'Test is malformed: import <%css.properties.foo:a%>, category css is not importable\';\n})()');
+    });
   });
 
   describe('compileTestCode', () => {
