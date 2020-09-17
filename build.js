@@ -63,6 +63,17 @@ const getCustomTestAPI = (name, member) => {
   }
 
   if (test) {
+    // Import code from other tests
+    test = test.replace(/<%(\w+)\.(\w+):(\w+)%>/g, (match, category, name, instancevar) => {
+      if (!(name in customTests.api)) {
+        return `throw 'Test is malformed; ${match} is an invalid reference';`;
+      }
+      return (customTests.api[name].__base || '').replace(
+          /var instance/g, `var ${instancevar}`
+      );
+    });
+
+    // Wrap in a function
     test = `(function() {${test}})()`;
   }
 

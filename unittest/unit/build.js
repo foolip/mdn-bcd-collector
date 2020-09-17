@@ -244,6 +244,38 @@ describe('build', () => {
         );
       });
     });
+
+    describe('import other test', () => {
+      const {getCustomTestAPI} = proxyquire('../../build', {
+        './custom-tests.json': {
+          api: {
+            foo: {
+              __base: 'var instance = 1;'
+            },
+            bar: {
+              __base: '<%api.foo:a%> var instance = a;'
+            },
+            bad: {
+              __base: '<%api.foobar:apple%>'
+            }
+          }
+        }
+      });
+
+      it('valid import', () => {
+        assert.equal(
+            getCustomTestAPI('bar'),
+            '(function() {var a = 1; var instance = a;return !!instance;})()'
+        );
+      });
+
+      it('invalid import', () => {
+        assert.equal(
+            getCustomTestAPI('bad'),
+            '(function() {throw \'Test is malformed; <%api.foobar:apple%> is an invalid reference\';return !!instance;})()'
+        );
+      });
+    });
   });
 
   describe('getCustomSubtestsAPI', () => {
