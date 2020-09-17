@@ -1,108 +1,109 @@
 {
   "api": {
     "ANGLE_instanced_arrays": {
-      "__base": "var canvas = document.createElement('canvas'); if (!canvas) {return false}; var gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl'); if (!gl) {return false}; var instance = gl.getExtension('ANGLE_instanced_arrays');"
+      "__base": "var canvas = document.createElement('canvas');\nif (!canvas) {return false};\nvar gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');\nif (!gl) {return false};\nvar instance = gl.getExtension('ANGLE_instanced_arrays');"
     },
     "AnalyserNode": {
-      "__base": "<%api.AudioContext:audioCtx%> if (!audioCtx) {return false}; var instance = audioCtx.createAnalyser();"
+      "__base": "<%api.AudioContext:audioCtx%> if (!audioCtx) {return false};\nvar instance = audioCtx.createAnalyser();"
     },
     "AudioBuffer": {
-      "__base": "<%api.AudioContext:audioCtx%> if (!audioCtx) {return false}; var instance = audioCtx.createBuffer(2, audioCtx.sampleRate * 3, audioCtx.sampleRate);"
+      "__base": "<%api.AudioContext:audioCtx%> if (!audioCtx) {return false};\nvar instance = audioCtx.createBuffer(2, audioCtx.sampleRate * 3, audioCtx.sampleRate);"
     },
     "AudioBufferSourceNode": {
-      "__base": "<%api.AudioContext:audioCtx%> if (!audioCtx) {return false}; var instance = audioCtx.createBufferSource();"
+      "__base": "<%api.AudioContext:audioCtx%> if (!audioCtx) {return false};\nvar instance = audioCtx.createBufferSource();"
     },
     "AudioContext": {
+      "__todo": "Separate into different prefix variations when able",
       "__base": "var instance = new (window.AudioContext || window.webkitAudioContext)();"
     },
     "AudioDestinationNode": {
-      "__base": "<%api.AudioContext:audioCtx%> if (!audioCtx) {return false}; var instance = audioCtx.destination;"
+      "__base": "<%api.AudioContext:audioCtx%> if (!audioCtx) {return false};\nvar instance = audioCtx.destination;"
     },
     "AudioListener": {
-      "__base": "<%api.AudioContext:audioCtx%> if (!audioCtx) {return false}; var instance = audioCtx.listener;"
+      "__base": "<%api.AudioContext:audioCtx%> if (!audioCtx) {return false};\nvar instance = audioCtx.listener;"
     },
     "AudioNode": {
-      "__base": "<%api.AudioContext:audioCtx%> if (!audioCtx) {return false}; var instance = audioCtx.createAnalyser();"
+      "__base": "<%api.AudioContext:audioCtx%> if (!audioCtx) {return false};\nvar instance = audioCtx.createAnalyser();"
     },
     "AudioParam": {
       "__base": "<%api.GainNode:gainNode%> var instance = gainNode.gain;"
     },
     "AudioParamMap": {
       "__TODO": "DEPENDS ON PROMISE TESTING SUPPORT",
-      "__base": "<%api.AudioWorkletNode:worklet%> if (!worklet) {return false}; var instance = worklet.parameters;"
+      "__base": "<%api.AudioWorkletNode:worklet%> if (!worklet) {return false};\nvar instance = worklet.parameters;"
     },
     "AudioWorkletNode": {
       "__TODO": "DEPENDS ON PROMISE TESTING SUPPORT",
-      "__base": "<%api.AudioContext:audioCtx%> if (!audioCtx) {return false}; await audioCtx.audioWorklet.addModule('/resources/custom-tests/api/AudioWorkletNode/WhiteNoiseProcessor.js'); var instance = new AudioWorkletNode(audioCtx, 'white-noise-processor');"
+      "__base": "<%api.AudioContext:audioCtx%> if (!audioCtx) {return false};\nawait audioCtx.audioWorklet.addModule('/resources/custom-tests/api/AudioWorkletNode/WhiteNoiseProcessor.js');\nvar instance = new AudioWorkletNode(audioCtx, 'white-noise-processor');"
     },
     "BiquadFilterNode": {
-      "__base": "<%api.AudioContext:audioCtx%> if (!audioCtx) {return false}; var instance = audioCtx.createBiquadFilter();"
+      "__base": "<%api.AudioContext:audioCtx%> if (!audioCtx) {return false};\nvar instance = audioCtx.createBiquadFilter();"
     },
     "ChannelMergerNode": {
-      "__base": "<%api.AudioContext:audioCtx%> if (!audioCtx) {return false}; var instance = audioCtx.createChannelMerger();"
+      "__base": "<%api.AudioContext:audioCtx%> if (!audioCtx) {return false};\nvar instance = audioCtx.createChannelMerger();"
     },
     "ChannelSplitterNode": {
-      "__base": "<%api.AudioContext:audioCtx%> if (!audioCtx) {return false}; var instance = audioCtx.createChannelSplitter();"
+      "__base": "<%api.AudioContext:audioCtx%> if (!audioCtx) {return false};\nvar instance = audioCtx.createChannelSplitter();"
     },
     "ConstantSourceNode": {
-      "__base": "<%api.AudioContext:audioCtx%> if (!audioCtx) {return false}; var instance = audioCtx.createConstantSource();"
+      "__base": "<%api.AudioContext:audioCtx%> if (!audioCtx) {return false};\nvar instance = audioCtx.createConstantSource();"
     },
     "ConvolverNode": {
-      "__base": "<%api.AudioContext:audioCtx%> if (!audioCtx) {return false}; var instance = audioCtx.createConvolver();"
+      "__base": "<%api.AudioContext:audioCtx%> if (!audioCtx) {return false};\nvar instance = audioCtx.createConvolver();"
     },
     "DelayNode": {
-      "__base": "<%api.AudioContext:audioCtx%> if (!audioCtx) {return false}; var instance = audioCtx.createDelay();"
+      "__base": "<%api.AudioContext:audioCtx%> if (!audioCtx) {return false};\nvar instance = audioCtx.createDelay();"
     },
     "Document": {
       "__base": "var instance = document;"
     },
     "DOMTokenList": {
       "__additional": {
-        "trim_whitespace": "var elm = document.createElement('b'); elm.className = ' foo bar foo '; elm.classList.remove('bar'); return elm.className === 'foo foo' || elm.className === 'foo';",
-        "remove_duplicates": "var elm = document.createElement('b'); elm.className = ' foo bar foo '; elm.classList.remove('bar'); return elm.className === 'foo';"
+        "trim_whitespace": "var elm = document.createElement('b');\nelm.className = ' foo bar foo ';\nelm.classList.remove('bar');\nreturn elm.className === 'foo foo' || elm.className === 'foo';",
+        "remove_duplicates": "var elm = document.createElement('b');\nelm.className = ' foo bar foo ';\nelm.classList.remove('bar');\nreturn elm.className === 'foo';"
       }
     },
     "DynamicsCompressorNode": {
-      "__base": "<%api.AudioContext:audioCtx%> if (!audioCtx) {return false}; var instance = audioCtx.createDynamicsCompressor();"
+      "__base": "<%api.AudioContext:audioCtx%> if (!audioCtx) {return false};\nvar instance = audioCtx.createDynamicsCompressor();"
     },
     "EXT_blend_minmax": {
-      "__base": "var canvas = document.createElement('canvas'); if (!canvas) {return false}; var gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl'); if (!gl) {return false}; var instance = gl.getExtension('EXT_blend_minmax');"
+      "__base": "var canvas = document.createElement('canvas');\nif (!canvas) {return false};\nvar gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');\nif (!gl) {return false};\nvar instance = gl.getExtension('EXT_blend_minmax');"
     },
     "EXT_color_buffer_float": {
-      "__base": "var canvas = document.createElement('canvas'); if (!canvas) {return false}; var gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl'); if (!gl) {return false}; var instance = gl.getExtension('EXT_color_buffer_float');"
+      "__base": "var canvas = document.createElement('canvas');\nif (!canvas) {return false};\nvar gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');\nif (!gl) {return false};\nvar instance = gl.getExtension('EXT_color_buffer_float');"
     },
     "EXT_color_buffer_half_float": {
-      "__base": "var canvas = document.createElement('canvas'); if (!canvas) {return false}; var gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl'); if (!gl) {return false}; var instance = gl.getExtension('EXT_color_buffer_half_float');"
+      "__base": "var canvas = document.createElement('canvas');\nif (!canvas) {return false};\nvar gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');\nif (!gl) {return false};\nvar instance = gl.getExtension('EXT_color_buffer_half_float');"
     },
     "EXT_disjoint_timer_query": {
-      "__base": "var canvas = document.createElement('canvas'); if (!canvas) {return false}; var gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl'); if (!gl) {return false}; var instance = gl.getExtension('EXT_disjoint_timer_query');"
+      "__base": "var canvas = document.createElement('canvas');\nif (!canvas) {return false};\nvar gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');\nif (!gl) {return false};\nvar instance = gl.getExtension('EXT_disjoint_timer_query');"
     },
     "EXT_float_blend": {
-      "__base": "var canvas = document.createElement('canvas'); if (!canvas) {return false}; var gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl'); if (!gl) {return false}; var instance = gl.getExtension('EXT_float_blend');"
+      "__base": "var canvas = document.createElement('canvas');\nif (!canvas) {return false};\nvar gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');\nif (!gl) {return false};\nvar instance = gl.getExtension('EXT_float_blend');"
     },
     "EXT_frag_depth": {
-      "__base": "var canvas = document.createElement('canvas'); if (!canvas) {return false}; var gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl'); if (!gl) {return false}; var instance = gl.getExtension('EXT_frag_depth');"
+      "__base": "var canvas = document.createElement('canvas');\nif (!canvas) {return false};\nvar gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');\nif (!gl) {return false};\nvar instance = gl.getExtension('EXT_frag_depth');"
     },
     "EXT_shader_texture_lod": {
-      "__base": "var canvas = document.createElement('canvas'); if (!canvas) {return false}; var gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl'); if (!gl) {return false}; var instance = gl.getExtension('EXT_shader_texture_lod');"
+      "__base": "var canvas = document.createElement('canvas');\nif (!canvas) {return false};\nvar gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');\nif (!gl) {return false};\nvar instance = gl.getExtension('EXT_shader_texture_lod');"
     },
     "EXT_sRGB": {
-      "__base": "var canvas = document.createElement('canvas'); if (!canvas) {return false}; var gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl'); if (!gl) {return false}; var instance = gl.getExtension('EXT_sRGB');"
+      "__base": "var canvas = document.createElement('canvas');\nif (!canvas) {return false};\nvar gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');\nif (!gl) {return false};\nvar instance = gl.getExtension('EXT_sRGB');"
     },
     "EXT_texture_compression_bptc": {
-      "__base": "var canvas = document.createElement('canvas'); if (!canvas) {return false}; var gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl'); if (!gl) {return false}; var instance = gl.getExtension('EXT_texture_compression_bptc');"
+      "__base": "var canvas = document.createElement('canvas');\nif (!canvas) {return false};\nvar gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');\nif (!gl) {return false};\nvar instance = gl.getExtension('EXT_texture_compression_bptc');"
     },
     "EXT_texture_compression_rgtc": {
-      "__base": "var canvas = document.createElement('canvas'); if (!canvas) {return false}; var gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl'); if (!gl) {return false}; var instance = gl.getExtension('EXT_texture_compression_rgtc');"
+      "__base": "var canvas = document.createElement('canvas');\nif (!canvas) {return false};\nvar gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');\nif (!gl) {return false};\nvar instance = gl.getExtension('EXT_texture_compression_rgtc');"
     },
     "EXT_texture_filter_anisotropic": {
-      "__base": "var canvas = document.createElement('canvas'); if (!canvas) {return false}; var gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl'); if (!gl) {return false}; var instance = gl.getExtension('EXT_texture_filter_anisotropic');"
+      "__base": "var canvas = document.createElement('canvas');\nif (!canvas) {return false};\nvar gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');\nif (!gl) {return false};\nvar instance = gl.getExtension('EXT_texture_filter_anisotropic');"
     },
     "GainNode": {
-      "__base": "<%api.AudioContext:audioCtx%> if (!audioCtx) {return false}; var instance = audioCtx.createGain();"
+      "__base": "<%api.AudioContext:audioCtx%> if (!audioCtx) {return false};\nvar instance = audioCtx.createGain();"
     },
     "IIRFilterNode": {
-      "__base": "<%api.AudioContext:audioCtx%> if (!audioCtx) {return false}; var instance = audioCtx.createIIRFilter();"
+      "__base": "<%api.AudioContext:audioCtx%> if (!audioCtx) {return false};\nvar instance = audioCtx.createIIRFilter();"
     },
     "MediaDevices": {
       "__base": "var instance = navigator.mediaDevices;"
@@ -114,19 +115,19 @@
       "__base": "var instance = document.createNodeIterator(document);"
     },
     "OscillatorNode": {
-      "__base": "<%api.AudioContext:audioCtx%> if (!audioCtx) {return false}; var instance = audioCtx.createOscillator();"
+      "__base": "<%api.AudioContext:audioCtx%> if (!audioCtx) {return false};\nvar instance = audioCtx.createOscillator();"
     },
     "PannerNode": {
-      "__base": "<%api.AudioContext:audioCtx%> if (!audioCtx) {return false}; var instance = audioCtx.createPanner();"
+      "__base": "<%api.AudioContext:audioCtx%> if (!audioCtx) {return false};\nvar instance = audioCtx.createPanner();"
     },
     "StereoPannerNode": {
-      "__base": "<%api.AudioContext:audioCtx%> if (!audioCtx) {return false}; var instance = audioCtx.createStereoPanner();"
+      "__base": "<%api.AudioContext:audioCtx%> if (!audioCtx) {return false};\nvar instance = audioCtx.createStereoPanner();"
     },
     "TreeWalker": {
       "__base": "var instance = document.createTreeWalker(document);"
     },
     "WaveShaperNode": {
-      "__base": "<%api.AudioContext:audioCtx%> if (!audioCtx) {return false}; var instance = audioCtx.createWaveShaper();"
+      "__base": "<%api.AudioContext:audioCtx%> if (!audioCtx) {return false};\nvar instance = audioCtx.createWaveShaper();"
     },
     "Window": {
       "__base": "var instance = window;"

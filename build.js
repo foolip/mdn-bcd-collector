@@ -40,7 +40,8 @@ const getCustomTestAPI = (name, member) => {
   let test = false;
 
   if (name in customTests.api) {
-    const testbase = customTests.api[name].__base || '';
+    const testbase = customTests.api[name].__base ?
+      customTests.api[name].__base + '\n' : '';
     if (member === undefined) {
       if ('__test' in customTests.api[name]) {
         test = testbase + customTests.api[name].__test;
@@ -64,17 +65,17 @@ const getCustomTestAPI = (name, member) => {
 
   if (test) {
     // Import code from other tests
-    test = test.replace(/<%(\w+)\.(\w+):(\w+)%>/g, (match, category, name, instancevar) => {
+    test = test.replace(/<%(\w+)\.(\w+):(\w+)%> ?/g, (match, category, name, instancevar) => {
       if (!(name in customTests.api)) {
         return `throw 'Test is malformed; ${match} is an invalid reference';`;
       }
-      return (customTests.api[name].__base || '').replace(
+      return (customTests.api[name].__base + '\n').replace(
           /var instance/g, `var ${instancevar}`
       );
     });
 
     // Wrap in a function
-    test = `(function() {${test}})()`;
+    test = `(function() {\n${test}\n})()`;
   }
 
   return test;
@@ -89,7 +90,7 @@ const getCustomSubtestsAPI = (name) => {
       for (
         const subtest of Object.entries(customTests.api[name].__additional)
       ) {
-        subtests[subtest[0]] = `(function() {${testbase}${subtest[1]}})()`;
+        subtests[subtest[0]] = `(function() {\n${testbase}${subtest[1]}\n})()`;
       }
     }
   }
@@ -100,7 +101,7 @@ const getCustomSubtestsAPI = (name) => {
 const getCustomTestCSS = (name) => {
   return 'properties' in customTests.css &&
       name in customTests.css.properties &&
-      `(function() {${customTests.css.properties[name]}})()`;
+      `(function() {\n${customTests.css.properties[name]}\n})()`;
 };
 
 const compileTestCode = (test, prefix = '', ownerPrefix = '') => {
