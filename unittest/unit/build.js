@@ -104,14 +104,14 @@ describe('build', () => {
       it('interface', () => {
         assert.equal(
             getCustomTestAPI('foo'),
-            '(function() {var a = 1;return a;})()'
+            '(function() {\nvar a = 1;\nreturn a;\n})()'
         );
       });
 
       it('member', () => {
         assert.equal(
             getCustomTestAPI('foo', 'bar'),
-            '(function() {var a = 1;return \'bar\' in instance;})()'
+            '(function() {\nvar a = 1;\nreturn \'bar\' in instance;\n})()'
         );
       });
 
@@ -132,7 +132,7 @@ describe('build', () => {
       });
 
       it('interface', () => {
-        assert.equal(getCustomTestAPI('foo'), '(function() {return 1;})()');
+        assert.equal(getCustomTestAPI('foo'), '(function() {\nreturn 1;\n})()');
       });
 
       it('member', () => {
@@ -155,14 +155,14 @@ describe('build', () => {
       it('interface', () => {
         assert.equal(
             getCustomTestAPI('foo'),
-            '(function() {var a = 1;return !!instance;})()'
+            '(function() {\nvar a = 1;\nreturn !!instance;\n})()'
         );
       });
 
       it('member', () => {
         assert.equal(
             getCustomTestAPI('foo', 'bar'),
-            '(function() {var a = 1;return a + 1;})()'
+            '(function() {\nvar a = 1;\nreturn a + 1;\n})()'
         );
       });
     });
@@ -185,7 +185,7 @@ describe('build', () => {
       it('member', () => {
         assert.equal(
             getCustomTestAPI('foo', 'bar'),
-            '(function() {return 1 + 1;})()'
+            '(function() {\nreturn 1 + 1;\n})()'
         );
       });
     });
@@ -212,7 +212,7 @@ describe('build', () => {
       it('member', () => {
         assert.equal(
             getCustomTestAPI('foo', 'bar'),
-            '(function() {return 1 + 1;})()'
+            '(function() {\nreturn 1 + 1;\n})()'
         );
       });
     });
@@ -233,14 +233,14 @@ describe('build', () => {
       it('interface', () => {
         assert.equal(
             getCustomTestAPI('foo'),
-            '(function() {var a = 1;return a;})()'
+            '(function() {\nvar a = 1;\nreturn a;\n})()'
         );
       });
 
       it('member', () => {
         assert.equal(
             getCustomTestAPI('foo', 'bar'),
-            '(function() {var a = 1;return a + 1;})()'
+            '(function() {\nvar a = 1;\nreturn a + 1;\n})()'
         );
       });
     });
@@ -265,14 +265,14 @@ describe('build', () => {
       it('valid import', () => {
         assert.equal(
             getCustomTestAPI('bar'),
-            '(function() {var a = 1; var instance = a;return !!instance;})()'
+            '(function() {\nvar a = 1;\nvar instance = a;\nreturn !!instance;\n})()'
         );
       });
 
       it('invalid import', () => {
         assert.equal(
             getCustomTestAPI('bad'),
-            '(function() {throw \'Test is malformed; <%api.foobar:apple%> is an invalid reference\';return !!instance;})()'
+            '(function() {\nthrow \'Test is malformed: <%api.foobar:apple%> is an invalid reference\';\nreturn !!instance;\n})()'
         );
       });
     });
@@ -296,8 +296,8 @@ describe('build', () => {
       assert.deepEqual(
           getCustomSubtestsAPI('foo', 'bar'),
           {
-            multiple: '(function() {return 1 + 1 + 1;})()',
-            'one.only': '(function() {return 1;})()'
+            multiple: '(function() {\nreturn 1 + 1 + 1;\n})()',
+            'one.only': '(function() {\nreturn 1;\n})()'
           }
       );
     });
@@ -323,7 +323,7 @@ describe('build', () => {
         }
       });
 
-      assert.equal(getCustomTestCSS('foo'), '(function() {return 1;})()');
+      assert.equal(getCustomTestCSS('foo'), '(function() {\nreturn 1;\n})()');
     });
   });
 
@@ -1142,7 +1142,7 @@ describe('build', () => {
         'api.ANGLE_instanced_arrays': {
           tests: [
             {
-              code: '(function() {var canvas = document.createElement(\'canvas\'); var gl = canvas.getContext(\'webgl\'); var instance = gl.getExtension(\'ANGLE_instanced_arrays\');return !!instance;})()',
+              code: '(function() {\nvar canvas = document.createElement(\'canvas\');\nvar gl = canvas.getContext(\'webgl\');\nvar instance = gl.getExtension(\'ANGLE_instanced_arrays\');\nreturn !!instance;\n})()',
               prefix: ''
             }
           ],
@@ -1152,7 +1152,7 @@ describe('build', () => {
         'api.ANGLE_instanced_arrays.drawArraysInstancedANGLE': {
           tests: [
             {
-              code: '(function() {var canvas = document.createElement(\'canvas\'); var gl = canvas.getContext(\'webgl\'); var instance = gl.getExtension(\'ANGLE_instanced_arrays\');return true && instance && \'drawArraysInstancedANGLE\' in instance;})()',
+              code: '(function() {\nvar canvas = document.createElement(\'canvas\');\nvar gl = canvas.getContext(\'webgl\');\nvar instance = gl.getExtension(\'ANGLE_instanced_arrays\');\nreturn true && instance && \'drawArraysInstancedANGLE\' in instance;\n})()',
               prefix: ''
             }
           ],
@@ -1162,7 +1162,7 @@ describe('build', () => {
         'api.ANGLE_instanced_arrays.drawElementsInstancedANGLE': {
           tests: [
             {
-              code: '(function() {var canvas = document.createElement(\'canvas\'); var gl = canvas.getContext(\'webgl\'); var instance = gl.getExtension(\'ANGLE_instanced_arrays\');return \'drawElementsInstancedANGLE\' in instance;})()',
+              code: '(function() {\nvar canvas = document.createElement(\'canvas\');\nvar gl = canvas.getContext(\'webgl\');\nvar instance = gl.getExtension(\'ANGLE_instanced_arrays\');\nreturn \'drawElementsInstancedANGLE\' in instance;\n})()',
               prefix: ''
             }
           ],
@@ -1182,7 +1182,7 @@ describe('build', () => {
         'api.Document.charset': {
           tests: [
             {
-              code: '(function() {return document.charset == "UTF-8";})()',
+              code: '(function() {\nreturn document.charset == "UTF-8";\n})()',
               prefix: ''
             }
           ],
@@ -1202,7 +1202,7 @@ describe('build', () => {
         'api.Document.loaded.loaded_is_boolean': {
           tests: [
             {
-              code: '(function() {return typeof document.loaded === "boolean";})()',
+              code: '(function() {\nreturn typeof document.loaded === "boolean";\n})()',
               prefix: ''
             }
           ],
@@ -1780,7 +1780,7 @@ describe('build', () => {
         'api.CSS': {
           tests: [
             {
-              code: '(function() {var css = CSS;return !!css;})()',
+              code: '(function() {\nvar css = CSS;\nreturn !!css;\n})()',
               prefix: ''
             }
           ],
@@ -1790,7 +1790,7 @@ describe('build', () => {
         'api.CSS.paintWorklet': {
           tests: [
             {
-              code: '(function() {var css = CSS;return css && \'paintWorklet\' in css;})()',
+              code: '(function() {\nvar css = CSS;\nreturn css && \'paintWorklet\' in css;\n})()',
               prefix: ''
             }
           ],

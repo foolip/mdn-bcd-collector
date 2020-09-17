@@ -13,6 +13,7 @@
       "__base": "<%api.AudioContext:audioCtx%> if (!audioCtx) {return false}; var instance = audioCtx.createBufferSource();"
     },
     "AudioContext": {
+      "__todo": "Separate into different prefix variations when able",
       "__base": "var instance = new (window.AudioContext || window.webkitAudioContext)();"
     },
     "AudioDestinationNode": {

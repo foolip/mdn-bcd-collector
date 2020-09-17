@@ -36,6 +36,11 @@ const writeFile = async (filename, content) => {
   await fs.writeFile(filename, content, 'utf8');
 };
 
+const wrapInFunction = (code) => {
+  return `(function() {${code}})()`.replace(/{/g, '{\n')
+      .replace(/; ?/g, ';\n');
+};
+
 const getCustomTestAPI = (name, member) => {
   let test = false;
 
@@ -64,17 +69,17 @@ const getCustomTestAPI = (name, member) => {
 
   if (test) {
     // Import code from other tests
-    test = test.replace(/<%(\w+)\.(\w+):(\w+)%>/g, (match, category, name, instancevar) => {
-      if (!(name in customTests.api)) {
-        return `throw 'Test is malformed; ${match} is an invalid reference';`;
+    test = test.replace(/<%(\w+)\.(\w+):(\w+)%> ?/g, (match, category, name, instancevar) => {
+      if (!(name in customTests.api && '__base' in customTests.api[name])) {
+        return `throw 'Test is malformed: ${match} is an invalid reference';`;
       }
-      return (customTests.api[name].__base || '').replace(
+      return customTests.api[name].__base.replace(
           /var instance/g, `var ${instancevar}`
       );
     });
 
-    // Wrap in a function
-    test = `(function() {${test}})()`;
+    // Wrap in a function and format
+    test = wrapInFunction(test);
   }
 
   return test;
@@ -89,7 +94,7 @@ const getCustomSubtestsAPI = (name) => {
       for (
         const subtest of Object.entries(customTests.api[name].__additional)
       ) {
-        subtests[subtest[0]] = `(function() {${testbase}${subtest[1]}})()`;
+        subtests[subtest[0]] = wrapInFunction(`${testbase}${subtest[1]}`);
       }
     }
   }
@@ -100,7 +105,7 @@ const getCustomSubtestsAPI = (name) => {
 const getCustomTestCSS = (name) => {
   return 'properties' in customTests.css &&
       name in customTests.css.properties &&
-      `(function() {${customTests.css.properties[name]}})()`;
+      wrapInFunction(customTests.css.properties[name]);
 };
 
 const compileTestCode = (test, prefix = '', ownerPrefix = '') => {
