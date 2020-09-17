@@ -56,6 +56,28 @@ interface CSSValueList : CSSValue {
   CSSValue item(unsigned long index);
 };
 
+[Exposed=Window]
+interface RGBColor {
+  readonly attribute CSSPrimitiveValue red;
+  readonly attribute CSSPrimitiveValue green;
+  readonly attribute CSSPrimitiveValue blue;
+};
+
+[Exposed=Window]
+interface Rect {
+  readonly attribute CSSPrimitiveValue top;
+  readonly attribute CSSPrimitiveValue right;
+  readonly attribute CSSPrimitiveValue bottom;
+  readonly attribute CSSPrimitiveValue left;
+};
+
+[Exposed=Window]
+interface Counter {
+  readonly attribute DOMString identifier;
+  readonly attribute DOMString listStyle;
+  readonly attribute DOMString separator;
+};
+
 partial interface CSSStyleDeclaration {
   CSSValue getPropertyCSSValue(DOMString property);
 };

@@ -186,7 +186,7 @@ partial interface Document {
   readonly attribute USVString? documentURIObject;
   readonly attribute Node? popupNode;
   readonly attribute Node? tooltipNode;
-  object getBoxObjectFor(DOMElement element);
+  object getBoxObjectFor(Element element);
   void loadOverlay(DOMString url, object observer);
   void queryCommandText();
 

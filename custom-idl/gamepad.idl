@@ -1,3 +1,9 @@
+// https://docs.google.com/document/d/1rnQ1gU0iwPXbO7OvKS6KO9gyfpSdSQvKhK9_OkzUuKE
+
+dictionary GamepadAxisEventInit : GamepadEventInit {
+  unsigned long axis;
+  double value;
+};
 
 [Exposed=Window]
 interface GamepadAxisEvent : GamepadEvent {
@@ -6,9 +12,14 @@ interface GamepadAxisEvent : GamepadEvent {
   readonly attribute double value;
 };
 
+dictionary GamepadButtonEventInit : GamepadEventInit {
+  unsigned long button;
+  double value;
+};
+
 [Exposed=Window]
 interface GamepadButtonEvent : GamepadEvent {
-    constructor(DOMString type, optional GamepadButtonEventInit eventInitDict = {});
-    readonly attribute unsigned long button;
-    readonly attribute double value;
+  constructor(DOMString type, optional GamepadButtonEventInit eventInitDict = {});
+  readonly attribute unsigned long button;
+  readonly attribute double value;
 };
