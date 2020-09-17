@@ -118,6 +118,36 @@ bcd.addTest('css.properties.custom-property', "(function() {return CSS.supports(
 
 Tips: make sure that all return statements will return a boolean, and implement thorough feature checking.
 
+#### Importing code from other tests
+
+Sometimes, some features will depend on the setup and configuration from other features, especially with APIs.  To prevent repeating the same code over and over again, you can import code from other custom tests to build new ones quicker.  The syntax to specify a test import is the following: `<%ident:varname%>`, where `ident` is the full identifier to import from, and `varname` is what to rename the `instance` variable from that test to.
+
+Example:
+
+The following JSON...
+
+```
+{
+  "api": {
+    "AudioContext": {
+      "__base": "var instance = new (window.AudioContext || window.webkitAudioContext)();"
+    },
+    "AudioDestinationNode": {
+      "__base": "<%api.AudioContext:audioCtx%> if (!audioCtx) {return false}; var instance = audioCtx.destination;"
+    }
+  }
+}
+```
+
+...will compile into...
+
+```javascript
+bcd.addTest('api.AudioContext', "(function() {var instance = new (window.AudioContext || window.webkitAudioContext)();})()", 'Window');
+bcd.addTest('api.AudioDestinationNode', "(function() {var instance = new (window.AudioContext || window.webkitAudioContext)(); if (!audioCtx) {return false}; var instance = audioCtx.destination;})()", 'Window');
+```
+
+Note: if the specified `ident` cannot be found, the code will be replaced with a error to throw indicating as such.
+
 ## API
 
 HTTP endpoints under `/api/` are used to enumerate/iterate test URLs, report
