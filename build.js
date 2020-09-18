@@ -58,7 +58,7 @@ const compileCustomTest = (code, format = true) => {
     code = `(function () {${code}})()`;
 
     // Format
-    code = prettier.format(code, {parser: 'babel'});
+    code = prettier.format(code, {singleQuote: true, parser: 'babel'});
   }
 
   return code;
