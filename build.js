@@ -36,39 +36,30 @@ const writeFile = async (filename, content) => {
   await fs.writeFile(filename, content, 'utf8');
 };
 
-const compileCustomTest = (code) => {
+const compileCustomTest = (code, format = true) => {
   // Import code from other tests
-  let newCode;
-  /* eslint-disable-next-line no-constant-condition */
-  while (true) {
-    newCode = code.replace(/<%(\w+)\.(\w+)(?:.(\w+))?:(\w+)%> ?/g, (match, category, name, member, instancevar) => {
-      if (category === 'api') {
-        if (!(name in customTests.api && '__base' in customTests.api[name])) {
-          return `throw 'Test is malformed: ${match} is an invalid reference';`;
-        }
-        return customTests.api[name].__base.replace(
-            /var instance/g, `var ${instancevar}`
-        );
+  code.replace(/<%(\w+)\.(\w+)(?:.(\w+))?:(\w+)%> ?/g, (match, category, name, member, instancevar) => {
+    if (category === 'api') {
+      if (!(name in customTests.api && '__base' in customTests.api[name])) {
+        return `throw 'Test is malformed: ${match} is an invalid reference';`;
       }
-
-      // TODO: add CSS category
-      return `throw 'Test is malformed: import ${match}, category ${category} is not importable';`;
-    });
-
-    if (newCode == code || newCode.includes('Test is malformed')) {
-      code = newCode;
-      break;
+      return compileCustomTest(customTests.api[name].__base, false).replace(
+          /var instance/g, `var ${instancevar}`
+      );
     }
 
-    code = newCode;
+    // TODO: add CSS category
+    return `throw 'Test is malformed: import ${match}, category ${category} is not importable';`;
+  });
+
+  if (format) {
+    // Wrap in a function
+    code = `(function() {${code}})()`;
+
+    // Format (TODO: replace with Prettier)
+    code = code.replace(/{/g, '{\n')
+        .replace(/; ?/g, ';\n');
   }
-
-  // Wrap in a function
-  code = `(function() {${code}})()`;
-
-  // Format (TODO: replace with Prettier)
-  code = code.replace(/{/g, '{\n')
-      .replace(/; ?/g, ';\n');
 
   return code;
 };
