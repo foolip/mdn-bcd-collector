@@ -33,8 +33,8 @@
       "__base.disabled": "<%api.AudioWorkletNode:worklet%> if (!worklet) {return false}; var instance = worklet.parameters;"
     },
     "AudioTrack": {
-      "__TODO": "NEEDS AUDIO ELEMENT TO LOAD BEFORE GETTING AUDIO TRACK",
-      "__base": "<%api.AudioTrackList:audioTracks%> if (!audioTracks) {return false}; var instance = audioTracks[0];"
+      "__TODO": "NEED TO FIND A WAY TO PRELOAD AUDIO ELEMENT",
+      "__base.disabled": "<%api.AudioTrackList:audioTracks%> if (!audioTracks) {return false}; var instance = audioTracks[0];"
     },
     "AudioTrackList": {
       "__base": "var el = document.createElement('audio'); el.src = '/resources/custom-tests/media/blip.mp3'; el.type = 'audio/mpeg'; el.preload = 'auto'; el.autoplay='true'; el.muted='true'; var instance = el.audioTracks;"
