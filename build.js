@@ -36,14 +36,14 @@ const writeFile = async (filename, content) => {
   await fs.writeFile(filename, content, 'utf8');
 };
 
-const compileCustomTest = (code) => {
+const compileCustomTest = (code, format = true) => {
   // Import code from other tests
-  code = code.replace(/<%(\w+)\.(\w+)(?:.(\w+))?:(\w+)%> ?/g, (match, category, name, member, instancevar) => {
+  code = code.replace(/<%(\w+)\.(\w+)(?:\.(\w+))?:(\w+)%> ?/g, (match, category, name, member, instancevar) => {
     if (category === 'api') {
       if (!(name in customTests.api && '__base' in customTests.api[name])) {
         return `throw 'Test is malformed: ${match} is an invalid reference';`;
       }
-      return customTests.api[name].__base.replace(
+      return compileCustomTest(customTests.api[name].__base, false).replace(
           /var instance/g, `var ${instancevar}`
       );
     }
@@ -52,12 +52,14 @@ const compileCustomTest = (code) => {
     return `throw 'Test is malformed: import ${match}, category ${category} is not importable';`;
   });
 
-  // Wrap in a function
-  code = `(function() {${code}})()`;
+  if (format) {
+    // Wrap in a function
+    code = `(function() {${code}})()`;
 
-  // Format (TODO: replace with Prettier)
-  code = code.replace(/{/g, '{\n')
-      .replace(/; ?/g, ';\n');
+    // Format (TODO: replace with Prettier)
+    code = code.replace(/{/g, '{\n')
+        .replace(/; ?/g, ';\n');
+  }
 
   return code;
 };

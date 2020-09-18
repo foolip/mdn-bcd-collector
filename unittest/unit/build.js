@@ -255,6 +255,9 @@ describe('build', () => {
             bar: {
               __base: '<%api.foo:a%> var instance = a;'
             },
+            baz: {
+              __base: '<%api.bar:b%> var instance = b;'
+            },
             bad: {
               __base: '<%api.foobar:apple%>'
             }
@@ -266,6 +269,11 @@ describe('build', () => {
         assert.equal(
             getCustomTestAPI('bar'),
             '(function() {\nvar a = 1;\nvar instance = a;\nreturn !!instance;\n})()'
+        );
+
+        assert.equal(
+            getCustomTestAPI('baz'),
+            '(function() {\nvar a = 1;\nvar b = a;\nvar instance = b;\nreturn !!instance;\n})()'
         );
       });
 
