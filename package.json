@@ -13,8 +13,8 @@
   },
   "scripts": {
     "prepare": "if [ -d node_modules/puppeteer ]; then cd node_modules/puppeteer && PUPPETEER_PRODUCT=firefox node install.js; fi",
-    "lint": "eslint . && ejslint views/*",
-    "lint-fix": "eslint --fix .",
+    "lint": "eslint . && prettier -c '**/*.json' '**/*.md' --color && ejslint views/*",
+    "lint-fix": "eslint --fix . && prettier --write '**/*.json' '**/*.md'",
     "clean": "rm -rf .nyc_output coverage generated tests.json",
     "build": "node build.js",
     "gcp-build": "npm run build",
@@ -61,6 +61,7 @@
     "nodemon": "2.0.4",
     "nyc": "15.1.0",
     "open-cli": "6.0.1",
+    "prettier": "2.1.2",
     "proxyquire": "2.1.3",
     "puppeteer": "5.3.0",
     "puppeteer-to-istanbul": "1.4.0",

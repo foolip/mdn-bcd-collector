@@ -13,7 +13,7 @@
       "__base": "<%api.AudioContext:audioCtx%> if (!audioCtx) {return false}; var instance = audioCtx.createBufferSource();"
     },
     "AudioContext": {
-      "__todo": "Separate into different prefix variations when able",
+      "__TODO": "Separate into different prefix variations when able",
       "__base": "var instance = new (window.AudioContext || window.webkitAudioContext)();"
     },
     "AudioDestinationNode": {
@@ -30,11 +30,11 @@
     },
     "AudioParamMap": {
       "__TODO": "DEPENDS ON PROMISE TESTING SUPPORT",
-      "__base": "<%api.AudioWorkletNode:worklet%> if (!worklet) {return false}; var instance = worklet.parameters;"
+      "__base.disabled": "<%api.AudioWorkletNode:worklet%> if (!worklet) {return false}; var instance = worklet.parameters;"
     },
     "AudioWorkletNode": {
       "__TODO": "DEPENDS ON PROMISE TESTING SUPPORT",
-      "__base": "<%api.AudioContext:audioCtx%> if (!audioCtx) {return false}; await audioCtx.audioWorklet.addModule('/resources/custom-tests/api/AudioWorkletNode/WhiteNoiseProcessor.js'); var instance = new AudioWorkletNode(audioCtx, 'white-noise-processor');"
+      "__base.disabled": "<%api.AudioContext:audioCtx%> if (!audioCtx) {return false}; await audioCtx.audioWorklet.addModule('/resources/custom-tests/api/AudioWorkletNode/WhiteNoiseProcessor.js'); var instance = new AudioWorkletNode(audioCtx, 'white-noise-processor');"
     },
     "BiquadFilterNode": {
       "__base": "<%api.AudioContext:audioCtx%> if (!audioCtx) {return false}; var instance = audioCtx.createBiquadFilter();"

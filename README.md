@@ -31,6 +31,7 @@ npm run deploy
 ```
 
 This step is performed automatically when the `main` or `prod` branches are pushed:
+
 - `main` deploys to https://staging-dot-mdn-bcd-collector.appspot.com/
 - `prod` deploys to https://mdn-bcd-collector.appspot.com/
 
@@ -43,7 +44,7 @@ npm run selenium
 ```
 
 You must configure your Selenium remote in `secrets.json`; local environments
-are not supported.  You may use any testing service, such as SauceLabs,
+are not supported. You may use any testing service, such as SauceLabs,
 BrowserStack, LambdaTest, etc. -- please check with your provider on how to
 configure your WebDriver URL.
 
