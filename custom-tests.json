@@ -123,6 +123,13 @@
     "IIRFilterNode": {
       "__base": "<%api.AudioContext:audioCtx%> if (!audioCtx) {return false}; var instance = audioCtx.createIIRFilter();"
     },
+    "MediaCapabilities": {
+      "__base": "var instance = navigator.mediaCapabilities;"
+    },
+    "MediaDeviceInfo": {
+      "__TODO": "DEPENDS ON PROMISE TESTING SUPPORT",
+      "__base.disabled": "<%api.MediaDevices:mediaDevices%> var devices = await navigator.mediaDevices.enumerateDevices(); var instance = devices[0];"
+    },
     "MediaDevices": {
       "__base": "var instance = navigator.mediaDevices;"
     },
