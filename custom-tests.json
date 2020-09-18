@@ -33,11 +33,16 @@
       "__base.disabled": "<%api.AudioWorkletNode:worklet%> if (!worklet) {return false}; var instance = worklet.parameters;"
     },
     "AudioTrack": {
-      "__TODO": "NEED TO FIND A WAY TO PRELOAD AUDIO ELEMENT",
-      "__base.disabled": "<%api.AudioTrackList:audioTracks%> if (!audioTracks) {return false}; var instance = audioTracks[0];"
+      "__base": "<%api.AudioTrackList:audioTracks%> if (!audioTracks) {return false}; var instance = audioTracks[0];"
     },
     "AudioTrackList": {
-      "__base": "var el = document.createElement('audio'); el.src = '/resources/custom-tests/media/blip.mp3'; el.type = 'audio/mpeg'; el.preload = 'auto'; el.autoplay='true'; el.muted='true'; var instance = el.audioTracks;"
+      "__resources": {
+        "resource-audio-blip": {
+          "type": "audio",
+          "src": "/media/blip.mp3"
+        }
+      },
+      "__base": "var el = document.getElementById('resource-audio-blip'); var instance = el.audioTracks;"
     },
     "AudioWorkletNode": {
       "__TODO": "DEPENDS ON PROMISE TESTING SUPPORT",
