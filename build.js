@@ -38,7 +38,7 @@ const writeFile = async (filename, content) => {
 
 const compileCustomTest = (code, format = true) => {
   // Import code from other tests
-  code.replace(/<%(\w+)\.(\w+)(?:\.(\w+))?:(\w+)%> ?/g, (match, category, name, member, instancevar) => {
+  code = code.replace(/<%(\w+)\.(\w+)(?:\.(\w+))?:(\w+)%> ?/g, (match, category, name, member, instancevar) => {
     if (category === 'api') {
       if (!(name in customTests.api && '__base' in customTests.api[name])) {
         return `throw 'Test is malformed: ${match} is an invalid reference';`;
