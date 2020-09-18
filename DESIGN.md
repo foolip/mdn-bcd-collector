@@ -14,7 +14,7 @@ interpreted with knowledge of what the test does.
 
 ### Writing custom tests
 
-The `custom-tests.json` file is used to write custom tests for APIs and CSS properties that cannot be tested with a simple statement (for example, WebGL extensions).  Custom tests are written in the following structure:
+The `custom-tests.json` file is used to write custom tests for APIs and CSS properties that cannot be tested with a simple statement (for example, WebGL extensions). Custom tests are written in the following structure:
 
 #### APIs
 
@@ -31,15 +31,15 @@ Each API interface is written in the following structure:
 }
 ```
 
-`__base` is the common code to access the interface, repeated across every test.  This is where you create your elements and set up your environment.  The instance of the interface being tested should be defined in a variable called `instance`.  This will allow the build script to automatically generate tests for the instance and its members.
+`__base` is the common code to access the interface, repeated across every test. This is where you create your elements and set up your environment. The instance of the interface being tested should be defined in a variable called `instance`. This will allow the build script to automatically generate tests for the instance and its members.
 
-You can define a custom method to test the interface instance itself via `__test`.  The `__test` should be a return statement that returns `true` or `false`.  If no `__test` is defined, it will default to `return !!instance`.
+You can define a custom method to test the interface instance itself via `__test`. The `__test` should be a return statement that returns `true` or `false`. If no `__test` is defined, it will default to `return !!instance`.
 
-Each member can have a custom test by defining a property as the member name.  Like `__test`, it should be a return statement that returns `true` or `false`.  If no custom test is defined, it will default to `return instance && 'MEMBER' in instance`.
+Each member can have a custom test by defining a property as the member name. Like `__test`, it should be a return statement that returns `true` or `false`. If no custom test is defined, it will default to `return instance && 'MEMBER' in instance`.
 
 Note: If an interface with a `__base` has a constructor test, but a custom test isn't defined for the constructor, the code will default to normal generation.
 
-Additional members and submembers can be defined using the `__additional` property.  If there is a subfeature to an API or one of its members, such as "api.AudioContext.AudioContext.latencyHint", that simply cannot be defined within IDL, you can include this object and specify tests for such subfeatures.
+Additional members and submembers can be defined using the `__additional` property. If there is a subfeature to an API or one of its members, such as "api.AudioContext.AudioContext.latencyHint", that simply cannot be defined within IDL, you can include this object and specify tests for such subfeatures.
 
 Each test will compile into a function as follows: `function() {__base + __test/MEMBER/SUBFEATURE}`
 
@@ -59,11 +59,9 @@ The following JSON...
       "__additional": {
         "remove_duplicates": "var elm = document.createElement('b'); elm.className = ' foo bar foo '; elm.classList.remove('bar'); return elm.className === 'foo';"
       }
-    },
+    }
   },
-  "css": {
-
-  }
+  "css": {}
 }
 ```
 
@@ -99,9 +97,7 @@ The following JSON...
 
 ```json
 {
-  "api": {
-
-  },
+  "api": {},
   "css": {
     "properties": {
       "custom-property": "return CSS.supports('color', 'var(--foo)') || CSS.supports('color', 'env(--foo)');"
@@ -113,14 +109,18 @@ The following JSON...
 ...will compile into...
 
 ```javascript
-bcd.addTest('css.properties.custom-property', "(function() {return CSS.supports('color', 'var(--foo)') || CSS.supports('color', 'env(--foo)');})()", 'CSS');
+bcd.addTest(
+  "css.properties.custom-property",
+  "(function() {return CSS.supports('color', 'var(--foo)') || CSS.supports('color', 'env(--foo)');})()",
+  "CSS"
+);
 ```
 
 Tips: make sure that all return statements will return a boolean, and implement thorough feature checking.
 
 #### Importing code from other tests
 
-Sometimes, some features will depend on the setup and configuration from other features, especially with APIs.  To prevent repeating the same code over and over again, you can import code from other custom tests to build new ones quicker.  The syntax to specify a test import is the following: `<%ident:varname%>`, where `ident` is the full identifier to import from, and `varname` is what to rename the `instance` variable from that test to.
+Sometimes, some features will depend on the setup and configuration from other features, especially with APIs. To prevent repeating the same code over and over again, you can import code from other custom tests to build new ones quicker. The syntax to specify a test import is the following: `<%ident:varname%>`, where `ident` is the full identifier to import from, and `varname` is what to rename the `instance` variable from that test to.
 
 Example:
 
@@ -142,8 +142,16 @@ The following JSON...
 ...will compile into...
 
 ```javascript
-bcd.addTest('api.AudioContext', "(function() {var instance = new (window.AudioContext || window.webkitAudioContext)();})()", 'Window');
-bcd.addTest('api.AudioDestinationNode', "(function() {var instance = new (window.AudioContext || window.webkitAudioContext)(); if (!audioCtx) {return false}; var instance = audioCtx.destination;})()", 'Window');
+bcd.addTest(
+  "api.AudioContext",
+  "(function() {var instance = new (window.AudioContext || window.webkitAudioContext)();})()",
+  "Window"
+);
+bcd.addTest(
+  "api.AudioDestinationNode",
+  "(function() {var instance = new (window.AudioContext || window.webkitAudioContext)(); if (!audioCtx) {return false}; var instance = audioCtx.destination;})()",
+  "Window"
+);
 ```
 
 Note: if the specified `ident` cannot be found, the code will be replaced with a error to throw indicating as such.
@@ -274,4 +282,4 @@ entirely static.
 
 ## Reports
 
-A JSON report file is automatically generated and submitted to https://github.com/foolip/mdn-bcd-results as a pull request.  A user can also download the JSON report by visiting `/api/results` (of which is linked at the end of the tests).
+A JSON report file is automatically generated and submitted to https://github.com/foolip/mdn-bcd-results as a pull request. A user can also download the JSON report by visiting `/api/results` (of which is linked at the end of the tests).
