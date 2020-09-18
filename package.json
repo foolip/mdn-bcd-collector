@@ -13,8 +13,8 @@
   },
   "scripts": {
     "prepare": "if [ -d node_modules/puppeteer ]; then cd node_modules/puppeteer && PUPPETEER_PRODUCT=firefox node install.js; fi",
-    "lint": "eslint . && prettier -c '**/*.json' '**/*.md' --color && ejslint views/*",
-    "lint-fix": "eslint --fix . && prettier --write '**/*.json' '**/*.md'",
+    "lint": "eslint . && prettier -c '**/*.json' '**/*.md' '**/*.yaml' --color && ejslint views/*",
+    "lint-fix": "eslint --fix . && prettier --write '**/*.json' '**/*.md' '**/*.yaml'",
     "clean": "rm -rf .nyc_output coverage generated tests.json",
     "build": "node build.js",
     "gcp-build": "npm run build",
