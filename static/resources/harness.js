@@ -308,7 +308,7 @@
       if (result.message) {
         response += ' (' + result.message + ')';
       }
-      response += '</strong>\n<code>' + result.info.code + ';</code>\n\n';
+      response += '</strong>\n<code>' + result.info.code + '</code>\n\n';
     }
 
     var resultsEl = document.getElementById('results');
