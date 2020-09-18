@@ -55,7 +55,7 @@ const compileCustomTest = (code, format = true) => {
 
   if (format) {
     // Wrap in a function
-    code = `(function() {${code}})()`;
+    code = `(function () {${code}})()`;
 
     // Format
     code = prettier.format(code, {parser: 'babel'});
