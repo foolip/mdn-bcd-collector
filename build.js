@@ -18,6 +18,7 @@ const fs = require('fs-extra');
 const path = require('path');
 const WebIDL2 = require('webidl2');
 const bcd = require('mdn-browser-compat-data');
+const prettier = require('prettier');
 
 const customTests = require('./custom-tests.json');
 const specData = require('./spec-data');
@@ -56,9 +57,8 @@ const compileCustomTest = (code, format = true) => {
     // Wrap in a function
     code = `(function() {${code}})()`;
 
-    // Format (TODO: replace with Prettier)
-    code = code.replace(/{/g, '{\n')
-        .replace(/; ?/g, ';\n');
+    // Format
+    code = prettier.format(code, {parser: 'babel'});
   }
 
   return code;
