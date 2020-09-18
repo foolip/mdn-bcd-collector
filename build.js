@@ -38,19 +38,30 @@ const writeFile = async (filename, content) => {
 
 const compileCustomTest = (code) => {
   // Import code from other tests
-  code = code.replace(/<%(\w+)\.(\w+)(?:.(\w+))?:(\w+)%> ?/g, (match, category, name, member, instancevar) => {
-    if (category === 'api') {
-      if (!(name in customTests.api && '__base' in customTests.api[name])) {
-        return `throw 'Test is malformed: ${match} is an invalid reference';`;
+  let newCode;
+  /* eslint-disable-next-line no-constant-condition */
+  while (true) {
+    newCode = code.replace(/<%(\w+)\.(\w+)(?:.(\w+))?:(\w+)%> ?/g, (match, category, name, member, instancevar) => {
+      if (category === 'api') {
+        if (!(name in customTests.api && '__base' in customTests.api[name])) {
+          return `throw 'Test is malformed: ${match} is an invalid reference';`;
+        }
+        return customTests.api[name].__base.replace(
+            /var instance/g, `var ${instancevar}`
+        );
       }
-      return customTests.api[name].__base.replace(
-          /var instance/g, `var ${instancevar}`
-      );
+
+      // TODO: add CSS category
+      return `throw 'Test is malformed: import ${match}, category ${category} is not importable';`;
+    });
+
+    if (newCode == code || newCode.includes('Test is malformed')) {
+      code = newCode;
+      break;
     }
 
-    // TODO: add CSS category
-    return `throw 'Test is malformed: import ${match}, category ${category} is not importable';`;
-  });
+    code = newCode;
+  }
 
   // Wrap in a function
   code = `(function() {${code}})()`;
