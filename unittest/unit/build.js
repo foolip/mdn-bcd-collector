@@ -155,14 +155,14 @@ describe('build', () => {
       it('interface', () => {
         assert.equal(
             getCustomTestAPI('foo'),
-            '(function () {\n  var a = 1;\n  return !!instance;\n});()'
+            '(function () {\n  var a = 1;\n  return !!instance;\n})();'
         );
       });
 
       it('member', () => {
         assert.equal(
             getCustomTestAPI('foo', 'bar'),
-            '(function () {\n  var a = 1;\n  return a + 1;\n});()'
+            '(function () {\n  var a = 1;\n  return a + 1;\n})();'
         );
       });
     });
@@ -185,7 +185,7 @@ describe('build', () => {
       it('member', () => {
         assert.equal(
             getCustomTestAPI('foo', 'bar'),
-            '(function () {\n  return 1 + 1;\n});()'
+            '(function () {\n  return 1 + 1;\n})();'
         );
       });
     });
@@ -212,7 +212,7 @@ describe('build', () => {
       it('member', () => {
         assert.equal(
             getCustomTestAPI('foo', 'bar'),
-            '(function () {\n  return 1 + 1;\n});()'
+            '(function () {\n  return 1 + 1;\n})();'
         );
       });
     });
@@ -233,14 +233,14 @@ describe('build', () => {
       it('interface', () => {
         assert.equal(
             getCustomTestAPI('foo'),
-            '(function () {\n  var a = 1;\n  return a;\n});()'
+            '(function () {\n  var a = 1;\n  return a;\n})();'
         );
       });
 
       it('member', () => {
         assert.equal(
             getCustomTestAPI('foo', 'bar'),
-            '(function () {\n  var a = 1;\n  return a + 1;\n});()'
+            '(function () {\n  var a = 1;\n  return a + 1;\n})();'
         );
       });
     });
@@ -268,19 +268,19 @@ describe('build', () => {
       it('valid import', () => {
         assert.equal(
             getCustomTestAPI('bar'),
-            '(function () {\n  var a = 1;\n  var instance = a;\n  return !!instance;\n});()'
+            '(function () {\n  var a = 1;\n  var instance = a;\n  return !!instance;\n})();'
         );
 
         assert.equal(
             getCustomTestAPI('baz'),
-            '(function () {\n  var a = 1;\n  var b = a;\n  var instance = b;\n  return !!instance;\n});()'
+            '(function () {\n  var a = 1;\n  var b = a;\n  var instance = b;\n  return !!instance;\n})();'
         );
       });
 
       it('invalid import', () => {
         assert.equal(
             getCustomTestAPI('bad'),
-            '(function () {\n  throw \'Test is malformed: <%api.foobar:apple%> is an invalid reference\';\n  return !!instance;\n});()'
+            '(function () {\n  throw \'Test is malformed: <%api.foobar:apple%> is an invalid reference\';\n  return !!instance;\n})();'
         );
       });
     });
@@ -304,8 +304,8 @@ describe('build', () => {
       assert.deepEqual(
           getCustomSubtestsAPI('foo', 'bar'),
           {
-            multiple: '(function () {\n  return 1 + 1 + 1;\n})(;)',
-            'one.only': '(function () {\n  return 1;\n});()'
+            multiple: '(function () {\n  return 1 + 1 + 1;\n})();',
+            'one.only': '(function () {\n  return 1;\n})();'
           }
       );
     });
@@ -331,7 +331,7 @@ describe('build', () => {
         }
       });
 
-      assert.equal(getCustomTestCSS('foo'), '(function () {\nreturn 1;\n})();');
+      assert.equal(getCustomTestCSS('foo'), '(function () {\n  return 1;\n})();');
     });
 
     it('import (not implemented)', () => {
@@ -1165,7 +1165,7 @@ describe('build', () => {
         'api.ANGLE_instanced_arrays': {
           tests: [
             {
-              code: '(function () {\nvar canvas = document.createElement(\'canvas\');\nvar gl = canvas.getContext(\'webgl\');\nvar instance = gl.getExtension(\'ANGLE_instanced_arrays\');\nreturn !!instance;\n})(;)',
+              code: '(function () {\n  var canvas = document.createElement(\'canvas\');\n  var gl = canvas.getContext(\'webgl\');\n  var instance = gl.getExtension(\'ANGLE_instanced_arrays\');\n  return !!instance;\n})();',
               prefix: ''
             }
           ],
@@ -1175,7 +1175,7 @@ describe('build', () => {
         'api.ANGLE_instanced_arrays.drawArraysInstancedANGLE': {
           tests: [
             {
-              code: '(function () {\nvar canvas = document.createElement(\'canvas\');\nvar gl = canvas.getContext(\'webgl\');\nvar instance = gl.getExtension(\'ANGLE_instanced_arrays\');\nreturn true && instance && \'drawArraysInstancedANGLE\' in instance;\n})(;)',
+              code: '(function () {\n  var canvas = document.createElement(\'canvas\');\n  var gl = canvas.getContext(\'webgl\');\n  var instance = gl.getExtension(\'ANGLE_instanced_arrays\');\n  return true && instance && \'drawArraysInstancedANGLE\' in instance;\n})();',
               prefix: ''
             }
           ],
@@ -1185,7 +1185,7 @@ describe('build', () => {
         'api.ANGLE_instanced_arrays.drawElementsInstancedANGLE': {
           tests: [
             {
-              code: '(function () {\nvar canvas = document.createElement(\'canvas\');\nvar gl = canvas.getContext(\'webgl\');\nvar instance = gl.getExtension(\'ANGLE_instanced_arrays\');\nreturn \'drawElementsInstancedANGLE\' in instance;\n})(;)',
+              code: '(function () {\n  var canvas = document.createElement(\'canvas\');\n  var gl = canvas.getContext(\'webgl\');\n  var instance = gl.getExtension(\'ANGLE_instanced_arrays\');\n  return \'drawElementsInstancedANGLE\' in instance;\n})();',
               prefix: ''
             }
           ],
@@ -1205,7 +1205,7 @@ describe('build', () => {
         'api.Document.charset': {
           tests: [
             {
-              code: '(function () {\nreturn document.charset == "UTF-8";\n})(;)',
+              code: '(function () {\n  return document.charset == \'UTF-8\';\n})();',
               prefix: ''
             }
           ],
@@ -1225,7 +1225,7 @@ describe('build', () => {
         'api.Document.loaded.loaded_is_boolean': {
           tests: [
             {
-              code: '(function () {\nreturn typeof document.loaded === "boolean";\n})(;)',
+              code: '(function () {\n  return typeof document.loaded === \'boolean\';\n})();',
               prefix: ''
             }
           ],
@@ -1803,7 +1803,7 @@ describe('build', () => {
         'api.CSS': {
           tests: [
             {
-              code: '(function () {\nvar css = CSS;\nreturn !!css;\n})(;)',
+              code: '(function () {\n  var css = CSS;\n  return !!css;\n})();',
               prefix: ''
             }
           ],
@@ -1813,7 +1813,7 @@ describe('build', () => {
         'api.CSS.paintWorklet': {
           tests: [
             {
-              code: '(function () {\nvar css = CSS;\nreturn css && \'paintWorklet\' in css;\n})(;)',
+              code: '(function () {\n  var css = CSS;\n  return css && \'paintWorklet\' in css;\n})();',
               prefix: ''
             }
           ],
