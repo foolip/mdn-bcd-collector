@@ -42,7 +42,9 @@
       <% tests.forEach(function(test) { %>
         bcd.addTest("<%- test.ident %>", <%- JSON.stringify(test.tests) %>, "<%- test.exposure %>");
       <% }); %>
-      window.onload = bcd.run;
+      window.onload = function() {
+        bcd.run(undefined, <%-Object.keys(resources).length%>)
+      };
     </script>
   </body>
 </html>
