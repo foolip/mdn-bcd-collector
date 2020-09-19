@@ -116,6 +116,7 @@ const getCustomSubtestsAPI = (name) => {
 };
 
 const getCustomResourcesAPI = (name) => {
+  // TODO: Use tests imports to inherit resources
   if (name in customTests.api && '__resources' in customTests.api[name]) {
     return customTests.api[name].__resources;
   }
