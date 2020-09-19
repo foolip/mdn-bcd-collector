@@ -45,7 +45,7 @@ Each member can have a custom test by defining a property as the member name. Li
 
 Note: If an interface with a `__base` has a constructor test, but a custom test isn't defined for the constructor, the code will default to normal generation.
 
-Certain tests may require resources, like audio or video.  To allow the resources to load before running the tests, rather than create and add an element with JavaScript, we can define resources to be loaded through the `__resources` object.  For each resource we wish to load, we simply define the element ID to assign as the object's key, specify the resource's `type` (audio, video, image, etc.), and define the `src` as the path after `/custom-tests`.  All resources should be placed in `/static/resources/custom-tests/media`.
+Certain tests may require resources, like audio or video. To allow the resources to load before running the tests, rather than create and add an element with JavaScript, we can define resources to be loaded through the `__resources` object. For each resource we wish to load, we simply define the element ID to assign as the object's key, specify the resource's `type` (audio, video, image, etc.), and define the `src` as the path after `/custom-tests`. All resources should be placed in `/static/resources/custom-tests/media`.
 
 Additional members and submembers can be defined using the `__additional` property. If there is a subfeature to an API or one of its members, such as "api.AudioContext.AudioContext.latencyHint", that simply cannot be defined within IDL, you can include this object and specify tests for such subfeatures.
 
