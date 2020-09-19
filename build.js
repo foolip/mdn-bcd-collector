@@ -168,7 +168,7 @@ const compileTest = (test, prefixesToTest = ['']) => {
     tests: [],
     category: test.category,
     exposure: test.exposure,
-    resources: test.resources
+    resources: test.resources || {}
   };
 
   if (!Array.isArray(test.raw.code)) {
