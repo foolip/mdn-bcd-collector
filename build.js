@@ -151,12 +151,12 @@ const compileTestCode = (test, prefix = '', ownerPrefix = '') => {
   }
   if (test.owner === 'CSS.supports') {
     const thisPrefix = prefix ? `-${prefix}-` : '';
-    return `CSS.supports("${thisPrefix}${test.property}", "inherit");`;
+    return `CSS.supports("${thisPrefix}${test.property}", "inherit")`;
   }
   if (test.property.startsWith('Symbol.')) {
-    return `"Symbol" in self && "${test.property.replace('Symbol.', '')}" in Symbol && ${test.property} in ${ownerAsProperty}.prototype;`;
+    return `"Symbol" in self && "${test.property.replace('Symbol.', '')}" in Symbol && ${test.property} in ${ownerAsProperty}.prototype`;
   }
-  return `"${property}" in ${owner};`;
+  return `"${property}" in ${owner}`;
 };
 
 const compileTest = (test, prefixesToTest = ['']) => {
