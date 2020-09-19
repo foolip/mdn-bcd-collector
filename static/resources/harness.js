@@ -285,7 +285,7 @@
           }, results);
         }, results);
       }, []);
-    }
+    };
 
     if (resourceCount) {
       resources.required = resourceCount;
@@ -297,7 +297,7 @@
           if (resources.thresholdMet) {
             // No need to restart the tests
             return;
-          };
+          }
           resources.loaded += 1;
 
           if (resources.loaded >= resources.required) {

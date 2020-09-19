@@ -367,11 +367,11 @@ describe('build', () => {
       const test = {property: 'constructor', owner: 'AudioContext'};
 
       it('normal', () => {
-        assert.equal(compileTestCode(test), 'bcd.testConstructor("AudioContext")');
+        assert.equal(compileTestCode(test), 'bcd.testConstructor("AudioContext");');
       });
 
       it('prefix', () => {
-        assert.equal(compileTestCode(test, 'moz'), 'bcd.testConstructor("mozAudioContext")');
+        assert.equal(compileTestCode(test, 'moz'), 'bcd.testConstructor("mozAudioContext");');
       });
     });
 
@@ -379,11 +379,11 @@ describe('build', () => {
       const test = {property: 'font-weight', owner: 'CSS.supports'};
 
       it('normal', () => {
-        assert.equal(compileTestCode(test), 'CSS.supports("font-weight", "inherit")');
+        assert.equal(compileTestCode(test), 'CSS.supports("font-weight", "inherit");');
       });
 
       it('prefix', () => {
-        assert.equal(compileTestCode(test, 'webkit'), 'CSS.supports("-webkit-font-weight", "inherit")');
+        assert.equal(compileTestCode(test, 'webkit'), 'CSS.supports("-webkit-font-weight", "inherit");');
       });
     });
 
@@ -391,11 +391,11 @@ describe('build', () => {
       const test = {property: 'Symbol.iterator', owner: 'DOMMatrixReadOnly'};
 
       it('normal', () => {
-        assert.equal(compileTestCode(test), '"Symbol" in self && "iterator" in Symbol && Symbol.iterator in DOMMatrixReadOnly.prototype');
+        assert.equal(compileTestCode(test), '"Symbol" in self && "iterator" in Symbol && Symbol.iterator in DOMMatrixReadOnly.prototype;');
       });
 
       it('prefix', () => {
-        assert.equal(compileTestCode(test, 'moz'), '"Symbol" in self && "iterator" in Symbol && Symbol.iterator in mozDOMMatrixReadOnly.prototype');
+        assert.equal(compileTestCode(test, 'moz'), '"Symbol" in self && "iterator" in Symbol && Symbol.iterator in mozDOMMatrixReadOnly.prototype;');
       });
     });
 
@@ -403,19 +403,19 @@ describe('build', () => {
       const test = {property: 'log', owner: 'console'};
 
       it('normal', () => {
-        assert.equal(compileTestCode(test), '"log" in console');
+        assert.equal(compileTestCode(test), '"log" in console;');
       });
 
       it('prefix', () => {
-        assert.equal(compileTestCode(test, 'webkit'), '"webkitLog" in console');
+        assert.equal(compileTestCode(test, 'webkit'), '"webkitLog" in console;');
       });
 
       it('owner prefix', () => {
-        assert.equal(compileTestCode(test, '', 'moz'), '"log" in mozConsole');
+        assert.equal(compileTestCode(test, '', 'moz'), '"log" in mozConsole;');
       });
 
       it('prefix + owner prefix', () => {
-        assert.equal(compileTestCode(test, 'webkit', 'moz'), '"webkitLog" in mozConsole');
+        assert.equal(compileTestCode(test, 'webkit', 'moz'), '"webkitLog" in mozConsole;');
       });
     });
   });
@@ -437,7 +437,7 @@ describe('build', () => {
       assert.deepEqual(compileTest(rawTest), {
         tests: [
           {
-            code: '"Document" in self && "body" in Document.prototype',
+            code: '"Document" in self && "body" in Document.prototype;',
             prefix: ''
           }
         ],
@@ -459,11 +459,11 @@ describe('build', () => {
       assert.deepEqual(compileTest(rawTest, ['', 'WebKit']), {
         tests: [
           {
-            code: '"Document" in self',
+            code: '"Document" in self;',
             prefix: ''
           },
           {
-            code: '"WebKitDocument" in self',
+            code: '"WebKitDocument" in self;',
             prefix: 'WebKit'
           }
         ],
@@ -1941,7 +1941,7 @@ describe('build', () => {
       'css.properties.appearance': {
         tests: [
           {
-            code: '"appearance" in document.body.style || CSS.supports("appearance", "inherit")',
+            code: '"appearance" in document.body.style || CSS.supports("appearance", "inherit");',
             prefix: ''
           }
         ],
@@ -1951,7 +1951,7 @@ describe('build', () => {
       'css.properties.font-family': {
         tests: [
           {
-            code: '"fontFamily" in document.body.style || CSS.supports("font-family", "inherit")',
+            code: '"fontFamily" in document.body.style || CSS.supports("font-family", "inherit");',
             prefix: ''
           }
         ],
@@ -1961,7 +1961,7 @@ describe('build', () => {
       'css.properties.font-weight': {
         tests: [
           {
-            code: '"fontWeight" in document.body.style || CSS.supports("font-weight", "inherit")',
+            code: '"fontWeight" in document.body.style || CSS.supports("font-weight", "inherit");',
             prefix: ''
           }
         ],
@@ -1971,7 +1971,7 @@ describe('build', () => {
       'css.properties.grid': {
         tests: [
           {
-            code: '"grid" in document.body.style || CSS.supports("grid", "inherit")',
+            code: '"grid" in document.body.style || CSS.supports("grid", "inherit");',
             prefix: ''
           }
         ],
