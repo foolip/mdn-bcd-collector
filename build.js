@@ -115,6 +115,14 @@ const getCustomSubtestsAPI = (name) => {
   return subtests;
 };
 
+const getCustomResourcesAPI = (name) => {
+  if (name in customTests.api && '__resources' in customTests.api[name]) {
+    return customTests.api[name].__resources;
+  }
+
+  return {};
+};
+
 const getCustomTestCSS = (name) => {
   return 'properties' in customTests.css &&
       name in customTests.css.properties &&
@@ -159,7 +167,8 @@ const compileTest = (test, prefixesToTest = ['']) => {
   const newTest = {
     tests: [],
     category: test.category,
-    exposure: test.exposure
+    exposure: test.exposure,
+    resources: test.resources
   };
 
   if (!Array.isArray(test.raw.code)) {
@@ -556,6 +565,7 @@ const buildIDLTests = (ast) => {
     const isGlobal = !!getExtAttr(iface, 'Global');
     const adjustedIfaceName = getName(iface);
     const customIfaceTest = getCustomTestAPI(adjustedIfaceName);
+    const resources = getCustomResourcesAPI(adjustedIfaceName);
 
     tests[`api.${adjustedIfaceName}`] = compileTest({
       raw: {
@@ -563,7 +573,8 @@ const buildIDLTests = (ast) => {
         combinator: '&&'
       },
       category: 'api',
-      exposure: Array.from(exposureSet)
+      exposure: Array.from(exposureSet),
+      resources: resources
     });
 
     const members = flattenMembers(iface);
@@ -620,7 +631,8 @@ const buildIDLTests = (ast) => {
           combinator: '&&'
         },
         category: 'api',
-        exposure: Array.from(exposureSet)
+        exposure: Array.from(exposureSet),
+        resources: resources
       });
       handledMemberNames.add(member.name);
     }
@@ -633,7 +645,8 @@ const buildIDLTests = (ast) => {
           combinator: '&&'
         },
         category: 'api',
-        exposure: Array.from(exposureSet)
+        exposure: Array.from(exposureSet),
+        resources: resources
       });
     }
   }

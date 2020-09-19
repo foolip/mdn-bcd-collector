@@ -21,6 +21,20 @@
     <p id="status">Running tests...</p>
     <p id="results"></p>
 
+    <% let resources = {}; %>
+    <% tests.forEach(function(test) {
+      Object.assign(resources, test.resources)
+    }); %>
+    <div id="resources">
+      <% for (const [resourceId, resource] of Object.entries(resources)) {
+        switch (resource.type) {
+           case 'audio': %>
+            <audio id="resource-<%-resourceId%>" src="/resources/custom-tests/<%-resource.src%>"></audio>
+            <% break;
+        }
+      }; %>
+    </div>
+
     <!-- TODO: https://github.com/foolip/mdn-bcd-collector/issues/407 -->
     <script src="/resources/json3.min.js"></script>
     <script src="/resources/harness.js"></script>

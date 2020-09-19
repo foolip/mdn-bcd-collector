@@ -33,11 +33,17 @@
       "__base.disabled": "<%api.AudioWorkletNode:worklet%> if (!worklet) {return false}; var instance = worklet.parameters;"
     },
     "AudioTrack": {
+      "__resources": {
+        "audio-blip": {
+          "type": "audio",
+          "src": "/media/blip.mp3"
+        }
+      },
       "__base": "<%api.AudioTrackList:audioTracks%> if (!audioTracks) {return false}; var instance = audioTracks[0];"
     },
     "AudioTrackList": {
       "__resources": {
-        "resource-audio-blip": {
+        "audio-blip": {
           "type": "audio",
           "src": "/media/blip.mp3"
         }

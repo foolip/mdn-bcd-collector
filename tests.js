@@ -62,7 +62,12 @@ class Tests {
       const test = this.tests[ident];
       for (const exposure of test.exposure) {
         if (!testExposure || exposure == testExposure) {
-          tests.push({ident: ident, tests: test.tests, exposure: exposure});
+          tests.push({
+            ident: ident,
+            tests: test.tests,
+            exposure: exposure,
+            resources: test.resources
+          });
         }
       }
     }
