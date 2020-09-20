@@ -22,6 +22,11 @@
 
 (function(global) {
   var pending = {};
+  var resources = {
+    required: 0,
+    loaded: 0,
+    thresholdMet: false
+  };
 
   function stringify(value) {
     try {
@@ -259,26 +264,51 @@
     }
   }
 
-  function run(callback) {
-    var timeout = setTimeout(function() {
-      updateStatus('<br />This test seems to be taking a long time; ' +
-          'it may have crashed. Check the console for errors.', true);
-    }, 10000);
+  function run(callback, resourceCount) {
+    var startTests = function() {
+      var timeout = setTimeout(function() {
+        updateStatus('<br />This test seems to be taking a long time; ' +
+            'it may have crashed. Check the console for errors.', true);
+      }, 10000);
 
-    runWindow(function(results) {
-      runWorker(function(results) {
-        runServiceWorker(function(results) {
-          pending = [];
+      runWindow(function(results) {
+        runWorker(function(results) {
+          runServiceWorker(function(results) {
+            pending = [];
 
-          clearTimeout(timeout);
-          if (typeof callback == 'function') {
-            callback(results);
-          } else {
-            report(results);
-          }
+            clearTimeout(timeout);
+            if (typeof callback == 'function') {
+              callback(results);
+            } else {
+              report(results);
+            }
+          }, results);
         }, results);
-      }, results);
-    }, []);
+      }, []);
+    };
+
+    if (resourceCount) {
+      resources.required = resourceCount;
+
+      // Load resources
+      document.querySelectorAll('audio').forEach(function(el) {
+        el.load();
+        el.onloadeddata = function() {
+          if (resources.thresholdMet) {
+            // No need to restart the tests
+            return;
+          }
+          resources.loaded += 1;
+
+          if (resources.loaded >= resources.required) {
+            resources.thresholdMet = true;
+            startTests();
+          }
+        };
+      });
+    } else {
+      startTests();
+    }
   }
 
   function report(results) {
@@ -308,7 +338,7 @@
       if (result.message) {
         response += ' (' + result.message + ')';
       }
-      response += '</strong>\n<code>' + result.info.code + ';</code>\n\n';
+      response += '</strong>\n<code>' + result.info.code + '</code>\n\n';
     }
 
     var resultsEl = document.getElementById('results');

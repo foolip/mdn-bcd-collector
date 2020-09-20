@@ -367,11 +367,11 @@ describe('build', () => {
       const test = {property: 'constructor', owner: 'AudioContext'};
 
       it('normal', () => {
-        assert.equal(compileTestCode(test), 'bcd.testConstructor("AudioContext")');
+        assert.equal(compileTestCode(test), 'bcd.testConstructor("AudioContext");');
       });
 
       it('prefix', () => {
-        assert.equal(compileTestCode(test, 'moz'), 'bcd.testConstructor("mozAudioContext")');
+        assert.equal(compileTestCode(test, 'moz'), 'bcd.testConstructor("mozAudioContext");');
       });
     });
 
@@ -431,6 +431,7 @@ describe('build', () => {
           combinator: '&&'
         },
         category: 'api',
+        resources: {},
         exposure: ['Window']
       };
 
@@ -442,6 +443,7 @@ describe('build', () => {
           }
         ],
         category: 'api',
+        resources: {},
         exposure: ['Window']
       });
     });
@@ -453,6 +455,7 @@ describe('build', () => {
           combinator: '&&'
         },
         category: 'api',
+        resources: {},
         exposure: ['Window']
       };
 
@@ -468,6 +471,7 @@ describe('build', () => {
           }
         ],
         category: 'api',
+        resources: {},
         exposure: ['Window']
       });
     });
@@ -483,6 +487,7 @@ describe('build', () => {
             combinator: '&&'
           },
           category: 'api',
+          resources: {},
           exposure: ['Window']
         };
 
@@ -506,6 +511,7 @@ describe('build', () => {
             }
           ],
           category: 'api',
+          resources: {},
           exposure: ['Window']
         });
       });
@@ -519,6 +525,7 @@ describe('build', () => {
             combinator: '&&'
           },
           category: 'api',
+          resources: {},
           exposure: ['Window']
         };
 
@@ -530,6 +537,7 @@ describe('build', () => {
             }
           ],
           category: 'api',
+          resources: {},
           exposure: ['Window']
         });
       });
@@ -541,6 +549,7 @@ describe('build', () => {
             combinator: '&&'
           },
           category: 'api',
+          resources: {},
           exposure: ['Window']
         };
 
@@ -552,6 +561,7 @@ describe('build', () => {
             }
           ],
           category: 'api',
+          resources: {},
           exposure: ['Window']
         });
       });
@@ -566,6 +576,7 @@ describe('build', () => {
           }
         ],
         category: 'api',
+        resources: {},
         exposure: ['Window']
       };
 
@@ -580,6 +591,7 @@ describe('build', () => {
             combinator: '&&'
           },
           category: 'api',
+          resources: {},
           exposure: ['Window']
         },
         {
@@ -591,6 +603,7 @@ describe('build', () => {
             combinator: '||'
           },
           category: 'api',
+          resources: {},
           exposure: ['Window']
         },
         {
@@ -602,6 +615,7 @@ describe('build', () => {
             combinator: '&&'
           },
           category: 'api',
+          resources: {},
           exposure: ['Worker']
         }
       ];
@@ -614,6 +628,7 @@ describe('build', () => {
           }
         ],
         category: 'api',
+        resources: {},
         exposure: ['Window']
       });
       assert.deepEqual(compileTest(rawTests[1]), {
@@ -624,6 +639,7 @@ describe('build', () => {
           }
         ],
         category: 'api',
+        resources: {},
         exposure: ['Window']
       });
       assert.deepEqual(compileTest(rawTests[2]), {
@@ -634,6 +650,7 @@ describe('build', () => {
           }
         ],
         category: 'api',
+        resources: {},
         exposure: ['Worker']
       });
     });
@@ -648,6 +665,7 @@ describe('build', () => {
           combinator: '||'
         },
         category: 'css',
+        resources: {},
         exposure: ['Window']
       };
 
@@ -659,6 +677,7 @@ describe('build', () => {
           }
         ],
         category: 'css',
+        resources: {},
         exposure: ['Window']
       });
     });
@@ -673,6 +692,7 @@ describe('build', () => {
           combinator: '||'
         },
         category: 'css',
+        resources: {},
         exposure: ['Window']
       };
 
@@ -688,6 +708,7 @@ describe('build', () => {
           }
         ],
         category: 'css',
+        resources: {},
         exposure: ['Window']
       });
     });
@@ -1017,6 +1038,7 @@ describe('build', () => {
             }
           ],
           category: 'api',
+          resources: {},
           exposure: ['Window']
         },
         'api.Attr.name': {
@@ -1027,6 +1049,7 @@ describe('build', () => {
             }
           ],
           category: 'api',
+          resources: {},
           exposure: ['Window']
         }
       });
@@ -1046,6 +1069,7 @@ describe('build', () => {
             }
           ],
           category: 'api',
+          resources: {},
           exposure: ['Window']
         },
         'api.Node.contains': {
@@ -1056,6 +1080,7 @@ describe('build', () => {
             }
           ],
           category: 'api',
+          resources: {},
           exposure: ['Window']
         }
       });
@@ -1076,6 +1101,7 @@ describe('build', () => {
             }
           ],
           category: 'api',
+          resources: {},
           exposure: ['Window']
         },
         'api.MediaSource.isTypeSupported': {
@@ -1086,6 +1112,7 @@ describe('build', () => {
             }
           ],
           category: 'api',
+          resources: {},
           exposure: ['Window']
         }
       });
@@ -1106,6 +1133,7 @@ describe('build', () => {
             }
           ],
           category: 'api',
+          resources: {},
           exposure: ['Window']
         },
         'api.Window.isWindow': {
@@ -1116,6 +1144,7 @@ describe('build', () => {
             }
           ],
           category: 'api',
+          resources: {},
           exposure: ['Window']
         }
       });
@@ -1170,6 +1199,7 @@ describe('build', () => {
             }
           ],
           category: 'api',
+          resources: {},
           exposure: ['Window']
         },
         'api.ANGLE_instanced_arrays.drawArraysInstancedANGLE': {
@@ -1180,6 +1210,7 @@ describe('build', () => {
             }
           ],
           category: 'api',
+          resources: {},
           exposure: ['Window']
         },
         'api.ANGLE_instanced_arrays.drawElementsInstancedANGLE': {
@@ -1190,6 +1221,7 @@ describe('build', () => {
             }
           ],
           category: 'api',
+          resources: {},
           exposure: ['Window']
         },
         'api.Document': {
@@ -1200,6 +1232,7 @@ describe('build', () => {
             }
           ],
           category: 'api',
+          resources: {},
           exposure: ['Window']
         },
         'api.Document.charset': {
@@ -1210,6 +1243,7 @@ describe('build', () => {
             }
           ],
           category: 'api',
+          resources: {},
           exposure: ['Window']
         },
         'api.Document.loaded': {
@@ -1220,6 +1254,7 @@ describe('build', () => {
             }
           ],
           category: 'api',
+          resources: {},
           exposure: ['Window']
         },
         'api.Document.loaded.loaded_is_boolean': {
@@ -1230,6 +1265,7 @@ describe('build', () => {
             }
           ],
           category: 'api',
+          resources: {},
           exposure: ['Window']
         }
       });
@@ -1256,6 +1292,7 @@ describe('build', () => {
             }
           ],
           category: 'api',
+          resources: {},
           exposure: ['Window']
         },
         'api.WindowOrWorkerGlobalScope.active': {
@@ -1266,6 +1303,7 @@ describe('build', () => {
             }
           ],
           category: 'api',
+          resources: {},
           exposure: ['Window']
         },
         'api.WindowOrWorkerGlobalScope.isLoaded': {
@@ -1276,6 +1314,7 @@ describe('build', () => {
             }
           ],
           category: 'api',
+          resources: {},
           exposure: ['Window']
         }
       });
@@ -1295,16 +1334,18 @@ describe('build', () => {
             }
           ],
           category: 'api',
+          resources: {},
           exposure: ['Window']
         },
         'api.Number.Number': {
           tests: [
             {
-              code: 'bcd.testConstructor("Number")',
+              code: 'bcd.testConstructor("Number");',
               prefix: ''
             }
           ],
           category: 'api',
+          resources: {},
           exposure: ['Window']
         }
       });
@@ -1322,16 +1363,18 @@ describe('build', () => {
             }
           ],
           category: 'api',
+          resources: {},
           exposure: ['Window']
         },
         'api.Number.Number': {
           tests: [
             {
-              code: 'bcd.testConstructor("Number")',
+              code: 'bcd.testConstructor("Number");',
               prefix: ''
             }
           ],
           category: 'api',
+          resources: {},
           exposure: ['Window']
         }
       });
@@ -1350,6 +1393,7 @@ describe('build', () => {
             }
           ],
           category: 'api',
+          resources: {},
           exposure: ['Window']
         },
         'api.DoubleList.@@iterator': {
@@ -1360,6 +1404,7 @@ describe('build', () => {
             }
           ],
           category: 'api',
+          resources: {},
           exposure: ['Window']
         },
         'api.DoubleList.entries': {
@@ -1370,6 +1415,7 @@ describe('build', () => {
             }
           ],
           category: 'api',
+          resources: {},
           exposure: ['Window']
         },
         'api.DoubleList.forEach': {
@@ -1380,6 +1426,7 @@ describe('build', () => {
             }
           ],
           category: 'api',
+          resources: {},
           exposure: ['Window']
         },
         'api.DoubleList.keys': {
@@ -1390,6 +1437,7 @@ describe('build', () => {
             }
           ],
           category: 'api',
+          resources: {},
           exposure: ['Window']
         },
         'api.DoubleList.values': {
@@ -1400,6 +1448,7 @@ describe('build', () => {
             }
           ],
           category: 'api',
+          resources: {},
           exposure: ['Window']
         }
       });
@@ -1418,6 +1467,7 @@ describe('build', () => {
             }
           ],
           category: 'api',
+          resources: {},
           exposure: ['Window']
         },
         'api.DoubleMap.clear': {
@@ -1428,6 +1478,7 @@ describe('build', () => {
             }
           ],
           category: 'api',
+          resources: {},
           exposure: ['Window']
         },
         'api.DoubleMap.delete': {
@@ -1438,6 +1489,7 @@ describe('build', () => {
             }
           ],
           category: 'api',
+          resources: {},
           exposure: ['Window']
         },
         'api.DoubleMap.entries': {
@@ -1448,6 +1500,7 @@ describe('build', () => {
             }
           ],
           category: 'api',
+          resources: {},
           exposure: ['Window']
         },
         'api.DoubleMap.forEach': {
@@ -1458,6 +1511,7 @@ describe('build', () => {
             }
           ],
           category: 'api',
+          resources: {},
           exposure: ['Window']
         },
         'api.DoubleMap.get': {
@@ -1468,6 +1522,7 @@ describe('build', () => {
             }
           ],
           category: 'api',
+          resources: {},
           exposure: ['Window']
         },
         'api.DoubleMap.has': {
@@ -1478,6 +1533,7 @@ describe('build', () => {
             }
           ],
           category: 'api',
+          resources: {},
           exposure: ['Window']
         },
         'api.DoubleMap.keys': {
@@ -1488,6 +1544,7 @@ describe('build', () => {
             }
           ],
           category: 'api',
+          resources: {},
           exposure: ['Window']
         },
         'api.DoubleMap.set': {
@@ -1498,6 +1555,7 @@ describe('build', () => {
             }
           ],
           category: 'api',
+          resources: {},
           exposure: ['Window']
         },
         'api.DoubleMap.size': {
@@ -1508,6 +1566,7 @@ describe('build', () => {
             }
           ],
           category: 'api',
+          resources: {},
           exposure: ['Window']
         },
         'api.DoubleMap.values': {
@@ -1518,6 +1577,7 @@ describe('build', () => {
             }
           ],
           category: 'api',
+          resources: {},
           exposure: ['Window']
         }
       });
@@ -1536,6 +1596,7 @@ describe('build', () => {
             }
           ],
           category: 'api',
+          resources: {},
           exposure: ['Window']
         },
         'api.DoubleSet.add': {
@@ -1546,6 +1607,7 @@ describe('build', () => {
             }
           ],
           category: 'api',
+          resources: {},
           exposure: ['Window']
         },
         'api.DoubleSet.clear': {
@@ -1556,6 +1618,7 @@ describe('build', () => {
             }
           ],
           category: 'api',
+          resources: {},
           exposure: ['Window']
         },
         'api.DoubleSet.delete': {
@@ -1566,6 +1629,7 @@ describe('build', () => {
             }
           ],
           category: 'api',
+          resources: {},
           exposure: ['Window']
         },
         'api.DoubleSet.entries': {
@@ -1576,6 +1640,7 @@ describe('build', () => {
             }
           ],
           category: 'api',
+          resources: {},
           exposure: ['Window']
         },
         'api.DoubleSet.has': {
@@ -1586,6 +1651,7 @@ describe('build', () => {
             }
           ],
           category: 'api',
+          resources: {},
           exposure: ['Window']
         },
         'api.DoubleSet.keys': {
@@ -1596,6 +1662,7 @@ describe('build', () => {
             }
           ],
           category: 'api',
+          resources: {},
           exposure: ['Window']
         },
         'api.DoubleSet.size': {
@@ -1606,6 +1673,7 @@ describe('build', () => {
             }
           ],
           category: 'api',
+          resources: {},
           exposure: ['Window']
         },
         'api.DoubleSet.values': {
@@ -1616,6 +1684,7 @@ describe('build', () => {
             }
           ],
           category: 'api',
+          resources: {},
           exposure: ['Window']
         }
       });
@@ -1635,6 +1704,7 @@ describe('build', () => {
             }
           ],
           category: 'api',
+          resources: {},
           exposure: ['Window']
         }
       });
@@ -1656,6 +1726,7 @@ describe('build', () => {
             }
           ],
           category: 'api',
+          resources: {},
           exposure: ['Window']
         },
         'api.MessageChannel': {
@@ -1666,6 +1737,7 @@ describe('build', () => {
             }
           ],
           category: 'api',
+          resources: {},
           exposure: ['Window', 'Worker']
         },
         'api.Worker': {
@@ -1676,6 +1748,7 @@ describe('build', () => {
             }
           ],
           category: 'api',
+          resources: {},
           exposure: ['Window']
         },
         'api.WorkerSync': {
@@ -1686,6 +1759,7 @@ describe('build', () => {
             }
           ],
           category: 'api',
+          resources: {},
           exposure: ['Worker']
         }
       });
@@ -1708,6 +1782,7 @@ describe('build', () => {
             }
           ],
           category: 'api',
+          resources: {},
           exposure: ['Window']
         },
         'api.AudioNode.disconnect': {
@@ -1718,6 +1793,7 @@ describe('build', () => {
             }
           ],
           category: 'api',
+          resources: {},
           exposure: ['Window']
         }
       });
@@ -1737,6 +1813,7 @@ describe('build', () => {
             }
           ],
           category: 'api',
+          resources: {},
           exposure: ['Window']
         },
         'api.CSS.paintWorklet': {
@@ -1747,6 +1824,7 @@ describe('build', () => {
             }
           ],
           category: 'api',
+          resources: {},
           exposure: ['Window']
         }
       });
@@ -1766,6 +1844,7 @@ describe('build', () => {
             }
           ],
           category: 'api',
+          resources: {},
           exposure: ['Window']
         },
         'api.CSS.supports': {
@@ -1776,6 +1855,7 @@ describe('build', () => {
             }
           ],
           category: 'api',
+          resources: {},
           exposure: ['Window']
         }
       });
@@ -1808,6 +1888,7 @@ describe('build', () => {
             }
           ],
           category: 'api',
+          resources: {},
           exposure: ['Window']
         },
         'api.CSS.paintWorklet': {
@@ -1818,6 +1899,7 @@ describe('build', () => {
             }
           ],
           category: 'api',
+          resources: {},
           exposure: ['Window']
         }
       });
@@ -1946,6 +2028,7 @@ describe('build', () => {
           }
         ],
         category: 'css',
+        resources: {},
         exposure: ['Window']
       },
       'css.properties.font-family': {
@@ -1956,6 +2039,7 @@ describe('build', () => {
           }
         ],
         category: 'css',
+        resources: {},
         exposure: ['Window']
       },
       'css.properties.font-weight': {
@@ -1966,6 +2050,7 @@ describe('build', () => {
           }
         ],
         category: 'css',
+        resources: {},
         exposure: ['Window']
       },
       'css.properties.grid': {
@@ -1976,6 +2061,7 @@ describe('build', () => {
           }
         ],
         category: 'css',
+        resources: {},
         exposure: ['Window']
       }
     });
