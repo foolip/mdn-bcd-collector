@@ -234,9 +234,11 @@ const inferSupportStatements = (versionMap) => {
 
     if (supported === true) {
       if (!lastStatement) {
+        let versionAdded = (
+            (lastWasNull || lastKnown.support === false) ? '≤' : ''
+          ) + version;
         statements.push({
-          version_added: (lastWasNull || lastKnown.support === false) ?
-              true : version,
+          version_added: versionAdded,
           ...(prefix && {prefix: prefix})
         });
       } else if (!lastStatement.version_added) {
@@ -265,8 +267,9 @@ const inferSupportStatements = (versionMap) => {
         lastStatement.version_added &&
         !lastStatement.version_removed
       ) {
-        lastStatement.version_removed =
-          (!lastWasNull || lastKnown.support === false) ? version : true;
+        lastStatement.version_removed = (
+            (lastWasNull || lastKnown.support === false) ? '' : '≤'
+          ) + version;
       } else if (!lastStatement) {
         statements.push({version_added: false});
       }
