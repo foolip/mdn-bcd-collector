@@ -546,6 +546,47 @@ const validateIDL = (ast) => {
   return true;
 };
 
+const buildIDLExpressions = (ast) => {
+  const globals = new Set();
+  const interfaces = new Map();
+  for (const dfn of ast) {
+    if (dfn.type === 'interface') {
+      if (getExtAttr(dfn, 'Global')) {
+        globals.add(dfn);
+      } else {
+        interfaces.set(dfn.name, dfn);
+      }
+      continue;
+    }
+  }
+  // Now traverse the graph (cycles are possible) starting at the globals
+  // and save the paths of attributes.
+  const traverse = (iface, path, ancestorInterfaces) => {
+    console.log(`${path} (${iface.name})`);
+    for (const member of iface.members) {
+      if (member.type !== 'attribute') {
+        continue;
+      }
+      if (member.idlType.nullable) {
+        continue;
+      }
+      // TODO: member.idlType.union
+      const attrInterface = interfaces.get(member.idlType.idlType);
+      if (!attrInterface) {
+        continue;
+      }
+      ancestorInterfaces.add(iface);
+      if (!ancestorInterfaces.has(attrInterface)) {
+        traverse(attrInterface, `${path}.${member.name}`, ancestorInterfaces);
+      }
+      ancestorInterfaces.delete(iface);
+    }
+  };
+  for (const global of globals.values()) {
+    traverse(global, 'self', new Set());
+  }
+};
+
 const buildIDLTests = (ast) => {
   const tests = {};
 
@@ -658,6 +699,7 @@ const buildIDLTests = (ast) => {
 const buildIDL = (webrefIDLs, customIDLs) => {
   const ast = flattenIDL(webrefIDLs, customIDLs);
   validateIDL(ast);
+  buildIDLExpressions(ast);
   return buildIDLTests(ast);
 };
 
