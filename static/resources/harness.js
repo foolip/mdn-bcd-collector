@@ -301,7 +301,7 @@
           resources.thresholdMet = true;
           startTests();
         }
-      }
+      };
 
       // Load resources
       document.querySelectorAll('audio, video').forEach(function(el) {
