@@ -123,8 +123,53 @@
     "IIRFilterNode": {
       "__base": "<%api.AudioContext:audioCtx%> if (!audioCtx) {return false}; var instance = audioCtx.createIIRFilter();"
     },
+    "MediaCapabilities": {
+      "__base": "var instance = navigator.mediaCapabilities;"
+    },
+    "MediaDeviceInfo": {
+      "__TODO": "DEPENDS ON PROMISE TESTING SUPPORT",
+      "__base.disabled": "<%api.MediaDevices:mediaDevices%> if (!mediaDevices) {return false;} var devices = await navigator.mediaDevices.enumerateDevices(); var instance = devices[0];"
+    },
     "MediaDevices": {
       "__base": "var instance = navigator.mediaDevices;"
+    },
+    "MediaElementAudioSourceNode": {
+      "__resources": {
+        "audio-blip": {
+          "type": "audio",
+          "src": "/media/blip.mp3"
+        }
+      },
+      "__base": "<%api.AudioContext:audioCtx%> if (!audioCtx) {return false}; var instance = audioCtx.createMediaElementSource(document.getElementById('resource-audio-blip'));"
+    },
+    "MediaSession": {
+      "__base": "var instance = navigator.MediaSession;"
+    },
+    "MediaSettingsRange": {
+      "__TODO": "DEPENDS ON PROMISE TESTING SUPPORT",
+      "__base.disabled": "<%api.MediaStreamTrack:track%> if (!track) {return false;} var imageCapture = new ImageCapture(track); var instance = imageCapture.track.getSettings();"
+    },
+    "MediaSource": {
+      "__base": "var instance = new MediaSource();"
+    },
+    "MediaStream": {
+      "__TODO": "DEPENDS ON PROMISE TESTING SUPPORT",
+      "__base.disabled": "<%api.MediaDevices:mediaDevices%> if (!mediaDevices) {return false;} var instance = await mediaDevices.getUserMedia({video: true});"
+    },
+    "MediaStreamAudioDestinationNode": {
+      "__base": "<%api.AudioContext:audioCtx%> if (!audioCtx) {return false}; var instance = audioCtx.createMediaStreamDestination();"
+    },
+    "MediaStreamAudioSourceNode": {
+      "__TODO": "DEPENDS ON PROMISE TESTING SUPPORT",
+      "__base.disabled": "<%api.MediaStream:mediaStream%> if (!mediaStream) {return false;} <%api.AudioContext:audioCtx%> if (!audioCtx) {return false}; var instance = audioCtx.createMediaStreamSource(mediaStream);"
+    },
+    "MediaStreamTrack": {
+      "__TODO": "DEPENDS ON PROMISE TESTING SUPPORT",
+      "__base.disabled": "<%api.MediaStream:mediaStream%> if (!mediaStream) {return false;} var instance = mediaStream.getVideoTracks()[0];"
+    },
+    "MediaStreamTrackAudioSourceNode": {
+      "__TODO": "DEPENDS ON PROMISE TESTING SUPPORT",
+      "__base.disabled": "<%api.MediaStream:mediaStream%> if (!mediaStream) {return false;} <%api.AudioContext:audioCtx%> if (!audioCtx) {return false}; var instance = audioCtx.createMediaStreamTrackSource(mediaStream);"
     },
     "Navigator": {
       "__base": "var instance = window.navigator;"
@@ -143,6 +188,24 @@
     },
     "TreeWalker": {
       "__base": "var instance = document.createTreeWalker(document);"
+    },
+    "VideoTrack": {
+      "__resources": {
+        "video-blank": {
+          "type": "video",
+          "src": "/media/blank.mp4"
+        }
+      },
+      "__base": "<%api.VideoTrackList:videoTracks%> if (!videoTracks) {return false}; var instance = videoTracks[0];"
+    },
+    "VideoTrackList": {
+      "__resources": {
+        "video-blank": {
+          "type": "video",
+          "src": "/media/blank.mp4"
+        }
+      },
+      "__base": "var el = document.getElementById('resource-video-blank'); var instance = el.videoTracks;"
     },
     "WaveShaperNode": {
       "__base": "<%api.AudioContext:audioCtx%> if (!audioCtx) {return false}; var instance = audioCtx.createWaveShaper();"

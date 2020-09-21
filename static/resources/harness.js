@@ -290,21 +290,23 @@
     if (resourceCount) {
       resources.required = resourceCount;
 
-      // Load resources
-      document.querySelectorAll('audio').forEach(function(el) {
-        el.load();
-        el.onloadeddata = function() {
-          if (resources.thresholdMet) {
-            // No need to restart the tests
-            return;
-          }
-          resources.loaded += 1;
+      var resourceLoaded = function() {
+        if (resources.thresholdMet) {
+          // No need to restart the tests
+          return;
+        }
+        resources.loaded += 1;
 
-          if (resources.loaded >= resources.required) {
-            resources.thresholdMet = true;
-            startTests();
-          }
-        };
+        if (resources.loaded >= resources.required) {
+          resources.thresholdMet = true;
+          startTests();
+        }
+      };
+
+      // Load resources
+      document.querySelectorAll('audio, video').forEach(function(el) {
+        el.load();
+        el.onloadeddata = resourceLoaded;
       });
     } else {
       startTests();
