@@ -189,6 +189,24 @@
     "TreeWalker": {
       "__base": "var instance = document.createTreeWalker(document);"
     },
+    "VideoTrack": {
+      "__resources": {
+        "video-blank": {
+          "type": "video",
+          "src": "/media/blank.mp4"
+        }
+      },
+      "__base": "<%api.VideoTrackList:videoTracks%> if (!videoTracks) {return false}; var instance = videoTracks[0];"
+    },
+    "VideoTrackList": {
+      "__resources": {
+        "video-blank": {
+          "type": "video",
+          "src": "/media/blank.mp4"
+        }
+      },
+      "__base": "var el = document.getElementById('resource-video-blank'); var instance = el.videoTracks;"
+    },
     "WaveShaperNode": {
       "__base": "<%api.AudioContext:audioCtx%> if (!audioCtx) {return false}; var instance = audioCtx.createWaveShaper();"
     },
