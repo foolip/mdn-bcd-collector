@@ -28,11 +28,13 @@
     <div id="resources" style="display: none;">
       <% for (const [resourceId, resource] of Object.entries(resources)) {
         switch (resource.type) {
-          case 'audio': %>
-            <audio id="resource-<%-resourceId%>" src="/resources/custom-tests<%-resource.src%>"></audio>
-            <% break;
+          case 'audio':
           case 'video': %>
-            <video id="resource-<%-resourceId%>" src="/resources/custom-tests<%-resource.src%>"></video>
+            <<%-resource.type%> id="resource-<%-resourceId%>">
+              <% for (const src of resource.src) { %>
+                <source src="/resources/custom-tests<%-src%>" />
+              <% } %>
+            </<%-resource.type%>>
             <% break;
         }
       }; %>
