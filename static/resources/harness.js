@@ -304,10 +304,11 @@
       };
 
       // Load resources
-      document.querySelectorAll('audio, video').forEach(function(el) {
-        el.load();
-        el.onloadeddata = resourceLoaded;
-      });
+      var resourceElements = document.querySelectorAll('audio, video');
+      for (var i = 0; i < resourceElements.length; i++) {
+        resourceElements[i].load();
+        resourceElements[i].onloadeddata = resourceLoaded;
+      };
     } else {
       startTests();
     }

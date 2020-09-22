@@ -25,7 +25,7 @@
     <% tests.forEach(function(test) {
       Object.assign(resources, test.resources)
     }); %>
-    <div id="resources">
+    <div id="resources" style="display: none;">
       <% for (const [resourceId, resource] of Object.entries(resources)) {
         switch (resource.type) {
           case 'audio': %>
