@@ -29,10 +29,10 @@
       <% for (const [resourceId, resource] of Object.entries(resources)) {
         switch (resource.type) {
           case 'audio': %>
-            <audio id="resource-<%-resourceId%>" src="/resources/custom-tests/<%-resource.src%>"></audio>
+            <audio id="resource-<%-resourceId%>" src="/resources/custom-tests<%-resource.src%>"></audio>
             <% break;
           case 'video': %>
-            <video id="resource-<%-resourceId%>" src="/resources/custom-tests/<%-resource.src%>"></video>
+            <video id="resource-<%-resourceId%>" src="/resources/custom-tests<%-resource.src%>"></video>
             <% break;
         }
       }; %>
