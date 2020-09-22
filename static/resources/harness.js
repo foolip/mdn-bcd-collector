@@ -308,7 +308,7 @@
       for (var i = 0; i < resourceElements.length; i++) {
         resourceElements[i].load();
         resourceElements[i].onloadeddata = resourceLoaded;
-      };
+      }
     } else {
       startTests();
     }

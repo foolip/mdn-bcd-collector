@@ -36,10 +36,7 @@
       "__resources": {
         "audio-blip": {
           "type": "audio",
-          "src": [
-            "/media/blip.mp3",
-            "/media/blip.ogg"
-          ]
+          "src": ["/media/blip.mp3", "/media/blip.ogg"]
         }
       },
       "__base": "<%api.AudioTrackList:audioTracks%> if (!audioTracks) {return false}; var instance = audioTracks[0];"
@@ -48,10 +45,7 @@
       "__resources": {
         "audio-blip": {
           "type": "audio",
-          "src": [
-            "/media/blip.mp3",
-            "/media/blip.ogg"
-          ]
+          "src": ["/media/blip.mp3", "/media/blip.ogg"]
         }
       },
       "__base": "var el = document.getElementById('resource-audio-blip'); var instance = el.audioTracks;"
@@ -143,10 +137,7 @@
       "__resources": {
         "audio-blip": {
           "type": "audio",
-          "src": [
-            "/media/blip.mp3",
-            "/media/blip.ogg"
-          ]
+          "src": ["/media/blip.mp3", "/media/blip.ogg"]
         }
       },
       "__base": "<%api.AudioContext:audioCtx%> if (!audioCtx) {return false}; var instance = audioCtx.createMediaElementSource(document.getElementById('resource-audio-blip'));"
@@ -202,10 +193,7 @@
       "__resources": {
         "video-blank": {
           "type": "video",
-          "src": [
-            "/media/blank.mp4",
-            "/media/blank.webm"
-          ]
+          "src": ["/media/blank.mp4", "/media/blank.webm"]
         }
       },
       "__base": "<%api.VideoTrackList:videoTracks%> if (!videoTracks) {return false}; var instance = videoTracks[0];"
@@ -214,10 +202,7 @@
       "__resources": {
         "video-blank": {
           "type": "video",
-          "src": [
-            "/media/blank.mp4",
-            "/media/blank.webm"
-          ]
+          "src": ["/media/blank.mp4", "/media/blank.webm"]
         }
       },
       "__base": "var el = document.getElementById('resource-video-blank'); var instance = el.videoTracks;"
