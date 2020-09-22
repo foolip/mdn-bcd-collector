@@ -266,9 +266,7 @@ const inferSupportStatements = (versionMap) => {
         lastStatement.version_added &&
         !lastStatement.version_removed
       ) {
-        lastStatement.version_removed = (
-            (lastWasNull || lastKnown.support === false) ? '' : '≤'
-        ) + version;
+        lastStatement.version_removed = (lastWasNull ? '≤' : '') + version;
       } else if (!lastStatement) {
         statements.push({version_added: false});
       }
