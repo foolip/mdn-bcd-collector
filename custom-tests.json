@@ -30,7 +30,7 @@
     },
     "AudioParamMap": {
       "__TODO": "DEPENDS ON PROMISE TESTING SUPPORT",
-      "__base.disabled": "<%api.AudioWorkletNode:worklet%> if (!worklet) {return false}; var instance = worklet.parameters;"
+      "__base": "<%api.AudioWorkletNode:worklet%> if (!worklet) {return false}; var instance = worklet.parameters;"
     },
     "AudioTrack": {
       "__resources": {
@@ -52,7 +52,7 @@
     },
     "AudioWorkletNode": {
       "__TODO": "DEPENDS ON PROMISE TESTING SUPPORT",
-      "__base.disabled": "<%api.AudioContext:audioCtx%> if (!audioCtx) {return false}; await audioCtx.audioWorklet.addModule('/resources/custom-tests/api/AudioWorkletNode/WhiteNoiseProcessor.js'); var instance = new AudioWorkletNode(audioCtx, 'white-noise-processor');"
+      "__base": "<%api.AudioContext:audioCtx%> if (!audioCtx) {return false}; await audioCtx.audioWorklet.addModule('/resources/custom-tests/api/AudioWorkletNode/WhiteNoiseProcessor.js'); var instance = new AudioWorkletNode(audioCtx, 'white-noise-processor');"
     },
     "BiquadFilterNode": {
       "__base": "<%api.AudioContext:audioCtx%> if (!audioCtx) {return false}; var instance = audioCtx.createBiquadFilter();"
@@ -128,7 +128,7 @@
     },
     "MediaDeviceInfo": {
       "__TODO": "DEPENDS ON PROMISE TESTING SUPPORT",
-      "__base.disabled": "<%api.MediaDevices:mediaDevices%> if (!mediaDevices) {return false;} var devices = await navigator.mediaDevices.enumerateDevices(); var instance = devices[0];"
+      "__base": "<%api.MediaDevices:mediaDevices%> if (!mediaDevices) {return false;} var devices = await navigator.mediaDevices.enumerateDevices(); var instance = devices[0];"
     },
     "MediaDevices": {
       "__base": "var instance = navigator.mediaDevices;"
@@ -147,29 +147,29 @@
     },
     "MediaSettingsRange": {
       "__TODO": "DEPENDS ON PROMISE TESTING SUPPORT",
-      "__base.disabled": "<%api.MediaStreamTrack:track%> if (!track) {return false;} var imageCapture = new ImageCapture(track); var instance = imageCapture.track.getSettings();"
+      "__base": "<%api.MediaStreamTrack:track%> if (!track) {return false;} var imageCapture = new ImageCapture(track); var instance = imageCapture.track.getSettings();"
     },
     "MediaSource": {
       "__base": "var instance = new MediaSource();"
     },
     "MediaStream": {
       "__TODO": "DEPENDS ON PROMISE TESTING SUPPORT",
-      "__base.disabled": "<%api.MediaDevices:mediaDevices%> if (!mediaDevices) {return false;} var instance = await mediaDevices.getUserMedia({video: true});"
+      "__base": "<%api.MediaDevices:mediaDevices%> if (!mediaDevices) {return false;} var instance = await mediaDevices.getUserMedia({video: true});"
     },
     "MediaStreamAudioDestinationNode": {
       "__base": "<%api.AudioContext:audioCtx%> if (!audioCtx) {return false}; var instance = audioCtx.createMediaStreamDestination();"
     },
     "MediaStreamAudioSourceNode": {
       "__TODO": "DEPENDS ON PROMISE TESTING SUPPORT",
-      "__base.disabled": "<%api.MediaStream:mediaStream%> if (!mediaStream) {return false;} <%api.AudioContext:audioCtx%> if (!audioCtx) {return false}; var instance = audioCtx.createMediaStreamSource(mediaStream);"
+      "__base": "<%api.MediaStream:mediaStream%> if (!mediaStream) {return false;} <%api.AudioContext:audioCtx%> if (!audioCtx) {return false}; var instance = audioCtx.createMediaStreamSource(mediaStream);"
     },
     "MediaStreamTrack": {
       "__TODO": "DEPENDS ON PROMISE TESTING SUPPORT",
-      "__base.disabled": "<%api.MediaStream:mediaStream%> if (!mediaStream) {return false;} var instance = mediaStream.getVideoTracks()[0];"
+      "__base": "<%api.MediaStream:mediaStream%> if (!mediaStream) {return false;} var instance = mediaStream.getVideoTracks()[0];"
     },
     "MediaStreamTrackAudioSourceNode": {
       "__TODO": "DEPENDS ON PROMISE TESTING SUPPORT",
-      "__base.disabled": "<%api.MediaStream:mediaStream%> if (!mediaStream) {return false;} <%api.AudioContext:audioCtx%> if (!audioCtx) {return false}; var instance = audioCtx.createMediaStreamTrackSource(mediaStream);"
+      "__base": "<%api.MediaStream:mediaStream%> if (!mediaStream) {return false;} <%api.AudioContext:audioCtx%> if (!audioCtx) {return false}; var instance = audioCtx.createMediaStreamTrackSource(mediaStream);"
     },
     "Navigator": {
       "__base": "var instance = window.navigator;"
