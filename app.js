@@ -71,6 +71,10 @@ const catchError = (err, res, method) => {
   }
 };
 
+const createReport = (results, req) => {
+  return {__version: appversion, results, userAgent: req.get('User-Agent')};
+};
+
 const app = express();
 
 // Layout config
@@ -104,10 +108,7 @@ app.post('/api/results', (req, res) => {
 
   const response = {};
 
-  Promise.all([
-    storage.put(req.sessionID, '__version', appversion),
-    storage.put(req.sessionID, forURL, req.body)
-  ]).then(() => {
+  storage.put(req.sessionID, forURL, req.body).then(() => {
     res.status(201).json(response);
   }).catch(/* istanbul ignore next */ (err) => catchError(err, res));
 });
@@ -115,8 +116,7 @@ app.post('/api/results', (req, res) => {
 app.get('/api/results', (req, res) => {
   storage.getAll(req.sessionID)
       .then((results) => {
-        const userAgent = req.get('User-Agent');
-        res.status(200).json({results, userAgent});
+        res.status(200).json(createReport(results, req));
       })
       .catch(/* istanbul ignore next */ (err) => catchError(err, res));
 });
@@ -129,8 +129,7 @@ app.post('/api/results/export/github', (req, res) => {
           return;
         }
 
-        const userAgent = req.get('User-Agent');
-        const report = {results, userAgent};
+        const report = createReport(results, req);
         const response = await github.exportAsPR(report);
         if (response) {
           res.json(response);
