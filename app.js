@@ -115,7 +115,8 @@ app.post('/api/results', (req, res) => {
 app.get('/api/results', (req, res) => {
   storage.getAll(req.sessionID)
       .then((results) => {
-        res.status(200).json(results);
+        const userAgent = req.get('User-Agent');
+        res.status(200).json({results, userAgent});
       })
       .catch(/* istanbul ignore next */ (err) => catchError(err, res));
 });
