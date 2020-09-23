@@ -40,8 +40,7 @@ const save = (object, keypath, bcdDir) => {
         wrapper[key] = wrappedValue;
         wrappedValue = wrapper;
       }
-      const json = JSON.stringify(wrappedValue, null, '  ') + '\n';
-      fs.writeFileSync(filepath, json);
+      writeFile(filepath, wrappedValue, {spacing: 2});
     }
   }
 };
