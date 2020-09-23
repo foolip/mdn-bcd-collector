@@ -22,6 +22,12 @@ const {
   until
 } = require('selenium-webdriver');
 const bcd = require('mdn-browser-compat-data');
+const path = require('path');
+
+const github = require('./github')();
+const {writeFile} = require('./utils');
+
+const resultsDir = path.join(__dirname, '..', 'mdn-bcd-results');
 
 const filterVersions = (data, earliestVersion) => {
   const versions = [];
@@ -38,7 +44,6 @@ const filterVersions = (data, earliestVersion) => {
   return versions;
 };
 
-// TODO: IE and pre-Blink Edge have issues with automated runtime
 let browsersToTest = {
   chrome: filterVersions(bcd.browsers.chrome.releases, 40),
   edge: filterVersions(bcd.browsers.edge.releases, 12),
@@ -120,14 +125,12 @@ const run = async (browser, version) => {
     if ((await statusEl.getText()).search('Failed') !== -1) {
       throw new Error('Results failed to upload');
     }
-    await driver.findElement(By.id('submit')).click();
 
-    await driver.wait(until.urlIs(`${host}/results`));
-    statusEl = await driver.findElement(By.id('status'));
-    await driver.wait(until.elementTextContains(statusEl, 'to'));
-    if ((await statusEl.getText()).search('Failed') !== -1) {
-      throw new Error('Pull request failed to submit');
-    }
+    await driver.get(`${host}/api/results`);
+    const report = await driver.wait(until.elementLocated(By.css('body')))
+        .getAttribute('innerText');
+    const {filename} = github.getReportMeta(report);
+    await writeFile(path.join(resultsDir, filename), report);
   } catch (e) {
     console.error(e);
   }
