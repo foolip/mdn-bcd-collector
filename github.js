@@ -25,7 +25,7 @@ const appversion = require('./package.json').version;
 module.exports = (options) => {
   const octokit = new Octokit(options);
 
-  const exportAsPR = async (report) => {
+  const getReportMeta = (report) => {
     const json = stringify(report, {space: '  '}) + '\n';
     const buffer = Buffer.from(json);
     /* eslint-disable-next-line max-len */
@@ -37,10 +37,20 @@ module.exports = (options) => {
     const browser = `${ua.browser.name} ${ua.browser.version}`;
     const os = `${ua.os.name} ${ua.os.version}`;
     const desc = `${browser} / ${os}`;
+    const title = `Results from ${desc}`;
     const slug = slugify(desc, {lower: true});
 
-    const name = `${appversion}-${slug}-${digest}`;
-    const branch = `collector/${name}`;
+    const filename = `${appversion}-${slug}-${digest}`;
+    const branch = `collector/${filename}`;
+
+    return {
+      json, buffer, hash, digest, ua, browser, os,
+      desc, title, slug, filename, branch
+    };
+  };
+
+  const exportAsPR = async (report) => {
+    const reportMeta = getReportMeta(report);
 
     if ((await octokit.auth()).type == 'unauthenticated') {
       return false;
@@ -49,7 +59,7 @@ module.exports = (options) => {
     await octokit.git.createRef({
       owner: 'foolip',
       repo: 'mdn-bcd-results',
-      ref: `refs/heads/${branch}`,
+      ref: `refs/heads/${reportMeta.branch}`,
       // first commit in repo
       sha: '753c6ed8e991e9729353a63d650ff0f5bd902b69'
     });
@@ -57,22 +67,22 @@ module.exports = (options) => {
     await octokit.repos.createOrUpdateFileContents({
       owner: 'foolip',
       repo: 'mdn-bcd-results',
-      path: `${name}.json`,
-      message: `Results from ${desc}`,
-      content: buffer.toString('base64'),
-      branch: branch
+      path: `${reportMeta.filename}.json`,
+      message: reportMeta.title,
+      content: reportMeta.buffer.toString('base64'),
+      branch: reportMeta.branch
     });
 
     const {data} = await octokit.pulls.create({
       owner: 'foolip',
       repo: 'mdn-bcd-results',
-      title: `Results from ${desc}`,
-      head: branch,
+      title: reportMeta.title,
+      head: reportMeta.branch,
       base: 'main'
     });
 
     return data;
   };
 
-  return {exportAsPR};
+  return {getReportMeta, exportAsPR};
 };
