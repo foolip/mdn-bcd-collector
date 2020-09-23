@@ -15,11 +15,13 @@
 const fs = require('fs-extra');
 const path = require('path');
 
-const writeFile = async (filename, content) => {
+const writeFile = async (filename, content, options) => {
+  options = options || {};
+
   if (Array.isArray(content)) {
     content = content.join('\n');
   } else if (typeof content === 'object') {
-    content = JSON.stringify(content);
+    content = JSON.stringify(content, null, options.spacing);
   }
   content = content.trimEnd() + '\n';
 
