@@ -22,20 +22,9 @@ const prettier = require('prettier');
 
 const customTests = require('./custom-tests.json');
 const specData = require('./spec-data');
+const {writeFile} = require('./utils');
 
 const generatedDir = path.join(__dirname, 'generated');
-
-const writeFile = async (filename, content) => {
-  if (Array.isArray(content)) {
-    content = content.join('\n');
-  } else if (typeof content === 'object') {
-    content = JSON.stringify(content);
-  }
-  content = content.trimEnd() + '\n';
-
-  await fs.ensureDir(path.dirname(filename));
-  await fs.writeFile(filename, content, 'utf8');
-};
 
 const compileCustomTest = (code, format = true) => {
   // Import code from other tests

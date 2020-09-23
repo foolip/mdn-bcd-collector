@@ -16,17 +16,14 @@
 
 const chai = require('chai');
 const chaiSubset = require('chai-subset');
-const chaiFs = require('chai-fs');
-chai.use(chaiSubset).use(chaiFs);
+chai.use(chaiSubset);
 const assert = chai.assert;
 const expect = chai.expect;
 
 const WebIDL2 = require('webidl2');
-const mockFs = require('mock-fs');
 const proxyquire = require('proxyquire');
 
 const {
-  writeFile,
   flattenIDL,
   getExposureSet,
   getName,
@@ -44,36 +41,6 @@ const {
 });
 
 describe('build', () => {
-  describe('writeFile', () => {
-    const filepath = '.testtmp';
-
-    beforeEach(() => {
-      mockFs({
-        '.testtmp': '',
-        './custom-tests.json': {api: {}, css: {}}
-      });
-    });
-
-    it('simple supported', async () => {
-      await writeFile(filepath, 'foo\nbar');
-      assert.fileContent(filepath, 'foo\nbar\n');
-    });
-
-    it('array', async () => {
-      await writeFile(filepath, ['foo', 'bar', 'baz']);
-      assert.fileContent(filepath, 'foo\nbar\nbaz\n');
-    });
-
-    it('dictionary', async () => {
-      await writeFile(filepath, {foo: ['bar', 'baz']});
-      assert.fileContent(filepath, '{"foo":["bar","baz"]}\n');
-    });
-
-    afterEach(() => {
-      mockFs.restore();
-    });
-  });
-
   describe('getCustomTestAPI', () => {
     describe('no custom tests', () => {
       const {getCustomTestAPI} = proxyquire('../../build', {
