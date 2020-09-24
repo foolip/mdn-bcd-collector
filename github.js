@@ -40,8 +40,8 @@ module.exports = (options) => {
     const title = `Results from ${desc}`;
     const slug = slugify(desc, {lower: true});
 
-    const filename = `${appversion}-${slug}-${digest}`;
-    const branch = `collector/${filename}`;
+    const filename = `${appversion}-${slug}-${digest}.json`;
+    const branch = `collector/${filename.replace('.json', '')}`;
 
     return {
       json, buffer, hash, digest, ua, browser, os,
@@ -67,7 +67,7 @@ module.exports = (options) => {
     await octokit.repos.createOrUpdateFileContents({
       owner: 'foolip',
       repo: 'mdn-bcd-results',
-      path: `${reportMeta.filename}.json`,
+      path: `${reportMeta.filename}`,
       message: reportMeta.title,
       content: reportMeta.buffer.toString('base64'),
       branch: reportMeta.branch
