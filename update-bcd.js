@@ -5,6 +5,8 @@ const fs = require('fs');
 const path = require('path');
 const uaParser = require('ua-parser-js');
 
+const {writeFile, isDirectory, isEquivalent} = require('./utils');
+
 const overrides = require('./overrides').filter(Array.isArray);
 
 const findEntry = (bcd, path) => {
@@ -14,38 +16,6 @@ const findEntry = (bcd, path) => {
     entry = entry[keys.shift()];
   }
   return entry;
-};
-
-const isDirectory = (fp) => {
-  try {
-    return fs.statSync(fp).isDirectory();
-  } catch (e) {
-    return false;
-  }
-};
-
-const isEquivalent = (a, b) => {
-  // Create arrays of property names
-  const aProps = Object.getOwnPropertyNames(a);
-  const bProps = Object.getOwnPropertyNames(b);
-
-  // If number of properties is different,
-  // objects are not equivalent
-  if (aProps.length != bProps.length) {
-    return false;
-  }
-
-  for (const propName of aProps) {
-    // If values of same property are not equal,
-    // objects are not equivalent
-    if (a[propName] !== b[propName]) {
-      return false;
-    }
-  }
-
-  // If we made it this far, objects
-  // are considered equivalent
-  return true;
 };
 
 // https://github.com/mdn/browser-compat-data/issues/3617
@@ -70,8 +40,7 @@ const save = (object, keypath, bcdDir) => {
         wrapper[key] = wrappedValue;
         wrappedValue = wrapper;
       }
-      const json = JSON.stringify(wrappedValue, null, '  ') + '\n';
-      fs.writeFileSync(filepath, json);
+      writeFile(filepath, wrappedValue, {spacing: 2});
     }
   }
 };
