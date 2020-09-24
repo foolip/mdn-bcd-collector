@@ -22,12 +22,24 @@ const {
   until
 } = require('selenium-webdriver');
 const bcd = require('mdn-browser-compat-data');
+const ora = require('ora');
 const path = require('path');
 
 const github = require('./github')();
 const {writeFile} = require('./utils');
+const secrets = require('./secrets.json');
 
 const resultsDir = path.join(__dirname, '..', 'mdn-bcd-results');
+
+const host = process.env.NODE_ENV === 'test' ?
+      `http://localhost:8080` :
+      'https://mdn-bcd-collector.appspot.com';
+
+const seleniumUrl = secrets.selenium.url && secrets.selenium.url
+    .replace('$USERNAME$', secrets.selenium.username)
+    .replace('$ACCESSKEY$', secrets.selenium.accesskey);
+
+const spinner = ora();
 
 const filterVersions = (data, earliestVersion) => {
   const versions = [];
@@ -43,28 +55,6 @@ const filterVersions = (data, earliestVersion) => {
 
   return versions;
 };
-
-let browsersToTest = {
-  chrome: filterVersions(bcd.browsers.chrome.releases, 40),
-  edge: filterVersions(bcd.browsers.edge.releases, 12),
-  firefox: filterVersions(bcd.browsers.firefox.releases, 35),
-  ie: filterVersions(bcd.browsers.ie.releases, 11),
-  safari: filterVersions(bcd.browsers.safari.releases, 9)
-};
-
-if (process.env.BROWSER) {
-  browsersToTest = {[process.env.BROWSER]: browsersToTest[process.env.BROWSER]};
-}
-
-const secrets = require('./secrets.json');
-
-const host = process.env.NODE_ENV === 'test' ?
-      `http://localhost:8080` :
-      'https://mdn-bcd-collector.appspot.com';
-
-const seleniumUrl = secrets.selenium.url && secrets.selenium.url
-    .replace('$USERNAME$', secrets.selenium.username)
-    .replace('$ACCESSKEY$', secrets.selenium.accesskey);
 
 const getSafariOS = (version) => {
   // Sauce Labs differentiates 10.0 vs. 10.1 in the OS version. This
@@ -121,18 +111,30 @@ const run = async (browser, version) => {
 
     await driver.wait(until.urlIs(`${host}/tests/`));
     statusEl = await driver.findElement(By.id('status'));
-    await driver.wait(until.elementTextContains(statusEl, 'upload'), 30000);
+    try {
+      await driver.wait(until.elementTextContains(statusEl, 'upload'), 30000);
+    } catch (e) {
+      if (e.name == 'TimeoutError') {
+        throw new Error('Timed out waiting for results to upload');
+      }
+
+      throw e;
+    }
     if ((await statusEl.getText()).search('Failed') !== -1) {
       throw new Error('Results failed to upload');
     }
 
     await driver.get(`${host}/api/results`);
-    const report = await driver.wait(until.elementLocated(By.css('body')))
-        .getAttribute('innerText');
+    const report = JSON.parse(
+        await driver.wait(until.elementLocated(By.css('body')))
+            .getAttribute('innerText')
+    );
     const {filename} = github.getReportMeta(report);
     await writeFile(path.join(resultsDir, filename), report);
+
+    spinner.succeed();
   } catch (e) {
-    console.error(e);
+    spinner.fail(spinner.text + ' - ' + e);
   }
 
   try {
@@ -147,29 +149,44 @@ const run = async (browser, version) => {
   await driver.quit();
 };
 
-const runAll = async () => {
+const runAll = async (limitBrowser) => {
   if (!seleniumUrl) {
     console.error('A Selenium remote WebDriver URL is not defined in secrets.json.  Please define your Selenium remote.');
     return false;
   }
 
+  let browsersToTest = {
+    chrome: filterVersions(bcd.browsers.chrome.releases, 40),
+    edge: filterVersions(bcd.browsers.edge.releases, 12),
+    firefox: filterVersions(bcd.browsers.firefox.releases, 35),
+    ie: filterVersions(bcd.browsers.ie.releases, 11),
+    safari: filterVersions(bcd.browsers.safari.releases, 9)
+  };
+
+  if (limitBrowser) {
+    browsersToTest = {[limitBrowser]: browsersToTest[limitBrowser]};
+  }
+
   // eslint-disable-next-line guard-for-in
   for (const browser in browsersToTest) {
     for (const version of browsersToTest[browser]) {
-      console.log(`Running ${bcd.browsers[browser].name} ${version}...`);
+      spinner.start(`${bcd.browsers[browser].name} ${version}`);
+
       try {
         await run(browser, version);
       } catch (e) {
-        console.error(e);
+        spinner.fail(spinner.text + ' - ' + e);
       }
     }
   }
+
+  spinner.stop();
   return true;
 };
 
 /* istanbul ignore if */
 if (require.main === module) {
-  if (runAll() === false) {
+  if (runAll(process.env.BROWSER) === false) {
     process.exit(1);
   }
 } else {

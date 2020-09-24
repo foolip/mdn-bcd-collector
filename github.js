@@ -17,16 +17,15 @@
 const crypto = require('crypto');
 const {Octokit} = require('@octokit/rest');
 const slugify = require('slugify');
-const stringify = require('json-stable-stringify');
 const uaParser = require('ua-parser-js');
 
-const appversion = require('./package.json').version;
+const {stringify} = require('./utils');
 
 module.exports = (options) => {
   const octokit = new Octokit(options);
 
   const getReportMeta = (report) => {
-    const json = stringify(report, {space: '  '}) + '\n';
+    const json = stringify(report) + '\n';
     const buffer = Buffer.from(json);
     /* eslint-disable-next-line max-len */
     // like https://github.com/web-platform-tests/wpt.fyi/blob/26805a0122ea01076ac22c0a96313c1cf5cc30d6/results-processor/wptreport.py#L79
@@ -40,8 +39,8 @@ module.exports = (options) => {
     const title = `Results from ${desc}`;
     const slug = slugify(desc, {lower: true});
 
-    const filename = `${appversion}-${slug}-${digest}`;
-    const branch = `collector/${filename}`;
+    const filename = `${report.__version}-${slug}-${digest}.json`;
+    const branch = `collector/${filename.replace('.json', '')}`;
 
     return {
       json, buffer, hash, digest, ua, browser, os,
@@ -67,7 +66,7 @@ module.exports = (options) => {
     await octokit.repos.createOrUpdateFileContents({
       owner: 'foolip',
       repo: 'mdn-bcd-results',
-      path: `${reportMeta.filename}.json`,
+      path: `${reportMeta.filename}`,
       message: reportMeta.title,
       content: reportMeta.buffer.toString('base64'),
       branch: reportMeta.branch
