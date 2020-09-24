@@ -500,15 +500,9 @@ const validateIDL = (ast) => {
     'BluetoothGATTRemoteServer', // TODO: web-bluetooth.idl
     'CSSOMString', // https://drafts.csswg.org/cssom/#cssomstring-type
     'Date', // https://github.com/WICG/deprecation-reporting/pull/7
-    'Directory', // TODO: file-system-api.idl
-    'DirectoryEntry', // TODO: file-system-api.idl
-    'EntryCallback', // TODO: file-system-api.idl
-    'FileWriterCallback', // TODO: file-system-api.idl
-    'MetadataCallback', // TODO: file-system-api.idl
     'PermissionName', // TODO: https://github.com/w3c/webref/issues/62
     'Region', // https://github.com/w3c/csswg-drafts/issues/5519
     'UndoManager', // TODO: undo-api.idl
-    'VoidCallback', // // TODO: file-system-api.idl
     'WindowProxy' // https://html.spec.whatwg.org/multipage/window-object.html#windowproxy
   ]);
   for (const usedType of usedTypes) {

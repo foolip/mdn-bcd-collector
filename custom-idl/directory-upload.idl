@@ -1,4 +1,21 @@
-// https://wicg.github.io/directory-upload/proposal.html#drag-and-drop
+// https://wicg.github.io/directory-upload/proposal.html#apis
+
+[Exposed=(Window,Worker)]
+interface Directory {
+  readonly attribute DOMString name;
+  readonly attribute DOMString path;
+  Promise<sequence<(File or Directory)>> getFilesAndDirectories();
+  Promise<sequence<File>> getFiles(optional boolean recursiveFlag=false);
+};
+
+partial interface HTMLInputElement {
+  attribute boolean allowdirs;
+  readonly attribute boolean isFilesAndDirectoriesSupported;
+  Promise<sequence<(File or Directory)>> getFilesAndDirectories();
+  Promise<sequence<File>> getFiles(optional boolean recursiveFlag=false);
+  void chooseDirectory();
+};
+
 partial interface DataTransfer {
   Promise<sequence<(File or Directory)>> getFilesAndDirectories();
   Promise<sequence<File>> getFiles(optional boolean recursiveFlag=false);

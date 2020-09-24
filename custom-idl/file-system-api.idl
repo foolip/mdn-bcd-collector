@@ -1,30 +1,81 @@
 // https://www.w3.org/TR/2012/WD-file-system-api-20120417/
 
-// TODO: this is incomplete
+// This is (hopefully) the delta between the old spec and
+// https://wicg.github.io/entries-api/, with adjusted names/types, and
+// [Exposed=Window,Worker] to test it everywhere, just to be safe.
 
-[Exposed=Window] interface DirectoryEntrySync {};
-[Exposed=Window] interface DirectoryReaderSync {};
+callback MetadataCallback = void (Metadata metadata);
+callback FileSystemCallback = void (FileSystem fileSystem);
+callback FileWriterCallback = void (FileWriter fileWriter);
 
-[Exposed=Window] interface EntrySync {};
+interface mixin LocalFileSystem {
+  const unsigned short TEMPORARY = 0;
+  const unsigned short PERSISTENT = 1;
+  void requestFileSystem(unsigned short type, unsigned long long size, FileSystemCallback successCallback, optional ErrorCallback errorCallback);
+  void resolveLocalFileSystemURL(DOMString url, FileSystemEntryCallback successCallback, optional ErrorCallback errorCallback);
+};
+Window includes LocalFileSystem;
+WorkerGlobalScope includes LocalFileSystem;
 
-[Exposed=Window] interface FileEntrySync {};
-[Exposed=Window] interface FileError {};
-[Exposed=Window] interface FileException {};
+interface mixin LocalFileSystemSync {
+  // const unsigned short TEMPORARY = 0;
+  // const unsigned short PERSISTENT = 1;
+  FileSystemSync requestFileSystemSync(unsigned short type, unsigned long long size);
+  EntrySync resolveLocalFileSystemSyncURL(DOMString url);
+};
+WorkerGlobalScope includes LocalFileSystemSync;
+
+[Exposed=Window,Worker]
+interface Metadata {
+ readonly attribute Date modificationTime;
+ readonly attribute unsigned long long size;
+};
 
 partial interface FileSystemEntry {
-  void getMetadata(MetadataCallback successCallback, optional ErrorCallback? errorCallback);
-  void moveTo(DirectoryEntry parent, optional DOMString? name, optional EntryCallback? successCallback, optional ErrorCallback? errorCallback);
-  void copyTo(DirectoryEntry parent, optional DOMString? name, optional EntryCallback? successCallback, optional ErrorCallback? errorCallback);
+  void getMetadata(MetadataCallback successCallback, optional ErrorCallback errorCallback);
+  void moveTo(FileSystemDirectoryEntry parent, optional DOMString name, optional FileSystemEntryCallback successCallback, optional ErrorCallback errorCallback);
+  void copyTo(FileSystemDirectoryEntry parent, optional DOMString name, optional FileSystemEntryCallback successCallback, optional ErrorCallback errorCallback);
   DOMString toURL();
-  void remove(VoidCallback successCallback, optional ErrorCallback? errorCallback);
+  void remove(VoidFunction successCallback, optional ErrorCallback errorCallback);
 };
 
 partial interface FileSystemFileEntry {
   void createWriter(FileWriterCallback successCallback,
-                    optional ErrorCallback? errorCallback);
+                    optional ErrorCallback errorCallback);
 };
 
-[Exposed=Window] interface FileSystemSync {
+// FileSystem is here: https://wicg.github.io/entries-api/#api-domfilesystem
+
+[Exposed=Window,Worker]
+interface FileSystemSync {
   readonly attribute DOMString name;
-  readonly attribute DirectoryEntry root;
+  readonly attribute DirectoryEntrySync root;
 };
+
+[Exposed=Window,Worker]
+interface DirectoryEntry {
+  DirectoryReader createReader();
+  void getFile(DOMString path, optional FileSystemFlags options, optional FileSystemEntryCallback successCallback, optional ErrorCallback errorCallback);
+  void getDirectory(DOMString path, optional FileSystemFlags options, optional FileSystemEntryCallback successCallback, optional ErrorCallback errorCallback);
+  void removeRecursively(VoidFunction successCallback, optional ErrorCallback errorCallback);
+};
+
+[Exposed=Window,Worker]
+interface DirectoryEntrySync {
+  DirectoryReaderSync createReader();
+  FileEntrySync getFile(DOMString path, optional FileSystemFlags options = {});
+  DirectoryEntrySync getDirectory(DOMString path, optional FileSystemFlags options = {});
+  void removeRecursively();
+};
+
+// The old names of things, before FileSystem prefixing
+[Exposed=Window,Worker] interface DirectoryReader {};
+[Exposed=Window,Worker] interface DirectoryReaderSync {};
+[Exposed=Window,Worker] interface Entry {};
+[Exposed=Window,Worker] interface EntrySync {};
+[Exposed=Window,Worker] interface FileEntry {};
+[Exposed=Window,Worker] interface FileEntrySync {};
+
+// In BCD, but not the old spec
+[Exposed=Window,Worker] interface FileError {};
+[Exposed=Window,Worker] interface FileException {};
