@@ -499,7 +499,7 @@ const validateIDL = (ast) => {
     'Animatable', // TODO: this is a mixin used as a union type
     'BluetoothGATTRemoteServer', // TODO: web-bluetooth.idl
     'CSSOMString', // https://drafts.csswg.org/cssom/#cssomstring-type
-    'Date', // TODO: deprecation-reporting.idl
+    'Date', // https://github.com/WICG/deprecation-reporting/pull/7
     'Directory', // TODO: file-system-api.idl
     'DirectoryEntry', // TODO: file-system-api.idl
     'EntryCallback', // TODO: file-system-api.idl
