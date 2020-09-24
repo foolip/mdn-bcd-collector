@@ -22,6 +22,7 @@ const {
   until
 } = require('selenium-webdriver');
 const bcd = require('mdn-browser-compat-data');
+const ora = require('ora');
 const path = require('path');
 
 const github = require('./github')();
@@ -37,6 +38,8 @@ const host = process.env.NODE_ENV === 'test' ?
 const seleniumUrl = secrets.selenium.url && secrets.selenium.url
     .replace('$USERNAME$', secrets.selenium.username)
     .replace('$ACCESSKEY$', secrets.selenium.accesskey);
+
+const spinner = ora();
 
 const filterVersions = (data, earliestVersion) => {
   const versions = [];
@@ -118,8 +121,10 @@ const run = async (browser, version) => {
         .getAttribute('innerText');
     const {filename} = github.getReportMeta(report);
     await writeFile(path.join(resultsDir, filename), report);
+
+    spinner.succeed();
   } catch (e) {
-    console.error(e);
+    spinner.fail(spinner.text + ' - ' + e);
   }
 
   try {
@@ -155,14 +160,17 @@ const runAll = async (limitBrowser) => {
   // eslint-disable-next-line guard-for-in
   for (const browser in browsersToTest) {
     for (const version of browsersToTest[browser]) {
-      console.log(`Running ${bcd.browsers[browser].name} ${version}...`);
+      spinner.start(`${bcd.browsers[browser].name} ${version}`);
+
       try {
         await run(browser, version);
       } catch (e) {
-        console.error(e);
+        spinner.fail(spinner.text + ' - ' + e);
       }
     }
   }
+
+  spinner.stop();
   return true;
 };
 
