@@ -17,7 +17,9 @@ const path = require('path');
 const stringifyJSON = require('json-stable-stringify');
 
 const stringify = (object, options = {}) => {
-  return stringifyJSON(object, {space: options.spacing || 2});
+  return stringifyJSON(object, {
+    space: options.spacing !== undefined ? options.spacing : 2
+  });
 };
 
 const writeFile = async (filename, content, options = {}) => {
