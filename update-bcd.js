@@ -257,6 +257,7 @@ const update = (bcd, supportMatrix) => {
             .filter((key) => !ignoreKeys.has(key));
         return keys.length === 1;
       });
+
       if (!simpleStatement) {
         // No simple statement probably means it's prefixed or under and
         // alternative name, but in any case implies that the main feature
@@ -273,17 +274,42 @@ const update = (bcd, supportMatrix) => {
         continue;
       }
 
-      if (!(typeof(simpleStatement.version_added) === 'string' &&
+      if (typeof(simpleStatement.version_added) === 'string' &&
+        typeof(inferredStatement.version_added) === 'string' &&
+        inferredStatement.version_added.includes('≤')
+      ) {
+        if (compareVersions.compare(
+          simpleStatement.version_added.replace('≤', ''),
+          inferredStatement.version_added.replace('≤', ''),
+          '>'
+        )) {
+          simpleStatement.version_added = inferredStatement.version_added;
+          modified = true;
+        }
+      } else if (!(typeof(simpleStatement.version_added) === 'string' &&
             inferredStatement.version_added === true)) {
         simpleStatement.version_added = inferredStatement.version_added;
         modified = true;
       }
 
-      if (inferredStatement.version_removed &&
-          !(typeof(simpleStatement.version_removed) === 'string' &&
-            inferredStatement.version_removed === true)) {
-        simpleStatement.version_removed = inferredStatement.version_removed;
-        modified = true;
+      if (inferredStatement.version_removed) {
+        if (typeof(simpleStatement.version_removed) === 'string' &&
+          typeof(inferredStatement.version_removed) === 'string' &&
+          inferredStatement.version_removed.includes('≤')
+        ) {
+          if (compareVersions.compare(
+            simpleStatement.version_removed.replace('≤', ''),
+            inferredStatement.version_removed.replace('≤', ''),
+            '>'
+          )) {
+            simpleStatement.version_removed = inferredStatement.version_removed;
+            modified = true;
+          }
+        } else if (!(typeof(simpleStatement.version_removed) === 'string' &&
+              inferredStatement.version_removed === true)) {
+          simpleStatement.version_added = inferredStatement.version_added;
+          modified = true;
+        }
       }
     }
   }
