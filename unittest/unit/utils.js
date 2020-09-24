@@ -29,10 +29,7 @@ describe('build', () => {
     const filepath = '.testtmp';
 
     beforeEach(() => {
-      mockFs({
-        '.testtmp': '',
-        './custom-tests.json': {api: {}, css: {}}
-      });
+      mockFs({'.testtmp': ''});
     });
 
     it('simple supported', async () => {
@@ -47,6 +44,11 @@ describe('build', () => {
 
     it('dictionary', async () => {
       await writeFile(filepath, {foo: ['bar', 'baz']});
+      assert.fileContent(filepath, '{\n  "foo": [\n    "bar",\n    "baz"]\n  }\n');
+    });
+
+    it('dictionary (no spacing)', async () => {
+      await writeFile(filepath, {foo: ['bar', 'baz']}, {spacing: 0});
       assert.fileContent(filepath, '{"foo":["bar","baz"]}\n');
     });
 
