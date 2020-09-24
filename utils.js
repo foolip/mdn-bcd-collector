@@ -22,7 +22,7 @@ const stringify = (object, options = {}) => {
   if (options.sort) {
     return stringifyJSON(object, {space: spacing});
   }
-  
+
   return JSON.stringify(object, null, spacing);
 };
 
