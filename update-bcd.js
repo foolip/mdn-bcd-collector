@@ -1,11 +1,12 @@
 'use strict';
 
 const compareVersions = require('compare-versions');
-const fs = require('fs');
+const fs = require('fs').promises;
+const klaw = require('klaw');
 const path = require('path');
 const uaParser = require('ua-parser-js');
 
-const {writeFile, isDirectory, isEquivalent} = require('./utils');
+const {isEquivalent} = require('./utils');
 
 const overrides = require('./overrides').filter(Array.isArray);
 
@@ -16,33 +17,6 @@ const findEntry = (bcd, path) => {
     entry = entry[keys.shift()];
   }
   return entry;
-};
-
-// https://github.com/mdn/browser-compat-data/issues/3617
-const save = (object, keypath, bcdDir) => {
-  if (keypath.length && !['api', 'css'].includes(keypath[0])) {
-    return;
-  }
-  for (const [key, value] of Object.entries(object)) {
-    const candidate = path.join(bcdDir, ...keypath, key);
-
-    if (isDirectory(candidate)) {
-      // If the path is a directory, recurse.
-      save(value, keypath.concat(key), bcdDir);
-    } else {
-      // Otherwise, write data to file.
-      const filepath = `${candidate}.json`;
-      // Add wrapping objects with keys as in keypath.
-      let wrappedValue = value;
-      const keys = keypath.concat(key).reverse();
-      for (const key of keys) {
-        const wrapper = {};
-        wrapper[key] = wrappedValue;
-        wrappedValue = wrapper;
-      }
-      writeFile(filepath, wrappedValue, {spacing: 2});
-    }
-  }
 };
 
 const getBrowserAndVersion = (userAgent, browsers) => {
@@ -123,12 +97,12 @@ const getSupportMap = (report) => {
 
 // Load all reports and build a map from BCD path to browser + version
 // and test result (null/true/false) for that version.
-const getSupportMatrix = (bcd, reports) => {
+const getSupportMatrix = (browsers, reports) => {
   const supportMatrix = new Map;
 
   for (const report of reports) {
     const [browser, version] = getBrowserAndVersion(
-        report.userAgent, bcd.browsers
+        report.userAgent, browsers
     );
     if (!browser || !version) {
       console.warn(`Ignoring unknown browser/version: ${report.userAgent}`);
@@ -148,7 +122,7 @@ const getSupportMatrix = (bcd, reports) => {
       if (!versionMap) {
         versionMap = new Map;
         for (const browserVersion of
-          Object.keys(bcd.browsers[browser].releases)
+          Object.keys(browsers[browser].releases)
         ) {
           versionMap.set(browserVersion, {result: null, prefix: ''});
         }
@@ -251,6 +225,8 @@ const inferSupportStatements = (versionMap) => {
 };
 
 const update = (bcd, supportMatrix) => {
+  let modified = false;
+
   for (const [path, browserMap] of supportMatrix.entries()) {
     const entry = findEntry(bcd, path);
     if (!entry || !entry.__compat) {
@@ -275,106 +251,115 @@ const update = (bcd, supportMatrix) => {
 
       const simpleStatement = supportStatement.find((statement) => {
         const ignoreKeys = new Set(['notes', 'partial_implementation']);
-        const keys = Object.keys(statement).filter(
-            (key) => !ignoreKeys.has(key)
-        );
+        const keys = Object.keys(statement)
+            .filter((key) => !ignoreKeys.has(key));
         return keys.length === 1;
       });
       if (!simpleStatement) {
         // No simple statement probably means it's prefixed or under and
         // alternative name, but in any case implies that the main feature
-        // is not supported. So only update in case new data contracts that.
+        // is not supported. So only update in case new data contradicts that.
         if (inferredStatments.some((statement) => statement.version_added)) {
           supportStatement.unshift(...inferredStatments);
-          supportStatement = supportStatement.filter(
-              (item, pos, self) => (pos === self.findIndex((el) => (
-                isEquivalent(el, item)
-              )))
-          );
+          supportStatement = supportStatement.filter((item, pos, self) => {
+            return pos === self.findIndex((el) => isEquivalent(el, item));
+          });
           entry.__compat.support[browser] = supportStatement.length === 1 ?
             supportStatement[0] : supportStatement;
+          modified = true;
         }
         continue;
       }
 
-      console.log(`Updating ${path}`);
-
-      if (
-        !(typeof(simpleStatement.version_added) === 'string' &&
-        inferredStatments[0].version_added === true)
-      ) {
+      if (!(typeof(simpleStatement.version_added) === 'string' &&
+            inferredStatments[0].version_added === true)) {
         simpleStatement.version_added = inferredStatments[0].version_added;
+        modified = true;
       }
 
-      if (
-        inferredStatments[0].version_removed &&
-        !(typeof(simpleStatement.version_removed) === 'string' &&
-          inferredStatments[0].version_removed === true)
-      ) {
+      if (inferredStatments[0].version_removed &&
+          !(typeof(simpleStatement.version_removed) === 'string' &&
+            inferredStatments[0].version_removed === true)) {
         simpleStatement.version_removed = inferredStatments[0].version_removed;
+        modified = true;
       }
     }
   }
+
+  return modified;
 };
 
-const loadFile = (reportFile) => {
-  try {
-    return JSON.parse(fs.readFileSync(reportFile));
-  } catch (e) {
-    console.warn(`Could not parse ${reportFile}; skipping`);
-    return null;
-  }
-};
+// |paths| can be files or directories. Returns an object mapping
+// from (absolute) path to the parsed file content.
+const loadJsonFiles = async (paths) => {
+  // Ignores .DS_Store, .git, etc.
+  const dotFilter = (item) => {
+    const basename = path.basename(item);
+    return basename === '.' || basename[0] !== '.';
+  };
 
-const loadFiles = (files, root = '') => {
-  const reports = [];
+  const jsonFiles = [];
 
-  for (const filename of files) {
-    const filepath = root + filename;
-    const fileStats = fs.lstatSync(filepath);
-
-    if (path.basename(filename).startsWith('.')) {
-      // Ignores .DS_Store, .git, etc.
-      continue;
-    } else if (fileStats.isDirectory()) {
-      const newReports = loadFiles(fs.readdirSync(filepath), filepath);
-      reports.push(...newReports);
-    } else if (fileStats.isFile()) {
-      const report = loadFile(filepath);
-
-      if (report) {
-        reports.push(report);
-      }
-    } else {
-      console.warn(`${filepath} is not file or folder; skipping`);
-    }
+  for (const p of paths) {
+    await new Promise((resolve, reject) => {
+      klaw(p, {filter: dotFilter})
+          .on('data', (item) => {
+            if (item.path.endsWith('.json')) {
+              jsonFiles.push(item.path);
+            }
+          })
+          .on('error', reject)
+          .on('end', resolve);
+    });
   }
 
-  return reports;
+  const entries = await Promise.all(
+      jsonFiles.map(async (file) => {
+        const data = JSON.parse(await fs.readFile(file));
+        return [file, data];
+      }));
+
+  return Object.fromEntries(entries);
 };
 
-const main = (reportFiles) => {
+const main = async (reportPaths) => {
   const BCD_DIR = process.env.BCD_DIR || `../browser-compat-data`;
-  const bcd = require(BCD_DIR);
+  // This will load and parse parts of BCD twice, but it's simple.
+  const {browsers} = require(BCD_DIR);
+  const bcdFiles = await loadJsonFiles([
+    path.join(BCD_DIR, 'api'),
+    path.join(BCD_DIR, 'css')
+  ]);
 
-  const reports = loadFiles(reportFiles);
-  const supportMatrix = getSupportMatrix(bcd, reports);
-  update(bcd, supportMatrix);
-  save(bcd, [], BCD_DIR);
+  const reports = Object.values(await loadJsonFiles(reportPaths));
+  const supportMatrix = getSupportMatrix(browsers, reports);
+
+  // Should match https://github.com/mdn/browser-compat-data/blob/f10bf2cc7d1b001a390e70b7854cab9435ffb443/test/linter/test-style.js#L63
+  // TODO: https://github.com/mdn/browser-compat-data/issues/3617
+  for (const [file, data] of Object.entries(bcdFiles)) {
+    const modified = update(data, supportMatrix);
+    if (!modified) {
+      continue;
+    }
+    console.log(`Updating ${path.relative(BCD_DIR, file)}`);
+    const json = JSON.stringify(data, null, '  ') + '\n';
+    await fs.writeFile(file, json);
+  }
 };
 
 /* istanbul ignore if */
 if (require.main === module) {
-  main(process.argv.slice(2));
+  main(process.argv.slice(2)).catch((error) => {
+    console.error(error);
+    process.exit(1);
+  });
 } else {
   module.exports = {
     findEntry,
-    isDirectory,
     getBrowserAndVersion,
     getSupportMap,
     getSupportMatrix,
     inferSupportStatements,
-    update,
-    loadFiles
+    update
   };
 }
