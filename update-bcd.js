@@ -310,6 +310,8 @@ const update = (bcd, supportMatrix) => {
           simpleStatement.version_added = inferredStatement.version_added;
           modified = true;
         }
+      } else if (simpleStatement.version_removed) {
+        delete simpleStatement.version_removed;
       }
     }
   }
