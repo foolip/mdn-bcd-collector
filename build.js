@@ -756,7 +756,7 @@ const build = async (specData, bcd) => {
   const CSSTests = buildCSS(specData.webref.css, bcd);
   const tests = Object.assign({}, IDLTests, CSSTests);
 
-  await writeFile(path.join(__dirname, 'tests.json'), tests);
+  await writeFile(path.join(__dirname, 'tests.json'), tests, {spacing: 0});
   await copyResources();
 };
 

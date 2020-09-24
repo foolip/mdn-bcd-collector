@@ -21,8 +21,6 @@ const uaParser = require('ua-parser-js');
 
 const {stringify} = require('./utils');
 
-const appversion = require('./package.json').version;
-
 module.exports = (options) => {
   const octokit = new Octokit(options);
 

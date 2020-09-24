@@ -26,7 +26,7 @@ const ora = require('ora');
 const path = require('path');
 
 const github = require('./github')();
-const {stringify, writeFile} = require('./utils');
+const {writeFile} = require('./utils');
 const secrets = require('./secrets.json');
 
 const resultsDir = path.join(__dirname, '..', 'mdn-bcd-results');
@@ -126,11 +126,11 @@ const run = async (browser, version) => {
 
     await driver.get(`${host}/api/results`);
     const report = JSON.parse(
-      await driver.wait(until.elementLocated(By.css('body')))
-        .getAttribute('innerText')
+        await driver.wait(until.elementLocated(By.css('body')))
+            .getAttribute('innerText')
     );
     const {filename} = github.getReportMeta(report);
-    await writeFile(path.join(resultsDir, filename), report, {spacing: 2});
+    await writeFile(path.join(resultsDir, filename), report);
 
     spinner.succeed();
   } catch (e) {
