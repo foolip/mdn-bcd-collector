@@ -128,7 +128,7 @@ const run = async (browser, version) => {
     const report = await driver.wait(until.elementLocated(By.css('body')))
         .getAttribute('innerText');
     const {filename} = github.getReportMeta(report);
-    await writeFile(path.join(resultsDir, filename), report);
+    await writeFile(path.join(resultsDir, filename), report, {spacing: 2});
 
     spinner.succeed();
   } catch (e) {
