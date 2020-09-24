@@ -234,8 +234,8 @@ const update = (bcd, supportMatrix) => {
     }
 
     for (const [browser, versionMap] of browserMap.entries()) {
-      const inferredStatments = inferSupportStatements(versionMap);
-      if (inferredStatments.length !== 1) {
+      const inferredStatements = inferSupportStatements(versionMap);
+      if (inferredStatements.length !== 1) {
         // TODO: handle more complicated scenarios
         continue;
       }
@@ -259,8 +259,8 @@ const update = (bcd, supportMatrix) => {
         // No simple statement probably means it's prefixed or under and
         // alternative name, but in any case implies that the main feature
         // is not supported. So only update in case new data contradicts that.
-        if (inferredStatments.some((statement) => statement.version_added)) {
-          supportStatement.unshift(...inferredStatments);
+        if (inferredStatements.some((statement) => statement.version_added)) {
+          supportStatement.unshift(...inferredStatements);
           supportStatement = supportStatement.filter((item, pos, self) => {
             return pos === self.findIndex((el) => isEquivalent(el, item));
           });
@@ -272,15 +272,15 @@ const update = (bcd, supportMatrix) => {
       }
 
       if (!(typeof(simpleStatement.version_added) === 'string' &&
-            inferredStatments[0].version_added === true)) {
-        simpleStatement.version_added = inferredStatments[0].version_added;
+            inferredStatements[0].version_added === true)) {
+        simpleStatement.version_added = inferredStatements[0].version_added;
         modified = true;
       }
 
-      if (inferredStatments[0].version_removed &&
+      if (inferredStatements[0].version_removed &&
           !(typeof(simpleStatement.version_removed) === 'string' &&
-            inferredStatments[0].version_removed === true)) {
-        simpleStatement.version_removed = inferredStatments[0].version_removed;
+            inferredStatements[0].version_removed === true)) {
+        simpleStatement.version_removed = inferredStatements[0].version_removed;
         modified = true;
       }
     }
