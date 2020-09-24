@@ -124,7 +124,6 @@ const getSupportMap = (report) => {
 // Load all reports and build a map from BCD path to browser + version
 // and test result (null/true/false) for that version.
 const getSupportMatrix = (bcd, reports) => {
-  // TODO catch prefixed support
   const supportMatrix = new Map;
 
   for (const report of reports) {
