@@ -26,7 +26,7 @@ const ora = require('ora');
 const path = require('path');
 
 const github = require('./github')();
-const {writeFile} = require('./utils');
+const {stringify, writeFile} = require('./utils');
 const secrets = require('./secrets.json');
 
 const resultsDir = path.join(__dirname, '..', 'mdn-bcd-results');
