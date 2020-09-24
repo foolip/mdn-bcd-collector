@@ -41,7 +41,7 @@ module.exports = (options) => {
     const title = `Results from ${desc}`;
     const slug = slugify(desc, {lower: true});
 
-    const filename = `${appversion}-${slug}-${digest}.json`;
+    const filename = `${report.__version}-${slug}-${digest}.json`;
     const branch = `collector/${filename.replace('.json', '')}`;
 
     return {
