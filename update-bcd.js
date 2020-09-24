@@ -240,6 +240,8 @@ const update = (bcd, supportMatrix) => {
         continue;
       }
 
+      const inferredStatement = inferredStatements[0];
+
       let supportStatement = entry.__compat.support[browser];
       if (!supportStatement) {
         // TODO: add a support statement
@@ -272,15 +274,15 @@ const update = (bcd, supportMatrix) => {
       }
 
       if (!(typeof(simpleStatement.version_added) === 'string' &&
-            inferredStatements[0].version_added === true)) {
-        simpleStatement.version_added = inferredStatements[0].version_added;
+            inferredStatement.version_added === true)) {
+        simpleStatement.version_added = inferredStatement.version_added;
         modified = true;
       }
 
-      if (inferredStatements[0].version_removed &&
+      if (inferredStatement.version_removed &&
           !(typeof(simpleStatement.version_removed) === 'string' &&
-            inferredStatements[0].version_removed === true)) {
-        simpleStatement.version_removed = inferredStatements[0].version_removed;
+            inferredStatement.version_removed === true)) {
+        simpleStatement.version_removed = inferredStatement.version_removed;
         modified = true;
       }
     }
