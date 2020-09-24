@@ -1,7 +1,41 @@
 // https://rniwa.github.io/undo-api/
 // https://whsieh.github.io/UndoManager/
 
-// TODO: Add the interfaces defined by the spec. This is something else.
+[Exposed=Window]
+interface UndoItem {
+  constructor(UndoItemInit initDict);
+  readonly attribute DOMString label;
+  readonly attribute boolean merged;
+};
+
+callback UndoItemCallback = void ();
+
+dictionary UndoItemInit {
+  required DOMString label;
+  boolean merged = false;
+  UndoItemCallback undo = null;
+  UndoItemCallback redo = null;
+};
+
+[Exposed=Window]
+interface UndoManager {
+  void undo();
+  void redo();
+  void clearUndo();
+  void clearRedo();
+  void addItem(UndoItem item);
+  void removeItem(unsigned long index);
+  UndoItem item(unsigned long index);
+  readonly attribute unsigned long length;
+  readonly attribute unsigned long position;
+};
+
+partial interface Element {
+  readonly attribute UndoManager undoManager;
+  [CEReactions] attribute boolean undoScope;
+};
+
+// https://trac.webkit.org/browser/webkit/trunk/Source/WebCore/dom/DocumentUndoMananger.idl?rev=266926
 partial interface Document {
-  attribute UndoManager undoManager;
+  readonly attribute UndoManager undoManager;
 };

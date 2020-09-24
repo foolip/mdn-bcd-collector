@@ -1,3 +1,8 @@
+[Exposed=Window]
+interface AccessibleNode : EventTarget {
+  // members omitted until this is actually shipped
+};
+
 partial interface Element {
   readonly attribute DOMString? computedRole;
   readonly attribute DOMString? computedName;

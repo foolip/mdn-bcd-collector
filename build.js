@@ -495,14 +495,12 @@ const validateIDL = (ast) => {
   }
   // Ignore some types that aren't defined. Most of these should be fixed.
   const ignoreTypes = new Set([
-    'AccessibleNode', // TODO: aom.idl
     'Animatable', // TODO: this is a mixin used as a union type
     'BluetoothGATTRemoteServer', // TODO: web-bluetooth.idl
     'CSSOMString', // https://drafts.csswg.org/cssom/#cssomstring-type
     'Date', // https://github.com/WICG/deprecation-reporting/pull/7
     'PermissionName', // TODO: https://github.com/w3c/webref/issues/62
     'Region', // https://github.com/w3c/csswg-drafts/issues/5519
-    'UndoManager', // TODO: undo-api.idl
     'WindowProxy' // https://html.spec.whatwg.org/multipage/window-object.html#windowproxy
   ]);
   for (const usedType of usedTypes) {
