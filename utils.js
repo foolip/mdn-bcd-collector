@@ -14,10 +14,13 @@
 
 const fs = require('fs-extra');
 const path = require('path');
+const stringifyJSON = require('json-stable-stringify');
 
-const writeFile = async (filename, content, options) => {
-  options = options || {};
+const stringify = (object, options = {}) => {
+  return stringifyJSON(object, {space: options.spacing || 2});
+};
 
+const writeFile = async (filename, content, options = {}) => {
   if (Array.isArray(content)) {
     content = content.join('\n');
   } else if (typeof content === 'object') {
@@ -62,6 +65,7 @@ const isEquivalent = (a, b) => {
 };
 
 module.exports = {
+  stringify,
   writeFile,
   isDirectory,
   isEquivalent

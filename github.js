@@ -17,8 +17,9 @@
 const crypto = require('crypto');
 const {Octokit} = require('@octokit/rest');
 const slugify = require('slugify');
-const stringify = require('json-stable-stringify');
 const uaParser = require('ua-parser-js');
+
+const {stringify} = require('./utils');
 
 const appversion = require('./package.json').version;
 
