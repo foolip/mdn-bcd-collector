@@ -64,6 +64,7 @@ const getBrowserAndVersion = (userAgent, browsers) => {
   }
 
   // Trim last component of the version until there's a match, if any.
+  // TODO: Doesn't work for Samsung Internet versions
   let version = ua.browser.version;
   const parts = version.split('.');
   while (parts.length && !(version in browsers[browser].releases)) {
@@ -80,9 +81,6 @@ const getSupportMap = (report) => {
   // Transform `report` to map from test name (BCD path) to array of results.
   const testMap = new Map;
   for (const [url, results] of Object.entries(report.results)) {
-    if (url === '__version') {
-      continue;
-    }
     for (const test of results) {
       const tests = testMap.get(test.name) || [];
       tests.push({url, result: test.result, prefix: test.prefix});
@@ -116,8 +114,6 @@ const getSupportMap = (report) => {
         supported.result = true;
         break;
       }
-
-      // XXX Check against HTTP vs. HTTPS
     }
 
     supportMap.set(name, supported);
@@ -128,7 +124,6 @@ const getSupportMap = (report) => {
 // Load all reports and build a map from BCD path to browser + version
 // and test result (null/true/false) for that version.
 const getSupportMatrix = (bcd, reports) => {
-  // TODO catch prefixed support
   const supportMatrix = new Map;
 
   for (const report of reports) {
