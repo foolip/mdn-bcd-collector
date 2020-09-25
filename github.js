@@ -18,14 +18,13 @@ const crypto = require('crypto');
 const {Octokit} = require('@octokit/rest');
 const slugify = require('slugify');
 const uaParser = require('ua-parser-js');
-
-const {stringify} = require('./utils');
+const stringify = require('json-stable-stringify');
 
 module.exports = (options) => {
   const octokit = new Octokit(options);
 
   const getReportMeta = (report) => {
-    const json = stringify(report, {sort: true}) + '\n';
+    const json = stringify(report, {space: 2}) + '\n';
     const buffer = Buffer.from(json);
     /* eslint-disable-next-line max-len */
     // like https://github.com/web-platform-tests/wpt.fyi/blob/26805a0122ea01076ac22c0a96313c1cf5cc30d6/results-processor/wptreport.py#L79
