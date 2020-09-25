@@ -22,11 +22,11 @@ const {
   until
 } = require('selenium-webdriver');
 const bcd = require('@mdn/browser-compat-data');
+const fs = require('fs-extra');
 const ora = require('ora');
 const path = require('path');
 
 const github = require('./github')();
-const {writeFile} = require('./utils');
 const secrets = require('./secrets.json');
 
 const resultsDir = path.join(__dirname, '..', 'mdn-bcd-results');
@@ -134,7 +134,7 @@ const run = async (browser, version) => {
         .getAttribute('textContent');
     const report = JSON.parse(reportString);
     const {filename} = github.getReportMeta(report);
-    await writeFile(path.join(resultsDir, filename), report);
+    await fs.writeJson(path.join(resultsDir, filename), report);
 
     spinner.succeed();
   } catch (e) {
