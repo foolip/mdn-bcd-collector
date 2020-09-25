@@ -107,6 +107,11 @@ interface PropertyNodeList : NodeList {
   PropertyValueArray getValues();
 };
 
+partial interface HTMLStyleElement {
+  // https://github.com/whatwg/html/issues/5590
+  attribute boolean disabled;
+};
+
 partial interface HTMLVideoElement {
   readonly attribute boolean webkitSupportsFullscreen;
   readonly attribute boolean webkitDisplayingFullscreen;
