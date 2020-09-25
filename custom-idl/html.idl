@@ -121,6 +121,9 @@ partial interface HTMLVideoElement {
   void webkitExitFullScreen();
   readonly attribute unsigned long webkitDecodedFrameCount;
   readonly attribute unsigned long webkitDroppedFrameCount;
+
+  // https://docs.microsoft.com/en-us/previous-versions/hh772572(v=vs.85)
+  readonly attribute boolean msIsStereo3D;
 };
 
 partial interface Window {
