@@ -763,6 +763,7 @@ if (require.main === module) {
     writeFile,
     getCustomTestAPI,
     getCustomSubtestsAPI,
+    getCustomResourcesAPI,
     getCustomTestCSS,
     compileTestCode,
     compileTest,
