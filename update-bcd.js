@@ -73,6 +73,11 @@ const getSupportMap = (report) => {
     // eslint-disable-next-line no-unused-vars
     for (const {url, result, prefix} of results) {
       if (result === null) {
+        const parentName = name.split('.').slice(0, -1).join('.');
+        const parentSupport = supportMap.get(parentName);
+        if (parentSupport && parentSupport.result === false) {
+          supported.result = false;
+        }
         continue;
       }
       if (supported.result === null) {
