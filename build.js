@@ -17,7 +17,7 @@
 const fs = require('fs-extra');
 const path = require('path');
 const WebIDL2 = require('webidl2');
-const bcd = require('mdn-browser-compat-data');
+const bcd = require('@mdn/browser-compat-data');
 const prettier = require('prettier');
 
 const customTests = require('./custom-tests.json');

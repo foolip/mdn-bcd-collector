@@ -21,7 +21,7 @@ const {
   logging,
   until
 } = require('selenium-webdriver');
-const bcd = require('mdn-browser-compat-data');
+const bcd = require('@mdn/browser-compat-data');
 const ora = require('ora');
 const path = require('path');
 
