@@ -14,23 +14,13 @@
 
 const fs = require('fs-extra');
 const path = require('path');
-const stringifyJSON = require('json-stable-stringify');
-
-const stringify = (object, options = {}) => {
-  const spacing = options.spacing !== undefined ? options.spacing : 2;
-
-  if (options.sort) {
-    return stringifyJSON(object, {space: spacing});
-  }
-
-  return JSON.stringify(object, null, spacing);
-};
 
 const writeFile = async (filename, content, options = {}) => {
   if (Array.isArray(content)) {
     content = content.join('\n');
   } else if (typeof content === 'object') {
-    content = stringify(content, options);
+    content = JSON.stringify(content, null, options.spacing !== undefined ?
+      options.spacing : 2);
   }
   content = content.trimEnd() + '\n';
 
@@ -71,7 +61,6 @@ const isEquivalent = (a, b) => {
 };
 
 module.exports = {
-  stringify,
   writeFile,
   isDirectory,
   isEquivalent

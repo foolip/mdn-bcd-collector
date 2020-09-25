@@ -112,7 +112,7 @@ const run = async (browser, version) => {
     await driver.wait(until.urlIs(`${host}/tests/`));
     statusEl = await driver.findElement(By.id('status'));
     try {
-      await driver.wait(until.elementTextContains(statusEl, 'upload'), 30000);
+      await driver.wait(until.elementTextContains(statusEl, 'upload'), 45000);
     } catch (e) {
       if (e.name == 'TimeoutError') {
         throw new Error('Timed out waiting for results to upload');
@@ -124,8 +124,15 @@ const run = async (browser, version) => {
       throw new Error('Results failed to upload');
     }
 
-    await driver.get(`view-source:${host}/api/results`);
-    const report = JSON.parse(await driver.getPageSource());
+    if (browser === 'chrome' || browser === 'firefox' ||
+      (browser === 'edge' && version >= 79)) {
+      await driver.get(`view-source:${host}/api/results`);
+    } else {
+      await driver.get(`${host}/api/results`);
+    }
+    const reportString = await driver.wait(until.elementLocated(By.css('body')))
+        .getAttribute('textContent');
+    const report = JSON.parse(reportString);
     const {filename} = github.getReportMeta(report);
     await writeFile(path.join(resultsDir, filename), report);
 
