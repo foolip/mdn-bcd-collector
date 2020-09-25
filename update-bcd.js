@@ -284,9 +284,9 @@ const update = (bcd, supportMatrix) => {
         inferredStatement.version_added.includes('≤')
       ) {
         if (compareVersions.compare(
-          simpleStatement.version_added.replace('≤', ''),
-          inferredStatement.version_added.replace('≤', ''),
-          '>'
+            simpleStatement.version_added.replace('≤', ''),
+            inferredStatement.version_added.replace('≤', ''),
+            '>'
         )) {
           simpleStatement.version_added = inferredStatement.version_added;
           modified = true;
@@ -303,9 +303,9 @@ const update = (bcd, supportMatrix) => {
           inferredStatement.version_removed.includes('≤')
         ) {
           if (compareVersions.compare(
-            simpleStatement.version_removed.replace('≤', ''),
-            inferredStatement.version_removed.replace('≤', ''),
-            '>'
+              simpleStatement.version_removed.replace('≤', ''),
+              inferredStatement.version_removed.replace('≤', ''),
+              '>'
           )) {
             simpleStatement.version_removed = inferredStatement.version_removed;
             modified = true;
