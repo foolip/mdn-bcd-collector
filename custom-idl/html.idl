@@ -66,6 +66,11 @@ partial interface Element {
   attribute EventHandler onsearch;
 };
 
+// https://github.com/whatwg/html/issues/4792
+[Exposed=Window]
+interface HTMLDocument : Document {
+};
+
 partial interface HTMLElement {
   // https://github.com/whatwg/html/pull/213
   attribute boolean itemScope;
