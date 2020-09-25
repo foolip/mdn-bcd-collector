@@ -15,6 +15,6 @@ jobs:
     - run: npm run unittest
     # ensure we can start the server without dev dependencies
     - run: npm ci --production
-    - run: npm start & npx wait-on -t 10000 -v http://localhost:8080
+    - run: NODE_ENV=test npm start & npx wait-on -t 10000 -v http://localhost:8080
 env:
   FORCE_COLOR: 3
