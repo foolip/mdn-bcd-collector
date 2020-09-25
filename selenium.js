@@ -124,11 +124,8 @@ const run = async (browser, version) => {
       throw new Error('Results failed to upload');
     }
 
-    await driver.get(`${host}/api/results`);
-    const report = JSON.parse(
-        await driver.wait(until.elementLocated(By.css('body')))
-            .getAttribute('innerText')
-    );
+    await driver.get(`view-source:${host}/api/results`);
+    const report = JSON.parse(await driver.getPageSource());
     const {filename} = github.getReportMeta(report);
     await writeFile(path.join(resultsDir, filename), report);
 
