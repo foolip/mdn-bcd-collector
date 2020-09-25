@@ -20,7 +20,7 @@ const writeFile = async (filename, content, options = {}) => {
     content = content.join('\n');
   } else if (typeof content === 'object') {
     content = JSON.stringify(content, null, options.spacing !== undefined ?
-      options.spacing : 2);;
+      options.spacing : 2);
   }
   content = content.trimEnd() + '\n';
 
