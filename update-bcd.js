@@ -11,6 +11,7 @@ const {isEquivalent} = require('./utils');
 const overrides = require('./overrides').filter(Array.isArray);
 
 const findEntry = (bcd, path) => {
+  if (!path) return null;
   const keys = path.split('.');
   let entry = bcd;
   while (entry && keys.length) {
