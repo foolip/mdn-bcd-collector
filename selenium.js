@@ -132,7 +132,6 @@ const run = async (browser, version) => {
     }
     const reportString = await driver.wait(until.elementLocated(By.css('body')))
         .getAttribute('innerText');
-    console.log(reportString);
     const report = JSON.parse(reportString);
     const {filename} = github.getReportMeta(report);
     await writeFile(path.join(resultsDir, filename), report);
