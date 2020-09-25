@@ -19,8 +19,7 @@ const {LoggingWinston} = require('@google-cloud/logging-winston');
 
 const getTransport = () => {
   /* istanbul ignore if */
-  if (process.env.NODE_ENV === 'production' ||
-      process.env.GOOGLE_APPLICATION_CREDENTIALS) {
+  if (process.env.GOOGLE_APPLICATION_CREDENTIALS) {
     return new LoggingWinston();
   }
   return new winston.transports.Console({
