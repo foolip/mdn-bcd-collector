@@ -124,7 +124,12 @@ const run = async (browser, version) => {
       throw new Error('Results failed to upload');
     }
 
-    await driver.get(`view-source:${host}/api/results`);
+    if (browser === 'chrome' || browser === 'firefox' ||
+      (browser === 'edge' && version >= 79)) {
+      await driver.get(`view-source:${host}/api/results`);
+    } else {
+      await driver.get(`${host}/api/results`);
+    }
     const reportString = await driver.wait(until.elementLocated(By.css('body')))
         .getAttribute('innerText');
     console.log(reportString);
