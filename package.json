@@ -13,8 +13,8 @@
   },
   "scripts": {
     "prepare": "node scripts.js prepare",
-    "lint": "eslint . && prettier -c '**/*.json' '**/*.md' '**/*.yaml' --color && ejslint views/*",
-    "lint-fix": "eslint --fix . && prettier --write '**/*.json' '**/*.md' '**/*.yaml'",
+    "lint": "eslint . && prettier -c \"**/*.json\" \"**/*.md\" \"**/*.yaml\" --color && ejslint views/*",
+    "lint-fix": "eslint --fix . && prettier --write \"**/*.json\" \"**/*.md\" \"**/*.yaml\"",
     "clean": "rm -rf .nyc_output coverage generated tests.json",
     "build": "node build.js",
     "gcp-build": "npm run build",
