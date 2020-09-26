@@ -41,6 +41,10 @@ const seleniumUrl = secrets.selenium.url && secrets.selenium.url
 
 const spinner = ora();
 
+const failSpinner = (e) => {
+  spinner.fail(spinner.text + ' - ' + e.stack);
+}
+
 const filterVersions = (data, earliestVersion) => {
   const versions = [];
 
@@ -138,7 +142,7 @@ const run = async (browser, version) => {
 
     spinner.succeed();
   } catch (e) {
-    spinner.fail(spinner.text + ' - ' + e);
+    failSpinner(e);
   }
 
   try {
@@ -179,7 +183,7 @@ const runAll = async (limitBrowser) => {
       try {
         await run(browser, version);
       } catch (e) {
-        spinner.fail(spinner.text + ' - ' + e);
+        failSpinner(e);
       }
     }
   }
