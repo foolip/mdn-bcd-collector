@@ -215,20 +215,20 @@
   function runSharedWorker(callback, results) {
     if ('SharedWorker' in pending) {
       if ('SharedWorker' in self) {
-        var myWorker = new Worker('/resources/worker.js');
+        var myWorker = new SharedWorker('/resources/sharedworker.js');
 
-        myWorker.onmessage = function(event) {
+        myWorker.port.onmessage = function(event) {
           callback(results.concat(event.data));
         };
 
-        myWorker.postMessage(pending.SharedWorker);
+        myWorker.port.postMessage(pending.SharedWorker);
       } else {
         console.log('No shared worker support');
         updateStatus('No shared worker support, skipping SharedWorker tests');
 
-        for (var i = 0; i < pending.Worker.length; i++) {
+        for (var i = 0; i < pending.SharedWorker.length; i++) {
           var result = {
-            name: pending.Worker[i].name,
+            name: pending.SharedWorker[i].name,
             result: false,
             message: 'No shared worker support',
             info: {
@@ -236,11 +236,11 @@
             }
           };
 
-          if (pending.Worker[i].info !== undefined) {
+          if (pending.SharedWorker[i].info !== undefined) {
             result.info = Object.assign(
                 {},
                 result.info,
-                pending.Worker[i].info
+                pending.SharedWorker[i].info
             );
           }
 
