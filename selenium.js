@@ -43,7 +43,7 @@ const spinner = ora();
 
 const failSpinner = (e) => {
   spinner.fail(spinner.text + ' - ' + e.stack);
-}
+};
 
 const filterVersions = (data, earliestVersion) => {
   const versions = [];
