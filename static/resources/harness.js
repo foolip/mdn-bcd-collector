@@ -13,7 +13,8 @@
 // limitations under the License.
 
 /* global console, document, window, location, navigator, XMLHttpRequest,
-          self, Worker, Promise, setTimeout, clearTimeout, MessageChannel */
+          self, Worker, Promise, setTimeout, clearTimeout, MessageChannel,
+          SharedWorker */
 
 'use strict';
 
