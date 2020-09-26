@@ -1,6 +1,7 @@
 const childProcess = require('child_process');
 
 const exec = (cmd, env) => {
+  env = {...process.env, ...env};
   console.log(`> ${cmd}`);
   return childProcess.execSync(cmd, {env, stdio: 'inherit'});
 };
