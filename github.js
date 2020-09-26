@@ -34,7 +34,7 @@ module.exports = (options) => {
     const ua = uaParser(report.userAgent);
     const browser = `${ua.browser.name} ${ua.browser.version}`;
     const os = `${ua.os.name} ${ua.os.version}`;
-    const desc = `${browser} / ${os}`;
+    const desc = ` ${browser} / ${os} / Collector v${report.__version}`;
     const title = `Results from ${desc}`;
     const slug = slugify(desc, {lower: true});
 
