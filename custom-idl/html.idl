@@ -41,6 +41,9 @@ partial interface DataTransfer {
 };
 
 partial interface Document {
+  // https://github.com/whatwg/html/pull/213
+  NodeList getItems(optional DOMString typeNames = "");
+
   // https://github.com/whatwg/html/pull/1103
   attribute EventHandler onafterscriptexecute;
   attribute EventHandler onbeforescriptexecute;
@@ -63,6 +66,22 @@ partial interface Element {
   attribute EventHandler onsearch;
 };
 
+// https://github.com/whatwg/html/issues/4792
+[Exposed=Window]
+interface HTMLDocument : Document {
+};
+
+partial interface HTMLElement {
+  // https://github.com/whatwg/html/pull/213
+  attribute boolean itemScope;
+  [PutForwards=value] readonly attribute DOMTokenList itemType;
+  attribute DOMString itemId;
+  [PutForwards=value] readonly attribute DOMTokenList itemRef;
+  [PutForwards=value] readonly attribute DOMTokenList itemProp;
+  readonly attribute HTMLPropertiesCollection properties;
+  attribute any itemValue; // acts as DOMString on setting
+};
+
 partial interface HTMLFrameSetElement {
   attribute EventHandler onorientationchange;
 };
@@ -77,6 +96,22 @@ partial interface HTMLMediaElement {
   readonly attribute unsigned long long webkitVideoDecodedByteCount;
 };
 
+// https://github.com/whatwg/html/pull/213
+interface HTMLPropertiesCollection : HTMLCollection {
+  // inherits length and item()
+  getter PropertyNodeList? namedItem(DOMString name); // shadows inherited namedItem()
+  [SameObject] readonly attribute FrozenArray<DOMString> names;
+};
+typedef sequence<any> PropertyValueArray;
+interface PropertyNodeList : NodeList {
+  PropertyValueArray getValues();
+};
+
+partial interface HTMLStyleElement {
+  // https://github.com/whatwg/html/issues/5590
+  attribute boolean disabled;
+};
+
 partial interface HTMLVideoElement {
   readonly attribute boolean webkitSupportsFullscreen;
   readonly attribute boolean webkitDisplayingFullscreen;
@@ -86,6 +121,9 @@ partial interface HTMLVideoElement {
   void webkitExitFullScreen();
   readonly attribute unsigned long webkitDecodedFrameCount;
   readonly attribute unsigned long webkitDroppedFrameCount;
+
+  // https://docs.microsoft.com/en-us/previous-versions/hh772572(v=vs.85)
+  readonly attribute boolean msIsStereo3D;
 };
 
 partial interface Window {

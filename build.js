@@ -22,7 +22,6 @@ const prettier = require('prettier');
 
 const customTests = require('./custom-tests.json');
 const specData = require('./spec-data');
-const {writeFile} = require('./utils');
 
 const generatedDir = path.join(__dirname, 'generated');
 
@@ -748,7 +747,7 @@ const build = async (specData, bcd) => {
   const CSSTests = buildCSS(specData.webref.css, bcd);
   const tests = Object.assign({}, IDLTests, CSSTests);
 
-  await writeFile(path.join(__dirname, 'tests.json'), tests, {spacing: 0});
+  await fs.writeJson(path.join(__dirname, 'tests.json'), tests);
   await copyResources();
 };
 
@@ -760,7 +759,6 @@ if (require.main === module) {
   });
 } else {
   module.exports = {
-    writeFile,
     getCustomTestAPI,
     getCustomSubtestsAPI,
     getCustomResourcesAPI,
