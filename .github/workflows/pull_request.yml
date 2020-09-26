@@ -2,8 +2,18 @@ on: pull_request
 name: PR
 jobs:
   test:
-    name: Test
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+        - name: Linux
+          runs-on: ubuntu-latest
+        - name: macOS
+          runs-on: macos-latest
+        # TODO: https://github.com/foolip/mdn-bcd-collector/issues/546
+        #- name: Windows
+        #  runs-on: windows-latest
+    name: Test (${{ matrix.name }})
+    runs-on: ${{ matrix.runs-on }}
     steps:
     - uses: actions/checkout@v2
     - uses: actions/setup-node@v1
