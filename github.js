@@ -35,7 +35,7 @@ module.exports = (options) => {
     const browser = `${ua.browser.name} ${ua.browser.version}`;
     const os = `${ua.os.name} ${ua.os.version}`;
     const desc = `${browser} / ${os}`;
-    const title = `Results from ${desc}`;
+    const title = `Results from ${desc} / Collector v${report.__version}`;
     const slug = slugify(desc, {lower: true});
 
     const filename = `${report.__version}-${slug}-${digest}.json`;
