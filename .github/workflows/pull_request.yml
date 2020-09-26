@@ -9,7 +9,6 @@ jobs:
           runs-on: ubuntu-latest
         - name: macOS
           runs-on: macos-latest
-        # TODO: https://github.com/foolip/mdn-bcd-collector/issues/546
         - name: Windows
           runs-on: windows-latest
     name: Test (${{ matrix.name }})
