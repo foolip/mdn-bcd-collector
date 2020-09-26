@@ -41,6 +41,10 @@ const seleniumUrl = secrets.selenium.url && secrets.selenium.url
 
 const spinner = ora();
 
+const failSpinner = (e) => {
+  spinner.fail(spinner.text + ' - ' + e.stack);
+};
+
 const filterVersions = (data, earliestVersion) => {
   const versions = [];
 
@@ -130,15 +134,15 @@ const run = async (browser, version) => {
     } else {
       await driver.get(`${host}/api/results`);
     }
-    const reportString = await driver.wait(until.elementLocated(By.css('body')))
-        .getAttribute('textContent');
+    const reportBody = await driver.wait(until.elementLocated(By.css('body')));
+    const reportString = await reportBody.getAttribute('textContent');
     const report = JSON.parse(reportString);
     const {filename} = github.getReportMeta(report);
     await fs.writeJson(path.join(resultsDir, filename), report);
 
     spinner.succeed();
   } catch (e) {
-    spinner.fail(spinner.text + ' - ' + e);
+    failSpinner(e);
   }
 
   try {
@@ -179,7 +183,7 @@ const runAll = async (limitBrowser) => {
       try {
         await run(browser, version);
       } catch (e) {
-        spinner.fail(spinner.text + ' - ' + e);
+        failSpinner(e);
       }
     }
   }
