@@ -212,6 +212,48 @@
     }
   }
 
+  function runSharedWorker(callback, results) {
+    if ('SharedWorker' in pending) {
+      if ('SharedWorker' in self) {
+        var myWorker = new Worker('/resources/worker.js');
+
+        myWorker.onmessage = function(event) {
+          callback(results.concat(event.data));
+        };
+
+        myWorker.postMessage(pending.SharedWorker);
+      } else {
+        console.log('No shared worker support');
+        updateStatus('No shared worker support, skipping SharedWorker tests');
+
+        for (var i = 0; i < pending.Worker.length; i++) {
+          var result = {
+            name: pending.Worker[i].name,
+            result: false,
+            message: 'No shared worker support',
+            info: {
+              exposure: 'SharedWorker'
+            }
+          };
+
+          if (pending.Worker[i].info !== undefined) {
+            result.info = Object.assign(
+                {},
+                result.info,
+                pending.Worker[i].info
+            );
+          }
+
+          results.push(result);
+        }
+
+        callback(results);
+      }
+    } else {
+      callback(results);
+    }
+  }
+
   function runServiceWorker(callback, results) {
     if ('ServiceWorker' in pending) {
       if ('serviceWorker' in navigator) {
@@ -273,15 +315,17 @@
 
       runWindow(function(results) {
         runWorker(function(results) {
-          runServiceWorker(function(results) {
-            pending = [];
+          runSharedWorker(function(results) {
+            runServiceWorker(function(results) {
+              pending = [];
 
-            clearTimeout(timeout);
-            if (typeof callback == 'function') {
-              callback(results);
-            } else {
-              report(results);
-            }
+              clearTimeout(timeout);
+              if (typeof callback == 'function') {
+                callback(results);
+              } else {
+                report(results);
+              }
+            }, results);
           }, results);
         }, results);
       }, []);
