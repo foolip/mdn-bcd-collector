@@ -43,33 +43,33 @@ const bcd = {
   browsers: {
     chrome: {
       releases: {
-        "85": {}
+        85: {}
       }
     },
     chrome_android: {
       releases: {
-        "85": {}
+        85: {}
       }
     },
     edge: {
       releases: {
-        "16": {}
+        16: {}
       }
     },
     safari: {
       releases: {
-        "14": {}
+        14: {}
       }
     },
     safari_ios: {
       releases: {
-        "14": {}
+        14: {}
       }
     },
     samsunginternet_android: {
       releases: {
-        "12.0": {},
-        "12.1": {}
+        '12.0': {},
+        12.1: {}
       }
     }
   },
@@ -103,7 +103,7 @@ describe('BCD updater', () => {
   describe('findEntry', () => {
     it('equal', () => {
       assert.deepEqual(
-        findEntry(bcd, 'api.AbortController'), bcd.api.AbortController
+          findEntry(bcd, 'api.AbortController'), bcd.api.AbortController
       );
     });
 
