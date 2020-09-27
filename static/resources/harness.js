@@ -289,6 +289,12 @@
       }, []);
     };
 
+    var resourceTimeout = setTimeout(function() {
+        // If the resources don't load, just start the tests anyways
+        console.log('Timed out waiting for resources to load, starting tests anyways');
+        startTests();
+      }, 5000);
+
     if (resourceCount) {
       resources.required = resourceCount;
 
@@ -300,6 +306,7 @@
         resources.loaded += 1;
 
         if (resources.loaded >= resources.required) {
+          clearTimeout(resourceTimeout);
           startTests();
         }
       };
@@ -310,14 +317,6 @@
         resourceElements[i].load();
         resourceElements[i].onloadeddata = resourceLoaded;
       }
-
-      setTimeout(function() {
-        if (!resources.testStarted) {
-          // If the resources don't load, just start the tests anyways
-          console.log('Timed out waiting for resources to load, starting tests anyways');
-          startTests();
-        }
-      }, 5000);
     } else {
       startTests();
     }
