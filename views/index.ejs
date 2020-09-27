@@ -51,14 +51,13 @@
     form.onsubmit = function(event) {
       event.preventDefault();
 
-      var newUrl = '/tests/' + testSelection.value.replace(/\./g, '/');
-      if (testSelection.value) {
-        newUrl = window.location.protocol + '//' + window.location.host + newUrl;
-        if (testSelection.value == '' || testSelection.value.indexOf('api') == 0) {
-          newUrl += limitExposure.options[limitExposure.selectedIndex].value;
-        }
-      }
+      var newUrl = window.location.protocol + '//' + window.location.host +
+          '/tests/' + testSelection.value.replace(/\./g, '/');
 
+      if (testSelection.value == '' || testSelection.value.indexOf('api') == 0) {
+        newUrl += limitExposure.options[limitExposure.selectedIndex].value;
+      }
+      
       if (newUrl) window.location = newUrl;
     }
   }
