@@ -25,7 +25,7 @@
   var resources = {
     required: 0,
     loaded: 0,
-    thresholdMet: false
+    testsStarted: false
   };
 
   function stringify(value) {
@@ -266,6 +266,8 @@
 
   function run(callback, resourceCount) {
     var startTests = function() {
+      resources.testsStarted = true;
+
       var timeout = setTimeout(function() {
         updateStatus('<br />This test seems to be taking a long time; ' +
             'it may have crashed. Check the console for errors.', true);
@@ -291,14 +293,13 @@
       resources.required = resourceCount;
 
       var resourceLoaded = function() {
-        if (resources.thresholdMet) {
+        if (resources.testsStarted) {
           // No need to restart the tests
           return;
         }
         resources.loaded += 1;
 
         if (resources.loaded >= resources.required) {
-          resources.thresholdMet = true;
           startTests();
         }
       };
@@ -309,6 +310,12 @@
         resourceElements[i].load();
         resourceElements[i].onloadeddata = resourceLoaded;
       }
+
+      // If the resources don't load, just start the tests anyways
+      setTimeout(function() {
+        console.log('Timed out waiting for resources to load, starting tests');
+        startTests();
+      }, 5000);
     } else {
       startTests();
     }
