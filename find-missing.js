@@ -40,6 +40,7 @@ const findMissing = () => {
   return missingEntries;
 };
 
+/* istanbul ignore next */
 const main = () => {
   console.log(findMissing().join('\n'));
 };
