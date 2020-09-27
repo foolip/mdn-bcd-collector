@@ -289,14 +289,14 @@
       }, []);
     };
 
-    var resourceTimeout = setTimeout(function() {
-      // If the resources don't load, just start the tests anyways
-      console.log('Timed out waiting for resources to load, starting tests anyways');
-      startTests();
-    }, 5000);
-
     if (resourceCount) {
       resources.required = resourceCount;
+
+      var resourceTimeout = setTimeout(function() {
+        // If the resources don't load, just start the tests anyways
+        console.log('Timed out waiting for resources to load, starting tests anyways');
+        startTests();
+      }, 5000);
 
       var resourceLoaded = function() {
         if (resources.testsStarted) {
