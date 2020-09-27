@@ -311,10 +311,12 @@
         resourceElements[i].onloadeddata = resourceLoaded;
       }
 
-      // If the resources don't load, just start the tests anyways
       setTimeout(function() {
-        console.log('Timed out waiting for resources to load, starting tests anyways');
-        startTests();
+        if (!resources.testStarted) {
+          // If the resources don't load, just start the tests anyways
+          console.log('Timed out waiting for resources to load, starting tests anyways');
+          startTests();
+        }
       }, 5000);
     } else {
       startTests();
