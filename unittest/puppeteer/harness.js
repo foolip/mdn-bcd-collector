@@ -23,7 +23,7 @@ const path = require('path');
 const {app} = require('../../app');
 
 const products = ['chrome'];
-if (process.platform !== 'win32' || Date.now() > Date.parse('2020-09-30')) {
+if (process.platform !== 'win32' || Date.now() > Date.parse('2020-10-30')) {
   // Browser.close() Firefox support is broken on Windows and thus causes hang
   // https://github.com/puppeteer/puppeteer/issues/5673
   products.push('firefox');
