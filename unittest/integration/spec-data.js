@@ -14,7 +14,8 @@
 
 'use strict';
 
-const assert = require('assert');
+const chai = require('chai');
+const assert = chai.assert;
 
 describe('spec-data', () => {
   let specData;

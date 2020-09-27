@@ -14,7 +14,8 @@
 
 'use strict';
 
-const assert = require('assert');
+const assert = require('chai').assert;
+
 const proxyquire = require('proxyquire');
 const sinon = require('sinon');
 const {Octokit} = require('@octokit/rest');

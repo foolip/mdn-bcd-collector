@@ -14,11 +14,13 @@
 
 'use strict';
 
-const assert = require('assert');
-const puppeteer = require('puppeteer');
-const pti = require('puppeteer-to-istanbul');
+const assert = require('chai').assert;
+
 const fs = require('fs');
 const path = require('path');
+
+const puppeteer = require('puppeteer');
+const pti = require('puppeteer-to-istanbul');
 
 const {app} = require('../../app');
 

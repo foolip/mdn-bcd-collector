@@ -14,7 +14,8 @@
 
 'use strict';
 
-const assert = require('assert');
+const assert = require('chai').assert;
+
 const updatebcd = require('../../update-bcd');
 
 describe('BCD updater', () => {
