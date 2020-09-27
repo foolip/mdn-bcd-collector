@@ -4,6 +4,7 @@
     "**/generated/**",
     "**/unittest/**",
     "**/coverage/**",
+    "**/resources/custom-tests/**",
     "**/json3.min.js",
     "selenium.js"
   ]
