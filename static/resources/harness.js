@@ -13,7 +13,8 @@
 // limitations under the License.
 
 /* global console, document, window, location, navigator, XMLHttpRequest,
-          self, Worker, Promise, setTimeout, clearTimeout, MessageChannel */
+          self, Worker, Promise, setTimeout, clearTimeout, MessageChannel,
+          SharedWorker */
 
 'use strict';
 
@@ -212,6 +213,48 @@
     }
   }
 
+  function runSharedWorker(callback, results) {
+    if ('SharedWorker' in pending) {
+      if ('SharedWorker' in self) {
+        var myWorker = new SharedWorker('/resources/sharedworker.js');
+
+        myWorker.port.onmessage = function(event) {
+          callback(results.concat(event.data));
+        };
+
+        myWorker.port.postMessage(pending.SharedWorker);
+      } else {
+        console.log('No shared worker support');
+        updateStatus('No shared worker support, skipping SharedWorker tests');
+
+        for (var i = 0; i < pending.SharedWorker.length; i++) {
+          var result = {
+            name: pending.SharedWorker[i].name,
+            result: false,
+            message: 'No shared worker support',
+            info: {
+              exposure: 'SharedWorker'
+            }
+          };
+
+          if (pending.SharedWorker[i].info !== undefined) {
+            result.info = Object.assign(
+                {},
+                result.info,
+                pending.SharedWorker[i].info
+            );
+          }
+
+          results.push(result);
+        }
+
+        callback(results);
+      }
+    } else {
+      callback(results);
+    }
+  }
+
   function runServiceWorker(callback, results) {
     if ('ServiceWorker' in pending) {
       if ('serviceWorker' in navigator) {
@@ -275,15 +318,17 @@
 
       runWindow(function(results) {
         runWorker(function(results) {
-          runServiceWorker(function(results) {
-            pending = [];
+          runSharedWorker(function(results) {
+            runServiceWorker(function(results) {
+              pending = [];
 
-            clearTimeout(timeout);
-            if (typeof callback == 'function') {
-              callback(results);
-            } else {
-              report(results);
-            }
+              clearTimeout(timeout);
+              if (typeof callback == 'function') {
+                callback(results);
+              } else {
+                report(results);
+              }
+            }, results);
           }, results);
         }, results);
       }, []);
