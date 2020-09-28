@@ -14,7 +14,9 @@
 
 'use strict';
 
-const assert = require('chai').assert;
+const chai = require('chai');
+const assert = chai.assert;
+const expect = chai.expect;
 
 const {
   isEquivalent,
@@ -117,6 +119,22 @@ const reports = [
             exposure: 'Window'
           },
           result: true
+        },
+        {
+          name: 'api.AudioContext',
+          info: {
+            code: '"AudioContext" in self',
+            exposure: 'Window'
+          },
+          result: true
+        },
+        {
+          name: 'api.AudioContext.close',
+          info: {
+            code: '"close" in AudioContext.prototype',
+            exposure: 'Window'
+          },
+          result: true
         }
       ]
     },
@@ -140,6 +158,14 @@ const reports = [
             code: '"abort" in AbortController.prototype',
             exposure: 'Window'
           },
+          result: false
+        },
+        {
+          name: 'api.AbortController.abort',
+          info: {
+            code: '"abort" in AbortController.prototype',
+            exposure: 'Worker'
+          },
           result: true
         },
         {
@@ -149,6 +175,23 @@ const reports = [
             exposure: 'Window'
           },
           result: false
+        },
+        {
+          name: 'api.AudioContext',
+          info: {
+            code: '"AudioContext" in self',
+            exposure: 'Window'
+          },
+          result: false
+        },
+        {
+          name: 'api.AudioContext.close',
+          info: {
+            code: '"close" in AudioContext.prototype',
+            exposure: 'Window'
+          },
+          result: null,
+          message: 'threw ReferenceError: AbortController is not defined'
         }
       ]
     },
@@ -181,6 +224,23 @@ const reports = [
             exposure: 'Window'
           },
           result: false
+        },
+        {
+          name: 'api.AudioContext',
+          info: {
+            code: '"AudioContext" in self',
+            exposure: 'Window'
+          },
+          result: false
+        },
+        {
+          name: 'api.AudioContext.close',
+          info: {
+            code: '"close" in AudioContext.prototype',
+            exposure: 'Window'
+          },
+          result: null,
+          message: 'threw ReferenceError: AbortController is not defined'
         }
       ]
     },
@@ -253,11 +313,31 @@ describe('BCD updater', () => {
     });
   });
 
-  it('getSupportMap', () => {
-    assert.deepEqual(getSupportMap(reports[2]), new Map([
-      ['api.AbortController', {result: true, prefix: ''}],
-      ['api.AbortController.abort', {result: null, prefix: ''}],
-      ['api.AbortController.AbortController', {result: false, prefix: ''}]
-    ]));
+  describe('getSupportMap', () => {
+    it('normal', () => {
+      assert.deepEqual(getSupportMap(reports[2]), new Map([
+        ['api.AbortController', {result: true, prefix: ''}],
+        ['api.AbortController.abort', {result: null, prefix: ''}],
+        ['api.AbortController.AbortController', {result: false, prefix: ''}],
+        ['api.AudioContext', {result: false, prefix: ''}],
+        ['api.AudioContext.close', {result: false, prefix: ''}]
+      ]));
+    });
+
+    it('support in only one exposure', () => {
+      assert.deepEqual(getSupportMap(reports[1]), new Map([
+        ['api.AbortController', {result: true, prefix: ''}],
+        ['api.AbortController.abort', {result: true, prefix: ''}],
+        ['api.AbortController.AbortController', {result: false, prefix: ''}],
+        ['api.AudioContext', {result: false, prefix: ''}],
+        ['api.AudioContext.close', {result: false, prefix: ''}]
+      ]));
+    });
+
+    it('no results', () => {
+      expect(() => {
+        getSupportMap({results: {}});
+      }).to.throw('No results!');
+    });
   });
 });
