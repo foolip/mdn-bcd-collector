@@ -106,7 +106,7 @@ const getSupportMap = (report) => {
         continue;
       }
       if (supported.result === null) {
-        supported = {result: result, prefix: prefix};
+        supported = {result: result, prefix: prefix || ''};
         continue;
       }
       if (supported.result !== result) {
@@ -174,15 +174,10 @@ const getSupportMatrix = (browsers, reports) => {
     }
     if (version === '*') {
       for (const v of versionMap.keys()) {
-        versionMap.set(v, {
-          result: supported, ...(prefix && {prefix: prefix})
-        });
+        versionMap.set(v, {result: supported, prefix: prefix || ''});
       }
     } else {
-      versionMap.set(version, {
-        result: supported,
-        ...(prefix && {prefix: prefix})
-      });
+      versionMap.set(version, {result: supported, prefix: prefix || ''});
     }
   }
 
