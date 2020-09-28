@@ -101,42 +101,32 @@ const reports = [
       'https://mdn-bcd-collector.appspot.com/tests/': [
         {
           name: 'api.AbortController',
-          info: {
-            code: '"AbortController" in self',
-            exposure: 'Window'
-          },
+          info: {exposure: 'Window'},
           result: true
         },
         {
           name: 'api.AbortController.abort',
-          info: {
-            code: '"abort" in AbortController.prototype',
-            exposure: 'Window'
-          },
+          info: {exposure: 'Window'},
           result: true
         },
         {
           name: 'api.AbortController.AbortController',
-          info: {
-            code: 'bcd.testConstructor("AbortController");',
-            exposure: 'Window'
-          },
+          info: {exposure: 'Window'},
           result: true
         },
         {
           name: 'api.AudioContext',
-          info: {
-            code: '"AudioContext" in self',
-            exposure: 'Window'
-          },
+          info: {exposure: 'Window'},
           result: true
         },
         {
           name: 'api.AudioContext.close',
-          info: {
-            code: '"close" in AudioContext.prototype',
-            exposure: 'Window'
-          },
+          info: {exposure: 'Window'},
+          result: true
+        },
+        {
+          name: 'css.properties.font-family',
+          info: {exposure: 'Window'},
           result: true
         }
       ]
@@ -149,50 +139,32 @@ const reports = [
       'https://mdn-bcd-collector.appspot.com/tests/': [
         {
           name: 'api.AbortController',
-          info: {
-            code: '"AbortController" in self',
-            exposure: 'Window'
-          },
+          info: {exposure: 'Window'},
           result: true
         },
         {
           name: 'api.AbortController.abort',
-          info: {
-            code: '"abort" in AbortController.prototype',
-            exposure: 'Window'
-          },
+          info: {exposure: 'Window'},
           result: false
         },
         {
           name: 'api.AbortController.abort',
-          info: {
-            code: '"abort" in AbortController.prototype',
-            exposure: 'Worker'
-          },
+          info: {exposure: 'Worker'},
           result: true
         },
         {
           name: 'api.AbortController.AbortController',
-          info: {
-            code: 'bcd.testConstructor("AbortController");',
-            exposure: 'Window'
-          },
+          info: {exposure: 'Window'},
           result: false
         },
         {
           name: 'api.AudioContext',
-          info: {
-            code: '"AudioContext" in self',
-            exposure: 'Window'
-          },
+          info: {exposure: 'Window'},
           result: false
         },
         {
           name: 'api.AudioContext.close',
-          info: {
-            code: '"close" in AudioContext.prototype',
-            exposure: 'Window'
-          },
+          info: {exposure: 'Window'},
           result: null,
           message: 'threw ReferenceError: AbortController is not defined'
         }
@@ -206,42 +178,27 @@ const reports = [
       'https://mdn-bcd-collector.appspot.com/tests/': [
         {
           name: 'api.AbortController',
-          info: {
-            code: '"AbortController" in self',
-            exposure: 'Window'
-          },
+          info: {exposure: 'Window'},
           result: true
         },
         {
           name: 'api.AbortController.abort',
-          info: {
-            code: '"abort" in AbortController.prototype',
-            exposure: 'Window'
-          },
+          info: {exposure: 'Window'},
           result: null
         },
         {
           name: 'api.AbortController.AbortController',
-          info: {
-            code: 'bcd.testConstructor("AbortController");',
-            exposure: 'Window'
-          },
+          info: {exposure: 'Window'},
           result: false
         },
         {
           name: 'api.AudioContext',
-          info: {
-            code: '"AudioContext" in self',
-            exposure: 'Window'
-          },
+          info: {exposure: 'Window'},
           result: false
         },
         {
           name: 'api.AudioContext.close',
-          info: {
-            code: '"close" in AudioContext.prototype',
-            exposure: 'Window'
-          },
+          info: {exposure: 'Window'},
           result: null,
           message: 'threw ReferenceError: AbortController is not defined'
         }
@@ -255,42 +212,27 @@ const reports = [
       'https://mdn-bcd-collector.appspot.com/tests/': [
         {
           name: 'api.AbortController',
-          info: {
-            code: '"AbortController" in self',
-            exposure: 'Window'
-          },
+          info: {exposure: 'Window'},
           result: false
         },
         {
           name: 'api.AbortController.abort',
-          info: {
-            code: '"abort" in AbortController.prototype',
-            exposure: 'Window'
-          },
+          info: {exposure: 'Window'},
           result: false
         },
         {
           name: 'api.AbortController.AbortController',
-          info: {
-            code: 'bcd.testConstructor("AbortController");',
-            exposure: 'Window'
-          },
+          info: {exposure: 'Window'},
           result: false
         },
         {
           name: 'api.AudioContext',
-          info: {
-            code: '"AudioContext" in self',
-            exposure: 'Window'
-          },
+          info: {exposure: 'Window'},
           result: false
         },
         {
           name: 'api.AudioContext.close',
-          info: {
-            code: '"close" in AudioContext.prototype',
-            exposure: 'Window'
-          },
+          info: {exposure: 'Window'},
           result: false
         }
       ]
