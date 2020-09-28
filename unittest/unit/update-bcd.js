@@ -18,11 +18,14 @@ const chai = require('chai');
 const assert = chai.assert;
 const expect = chai.expect;
 
+const sinon = require('sinon');
+
 const {
   isEquivalent,
   findEntry,
   getBrowserAndVersion,
-  getSupportMap
+  getSupportMap,
+  getSupportMatrix
 } = require('../../update-bcd');
 
 const bcd = {
@@ -245,6 +248,54 @@ const reports = [
       ]
     },
     userAgent: 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.61 Safari/537.36'
+  },
+  {
+    __version: '0.3.1',
+    results: {
+      'https://mdn-bcd-collector.appspot.com/tests/': [
+        {
+          name: 'api.AbortController',
+          info: {
+            code: '"AbortController" in self',
+            exposure: 'Window'
+          },
+          result: false
+        },
+        {
+          name: 'api.AbortController.abort',
+          info: {
+            code: '"abort" in AbortController.prototype',
+            exposure: 'Window'
+          },
+          result: false
+        },
+        {
+          name: 'api.AbortController.AbortController',
+          info: {
+            code: 'bcd.testConstructor("AbortController");',
+            exposure: 'Window'
+          },
+          result: false
+        },
+        {
+          name: 'api.AudioContext',
+          info: {
+            code: '"AudioContext" in self',
+            exposure: 'Window'
+          },
+          result: false
+        },
+        {
+          name: 'api.AudioContext.close',
+          info: {
+            code: '"close" in AudioContext.prototype',
+            exposure: 'Window'
+          },
+          result: false
+        }
+      ]
+    },
+    userAgent: 'Mozilla/5.0 (Windows NT 6.3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 YaBrowser/17.6.1.749 Yowser/2.5 Safari/537.36'
   }
 ];
 
@@ -338,6 +389,53 @@ describe('BCD updater', () => {
       expect(() => {
         getSupportMap({results: {}});
       }).to.throw('No results!');
+    });
+  });
+
+  describe('getSupportMatrix', () => {
+    beforeEach(() => {
+      sinon.stub(console, 'warn');
+    });
+
+    it('normal', () => {
+      assert.deepEqual(getSupportMatrix(bcd.browsers, reports), new Map([
+        ['api.AbortController', new Map([['chrome', new Map([
+          ['82', {result: null, prefix: ''}],
+          ['83', {result: true, prefix: ''}],
+          ['84', {result: true, prefix: ''}],
+          ['85', {result: true, prefix: ''}]
+        ])]])],
+        ['api.AbortController.abort', new Map([['chrome', new Map([
+          ['82', {result: null, prefix: ''}],
+          ['83', {result: null, prefix: ''}],
+          ['84', {result: true, prefix: ''}],
+          ['85', {result: true, prefix: ''}]
+        ])]])],
+        ['api.AbortController.AbortController', new Map([['chrome', new Map([
+          ['82', {result: null, prefix: ''}],
+          ['83', {result: false, prefix: ''}],
+          ['84', {result: false, prefix: ''}],
+          ['85', {result: true, prefix: ''}]
+        ])]])],
+        ['api.AudioContext', new Map([['chrome', new Map([
+          ['82', {result: null, prefix: ''}],
+          ['83', {result: false, prefix: ''}],
+          ['84', {result: false, prefix: ''}],
+          ['85', {result: true, prefix: ''}]
+        ])]])],
+        ['api.AudioContext.close', new Map([['chrome', new Map([
+          ['82', {result: null, prefix: ''}],
+          ['83', {result: false, prefix: ''}],
+          ['84', {result: false, prefix: ''}],
+          ['85', {result: true, prefix: ''}]
+        ])]])]
+      ]));
+
+      expect(console.warn.calledWith('Ignoring unknown browser/version: Mozilla/5.0 (Windows NT 6.3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 YaBrowser/17.6.1.749 Yowser/2.5 Safari/537.36')).to.be.true;
+    });
+
+    afterEach(() => {
+      console.warn.restore();
     });
   });
 });
