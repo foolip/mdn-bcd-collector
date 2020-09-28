@@ -106,7 +106,7 @@ const getSupportMap = (report) => {
         continue;
       }
       if (supported.result === null) {
-        supported = {result: result, prefix: prefix};
+        supported = {result: result, prefix: prefix || ''};
         continue;
       }
       if (supported.result !== result) {
