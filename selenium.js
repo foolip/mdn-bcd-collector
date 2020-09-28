@@ -128,19 +128,31 @@ const run = async (browser, version) => {
       throw new Error('Results failed to upload');
     }
 
-    if (browser === 'chrome' || browser === 'firefox' ||
-      (browser === 'edge' && version >= 79)) {
-      await driver.get(`view-source:${host}/api/results`);
-    } else {
-      await driver.get(`${host}/api/results`);
-    }
-    const reportBody = await driver.wait(until.elementLocated(By.css('body')));
-    const reportString = await reportBody.getAttribute('textContent');
-    const report = JSON.parse(reportString);
-    const {filename} = github.getReportMeta(report);
-    await fs.writeJson(path.join(resultsDir, filename), report);
+    try {
+      if (browser === 'chrome' || browser === 'firefox' ||
+        (browser === 'edge' && version >= 79)) {
+        await driver.get(`view-source:${host}/api/results`);
+      } else {
+        await driver.get(`${host}/api/results`);
+      }
+      const reportBody = await driver.wait(until.elementLocated(By.css('body')));
+      const reportString = await reportBody.getAttribute('textContent');
+      const report = JSON.parse(reportString);
+      const {filename} = github.getReportMeta(report);
+      await fs.writeJson(path.join(resultsDir, filename), report);
 
-    spinner.succeed();
+      spinner.succeed();
+    } catch (e) {
+      // If we can't download the results, fallback to GitHub
+      await driver.wait(until.urlIs(`${host}/results`));
+      statusEl = await driver.findElement(By.id('status'));
+      await driver.wait(until.elementTextContains(statusEl, 'to'));
+      if ((await statusEl.getText()).search('Failed') !== -1) {
+        throw new Error('Pull request failed to submit');
+      }
+
+      spinner.warn(spinner.text + ' - Exported to GitHub');
+    }
   } catch (e) {
     failSpinner(e);
   }
