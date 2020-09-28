@@ -30,6 +30,7 @@ const {
 } = proxyquire('../../update-bcd', {
   './overrides': [
     'Test overrides',
+    ['css.properties.font-family', 'safari', '5.1', false, ''],
     ['css.properties.font-family', 'chrome', '83', false, ''],
     ['css.properties.font-face', 'chrome', '*', null, '']
   ]
