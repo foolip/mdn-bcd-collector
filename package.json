@@ -50,7 +50,7 @@
     "chai-subset": "1.6.0",
     "compare-versions": "3.6.0",
     "ejs-lint": "1.1.0",
-    "eslint": "7.9.0",
+    "eslint": "7.10.0",
     "eslint-config-google": "0.14.0",
     "eslint-plugin-prefer-arrow": "1.2.2",
     "fs-extra": "9.0.1",
