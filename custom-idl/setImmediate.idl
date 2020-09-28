@@ -1,0 +1,7 @@
+// https://w3c.github.io/setImmediate/
+
+interface mixin WindowTimersExtension {
+  long setImmediate(any handler, any... args);
+  void clearImmediate(long handle);
+};
+Window includes WindowTimersExtension;

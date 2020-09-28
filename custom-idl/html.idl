@@ -66,6 +66,22 @@ partial interface Element {
   attribute EventHandler onsearch;
 };
 
+partial interface HTMLAudioElement {
+  // https://developer.mozilla.org/en-US/docs/Web/API/HTMLAudioElement#Obsolete_Mozilla-only_methods
+  unsigned long long mozCurrentSampleOffset();
+  void mozSetup(unsigned long channels, unsigned long rate);
+  unsigned long mozWriteAudio(any data);
+};
+
+partial interface HTMLCanvasElement {
+  // https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/mozFetchAsStream
+  void mozFetchAsStream(VoidFunction callback, optional DOMString type = "image/png");
+  // https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/mozGetAsFile
+  File mozGetAsFile(DOMString name, optional DOMString type = "image/png");
+  // https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/mozOpaque
+  attribute boolean mozOpaque;
+};
+
 // https://github.com/whatwg/html/issues/4792
 [Exposed=Window]
 interface HTMLDocument : Document {
@@ -89,11 +105,36 @@ partial interface HTMLFrameSetElement {
 partial interface HTMLInputElement {
   // https://github.com/whatwg/html/issues/667
   attribute boolean incremental;
+
+  // https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/mozGetFileNameArray
+  sequence<DOMString> mozGetFileNameArray();
+  // https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/mozSetFileNameArray
+  void mozSetFileNameArray(sequence<DOMString> fileNames);
+  // https://hg.mozilla.org/mozilla-central/file/f22c20641704d783097b1b128d826c8460de7354/dom/webidl/HTMLInputElement.webidl#l163
+  void mozSetFileArray(sequence<File> files);
 };
 
 partial interface HTMLMediaElement {
+  // Chromium extensions
   readonly attribute unsigned long long webkitAudioDecodedByteCount;
   readonly attribute unsigned long long webkitVideoDecodedByteCount;
+
+  // https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement#Obsolete_attributes
+  readonly attribute boolean mozAudioCaptured;
+  readonly attribute double mozChannels;
+  readonly attribute double mozFragmentEnd;
+  attribute unsigned long mozFrameBufferLength;
+  readonly attribute double mozSampleRate;
+
+  // https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement#Obsolete_methods
+  MediaStream mozCaptureStream();
+  MediaStream mozCaptureStreamUntilEnded();
+  object mozGetMetadata();
+  void mozLoadFrom(HTMLMediaElement other);
+
+  // https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement#Obsolete_event_handlers
+  attribute EventHandler onmozinterruptbegin;
+  attribute EventHandler onmozinterruptend;
 };
 
 // https://github.com/whatwg/html/pull/213
@@ -124,6 +165,19 @@ partial interface HTMLVideoElement {
 
   // https://docs.microsoft.com/en-us/previous-versions/hh772572(v=vs.85)
   readonly attribute boolean msIsStereo3D;
+
+  // https://developer.mozilla.org/en-US/docs/Web/API/HTMLVideoElement#Gecko-specific_properties
+  readonly attribute unsigned long mozParsedFrames;
+  readonly attribute unsigned long mozDecodedFrames;
+  readonly attribute unsigned long mozPresentedFrames;
+  readonly attribute unsigned long mozPaintedFrames;
+  readonly attribute double mozFrameDelay;
+  readonly attribute boolean mozHasAudio;
+};
+
+partial interface Navigator {
+  // https://developer.mozilla.org/en-US/docs/Web/API/Navigator/mozIsLocallyAvailable
+  boolean mozIsLocallyAvailable(DOMString url, boolean ifOffline);
 };
 
 partial interface Window {
