@@ -19,35 +19,10 @@ const assert = require('chai').assert;
 const proxyquire = require('proxyquire');
 
 const tests = {
-  'api.AbortController': {
-    tests: [{code: '"AbortController" in self', prefix: ''}],
-    category: 'api',
-    resources: {},
-    exposure: ['Window', 'Worker', 'ServiceWorker']
-  },
-  'api.AbortController.signal': {
-    tests: [{code: '"AbortController" in self && "signal" in AbortController.prototype', prefix: ''}],
-    category: 'api',
-    resources: {
-      'audio-blip': {
-        type: 'audio',
-        src: '/media/blip.mp3'
-      }
-    },
-    exposure: ['Window', 'Worker']
-  },
-  'css.properties.font-family': {
-    tests: [{code: '"fontFamily" in document.body.style || CSS.supports("font-family", "inherit")', prefix: ''}],
-    category: 'css',
-    resources: {},
-    exposure: ['Window']
-  },
-  'javascript.builtins.array': {
-    tests: [{code: '[1, 2, 3]', prefix: ''}],
-    category: 'javascript',
-    resources: {},
-    exposure: ['JavaScript']
-  }
+  'api.AbortController': {},
+  'api.AbortController.signal': {},
+  'css.properties.font-family': {},
+  'javascript.builtins.array': {}
 };
 const bcd = {
   api: {
