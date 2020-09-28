@@ -24,7 +24,8 @@ const {
   findEntry,
   getBrowserAndVersion,
   getSupportMap,
-  getSupportMatrix
+  getSupportMatrix,
+  inferSupportStatements
 } = proxyquire('../../update-bcd', {
   './overrides': [
     'Test overrides',
@@ -406,5 +407,13 @@ describe('BCD updater', () => {
     afterEach(() => {
       console.warn.restore();
     });
+  });
+
+  it('inferSupportStatements', () => {
+    const supportMatrix = getSupportMatrix(bcd.browsers, reports);
+    const browserMap = supportMatrix.entries().next().value[1];
+    const versionMap = browserMap.entries().next().value[1];
+
+    assert.deepEqual(inferSupportStatements(versionMap), [{version_added: '≤83'}]);
   });
 });
