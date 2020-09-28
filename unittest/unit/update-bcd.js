@@ -19,7 +19,8 @@ const assert = require('chai').assert;
 const {
   isEquivalent,
   findEntry,
-  getBrowserAndVersion
+  getBrowserAndVersion,
+  getSupportMap
 } = require('../../update-bcd');
 
 const bcd = {
@@ -43,6 +44,9 @@ const bcd = {
   browsers: {
     chrome: {
       releases: {
+        82: {},
+        83: {},
+        84: {},
         85: {}
       }
     },
@@ -84,6 +88,105 @@ const bcd = {
     }
   }
 };
+
+const reports = [
+  {
+    __version: '0.3.1',
+    results: {
+      'https://mdn-bcd-collector.appspot.com/tests/': [
+        {
+          name: 'api.AbortController',
+          info: {
+            code: '"AbortController" in self',
+            exposure: 'Window'
+          },
+          result: true
+        },
+        {
+          name: 'api.AbortController.abort',
+          info: {
+            code: '"abort" in AbortController.prototype',
+            exposure: 'Window'
+          },
+          result: true
+        },
+        {
+          name: 'api.AbortController.AbortController',
+          info: {
+            code: 'bcd.testConstructor("AbortController");',
+            exposure: 'Window'
+          },
+          result: true
+        }
+      ]
+    },
+    userAgent: 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.83 Safari/537.36'
+  },
+  {
+    __version: '0.3.1',
+    results: {
+      'https://mdn-bcd-collector.appspot.com/tests/': [
+        {
+          name: 'api.AbortController',
+          info: {
+            code: '"AbortController" in self',
+            exposure: 'Window'
+          },
+          result: true
+        },
+        {
+          name: 'api.AbortController.abort',
+          info: {
+            code: '"abort" in AbortController.prototype',
+            exposure: 'Window'
+          },
+          result: true
+        },
+        {
+          name: 'api.AbortController.AbortController',
+          info: {
+            code: 'bcd.testConstructor("AbortController");',
+            exposure: 'Window'
+          },
+          result: false
+        }
+      ]
+    },
+    userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.89 Safari/537.36'
+  },
+  {
+    __version: '0.3.1',
+    results: {
+      'https://mdn-bcd-collector.appspot.com/tests/': [
+        {
+          name: 'api.AbortController',
+          info: {
+            code: '"AbortController" in self',
+            exposure: 'Window'
+          },
+          result: true
+        },
+        {
+          name: 'api.AbortController.abort',
+          info: {
+            code: '"abort" in AbortController.prototype',
+            exposure: 'Window'
+          },
+          result: null
+        },
+        {
+          name: 'api.AbortController.AbortController',
+          info: {
+            code: 'bcd.testConstructor("AbortController");',
+            exposure: 'Window'
+          },
+          result: false
+        }
+      ]
+    },
+    userAgent: 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.61 Safari/537.36'
+  }
+];
 
 describe('BCD updater', () => {
   describe('isEquivalent', () => {
@@ -148,5 +251,13 @@ describe('BCD updater', () => {
     it('Yandex Browser (not in BCD)', () => {
       assert.deepEqual(getBrowserAndVersion('Mozilla/5.0 (Windows NT 6.3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 YaBrowser/17.6.1.749 Yowser/2.5 Safari/537.36', bcd.browsers), [null, null]);
     });
+  });
+
+  it('getSupportMap', () => {
+    assert.deepEqual(getSupportMap(reports[0]), new Map([
+      ['api.AbortController', {result: true, prefix: undefined}],
+      ['api.AbortController.abort', {result: null, prefix: ''}],
+      ['api.AbortController.AbortController', {result: false, prefix: undefined}]
+    ]));
   });
 });
