@@ -254,7 +254,7 @@ describe('BCD updater', () => {
   });
 
   it('getSupportMap', () => {
-    assert.deepEqual(getSupportMap(reports[0]), new Map([
+    assert.deepEqual(getSupportMap(reports[2]), new Map([
       ['api.AbortController', {result: true, prefix: ''}],
       ['api.AbortController.abort', {result: null, prefix: ''}],
       ['api.AbortController.AbortController', {result: false, prefix: ''}]
