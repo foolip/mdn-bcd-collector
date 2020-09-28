@@ -214,26 +214,6 @@ const reports = [
           name: 'api.AbortController',
           info: {exposure: 'Window'},
           result: false
-        },
-        {
-          name: 'api.AbortController.abort',
-          info: {exposure: 'Window'},
-          result: false
-        },
-        {
-          name: 'api.AbortController.AbortController',
-          info: {exposure: 'Window'},
-          result: false
-        },
-        {
-          name: 'api.AudioContext',
-          info: {exposure: 'Window'},
-          result: false
-        },
-        {
-          name: 'api.AudioContext.close',
-          info: {exposure: 'Window'},
-          result: false
         }
       ]
     },
