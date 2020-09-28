@@ -211,7 +211,7 @@ const inferSupportStatements = (versionMap) => {
           version_added: version,
           ...(prefix && {prefix: prefix})
         });
-      } else if (lastStatement.prefix !== prefix) {
+      } else if ((lastStatement.prefix || '') !== prefix) {
         // Prefix changed
         statements.push({
           version_added: version,
