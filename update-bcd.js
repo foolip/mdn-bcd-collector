@@ -382,6 +382,7 @@ const loadJsonFiles = async (paths) => {
   return Object.fromEntries(entries);
 };
 
+/* istanbul ignore next */
 const main = async (reportPaths) => {
   const BCD_DIR = process.env.BCD_DIR || `../browser-compat-data`;
   // This will load and parse parts of BCD twice, but it's simple.
