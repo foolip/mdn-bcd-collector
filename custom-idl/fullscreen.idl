@@ -1,0 +1,3 @@
+partial interface Window {
+  readonly attribute boolean fullScreen;
+};
