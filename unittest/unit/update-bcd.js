@@ -18,6 +18,7 @@ const chai = require('chai');
 const assert = chai.assert;
 const expect = chai.expect;
 
+const proxyquire = require('proxyquire');
 const sinon = require('sinon');
 
 const {
@@ -26,7 +27,13 @@ const {
   getBrowserAndVersion,
   getSupportMap,
   getSupportMatrix
-} = require('../../update-bcd');
+} = proxyquire('../../update-bcd', {
+  './overrides': [
+    'Test overrides',
+    ['css.properties.font-family', 'chrome', '83', false, ''],
+    ['css.properties.font-face', 'chrome', '*', null, '']
+  ]
+});
 
 const bcd = {
   api: {
@@ -128,6 +135,11 @@ const reports = [
           name: 'css.properties.font-family',
           info: {exposure: 'Window'},
           result: true
+        },
+        {
+          name: 'css.properties.font-face',
+          info: {exposure: 'Window'},
+          result: true
         }
       ]
     },
@@ -167,6 +179,16 @@ const reports = [
           info: {exposure: 'Window'},
           result: null,
           message: 'threw ReferenceError: AbortController is not defined'
+        },
+        {
+          name: 'css.properties.font-family',
+          info: {exposure: 'Window'},
+          result: true
+        },
+        {
+          name: 'css.properties.font-face',
+          info: {exposure: 'Window'},
+          result: true
         }
       ]
     },
@@ -201,6 +223,16 @@ const reports = [
           info: {exposure: 'Window'},
           result: null,
           message: 'threw ReferenceError: AbortController is not defined'
+        },
+        {
+          name: 'css.properties.font-family',
+          info: {exposure: 'Window'},
+          result: true
+        },
+        {
+          name: 'css.properties.font-face',
+          info: {exposure: 'Window'},
+          result: true
         }
       ]
     },
@@ -293,7 +325,9 @@ describe('BCD updater', () => {
         ['api.AbortController.abort', {result: null, prefix: ''}],
         ['api.AbortController.AbortController', {result: false, prefix: ''}],
         ['api.AudioContext', {result: false, prefix: ''}],
-        ['api.AudioContext.close', {result: false, prefix: ''}]
+        ['api.AudioContext.close', {result: false, prefix: ''}],
+        ['css.properties.font-family', {result: true, prefix: ''}],
+        ['css.properties.font-face', {result: true, prefix: ''}]
       ]));
     });
 
@@ -303,7 +337,9 @@ describe('BCD updater', () => {
         ['api.AbortController.abort', {result: true, prefix: ''}],
         ['api.AbortController.AbortController', {result: false, prefix: ''}],
         ['api.AudioContext', {result: false, prefix: ''}],
-        ['api.AudioContext.close', {result: false, prefix: ''}]
+        ['api.AudioContext.close', {result: false, prefix: ''}],
+        ['css.properties.font-family', {result: true, prefix: ''}],
+        ['css.properties.font-face', {result: true, prefix: ''}]
       ]));
     });
 
@@ -350,6 +386,18 @@ describe('BCD updater', () => {
           ['83', {result: false, prefix: ''}],
           ['84', {result: false, prefix: ''}],
           ['85', {result: true, prefix: ''}]
+        ])]])],
+        ['css.properties.font-family', new Map([['chrome', new Map([
+          ['82', {result: null, prefix: ''}],
+          ['83', {result: false, prefix: ''}],
+          ['84', {result: true, prefix: ''}],
+          ['85', {result: true, prefix: ''}]
+        ])]])],
+        ['css.properties.font-face', new Map([['chrome', new Map([
+          ['82', {result: null, prefix: ''}],
+          ['83', {result: null, prefix: ''}],
+          ['84', {result: null, prefix: ''}],
+          ['85', {result: null, prefix: ''}]
         ])]])]
       ]));
 
