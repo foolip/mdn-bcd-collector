@@ -332,6 +332,7 @@ const update = (bcd, supportMatrix) => {
 
 // |paths| can be files or directories. Returns an object mapping
 // from (absolute) path to the parsed file content.
+/* istanbul ignore next */
 const loadJsonFiles = async (paths) => {
   // Ignores .DS_Store, .git, etc.
   const dotFilter = (item) => {
