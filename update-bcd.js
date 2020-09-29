@@ -7,6 +7,7 @@ const klaw = require('klaw');
 const path = require('path');
 const uaParser = require('ua-parser-js');
 
+const logger = require('./logger');
 const overrides = require('./overrides').filter(Array.isArray);
 
 const findEntry = (bcd, path) => {
@@ -89,7 +90,7 @@ const getSupportMap = (report) => {
       if (supported.result !== result) {
         // This will happen for [SecureContext] APIs and APIs under multiple
         // exposure scopes.
-        // console.log(`Contradictory results for ${name}: ${JSON.stringify(
+        // logger.warn(`Contradictory results for ${name}: ${JSON.stringify(
         //     results, null, '  '
         // )}`);
         supported.result = true;
@@ -112,7 +113,7 @@ const getSupportMatrix = (browsers, reports) => {
         report.userAgent, browsers
     );
     if (!browser || !version) {
-      console.warn(`Ignoring unknown browser/version: ${report.userAgent}`);
+      logger.warn(`Ignoring unknown browser/version: ${report.userAgent}`);
       continue;
     }
 
@@ -373,7 +374,7 @@ const main = async (reportPaths) => {
     if (!modified) {
       continue;
     }
-    console.log(`Updating ${path.relative(BCD_DIR, file)}`);
+    logger.info(`Updating ${path.relative(BCD_DIR, file)}`);
     const json = JSON.stringify(data, null, '  ') + '\n';
     await fs.writeFile(file, json);
   }
@@ -382,7 +383,7 @@ const main = async (reportPaths) => {
 /* istanbul ignore if */
 if (require.main === module) {
   main(process.argv.slice(2)).catch((error) => {
-    console.error(error);
+    logger.error(error);
     process.exit(1);
   });
 } else {
