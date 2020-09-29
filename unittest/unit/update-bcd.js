@@ -213,6 +213,11 @@ const reports = [
           result: false
         },
         {
+          name: 'api.NewInterfaceNotInBCD',
+          info: {exposure: 'Window'},
+          result: false
+        },
+        {
           name: 'api.PrefixedInterface',
           info: {exposure: 'Window'},
           result: true,
@@ -268,6 +273,11 @@ const reports = [
         },
         {
           name: 'api.ExperimentalInterface',
+          info: {exposure: 'Window'},
+          result: true
+        },
+        {
+          name: 'api.NewInterfaceNotInBCD',
           info: {exposure: 'Window'},
           result: true
         },
@@ -395,6 +405,7 @@ describe('BCD updater', () => {
         ['api.AudioContext.close', {result: false, prefix: ''}],
         ['api.DeprecatedInterface', {result: true, prefix: ''}],
         ['api.ExperimentalInterface', {result: false, prefix: ''}],
+        ['api.NewInterfaceNotInBCD', {result: false, prefix: ''}],
         ['api.PrefixedInterface', {result: true, prefix: 'WebKit'}],
         ['css.properties.font-family', {result: true, prefix: ''}],
         ['css.properties.font-face', {result: true, prefix: ''}]
@@ -457,6 +468,12 @@ describe('BCD updater', () => {
           ['84', {result: false, prefix: ''}],
           ['85', {result: true, prefix: ''}]
         ])]])],
+        ['api.NewInterfaceNotInBCD', new Map([['chrome', new Map([
+          ['82', {result: null, prefix: ''}],
+          ['83', {result: null, prefix: ''}],
+          ['84', {result: false, prefix: ''}],
+          ['85', {result: true, prefix: ''}]
+        ])]])],
         ['api.PrefixedInterface', new Map([['chrome', new Map([
           ['82', {result: null, prefix: ''}],
           ['83', {result: true, prefix: 'WebKit'}],
@@ -507,6 +524,9 @@ describe('BCD updater', () => {
       ],
       'api.ExperimentalInterface': [
         {version_added: '≤83', version_removed: '84'},
+        {version_added: '85'}
+      ],
+      'api.NewInterfaceNotInBCD': [
         {version_added: '85'}
       ],
       'api.PrefixedInterface': [
