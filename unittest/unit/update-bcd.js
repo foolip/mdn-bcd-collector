@@ -132,6 +132,21 @@ const reports = [
           result: true
         },
         {
+          name: 'api.DeprecatedInterface',
+          info: {exposure: 'Window'},
+          result: false
+        },
+        {
+          name: 'api.ExperimentalInterface',
+          info: {exposure: 'Window'},
+          result: true
+        },
+        {
+          name: 'api.PrefixedInterface',
+          info: {exposure: 'Window'},
+          result: true
+        },
+        {
           name: 'css.properties.font-family',
           info: {exposure: 'Window'},
           result: true
@@ -181,6 +196,22 @@ const reports = [
           message: 'threw ReferenceError: AbortController is not defined'
         },
         {
+          name: 'api.DeprecatedInterface',
+          info: {exposure: 'Window'},
+          result: true
+        },
+        {
+          name: 'api.ExperimentalInterface',
+          info: {exposure: 'Window'},
+          result: false
+        },
+        {
+          name: 'api.PrefixedInterface',
+          info: {exposure: 'Window'},
+          result: true,
+          prefix: 'WebKit'
+        },
+        {
           name: 'css.properties.font-family',
           info: {exposure: 'Window'},
           result: true
@@ -223,6 +254,22 @@ const reports = [
           info: {exposure: 'Window'},
           result: null,
           message: 'threw ReferenceError: AbortController is not defined'
+        },
+        {
+          name: 'api.DeprecatedInterface',
+          info: {exposure: 'Window'},
+          result: true
+        },
+        {
+          name: 'api.ExperimentalInterface',
+          info: {exposure: 'Window'},
+          result: true
+        },
+        {
+          name: 'api.PrefixedInterface',
+          info: {exposure: 'Window'},
+          result: true,
+          prefix: 'WebKit'
         },
         {
           name: 'css.properties.font-family',
@@ -326,6 +373,9 @@ describe('BCD updater', () => {
         ['api.AbortController.AbortController', {result: false, prefix: ''}],
         ['api.AudioContext', {result: false, prefix: ''}],
         ['api.AudioContext.close', {result: false, prefix: ''}],
+        ['api.DeprecatedInterface', {result: true, prefix: ''}],
+        ['api.ExperimentalInterface', {result: true, prefix: ''}],
+        ['api.PrefixedInterface', {result: true, prefix: 'WebKit'}],
         ['css.properties.font-family', {result: true, prefix: ''}],
         ['css.properties.font-face', {result: true, prefix: ''}]
       ]));
@@ -338,6 +388,9 @@ describe('BCD updater', () => {
         ['api.AbortController.AbortController', {result: false, prefix: ''}],
         ['api.AudioContext', {result: false, prefix: ''}],
         ['api.AudioContext.close', {result: false, prefix: ''}],
+        ['api.DeprecatedInterface', {result: true, prefix: ''}],
+        ['api.ExperimentalInterface', {result: false, prefix: ''}],
+        ['api.PrefixedInterface', {result: true, prefix: 'WebKit'}],
         ['css.properties.font-family', {result: true, prefix: ''}],
         ['css.properties.font-face', {result: true, prefix: ''}]
       ]));
@@ -387,6 +440,24 @@ describe('BCD updater', () => {
           ['84', {result: false, prefix: ''}],
           ['85', {result: true, prefix: ''}]
         ])]])],
+        ['api.DeprecatedInterface', new Map([['chrome', new Map([
+          ['82', {result: null, prefix: ''}],
+          ['83', {result: true, prefix: ''}],
+          ['84', {result: true, prefix: ''}],
+          ['85', {result: false, prefix: ''}]
+        ])]])],
+        ['api.ExperimentalInterface', new Map([['chrome', new Map([
+          ['82', {result: null, prefix: ''}],
+          ['83', {result: true, prefix: ''}],
+          ['84', {result: false, prefix: ''}],
+          ['85', {result: true, prefix: ''}]
+        ])]])],
+        ['api.PrefixedInterface', new Map([['chrome', new Map([
+          ['82', {result: null, prefix: ''}],
+          ['83', {result: true, prefix: 'WebKit'}],
+          ['84', {result: true, prefix: 'WebKit'}],
+          ['85', {result: true, prefix: ''}]
+        ])]])],
         ['css.properties.font-family', new Map([['chrome', new Map([
           ['82', {result: null, prefix: ''}],
           ['83', {result: false, prefix: ''}],
@@ -409,11 +480,71 @@ describe('BCD updater', () => {
     });
   });
 
-  it('inferSupportStatements', () => {
-    const supportMatrix = getSupportMatrix(bcd.browsers, reports);
-    const browserMap = supportMatrix.entries().next().value[1];
-    const versionMap = browserMap.entries().next().value[1];
+  describe('inferSupportStatements', () => {
+    const expectedResults = {
+      'api.AbortController': [
+        {version_added: '≤83'}
+      ],
+      'api.AbortController.abort': [
+        {version_added: '≤84'}
+      ],
+      'api.AbortController.AbortController': [
+        {version_added: '85'}
+      ],
+      'api.AudioContext': [
+        {version_added: '85'}
+      ],
+      'api.AudioContext.close': [
+        {version_added: '85'}
+      ],
+      'api.DeprecatedInterface': [
+        {version_added: '≤83', version_removed: '85'}
+      ],
+      'api.ExperimentalInterface': [
+        {version_added: '≤83', version_removed: '84'},
+        {version_added: '85'}
+      ],
+      'api.PrefixedInterface': [
+        {prefix: 'WebKit', version_added: '≤83'},
+        {version_added: '85'}
+      ],
+      'css.properties.font-family': [
+        {version_added: '84'}
+      ],
+      'css.properties.font-face': []
+    };
 
-    assert.deepEqual(inferSupportStatements(versionMap), [{version_added: '≤83'}]);
+    const supportMatrix = getSupportMatrix(bcd.browsers, reports);
+    for (const [path, browserMap] of supportMatrix.entries()) {
+      for (const [_, versionMap] of browserMap.entries()) {
+        it(path, () => {
+          assert.deepEqual(
+              inferSupportStatements(versionMap), expectedResults[path]
+          );
+        });
+      }
+    }
+
+    it('Invalid results', () => {
+      expect(() => {
+        const report = {
+          __version: '0.3.1',
+          results: {
+            'https://mdn-bcd-collector.appspot.com/tests/': [
+              {
+                name: 'api.AbortController',
+                info: {exposure: 'Window'},
+                result: 87
+              }
+            ]
+          },
+          userAgent: 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.61 Safari/537.36'
+        };
+        const versionMap = getSupportMatrix(bcd.browsers, [report])
+            .entries().next().value[1].entries().next().value[1];
+
+        inferSupportStatements(versionMap);
+      }).to.throw('result not true/false/null; got 87');
+    });
   });
 });
