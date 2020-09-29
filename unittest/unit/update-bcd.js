@@ -39,12 +39,12 @@ const {
 const bcd = {
   api: {
     AbortController: {
-      __compat: {support: {chrome: {version_added: null}}},
+      __compat: {support: {chrome: {version_added: '80'}}},
       AbortController: {
         __compat: {support: {chrome: {version_added: null}}}
       },
       abort: {
-        __compat: {support: {chrome: {version_added: null}}}
+        __compat: {support: {chrome: {version_added: '85'}}}
       },
       dummy: {
         __compat: {support: {chrome: {version_added: null}}}
@@ -234,11 +234,6 @@ const reports = [
           result: false
         },
         {
-          name: 'api.RemovedInterface',
-          info: {exposure: 'Window'},
-          result: false
-        },
-        {
           name: 'api.PrefixedInterface1',
           info: {exposure: 'Window'},
           result: true
@@ -248,6 +243,11 @@ const reports = [
           info: {exposure: 'Window'},
           result: true,
           prefix: 'WebKit'
+        },
+        {
+          name: 'api.RemovedInterface',
+          info: {exposure: 'Window'},
+          result: false
         },
         {
           name: 'css.properties.font-family',
@@ -644,7 +644,7 @@ describe('BCD updater', () => {
       assert.deepEqual(bcdCopy, {
         api: {
           AbortController: {
-            __compat: {support: {chrome: {version_added: '≤83'}}},
+            __compat: {support: {chrome: {version_added: '80'}}},
             AbortController: {
               __compat: {support: {chrome: {version_added: '85'}}}
             },
