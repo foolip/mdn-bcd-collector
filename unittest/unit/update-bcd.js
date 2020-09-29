@@ -19,8 +19,8 @@ const {assert, expect} = require('chai');
 const proxyquire = require('proxyquire');
 const sinon = require('sinon');
 
+const logger = require('../../logger');
 const {
-  isEquivalent,
   findEntry,
   getBrowserAndVersion,
   getSupportMap,
@@ -352,20 +352,6 @@ const reports = [
 ];
 
 describe('BCD updater', () => {
-  describe('isEquivalent', () => {
-    it('equal', () => {
-      assert.equal(isEquivalent({a: 1, b: 2}, {a: 1, b: 2}), true);
-    });
-
-    it('not equal: different keys', () => {
-      assert.equal(isEquivalent({a: 1, b: 2}, {a: 1, b: 2, c: 3}), false);
-    });
-
-    it('not equal: same keys, different values', () => {
-      assert.equal(isEquivalent({a: 1, b: 2}, {a: 1, b: 3}), false);
-    });
-  });
-
   describe('findEntry', () => {
     it('equal', () => {
       assert.deepEqual(
@@ -461,7 +447,7 @@ describe('BCD updater', () => {
 
   describe('getSupportMatrix', () => {
     beforeEach(() => {
-      sinon.stub(console, 'warn');
+      sinon.stub(logger, 'warn');
     });
 
     it('normal', () => {
@@ -546,11 +532,11 @@ describe('BCD updater', () => {
         ])]])]
       ]));
 
-      expect(console.warn.calledWith('Ignoring unknown browser/version: Mozilla/5.0 (Windows NT 6.3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 YaBrowser/17.6.1.749 Yowser/2.5 Safari/537.36')).to.be.true;
+      expect(logger.warn.calledWith('Ignoring unknown browser/version: Mozilla/5.0 (Windows NT 6.3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 YaBrowser/17.6.1.749 Yowser/2.5 Safari/537.36')).to.be.true;
     });
 
     afterEach(() => {
-      console.warn.restore();
+      logger.warn.restore();
     });
   });
 
