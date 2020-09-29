@@ -27,6 +27,7 @@ const ora = require('ora');
 const path = require('path');
 
 const github = require('./github')();
+const logger = require('./logger');
 const secrets = require('./secrets.json');
 
 const resultsDir = path.join(__dirname, '..', 'mdn-bcd-results');
@@ -160,7 +161,7 @@ const run = async (browser, version) => {
   try {
     const logs = await driver.manage().logs().get(logging.Type.BROWSER);
     logs.forEach((entry) => {
-      console.log('[Browser Logger: %s] %s', entry.level.name, entry.message);
+      logger.info('[Browser Logger: %s] %s', entry.level.name, entry.message);
     });
   } catch (e) {
     // If we couldn't get the browser logs, ignore and continue
@@ -171,7 +172,7 @@ const run = async (browser, version) => {
 
 const runAll = async (limitBrowser) => {
   if (!seleniumUrl) {
-    console.error('A Selenium remote WebDriver URL is not defined in secrets.json.  Please define your Selenium remote.');
+    logger.error('A Selenium remote WebDriver URL is not defined in secrets.json.  Please define your Selenium remote.');
     return false;
   }
 
