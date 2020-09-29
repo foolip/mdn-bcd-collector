@@ -14,7 +14,8 @@
 
 'use strict';
 
-const assert = require('assert');
+const assert = require('chai').assert;
+
 const Tests = require('../../tests');
 
 const testDatabase = {

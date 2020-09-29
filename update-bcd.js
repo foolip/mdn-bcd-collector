@@ -41,7 +41,7 @@ const getBrowserAndVersion = (userAgent, browsers) => {
   }
 
   // Trim last component of the version until there's a match, if any.
-  // TODO: Doesn't work for Samsung Internet versions
+  // TODO: Doesn't work for Samsung Internet or Safari iOS versions
   let version = ua.browser.version;
   const parts = version.split('.');
   while (parts.length && !(version in browsers[browser].releases)) {
@@ -189,7 +189,7 @@ const inferSupportStatements = (versionMap) => {
           version_added: version,
           ...(prefix && {prefix: prefix})
         });
-      } else if (lastStatement.prefix !== prefix) {
+      } else if ((lastStatement.prefix || '') !== prefix) {
         // Prefix changed
         statements.push({
           version_added: version,
@@ -296,25 +296,11 @@ const update = (bcd, supportMatrix) => {
       }
 
       if (inferredStatement.version_removed) {
-        if (typeof(simpleStatement.version_removed) === 'string' &&
-          typeof(inferredStatement.version_removed) === 'string' &&
-          inferredStatement.version_removed.includes('≤')
-        ) {
-          if (compareVersions.compare(
-              simpleStatement.version_removed.replace('≤', ''),
-              inferredStatement.version_removed.replace('≤', ''),
-              '>'
-          )) {
-            simpleStatement.version_removed = inferredStatement.version_removed;
-            modified = true;
-          }
-        } else if (!(typeof(simpleStatement.version_removed) === 'string' &&
+        if (!(typeof(simpleStatement.version_removed) === 'string' &&
               inferredStatement.version_removed === true)) {
-          simpleStatement.version_added = inferredStatement.version_added;
+          simpleStatement.version_removed = inferredStatement.version_removed;
           modified = true;
         }
-      } else if (simpleStatement.version_removed) {
-        delete simpleStatement.version_removed;
       }
     }
   }
@@ -324,6 +310,7 @@ const update = (bcd, supportMatrix) => {
 
 // |paths| can be files or directories. Returns an object mapping
 // from (absolute) path to the parsed file content.
+/* istanbul ignore next */
 const loadJsonFiles = async (paths) => {
   // Ignores .DS_Store, .git, etc.
   const dotFilter = (item) => {
@@ -355,6 +342,7 @@ const loadJsonFiles = async (paths) => {
   return Object.fromEntries(entries);
 };
 
+/* istanbul ignore next */
 const main = async (reportPaths) => {
   const BCD_DIR = process.env.BCD_DIR || `../browser-compat-data`;
   // This will load and parse parts of BCD twice, but it's simple.

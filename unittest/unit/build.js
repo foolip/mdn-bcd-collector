@@ -278,6 +278,47 @@ describe('build', () => {
     });
   });
 
+  describe('getCustomResourcesAPI', () => {
+    it('get resources', () => {
+      const {getCustomResourcesAPI} = proxyquire('../../build', {
+        './custom-tests.json': {
+          api: {
+            foo: {
+              __resources: {
+                'audio-blip': {
+                  type: 'audio',
+                  src: ['/media/blip.mp3', '/media/blip.ogg']
+                }
+              }
+            }
+          }
+        }
+      });
+
+      assert.deepEqual(
+          getCustomResourcesAPI('foo'),
+          {
+            'audio-blip': {
+              type: 'audio',
+              src: ['/media/blip.mp3', '/media/blip.ogg']
+            }
+          }
+      );
+    });
+
+    it('no resources', () => {
+      const {getCustomResourcesAPI} = proxyquire('../../build', {
+        './custom-tests.json': {
+          api: {
+            foo: {}
+          }
+        }
+      });
+
+      assert.deepEqual(getCustomResourcesAPI('foo'), {});
+    });
+  });
+
   describe('getCustomTestCSS', () => {
     it('no custom tests', () => {
       const {getCustomTestCSS} = proxyquire('../../build', {

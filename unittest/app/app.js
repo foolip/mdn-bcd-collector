@@ -14,15 +14,15 @@
 
 'use strict';
 
-const {app, version} = require('../../app');
 const chai = require('chai');
 const chaiHttp = require('chai-http');
+chai.use(chaiHttp);
+const assert = chai.assert;
+
+const {app, version} = require('../../app');
+const agent = chai.request.agent(app);
 
 const tests = Object.entries(require('../../tests.json'));
-
-chai.use(chaiHttp);
-const agent = chai.request.agent(app);
-const assert = chai.assert;
 
 const userAgent = `node-superagent/${
   require('../../package-lock.json').dependencies.superagent.version

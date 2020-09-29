@@ -14,7 +14,7 @@
 
 'use strict';
 
-const assert = require('assert');
+const assert = require('chai').assert;
 
 const {CloudStorage, MemoryStorage, getStorage} = require('../../storage');
 

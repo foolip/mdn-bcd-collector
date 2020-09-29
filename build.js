@@ -761,6 +761,7 @@ if (require.main === module) {
   module.exports = {
     getCustomTestAPI,
     getCustomSubtestsAPI,
+    getCustomResourcesAPI,
     getCustomTestCSS,
     compileTestCode,
     compileTest,
