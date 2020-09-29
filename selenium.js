@@ -161,7 +161,7 @@ const run = async (browser, version) => {
   try {
     const logs = await driver.manage().logs().get(logging.Type.BROWSER);
     logs.forEach((entry) => {
-      logger.info('[Browser Logger: %s] %s', entry.level.name, entry.message);
+      logger.info(`[Browser Logger: ${entry.level.name}] ${entry.message}`);
     });
   } catch (e) {
     // If we couldn't get the browser logs, ignore and continue
