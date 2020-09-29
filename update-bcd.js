@@ -1,36 +1,14 @@
 'use strict';
 
 const compareVersions = require('compare-versions');
+const deepEqual = require('fast-deep-equal');
 const fs = require('fs').promises;
 const klaw = require('klaw');
 const path = require('path');
 const uaParser = require('ua-parser-js');
 
+const logger = require('./logger');
 const overrides = require('./overrides').filter(Array.isArray);
-
-const isEquivalent = (a, b) => {
-  // Create arrays of property names
-  const aProps = Object.getOwnPropertyNames(a);
-  const bProps = Object.getOwnPropertyNames(b);
-
-  // If number of properties is different,
-  // objects are not equivalent
-  if (aProps.length != bProps.length) {
-    return false;
-  }
-
-  for (const propName of aProps) {
-    // If values of same property are not equal,
-    // objects are not equivalent
-    if (a[propName] !== b[propName]) {
-      return false;
-    }
-  }
-
-  // If we made it this far, objects
-  // are considered equivalent
-  return true;
-};
 
 const findEntry = (bcd, path) => {
   if (!path) {
@@ -112,7 +90,7 @@ const getSupportMap = (report) => {
       if (supported.result !== result) {
         // This will happen for [SecureContext] APIs and APIs under multiple
         // exposure scopes.
-        // console.log(`Contradictory results for ${name}: ${JSON.stringify(
+        // logger.warn(`Contradictory results for ${name}: ${JSON.stringify(
         //     results, null, '  '
         // )}`);
         supported.result = true;
@@ -135,7 +113,7 @@ const getSupportMatrix = (browsers, reports) => {
         report.userAgent, browsers
     );
     if (!browser || !version) {
-      console.warn(`Ignoring unknown browser/version: ${report.userAgent}`);
+      logger.warn(`Ignoring unknown browser/version: ${report.userAgent}`);
       continue;
     }
 
@@ -290,7 +268,7 @@ const update = (bcd, supportMatrix) => {
         if (inferredStatements.some((statement) => statement.version_added)) {
           supportStatement.unshift(...inferredStatements);
           supportStatement = supportStatement.filter((item, pos, self) => {
-            return pos === self.findIndex((el) => isEquivalent(el, item));
+            return pos === self.findIndex((el) => deepEqual(el, item));
           });
           entry.__compat.support[browser] = supportStatement.length === 1 ?
             supportStatement[0] : supportStatement;
@@ -384,7 +362,7 @@ const main = async (reportPaths) => {
     if (!modified) {
       continue;
     }
-    console.log(`Updating ${path.relative(BCD_DIR, file)}`);
+    logger.info(`Updating ${path.relative(BCD_DIR, file)}`);
     const json = JSON.stringify(data, null, '  ') + '\n';
     await fs.writeFile(file, json);
   }
@@ -393,12 +371,11 @@ const main = async (reportPaths) => {
 /* istanbul ignore if */
 if (require.main === module) {
   main(process.argv.slice(2)).catch((error) => {
-    console.error(error);
+    logger.error(error);
     process.exit(1);
   });
 } else {
   module.exports = {
-    isEquivalent,
     findEntry,
     getBrowserAndVersion,
     getSupportMap,
