@@ -55,7 +55,9 @@ const bcd = {
 };
 
 const {traverseFeatures, findMissing} = proxyquire('../../find-missing', {
-  './tests.json': Object.assign({}, tests),
+  './tests.json': tests,
+  // Object.assign used to mitigate loading bug
+  // https://github.com/foolip/mdn-bcd-collector/pull/553#discussion_r495793082
   '@mdn/browser-compat-data': Object.assign({}, bcd)
 });
 

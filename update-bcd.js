@@ -41,7 +41,7 @@ const getBrowserAndVersion = (userAgent, browsers) => {
   }
 
   // Trim last component of the version until there's a match, if any.
-  // TODO: Doesn't work for Samsung Internet versions
+  // TODO: Doesn't work for Samsung Internet or Safari iOS versions
   let version = ua.browser.version;
   const parts = version.split('.');
   while (parts.length && !(version in browsers[browser].releases)) {

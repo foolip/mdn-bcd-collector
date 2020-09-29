@@ -14,7 +14,7 @@
 
 'use strict';
 
-const {assert, expect} = require('chai');
+const {assert} = require('chai');
 
 const proxyquire = require('proxyquire');
 const sinon = require('sinon');
@@ -95,9 +95,9 @@ const bcd = {
   browsers: {
     chrome: {releases: {82: {}, 83: {}, 84: {}, 85: {}}},
     chrome_android: {releases: {85: {}}},
-    edge: {releases: {16: {}}},
+    edge: {releases: {16: {}, 84: {}}},
     safari: {releases: {14: {}}},
-    safari_ios: {releases: {14: {}}},
+    safari_ios: {releases: {13.4: {}, 14: {}}},
     samsunginternet_android: {releases: {'12.0': {}, 12.1: {}}}
   },
   css: {
@@ -354,17 +354,17 @@ const reports = [
 describe('BCD updater', () => {
   describe('findEntry', () => {
     it('equal', () => {
-      assert.deepEqual(
+      assert.strictEqual(
           findEntry(bcd, 'api.AbortController'), bcd.api.AbortController
       );
     });
 
     it('no path', () => {
-      assert.equal(findEntry(bcd, ''), null);
+      assert.strictEqual(findEntry(bcd, ''), null);
     });
 
     it('invalid path', () => {
-      assert.equal(findEntry(bcd, 'api.MissingAPI'), undefined);
+      assert.strictEqual(findEntry(bcd, 'api.MissingAPI'), undefined);
     });
   });
 
@@ -381,12 +381,20 @@ describe('BCD updater', () => {
       assert.deepEqual(getBrowserAndVersion('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36 Edge/16.16299', bcd.browsers), ['edge', '16']);
     });
 
+    it('Edge (Chromium)', () => {
+      assert.deepEqual(getBrowserAndVersion('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.125 Safari/537.36 Edg/84.0.522.59', bcd.browsers), ['edge', '84']);
+    });
+
     it('Safari', () => {
       assert.deepEqual(getBrowserAndVersion('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Safari/605.1.15', bcd.browsers), ['safari', '14']);
     });
 
     it('Safari iOS', () => {
-      assert.deepEqual(getBrowserAndVersion('Mozilla/5.0 (iPhone; CPU iPhone OS 14_0_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Mobile/15E148 Safari/604.1', bcd.browsers), ['safari_ios', '14']);
+      assert.deepEqual(getBrowserAndVersion('Mozilla/5.0 (iPhone; CPU iPhone OS 13_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1.1 Mobile/15E148 Safari/604.1', bcd.browsers), ['safari_ios', '']);
+    });
+
+    it('Samsung Internet (10.1)', () => {
+      assert.deepEqual(getBrowserAndVersion('Mozilla/5.0 (Linux; Android 9; SAMSUNG SM-G960U) AppleWebKit/537.36 (KHTML, like Gecko) SamsungBrowser/10.1 Chrome/71.0.3578.99 Mobile Safari/537.36', bcd.browsers), ['samsunginternet_android', '']);
     });
 
     it('Samsung Internet (12.0)', () => {
@@ -439,9 +447,9 @@ describe('BCD updater', () => {
     });
 
     it('no results', () => {
-      expect(() => {
+      assert.throws(() => {
         getSupportMap({results: {}});
-      }).to.throw('No results!');
+      }, Error, 'No results!');
     });
   });
 
@@ -532,7 +540,7 @@ describe('BCD updater', () => {
         ])]])]
       ]));
 
-      expect(logger.warn.calledWith('Ignoring unknown browser/version: Mozilla/5.0 (Windows NT 6.3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 YaBrowser/17.6.1.749 Yowser/2.5 Safari/537.36')).to.be.true;
+      assert.isTrue(logger.warn.calledWith('Ignoring unknown browser/version: Mozilla/5.0 (Windows NT 6.3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 YaBrowser/17.6.1.749 Yowser/2.5 Safari/537.36'));
     });
 
     afterEach(() => {
@@ -595,7 +603,7 @@ describe('BCD updater', () => {
     }
 
     it('Invalid results', () => {
-      expect(() => {
+      assert.throws(() => {
         const report = {
           __version: '0.3.1',
           results: {
@@ -613,7 +621,7 @@ describe('BCD updater', () => {
             .entries().next().value[1].entries().next().value[1];
 
         inferSupportStatements(versionMap);
-      }).to.throw('result not true/false/null; got 87');
+      }, Error, 'result not true/false/null; got 87');
     });
   });
 
@@ -622,7 +630,7 @@ describe('BCD updater', () => {
     let bcdCopy;
 
     beforeEach(() => {
-      bcdCopy = Object.assign({}, bcd);
+      bcdCopy = JSON.parse(JSON.stringify(bcd));
     });
 
     it('normal', () => {
@@ -706,9 +714,9 @@ describe('BCD updater', () => {
         browsers: {
           chrome: {releases: {82: {}, 83: {}, 84: {}, 85: {}}},
           chrome_android: {releases: {85: {}}},
-          edge: {releases: {16: {}}},
+          edge: {releases: {16: {}, 84: {}}},
           safari: {releases: {14: {}}},
-          safari_ios: {releases: {14: {}}},
+          safari_ios: {releases: {13.4: {}, 14: {}}},
           samsunginternet_android: {releases: {'12.0': {}, 12.1: {}}}
         },
         css: {
