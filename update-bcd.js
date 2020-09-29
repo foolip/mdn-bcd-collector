@@ -318,25 +318,11 @@ const update = (bcd, supportMatrix) => {
       }
 
       if (inferredStatement.version_removed) {
-        if (typeof(simpleStatement.version_removed) === 'string' &&
-          typeof(inferredStatement.version_removed) === 'string' &&
-          inferredStatement.version_removed.includes('≤')
-        ) {
-          if (compareVersions.compare(
-              simpleStatement.version_removed.replace('≤', ''),
-              inferredStatement.version_removed.replace('≤', ''),
-              '>'
-          )) {
-            simpleStatement.version_removed = inferredStatement.version_removed;
-            modified = true;
-          }
-        } else if (!(typeof(simpleStatement.version_removed) === 'string' &&
+        if (!(typeof(simpleStatement.version_removed) === 'string' &&
               inferredStatement.version_removed === true)) {
           simpleStatement.version_removed = inferredStatement.version_removed;
           modified = true;
         }
-      } else if (simpleStatement.version_removed) {
-        delete simpleStatement.version_removed;
       }
     }
   }
