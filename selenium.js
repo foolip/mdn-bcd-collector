@@ -145,6 +145,7 @@ const run = async (browser, version) => {
       spinner.succeed();
     } catch (e) {
       // If we can't download the results, fallback to GitHub
+      await driver.get(`${host}/results`);
       await driver.wait(until.urlIs(`${host}/results`));
       statusEl = await driver.findElement(By.id('status'));
       await driver.wait(until.elementTextContains(statusEl, 'to'));
