@@ -618,16 +618,20 @@ describe('BCD updater', () => {
             }
           },
           ExperimentalInterface: {
-            __compat: {support: {chrome: [
-              {version_added: '85'},
-              {version_added: '≤83', version_removed: '84'}
-            ]}}
+            // TODO: handle more complicated scenarios
+            // __compat: {support: {chrome: [
+            //   {version_added: '85'},
+            //   {version_added: '≤83', version_removed: '84'}
+            // ]}}
+            __compat: {support: {chrome: {version_added: null}}}
           },
           PrefixedInterface: {
-            __compat: {support: {chrome: [
-              {version_added: '85'},
-              {prefix: 'WebKit', version_added: '≤83'}
-            ]}}
+            // TODO: handle more complicated scenarios
+            // __compat: {support: {chrome: [
+            //   {version_added: '85'},
+            //   {prefix: 'WebKit', version_added: '≤83'}
+            // ]}}
+            __compat: {support: {chrome: {version_added: null}}}
           }
         },
         browsers: {
