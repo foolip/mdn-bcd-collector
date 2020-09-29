@@ -332,7 +332,7 @@ const update = (bcd, supportMatrix) => {
           }
         } else if (!(typeof(simpleStatement.version_removed) === 'string' &&
               inferredStatement.version_removed === true)) {
-          simpleStatement.version_added = inferredStatement.version_added;
+          simpleStatement.version_removed = inferredStatement.version_removed;
           modified = true;
         }
       } else if (simpleStatement.version_removed) {
