@@ -25,7 +25,8 @@ const {
   getBrowserAndVersion,
   getSupportMap,
   getSupportMatrix,
-  inferSupportStatements
+  inferSupportStatements,
+  update
 } = proxyquire('../../update-bcd', {
   './overrides': [
     'Test overrides',
@@ -35,67 +36,71 @@ const {
   ]
 });
 
+'api.AbortController';
+'api.AbortController.abort';
+'api.AbortController.AbortController';
+'api.AudioContext';
+'api.AudioContext.close';
+'api.DeprecatedInterface';
+'api.ExperimentalInterface';
+'api.PrefixedInterface';
+'css.properties.font-family';
+'css.properties.font-face';
+
 const bcd = {
   api: {
     AbortController: {
-      __compat: {},
+      __compat: {support: {chrome: {version_added: null}}},
+      AbortController: {
+        __compat: {support: {chrome: {version_added: null}}}
+      },
+      abort: {
+        __compat: {support: {chrome: {version_added: null}}}
+      },
       dummy: {
-        __compat: {}
+        __compat: {support: {chrome: {version_added: null}}}
       },
       signal: {
-        __compat: {}
+        __compat: {support: {chrome: {version_added: null}}}
       }
     },
-    DummyAPI: {
-      __compat: {},
-      dummy: {
-        __compat: {}
+    AudioContext: {
+      __compat: {support: {chrome: {version_added: null}}},
+      close: {
+        __compat: {support: {chrome: {version_added: null}}}
       }
+    },
+    DeprecatedInterface: {
+      __compat: {support: {chrome: {version_added: null}}}
+    },
+    DummyAPI: {
+      __compat: {support: {chrome: {version_added: null}}},
+      dummy: {
+        __compat: {support: {chrome: {version_added: null}}}
+      }
+    },
+    ExperimentalInterface: {
+      __compat: {support: {chrome: {version_added: null}}}
+    },
+    PrefixedInterface: {
+      __compat: {support: {chrome: {version_added: null}}}
     }
   },
   browsers: {
-    chrome: {
-      releases: {
-        82: {},
-        83: {},
-        84: {},
-        85: {}
-      }
-    },
-    chrome_android: {
-      releases: {
-        85: {}
-      }
-    },
-    edge: {
-      releases: {
-        16: {}
-      }
-    },
-    safari: {
-      releases: {
-        14: {}
-      }
-    },
-    safari_ios: {
-      releases: {
-        14: {}
-      }
-    },
-    samsunginternet_android: {
-      releases: {
-        '12.0': {},
-        12.1: {}
-      }
-    }
+    chrome: {releases: {82: {}, 83: {}, 84: {}, 85: {}}},
+    chrome_android: {releases: {85: {}}},
+    edge: {releases: {16: {}}},
+    safari: {releases: {14: {}}},
+    safari_ios: {releases: {14: {}}},
+    samsunginternet_android: {releases: {'12.0': {}, 12.1: {}}}
   },
   css: {
     properties: {
       'font-family': {
-        __compat: {}
+        __compat: {support: {chrome: {version_added: null}}}
       },
       'font-face': {
-        __compat: {}
+        __compat: {support: {chrome: {version_added: null}}}
       }
     }
   }
@@ -114,27 +119,28 @@ const reports = [
         {
           name: 'api.AbortController.abort',
           info: {exposure: 'Window'},
-          result: true
+          result: null
         },
         {
           name: 'api.AbortController.AbortController',
           info: {exposure: 'Window'},
-          result: true
+          result: false
         },
         {
           name: 'api.AudioContext',
           info: {exposure: 'Window'},
-          result: true
+          result: false
         },
         {
           name: 'api.AudioContext.close',
           info: {exposure: 'Window'},
-          result: true
+          result: null,
+          message: 'threw ReferenceError: AbortController is not defined'
         },
         {
           name: 'api.DeprecatedInterface',
           info: {exposure: 'Window'},
-          result: false
+          result: true
         },
         {
           name: 'api.ExperimentalInterface',
@@ -144,7 +150,8 @@ const reports = [
         {
           name: 'api.PrefixedInterface',
           info: {exposure: 'Window'},
-          result: true
+          result: true,
+          prefix: 'WebKit'
         },
         {
           name: 'css.properties.font-family',
@@ -158,7 +165,7 @@ const reports = [
         }
       ]
     },
-    userAgent: 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.83 Safari/537.36'
+    userAgent: 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.61 Safari/537.36'
   },
   {
     __version: '0.3.1',
@@ -237,28 +244,27 @@ const reports = [
         {
           name: 'api.AbortController.abort',
           info: {exposure: 'Window'},
-          result: null
+          result: true
         },
         {
           name: 'api.AbortController.AbortController',
           info: {exposure: 'Window'},
-          result: false
+          result: true
         },
         {
           name: 'api.AudioContext',
           info: {exposure: 'Window'},
-          result: false
+          result: true
         },
         {
           name: 'api.AudioContext.close',
           info: {exposure: 'Window'},
-          result: null,
-          message: 'threw ReferenceError: AbortController is not defined'
+          result: true
         },
         {
           name: 'api.DeprecatedInterface',
           info: {exposure: 'Window'},
-          result: true
+          result: false
         },
         {
           name: 'api.ExperimentalInterface',
@@ -268,8 +274,7 @@ const reports = [
         {
           name: 'api.PrefixedInterface',
           info: {exposure: 'Window'},
-          result: true,
-          prefix: 'WebKit'
+          result: true
         },
         {
           name: 'css.properties.font-family',
@@ -283,7 +288,7 @@ const reports = [
         }
       ]
     },
-    userAgent: 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.61 Safari/537.36'
+    userAgent: 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.83 Safari/537.36'
   },
   {
     __version: '0.3.1',
@@ -367,7 +372,7 @@ describe('BCD updater', () => {
 
   describe('getSupportMap', () => {
     it('normal', () => {
-      assert.deepEqual(getSupportMap(reports[2]), new Map([
+      assert.deepEqual(getSupportMap(reports[0]), new Map([
         ['api.AbortController', {result: true, prefix: ''}],
         ['api.AbortController.abort', {result: null, prefix: ''}],
         ['api.AbortController.AbortController', {result: false, prefix: ''}],
@@ -545,6 +550,85 @@ describe('BCD updater', () => {
 
         inferSupportStatements(versionMap);
       }).to.throw('result not true/false/null; got 87');
+    });
+  });
+
+  describe('update', () => {
+    const supportMatrix = getSupportMatrix(bcd.browsers, reports);
+    let bcdCopy;
+
+    beforeEach(() => {
+      bcdCopy = Object.assign({}, bcd);
+    });
+
+    it('normal', () => {
+      update(bcdCopy, supportMatrix);
+      assert.deepEqual(bcdCopy, {
+        api: {
+          AbortController: {
+            __compat: {support: {chrome: {version_added: '≤83'}}},
+            AbortController: {
+              __compat: {support: {chrome: {version_added: '85'}}}
+            },
+            abort: {
+              __compat: {support: {chrome: {version_added: '≤84'}}}
+            },
+            dummy: {
+              __compat: {support: {chrome: {version_added: null}}}
+            },
+            signal: {
+              __compat: {support: {chrome: {version_added: null}}}
+            }
+          },
+          AudioContext: {
+            __compat: {support: {chrome: {version_added: '85'}}},
+            close: {
+              __compat: {support: {chrome: {version_added: '85'}}}
+            }
+          },
+          DeprecatedInterface: {
+            __compat: {support: {chrome: {
+              version_added: '≤83', version_removed: '85'
+            }}}
+          },
+          DummyAPI: {
+            __compat: {support: {chrome: {version_added: null}}},
+            dummy: {
+              __compat: {support: {chrome: {version_added: null}}}
+            }
+          },
+          ExperimentalInterface: {
+            __compat: {support: {chrome: [
+              {version_added: '85'},
+              {version_added: '≤83', version_removed: '84'}
+            ]}}
+          },
+          PrefixedInterface: {
+            __compat: {support: {chrome: [
+              {version_added: '85'},
+              {prefix: 'WebKit', version_added: '≤83'}
+            ]}}
+          }
+        },
+        browsers: {
+          chrome: {releases: {82: {}, 83: {}, 84: {}, 85: {}}},
+          chrome_android: {releases: {85: {}}},
+          edge: {releases: {16: {}}},
+          safari: {releases: {14: {}}},
+          safari_ios: {releases: {14: {}}},
+          samsunginternet_android: {releases: {'12.0': {}, 12.1: {}}}
+        },
+        css: {
+          properties: {
+            'font-family': {
+              __compat: {support: {chrome: {version_added: '84'}}}
+            },
+            'font-face': {
+              __compat: {support: {chrome: {version_added: null}}}
+            }
+          }
+        }
+      });
     });
   });
 });
