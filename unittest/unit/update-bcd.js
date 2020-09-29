@@ -36,17 +36,6 @@ const {
   ]
 });
 
-'api.AbortController';
-'api.AbortController.abort';
-'api.AbortController.AbortController';
-'api.AudioContext';
-'api.AudioContext.close';
-'api.DeprecatedInterface';
-'api.ExperimentalInterface';
-'api.PrefixedInterface';
-'css.properties.font-family';
-'css.properties.font-face';
-
 const bcd = {
   api: {
     AbortController: {
@@ -67,7 +56,7 @@ const bcd = {
     AudioContext: {
       __compat: {support: {chrome: {version_added: null}}},
       close: {
-        __compat: {support: {chrome: {version_added: null}}}
+        __compat: {support: {}}
       }
     },
     DeprecatedInterface: {
@@ -80,9 +69,26 @@ const bcd = {
       }
     },
     ExperimentalInterface: {
+      __compat: {support: {chrome: [
+        {
+          version_added: '70',
+          notes: 'Not supported on Windows XP.'
+        },
+        {
+          version_added: '64',
+          version_removed: '70',
+          flags: {},
+          notes: 'Not supported on Windows XP.'
+        }
+      ]}}
+    },
+    PrefixedInterface1: {
+      __compat: {support: {chrome: {version_added: '80', prefix: 'WebKit'}}}
+    },
+    PrefixedInterface2: {
       __compat: {support: {chrome: {version_added: null}}}
     },
-    PrefixedInterface: {
+    RemovedInterface: {
       __compat: {support: {chrome: {version_added: null}}}
     }
   },
@@ -148,10 +154,20 @@ const reports = [
           result: true
         },
         {
-          name: 'api.PrefixedInterface',
+          name: 'api.PrefixedInterface1',
+          info: {exposure: 'Window'},
+          result: true
+        },
+        {
+          name: 'api.PrefixedInterface2',
           info: {exposure: 'Window'},
           result: true,
           prefix: 'WebKit'
+        },
+        {
+          name: 'api.RemovedInterface',
+          info: {exposure: 'Window'},
+          result: true
         },
         {
           name: 'css.properties.font-family',
@@ -210,7 +226,7 @@ const reports = [
         {
           name: 'api.ExperimentalInterface',
           info: {exposure: 'Window'},
-          result: false
+          result: true
         },
         {
           name: 'api.NewInterfaceNotInBCD',
@@ -218,7 +234,17 @@ const reports = [
           result: false
         },
         {
-          name: 'api.PrefixedInterface',
+          name: 'api.RemovedInterface',
+          info: {exposure: 'Window'},
+          result: false
+        },
+        {
+          name: 'api.PrefixedInterface1',
+          info: {exposure: 'Window'},
+          result: true
+        },
+        {
+          name: 'api.PrefixedInterface2',
           info: {exposure: 'Window'},
           result: true,
           prefix: 'WebKit'
@@ -282,7 +308,17 @@ const reports = [
           result: true
         },
         {
-          name: 'api.PrefixedInterface',
+          name: 'api.PrefixedInterface1',
+          info: {exposure: 'Window'},
+          result: true
+        },
+        {
+          name: 'api.PrefixedInterface2',
+          info: {exposure: 'Window'},
+          result: true
+        },
+        {
+          name: 'api.RemovedInterface',
           info: {exposure: 'Window'},
           result: true
         },
@@ -390,7 +426,9 @@ describe('BCD updater', () => {
         ['api.AudioContext.close', {result: false, prefix: ''}],
         ['api.DeprecatedInterface', {result: true, prefix: ''}],
         ['api.ExperimentalInterface', {result: true, prefix: ''}],
-        ['api.PrefixedInterface', {result: true, prefix: 'WebKit'}],
+        ['api.PrefixedInterface1', {result: true, prefix: ''}],
+        ['api.PrefixedInterface2', {result: true, prefix: 'WebKit'}],
+        ['api.RemovedInterface', {result: true, prefix: ''}],
         ['css.properties.font-family', {result: true, prefix: ''}],
         ['css.properties.font-face', {result: true, prefix: ''}]
       ]));
@@ -404,9 +442,11 @@ describe('BCD updater', () => {
         ['api.AudioContext', {result: false, prefix: ''}],
         ['api.AudioContext.close', {result: false, prefix: ''}],
         ['api.DeprecatedInterface', {result: true, prefix: ''}],
-        ['api.ExperimentalInterface', {result: false, prefix: ''}],
+        ['api.ExperimentalInterface', {result: true, prefix: ''}],
         ['api.NewInterfaceNotInBCD', {result: false, prefix: ''}],
-        ['api.PrefixedInterface', {result: true, prefix: 'WebKit'}],
+        ['api.PrefixedInterface1', {result: true, prefix: ''}],
+        ['api.PrefixedInterface2', {result: true, prefix: 'WebKit'}],
+        ['api.RemovedInterface', {result: false, prefix: ''}],
         ['css.properties.font-family', {result: true, prefix: ''}],
         ['css.properties.font-face', {result: true, prefix: ''}]
       ]));
@@ -465,7 +505,7 @@ describe('BCD updater', () => {
         ['api.ExperimentalInterface', new Map([['chrome', new Map([
           ['82', {result: null, prefix: ''}],
           ['83', {result: true, prefix: ''}],
-          ['84', {result: false, prefix: ''}],
+          ['84', {result: true, prefix: ''}],
           ['85', {result: true, prefix: ''}]
         ])]])],
         ['api.NewInterfaceNotInBCD', new Map([['chrome', new Map([
@@ -474,10 +514,22 @@ describe('BCD updater', () => {
           ['84', {result: false, prefix: ''}],
           ['85', {result: true, prefix: ''}]
         ])]])],
-        ['api.PrefixedInterface', new Map([['chrome', new Map([
+        ['api.PrefixedInterface1', new Map([['chrome', new Map([
+          ['82', {result: null, prefix: ''}],
+          ['83', {result: true, prefix: ''}],
+          ['84', {result: true, prefix: ''}],
+          ['85', {result: true, prefix: ''}]
+        ])]])],
+        ['api.PrefixedInterface2', new Map([['chrome', new Map([
           ['82', {result: null, prefix: ''}],
           ['83', {result: true, prefix: 'WebKit'}],
           ['84', {result: true, prefix: 'WebKit'}],
+          ['85', {result: true, prefix: ''}]
+        ])]])],
+        ['api.RemovedInterface', new Map([['chrome', new Map([
+          ['82', {result: null, prefix: ''}],
+          ['83', {result: true, prefix: ''}],
+          ['84', {result: false, prefix: ''}],
           ['85', {result: true, prefix: ''}]
         ])]])],
         ['css.properties.font-family', new Map([['chrome', new Map([
@@ -523,14 +575,20 @@ describe('BCD updater', () => {
         {version_added: '≤83', version_removed: '85'}
       ],
       'api.ExperimentalInterface': [
-        {version_added: '≤83', version_removed: '84'},
-        {version_added: '85'}
+        {version_added: '≤83'}
       ],
       'api.NewInterfaceNotInBCD': [
         {version_added: '85'}
       ],
-      'api.PrefixedInterface': [
+      'api.PrefixedInterface1': [
+        {version_added: '≤83'}
+      ],
+      'api.PrefixedInterface2': [
         {prefix: 'WebKit', version_added: '≤83'},
+        {version_added: '85'}
+      ],
+      'api.RemovedInterface': [
+        {version_added: '≤83', version_removed: '84'},
         {version_added: '85'}
       ],
       'css.properties.font-family': [
@@ -603,7 +661,7 @@ describe('BCD updater', () => {
           AudioContext: {
             __compat: {support: {chrome: {version_added: '85'}}},
             close: {
-              __compat: {support: {chrome: {version_added: '85'}}}
+              __compat: {support: {}}
             }
           },
           DeprecatedInterface: {
@@ -618,18 +676,43 @@ describe('BCD updater', () => {
             }
           },
           ExperimentalInterface: {
-            // TODO: handle more complicated scenarios
-            // __compat: {support: {chrome: [
-            //   {version_added: '85'},
-            //   {version_added: '≤83', version_removed: '84'}
-            // ]}}
-            __compat: {support: {chrome: {version_added: null}}}
+            __compat: {support: {chrome: [
+              {
+                version_added: '70',
+                notes: 'Not supported on Windows XP.'
+              },
+              {
+                version_added: '64',
+                version_removed: '70',
+                flags: {},
+                notes: 'Not supported on Windows XP.'
+              }
+            ]}}
           },
-          PrefixedInterface: {
+          PrefixedInterface1: {
             // TODO: handle more complicated scenarios
             // __compat: {support: {chrome: [
             //   {version_added: '85'},
             //   {prefix: 'WebKit', version_added: '≤83'}
+            // ]}}
+            __compat: {support: {chrome: [
+              {version_added: '≤83'},
+              {version_added: '80', prefix: 'WebKit'}
+            ]}}
+          },
+          PrefixedInterface2: {
+            // TODO: handle more complicated scenarios
+            // __compat: {support: {chrome: [
+            //   {version_added: '85'},
+            //   {prefix: 'WebKit', version_added: '≤83'}
+            // ]}}
+            __compat: {support: {chrome: {version_added: null}}}
+          },
+          RemovedInterface: {
+            // TODO: handle more complicated scenarios
+            // __compat: {support: {chrome: [
+            //   {version_added: '85'},
+            //   {version_added: '≤83', version_removed: '84'}
             // ]}}
             __compat: {support: {chrome: {version_added: null}}}
           }
