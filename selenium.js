@@ -78,6 +78,24 @@ const getSafariOS = (version) => {
   }
 };
 
+const awaitPageReady = async (driver) => {
+  await driver.wait(() => {
+    return driver.executeScript('return document.readyState')
+        .then((readyState) => (readyState === 'complete'));
+  });
+  await driver.executeScript('return document.readyState');
+};
+
+const awaitPage = async (driver, page) => {
+  await driver.wait(until.urlIs(page), 30000);
+  await awaitPageReady(driver);
+};
+
+const goToPage = async (driver, page) => {
+  await driver.get(page);
+  await awaitPageReady(driver);
+};
+
 const run = async (browser, version) => {
   const capabilities = new Capabilities();
   capabilities.set(
@@ -106,15 +124,10 @@ const run = async (browser, version) => {
   let statusEl;
 
   try {
-    await driver.get(`${host}`);
-    await driver.wait(() => {
-      return driver.executeScript('return document.readyState')
-          .then((readyState) => (readyState === 'complete'));
-    });
-    await driver.executeScript('return document.readyState');
+    await goToPage(driver, host);
     await driver.findElement(By.id('start')).click();
 
-    await driver.wait(until.urlIs(`${host}/tests/`));
+    await awaitPage(driver, `${host}/tests/`);
     statusEl = await driver.findElement(By.id('status'));
     try {
       await driver.wait(until.elementTextContains(statusEl, 'upload'), 45000);
@@ -132,9 +145,9 @@ const run = async (browser, version) => {
     try {
       if (browser === 'chrome' || browser === 'firefox' ||
         (browser === 'edge' && version >= 79)) {
-        await driver.get(`view-source:${host}/api/results`);
+        await goToPage(driver, `view-source:${host}/api/results`);
       } else {
-        await driver.get(`${host}/api/results`);
+        await goToPage(driver, `${host}/api/results`);
       }
       const reportBody = await driver.wait(until.elementLocated(By.css('body')));
       const reportString = await reportBody.getAttribute('textContent');
@@ -145,8 +158,7 @@ const run = async (browser, version) => {
       spinner.succeed();
     } catch (e) {
       // If we can't download the results, fallback to GitHub
-      await driver.get(`${host}/results`);
-      await driver.wait(until.urlIs(`${host}/results`));
+      await goToPage(driver, `${host}/results`);
       statusEl = await driver.findElement(By.id('status'));
       await driver.wait(until.elementTextContains(statusEl, 'to'));
       if ((await statusEl.getText()).search('Failed') !== -1) {
