@@ -22,6 +22,7 @@ const sinon = require('sinon');
 const logger = require('../../logger');
 const {
   findEntry,
+  getMajorMinorVersion,
   getBrowserAndVersion,
   getSupportMap,
   getSupportMatrix,
@@ -96,9 +97,9 @@ const bcd = {
     chrome: {releases: {82: {}, 83: {}, 84: {}, 85: {}}},
     chrome_android: {releases: {85: {}}},
     edge: {releases: {16: {}, 84: {}}},
-    safari: {releases: {14: {}}},
-    safari_ios: {releases: {13.4: {}, 14: {}}},
-    samsunginternet_android: {releases: {'12.0': {}, 12.1: {}}}
+    safari: {releases: {13: {}, 13.1: {}, 14: {}}},
+    safari_ios: {releases: {13: {}, 13.3: {}, 13.4: {}, 14: {}}},
+    samsunginternet_android: {releases: {'10.0': {}, 10.2: {}, '11.0': {}, 11.2: {}, '12.0': {}, 12.1: {}}}
   },
   css: {
     properties: {
@@ -368,9 +369,39 @@ describe('BCD updater', () => {
     });
   });
 
+  describe('getMajorMinorVersion', () => {
+    it('1.2.3', () => {
+      assert.strictEqual(getMajorMinorVersion('1.2.3'), '1.2');
+    });
+
+    it('10', () => {
+      assert.strictEqual(getMajorMinorVersion('10'), '10.0');
+    });
+
+    it('10.0', () => {
+      assert.strictEqual(getMajorMinorVersion('10.0'), '10.0');
+    });
+
+    it('10.01', () => {
+      assert.strictEqual(getMajorMinorVersion('10.01'), '10.01');
+    });
+
+    it('10.1', () => {
+      assert.strictEqual(getMajorMinorVersion('10.1'), '10.1');
+    });
+
+    it('58.0.3029.110', () => {
+      assert.strictEqual(getMajorMinorVersion('58.0.3029.110'), '58.0');
+    });
+  });
+
   describe('getBrowserAndVersion', () => {
     it('Chrome', () => {
       assert.deepEqual(getBrowserAndVersion('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.121 Safari/537.36', bcd.browsers), ['chrome', '85']);
+    });
+
+    it('Chrome 100 (not in BCD)', () => {
+      assert.deepEqual(getBrowserAndVersion('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4183.121 Safari/537.36', bcd.browsers), ['chrome', null]);
     });
 
     it('Chrome Android', () => {
@@ -385,16 +416,20 @@ describe('BCD updater', () => {
       assert.deepEqual(getBrowserAndVersion('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.125 Safari/537.36 Edg/84.0.522.59', bcd.browsers), ['edge', '84']);
     });
 
-    it('Safari', () => {
+    it('Safari 14', () => {
       assert.deepEqual(getBrowserAndVersion('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Safari/605.1.15', bcd.browsers), ['safari', '14']);
     });
 
+    it('Safari 14.1 (not in BCD)', () => {
+      assert.deepEqual(getBrowserAndVersion('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.1 Safari/605.1.15', bcd.browsers), ['safari', null]);
+    });
+
     it('Safari iOS', () => {
-      assert.deepEqual(getBrowserAndVersion('Mozilla/5.0 (iPhone; CPU iPhone OS 13_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1.1 Mobile/15E148 Safari/604.1', bcd.browsers), ['safari_ios', '']);
+      assert.deepEqual(getBrowserAndVersion('Mozilla/5.0 (iPhone; CPU iPhone OS 13_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1.1 Mobile/15E148 Safari/604.1', bcd.browsers), ['safari_ios', '13.4']);
     });
 
     it('Samsung Internet (10.1)', () => {
-      assert.deepEqual(getBrowserAndVersion('Mozilla/5.0 (Linux; Android 9; SAMSUNG SM-G960U) AppleWebKit/537.36 (KHTML, like Gecko) SamsungBrowser/10.1 Chrome/71.0.3578.99 Mobile Safari/537.36', bcd.browsers), ['samsunginternet_android', '']);
+      assert.deepEqual(getBrowserAndVersion('Mozilla/5.0 (Linux; Android 9; SAMSUNG SM-G960U) AppleWebKit/537.36 (KHTML, like Gecko) SamsungBrowser/10.1 Chrome/71.0.3578.99 Mobile Safari/537.36', bcd.browsers), ['samsunginternet_android', '10.0']);
     });
 
     it('Samsung Internet (12.0)', () => {
@@ -715,9 +750,9 @@ describe('BCD updater', () => {
           chrome: {releases: {82: {}, 83: {}, 84: {}, 85: {}}},
           chrome_android: {releases: {85: {}}},
           edge: {releases: {16: {}, 84: {}}},
-          safari: {releases: {14: {}}},
-          safari_ios: {releases: {13.4: {}, 14: {}}},
-          samsunginternet_android: {releases: {'12.0': {}, 12.1: {}}}
+          safari: {releases: {13: {}, 13.1: {}, 14: {}}},
+          safari_ios: {releases: {13: {}, 13.3: {}, 13.4: {}, 14: {}}},
+          samsunginternet_android: {releases: {'10.0': {}, 10.2: {}, '11.0': {}, 11.2: {}, '12.0': {}, 12.1: {}}}
         },
         css: {
           properties: {
