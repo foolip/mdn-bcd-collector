@@ -153,7 +153,7 @@ const run = async (browser, version) => {
       const reportString = await reportBody.getAttribute('textContent');
       const report = JSON.parse(reportString);
       const {filename} = github.getReportMeta(report);
-      await fs.writeJson(path.join(resultsDir, filename), report);
+      await fs.writeJson(path.join(resultsDir, filename), report, {spaces: 2});
 
       spinner.succeed();
     } catch (e) {
