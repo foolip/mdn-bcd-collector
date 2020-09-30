@@ -83,6 +83,9 @@ const bcd = {
         }
       ]}}
     },
+    NullAPI: {
+      __compat: {support: {chrome: {version_added: '80'}}}
+    },
     PrefixedInterface1: {
       __compat: {support: {chrome: {version_added: '80', prefix: 'WebKit'}}}
     },
@@ -153,6 +156,11 @@ const reports = [
           name: 'api.ExperimentalInterface',
           info: {exposure: 'Window'},
           result: true
+        },
+        {
+          name: 'api.NullAPI',
+          info: {exposure: 'Window'},
+          result: null
         },
         {
           name: 'api.PrefixedInterface1',
@@ -235,6 +243,11 @@ const reports = [
           result: false
         },
         {
+          name: 'api.NullAPI',
+          info: {exposure: 'Window'},
+          result: null
+        },
+        {
           name: 'api.PrefixedInterface1',
           info: {exposure: 'Window'},
           result: true
@@ -307,6 +320,11 @@ const reports = [
           name: 'api.NewInterfaceNotInBCD',
           info: {exposure: 'Window'},
           result: true
+        },
+        {
+          name: 'api.NullAPI',
+          info: {exposure: 'Window'},
+          result: null
         },
         {
           name: 'api.PrefixedInterface1',
@@ -455,6 +473,7 @@ describe('BCD updater', () => {
         ['api.AudioContext.close', {result: false, prefix: ''}],
         ['api.DeprecatedInterface', {result: true, prefix: ''}],
         ['api.ExperimentalInterface', {result: true, prefix: ''}],
+        ['api.NullAPI', {result: null, prefix: ''}],
         ['api.PrefixedInterface1', {result: true, prefix: ''}],
         ['api.PrefixedInterface2', {result: true, prefix: 'WebKit'}],
         ['api.RemovedInterface', {result: true, prefix: ''}],
@@ -473,6 +492,7 @@ describe('BCD updater', () => {
         ['api.DeprecatedInterface', {result: true, prefix: ''}],
         ['api.ExperimentalInterface', {result: true, prefix: ''}],
         ['api.NewInterfaceNotInBCD', {result: false, prefix: ''}],
+        ['api.NullAPI', {result: null, prefix: ''}],
         ['api.PrefixedInterface1', {result: true, prefix: ''}],
         ['api.PrefixedInterface2', {result: true, prefix: 'WebKit'}],
         ['api.RemovedInterface', {result: false, prefix: ''}],
@@ -543,6 +563,12 @@ describe('BCD updater', () => {
           ['84', {result: false, prefix: ''}],
           ['85', {result: true, prefix: ''}]
         ])]])],
+        ['api.NullAPI', new Map([['chrome', new Map([
+          ['82', {result: null, prefix: ''}],
+          ['83', {result: null, prefix: ''}],
+          ['84', {result: null, prefix: ''}],
+          ['85', {result: null, prefix: ''}]
+        ])]])],
         ['api.PrefixedInterface1', new Map([['chrome', new Map([
           ['82', {result: null, prefix: ''}],
           ['83', {result: true, prefix: ''}],
@@ -609,6 +635,7 @@ describe('BCD updater', () => {
       'api.NewInterfaceNotInBCD': [
         {version_added: '85'}
       ],
+      'api.NullAPI': [],
       'api.PrefixedInterface1': [
         {version_added: '≤83'}
       ],
@@ -717,6 +744,9 @@ describe('BCD updater', () => {
                 notes: 'Not supported on Windows XP.'
               }
             ]}}
+          },
+          NullAPI: {
+            __compat: {support: {chrome: {version_added: '80'}}}
           },
           PrefixedInterface1: {
             // TODO: handle more complicated scenarios
