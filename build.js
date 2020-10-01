@@ -104,12 +104,20 @@ const getCustomSubtestsAPI = (name) => {
 };
 
 const getCustomResourcesAPI = (name) => {
+  const resources = {};
+
   // TODO: Use tests imports to inherit resources
   if (name in customTests.api && '__resources' in customTests.api[name]) {
-    return customTests.api[name].__resources;
+    for (const key of customTests.api[name].__resources) {
+      if (Object.keys(customTests.api.__resources).includes(key)) {
+        resources[key] = customTests.api.__resources[key];
+      } else {
+        throw new Error(`Resource ${key} is not defined but referenced in api.${name}`);
+      }
+    }
   }
 
-  return {};
+  return resources;
 };
 
 const getCustomTestCSS = (name) => {
