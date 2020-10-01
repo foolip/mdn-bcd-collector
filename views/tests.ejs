@@ -44,11 +44,16 @@
     <script src="/resources/json3.min.js"></script>
     <script src="/resources/harness.js"></script>
     <script>
+      <% for (const [instanceId, instance] of Object.entries(resources)
+        .filter((item) => (item[1].type === 'instance'))) { %>
+        bcd.addInstance("<%- instanceId %>", "<%- instance.src %>");
+      <% }; %>
       <% tests.forEach(function(test) { %>
         bcd.addTest("<%- test.ident %>", <%- JSON.stringify(test.tests) %>, "<%- test.exposure %>");
       <% }); %>
       window.onload = function() {
-        bcd.run(undefined, <%-Object.keys(resources).length%>)
+        bcd.run(undefined, <%-Object.entries(resources)
+        .filter((item) => (item[1].type !== 'instance')).length%>)
       };
     </script>
   </body>

@@ -28,6 +28,7 @@
     loaded: 0,
     testsStarted: false
   };
+  var reusableInstances = {};
 
   function stringify(value) {
     try {
@@ -54,6 +55,15 @@
       statusElement.innerHTML = statusElement.innerHTML + newStatus;
     } else {
       statusElement.innerHTML = newStatus;
+    }
+  }
+
+  function addInstance(name, code) {
+    try {
+      reusableInstances[name] = eval('(function () {' + code + '})()');
+    } catch (e) {
+      reusableInstances[name] = false;
+      console.error(e);
     }
   }
 
@@ -481,6 +491,7 @@
 
   global.bcd = {
     testConstructor: testConstructor,
+    addInstance: addInstance,
     addTest: addTest,
     test: test,
     run: run

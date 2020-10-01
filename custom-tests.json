@@ -8,32 +8,46 @@
       "video-blank": {
         "type": "video",
         "src": ["/media/blank.mp4", "/media/blank.webm"]
+      },
+      "audioContext": {
+        "type": "instance",
+        "src": "return new (window.AudioContext || window.webkitAudioContext)();"
+      },
+      "webGL": {
+        "type": "instance",
+        "src": "var canvas = document.createElement('canvas'); if (!canvas) {return false}; return canvas.getContext('webgl') || canvas.getContext('experimental-webgl');"
       }
     },
     "ANGLE_instanced_arrays": {
-      "__base": "var canvas = document.createElement('canvas'); if (!canvas) {return false}; var gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl'); if (!gl) {return false}; var instance = gl.getExtension('ANGLE_instanced_arrays');"
+      "__base": "if (!reusableInstances.webGL) {return false}; reusableInstances.webGL.getExtension('ANGLE_instanced_arrays');"
     },
     "AnalyserNode": {
-      "__base": "<%api.AudioContext:audioCtx%> if (!audioCtx) {return false}; var instance = audioCtx.createAnalyser();"
+      "__resources": ["audioContext"],
+      "__base": "if (!reusableInstances.audioContext) {return false;} reusableInstances.audioContext.createAnalyser();"
     },
     "AudioBuffer": {
-      "__base": "<%api.AudioContext:audioCtx%> if (!audioCtx) {return false}; var instance = audioCtx.createBuffer(2, audioCtx.sampleRate * 3, audioCtx.sampleRate);"
+      "__resources": ["audioContext"],
+      "__base": "if (!reusableInstances.audioContext) {return false;} reusableInstances.audioContext.createBuffer(2, audioContext.sampleRate * 3, audioContext.sampleRate);"
     },
     "AudioBufferSourceNode": {
-      "__base": "<%api.AudioContext:audioCtx%> if (!audioCtx) {return false}; var instance = audioCtx.createBufferSource();"
+      "__resources": ["audioContext"],
+      "__base": "if (!reusableInstances.audioContext) {return false;} reusableInstances.audioContext.createBufferSource();"
     },
     "AudioContext": {
-      "__TODO": "Separate into different prefix variations when able",
-      "__base": "var instance = new (window.AudioContext || window.webkitAudioContext)();"
+      "__TODO": "Add webkit prefix",
+      "__base": "var instance = new window.AudioContext();"
     },
     "AudioDestinationNode": {
-      "__base": "<%api.AudioContext:audioCtx%> if (!audioCtx) {return false}; var instance = audioCtx.destination;"
+      "__resources": ["audioContext"],
+      "__base": "if (!reusableInstances.audioContext) {return false;} reusableInstances.audioContext.destination;"
     },
     "AudioListener": {
-      "__base": "<%api.AudioContext:audioCtx%> if (!audioCtx) {return false}; var instance = audioCtx.listener;"
+      "__resources": ["audioContext"],
+      "__base": "if (!reusableInstances.audioContext) {return false;} reusableInstances.audioContext.listener;"
     },
     "AudioNode": {
-      "__base": "<%api.AudioContext:audioCtx%> if (!audioCtx) {return false}; var instance = audioCtx.createAnalyser();"
+      "__resources": ["audioContext"],
+      "__base": "if (!reusableInstances.audioContext) {return false;} reusableInstances.audioContext.createAnalyser();"
     },
     "AudioParam": {
       "__base": "<%api.GainNode:gainNode%> var instance = gainNode.gain;"
@@ -52,25 +66,32 @@
     },
     "AudioWorkletNode": {
       "__TODO": "DEPENDS ON PROMISE TESTING SUPPORT",
-      "__base.disabled": "<%api.AudioContext:audioCtx%> if (!audioCtx) {return false}; await audioCtx.audioWorklet.addModule('/resources/custom-tests/api/AudioWorkletNode/WhiteNoiseProcessor.js'); var instance = new AudioWorkletNode(audioCtx, 'white-noise-processor');"
+      "__resources": ["audioContext"],
+      "__base.disabled": "await if (!reusableInstances.audioContext) {return false;} reusableInstances.audioContext.audioWorklet.addModule('/resources/custom-tests/api/AudioWorkletNode/WhiteNoiseProcessor.js'); var instance = new AudioWorkletNode(audioContext, 'white-noise-processor');"
     },
     "BiquadFilterNode": {
-      "__base": "<%api.AudioContext:audioCtx%> if (!audioCtx) {return false}; var instance = audioCtx.createBiquadFilter();"
+      "__resources": ["audioContext"],
+      "__base": "if (!reusableInstances.audioContext) {return false;} reusableInstances.audioContext.createBiquadFilter();"
     },
     "ChannelMergerNode": {
-      "__base": "<%api.AudioContext:audioCtx%> if (!audioCtx) {return false}; var instance = audioCtx.createChannelMerger();"
+      "__resources": ["audioContext"],
+      "__base": "if (!reusableInstances.audioContext) {return false;} reusableInstances.audioContext.createChannelMerger();"
     },
     "ChannelSplitterNode": {
-      "__base": "<%api.AudioContext:audioCtx%> if (!audioCtx) {return false}; var instance = audioCtx.createChannelSplitter();"
+      "__resources": ["audioContext"],
+      "__base": "if (!reusableInstances.audioContext) {return false;} reusableInstances.audioContext.createChannelSplitter();"
     },
     "ConstantSourceNode": {
-      "__base": "<%api.AudioContext:audioCtx%> if (!audioCtx) {return false}; var instance = audioCtx.createConstantSource();"
+      "__resources": ["audioContext"],
+      "__base": "if (!reusableInstances.audioContext) {return false;} reusableInstances.audioContext.createConstantSource();"
     },
     "ConvolverNode": {
-      "__base": "<%api.AudioContext:audioCtx%> if (!audioCtx) {return false}; var instance = audioCtx.createConvolver();"
+      "__resources": ["audioContext"],
+      "__base": "if (!reusableInstances.audioContext) {return false;} reusableInstances.audioContext.createConvolver();"
     },
     "DelayNode": {
-      "__base": "<%api.AudioContext:audioCtx%> if (!audioCtx) {return false}; var instance = audioCtx.createDelay();"
+      "__resources": ["audioContext"],
+      "__base": "if (!reusableInstances.audioContext) {return false;} reusableInstances.audioContext.createDelay();"
     },
     "Document": {
       "__base": "var instance = document;"
@@ -82,46 +103,60 @@
       }
     },
     "DynamicsCompressorNode": {
-      "__base": "<%api.AudioContext:audioCtx%> if (!audioCtx) {return false}; var instance = audioCtx.createDynamicsCompressor();"
+      "__resources": ["audioContext"],
+      "__base": "if (!reusableInstances.audioContext) {return false;} reusableInstances.audioContext.createDynamicsCompressor();"
     },
     "EXT_blend_minmax": {
-      "__base": "var canvas = document.createElement('canvas'); if (!canvas) {return false}; var gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl'); if (!gl) {return false}; var instance = gl.getExtension('EXT_blend_minmax');"
+      "__resources": ["webGL"],
+      "__base": "if (!reusableInstances.webGL) {return false}; reusableInstances.webGL.getExtension('EXT_blend_minmax');"
     },
     "EXT_color_buffer_float": {
-      "__base": "var canvas = document.createElement('canvas'); if (!canvas) {return false}; var gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl'); if (!gl) {return false}; var instance = gl.getExtension('EXT_color_buffer_float');"
+      "__resources": ["webGL"],
+      "__base": "if (!reusableInstances.webGL) {return false}; reusableInstances.webGL.getExtension('EXT_color_buffer_float');"
     },
     "EXT_color_buffer_half_float": {
-      "__base": "var canvas = document.createElement('canvas'); if (!canvas) {return false}; var gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl'); if (!gl) {return false}; var instance = gl.getExtension('EXT_color_buffer_half_float');"
+      "__resources": ["webGL"],
+      "__base": "if (!reusableInstances.webGL) {return false}; reusableInstances.webGL.getExtension('EXT_color_buffer_half_float');"
     },
     "EXT_disjoint_timer_query": {
-      "__base": "var canvas = document.createElement('canvas'); if (!canvas) {return false}; var gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl'); if (!gl) {return false}; var instance = gl.getExtension('EXT_disjoint_timer_query');"
+      "__resources": ["webGL"],
+      "__base": "if (!reusableInstances.webGL) {return false}; reusableInstances.webGL.getExtension('EXT_disjoint_timer_query');"
     },
     "EXT_float_blend": {
-      "__base": "var canvas = document.createElement('canvas'); if (!canvas) {return false}; var gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl'); if (!gl) {return false}; var instance = gl.getExtension('EXT_float_blend');"
+      "__resources": ["webGL"],
+      "__base": "if (!reusableInstances.webGL) {return false}; reusableInstances.webGL.getExtension('EXT_float_blend');"
     },
     "EXT_frag_depth": {
-      "__base": "var canvas = document.createElement('canvas'); if (!canvas) {return false}; var gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl'); if (!gl) {return false}; var instance = gl.getExtension('EXT_frag_depth');"
+      "__resources": ["webGL"],
+      "__base": "if (!reusableInstances.webGL) {return false}; reusableInstances.webGL.getExtension('EXT_frag_depth');"
     },
     "EXT_shader_texture_lod": {
-      "__base": "var canvas = document.createElement('canvas'); if (!canvas) {return false}; var gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl'); if (!gl) {return false}; var instance = gl.getExtension('EXT_shader_texture_lod');"
+      "__resources": ["webGL"],
+      "__base": "if (!reusableInstances.webGL) {return false}; reusableInstances.webGL.getExtension('EXT_shader_texture_lod');"
     },
     "EXT_sRGB": {
-      "__base": "var canvas = document.createElement('canvas'); if (!canvas) {return false}; var gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl'); if (!gl) {return false}; var instance = gl.getExtension('EXT_sRGB');"
+      "__resources": ["webGL"],
+      "__base": "if (!reusableInstances.webGL) {return false}; reusableInstances.webGL.getExtension('EXT_sRGB');"
     },
     "EXT_texture_compression_bptc": {
-      "__base": "var canvas = document.createElement('canvas'); if (!canvas) {return false}; var gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl'); if (!gl) {return false}; var instance = gl.getExtension('EXT_texture_compression_bptc');"
+      "__resources": ["webGL"],
+      "__base": "if (!reusableInstances.webGL) {return false}; reusableInstances.webGL.getExtension('EXT_texture_compression_bptc');"
     },
     "EXT_texture_compression_rgtc": {
-      "__base": "var canvas = document.createElement('canvas'); if (!canvas) {return false}; var gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl'); if (!gl) {return false}; var instance = gl.getExtension('EXT_texture_compression_rgtc');"
+      "__resources": ["webGL"],
+      "__base": "if (!reusableInstances.webGL) {return false}; reusableInstances.webGL.getExtension('EXT_texture_compression_rgtc');"
     },
     "EXT_texture_filter_anisotropic": {
-      "__base": "var canvas = document.createElement('canvas'); if (!canvas) {return false}; var gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl'); if (!gl) {return false}; var instance = gl.getExtension('EXT_texture_filter_anisotropic');"
+      "__resources": ["webGL"],
+      "__base": "if (!reusableInstances.webGL) {return false}; reusableInstances.webGL.getExtension('EXT_texture_filter_anisotropic');"
     },
     "GainNode": {
-      "__base": "<%api.AudioContext:audioCtx%> if (!audioCtx) {return false}; var instance = audioCtx.createGain();"
+      "__resources": ["audioContext"],
+      "__base": "if (!reusableInstances.audioContext) {return false;} reusableInstances.audioContext.createGain();"
     },
     "IIRFilterNode": {
-      "__base": "<%api.AudioContext:audioCtx%> if (!audioCtx) {return false}; var instance = audioCtx.createIIRFilter();"
+      "__resources": ["audioContext"],
+      "__base": "if (!reusableInstances.audioContext) {return false;} reusableInstances.audioContext.createIIRFilter();"
     },
     "MediaCapabilities": {
       "__base": "var instance = navigator.mediaCapabilities;"
@@ -135,7 +170,8 @@
     },
     "MediaElementAudioSourceNode": {
       "__resources": ["audio-blip"],
-      "__base": "<%api.AudioContext:audioCtx%> if (!audioCtx) {return false}; var instance = audioCtx.createMediaElementSource(document.getElementById('resource-audio-blip'));"
+      "__resources": ["audioContext"],
+      "__base": "if (!reusableInstances.audioContext) {return false;} reusableInstances.audioContext.createMediaElementSource(document.getElementById('resource-audio-blip'));"
     },
     "MediaSession": {
       "__base": "var instance = navigator.MediaSession;"
@@ -152,11 +188,13 @@
       "__base.disabled": "<%api.MediaDevices:mediaDevices%> if (!mediaDevices) {return false;} var instance = await mediaDevices.getUserMedia({video: true});"
     },
     "MediaStreamAudioDestinationNode": {
-      "__base": "<%api.AudioContext:audioCtx%> if (!audioCtx) {return false}; var instance = audioCtx.createMediaStreamDestination();"
+      "__resources": ["audioContext"],
+      "__base": "if (!reusableInstances.audioContext) {return false;} reusableInstances.audioContext.createMediaStreamDestination();"
     },
     "MediaStreamAudioSourceNode": {
       "__TODO": "DEPENDS ON PROMISE TESTING SUPPORT",
-      "__base.disabled": "<%api.MediaStream:mediaStream%> if (!mediaStream) {return false;} <%api.AudioContext:audioCtx%> if (!audioCtx) {return false}; var instance = audioCtx.createMediaStreamSource(mediaStream);"
+      "__resources": ["audioContext"],
+      "__base.disabled": "<%api.MediaStream:mediaStream%> if (!mediaStream) {return false;} if (!reusableInstances.audioContext) {return false;} reusableInstances.audioContext.createMediaStreamSource(mediaStream);"
     },
     "MediaStreamTrack": {
       "__TODO": "DEPENDS ON PROMISE TESTING SUPPORT",
@@ -164,7 +202,8 @@
     },
     "MediaStreamTrackAudioSourceNode": {
       "__TODO": "DEPENDS ON PROMISE TESTING SUPPORT",
-      "__base.disabled": "<%api.MediaStream:mediaStream%> if (!mediaStream) {return false;} <%api.AudioContext:audioCtx%> if (!audioCtx) {return false}; var instance = audioCtx.createMediaStreamTrackSource(mediaStream);"
+      "__resources": ["audioContext"],
+      "__base.disabled": "<%api.MediaStream:mediaStream%> if (!mediaStream) {return false;} if (!reusableInstances.audioContext) {return false;} reusableInstances.audioContext.createMediaStreamTrackSource(mediaStream);"
     },
     "Navigator": {
       "__base": "var instance = window.navigator;"
@@ -173,13 +212,16 @@
       "__base": "var instance = document.createNodeIterator(document);"
     },
     "OscillatorNode": {
-      "__base": "<%api.AudioContext:audioCtx%> if (!audioCtx) {return false}; var instance = audioCtx.createOscillator();"
+      "__resources": ["audioContext"],
+      "__base": "if (!reusableInstances.audioContext) {return false;} reusableInstances.audioContext.createOscillator();"
     },
     "PannerNode": {
-      "__base": "<%api.AudioContext:audioCtx%> if (!audioCtx) {return false}; var instance = audioCtx.createPanner();"
+      "__resources": ["audioContext"],
+      "__base": "if (!reusableInstances.audioContext) {return false;} reusableInstances.audioContext.createPanner();"
     },
     "StereoPannerNode": {
-      "__base": "<%api.AudioContext:audioCtx%> if (!audioCtx) {return false}; var instance = audioCtx.createStereoPanner();"
+      "__resources": ["audioContext"],
+      "__base": "if (!reusableInstances.audioContext) {return false;} reusableInstances.audioContext.createStereoPanner();"
     },
     "TreeWalker": {
       "__base": "var instance = document.createTreeWalker(document);"
@@ -193,7 +235,8 @@
       "__base": "var el = document.getElementById('resource-video-blank'); var instance = el.videoTracks;"
     },
     "WaveShaperNode": {
-      "__base": "<%api.AudioContext:audioCtx%> if (!audioCtx) {return false}; var instance = audioCtx.createWaveShaper();"
+      "__resources": ["audioContext"],
+      "__base": "if (!reusableInstances.audioContext) {return false;} reusableInstances.audioContext.createWaveShaper();"
     },
     "Window": {
       "__base": "var instance = window;"
