@@ -156,7 +156,7 @@
     },
     "IIRFilterNode": {
       "__resources": ["audioContext"],
-      "__base": "if (!reusableInstances.audioContext) {return false;} reusableInstances.audioContext.createIIRFilter();"
+      "__base": "if (!reusableInstances.audioContext) {return false;} reusableInstances.audioContext.createIIRFilter([1], [1]);"
     },
     "MediaCapabilities": {
       "__base": "var instance = navigator.mediaCapabilities;"
