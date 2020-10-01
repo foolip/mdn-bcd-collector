@@ -121,7 +121,7 @@
       "__base": "<%api.AudioContext:audioCtx%> if (!audioCtx) {return false}; var instance = audioCtx.createGain();"
     },
     "IIRFilterNode": {
-      "__base": "<%api.AudioContext:audioCtx%> if (!audioCtx) {return false}; var instance = audioCtx.createIIRFilter();"
+      "__base": "<%api.AudioContext:audioCtx%> if (!audioCtx) {return false}; var instance = audioCtx.createIIRFilter([1], [1]);"
     },
     "MediaCapabilities": {
       "__base": "var instance = navigator.mediaCapabilities;"
