@@ -319,6 +319,24 @@ describe('build', () => {
 
       assert.deepEqual(getCustomResourcesAPI('foo'), {});
     });
+
+    it('try to get invalid resource', () => {
+      const {getCustomResourcesAPI} = proxyquire('../../build', {
+        './custom-tests.json': {
+          api: {
+            __resources: {},
+            foo: {
+              __resources: ['audio-blip']
+            }
+          }
+        }
+      });
+
+      assert.throws(() => {
+        getCustomResourcesAPI('foo');
+      }, Error,
+      'Resource audio-blip is not defined but referenced in api.foo');
+    });
   });
 
   describe('getCustomTestCSS', () => {
