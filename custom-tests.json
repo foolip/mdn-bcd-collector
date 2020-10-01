@@ -1,5 +1,15 @@
 {
   "api": {
+    "__resources": {
+      "audio-blip": {
+        "type": "audio",
+        "src": ["/media/blip.mp3", "/media/blip.ogg"]
+      },
+      "video-blank": {
+        "type": "video",
+        "src": ["/media/blank.mp4", "/media/blank.webm"]
+      }
+    },
     "ANGLE_instanced_arrays": {
       "__base": "var canvas = document.createElement('canvas'); if (!canvas) {return false}; var gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl'); if (!gl) {return false}; var instance = gl.getExtension('ANGLE_instanced_arrays');"
     },
@@ -33,21 +43,11 @@
       "__base.disabled": "<%api.AudioWorkletNode:worklet%> if (!worklet) {return false}; var instance = worklet.parameters;"
     },
     "AudioTrack": {
-      "__resources": {
-        "audio-blip": {
-          "type": "audio",
-          "src": ["/media/blip.mp3", "/media/blip.ogg"]
-        }
-      },
+      "__resources": ["audio-blip"],
       "__base": "<%api.AudioTrackList:audioTracks%> if (!audioTracks) {return false}; var instance = audioTracks[0];"
     },
     "AudioTrackList": {
-      "__resources": {
-        "audio-blip": {
-          "type": "audio",
-          "src": ["/media/blip.mp3", "/media/blip.ogg"]
-        }
-      },
+      "__resources": ["audio-blip"],
       "__base": "var el = document.getElementById('resource-audio-blip'); var instance = el.audioTracks;"
     },
     "AudioWorkletNode": {
@@ -134,12 +134,7 @@
       "__base": "var instance = navigator.mediaDevices;"
     },
     "MediaElementAudioSourceNode": {
-      "__resources": {
-        "audio-blip": {
-          "type": "audio",
-          "src": ["/media/blip.mp3", "/media/blip.ogg"]
-        }
-      },
+      "__resources": ["audio-blip"],
       "__base": "<%api.AudioContext:audioCtx%> if (!audioCtx) {return false}; var instance = audioCtx.createMediaElementSource(document.getElementById('resource-audio-blip'));"
     },
     "MediaSession": {
@@ -190,21 +185,11 @@
       "__base": "var instance = document.createTreeWalker(document);"
     },
     "VideoTrack": {
-      "__resources": {
-        "video-blank": {
-          "type": "video",
-          "src": ["/media/blank.mp4", "/media/blank.webm"]
-        }
-      },
+      "__resources": ["video-blank"],
       "__base": "<%api.VideoTrackList:videoTracks%> if (!videoTracks) {return false}; var instance = videoTracks[0];"
     },
     "VideoTrackList": {
-      "__resources": {
-        "video-blank": {
-          "type": "video",
-          "src": ["/media/blank.mp4", "/media/blank.webm"]
-        }
-      },
+      "__resources": ["video-blank"],
       "__base": "var el = document.getElementById('resource-video-blank'); var instance = el.videoTracks;"
     },
     "WaveShaperNode": {
