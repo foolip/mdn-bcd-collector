@@ -37,14 +37,14 @@ const {
   cssPropertyToIDLAttribute,
   buildCSS
 } = proxyquire('../../build', {
-  './custom-tests.json': {api: {}, css: {}}
+  './custom-tests.json': {api: {__resources: {}}, css: {}}
 });
 
 describe('build', () => {
   describe('getCustomTestAPI', () => {
     describe('no custom tests', () => {
       const {getCustomTestAPI} = proxyquire('../../build', {
-        './custom-tests.json': {api: {}, css: {}}
+        './custom-tests.json': {api: {__resources: {}}, css: {}}
       });
 
       it('interface', () => {
@@ -283,13 +283,14 @@ describe('build', () => {
       const {getCustomResourcesAPI} = proxyquire('../../build', {
         './custom-tests.json': {
           api: {
-            foo: {
-              __resources: {
-                'audio-blip': {
-                  type: 'audio',
-                  src: ['/media/blip.mp3', '/media/blip.ogg']
-                }
+            __resources: {
+              'audio-blip': {
+                type: 'audio',
+                src: ['/media/blip.mp3', '/media/blip.ogg']
               }
+            },
+            foo: {
+              __resources: ['audio-blip']
             }
           }
         }
@@ -310,12 +311,31 @@ describe('build', () => {
       const {getCustomResourcesAPI} = proxyquire('../../build', {
         './custom-tests.json': {
           api: {
+            __resources: {},
             foo: {}
           }
         }
       });
 
       assert.deepEqual(getCustomResourcesAPI('foo'), {});
+    });
+
+    it('try to get invalid resource', () => {
+      const {getCustomResourcesAPI} = proxyquire('../../build', {
+        './custom-tests.json': {
+          api: {
+            __resources: {},
+            foo: {
+              __resources: ['audio-blip']
+            }
+          }
+        }
+      });
+
+      assert.throws(() => {
+        getCustomResourcesAPI('foo');
+      }, Error,
+      'Resource audio-blip is not defined but referenced in api.foo');
     });
   });
 
