@@ -67,12 +67,12 @@ const getSafariOS = (version) => {
 
   switch (version) {
     case '10':
-      return 'OS X 10.11';
+      return '10.11';
     case '11':
-      return 'macOS 10.12';
+      return '10.12';
     case '12':
     case '13':
-      return 'macOS 10.13';
+      return '10.13';
     default:
       return undefined;
   }
@@ -109,8 +109,12 @@ const run = async (browser, version) => {
   );
 
   if (browser === 'safari') {
-    const platform = getSafariOS(version);
-    capabilities.set('platform', platform);
+    const osVersion = getSafariOS(version);
+    capabilities.set('os', 'OS X');
+    capabilities.set('os_version', osVersion);
+  } else {
+    capabilities.set('os', 'Windows');
+    capabilities.set('os_version', '10');
   }
 
   const prefs = new logging.Preferences();
@@ -194,6 +198,7 @@ const runAll = async (limitBrowser) => {
     edge: filterVersions(bcd.browsers.edge.releases, 12),
     firefox: filterVersions(bcd.browsers.firefox.releases, 35),
     ie: filterVersions(bcd.browsers.ie.releases, 11),
+    opera: filterVersions(bcd.browsers.opera.releases, 27),
     safari: filterVersions(bcd.browsers.safari.releases, 9)
   };
 
