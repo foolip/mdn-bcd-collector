@@ -109,9 +109,9 @@ const run = async (browser, version) => {
   );
 
   if (browser === 'safari') {
-    const os_version = getSafariOS(version);
+    const osVersion = getSafariOS(version);
     capabilities.set('os', 'OS X');
-    capabilities.set('os_version', os_version);
+    capabilities.set('os_version', osVersion);
   } else {
     capabilities.set('os', 'Windows');
     capabilities.set('os_version', '10');
@@ -198,7 +198,7 @@ const runAll = async (limitBrowser) => {
     edge: filterVersions(bcd.browsers.edge.releases, 12),
     firefox: filterVersions(bcd.browsers.firefox.releases, 35),
     ie: filterVersions(bcd.browsers.ie.releases, 11),
-    opera: filterVersion(bcd.browsers.opera.releases, 27),
+    opera: filterVersions(bcd.browsers.opera.releases, 27),
     safari: filterVersions(bcd.browsers.safari.releases, 9)
   };
 
