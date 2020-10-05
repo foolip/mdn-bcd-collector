@@ -15,6 +15,8 @@
 'use strict';
 
 const path = require('path');
+const querystring = require('querystring');
+
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const uniqueString = require('unique-string');
@@ -95,8 +97,10 @@ app.use(express.static('generated'));
 
 app.post('/api/get', (req, res) => {
   const testSelection = (req.body.testSelection || '').replace(/\./g, '/');
-  const query = req.body.limitExposure ? `?exposure=${req.body.limitExposure}` : '';
-  res.redirect(`/tests/${testSelection}${query}`);
+  const queryParams = {...(req.body.limitExposure && {exposure: req.body.limitExposure})};
+  const query = querystring.encode(queryParams);
+  
+  res.redirect(`/tests/${testSelection}${query ? `?${query}`: ''}`);
 });
 
 app.post('/api/results', (req, res) => {
