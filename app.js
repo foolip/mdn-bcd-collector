@@ -86,11 +86,16 @@ app.set('layout extractScripts', true);
 // Additional config
 app.use(cookieParser());
 app.use(cookieSession);
+app.use(express.urlencoded({extended: true}));
 app.use(express.json({limit: '32mb'}));
 app.use(express.static('static'));
 app.use(express.static('generated'));
 
 // Backend API
+
+app.post('/api/get', (req, res) => {
+  res.redirect(`/tests/${req.body.testSelection.replace(/\./g, '/')}${req.body.limitExposure || ''}`);
+});
 
 app.post('/api/results', (req, res) => {
   if (!req.is('json')) {
