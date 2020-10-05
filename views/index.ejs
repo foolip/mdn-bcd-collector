@@ -1,37 +1,64 @@
 <%- contentFor('body') %>
 <h1>mdn-bcd-collector</h1>
-<p>Data collection service for <a href="https://github.com/mdn/browser-compat-data">mdn/browser-compat-data</a>. This website provides automatic feature detection for Web APIs and CSS properties, to assist in obtaining data for the BCD project.</p>
+<div id="homeInfo">
+  <p>Data collection service for <a href="https://github.com/mdn/browser-compat-data">@mdn/browser-compat-data</a>. This website provides automatic feature detection for Web APIs and CSS properties, to assist in obtaining data for the BCD project.</p>
+  <p id="betaNotice">Note: this website is in beta; not all feature detection is accurate yet. If you find any errors, please <a href="https://github.com/foolip/mdn-bcd-collector/issues/new">file an issue</a> in the GitHub repository.</p>
+</div>
 
-<form id="testForm">
-  <input type="submit" id="start" value="Run" />
-  <datalist id="tests">
-    <% tests.forEach(function(test) { %>
-      <option value="<%- test %>"></option>
-    <% }); %>
-  </datalist>
-  <input id="testSelection" list="tests" placeholder="All Tests" size="40" />
-  <br /><br />
-  <div id="limitExposureBox">
-    <label for="limitExposure">Limit Exposure:</label>
-    <select id="limitExposure">
-      <option value="">All Global Exposures</option>
-      <option value="?exposure=Window">Window</option>
-      <option value="?exposure=Worker">Dedicated Worker</option>
-      <option value="?exposure=SharedWorker">Shared Worker</option>
-      <option value="?exposure=ServiceWorker">Service Worker</option>
-    </select>
-  </div>
-</form>
+<span id="forkongithub"><a href="https://github.com/foolip/mdn-bcd-collector">Fork me on GitHub</a></span>
 
-<p>Note: this website is in beta; not all feature detection is accurate yet. If you find any errors, please file an issue on the GitHub page.</p>
-<p>Known caveats:</p>
+<h2>Run Tests</h2>
+<div class="paper">
+  <form id="testForm">
+    <input type="submit" id="start" value="Run" />
+    <datalist id="tests">
+      <% tests.forEach(function(test) { %>
+        <option value="<%- test %>"></option>
+      <% }); %>
+    </datalist>
+    <input id="testSelection" list="tests" placeholder="All Tests" size="40" />
+    <br /><br />
+    <div id="limitExposureBox">
+      <label for="limitExposure">Limit Exposure:</label>
+      <select id="limitExposure">
+        <option value="">All Global Exposures</option>
+        <option value="?exposure=Window">Window</option>
+        <option value="?exposure=Worker">Dedicated Worker</option>
+        <option value="?exposure=SharedWorker">Shared Worker</option>
+        <option value="?exposure=ServiceWorker">Service Worker</option>
+      </select>
+    </div>
+  </form>
+</div>
+
+<h2>Known Caveats</h2>
 <ul>
   <li>Detection for features under alternative names is not yet supported</li>
   <li>In older browsers, some attributes aren't initialized in the API prototypes, resulting in false negatives (see <a href="https://github.com/foolip/mdn-bcd-collector/issues/406">#406</a>)</li>
   <li>Some APIs are accessed through other APIs and aren't exposed on their own; custom tests have not been written for them all</li>
 </ul>
 
-<p><a href="https://github.com/foolip/mdn-bcd-collector">Source on GitHub</a></p>
+<h2>Supported Browsers</h2>
+<div id="compat-table">
+  <div class="compat-table-entry">
+    <img src="/images/browsers/chrome.png" /><p>Chrome 1+</p>
+  </div>
+  <div class="compat-table-entry">
+    <img src="/images/browsers/edge.png" /><p>Edge 12+</p>
+  </div>
+  <div class="compat-table-entry">
+    <img src="/images/browsers/firefox.png" /><p>Firefox 1+</p>
+  </div>
+  <div class="compat-table-entry">
+    <img src="/images/browsers/ie.png" /><p>Internet Explorer 9+</p>
+  </div>
+  <div class="compat-table-entry">
+    <img src="/images/browsers/opera.png" /><p>Opera 12.1+</p>
+  </div>
+  <div class="compat-table-entry">
+    <img src="/images/browsers/safari.png" /><p>Safari 3+</p>
+  </div>
+</div>
 
 <script>
   function main() {

@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto&family=Roboto+Mono&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Roboto:wght@400;700&display=swap');
 
 body {
   font-family: 'Roboto', Arial, sans-serif;
@@ -40,6 +40,117 @@ input::placeholder {
   color: #ccc;
 }
 
+.paper {
+  padding: 12px 8px;
+  background-color: #eee;
+  box-shadow: 0 0 10px black;
+  border-radius: 8px;
+}
+
+/* https://codepo8.github.io/css-fork-on-github-ribbon/ */
+
+#forkongithub {
+  position: absolute;
+  display: block;
+  top: 0;
+  right: 0;
+  width: 180px;
+  height: 180px;
+  overflow: hidden;
+  z-index: 9999;
+}
+
+#forkongithub a {
+  background: #3d8a3f;
+  color: #fff;
+  text-decoration: none;
+  text-align: center;
+  font-weight: bold;
+  padding: 5px 40px;
+  font-size: 0.75rem;
+  line-height: 1.5rem;
+  transition: 0.2s;
+
+  width: 150px;
+  position: absolute;
+  top: 50px;
+  right: -50px;
+  transform: rotate(45deg);
+  -webkit-transform: rotate(45deg);
+  -ms-transform: rotate(45deg);
+  -moz-transform: rotate(45deg);
+  -o-transform: rotate(45deg);
+  box-shadow: 4px 4px 10px rgba(0,0,0,0.8);
+}
+
+#forkongithub a:hover {
+  background: #4caf50;
+  color: #fff;
+}
+
+#forkongithub a::before,#forkongithub a::after {
+  content: "";
+  width: 100%;
+  display: block;
+  position: absolute;
+  top: 1px;
+  left: 0;
+  height: 1px;
+  background: #fff;
+}
+
+#forkongithub a::after {
+  bottom: 1px;
+  top: auto;
+}
+
+@media screen and (max-width: 600px), screen and (max-device-width: 600px) {
+  #forkongithub {
+    width: 120px;
+    height: 120px;
+  }
+
+  #forkongithub a {
+    font-size: 0.5rem;
+    line-height: 1rem;
+    width: 100px;
+    top: 30px;
+    right: -50px;
+  }
+}
+/* End */
+
+#homeInfo {
+  margin-right: 50px;
+}
+
+@media screen and (max-width: 600px), screen and (max-device-width: 600px) {
+  #homeInfo {
+    margin-right: 5px;
+  }
+}
+
+#betaNotice {
+  color: #700;
+  font-weight: bold;
+}
+
+#compat-table .compat-table-entry {
+  display: inline-block;
+  margin-right: 16px;
+}
+
+#compat-table .compat-table-entry img {
+  display: inline-block;
+  width: 32px;
+  height: 32px;
+}
+
+#compat-table .compat-table-entry p {
+  display: inline-block;
+  margin-left: 8px;
+}
+
 @media (prefers-color-scheme: dark) {
   body {
     background-color: #111;
@@ -48,5 +159,13 @@ input::placeholder {
 
   a {
     color: #99f;
+  }
+
+  .paper {
+    background-color: #191919;
+  }
+
+  #betaNotice {
+    color: #faa;
   }
 }
