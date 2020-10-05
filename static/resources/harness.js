@@ -30,6 +30,14 @@
   };
   var reusableInstances = {};
 
+  if (!window.console) {
+    // IE undefined console workaround
+    console = {
+      log: function() {},
+      error: function() {}
+    };
+  }
+
   function stringify(value) {
     try {
       return String(value);
