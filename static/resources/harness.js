@@ -30,7 +30,7 @@
   };
   var reusableInstances = {};
 
-  if (!window.console) {
+  if (!('console' in self)) {
     // IE undefined console workaround
     console = {
       log: function() {},
