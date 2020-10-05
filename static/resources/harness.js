@@ -30,6 +30,15 @@
   };
   var reusableInstances = {};
 
+  if (!('console' in self)) {
+    // IE undefined console workaround
+    // eslint-disable-next-line no-global-assign
+    console = {
+      log: function() {},
+      error: function() {}
+    };
+  }
+
   function stringify(value) {
     try {
       return String(value);
