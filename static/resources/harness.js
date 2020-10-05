@@ -14,7 +14,7 @@
 
 /* global console, document, window, location, navigator, XMLHttpRequest,
           self, Worker, Promise, setTimeout, clearTimeout, MessageChannel,
-          SharedWorker */
+          SharedWorker, ActiveXObject */
 
 'use strict';
 
