@@ -15,6 +15,8 @@
 'use strict';
 
 const path = require('path');
+const querystring = require('querystring');
+
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const uniqueString = require('unique-string');
@@ -86,11 +88,22 @@ app.set('layout extractScripts', true);
 // Additional config
 app.use(cookieParser());
 app.use(cookieSession);
+app.use(express.urlencoded({extended: true}));
 app.use(express.json({limit: '32mb'}));
 app.use(express.static('static'));
 app.use(express.static('generated'));
 
 // Backend API
+
+app.post('/api/get', (req, res) => {
+  const testSelection = (req.body.testSelection || '').replace(/\./g, '/');
+  const queryParams = {
+    ...(req.body.limitExposure && {exposure: req.body.limitExposure})
+  };
+  const query = querystring.encode(queryParams);
+
+  res.redirect(`/tests/${testSelection}${query ? `?${query}`: ''}`);
+});
 
 app.post('/api/results', (req, res) => {
   if (!req.is('json')) {
