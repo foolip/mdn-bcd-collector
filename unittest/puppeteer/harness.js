@@ -41,7 +41,15 @@ describe('harness.js', () => {
   after(() => server.close());
 
   for (const product of products) {
-    it(product, async () => {
+    it(product, async function() {
+      if (product === 'firefox' && process.platform === 'win32' &&
+        require('../../package.json').devDependencies.puppeteer === '5.3.1') {
+        // Browser.close() Firefox support is broken on Windows and causes hang
+        // https://github.com/puppeteer/puppeteer/issues/5673
+        /* eslint-disable no-invalid-this */
+        this.skip();
+        return;
+      }
       const browser = await puppeteer.launch({product});
       after(() => browser.close());
 
