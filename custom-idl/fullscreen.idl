@@ -52,6 +52,16 @@ partial interface Document {
   void msExitFullscreen();
 };
 
+// Event handler attributes, added widely to find them wherever they are.
+partial interface mixin GlobalEventHandlers {
+  attribute EventHandler onmozfullscreenchange;
+  attribute EventHandler onmozfullscreenerror;
+  attribute EventHandler onmsfullscreenchange;
+  attribute EventHandler onmsfullscreenerror;
+  attribute EventHandler onwebkitfullscreenchange;
+  attribute EventHandler onwebkitfullscreenerror;
+};
+
 // In BCD, but only prefixed variants of this have shipped:
 partial interface Window {
   readonly attribute boolean fullScreen;
