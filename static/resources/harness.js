@@ -438,28 +438,36 @@
       }
     }
 
-    if ('XMLHttpRequest' in self) {
-      try {
-        var body = JSON.stringify(results);
-        var client = new XMLHttpRequest();
-        client.open('POST', '/api/results?for='+encodeURIComponent(location.href));
-        client.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
-        client.send(body);
-        client.onreadystatechange = function() {
-          if (client.readyState == 4) {
-            if (client.status >= 200 && client.status <= 299) {
-              updateStatus('Results uploaded. <a href="/results" id="submit">Submit to GitHub</a>');
-            } else {
-              updateStatus('Failed to upload results: server error.');
-            }
-          }
-        };
-      } catch (e) {
-        updateStatus('Failed to upload results: client error.');
-        console.error(e);
+    try {
+      var body = JSON.stringify(results);
+
+      var client;
+      if ('XMLHttpRequest' in self) {
+        client = new XMLHttpRequest();
+      } else if ('ActiveXObject' in self) {
+        client = new ActiveXObject('Microsoft.XMLHTTP');
       }
-    } else {
-      updateStatus('Cannot upload results: XMLHttpRequest is not supported.');
+
+      if (!client) {
+        updateStatus('Cannot upload results: XMLHttpRequest is not supported.');
+        return;
+      }
+
+      client.open('POST', '/api/results?for='+encodeURIComponent(location.href));
+      client.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+      client.send(body);
+      client.onreadystatechange = function() {
+        if (client.readyState == 4) {
+          if (client.status >= 200 && client.status <= 299) {
+            updateStatus('Results uploaded. <a href="/results" id="submit">Submit to GitHub</a>');
+          } else {
+            updateStatus('Failed to upload results: server error.');
+          }
+        }
+      };
+    } catch (e) {
+      updateStatus('Failed to upload results: client error.');
+      console.error(e);
     }
   }
 

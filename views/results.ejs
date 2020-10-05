@@ -13,7 +13,19 @@
 function exportGitHub() {
   var status = document.getElementById('status');
   var link = document.getElementById('link');
-  var client = new XMLHttpRequest();
+
+  var client;
+  if ('XMLHttpRequest' in self) {
+    client = new XMLHttpRequest();
+  } else if ('ActiveXObject' in self) {
+    client = new ActiveXObject('Microsoft.XMLHTTP');
+  }
+
+  if (!client) {
+    status.innerHTML = 'Cannot upload results: XMLHttpRequest is not supported.';
+    return;
+  }
+
   client.open('POST', '/api/results/export/github', true);
   client.send();
   status.textContent = 'Exporting...';
