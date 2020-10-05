@@ -32,6 +32,7 @@
 
   if (!('console' in self)) {
     // IE undefined console workaround
+    // eslint-disable-next-line no-global-assign
     console = {
       log: function() {},
       error: function() {}
