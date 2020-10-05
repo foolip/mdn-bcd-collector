@@ -13,10 +13,22 @@
 function exportGitHub() {
   var status = document.getElementById('status');
   var link = document.getElementById('link');
-  var client = new XMLHttpRequest();
+
+  var client;
+  if ('XMLHttpRequest' in self) {
+    client = new XMLHttpRequest();
+  } else if ('ActiveXObject' in self) {
+    client = new ActiveXObject('Microsoft.XMLHTTP');
+  }
+
+  if (!client) {
+    status.innerHTML = 'Cannot upload results: XMLHttpRequest is not supported.';
+    return;
+  }
+
   client.open('POST', '/api/results/export/github', true);
   client.send();
-  status.textContent = 'Exporting...';
+  status.innerHTML = 'Exporting...';
   client.onreadystatechange = function() {
     if (client.readyState == 4) {
       var response = {};
@@ -28,10 +40,10 @@ function exportGitHub() {
       }
 
       if (response.error) {
-        status.textContent = 'Failed to export: ' + response.error;
+        status.innerHTML = 'Failed to export: ' + response.error;
       } else {
-        status.textContent = 'Exported to';
-        link.href = link.textContent = response.html_url;
+        status.innerHTML = 'Exported to';
+        link.href = link.innerHTML = response.html_url;
       }
     }
   }
