@@ -62,7 +62,7 @@ partial interface mixin GlobalEventHandlers {
   attribute EventHandler onwebkitfullscreenerror;
 };
 
-// In BCD, but only prefixed variants of this have shipped:
+// Capitalization variant of window.fullscreen supported by Firefox:
 partial interface Window {
   readonly attribute boolean fullScreen;
 };
