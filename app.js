@@ -94,7 +94,9 @@ app.use(express.static('generated'));
 // Backend API
 
 app.post('/api/get', (req, res) => {
-  res.redirect(`/tests/${req.body.testSelection.replace(/\./g, '/')}${req.body.limitExposure || ''}`);
+  const testSelection = (req.body.testSelection || '').replace(/\./g, '/');
+  const query = req.body.limitExposure ? `?exposure=${req.body.limitExposure}` : '';
+  res.redirect(`/tests/${testSelection}${query}`);
 });
 
 app.post('/api/results', (req, res) => {
