@@ -151,6 +151,10 @@ input::placeholder {
   margin-left: 8px;
 }
 
+.result p {
+  margin-bottom: 0;
+}
+
 @media (prefers-color-scheme: dark) {
   body {
     background-color: #111;
