@@ -1,3 +1,58 @@
+// https://blog.foolip.org/2014/07/21/history-of-the-fullscreen-api/
+
+partial interface HTMLVideoElement {
+  readonly attribute boolean webkitSupportsFullscreen;
+  readonly attribute boolean webkitDisplayingFullscreen;
+  void webkitEnterFullscreen();
+  void webkitExitFullscreen();
+  void webkitEnterFullScreen();
+  void webkitExitFullScreen();
+};
+
+partial interface Element {
+  const unsigned short ALLOW_KEYBOARD_INPUT = 1;
+  void webkitRequestFullScreen(unsigned short flags);
+};
+
+partial interface Document {
+  readonly attribute boolean webkitIsFullScreen;
+  readonly attribute boolean webkitFullScreenKeyboardInputAllowed;
+  readonly attribute Element? webkitCurrentFullScreenElement;
+  void webkitCancelFullScreen();
+};
+
+partial interface Element {
+  void mozRequestFullScreen();
+};
+
+partial interface Document {
+  readonly attribute boolean mozFullScreen;
+  readonly attribute boolean mozFullScreenEnabled;
+  readonly attribute Element? mozFullScreenElement;
+  void mozCancelFullScreen();
+};
+
+partial interface Element {
+  void webkitRequestFullscreen();
+};
+
+partial interface Document {
+  readonly attribute boolean webkitFullscreenEnabled;
+  readonly attribute Element? webkitFullscreenElement;
+  void webkitExitFullscreen();
+};
+
+partial interface Element {
+  void msRequestFullscreen();
+};
+
+partial interface Document {
+  readonly attribute boolean msFullscreenEnabled;
+  readonly attribute Element? msFullscreenElement;
+  void msExitFullscreen();
+};
+
+// In BCD, but only prefixed variants of this have shipped:
 partial interface Window {
   readonly attribute boolean fullScreen;
 };

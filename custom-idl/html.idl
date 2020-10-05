@@ -154,12 +154,6 @@ partial interface HTMLStyleElement {
 };
 
 partial interface HTMLVideoElement {
-  readonly attribute boolean webkitSupportsFullscreen;
-  readonly attribute boolean webkitDisplayingFullscreen;
-  void webkitEnterFullscreen();
-  void webkitExitFullscreen();
-  void webkitEnterFullScreen();
-  void webkitExitFullScreen();
   readonly attribute unsigned long webkitDecodedFrameCount;
   readonly attribute unsigned long webkitDroppedFrameCount;
 
