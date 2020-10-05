@@ -390,43 +390,68 @@
 
     updateStatus('Posting results to server...');
 
-    var response = '';
-    for (var i=0; i<results.length; i++) {
-      var result = results[i];
-      response += result.name;
-      if (result.name.indexOf('css.') != 0) {
-        response += ' (' + result.info.exposure + ' exposure)';
-      }
-      response += ': <strong>' + result.result;
-      if (result.prefix) {
-        response += ' (' + result.prefix + ' prefix)';
-      }
-      if (result.message) {
-        response += ' (' + result.message + ')';
-      }
-      response += '</strong>\n<code>' + result.info.code + '</code>\n\n';
-    }
-
     var resultsEl = document.getElementById('results');
     if (resultsEl) {
-      resultsEl.innerHTML = '<hr />' + response
-          .replace(/\n/g, '<br />');
+      resultsEl.appendChild(document.createElement('hr'));
+
+      for (var i=0; i<results.length; i++) {
+        var result = results[i];
+
+        var thisResultEl = document.createElement('div');
+        thisResultEl.className = 'result';
+
+        var resultNameEl = document.createElement('p');
+
+        resultNameEl.innerHTML = result.name;
+        if (result.name.indexOf('css.') != 0) {
+          resultNameEl.innerHTML += ' (' + result.info.exposure + ' exposure)';
+        }
+        resultNameEl.innerHTML += ':&nbsp;';
+
+        var resultValueEl = document.createElement('strong');
+        resultValueEl.innerHTML = result.result;
+        if (result.prefix) {
+          resultValueEl.innerHTML += ' (' + result.prefix + ' prefix)';
+        }
+        if (result.message) {
+          resultValueEl.innerHTML += ' (' + result.message + ')';
+        }
+        resultNameEl.appendChild(resultValueEl);
+        thisResultEl.appendChild(resultNameEl);
+
+        var codeEl = document.createElement('code');
+        codeEl.innerHTML = result.info.code;
+        thisResultEl.appendChild(codeEl);
+        thisResultEl.appendChild(document.createElement('br'));
+        thisResultEl.appendChild(document.createElement('br'));
+
+        resultsEl.appendChild(thisResultEl);
+      }
     }
 
-    var body = JSON.stringify(results);
-    var client = new XMLHttpRequest();
-    client.open('POST', '/api/results?for='+encodeURIComponent(location.href));
-    client.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
-    client.send(body);
-    client.onreadystatechange = function() {
-      if (client.readyState == 4) {
-        if (client.status >= 200 && client.status <= 299) {
-          updateStatus('Results uploaded. <a href="/results" id="submit">Submit to GitHub</a>');
-        } else {
-          updateStatus('Failed to upload results.');
-        }
+    if ('XMLHttpRequest' in self) {
+      try {
+        var body = JSON.stringify(results);
+        var client = new XMLHttpRequest();
+        client.open('POST', '/api/results?for='+encodeURIComponent(location.href));
+        client.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+        client.send(body);
+        client.onreadystatechange = function() {
+          if (client.readyState == 4) {
+            if (client.status >= 200 && client.status <= 299) {
+              updateStatus('Results uploaded. <a href="/results" id="submit">Submit to GitHub</a>');
+            } else {
+              updateStatus('Failed to upload results: server error.');
+            }
+          }
+        };
+      } catch (e) {
+        updateStatus('Failed to upload results: client error.');
+        console.error(e);
       }
-    };
+    } else {
+      updateStatus('Cannot upload results: XMLHttpRequest is not supported.');
+    }
   }
 
   // Service Worker helpers
