@@ -18,6 +18,7 @@ const chai = require('chai');
 const chaiHttp = require('chai-http');
 chai.use(chaiHttp);
 const assert = chai.assert;
+const expect = chai.expect;
 
 const {app, version} = require('../../app');
 const agent = chai.request.agent(app);
@@ -113,6 +114,50 @@ describe('/api/results', () => {
         .query({for: testURL})
         .send('my bad results');
     assert.equal(res.status, 400);
+  });
+});
+
+describe('/api/get', () => {
+  it('get all tests, no post vars', async () => {
+    const res = await agent.post('/api/get')
+        .send({});
+    expect(res).to.redirectTo(/\/tests\/$/);
+  });
+
+  it('get all tests, with post vars', async () => {
+    const res = await agent.post('/api/get')
+        .send({testSelection: '', limitExposure: ''});
+    expect(res).to.redirectTo(/\/tests\/$/);
+  });
+
+  it('get all tests, limit exposure', async () => {
+    const res = await agent.post('/api/get')
+        .send({testSelection: '', limitExposure: 'Window'});
+    expect(res).to.redirectTo(/\/tests\/\?exposure=Window$/);
+  });
+
+  it('get "api"', async () => {
+    const res = await agent.post('/api/get')
+        .send({testSelection: 'api', limitExposure: ''});
+    expect(res).to.redirectTo(/\/tests\/api$/);
+  });
+
+  it('get "api", limit exposure', async () => {
+    const res = await agent.post('/api/get')
+        .send({testSelection: 'api', limitExposure: 'Window'});
+    expect(res).to.redirectTo(/\/tests\/api\?exposure=Window$/);
+  });
+
+  it('get specific test', async () => {
+    const res = await agent.post('/api/get')
+        .send({testSelection: 'api.AbortController.signal', limitExposure: ''});
+    expect(res).to.redirectTo(/\/tests\/api\/AbortController\/signal$/);
+  });
+
+  it('get specific test, limit exposure', async () => {
+    const res = await agent.post('/api/get')
+        .send({testSelection: 'api.AbortController.signal', limitExposure: 'Window'});
+    expect(res).to.redirectTo(/\/tests\/api\/AbortController\/signal\?exposure=Window$/);
   });
 });
 
