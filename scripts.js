@@ -23,15 +23,34 @@ const exec = (cmd, env) => {
 const prepare = () => {
   try {
     process.chdir('node_modules/puppeteer');
-  } catch {
+  } catch (e) {
     return;
   }
   exec('node install.js', {PUPPETEER_PRODUCT: 'firefox'});
 };
 
-const command = process.argv[2];
-if (command === 'prepare') {
-  prepare();
-} else if (command === 'unittest') {
-  exec('nyc mocha --recursive unittest', {NODE_ENV: 'test'});
+if (require.main === module) {
+  const {argv} = require('yargs').command(
+      '$0 <command>',
+      'Run an action',
+      (yargs) => {
+        yargs
+            .positional('command', {
+              describe: 'What command to run',
+              type: 'string',
+              choices: ['unittest', 'prepare']
+            });
+      }
+  );
+
+  switch (argv.command) {
+    case 'prepare':
+      prepare();
+      break;
+    case 'unittest':
+      exec('nyc mocha --recursive unittest', {NODE_ENV: 'test'});
+      break;
+    default:
+      console.error(`Unknown command ${argv.command}!`);
+  }
 }

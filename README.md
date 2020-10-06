@@ -48,10 +48,11 @@ are not supported. You may use any testing service, such as SauceLabs,
 BrowserStack, LambdaTest, etc. -- please check with your provider on how to
 configure your WebDriver URL.
 
-You can also test just a single browser by defining the `BROWSER` environment variable:
+You can also limit the browsers to test by defining browsers as arguments:
 
 ```sh
-BROWSER=chrome npm run selenium
+npm run selenium chrome
+npm run selenium edge ie
 ```
 
 ## Running the unit tests and linter

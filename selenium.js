@@ -187,7 +187,7 @@ const run = async (browser, version) => {
   await driver.quit();
 };
 
-const runAll = async (limitBrowser) => {
+const runAll = async (limitBrowsers) => {
   if (!seleniumUrl) {
     logger.error('A Selenium remote WebDriver URL is not defined in secrets.json.  Please define your Selenium remote.');
     return false;
@@ -201,8 +201,9 @@ const runAll = async (limitBrowser) => {
     safari: filterVersions(bcd.browsers.safari.releases, 9)
   };
 
-  if (limitBrowser) {
-    browsersToTest = {[limitBrowser]: browsersToTest[limitBrowser]};
+  if (limitBrowsers) {
+    browsersToTest = Object.fromEntries(Object.entries(browsersToTest)
+        .filter(([k]) => (limitBrowsers.includes(k))));
   }
 
   // eslint-disable-next-line guard-for-in
@@ -224,7 +225,20 @@ const runAll = async (limitBrowser) => {
 
 /* istanbul ignore if */
 if (require.main === module) {
-  if (runAll(process.env.BROWSER) === false) {
+  const {argv} = require('yargs').command(
+      '$0 [browser..]',
+      'Run Selenium on several browser versions',
+      (yargs) => {
+        yargs
+            .positional('browser', {
+              describe: 'Limit the browser(s) to test',
+              type: 'string',
+              choices: ['chrome', 'edge', 'firefox', 'ie', 'safari']
+            });
+      }
+  );
+
+  if (runAll(argv.browser) === false) {
     process.exit(1);
   }
 } else {
