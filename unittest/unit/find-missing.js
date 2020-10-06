@@ -16,7 +16,7 @@
 
 const assert = require('chai').assert;
 
-const proxyquire = require('proxyquire');
+const proxyquire = require('proxyquire').noCallThru();
 
 const tests = {
   'api.AbortController': {},
@@ -54,11 +54,9 @@ const bcd = {
   }
 };
 
-const {traverseFeatures, findMissing} = proxyquire('../../find-missing', {
+const {traverseFeatures, getMissing} = proxyquire('../../find-missing', {
   './tests.json': tests,
-  // Object.assign used to mitigate loading bug
-  // https://github.com/foolip/mdn-bcd-collector/pull/553#discussion_r495793082
-  '@mdn/browser-compat-data': Object.assign({}, bcd)
+  '@mdn/browser-compat-data': bcd
 });
 
 describe('find-missing', () => {
@@ -74,12 +72,20 @@ describe('find-missing', () => {
     ]);
   });
 
-  it('findMissing', () => {
-    assert.deepEqual(findMissing(bcd, ''), [
-      'api.AbortController.dummy',
-      'api.DummyAPI',
-      'api.DummyAPI.dummy',
-      'css.properties.font-face'
-    ]);
+  describe('getMissing', () => {
+    it('collector -> bcd', () => {
+      assert.deepEqual(getMissing(), [
+        'api.AbortController.dummy',
+        'api.DummyAPI',
+        'api.DummyAPI.dummy',
+        'css.properties.font-face'
+      ]);
+    });
+
+    it('bcd -> collector', () => {
+      assert.deepEqual(getMissing('bcd-to-collector'), [
+        'javascript.builtins.array'
+      ]);
+    });
   });
 });

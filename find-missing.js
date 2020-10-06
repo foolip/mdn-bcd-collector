@@ -23,16 +23,11 @@ const traverseFeatures = (obj, identifier) => {
   return features;
 };
 
-const findMissing = () => {
-  const bcdEntries = [
-    ...traverseFeatures(bcd.api, 'api.'),
-    ...traverseFeatures(bcd.css.properties, 'css.properties.')
-  ];
-  const collectorEntries = Object.keys(tests);
+const findMissing = (entries1, entries2) => {
   const missingEntries = [];
 
-  for (const entry of bcdEntries) {
-    if (!collectorEntries.includes(entry)) {
+  for (const entry of entries1) {
+    if (!entries2.includes(entry)) {
       missingEntries.push(entry);
     }
   }
@@ -40,9 +35,25 @@ const findMissing = () => {
   return missingEntries;
 };
 
+const getMissing = (direction = 'collector-to-bcd') => {
+  const bcdEntries = [
+    ...traverseFeatures(bcd.api, 'api.'),
+    ...traverseFeatures(bcd.css.properties, 'css.properties.')
+  ];
+  const collectorEntries = Object.keys(tests);
+
+  switch (direction) {
+    case 'bcd-to-collector':
+      return findMissing(collectorEntries, bcdEntries);
+    case 'collector-to-bcd':
+    default:
+      return findMissing(bcdEntries, collectorEntries);
+  }
+};
+
 /* istanbul ignore next */
 const main = () => {
-  console.log(findMissing().join('\n'));
+  console.log(getMissing().join('\n'));
 };
 
 /* istanbul ignore if */
@@ -51,6 +62,7 @@ if (require.main === module) {
 } else {
   module.exports = {
     traverseFeatures,
-    findMissing
+    findMissing,
+    getMissing
   };
 }
