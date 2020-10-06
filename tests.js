@@ -14,6 +14,8 @@
 
 'use strict';
 
+const didYouMean = require('didyoumean');
+
 class Tests {
   constructor(options) {
     this.tests = options.tests;
@@ -48,6 +50,10 @@ class Tests {
 
   listEndpoints() {
     return Object.keys(this.endpoints);
+  }
+
+  didYouMean(input) {
+    return didYouMean(input, this.listEndpoints());
   }
 
   getTests(endpoint, testExposure) {
