@@ -177,10 +177,9 @@ app.all('/tests/*', (req, res) => {
       tests: foundTests
     });
   } else {
-    res.status(404).render('error', {
-      title: `Tests Not Found`,
-      message: `Could not find tests for ${ident}.`,
-      url: req.url
+    res.status(404).render('testnotfound', {
+      ident: ident,
+      suggestion: tests.didYouMean(ident)
     });
   }
 });
