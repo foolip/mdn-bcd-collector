@@ -45,15 +45,33 @@ const getMissing = (direction = 'collector-to-bcd') => {
   switch (direction) {
     case 'bcd-to-collector':
       return findMissing(collectorEntries, bcdEntries);
-    case 'collector-to-bcd':
     default:
+      console.log(`Direction '${direction}' is unknown; defaulting to collector -> bcd`);
+      // eslint-disable-next-line no-fallthrough
+    case 'collector-to-bcd':
       return findMissing(bcdEntries, collectorEntries);
   }
 };
 
 /* istanbul ignore next */
 const main = () => {
-  console.log(getMissing().join('\n'));
+  const {argv} = require('yargs').command(
+      '$0 [--direction]',
+      'Find missing entries between BCD and the collector tests',
+      (yargs) => {
+        yargs
+            .option('direction', {
+              alias: 'd',
+              describe: 'Which direction to find missing entries from ("a-to-b" will check what is in a that is missing from b)',
+              choices: ['bcd-to-collector', 'collector-to-bcd'],
+              nargs: 1,
+              type: 'string',
+              default: 'collector-to-bcd'
+            });
+      }
+  );
+
+  console.log(getMissing(argv.direction).join('\n'));
 };
 
 /* istanbul ignore if */

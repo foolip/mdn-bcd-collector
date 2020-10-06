@@ -40,7 +40,8 @@
     "slugify": "1.4.5",
     "ua-parser-js": "0.7.22",
     "unique-string": "2.0.0",
-    "winston": "3.3.3"
+    "winston": "3.3.3",
+    "yargs": "16.0.3"
   },
   "devDependencies": {
     "@browser-logos/chrome": "1.0.18",

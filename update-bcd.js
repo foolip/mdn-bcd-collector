@@ -396,7 +396,19 @@ const main = async (reportPaths) => {
 
 /* istanbul ignore if */
 if (require.main === module) {
-  main(process.argv.slice(2)).catch((error) => {
+  const {argv} = require('yargs').command(
+      '$0 <files..>',
+      'Update BCD from a specified set of report files',
+      (yargs) => {
+        yargs
+            .positional('files', {
+              describe: 'The report files to update from (also accepts folders)',
+              type: 'string'
+            });
+      }
+  );
+
+  main(argv.files).catch((error) => {
     logger.error(error);
     process.exit(1);
   });
