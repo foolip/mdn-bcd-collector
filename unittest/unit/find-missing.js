@@ -16,7 +16,7 @@
 
 const assert = require('chai').assert;
 
-const proxyquire = require('proxyquire');
+const proxyquire = require('proxyquire').noCallThru();
 
 const tests = {
   'api.AbortController': {},
@@ -56,9 +56,7 @@ const bcd = {
 
 const {traverseFeatures, findMissing} = proxyquire('../../find-missing', {
   './tests.json': tests,
-  // Object.assign used to mitigate loading bug
-  // https://github.com/foolip/mdn-bcd-collector/pull/553#discussion_r495793082
-  '@mdn/browser-compat-data': Object.assign({}, bcd)
+  '@mdn/browser-compat-data': bcd
 });
 
 describe('find-missing', () => {

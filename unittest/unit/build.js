@@ -21,7 +21,7 @@ const assert = chai.assert;
 const expect = chai.expect;
 
 const WebIDL2 = require('webidl2');
-const proxyquire = require('proxyquire');
+const proxyquire = require('proxyquire').noCallThru();
 
 const {
   flattenIDL,

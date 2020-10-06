@@ -16,7 +16,7 @@
 
 const assert = require('chai').assert;
 
-const proxyquire = require('proxyquire');
+const proxyquire = require('proxyquire').noCallThru();
 const sinon = require('sinon');
 const {Octokit} = require('@octokit/rest');
 
