@@ -62,6 +62,7 @@ if (require.main === module) {
 } else {
   module.exports = {
     traverseFeatures,
-    findMissing
+    findMissing,
+    getMissing
   };
 }
