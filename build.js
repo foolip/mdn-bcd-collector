@@ -735,7 +735,13 @@ const copyResources = async () => {
     ['json3/lib/json3.min.js', 'resources'],
     ['chai/chai.js', 'unittest'],
     ['mocha/mocha.css', 'unittest'],
-    ['mocha/mocha.js', 'unittest']
+    ['mocha/mocha.js', 'unittest'],
+    ['@browser-logos/chrome/chrome_64x64.png', 'browser-logos', 'chrome.png'],
+    ['@browser-logos/edge/edge_64x64.png', 'browser-logos', 'edge.png'],
+    ['@browser-logos/firefox/firefox_64x64.png', 'browser-logos', 'firefox.png'],
+    ['@browser-logos/internet-explorer_9-11/internet-explorer_9-11_64x64.png', 'browser-logos', 'ie.png'],
+    ['@browser-logos/opera/opera_64x64.png', 'browser-logos', 'opera.png'],
+    ['@browser-logos/safari/safari_64x64.png', 'browser-logos', 'safari.png']
   ];
   for (const [srcInModules, destInGenerated, newFilename] of resources) {
     const src = require.resolve(srcInModules);
