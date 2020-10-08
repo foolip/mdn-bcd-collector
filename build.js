@@ -765,29 +765,29 @@ const build = async (specData, bcd) => {
   await copyResources();
 };
 
+module.exports = {
+  getCustomTestAPI,
+  getCustomSubtestsAPI,
+  getCustomResourcesAPI,
+  getCustomTestCSS,
+  compileTestCode,
+  compileTest,
+  flattenIDL,
+  getExposureSet,
+  getName,
+  buildIDLTests,
+  buildIDL,
+  validateIDL,
+  collectCSSPropertiesFromBCD,
+  collectCSSPropertiesFromWebref,
+  cssPropertyToIDLAttribute,
+  buildCSS
+};
+
 /* istanbul ignore if */
 if (require.main === module) {
   build(specData, bcd).catch((reason) => {
     console.error(reason);
     process.exit(1);
   });
-} else {
-  module.exports = {
-    getCustomTestAPI,
-    getCustomSubtestsAPI,
-    getCustomResourcesAPI,
-    getCustomTestCSS,
-    compileTestCode,
-    compileTest,
-    flattenIDL,
-    getExposureSet,
-    getName,
-    buildIDLTests,
-    buildIDL,
-    validateIDL,
-    collectCSSPropertiesFromBCD,
-    collectCSSPropertiesFromWebref,
-    cssPropertyToIDLAttribute,
-    buildCSS
-  };
 }

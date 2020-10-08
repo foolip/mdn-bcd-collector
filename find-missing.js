@@ -74,13 +74,13 @@ const main = () => {
   console.log(getMissing(argv.direction).join('\n'));
 };
 
+module.exports = {
+  traverseFeatures,
+  findMissing,
+  getMissing
+};
+
 /* istanbul ignore if */
 if (require.main === module) {
   main();
-} else {
-  module.exports = {
-    traverseFeatures,
-    findMissing,
-    getMissing
-  };
 }

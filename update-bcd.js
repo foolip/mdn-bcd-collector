@@ -394,6 +394,16 @@ const main = async (reportPaths) => {
   }
 };
 
+module.exports = {
+  findEntry,
+  getMajorMinorVersion,
+  getBrowserAndVersion,
+  getSupportMap,
+  getSupportMatrix,
+  inferSupportStatements,
+  update
+};
+
 /* istanbul ignore if */
 if (require.main === module) {
   const {argv} = require('yargs').command(
@@ -412,14 +422,4 @@ if (require.main === module) {
     logger.error(error);
     process.exit(1);
   });
-} else {
-  module.exports = {
-    findEntry,
-    getMajorMinorVersion,
-    getBrowserAndVersion,
-    getSupportMap,
-    getSupportMatrix,
-    inferSupportStatements,
-    update
-  };
 }
