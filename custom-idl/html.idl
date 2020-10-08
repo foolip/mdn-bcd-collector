@@ -176,6 +176,7 @@ partial interface Navigator {
 
 partial interface Window {
   long webkitRequestAnimationFrame(FrameRequestCallback callback);
+  void webkitCancelRequestAnimationFrame(long id);
   void webkitCancelAnimationFrame(long id);
 
   // https://github.com/whatwg/html/issues/2379
