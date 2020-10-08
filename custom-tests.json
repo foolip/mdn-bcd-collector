@@ -15,7 +15,7 @@
       },
       "webGL": {
         "type": "instance",
-        "src": "var canvas = document.createElement('canvas'); if (!canvas) {return false}; return canvas.getContext('webgl') || canvas.getContext('experimental-webgl');"
+        "src": "var canvas = document.createElement('canvas'); if (!canvas) {return false}; return canvas.getContext('webgl2') || canvas.getContext('webgl') || canvas.getContext('experimental-webgl');"
       }
     },
     "ANGLE_instanced_arrays": {
