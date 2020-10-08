@@ -241,9 +241,4 @@ if (require.main === module) {
   if (runAll(argv.browser) === false) {
     process.exit(1);
   }
-} else {
-  module.exports = {
-    run,
-    runAll
-  };
 }

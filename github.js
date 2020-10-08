@@ -20,7 +20,7 @@ const slugify = require('slugify');
 const uaParser = require('ua-parser-js');
 const stringify = require('json-stable-stringify');
 
-module.exports = (options) => {
+const github = (options) => {
   const octokit = new Octokit(options);
 
   const getReportMeta = (report) => {
@@ -84,3 +84,5 @@ module.exports = (options) => {
 
   return {getReportMeta, exportAsPR};
 };
+
+module.exports = github;

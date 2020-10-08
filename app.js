@@ -193,6 +193,11 @@ app.use((req, res) => {
   });
 });
 
+module.exports = {
+  app,
+  version: appversion
+};
+
 /* istanbul ignore if */
 if (require.main === module) {
   // Start the server
@@ -200,10 +205,4 @@ if (require.main === module) {
     logger.info(`App listening on port ${PORT}`);
     logger.info('Press Ctrl+C to quit.');
   });
-} else {
-  // Export for testing
-  module.exports = {
-    app: app,
-    version: appversion
-  };
 }
