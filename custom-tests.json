@@ -15,24 +15,24 @@
       },
       "webGL": {
         "type": "instance",
-        "src": "var canvas = document.createElement('canvas'); if (!canvas) {return false}; return canvas.getContext('webgl2') || canvas.getContext('webgl') || canvas.getContext('experimental-webgl');"
+        "src": "var canvas = document.createElement('canvas'); return canvas.getContext('webgl2') || canvas.getContext('webgl') || canvas.getContext('experimental-webgl');"
       }
     },
     "ANGLE_instanced_arrays": {
       "__resources": ["webGL"],
-      "__base": "if (!reusableInstances.webGL) {return false}; var instance = reusableInstances.webGL.getExtension('ANGLE_instanced_arrays');"
+      "__base": "var instance = reusableInstances.webGL.getExtension('ANGLE_instanced_arrays');"
     },
     "AnalyserNode": {
       "__resources": ["audioContext"],
-      "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createAnalyser();"
+      "__base": "var instance = reusableInstances.audioContext.createAnalyser();"
     },
     "AudioBuffer": {
       "__resources": ["audioContext"],
-      "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createBuffer(2, audioContext.sampleRate * 3, audioContext.sampleRate);"
+      "__base": "var instance = reusableInstances.audioContext.createBuffer(2, audioContext.sampleRate * 3, audioContext.sampleRate);"
     },
     "AudioBufferSourceNode": {
       "__resources": ["audioContext"],
-      "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createBufferSource();"
+      "__base": "var instance = reusableInstances.audioContext.createBufferSource();"
     },
     "AudioContext": {
       "__TODO": "Add webkit prefix",
@@ -40,26 +40,26 @@
     },
     "AudioDestinationNode": {
       "__resources": ["audioContext"],
-      "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.destination;"
+      "__base": "var instance = reusableInstances.audioContext.destination;"
     },
     "AudioListener": {
       "__resources": ["audioContext"],
-      "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.listener;"
+      "__base": "var instance = reusableInstances.audioContext.listener;"
     },
     "AudioNode": {
       "__resources": ["audioContext"],
-      "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createAnalyser();"
+      "__base": "var instance = reusableInstances.audioContext.createAnalyser();"
     },
     "AudioParam": {
       "__base": "<%api.GainNode:gainNode%> var instance = gainNode.gain;"
     },
     "AudioParamMap": {
       "__TODO": "DEPENDS ON PROMISE TESTING SUPPORT",
-      "__base.disabled": "<%api.AudioWorkletNode:worklet%> if (!worklet) {return false}; var instance = worklet.parameters;"
+      "__base.disabled": "<%api.AudioWorkletNode:worklet%> var instance = worklet.parameters;"
     },
     "AudioTrack": {
       "__resources": ["audio-blip"],
-      "__base": "<%api.AudioTrackList:audioTracks%> if (!audioTracks) {return false}; var instance = audioTracks[0];"
+      "__base": "<%api.AudioTrackList:audioTracks%> var instance = audioTracks[0];"
     },
     "AudioTrackList": {
       "__resources": ["audio-blip"],
@@ -68,31 +68,31 @@
     "AudioWorkletNode": {
       "__TODO": "DEPENDS ON PROMISE TESTING SUPPORT",
       "__resources": ["audioContext"],
-      "__base.disabled": "await if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.audioWorklet.addModule('/resources/custom-tests/api/AudioWorkletNode/WhiteNoiseProcessor.js'); var instance = new AudioWorkletNode(audioContext, 'white-noise-processor');"
+      "__base.disabled": "await var instance = reusableInstances.audioContext.audioWorklet.addModule('/resources/custom-tests/api/AudioWorkletNode/WhiteNoiseProcessor.js'); var instance = new AudioWorkletNode(audioContext, 'white-noise-processor');"
     },
     "BiquadFilterNode": {
       "__resources": ["audioContext"],
-      "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createBiquadFilter();"
+      "__base": "var instance = reusableInstances.audioContext.createBiquadFilter();"
     },
     "ChannelMergerNode": {
       "__resources": ["audioContext"],
-      "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createChannelMerger();"
+      "__base": "var instance = reusableInstances.audioContext.createChannelMerger();"
     },
     "ChannelSplitterNode": {
       "__resources": ["audioContext"],
-      "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createChannelSplitter();"
+      "__base": "var instance = reusableInstances.audioContext.createChannelSplitter();"
     },
     "ConstantSourceNode": {
       "__resources": ["audioContext"],
-      "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createConstantSource();"
+      "__base": "var instance = reusableInstances.audioContext.createConstantSource();"
     },
     "ConvolverNode": {
       "__resources": ["audioContext"],
-      "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createConvolver();"
+      "__base": "var instance = reusableInstances.audioContext.createConvolver();"
     },
     "DelayNode": {
       "__resources": ["audioContext"],
-      "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createDelay();"
+      "__base": "var instance = reusableInstances.audioContext.createDelay();"
     },
     "Document": {
       "__base": "var instance = document;"
@@ -105,105 +105,105 @@
     },
     "DynamicsCompressorNode": {
       "__resources": ["audioContext"],
-      "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createDynamicsCompressor();"
+      "__base": "var instance = reusableInstances.audioContext.createDynamicsCompressor();"
     },
     "EXT_blend_minmax": {
       "__resources": ["webGL"],
-      "__base": "if (!reusableInstances.webGL) {return false}; var instance = reusableInstances.webGL.getExtension('EXT_blend_minmax');"
+      "__base": "var instance = reusableInstances.webGL.getExtension('EXT_blend_minmax');"
     },
     "EXT_color_buffer_float": {
       "__resources": ["webGL"],
-      "__base": "if (!reusableInstances.webGL) {return false}; var instance = reusableInstances.webGL.getExtension('EXT_color_buffer_float');"
+      "__base": "var instance = reusableInstances.webGL.getExtension('EXT_color_buffer_float');"
     },
     "EXT_color_buffer_half_float": {
       "__resources": ["webGL"],
-      "__base": "if (!reusableInstances.webGL) {return false}; var instance = reusableInstances.webGL.getExtension('EXT_color_buffer_half_float');"
+      "__base": "var instance = reusableInstances.webGL.getExtension('EXT_color_buffer_half_float');"
     },
     "EXT_disjoint_timer_query": {
       "__resources": ["webGL"],
-      "__base": "if (!reusableInstances.webGL) {return false}; var instance = reusableInstances.webGL.getExtension('EXT_disjoint_timer_query');"
+      "__base": "var instance = reusableInstances.webGL.getExtension('EXT_disjoint_timer_query');"
     },
     "EXT_float_blend": {
       "__resources": ["webGL"],
-      "__base": "if (!reusableInstances.webGL) {return false}; var instance = reusableInstances.webGL.getExtension('EXT_float_blend');"
+      "__base": "var instance = reusableInstances.webGL.getExtension('EXT_float_blend');"
     },
     "EXT_frag_depth": {
       "__resources": ["webGL"],
-      "__base": "if (!reusableInstances.webGL) {return false}; var instance = reusableInstances.webGL.getExtension('EXT_frag_depth');"
+      "__base": "var instance = reusableInstances.webGL.getExtension('EXT_frag_depth');"
     },
     "EXT_shader_texture_lod": {
       "__resources": ["webGL"],
-      "__base": "if (!reusableInstances.webGL) {return false}; var instance = reusableInstances.webGL.getExtension('EXT_shader_texture_lod');"
+      "__base": "var instance = reusableInstances.webGL.getExtension('EXT_shader_texture_lod');"
     },
     "EXT_sRGB": {
       "__resources": ["webGL"],
-      "__base": "if (!reusableInstances.webGL) {return false}; var instance = reusableInstances.webGL.getExtension('EXT_sRGB');"
+      "__base": "var instance = reusableInstances.webGL.getExtension('EXT_sRGB');"
     },
     "EXT_texture_compression_bptc": {
       "__resources": ["webGL"],
-      "__base": "if (!reusableInstances.webGL) {return false}; var instance = reusableInstances.webGL.getExtension('EXT_texture_compression_bptc');"
+      "__base": "var instance = reusableInstances.webGL.getExtension('EXT_texture_compression_bptc');"
     },
     "EXT_texture_compression_rgtc": {
       "__resources": ["webGL"],
-      "__base": "if (!reusableInstances.webGL) {return false}; var instance = reusableInstances.webGL.getExtension('EXT_texture_compression_rgtc');"
+      "__base": "var instance = reusableInstances.webGL.getExtension('EXT_texture_compression_rgtc');"
     },
     "EXT_texture_filter_anisotropic": {
       "__resources": ["webGL"],
-      "__base": "if (!reusableInstances.webGL) {return false}; var instance = reusableInstances.webGL.getExtension('EXT_texture_filter_anisotropic');"
+      "__base": "var instance = reusableInstances.webGL.getExtension('EXT_texture_filter_anisotropic');"
     },
     "GainNode": {
       "__resources": ["audioContext"],
-      "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createGain();"
+      "__base": "var instance = reusableInstances.audioContext.createGain();"
     },
     "IIRFilterNode": {
       "__resources": ["audioContext"],
-      "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createIIRFilter([1], [1]);"
+      "__base": "var instance = reusableInstances.audioContext.createIIRFilter([1], [1]);"
     },
     "MediaCapabilities": {
       "__base": "var instance = navigator.mediaCapabilities;"
     },
     "MediaDeviceInfo": {
       "__TODO": "DEPENDS ON PROMISE TESTING SUPPORT",
-      "__base.disabled": "<%api.MediaDevices:mediaDevices%> if (!mediaDevices) {return false;} var devices = await navigator.mediaDevices.enumerateDevices(); var instance = devices[0];"
+      "__base.disabled": "<%api.MediaDevices:mediaDevices%> var devices = await navigator.mediaDevices.enumerateDevices(); var instance = devices[0];"
     },
     "MediaDevices": {
       "__base": "var instance = navigator.mediaDevices;"
     },
     "MediaElementAudioSourceNode": {
       "__resources": ["audio-blip", "audioContext"],
-      "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createMediaElementSource(document.getElementById('resource-audio-blip'));"
+      "__base": "var instance = reusableInstances.audioContext.createMediaElementSource(document.getElementById('resource-audio-blip'));"
     },
     "MediaSession": {
       "__base": "var instance = navigator.MediaSession;"
     },
     "MediaSettingsRange": {
       "__TODO": "DEPENDS ON PROMISE TESTING SUPPORT",
-      "__base.disabled": "<%api.MediaStreamTrack:track%> if (!track) {return false;} var imageCapture = new ImageCapture(track); var instance = imageCapture.track.getSettings();"
+      "__base.disabled": "<%api.MediaStreamTrack:track%> if (!track) {return null;} var imageCapture = new ImageCapture(track); var instance = imageCapture.track.getSettings();"
     },
     "MediaSource": {
       "__base": "var instance = new MediaSource();"
     },
     "MediaStream": {
       "__TODO": "DEPENDS ON PROMISE TESTING SUPPORT",
-      "__base.disabled": "<%api.MediaDevices:mediaDevices%> if (!mediaDevices) {return false;} var instance = await mediaDevices.getUserMedia({video: true});"
+      "__base.disabled": "<%api.MediaDevices:mediaDevices%> var instance = await mediaDevices.getUserMedia({video: true});"
     },
     "MediaStreamAudioDestinationNode": {
       "__resources": ["audioContext"],
-      "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createMediaStreamDestination();"
+      "__base": "var instance = reusableInstances.audioContext.createMediaStreamDestination();"
     },
     "MediaStreamAudioSourceNode": {
       "__TODO": "DEPENDS ON PROMISE TESTING SUPPORT",
       "__resources": ["audioContext"],
-      "__base.disabled": "<%api.MediaStream:mediaStream%> if (!mediaStream) {return false;} if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createMediaStreamSource(mediaStream);"
+      "__base.disabled": "<%api.MediaStream:mediaStream%> if (!mediaStream) {return null;} var instance = reusableInstances.audioContext.createMediaStreamSource(mediaStream);"
     },
     "MediaStreamTrack": {
       "__TODO": "DEPENDS ON PROMISE TESTING SUPPORT",
-      "__base.disabled": "<%api.MediaStream:mediaStream%> if (!mediaStream) {return false;} var instance = mediaStream.getVideoTracks()[0];"
+      "__base.disabled": "<%api.MediaStream:mediaStream%> var instance = mediaStream.getVideoTracks()[0];"
     },
     "MediaStreamTrackAudioSourceNode": {
       "__TODO": "DEPENDS ON PROMISE TESTING SUPPORT",
       "__resources": ["audioContext"],
-      "__base.disabled": "<%api.MediaStream:mediaStream%> if (!mediaStream) {return false;} if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createMediaStreamTrackSource(mediaStream);"
+      "__base.disabled": "<%api.MediaStream:mediaStream%> if (!mediaStream) {return null;} var instance = reusableInstances.audioContext.createMediaStreamTrackSource(mediaStream);"
     },
     "Navigator": {
       "__base": "var instance = window.navigator;"
@@ -213,22 +213,22 @@
     },
     "OscillatorNode": {
       "__resources": ["audioContext"],
-      "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createOscillator();"
+      "__base": "var instance = reusableInstances.audioContext.createOscillator();"
     },
     "PannerNode": {
       "__resources": ["audioContext"],
-      "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createPanner();"
+      "__base": "var instance = reusableInstances.audioContext.createPanner();"
     },
     "StereoPannerNode": {
       "__resources": ["audioContext"],
-      "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createStereoPanner();"
+      "__base": "var instance = reusableInstances.audioContext.createStereoPanner();"
     },
     "TreeWalker": {
       "__base": "var instance = document.createTreeWalker(document);"
     },
     "VideoTrack": {
       "__resources": ["video-blank"],
-      "__base": "<%api.VideoTrackList:videoTracks%> if (!videoTracks) {return false}; var instance = videoTracks[0];"
+      "__base": "<%api.VideoTrackList:videoTracks%> var instance = videoTracks[0];"
     },
     "VideoTrackList": {
       "__resources": ["video-blank"],
@@ -236,7 +236,7 @@
     },
     "WaveShaperNode": {
       "__resources": ["audioContext"],
-      "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createWaveShaper();"
+      "__base": "var instance = reusableInstances.audioContext.createWaveShaper();"
     },
     "Window": {
       "__base": "var instance = window;"
