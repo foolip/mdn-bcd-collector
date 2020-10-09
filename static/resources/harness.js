@@ -30,13 +30,16 @@
   };
   var reusableInstances = {};
 
-  if (!('console' in self)) {
-    // IE undefined console workaround
-    // eslint-disable-next-line no-global-assign
-    console = {
-      log: function() {},
-      error: function() {}
-    };
+  function consoleLog(message) {
+    if ('console' in self) {
+      console.log(message);
+    }
+  }
+
+  function consoleError(message) {
+    if ('console' in self) {
+      console.error(message);
+    }
   }
 
   function stringify(value) {
@@ -72,7 +75,7 @@
       reusableInstances[name] = eval('(function () {' + code + '})()');
     } catch (e) {
       reusableInstances[name] = false;
-      console.error(e);
+      consoleError(e);
     }
   }
 
@@ -201,7 +204,7 @@
 
         myWorker.postMessage(pending.Worker);
       } else {
-        console.log('No worker support');
+        consoleLog('No worker support');
         updateStatus('No worker support, skipping Worker/DedicatedWorker tests');
 
         for (var i = 0; i < pending.Worker.length; i++) {
@@ -243,7 +246,7 @@
 
         myWorker.port.postMessage(pending.SharedWorker);
       } else {
-        console.log('No shared worker support');
+        consoleLog('No shared worker support');
         updateStatus('No shared worker support, skipping SharedWorker tests');
 
         for (var i = 0; i < pending.SharedWorker.length; i++) {
@@ -286,7 +289,7 @@
             var messageChannel = new MessageChannel();
 
             messageChannel.port1.onmessage = function(event) {
-              console.log(event);
+              consoleLog(event);
               callback(results.concat(event.data));
             };
 
@@ -297,7 +300,7 @@
           });
         });
       } else {
-        console.log('No service worker support, skipping');
+        consoleLog('No service worker support, skipping');
         updateStatus('No service worker support, skipping ServiceWorker tests');
 
         for (var i = 0; i < pending.ServiceWorker.length; i++) {
@@ -358,7 +361,7 @@
 
       var resourceTimeout = setTimeout(function() {
         // If the resources don't load, just start the tests anyways
-        console.log('Timed out waiting for resources to load, starting tests anyways');
+        consoleLog('Timed out waiting for resources to load, starting tests anyways');
         startTests();
       }, 5000);
 
@@ -467,7 +470,7 @@
       };
     } catch (e) {
       updateStatus('Failed to upload results: client error.');
-      console.error(e);
+      consoleError(e);
     }
   }
 
