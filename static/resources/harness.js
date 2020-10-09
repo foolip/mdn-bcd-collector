@@ -34,13 +34,13 @@
     if ('console' in self) {
       console.log(message);
     }
-  };
+  }
 
   function consoleError(message) {
     if ('console' in self) {
       console.error(message);
     }
-  };
+  }
 
   function stringify(value) {
     try {
