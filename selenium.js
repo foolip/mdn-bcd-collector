@@ -214,7 +214,7 @@ const run = async (browser, version, os) => {
       } else {
         await goToPage(driver, `${host}/api/results`, browser, version);
       }
-      const reportBody = await driver.wait(until.elementLocated(By.css('body')));
+      const reportBody = await driver.wait(until.elementLocated(By.css('body')), 10000);
       const reportString = await reportBody.getAttribute('textContent');
       const report = JSON.parse(reportString);
       const {filename} = github.getReportMeta(report);
