@@ -213,7 +213,7 @@ const runAll = async (limitBrowsers, oses) => {
   // eslint-disable-next-line guard-for-in
   for (const browser in browsersToTest) {
     for (const version of browsersToTest[browser]) {
-      for (const os of oses || ['Windows', 'macOS']) {
+      for (const os of oses) {
         spinner.start(`${bcd.browsers[browser].name} ${version} on ${os}`);
 
         try {
