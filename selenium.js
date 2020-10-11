@@ -241,10 +241,11 @@ if (require.main === module) {
               type: 'string',
               choices: ['chrome', 'edge', 'firefox', 'ie', 'safari']
             })
-            .optional('os', {
+            .option('os', {
               describe: 'Limit the os(es) to test',
-              type: 'string',
-              choices: ['Windows', 'macOS']
+              type: 'array',
+              choices: ['Windows', 'macOS'],
+              default: ['Windows', 'macOS']
             });
       }
   );
