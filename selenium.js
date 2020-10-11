@@ -84,7 +84,7 @@ const getSafariOS = (version) => {
 
 const buildDriver = async (browser, version, os) => {
   let osesToTest = [];
-  const safariOnSauceLabs = browser === 'safari' && 'saucelabs' in seleniumUrl;
+  const safariOnSauceLabs = browser === 'safari' && seleniumUrl.includes('saucelabs');
 
   switch (os) {
     case 'Windows':
@@ -101,7 +101,7 @@ const buildDriver = async (browser, version, os) => {
   }
 
   // eslint-disable-next-line guard-for-in
-  for (const [osName, osVersion] in osesToTest) {
+  for (const [osName, osVersion] of osesToTest) {
     const capabilities = new Capabilities();
     capabilities.set(
         Capability.BROWSER_NAME,
@@ -235,11 +235,11 @@ const runAll = async (limitBrowsers, oses) => {
   }
 
   let browsersToTest = {
-    chrome: filterVersions(bcd.browsers.chrome.releases, 40),
+    chrome: filterVersions(bcd.browsers.chrome.releases, 26),
     edge: filterVersions(bcd.browsers.edge.releases, 12),
-    firefox: filterVersions(bcd.browsers.firefox.releases, 35),
-    ie: filterVersions(bcd.browsers.ie.releases, 11),
-    safari: filterVersions(bcd.browsers.safari.releases, 9)
+    firefox: filterVersions(bcd.browsers.firefox.releases, 4),
+    ie: filterVersions(bcd.browsers.ie.releases, 9),
+    safari: filterVersions(bcd.browsers.safari.releases, 8)
   };
 
   if (limitBrowsers) {
