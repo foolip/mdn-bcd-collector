@@ -258,6 +258,16 @@ const runAll = async (limitBrowsers, oses) => {
           continue;
         }
 
+        if (browser === 'edge' && os === 'macOS' && version <= 18) {
+          // Don't test EdgeHTML on macOS
+          continue;
+        }
+
+        if (browser === 'ie' && os === 'macOS') {
+          // Don't test Internet Explorer on macOS
+          continue;
+        }
+
         spinner.start(prettyName(browser, version, os));
 
         try {
