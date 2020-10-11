@@ -51,7 +51,8 @@ const timestamp = () => {
 }
 
 const error = (e) => {
-  const msg = spinner.text.split(' - ')[0] + ' - ' + timestamp() + ": " + e.stack  ;
+  const msg = spinner.text.split(' - ')[0] + ' - ' + timestamp() + ": " +
+    e.name === 'Error' ? e.message : e.stack;
   spinner.fail(msg);
 };
 
