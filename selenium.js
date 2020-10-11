@@ -78,6 +78,65 @@ const getSafariOS = (version) => {
   }
 };
 
+const buildDriver = async (browser, version, os) => {
+  let osesToTest = [];
+
+  switch (os) {
+    case 'Windows':
+      osesToTest = [
+        ['Windows', '10'], ['Windows', '8.1'], ['Windows', '8'], ['Windows', '7'], ['Windows', 'XP']
+      ];
+      break;
+    case 'macOS':
+      osesToTest = [['OS X', browser === 'safari' &&
+          'saucelabs' in seleniumUrl && getSafariOS(version)]
+      ];
+      break;
+  }
+
+  // eslint-disable-next-line guard-for-in
+  for (const [osName, osVersion] in osesToTest) {
+    const capabilities = new Capabilities();
+    capabilities.set(
+        Capability.BROWSER_NAME,
+        Browser[browser.toUpperCase()]
+    );
+    capabilities.set(Capability.VERSION, version.split('.')[0]);
+    capabilities.set(
+        'name',
+        `mdn-bcd-collector: ${bcd.browsers[browser].name} ${version} on ${os}`
+    );
+
+    capabilities.set('os', osName);
+    if (osVersion) {
+      capabilities.set('os_version', osVersion);
+    }
+
+    const prefs = new logging.Preferences();
+    prefs.setLevel(logging.Type.BROWSER, logging.Level.SEVERE);
+    capabilities.setLoggingPrefs(prefs);
+
+    try {
+      const driverBuilder = new Builder().usingServer(seleniumUrl)
+          .withCapabilities(capabilities);
+      const driver = await driverBuilder.build();
+
+      return driver;
+    } catch (e) {
+      if (e.name == 'UnsupportedOperationError' &&
+        e.message.startsWith('Misconfigured -- Unsupported OS/browser/version/device combo')
+      ) {
+        // If unsupported config, continue to the next grid configuration
+        continue;
+      } else {
+        throw e;
+      }
+    }
+  }
+
+  return undefined;
+};
+
 const awaitPageReady = async (driver) => {
   await driver.wait(() => {
     return driver.executeScript('return document.readyState')
@@ -97,37 +156,10 @@ const goToPage = async (driver, page) => {
 };
 
 const run = async (browser, version, os) => {
-  const capabilities = new Capabilities();
-  capabilities.set(
-      Capability.BROWSER_NAME,
-      Browser[browser.toUpperCase()]
-  );
-  capabilities.set(Capability.VERSION, version.split('.')[0]);
-  capabilities.set(
-      'name',
-      `mdn-bcd-collector: ${bcd.browsers[browser].name} ${version} on ${os}`
-  );
-
-  switch (os) {
-    case 'Windows':
-      capabilities.set('os', 'Windows');
-      capabilities.set('os_version', '10');
-      break;
-    case 'macOS':
-      capabilities.set('os', 'OS X');
-      if (browser === 'safari' && 'saucelabs' in seleniumUrl) {
-        capabilities.set('os_version', getSafariOS(version));
-      }
-      break;
+  const driver = await buildDriver(browser, version, os);
+  if (!driver) {
+    throw new Error('Selenium grid does not support browser/OS config');
   }
-
-  const prefs = new logging.Preferences();
-  prefs.setLevel(logging.Type.BROWSER, logging.Level.SEVERE);
-  capabilities.setLoggingPrefs(prefs);
-
-  const driverBuilder = new Builder().usingServer(seleniumUrl)
-      .withCapabilities(capabilities);
-  const driver = await driverBuilder.build();
 
   let statusEl;
 
