@@ -42,6 +42,10 @@ const seleniumUrl = secrets.selenium.url && secrets.selenium.url
 
 const spinner = ora();
 
+const prettyName = (browser, version, os) => {
+  return `${bcd.browsers[browser].name} ${version} on ${os}`;
+};
+
 const failSpinner = (e) => {
   spinner.fail(spinner.text + ' - ' + e.stack);
 };
@@ -78,6 +82,66 @@ const getSafariOS = (version) => {
   }
 };
 
+const buildDriver = async (browser, version, os) => {
+  let osesToTest = [];
+  const safariOnSauceLabs = browser === 'safari' && 'saucelabs' in seleniumUrl;
+
+  switch (os) {
+    case 'Windows':
+      osesToTest = [
+        ['Windows', '10'], ['Windows', '8.1'], ['Windows', '8'], ['Windows', '7'], ['Windows', 'XP']
+      ];
+      break;
+    case 'macOS':
+      osesToTest = [['OS X', safariOnSauceLabs && getSafariOS(version)]
+      ];
+      break;
+    default:
+      throw new Error(`Unknown/unsupported OS: ${os}`);
+  }
+
+  // eslint-disable-next-line guard-for-in
+  for (const [osName, osVersion] in osesToTest) {
+    const capabilities = new Capabilities();
+    capabilities.set(
+        Capability.BROWSER_NAME,
+        Browser[browser.toUpperCase()]
+    );
+    capabilities.set(Capability.VERSION, version.split('.')[0]);
+    capabilities.set(
+        'name', `mdn-bcd-collector: ${prettyName(browser, version, os)}`
+    );
+
+    capabilities.set('os', osName);
+    if (osVersion) {
+      capabilities.set('os_version', osVersion);
+    }
+
+    const prefs = new logging.Preferences();
+    prefs.setLevel(logging.Type.BROWSER, logging.Level.SEVERE);
+    capabilities.setLoggingPrefs(prefs);
+
+    try {
+      const driverBuilder = new Builder().usingServer(seleniumUrl)
+          .withCapabilities(capabilities);
+      const driver = await driverBuilder.build();
+
+      return driver;
+    } catch (e) {
+      if (e.name == 'UnsupportedOperationError' &&
+        e.message.startsWith('Misconfigured -- Unsupported OS/browser/version/device combo')
+      ) {
+        // If unsupported config, continue to the next grid configuration
+        continue;
+      } else {
+        throw e;
+      }
+    }
+  }
+
+  return undefined;
+};
+
 const awaitPageReady = async (driver) => {
   await driver.wait(() => {
     return driver.executeScript('return document.readyState')
@@ -96,34 +160,11 @@ const goToPage = async (driver, page) => {
   await awaitPageReady(driver);
 };
 
-const run = async (browser, version) => {
-  const capabilities = new Capabilities();
-  capabilities.set(
-      Capability.BROWSER_NAME,
-      Browser[browser.toUpperCase()]
-  );
-  capabilities.set(Capability.VERSION, version);
-  capabilities.set(
-      'name',
-      `mdn-bcd-collector: ${bcd.browsers[browser].name} ${version}`
-  );
-
-  if (browser === 'safari') {
-    const osVersion = getSafariOS(version);
-    capabilities.set('os', 'OS X');
-    capabilities.set('os_version', osVersion);
-  } else {
-    capabilities.set('os', 'Windows');
-    capabilities.set('os_version', '10');
+const run = async (browser, version, os) => {
+  const driver = await buildDriver(browser, version, os);
+  if (!driver) {
+    throw new Error('Selenium grid does not support browser/OS config');
   }
-
-  const prefs = new logging.Preferences();
-  prefs.setLevel(logging.Type.BROWSER, logging.Level.SEVERE);
-  capabilities.setLoggingPrefs(prefs);
-
-  const driverBuilder = new Builder().usingServer(seleniumUrl)
-      .withCapabilities(capabilities);
-  const driver = await driverBuilder.build();
 
   let statusEl;
 
@@ -187,7 +228,7 @@ const run = async (browser, version) => {
   await driver.quit();
 };
 
-const runAll = async (limitBrowsers) => {
+const runAll = async (limitBrowsers, oses) => {
   if (!seleniumUrl) {
     logger.error('A Selenium remote WebDriver URL is not defined in secrets.json.  Please define your Selenium remote.');
     return false;
@@ -209,12 +250,19 @@ const runAll = async (limitBrowsers) => {
   // eslint-disable-next-line guard-for-in
   for (const browser in browsersToTest) {
     for (const version of browsersToTest[browser]) {
-      spinner.start(`${bcd.browsers[browser].name} ${version}`);
+      for (const os of oses) {
+        if (browser === 'safari' && os === 'Windows') {
+          // Don't test Safari on Windows
+          continue;
+        }
 
-      try {
-        await run(browser, version);
-      } catch (e) {
-        failSpinner(e);
+        spinner.start(prettyName(browser, version, os));
+
+        try {
+          await run(browser, version, os);
+        } catch (e) {
+          failSpinner(e);
+        }
       }
     }
   }
@@ -234,11 +282,17 @@ if (require.main === module) {
               describe: 'Limit the browser(s) to test',
               type: 'string',
               choices: ['chrome', 'edge', 'firefox', 'ie', 'safari']
+            })
+            .option('os', {
+              describe: 'Limit the os(es) to test',
+              type: 'array',
+              choices: ['Windows', 'macOS'],
+              default: ['Windows', 'macOS']
             });
       }
   );
 
-  if (runAll(argv.browser) === false) {
+  if (runAll(argv.browser, argv.os) === false) {
     process.exit(1);
   }
 }
