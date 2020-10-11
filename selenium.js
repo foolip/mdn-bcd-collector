@@ -27,7 +27,6 @@ const ora = require('ora');
 const path = require('path');
 
 const github = require('./github')();
-const logger = require('./logger');
 const secrets = require('./secrets.json');
 
 const resultsDir = path.join(__dirname, '..', 'mdn-bcd-results');
@@ -46,9 +45,29 @@ const prettyName = (browser, version, os) => {
   return `${bcd.browsers[browser].name} ${version} on ${os}`;
 };
 
-const failSpinner = (e) => {
-  spinner.fail(spinner.text + ' - ' + e.stack);
+const timestamp = () => {
+  const now = new Date(Date.now());
+  return now.toLocaleTimeString(undefined, {hour12: false});
+}
+
+const error = (e) => {
+  const msg = spinner.text.split(' - ')[0] + ' - ' + timestamp() + ": " + e.stack  ;
+  spinner.fail(msg);
 };
+
+const warn = (message) => {
+  const msg = spinner.text.split(' - ')[0] + ' - ' + message;
+  spinner.warn(msg);
+};
+
+const log = (message) => {
+  const msg = spinner.text.split(' - ')[0] + ' - ' + timestamp() + ": " + message;
+  spinner.text = msg;
+};
+
+const succeed = () => {
+  spinner.succeed(spinner.text.split(' - ')[0]);
+}
 
 const filterVersions = (data, earliestVersion) => {
   const versions = [];
@@ -148,7 +167,7 @@ const awaitPageReady = async (driver) => {
   await driver.wait(() => {
     return driver.executeScript('return document.readyState')
         .then((readyState) => (readyState === 'complete'));
-  });
+  }, 15000);
   await driver.executeScript('return document.readyState');
 };
 
@@ -176,11 +195,13 @@ const awaitPage = async (driver, page, browser, version) => {
 };
 
 const goToPage = async (driver, page, browser, version) => {
-  await driver.get(changeProtocol(page, browser, version));
+  await driver.get(changeProtocol(page, browser, version), 30000);
   await awaitPageReady(driver);
 };
 
 const run = async (browser, version, os) => {
+  log('Starting...');
+
   const driver = await buildDriver(browser, version, os);
   if (!driver) {
     throw new Error('Selenium grid does not support browser/OS config');
@@ -189,13 +210,15 @@ const run = async (browser, version, os) => {
   let statusEl;
 
   try {
+    log('Loading homepage...');
     await goToPage(driver, host, browser, version);
     await driver.findElement(By.id('start')).click();
 
+    log('Running tests...');
     await awaitPage(driver, `${host}/tests/`, browser, version);
     statusEl = await driver.findElement(By.id('status'));
     try {
-      await driver.wait(until.elementTextContains(statusEl, 'upload'), 45000);
+      await driver.wait(until.elementTextContains(statusEl, 'upload'), 30000);
     } catch (e) {
       if (e.name == 'TimeoutError') {
         throw new Error('Timed out waiting for results to upload');
@@ -208,6 +231,7 @@ const run = async (browser, version, os) => {
     }
 
     try {
+      log('Attempting to download results...');
       if (browser === 'chrome' || browser === 'firefox' ||
         (browser === 'edge' && version >= 79)) {
         await goToPage(driver, `view-source:${host}/api/results`, browser, version);
@@ -216,13 +240,15 @@ const run = async (browser, version, os) => {
       }
       const reportBody = await driver.wait(until.elementLocated(By.css('body')), 10000);
       const reportString = await reportBody.getAttribute('textContent');
+      log('Saving results...');
       const report = JSON.parse(reportString);
       const {filename} = github.getReportMeta(report);
       await fs.writeJson(path.join(resultsDir, filename), report, {spaces: 2});
 
-      spinner.succeed();
+      succeed();
     } catch (e) {
       // If we can't download the results, fallback to GitHub
+      log('Uploading results to GitHub...');
       await goToPage(driver, `${host}/results`, browser, version);
       statusEl = await driver.findElement(By.id('status'));
       await driver.wait(until.elementTextContains(statusEl, 'to'));
@@ -230,16 +256,16 @@ const run = async (browser, version, os) => {
         throw new Error('Pull request failed to submit');
       }
 
-      spinner.warn(spinner.text + ' - Exported to GitHub');
+      warn('Exported to GitHub');
     }
   } catch (e) {
-    failSpinner(e);
+    error(e);
   }
 
   try {
     const logs = await driver.manage().logs().get(logging.Type.BROWSER);
     logs.forEach((entry) => {
-      logger.info(`[Browser Logger: ${entry.level.name}] ${entry.message}`);
+      console.info(`[Browser Logger: ${entry.level.name}] ${entry.message}`);
     });
   } catch (e) {
     // If we couldn't get the browser logs, ignore and continue
@@ -250,7 +276,7 @@ const run = async (browser, version, os) => {
 
 const runAll = async (limitBrowsers, oses) => {
   if (!seleniumUrl) {
-    logger.error('A Selenium remote WebDriver URL is not defined in secrets.json.  Please define your Selenium remote.');
+    console.error('A Selenium remote WebDriver URL is not defined in secrets.json.  Please define your Selenium remote.');
     return false;
   }
 
@@ -291,7 +317,7 @@ const runAll = async (limitBrowsers, oses) => {
         try {
           await run(browser, version, os);
         } catch (e) {
-          failSpinner(e);
+          error(e);
         }
       }
     }
@@ -314,7 +340,7 @@ if (require.main === module) {
               choices: ['chrome', 'edge', 'firefox', 'ie', 'safari']
             })
             .option('os', {
-              describe: 'Limit the os(es) to test',
+              describe: 'Specify OS to test',
               type: 'array',
               choices: ['Windows', 'macOS'],
               default: ['Windows', 'macOS']
