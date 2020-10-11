@@ -237,11 +237,11 @@ const runAll = async (limitBrowsers, oses) => {
   }
 
   let browsersToTest = {
-    chrome: filterVersions(bcd.browsers.chrome.releases, 26),
+    chrome: filterVersions(bcd.browsers.chrome.releases, 15),
     edge: filterVersions(bcd.browsers.edge.releases, 12),
     firefox: filterVersions(bcd.browsers.firefox.releases, 4),
-    ie: filterVersions(bcd.browsers.ie.releases, 9),
-    safari: filterVersions(bcd.browsers.safari.releases, 8)
+    ie: filterVersions(bcd.browsers.ie.releases, 6),
+    safari: filterVersions(bcd.browsers.safari.releases, 5.1)
   };
 
   if (limitBrowsers) {
