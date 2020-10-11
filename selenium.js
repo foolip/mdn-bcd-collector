@@ -48,10 +48,10 @@ const prettyName = (browser, version, os) => {
 const timestamp = () => {
   const now = new Date(Date.now());
   return now.toLocaleTimeString(undefined, {hour12: false});
-}
+};
 
 const error = (e) => {
-  spinner.fail(spinner.text.split(' - ')[0] + ' - ' + timestamp() + ": " +
+  spinner.fail(spinner.text.split(' - ')[0] + ' - ' + timestamp() + ': ' +
     e.name === 'Error' ? e.message : e.stack);
 };
 
@@ -60,12 +60,12 @@ const warn = (message) => {
 };
 
 const log = (message) => {
-  spinner.text = spinner.text.split(' - ')[0] + ' - ' + timestamp() + ": " + message;
+  spinner.text = spinner.text.split(' - ')[0] + ' - ' + timestamp() + ': ' + message;
 };
 
 const succeed = () => {
   spinner.succeed(spinner.text.split(' - ')[0]);
-}
+};
 
 const filterVersions = (data, earliestVersion) => {
   const versions = [];
