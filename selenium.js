@@ -80,6 +80,7 @@ const getSafariOS = (version) => {
 
 const buildDriver = async (browser, version, os) => {
   let osesToTest = [];
+  const safariOnSauceLabs = browser === 'safari' && 'saucelabs' in seleniumUrl;
 
   switch (os) {
     case 'Windows':
@@ -88,8 +89,7 @@ const buildDriver = async (browser, version, os) => {
       ];
       break;
     case 'macOS':
-      osesToTest = [['OS X', browser === 'safari' &&
-          'saucelabs' in seleniumUrl && getSafariOS(version)]
+      osesToTest = [['OS X', safariOnSauceLabs && getSafariOS(version)]
       ];
       break;
   }
