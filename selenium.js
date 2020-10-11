@@ -42,6 +42,10 @@ const seleniumUrl = secrets.selenium.url && secrets.selenium.url
 
 const spinner = ora();
 
+const prettyName = (browser, version, os) => {
+  return `${bcd.browsers[browser].name} ${version} on ${os}`;
+}
+
 const failSpinner = (e) => {
   spinner.fail(spinner.text + ' - ' + e.stack);
 };
@@ -105,8 +109,7 @@ const buildDriver = async (browser, version, os) => {
     );
     capabilities.set(Capability.VERSION, version.split('.')[0]);
     capabilities.set(
-        'name',
-        `mdn-bcd-collector: ${bcd.browsers[browser].name} ${version} on ${os}`
+        'name', `mdn-bcd-collector: ${prettyName(browser, version, os)}`
     );
 
     capabilities.set('os', osName);
@@ -248,7 +251,7 @@ const runAll = async (limitBrowsers, oses) => {
   for (const browser in browsersToTest) {
     for (const version of browsersToTest[browser]) {
       for (const os of oses) {
-        spinner.start(`${bcd.browsers[browser].name} ${version} on ${os}`);
+        spinner.start(prettyName(browser, version, os));
 
         try {
           await run(browser, version, os);
