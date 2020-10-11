@@ -102,7 +102,7 @@ const run = async (browser, version, os) => {
       Capability.BROWSER_NAME,
       Browser[browser.toUpperCase()]
   );
-  capabilities.set(Capability.VERSION, version);
+  capabilities.set(Capability.VERSION, version.split('.')[0]);
   capabilities.set(
       'name',
       `mdn-bcd-collector: ${bcd.browsers[browser].name} ${version} on ${os}`
