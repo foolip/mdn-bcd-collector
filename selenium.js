@@ -44,7 +44,7 @@ const spinner = ora();
 
 const prettyName = (browser, version, os) => {
   return `${bcd.browsers[browser].name} ${version} on ${os}`;
-}
+};
 
 const failSpinner = (e) => {
   spinner.fail(spinner.text + ' - ' + e.stack);
