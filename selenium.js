@@ -251,6 +251,11 @@ const runAll = async (limitBrowsers, oses) => {
   for (const browser in browsersToTest) {
     for (const version of browsersToTest[browser]) {
       for (const os of oses) {
+        if (browser === 'safari' && os === 'Windows') {
+          // Don't test Safari on Windows
+          continue;
+        }
+
         spinner.start(prettyName(browser, version, os));
 
         try {
