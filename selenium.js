@@ -115,7 +115,7 @@ const run = async (browser, version, os) => {
       break;
     case 'macOS':
       capabilities.set('os', 'OS X');
-      if (browser === 'safari') {
+      if (browser === 'safari' && 'saucelabs' in seleniumUrl) {
         capabilities.set('os_version', getSafariOS(version));
       }
       break;
