@@ -101,7 +101,7 @@ const buildDriver = async (browser, version, os) => {
   }
 
   // eslint-disable-next-line guard-for-in
-  for (const [osName, osVersion] in osesToTest) {
+  for (const [osName, osVersion] of osesToTest) {
     const capabilities = new Capabilities();
     capabilities.set(
         Capability.BROWSER_NAME,
