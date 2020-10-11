@@ -92,6 +92,8 @@ const buildDriver = async (browser, version, os) => {
       osesToTest = [['OS X', safariOnSauceLabs && getSafariOS(version)]
       ];
       break;
+    default:
+      throw new Error(`Unknown/unsupported OS: ${os}`);
   }
 
   // eslint-disable-next-line guard-for-in
