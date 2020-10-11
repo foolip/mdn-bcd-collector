@@ -96,7 +96,7 @@ const goToPage = async (driver, page) => {
   await awaitPageReady(driver);
 };
 
-const run = async (browser, version) => {
+const run = async (browser, version, os) => {
   const capabilities = new Capabilities();
   capabilities.set(
       Capability.BROWSER_NAME,
@@ -105,16 +105,20 @@ const run = async (browser, version) => {
   capabilities.set(Capability.VERSION, version);
   capabilities.set(
       'name',
-      `mdn-bcd-collector: ${bcd.browsers[browser].name} ${version}`
+      `mdn-bcd-collector: ${bcd.browsers[browser].name} ${version} on ${os}`
   );
 
-  if (browser === 'safari') {
-    const osVersion = getSafariOS(version);
-    capabilities.set('os', 'OS X');
-    capabilities.set('os_version', osVersion);
-  } else {
-    capabilities.set('os', 'Windows');
-    capabilities.set('os_version', '10');
+  switch (os) {
+    case 'Windows':
+      capabilities.set('os', 'Windows');
+      capabilities.set('os_version', '10');
+      break;
+    case 'macOS':
+      capabilities.set('os', 'OS X');
+      if (browser === 'safari') {
+        capabilities.set('os_version', getSafariOS(version));
+      }
+      break;
   }
 
   const prefs = new logging.Preferences();
@@ -187,7 +191,7 @@ const run = async (browser, version) => {
   await driver.quit();
 };
 
-const runAll = async (limitBrowsers) => {
+const runAll = async (limitBrowsers, oses) => {
   if (!seleniumUrl) {
     logger.error('A Selenium remote WebDriver URL is not defined in secrets.json.  Please define your Selenium remote.');
     return false;
@@ -209,12 +213,14 @@ const runAll = async (limitBrowsers) => {
   // eslint-disable-next-line guard-for-in
   for (const browser in browsersToTest) {
     for (const version of browsersToTest[browser]) {
-      spinner.start(`${bcd.browsers[browser].name} ${version}`);
+      for (const os of oses || ['Windows', 'macOS']) {
+        spinner.start(`${bcd.browsers[browser].name} ${version} on ${os}`);
 
-      try {
-        await run(browser, version);
-      } catch (e) {
-        failSpinner(e);
+        try {
+          await run(browser, version, os);
+        } catch (e) {
+          failSpinner(e);
+        }
       }
     }
   }
@@ -234,11 +240,16 @@ if (require.main === module) {
               describe: 'Limit the browser(s) to test',
               type: 'string',
               choices: ['chrome', 'edge', 'firefox', 'ie', 'safari']
+            })
+            .optional('os', {
+              describe: 'Limit the os(es) to test',
+              type: 'string',
+              choices: ['Windows', 'macOS']
             });
       }
   );
 
-  if (runAll(argv.browser) === false) {
+  if (runAll(argv.browser, argv.os) === false) {
     process.exit(1);
   }
 }
