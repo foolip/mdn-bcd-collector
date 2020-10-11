@@ -152,13 +152,31 @@ const awaitPageReady = async (driver) => {
   await driver.executeScript('return document.readyState');
 };
 
-const awaitPage = async (driver, page) => {
-  await driver.wait(until.urlIs(page), 30000);
+const changeProtocol = (page, browser, version) => {
+  let useHttp = false;
+  switch (browser) {
+    case 'chrome':
+      useHttp = version <= 15;
+      break;
+    case 'firefox':
+      useHttp = version <= 4;
+      break;
+  }
+
+  if (useHttp) {
+    return page.replace('https://', 'http://');
+  }
+
+  return page;
+};
+
+const awaitPage = async (driver, page, browser, version) => {
+  await driver.wait(until.urlIs(changeProtocol(page, browser, version)), 30000);
   await awaitPageReady(driver);
 };
 
-const goToPage = async (driver, page) => {
-  await driver.get(page);
+const goToPage = async (driver, page, browser, version) => {
+  await driver.get(changeProtocol(page, browser, version));
   await awaitPageReady(driver);
 };
 
@@ -171,10 +189,10 @@ const run = async (browser, version, os) => {
   let statusEl;
 
   try {
-    await goToPage(driver, host);
+    await goToPage(driver, host, browser, version);
     await driver.findElement(By.id('start')).click();
 
-    await awaitPage(driver, `${host}/tests/`);
+    await awaitPage(driver, `${host}/tests/`, browser, version);
     statusEl = await driver.findElement(By.id('status'));
     try {
       await driver.wait(until.elementTextContains(statusEl, 'upload'), 45000);
@@ -192,9 +210,9 @@ const run = async (browser, version, os) => {
     try {
       if (browser === 'chrome' || browser === 'firefox' ||
         (browser === 'edge' && version >= 79)) {
-        await goToPage(driver, `view-source:${host}/api/results`);
+        await goToPage(driver, `view-source:${host}/api/results`, browser, version);
       } else {
-        await goToPage(driver, `${host}/api/results`);
+        await goToPage(driver, `${host}/api/results`, browser, version);
       }
       const reportBody = await driver.wait(until.elementLocated(By.css('body')));
       const reportString = await reportBody.getAttribute('textContent');
@@ -205,7 +223,7 @@ const run = async (browser, version, os) => {
       spinner.succeed();
     } catch (e) {
       // If we can't download the results, fallback to GitHub
-      await goToPage(driver, `${host}/results`);
+      await goToPage(driver, `${host}/results`, browser, version);
       statusEl = await driver.findElement(By.id('status'));
       await driver.wait(until.elementTextContains(statusEl, 'to'));
       if ((await statusEl.getText()).search('Failed') !== -1) {
