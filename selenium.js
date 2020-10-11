@@ -84,7 +84,7 @@ const getSafariOS = (version) => {
 
 const buildDriver = async (browser, version, os) => {
   let osesToTest = [];
-  const safariOnSauceLabs = browser === 'safari' && 'saucelabs' in seleniumUrl;
+  const safariOnSauceLabs = browser === 'safari' && seleniumUrl.includes('saucelabs');
 
   switch (os) {
     case 'Windows':
