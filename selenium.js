@@ -128,8 +128,10 @@ const buildDriver = async (browser, version, os) => {
 
       return driver;
     } catch (e) {
-      if (e.name == 'UnsupportedOperationError' &&
-        e.message.startsWith('Misconfigured -- Unsupported OS/browser/version/device combo')
+      if ((e.name == 'UnsupportedOperationError' &&
+        e.message.startsWith('Misconfigured -- Unsupported OS/browser/version/device combo')) ||
+        (e.name == 'WebDriverError' &&
+        e.message.startsWith('OS/Browser combination invalid'))
       ) {
         // If unsupported config, continue to the next grid configuration
         continue;
