@@ -51,19 +51,16 @@ const timestamp = () => {
 }
 
 const error = (e) => {
-  const msg = spinner.text.split(' - ')[0] + ' - ' + timestamp() + ": " +
-    e.name === 'Error' ? e.message : e.stack;
-  spinner.fail(msg);
+  spinner.fail(spinner.text.split(' - ')[0] + ' - ' + timestamp() + ": " +
+    e.name === 'Error' ? e.message : e.stack);
 };
 
 const warn = (message) => {
-  const msg = spinner.text.split(' - ')[0] + ' - ' + message;
-  spinner.warn(msg);
+  spinner.warn(spinner.text.split(' - ')[0] + ' - ' + message);
 };
 
 const log = (message) => {
-  const msg = spinner.text.split(' - ')[0] + ' - ' + timestamp() + ": " + message;
-  spinner.text = msg;
+  spinner.text = spinner.text.split(' - ')[0] + ' - ' + timestamp() + ": " + message;
 };
 
 const succeed = () => {
