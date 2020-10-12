@@ -208,8 +208,7 @@ const inferSupportStatements = (versionMap) => {
           ...(prefix && {prefix: prefix})
         });
       } else if (!lastStatement.version_added) {
-        lastStatement.version_added =
-          ((lastWasNull || lastKnown.support === false) ? '≤' : '') + version;
+        lastStatement.version_added = (lastWasNull ? '≤' : '') + version;
       } else if (lastStatement.version_removed) {
         // added back again
         statements.push({
