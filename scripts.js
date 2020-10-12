@@ -14,7 +14,7 @@
 
 const childProcess = require('child_process');
 const path = require('path');
-const fs = require('fs-extra');
+const fs = require('fs');
 
 const exec = (cmd, env) => {
   env = {...process.env, ...env};
