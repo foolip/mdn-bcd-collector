@@ -329,7 +329,7 @@
     }
   }
 
-  function run(callback, resourceCount) {
+  function run(callback, resourceCount, hideResults) {
     var startTests = function() {
       resources.testsStarted = true;
 
@@ -348,7 +348,7 @@
               if (typeof callback == 'function') {
                 callback(results);
               } else {
-                report(results);
+                report(results, hideResults);
               }
             }, results);
           }, results);
@@ -389,7 +389,7 @@
     }
   }
 
-  function report(results) {
+  function report(results, hideResults) {
     var css = document.createElement('link');
     css.rel = 'stylesheet';
     css.type = 'text/css';
@@ -403,7 +403,8 @@
     updateStatus('Posting results to server...');
 
     var resultsEl = document.getElementById('results');
-    if (resultsEl) {
+
+    if (resultsEl && !hideResults) {
       resultsEl.appendChild(document.createElement('hr'));
 
       for (var i=0; i<results.length; i++) {
