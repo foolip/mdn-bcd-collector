@@ -98,7 +98,7 @@ app.use(express.static('generated'));
 app.post('/api/get', (req, res) => {
   const testSelection = (req.body.testSelection || '').replace(/\./g, '/');
   const queryParams = {
-    ...(req.query.hideResults && {hideResults: req.query.hideResults}),
+    ...(req.body.hideResults && {hideResults: req.body.hideResults}),
     ...(req.body.limitExposure && {exposure: req.body.limitExposure})
   };
   const query = querystring.encode(queryParams);
