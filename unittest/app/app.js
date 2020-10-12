@@ -159,6 +159,18 @@ describe('/api/get', () => {
         .send({testSelection: 'api.AbortController.signal', limitExposure: 'Window'});
     expect(res).to.redirectTo(/\/tests\/api\/AbortController\/signal\?exposure=Window$/);
   });
+
+  it('get specific test, hide results', async () => {
+    const res = await agent.post('/api/get')
+        .send({testSelection: 'api.AbortController.signal', limitExposure: '', hideResults: true});
+    expect(res).to.redirectTo(/\/tests\/api\/AbortController\/signal\?hideResults=true$/);
+  });
+
+  it('get specific test, limit exposure and hide results', async () => {
+    const res = await agent.post('/api/get')
+        .send({testSelection: 'api.AbortController.signal', limitExposure: 'Window', hideResults: true});
+    expect(res).to.redirectTo(/\/tests\/api\/AbortController\/signal\?hideResults=true&exposure=Window$/);
+  });
 });
 
 describe('rendered pages', () => {
