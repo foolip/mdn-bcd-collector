@@ -419,7 +419,7 @@ if (require.main === module) {
   );
 
   main(argv.files).catch((error) => {
-    logger.error(error);
+    logger.error(error.stack);
     process.exit(1);
   });
 }
