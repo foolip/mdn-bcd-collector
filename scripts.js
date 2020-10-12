@@ -28,7 +28,7 @@ const prepare = () => {
   const secretsSamplePath = path.join(__dirname, 'secrets.sample.json');
 
   if (!fs.existsSync(secretsPath)) {
-    fs.copyFile(secretsSamplePath, secretsPath);
+    fs.copyFileSync(secretsSamplePath, secretsPath);
   }
 
   // Install Firefox for Puppeteer
