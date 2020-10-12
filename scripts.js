@@ -13,6 +13,8 @@
 // limitations under the License.
 
 const childProcess = require('child_process');
+const path = require('path');
+const fs = require('fs');
 
 const exec = (cmd, env) => {
   env = {...process.env, ...env};
@@ -21,6 +23,15 @@ const exec = (cmd, env) => {
 };
 
 const prepare = () => {
+  // Copy secrets.sample.json to secrets.json if needed
+  const secretsPath = path.join(__dirname, 'secrets.json');
+  const secretsSamplePath = path.join(__dirname, 'secrets.sample.json');
+
+  if (!fs.existsSync(secretsPath)) {
+    fs.copyFileSync(secretsSamplePath, secretsPath);
+  }
+
+  // Install Firefox for Puppeteer
   try {
     process.chdir('node_modules/puppeteer');
   } catch (e) {

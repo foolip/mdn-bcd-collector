@@ -12,10 +12,6 @@ See [DESIGN.md](./DESIGN.md) for details of how this service works.
 npm install
 ```
 
-Before you can run or deploy, copy `secrets.sample.json` to `secrets.json`.
-
-(The tests can be run without a `secrets.json`.)
-
 ## Running locally
 
 ```sh
