@@ -2,7 +2,7 @@
 <h1>Test Not Found</h1>
 <p>Could not find a test for <code><%= ident %></code>. 
   <% if (suggestion) { %>
-    <span class="notice">Did you mean <a href="/tests/<%= suggestion.replace(/\./g, '/') + query %>"><code><%= suggestion %></code></a>?</span>
+    <span class="notice">Did you mean <a href="/tests/<%= `${suggestion.replace(/\./g, '/')}${query ? `?${query}`: ''}` %>"><code><%= suggestion %></code></a>?</span>
   <% } %>
 </p>
 

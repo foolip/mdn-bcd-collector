@@ -98,12 +98,12 @@ app.use(express.static('generated'));
 app.post('/api/get', (req, res) => {
   const testSelection = (req.body.testSelection || '').replace(/\./g, '/');
   const queryParams = {
-    hideResults: !req.query.showResults,
+    ...(req.query.hideResults && {hideResults: req.query.hideResults}),
     ...(req.body.limitExposure && {exposure: req.body.limitExposure})
   };
   const query = querystring.encode(queryParams);
 
-  res.redirect(`/tests/${testSelection}?${query}`);
+  res.redirect(`/tests/${testSelection}${query ? `?${query}`: ''}`);
 });
 
 app.post('/api/results', (req, res) => {
