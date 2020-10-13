@@ -74,6 +74,9 @@
       "__resources": ["audioContext"],
       "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createBiquadFilter();"
     },
+    "CanvasRenderingContext2D": {
+      "__base": "var canvas = document.createElement('canvas'); if (!canvas) {return false}; return canvas.getContext('2d');"
+    },
     "ChannelMergerNode": {
       "__resources": ["audioContext"],
       "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createChannelMerger();"
