@@ -1,0 +1,13 @@
+// https://github.com/w3c/payment-request/pull/929
+
+[SecureContext, Exposed=Window]
+interface MerchantValidationEvent : Event {
+  constructor(DOMString type, optional MerchantValidationEventInit eventInitDict = {});
+  readonly attribute DOMString methodName;
+  readonly attribute USVString validationURL;
+  undefined complete(Promise<any> merchantSessionPromise);
+};
+
+partial interface PaymentRequest {
+  attribute EventHandler onmerchantvalidation;
+};
