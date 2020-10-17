@@ -99,6 +99,9 @@
     "CSSRuleList": {
       "__base": "if (!document.styleSheets) {return false;} var instance = document.styleSheets[0].cssRules;"
     },
+    "CSSStyleDeclaration": {
+      "__base": "var el = document.createElement('p'); var instance = el.style;"
+    },
     "DelayNode": {
       "__resources": ["audioContext"],
       "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createDelay();"
