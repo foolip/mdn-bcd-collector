@@ -94,7 +94,7 @@
       "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createConvolver();"
     },
     "CSSRule": {
-      "__base": "<%api.CSSRuleList:cssRules%> var instance = cssRules.item(0);"
+      "__base": "<%api.CSSRuleList:cssRules%> if (!cssRules) return false; var instance = cssRules.item(0);"
     },
     "CSSRuleList": {
       "__base": "if (!document.styleSheets) {return false;} var instance = document.styleSheets[0].cssRules;"
