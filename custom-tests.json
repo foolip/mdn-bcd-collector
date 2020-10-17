@@ -13,6 +13,10 @@
         "type": "instance",
         "src": "return new (window.AudioContext || window.webkitAudioContext)();"
       },
+      "stylesheet": {
+        "type": "instance",
+        "src": "var sheet = document.createElement('style'); if (!sheet) {return false}; sheet.innerHTML = 'ruby { color: black; };'; return sheet.sheet;"
+      },
       "webGL": {
         "type": "instance",
         "src": "var canvas = document.createElement('canvas'); if (!canvas) {return false}; return canvas.getContext('webgl2') || canvas.getContext('webgl') || canvas.getContext('experimental-webgl');"
@@ -92,6 +96,10 @@
     "ConvolverNode": {
       "__resources": ["audioContext"],
       "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createConvolver();"
+    },
+    "CSSRule": {
+      "__resources": ["stylesheet"],
+      "__base": "if (!reusableInstances.stylesheet) {return false;} var instance = reusableInstances.stylesheet.cssRules.item(0);"
     },
     "DelayNode": {
       "__resources": ["audioContext"],
