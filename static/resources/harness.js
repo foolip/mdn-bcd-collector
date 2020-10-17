@@ -534,7 +534,7 @@
   }
 
   global.stringify = stringify;
-
+  global.reusableInstances = reusableInstances;
   global.bcd = {
     testConstructor: testConstructor,
     addInstance: addInstance,
