@@ -6,6 +6,7 @@
     "views/*",
     "tests.json",
     "find-missing.js",
+    "scripts.js",
     "selenium.js",
     "update-bcd.js"
   ]

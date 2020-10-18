@@ -208,7 +208,7 @@ const inferSupportStatements = (versionMap) => {
           ...(prefix && {prefix: prefix})
         });
       } else if (!lastStatement.version_added) {
-        lastStatement.version_added = version;
+        lastStatement.version_added = (lastWasNull ? '≤' : '') + version;
       } else if (lastStatement.version_removed) {
         // added back again
         statements.push({
@@ -419,7 +419,7 @@ if (require.main === module) {
   );
 
   main(argv.files).catch((error) => {
-    logger.error(error);
+    logger.error(error.stack);
     process.exit(1);
   });
 }

@@ -98,6 +98,7 @@ app.use(express.static('generated'));
 app.post('/api/get', (req, res) => {
   const testSelection = (req.body.testSelection || '').replace(/\./g, '/');
   const queryParams = {
+    ...(req.body.hideResults && {hideResults: req.body.hideResults}),
     ...(req.body.limitExposure && {exposure: req.body.limitExposure})
   };
   const query = querystring.encode(queryParams);
@@ -174,12 +175,14 @@ app.all('/tests/*', (req, res) => {
     res.render('tests', {
       title: `${ident || 'All Tests'}`,
       layout: false,
-      tests: foundTests
+      tests: foundTests,
+      hideResults: req.query.hideResults
     });
   } else {
     res.status(404).render('testnotfound', {
       ident: ident,
-      suggestion: tests.didYouMean(ident)
+      suggestion: tests.didYouMean(ident),
+      query: '?' + querystring.encode(req.query)
     });
   }
 });
