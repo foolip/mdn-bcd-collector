@@ -225,6 +225,9 @@ describe('build', () => {
             baz: {
               __base: '<%api.bar:b%> var instance = b;'
             },
+            ban: {
+              __base: '<%api.foo:instance%>'
+            },
             bad: {
               __base: '<%api.foobar:apple%>'
             }
@@ -235,12 +238,19 @@ describe('build', () => {
       it('valid import', () => {
         assert.equal(
             getCustomTestAPI('bar'),
-            '(function () {\n  var a = 1;\n  var instance = a;\n  return !!instance;\n})();'
+            '(function () {\n  var a = 1;\n  if (!a) {\n    return false;\n  }\n  var instance = a;\n  return !!instance;\n})();'
         );
 
         assert.equal(
             getCustomTestAPI('baz'),
-            '(function () {\n  var a = 1;\n  var b = a;\n  var instance = b;\n  return !!instance;\n})();'
+            '(function () {\n  var a = 1;\n  if (!a) {\n    return false;\n  }\n  var b = a;\n  if (!b) {\n    return false;\n  }\n  var instance = b;\n  return !!instance;\n})();'
+        );
+      });
+
+      it('valid import: import is instance', () => {
+        assert.equal(
+            getCustomTestAPI('ban'),
+            '(function () {\n  var instance = 1;\n  return !!instance;\n})();'
         );
       });
 
