@@ -97,10 +97,16 @@
       "__base": "<%api.CSSRuleList:cssRules%> if (!cssRules) return false; var instance = cssRules.item(0);"
     },
     "CSSRuleList": {
-      "__base": "if (!document.styleSheets) {return false;} var instance = document.styleSheets[0].cssRules;"
+      "__base": "<%api.CSSStyleSheet:styleSheet%> if (!styleSheet) {return false;} var instance = styleSheet.cssRules;"
     },
     "CSSStyleDeclaration": {
       "__base": "var el = document.createElement('p'); var instance = el.style;"
+    },
+    "CSSStyleRule": {
+      "__base": "<%api.CSSRule:instance%>"
+    },
+    "CSSStyleSheet": {
+      "__base": "if (!document.styleSheets) {return false;} var instance = document.styleSheets[0];"
     },
     "DelayNode": {
       "__resources": ["audioContext"],
