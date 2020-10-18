@@ -55,11 +55,11 @@
     },
     "AudioParamMap": {
       "__TODO": "DEPENDS ON PROMISE TESTING SUPPORT",
-      "__base.disabled": "<%api.AudioWorkletNode:worklet%> if (!worklet) {return false}; var instance = worklet.parameters;"
+      "__base.disabled": "<%api.AudioWorkletNode:worklet%> var instance = worklet.parameters;"
     },
     "AudioTrack": {
       "__resources": ["audio-blip"],
-      "__base": "<%api.AudioTrackList:audioTracks%> if (!audioTracks) {return false}; var instance = audioTracks[0];"
+      "__base": "<%api.AudioTrackList:audioTracks%> var instance = audioTracks[0];"
     },
     "AudioTrackList": {
       "__resources": ["audio-blip"],
@@ -73,6 +73,9 @@
     "BiquadFilterNode": {
       "__resources": ["audioContext"],
       "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createBiquadFilter();"
+    },
+    "CanvasRenderingContext2D": {
+      "__base": "var canvas = document.createElement('canvas'); if (!canvas) {return false}; return canvas.getContext('2d');"
     },
     "ChannelMergerNode": {
       "__resources": ["audioContext"],
@@ -89,6 +92,21 @@
     "ConvolverNode": {
       "__resources": ["audioContext"],
       "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createConvolver();"
+    },
+    "CSSRule": {
+      "__base": "<%api.CSSRuleList:cssRules%> var instance = cssRules.item(0);"
+    },
+    "CSSRuleList": {
+      "__base": "<%api.CSSStyleSheet:styleSheet%> var instance = styleSheet.cssRules;"
+    },
+    "CSSStyleDeclaration": {
+      "__base": "var el = document.createElement('p'); var instance = el.style;"
+    },
+    "CSSStyleRule": {
+      "__base": "<%api.CSSRule:instance%>"
+    },
+    "CSSStyleSheet": {
+      "__base": "if (!document.styleSheets) {return false;} var instance = document.styleSheets[0];"
     },
     "DelayNode": {
       "__resources": ["audioContext"],
@@ -164,7 +182,7 @@
     },
     "MediaDeviceInfo": {
       "__TODO": "DEPENDS ON PROMISE TESTING SUPPORT",
-      "__base.disabled": "<%api.MediaDevices:mediaDevices%> if (!mediaDevices) {return false;} var devices = await navigator.mediaDevices.enumerateDevices(); var instance = devices[0];"
+      "__base.disabled": "<%api.MediaDevices:mediaDevices%> var devices = await navigator.mediaDevices.enumerateDevices(); var instance = devices[0];"
     },
     "MediaDevices": {
       "__base": "var instance = navigator.mediaDevices;"
@@ -185,7 +203,7 @@
     },
     "MediaStream": {
       "__TODO": "DEPENDS ON PROMISE TESTING SUPPORT",
-      "__base.disabled": "<%api.MediaDevices:mediaDevices%> if (!mediaDevices) {return false;} var instance = await mediaDevices.getUserMedia({video: true});"
+      "__base.disabled": "<%api.MediaDevices:mediaDevices%> var instance = await mediaDevices.getUserMedia({video: true});"
     },
     "MediaStreamAudioDestinationNode": {
       "__resources": ["audioContext"],
@@ -194,16 +212,16 @@
     "MediaStreamAudioSourceNode": {
       "__TODO": "DEPENDS ON PROMISE TESTING SUPPORT",
       "__resources": ["audioContext"],
-      "__base.disabled": "<%api.MediaStream:mediaStream%> if (!mediaStream) {return false;} if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createMediaStreamSource(mediaStream);"
+      "__base.disabled": "<%api.MediaStream:mediaStream%> if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createMediaStreamSource(mediaStream);"
     },
     "MediaStreamTrack": {
       "__TODO": "DEPENDS ON PROMISE TESTING SUPPORT",
-      "__base.disabled": "<%api.MediaStream:mediaStream%> if (!mediaStream) {return false;} var instance = mediaStream.getVideoTracks()[0];"
+      "__base.disabled": "<%api.MediaStream:mediaStream%> var instance = mediaStream.getVideoTracks()[0];"
     },
     "MediaStreamTrackAudioSourceNode": {
       "__TODO": "DEPENDS ON PROMISE TESTING SUPPORT",
       "__resources": ["audioContext"],
-      "__base.disabled": "<%api.MediaStream:mediaStream%> if (!mediaStream) {return false;} if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createMediaStreamTrackSource(mediaStream);"
+      "__base.disabled": "<%api.MediaStream:mediaStream%> if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createMediaStreamTrackSource(mediaStream);"
     },
     "Navigator": {
       "__base": "var instance = window.navigator;"
@@ -228,7 +246,7 @@
     },
     "VideoTrack": {
       "__resources": ["video-blank"],
-      "__base": "<%api.VideoTrackList:videoTracks%> if (!videoTracks) {return false}; var instance = videoTracks[0];"
+      "__base": "<%api.VideoTrackList:videoTracks%> var instance = videoTracks[0];"
     },
     "VideoTrackList": {
       "__resources": ["video-blank"],
