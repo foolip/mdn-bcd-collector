@@ -32,9 +32,13 @@ const compileCustomTest = (code, format = true) => {
       if (!(name in customTests.api && '__base' in customTests.api[name])) {
         return `throw 'Test is malformed: ${match} is an invalid reference';`;
       }
-      return compileCustomTest(customTests.api[name].__base, false).replace(
+      let importcode = compileCustomTest(customTests.api[name].__base, false).replace(
           /var instance/g, `var ${instancevar}`
       );
+      if (instancevar !== 'instance') {
+        importcode += ` if (!${instancevar}) {return false;}`;
+      };
+      return importcode;
     }
 
     // TODO: add CSS category
