@@ -37,7 +37,7 @@ const compileCustomTest = (code, format = true) => {
           /var instance/g, `var ${instancevar}`
       );
       if (instancevar !== 'instance') {
-        importcode += ` if (!${instancevar}) {return false;}`;
+        importcode += ` if (!${instancevar}) {return null;}`;
       }
       return importcode;
     }

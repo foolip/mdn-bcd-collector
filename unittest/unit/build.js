@@ -238,12 +238,12 @@ describe('build', () => {
       it('valid import', () => {
         assert.equal(
             getCustomTestAPI('bar'),
-            '(function () {\n  var a = 1;\n  if (!a) {\n    return false;\n  }\n  var instance = a;\n  return !!instance;\n})();'
+            '(function () {\n  var a = 1;\n  if (!a) {\n    return null;\n  }\n  var instance = a;\n  return !!instance;\n})();'
         );
 
         assert.equal(
             getCustomTestAPI('baz'),
-            '(function () {\n  var a = 1;\n  if (!a) {\n    return false;\n  }\n  var b = a;\n  if (!b) {\n    return false;\n  }\n  var instance = b;\n  return !!instance;\n})();'
+            '(function () {\n  var a = 1;\n  if (!a) {\n    return null;\n  }\n  var b = a;\n  if (!b) {\n    return null;\n  }\n  var instance = b;\n  return !!instance;\n})();'
         );
       });
 
