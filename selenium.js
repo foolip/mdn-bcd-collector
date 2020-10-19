@@ -210,7 +210,7 @@ const run = async (browser, version, os) => {
   try {
     log('Loading homepage...');
     await goToPage(driver, host, browser, version);
-    await driver.findElement(By.id('showResults')).click();
+    await driver.findElement(By.id('hideResults')).click();
     await driver.findElement(By.id('start')).click();
 
     log('Running tests...');
