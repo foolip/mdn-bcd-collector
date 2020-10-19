@@ -121,6 +121,9 @@
         "remove_duplicates": "var elm = document.createElement('b'); elm.className = ' foo bar foo '; elm.classList.remove('bar'); return elm.className === 'foo';"
       }
     },
+    "Element": {
+      "__base": "var instance = document.createElement('p');"
+    },
     "DynamicsCompressorNode": {
       "__resources": ["audioContext"],
       "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createDynamicsCompressor();"
