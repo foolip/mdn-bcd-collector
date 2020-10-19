@@ -52,7 +52,7 @@ const timestamp = () => {
 
 const error = (e) => {
   spinner.fail(spinner.text.split(' - ')[0] + ' - ' + timestamp() + ': ' +
-    e.name === 'Error' ? e.message : e.stack);
+    (e.name === 'Error' ? e.message : e.stack));
 };
 
 const warn = (message) => {
@@ -210,11 +210,11 @@ const run = async (browser, version, os) => {
   try {
     log('Loading homepage...');
     await goToPage(driver, host, browser, version);
-    await driver.findElement(By.id('showResults')).click();
+    await driver.findElement(By.id('hideResults')).click();
     await driver.findElement(By.id('start')).click();
 
     log('Running tests...');
-    await awaitPage(driver, `${host}/tests/`, browser, version);
+    await awaitPage(driver, `${host}/tests/?hideResults=on`, browser, version);
     statusEl = await driver.findElement(By.id('status'));
     try {
       await driver.wait(until.elementTextContains(statusEl, 'upload'), 30000);
