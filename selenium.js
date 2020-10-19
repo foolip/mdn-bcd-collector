@@ -52,7 +52,7 @@ const timestamp = () => {
 
 const error = (e) => {
   spinner.fail(spinner.text.split(' - ')[0] + ' - ' + timestamp() + ': ' +
-    e.name === 'Error' ? e.message : e.stack);
+    (e.name === 'Error' ? e.message : e.stack));
 };
 
 const warn = (message) => {
