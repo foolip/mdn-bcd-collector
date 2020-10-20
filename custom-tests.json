@@ -13,6 +13,10 @@
         "type": "instance",
         "src": "return new (window.AudioContext || window.webkitAudioContext)();"
       },
+      "createStyleSheet": {
+        "type": "instance",
+        "src": "return function(css) {var el = document.createElement('style'); el.innerHTML = css; document.head.appendChild(el); el.sheet.disabled = true; return el.sheet;}"
+      },
       "webGL": {
         "type": "instance",
         "src": "var canvas = document.createElement('canvas'); if (!canvas) {return false}; return canvas.getContext('webgl2') || canvas.getContext('webgl') || canvas.getContext('experimental-webgl');"
@@ -93,20 +97,44 @@
       "__resources": ["audioContext"],
       "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createConvolver();"
     },
+    "CSSKeyframeRule": {
+      "__resources": ["createStyleSheet"],
+      "__base": "<%api.CSSKeyframesRule:keyframes%> var instance = keyframes.cssRules.item(0);"
+    },
+    "CSSKeyframesRule": {
+      "__resources": ["createStyleSheet"],
+      "__base": "var stylesheet = reusableInstances.createStyleSheet('@keyframes test {0% { top: 0 } 100% { top: 100px; }} @-webkit-keyframes test {0% { top: 0 } 100% { top: 100px; }} @-moz-keyframes test {0% { top: 0 } 100% { top: 100px; }} @-o-keyframes test {0% { top: 0 } 100% { top: 100px; }}'); var instance = stylesheet.cssRules.item(0);"
+    },
+    "CSSMediaRule": {
+      "__resources": ["createStyleSheet"],
+      "__base": "var stylesheet = reusableInstances.createStyleSheet('@media (max-width: 600px) {body {background-color: #111;color: white;}}'); var instance = stylesheet.cssRules.item(0);"
+    },
+    "CSSPageRule": {
+      "__resources": ["createStyleSheet"],
+      "__base": "var stylesheet = reusableInstances.createStyleSheet('@page {margin: 1cm;}'); var instance = stylesheet.cssRules.item(0);"
+    },
     "CSSRule": {
+      "__resources": ["createStyleSheet"],
       "__base": "<%api.CSSRuleList:cssRules%> var instance = cssRules.item(0);"
     },
     "CSSRuleList": {
-      "__base": "<%api.CSSStyleSheet:styleSheet%> var instance = styleSheet.cssRules;"
+      "__resources": ["createStyleSheet"],
+      "__base": "<%api.CSSStyleSheet:stylesheet%> var instance = stylesheet.cssRules;"
     },
     "CSSStyleDeclaration": {
       "__base": "var el = document.createElement('p'); var instance = el.style;"
     },
     "CSSStyleRule": {
+      "__resources": ["createStyleSheet"],
       "__base": "<%api.CSSRule:instance%>"
     },
     "CSSStyleSheet": {
-      "__base": "if (!document.styleSheets) {return false;} var instance = document.styleSheets[0];"
+      "__resources": ["createStyleSheet"],
+      "__base": "var instance = reusableInstances.createStyleSheet('p {color: red;}');"
+    },
+    "CSSSupportsRule": {
+      "__resources": ["createStyleSheet"],
+      "__base": "var stylesheet = reusableInstances.createStyleSheet('@supports (display: grid) {div {display: grid;}}'); var instance = stylesheet.cssRules.item(0);"
     },
     "DelayNode": {
       "__resources": ["audioContext"],
@@ -122,7 +150,7 @@
       }
     },
     "Element": {
-      "__base": "var instance = document.createElement('p');"
+      "__base": "<%api.HTMLElement:instance%>"
     },
     "DynamicsCompressorNode": {
       "__resources": ["audioContext"],
@@ -176,9 +204,244 @@
       "__resources": ["audioContext"],
       "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createGain();"
     },
+    "HTMLAnchorElement": {
+      "__base": "var instance = document.createElement('a'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
+    },
+    "HTMLAreaElement": {
+      "__base": "var instance = document.createElement('area'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
+    },
+    "HTMLAudioElement": {
+      "__base": "var instance = document.createElement('audio'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
+    },
+    "HTMLBaseElement": {
+      "__base": "var instance = document.createElement('base'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
+    },
+    "HTMLBaseFontElement": {
+      "__base": "var instance = document.createElement('basefont'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
+    },
+    "HTMLBodyElement": {
+      "__base": "var instance = document.createElement('body'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
+    },
+    "HTMLBRElement": {
+      "__base": "var instance = document.createElement('br'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
+    },
+    "HTMLButtonElement": {
+      "__base": "var instance = document.createElement('button'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
+    },
+    "HTMLCanvasElement": {
+      "__base": "var instance = document.createElement('canvas'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
+    },
+    "HTMLContentElement": {
+      "__base": "var instance = document.createElement('content'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
+    },
+    "HTMLDataElement": {
+      "__base": "var instance = document.createElement('data'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
+    },
+    "HTMLDataListElement": {
+      "__base": "var instance = document.createElement('datalist'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
+    },
+    "HTMLDetailsElement": {
+      "__base": "var instance = document.createElement('details'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
+    },
+    "HTMLDialogElement": {
+      "__base": "var instance = document.createElement('dialog'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
+    },
+    "HTMLDivElement": {
+      "__base": "var instance = document.createElement('div'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
+    },
+    "HTMLDListElement": {
+      "__base": "var instance = document.createElement('dl'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
+    },
+    "HTMLElement": {
+      "__base": "<%api.HTMLParagraphElement:instance%>"
+    },
+    "HTMLEmbedElement": {
+      "__base": "var instance = document.createElement('embed'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
+    },
+    "HTMLFieldSetElement": {
+      "__base": "var instance = document.createElement('fieldset'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
+    },
+    "HTMLFontElement": {
+      "__base": "var instance = document.createElement('font'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
+    },
+    "HTMLFormElement": {
+      "__base": "var instance = document.createElement('form'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
+    },
+    "HTMLFrameElement": {
+      "__base": "var instance = document.createElement('frame'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
+    },
+    "HTMLFrameSetElement": {
+      "__base": "var instance = document.createElement('frameset'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
+    },
+    "HTMLHeadElement": {
+      "__base": "var instance = document.createElement('head'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
+    },
+    "HTMLHeadingElement": {
+      "__base": "var instance = document.createElement('h1'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
+    },
+    "HTMLHRElement": {
+      "__base": "var instance = document.createElement('hr'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
+    },
+    "HTMLHtmlElement": {
+      "__base": "var instance = document.createElement('html'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
+    },
+    "HTMLIFrameElement": {
+      "__base": "var instance = document.createElement('iframe'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
+    },
+    "HTMLImageElement": {
+      "__base": "var instance = document.createElement('img'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
+    },
+    "HTMLInputElement": {
+      "__base": "var instance = document.createElement('input'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
+    },
+    "HTMLIsIndexElement": {
+      "__base": "var instance = document.createElement('isindex'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
+    },
+    "HTMLKeygenElement": {
+      "__base": "var instance = document.createElement('keygen'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
+    },
+    "HTMLLabelElement": {
+      "__base": "var instance = document.createElement('label'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
+    },
+    "HTMLLegendElement": {
+      "__base": "var instance = document.createElement('legend'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
+    },
+    "HTMLLIElement": {
+      "__base": "var instance = document.createElement('li'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
+    },
+    "HTMLLinkElement": {
+      "__base": "var instance = document.createElement('link'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
+    },
+    "HTMLMapElement": {
+      "__base": "var instance = document.createElement('map'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
+    },
+    "HTMLMarqueeElement": {
+      "__base": "var instance = document.createElement('marquee'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
+    },
+    "HTMLMediaElement": {
+      "__base": "<%api.HTMLVideoElement:instance%>"
+    },
+    "HTMLMenuElement": {
+      "__base": "var instance = document.createElement('menu'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
+    },
+    "HTMLMenuItemElement": {
+      "__base": "var instance = document.createElement('menuitem'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
+    },
+    "HTMLMetaElement": {
+      "__base": "var instance = document.createElement('meta'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
+    },
+    "HTMLMeterElement": {
+      "__base": "var instance = document.createElement('meter'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
+    },
+    "HTMLModElement": {
+      "__base": "var instance = document.createElement('del'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
+    },
+    "HTMLObjectElement": {
+      "__base": "var instance = document.createElement('object'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
+    },
+    "HTMLOListElement": {
+      "__base": "var instance = document.createElement('ol'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
+    },
+    "HTMLOptGroupElement": {
+      "__base": "var instance = document.createElement('optgroup'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
+    },
+    "HTMLOptionElement": {
+      "__base": "var instance = document.createElement('option'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
+    },
+    "HTMLOutputElement": {
+      "__base": "var instance = document.createElement('output'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
+    },
+    "HTMLParagraphElement": {
+      "__base": "var instance = document.createElement('p'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
+    },
+    "HTMLParamElement": {
+      "__base": "var instance = document.createElement('param'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
+    },
+    "HTMLPictureElement": {
+      "__base": "var instance = document.createElement('picture'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
+    },
+    "HTMLPreElement": {
+      "__base": "var instance = document.createElement('pre'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
+    },
+    "HTMLProgressElement": {
+      "__base": "var instance = document.createElement('progress'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
+    },
+    "HTMLQuoteElement": {
+      "__base": "var instance = document.createElement('blockquote'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
+    },
+    "HTMLScriptElement": {
+      "__base": "var instance = document.createElement('script'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
+    },
+    "HTMLSelectElement": {
+      "__base": "var instance = document.createElement('select'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
+    },
+    "HTMLShadowElement": {
+      "__base": "var instance = document.createElement('shadow'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
+    },
+    "HTMLSlotElement": {
+      "__base": "var instance = document.createElement('slot'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
+    },
+    "HTMLSourceElement": {
+      "__base": "var instance = document.createElement('source'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
+    },
+    "HTMLSpanElement": {
+      "__base": "var instance = document.createElement('span'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
+    },
+    "HTMLStyleElement": {
+      "__base": "var instance = document.createElement('style'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
+    },
+    "HTMLTableCaptionElement": {
+      "__base": "var instance = document.createElement('caption'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
+    },
+    "HTMLTableCellElement": {
+      "__base": "var instance = document.createElement('td'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
+    },
+    "HTMLTableColElement": {
+      "__base": "var instance = document.createElement('col'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
+    },
+    "HTMLTableElement": {
+      "__base": "var instance = document.createElement('table'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
+    },
+    "HTMLTableRowElement": {
+      "__base": "var instance = document.createElement('tr'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
+    },
+    "HTMLTableSectionElement": {
+      "__base": "var instance = document.createElement('tbody'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
+    },
+    "HTMLTemplateElement": {
+      "__base": "var instance = document.createElement('template'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
+    },
+    "HTMLTextAreaElement": {
+      "__base": "var instance = document.createElement('textarea'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
+    },
+    "HTMLTimeElement": {
+      "__base": "var instance = document.createElement('time'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
+    },
+    "HTMLTitleElement": {
+      "__base": "var instance = document.createElement('title'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
+    },
+    "HTMLTrackElement": {
+      "__base": "var instance = document.createElement('track'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
+    },
+    "HTMLUListElement": {
+      "__base": "var instance = document.createElement('ul'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
+    },
+    "HTMLUnknownElement": {
+      "__base": "var instance = document.createElement('unknown');"
+    },
+    "HTMLVideoElement": {
+      "__base": "var instance = document.createElement('video'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
+    },
     "IIRFilterNode": {
       "__resources": ["audioContext"],
       "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createIIRFilter([1], [1]);"
+    },
+    "KHR_parallel_shader_compile": {
+      "__resources": ["webGL"],
+      "__base": "if (!reusableInstances.webGL) {return false}; var instance = reusableInstances.webGL.getExtension('KHR_parallel_shader_compile');"
+    },
+    "Location": {
+      "__base": "var instance = window.location;"
     },
     "MediaCapabilities": {
       "__base": "var instance = navigator.mediaCapabilities;"
@@ -236,6 +499,42 @@
       "__resources": ["audioContext"],
       "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createOscillator();"
     },
+    "OES_element_index_uint": {
+      "__resources": ["webGL"],
+      "__base": "if (!reusableInstances.webGL) {return false}; var instance = reusableInstances.webGL.getExtension('OES_element_index_uint');"
+    },
+    "OES_fbo_render_mipmap": {
+      "__resources": ["webGL"],
+      "__base": "if (!reusableInstances.webGL) {return false}; var instance = reusableInstances.webGL.getExtension('OES_fbo_render_mipmap');"
+    },
+    "OES_standard_derivatives": {
+      "__resources": ["webGL"],
+      "__base": "if (!reusableInstances.webGL) {return false}; var instance = reusableInstances.webGL.getExtension('OES_standard_derivatives');"
+    },
+    "OES_texture_float": {
+      "__resources": ["webGL"],
+      "__base": "if (!reusableInstances.webGL) {return false}; var instance = reusableInstances.webGL.getExtension('OES_texture_float');"
+    },
+    "OES_texture_float_linear": {
+      "__resources": ["webGL"],
+      "__base": "if (!reusableInstances.webGL) {return false}; var instance = reusableInstances.webGL.getExtension('OES_texture_float_linear');"
+    },
+    "OES_texture_half_float": {
+      "__resources": ["webGL"],
+      "__base": "if (!reusableInstances.webGL) {return false}; var instance = reusableInstances.webGL.getExtension('OES_texture_half_float');"
+    },
+    "OES_texture_half_float_linear": {
+      "__resources": ["webGL"],
+      "__base": "if (!reusableInstances.webGL) {return false}; var instance = reusableInstances.webGL.getExtension('OES_texture_half_float_linear');"
+    },
+    "OES_vertex_array_object": {
+      "__resources": ["webGL"],
+      "__base": "if (!reusableInstances.webGL) {return false}; var instance = reusableInstances.webGL.getExtension('OES_vertex_array_object');"
+    },
+    "OVR_multiview2": {
+      "__resources": ["webGL"],
+      "__base": "if (!reusableInstances.webGL) {return false}; var instance = reusableInstances.webGL.getExtension('OVR_multiview2');"
+    },
     "PannerNode": {
       "__resources": ["audioContext"],
       "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createPanner();"
@@ -258,6 +557,58 @@
     "WaveShaperNode": {
       "__resources": ["audioContext"],
       "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createWaveShaper();"
+    },
+    "WEBGL_color_buffer_float": {
+      "__resources": ["webGL"],
+      "__base": "if (!reusableInstances.webGL) {return false}; var instance = reusableInstances.webGL.getExtension('WEBGL_color_buffer_float');"
+    },
+    "WEBGL_compressed_texture_astc": {
+      "__resources": ["webGL"],
+      "__base": "if (!reusableInstances.webGL) {return false}; var instance = reusableInstances.webGL.getExtension('WEBGL_compressed_texture_astc');"
+    },
+    "WEBGL_compressed_texture_atc": {
+      "__resources": ["webGL"],
+      "__base": "if (!reusableInstances.webGL) {return false}; var instance = reusableInstances.webGL.getExtension('WEBGL_compressed_texture_atc');"
+    },
+    "WEBGL_compressed_texture_etc": {
+      "__resources": ["webGL"],
+      "__base": "if (!reusableInstances.webGL) {return false}; var instance = reusableInstances.webGL.getExtension('WEBGL_compressed_texture_etc');"
+    },
+    "WEBGL_compressed_texture_etc1": {
+      "__resources": ["webGL"],
+      "__base": "if (!reusableInstances.webGL) {return false}; var instance = reusableInstances.webGL.getExtension('WEBGL_compressed_texture_etc1');"
+    },
+    "WEBGL_compressed_texture_pvrtc": {
+      "__resources": ["webGL"],
+      "__base": "if (!reusableInstances.webGL) {return false}; var instance = reusableInstances.webGL.getExtension('WEBGL_compressed_texture_pvrtc');"
+    },
+    "WEBGL_compressed_texture_s3tc": {
+      "__resources": ["webGL"],
+      "__base": "if (!reusableInstances.webGL) {return false}; var instance = reusableInstances.webGL.getExtension('WEBGL_compressed_texture_s3tc');"
+    },
+    "WEBGL_compressed_texture_s3tc_srgb": {
+      "__resources": ["webGL"],
+      "__base": "if (!reusableInstances.webGL) {return false}; var instance = reusableInstances.webGL.getExtension('WEBGL_compressed_texture_s3tc_srgb');"
+    },
+    "WEBGL_debug_renderer_info": {
+      "__resources": ["webGL"],
+      "__base": "if (!reusableInstances.webGL) {return false}; var instance = reusableInstances.webGL.getExtension('WEBGL_debug_renderer_info');"
+    },
+    "WEBGL_debug_shaders": {
+      "__resources": ["webGL"],
+      "__base": "if (!reusableInstances.webGL) {return false}; var instance = reusableInstances.webGL.getExtension('WEBGL_debug_shaders');"
+    },
+    "WEBGL_depth_texture": {
+      "__resources": ["webGL"],
+      "__base": "if (!reusableInstances.webGL) {return false}; var instance = reusableInstances.webGL.getExtension('WEBGL_depth_texture');"
+    },
+    "WEBGL_draw_buffers": {
+      "__resources": ["webGL"],
+      "__base": "if (!reusableInstances.webGL) {return false}; var instance = reusableInstances.webGL.getExtension('WEBGL_draw_buffers');"
+    },
+    "WEBGL_lose_context": {
+      "__resources": ["webGL"],
+      "__base": "if (!reusableInstances.webGL) {return false}; var instance = reusableInstances.webGL.getExtension('WEBGL_lose_context');"
     },
     "Window": {
       "__base": "var instance = window;"
