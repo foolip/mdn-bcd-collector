@@ -97,6 +97,22 @@
       "__resources": ["audioContext"],
       "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createConvolver();"
     },
+    "CSSKeyframeRule": {
+      "__resources": ["createStyleSheet"],
+      "__base": "<%api.CSSKeyframesRule:keyframes%> var instance = keyframes.cssRules.item(0);"
+    },
+    "CSSKeyframesRule": {
+      "__resources": ["createStyleSheet"],
+      "__base": "var stylesheet = reusableInstances.createStyleSheet('@keyframes test {0% { top: 0 } 100% { top: 100px; }} @-webkit-keyframes test {0% { top: 0 } 100% { top: 100px; }} @-moz-keyframes test {0% { top: 0 } 100% { top: 100px; }} @-o-keyframes test {0% { top: 0 } 100% { top: 100px; }}'); var instance = stylesheet.cssRules.item(0);"
+    },
+    "CSSMediaRule": {
+      "__resources": ["createStyleSheet"],
+      "__base": "var stylesheet = reusableInstances.createStyleSheet('@media (max-width: 600px) {body {background-color: #111;color: white;}}'); var instance = stylesheet.cssRules.item(0);"
+    },
+    "CSSPageRule": {
+      "__resources": ["createStyleSheet"],
+      "__base": "var stylesheet = reusableInstances.createStyleSheet('@page {margin: 1cm;}'); var instance = stylesheet.cssRules.item(0);"
+    },
     "CSSRule": {
       "__resources": ["createStyleSheet"],
       "__base": "<%api.CSSRuleList:cssRules%> var instance = cssRules.item(0);"
