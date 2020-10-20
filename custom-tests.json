@@ -15,7 +15,7 @@
       },
       "stylesheet": {
         "type": "instance",
-        "src": "var el = document.createElement('style'); el.innerHTML = 'p {color: red;}'; document.head.appendChild(el); el.sheet.disabled = true; return el.sheet;"
+        "src": "return function(css) {var el = document.createElement('style'); el.innerHTML = css; document.head.appendChild(el); el.sheet.disabled = true; return el.sheet;}"
       },
       "webGL": {
         "type": "instance",
@@ -114,7 +114,7 @@
     },
     "CSSStyleSheet": {
       "__resources": ["stylesheet"],
-      "__base": "var instance = reusableInstances.stylesheet;"
+      "__base": "var instance = reusableInstances.stylesheet('p {color: red;}');"
     },
     "DelayNode": {
       "__resources": ["audioContext"],
