@@ -122,7 +122,7 @@
       }
     },
     "Element": {
-      "__base": "var instance = document.createElement('p');"
+      "__base": "<%api.HTMLElement:instance%>"
     },
     "DynamicsCompressorNode": {
       "__resources": ["audioContext"],
@@ -175,6 +175,234 @@
     "GainNode": {
       "__resources": ["audioContext"],
       "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createGain();"
+    },
+    "HTMLAnchorElement": {
+      "__base": "var instance = document.createElement('a');"
+    },
+    "HTMLAreaElement": {
+      "__base": "var instance = document.createElement('area');"
+    },
+    "HTMLAudioElement": {
+      "__base": "var instance = document.createElement('audio');"
+    },
+    "HTMLBaseElement": {
+      "__base": "var instance = document.createElement('base');"
+    },
+    "HTMLBaseFontElement": {
+      "__base": "var instance = document.createElement('basefont');"
+    },
+    "HTMLBodyElement": {
+      "__base": "var instance = document.createElement('body');"
+    },
+    "HTMLBRElement": {
+      "__base": "var instance = document.createElement('br');"
+    },
+    "HTMLButtonElement": {
+      "__base": "var instance = document.createElement('button');"
+    },
+    "HTMLCanvasElement": {
+      "__base": "var instance = document.createElement('canvas');"
+    },
+    "HTMLContentElement": {
+      "__base": "var instance = document.createElement('content');"
+    },
+    "HTMLDataElement": {
+      "__base": "var instance = document.createElement('data');"
+    },
+    "HTMLDataListElement": {
+      "__base": "var instance = document.createElement('datalist');"
+    },
+    "HTMLDetailsElement": {
+      "__base": "var instance = document.createElement('details');"
+    },
+    "HTMLDialogElement": {
+      "__base": "var instance = document.createElement('dialog');"
+    },
+    "HTMLDivElement": {
+      "__base": "var instance = document.createElement('div');"
+    },
+    "HTMLDListElement": {
+      "__base": "var instance = document.createElement('dl');"
+    },
+    "HTMLElement": {
+      "__base": "<%api.HTMLParagraphElement:instance%>"
+    },
+    "HTMLEmbedElement": {
+      "__base": "var instance = document.createElement('embed');"
+    },
+    "HTMLFieldSetElement": {
+      "__base": "var instance = document.createElement('fieldset');"
+    },
+    "HTMLFontElement": {
+      "__base": "var instance = document.createElement('font');"
+    },
+    "HTMLFormElement": {
+      "__base": "var instance = document.createElement('form');"
+    },
+    "HTMLFrameElement": {
+      "__base": "var instance = document.createElement('frame');"
+    },
+    "HTMLFrameSetElement": {
+      "__base": "var instance = document.createElement('frameset');"
+    },
+    "HTMLHeadElement": {
+      "__base": "var instance = document.createElement('head');"
+    },
+    "HTMLHeadingElement": {
+      "__base": "var instance = document.createElement('h1');"
+    },
+    "HTMLHRElement": {
+      "__base": "var instance = document.createElement('hr');"
+    },
+    "HTMLHtmlElement": {
+      "__base": "var instance = document.createElement('html');"
+    },
+    "HTMLIFrameElement": {
+      "__base": "var instance = document.createElement('iframe');"
+    },
+    "HTMLImageElement": {
+      "__base": "var instance = document.createElement('img');"
+    },
+    "HTMLInputElement": {
+      "__base": "var instance = document.createElement('input');"
+    },
+    "HTMLIsIndexElement": {
+      "__base": "var instance = document.createElement('isindex');"
+    },
+    "HTMLKeygenElement": {
+      "__base": "var instance = document.createElement('keygen');"
+    },
+    "HTMLLabelElement": {
+      "__base": "var instance = document.createElement('label');"
+    },
+    "HTMLLegendElement": {
+      "__base": "var instance = document.createElement('legend');"
+    },
+    "HTMLLIElement": {
+      "__base": "var instance = document.createElement('li');"
+    },
+    "HTMLLinkElement": {
+      "__base": "var instance = document.createElement('link');"
+    },
+    "HTMLMapElement": {
+      "__base": "var instance = document.createElement('map');"
+    },
+    "HTMLMarqueeElement": {
+      "__base": "var instance = document.createElement('marquee');"
+    },
+    "HTMLMediaElement": {
+      "__base": "<%api.HTMLVideoElement:instance%>"
+    },
+    "HTMLMenuElement": {
+      "__base": "var instance = document.createElement('menu');"
+    },
+    "HTMLMenuItemElement": {
+      "__base": "var instance = document.createElement('menuitem');"
+    },
+    "HTMLMetaElement": {
+      "__base": "var instance = document.createElement('meta');"
+    },
+    "HTMLMeterElement": {
+      "__base": "var instance = document.createElement('meter');"
+    },
+    "HTMLModElement": {
+      "__base": "var instance = document.createElement('del');"
+    },
+    "HTMLObjectElement": {
+      "__base": "var instance = document.createElement('object');"
+    },
+    "HTMLOListElement": {
+      "__base": "var instance = document.createElement('ol');"
+    },
+    "HTMLOptGroupElement": {
+      "__base": "var instance = document.createElement('optgroup');"
+    },
+    "HTMLOptionElement": {
+      "__base": "var instance = document.createElement('option');"
+    },
+    "HTMLOutputElement": {
+      "__base": "var instance = document.createElement('output');"
+    },
+    "HTMLParagraphElement": {
+      "__base": "var instance = document.createElement('p');"
+    },
+    "HTMLParamElement": {
+      "__base": "var instance = document.createElement('param');"
+    },
+    "HTMLPictureElement": {
+      "__base": "var instance = document.createElement('picture');"
+    },
+    "HTMLPreElement": {
+      "__base": "var instance = document.createElement('pre');"
+    },
+    "HTMLProgressElement": {
+      "__base": "var instance = document.createElement('progress');"
+    },
+    "HTMLQuoteElement": {
+      "__base": "var instance = document.createElement('blockquote');"
+    },
+    "HTMLScriptElement": {
+      "__base": "var instance = document.createElement('script');"
+    },
+    "HTMLSelectElement": {
+      "__base": "var instance = document.createElement('select');"
+    },
+    "HTMLShadowElement": {
+      "__base": "var instance = document.createElement('shadow');"
+    },
+    "HTMLSlotElement": {
+      "__base": "var instance = document.createElement('slot');"
+    },
+    "HTMLSourceElement": {
+      "__base": "var instance = document.createElement('source');"
+    },
+    "HTMLSpanElement": {
+      "__base": "var instance = document.createElement('span');"
+    },
+    "HTMLStyleElement": {
+      "__base": "var instance = document.createElement('style');"
+    },
+    "HTMLTableCaptionElement": {
+      "__base": "var instance = document.createElement('caption');"
+    },
+    "HTMLTableCellElement": {
+      "__base": "var instance = document.createElement('td');"
+    },
+    "HTMLTableColElement": {
+      "__base": "var instance = document.createElement('col');"
+    },
+    "HTMLTableElement": {
+      "__base": "var instance = document.createElement('table');"
+    },
+    "HTMLTableRowElement": {
+      "__base": "var instance = document.createElement('tr');"
+    },
+    "HTMLTableSectionElement": {
+      "__base": "var instance = document.createElement('tbody');"
+    },
+    "HTMLTemplateElement": {
+      "__base": "var instance = document.createElement('template');"
+    },
+    "HTMLTextAreaElement": {
+      "__base": "var instance = document.createElement('textarea');"
+    },
+    "HTMLTimeElement": {
+      "__base": "var instance = document.createElement('time');"
+    },
+    "HTMLTitleElement": {
+      "__base": "var instance = document.createElement('title');"
+    },
+    "HTMLTrackElement": {
+      "__base": "var instance = document.createElement('track');"
+    },
+    "HTMLUListElement": {
+      "__base": "var instance = document.createElement('ul');"
+    },
+    "HTMLUnknownElement": {
+      "__base": "var instance = document.createElement('unknown');"
+    },
+    "HTMLVideoElement": {
+      "__base": "var instance = document.createElement('video');"
     },
     "IIRFilterNode": {
       "__resources": ["audioContext"],
