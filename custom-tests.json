@@ -180,6 +180,10 @@
       "__resources": ["audioContext"],
       "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createIIRFilter([1], [1]);"
     },
+    "KHR_parallel_shader_compile": {
+      "__resources": ["webGL"],
+      "__base": "if (!reusableInstances.webGL) {return false}; var instance = reusableInstances.webGL.getExtension('KHR_parallel_shader_compile');"
+    },
     "MediaCapabilities": {
       "__base": "var instance = navigator.mediaCapabilities;"
     },
@@ -236,6 +240,42 @@
       "__resources": ["audioContext"],
       "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createOscillator();"
     },
+    "OES_element_index_uint": {
+      "__resources": ["webGL"],
+      "__base": "if (!reusableInstances.webGL) {return false}; var instance = reusableInstances.webGL.getExtension('OES_element_index_uint');"
+    },
+    "OES_fbo_render_mipmap": {
+      "__resources": ["webGL"],
+      "__base": "if (!reusableInstances.webGL) {return false}; var instance = reusableInstances.webGL.getExtension('OES_fbo_render_mipmap');"
+    },
+    "OES_standard_derivatives": {
+      "__resources": ["webGL"],
+      "__base": "if (!reusableInstances.webGL) {return false}; var instance = reusableInstances.webGL.getExtension('OES_standard_derivatives');"
+    },
+    "OES_texture_float": {
+      "__resources": ["webGL"],
+      "__base": "if (!reusableInstances.webGL) {return false}; var instance = reusableInstances.webGL.getExtension('OES_texture_float');"
+    },
+    "OES_texture_float_linear": {
+      "__resources": ["webGL"],
+      "__base": "if (!reusableInstances.webGL) {return false}; var instance = reusableInstances.webGL.getExtension('OES_texture_float_linear');"
+    },
+    "OES_texture_half_float": {
+      "__resources": ["webGL"],
+      "__base": "if (!reusableInstances.webGL) {return false}; var instance = reusableInstances.webGL.getExtension('OES_texture_half_float');"
+    },
+    "OES_texture_half_float_linear": {
+      "__resources": ["webGL"],
+      "__base": "if (!reusableInstances.webGL) {return false}; var instance = reusableInstances.webGL.getExtension('OES_texture_half_float_linear');"
+    },
+    "OES_vertex_array_object": {
+      "__resources": ["webGL"],
+      "__base": "if (!reusableInstances.webGL) {return false}; var instance = reusableInstances.webGL.getExtension('OES_vertex_array_object');"
+    },
+    "OVR_multiview2": {
+      "__resources": ["webGL"],
+      "__base": "if (!reusableInstances.webGL) {return false}; var instance = reusableInstances.webGL.getExtension('OVR_multiview2');"
+    },
     "PannerNode": {
       "__resources": ["audioContext"],
       "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createPanner();"
@@ -258,6 +298,58 @@
     "WaveShaperNode": {
       "__resources": ["audioContext"],
       "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createWaveShaper();"
+    },
+    "WEBGL_color_buffer_float": {
+      "__resources": ["webGL"],
+      "__base": "if (!reusableInstances.webGL) {return false}; var instance = reusableInstances.webGL.getExtension('WEBGL_color_buffer_float');"
+    },
+    "WEBGL_compressed_texture_astc": {
+      "__resources": ["webGL"],
+      "__base": "if (!reusableInstances.webGL) {return false}; var instance = reusableInstances.webGL.getExtension('WEBGL_compressed_texture_astc');"
+    },
+    "WEBGL_compressed_texture_atc": {
+      "__resources": ["webGL"],
+      "__base": "if (!reusableInstances.webGL) {return false}; var instance = reusableInstances.webGL.getExtension('WEBGL_compressed_texture_atc');"
+    },
+    "WEBGL_compressed_texture_etc": {
+      "__resources": ["webGL"],
+      "__base": "if (!reusableInstances.webGL) {return false}; var instance = reusableInstances.webGL.getExtension('WEBGL_compressed_texture_etc');"
+    },
+    "WEBGL_compressed_texture_etc1": {
+      "__resources": ["webGL"],
+      "__base": "if (!reusableInstances.webGL) {return false}; var instance = reusableInstances.webGL.getExtension('WEBGL_compressed_texture_etc1');"
+    },
+    "WEBGL_compressed_texture_pvrtc": {
+      "__resources": ["webGL"],
+      "__base": "if (!reusableInstances.webGL) {return false}; var instance = reusableInstances.webGL.getExtension('WEBGL_compressed_texture_pvrtc');"
+    },
+    "WEBGL_compressed_texture_s3tc": {
+      "__resources": ["webGL"],
+      "__base": "if (!reusableInstances.webGL) {return false}; var instance = reusableInstances.webGL.getExtension('WEBGL_compressed_texture_s3tc');"
+    },
+    "WEBGL_compressed_texture_s3tc_srgb": {
+      "__resources": ["webGL"],
+      "__base": "if (!reusableInstances.webGL) {return false}; var instance = reusableInstances.webGL.getExtension('WEBGL_compressed_texture_s3tc_srgb');"
+    },
+    "WEBGL_debug_renderer_info": {
+      "__resources": ["webGL"],
+      "__base": "if (!reusableInstances.webGL) {return false}; var instance = reusableInstances.webGL.getExtension('WEBGL_debug_renderer_info');"
+    },
+    "WEBGL_debug_shaders": {
+      "__resources": ["webGL"],
+      "__base": "if (!reusableInstances.webGL) {return false}; var instance = reusableInstances.webGL.getExtension('WEBGL_debug_shaders');"
+    },
+    "WEBGL_depth_texture": {
+      "__resources": ["webGL"],
+      "__base": "if (!reusableInstances.webGL) {return false}; var instance = reusableInstances.webGL.getExtension('WEBGL_depth_texture');"
+    },
+    "WEBGL_draw_buffers": {
+      "__resources": ["webGL"],
+      "__base": "if (!reusableInstances.webGL) {return false}; var instance = reusableInstances.webGL.getExtension('WEBGL_draw_buffers');"
+    },
+    "WEBGL_lose_context": {
+      "__resources": ["webGL"],
+      "__base": "if (!reusableInstances.webGL) {return false}; var instance = reusableInstances.webGL.getExtension('WEBGL_lose_context');"
     },
     "Window": {
       "__base": "var instance = window;"
