@@ -13,7 +13,7 @@
         "type": "instance",
         "src": "return new (window.AudioContext || window.webkitAudioContext)();"
       },
-      "stylesheet": {
+      "createStyleSheet": {
         "type": "instance",
         "src": "return function(css) {var el = document.createElement('style'); el.innerHTML = css; document.head.appendChild(el); el.sheet.disabled = true; return el.sheet;}"
       },
@@ -98,23 +98,23 @@
       "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createConvolver();"
     },
     "CSSRule": {
-      "__resources": ["stylesheet"],
+      "__resources": ["createStyleSheet"],
       "__base": "<%api.CSSRuleList:cssRules%> var instance = cssRules.item(0);"
     },
     "CSSRuleList": {
-      "__resources": ["stylesheet"],
+      "__resources": ["createStyleSheet"],
       "__base": "<%api.CSSStyleSheet:stylesheet%> var instance = stylesheet.cssRules;"
     },
     "CSSStyleDeclaration": {
       "__base": "var el = document.createElement('p'); var instance = el.style;"
     },
     "CSSStyleRule": {
-      "__resources": ["stylesheet"],
+      "__resources": ["createStyleSheet"],
       "__base": "<%api.CSSRule:instance%>"
     },
     "CSSStyleSheet": {
-      "__resources": ["stylesheet"],
-      "__base": "var instance = reusableInstances.stylesheet('p {color: red;}');"
+      "__resources": ["createStyleSheet"],
+      "__base": "var instance = reusableInstances.createStyleSheet('p {color: red;}');"
     },
     "DelayNode": {
       "__resources": ["audioContext"],
