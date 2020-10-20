@@ -464,11 +464,13 @@
         resultNameEl.appendChild(resultValueEl);
         thisResultEl.appendChild(resultNameEl);
 
-        var codeEl = document.createElement('code');
-        codeEl.innerHTML = result.info.code.replace(/\n/g, '<br />');
-        thisResultEl.appendChild(codeEl);
-        thisResultEl.appendChild(document.createElement('br'));
-        thisResultEl.appendChild(document.createElement('br'));
+        if (result.info.code) {
+          var codeEl = document.createElement('code');
+          codeEl.innerHTML = result.info.code.replace(/\n/g, '<br />');
+          thisResultEl.appendChild(codeEl);
+          thisResultEl.appendChild(document.createElement('br'));
+          thisResultEl.appendChild(document.createElement('br'));
+        }
 
         resultsEl.appendChild(thisResultEl);
       }
