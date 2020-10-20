@@ -205,232 +205,232 @@
       "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createGain();"
     },
     "HTMLAnchorElement": {
-      "__base": "var instance = document.createElement('a');"
+      "__base": "var instance = document.createElement('a'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
     },
     "HTMLAreaElement": {
-      "__base": "var instance = document.createElement('area');"
+      "__base": "var instance = document.createElement('area'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
     },
     "HTMLAudioElement": {
-      "__base": "var instance = document.createElement('audio');"
+      "__base": "var instance = document.createElement('audio'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
     },
     "HTMLBaseElement": {
-      "__base": "var instance = document.createElement('base');"
+      "__base": "var instance = document.createElement('base'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
     },
     "HTMLBaseFontElement": {
-      "__base": "var instance = document.createElement('basefont');"
+      "__base": "var instance = document.createElement('basefont'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
     },
     "HTMLBodyElement": {
-      "__base": "var instance = document.createElement('body');"
+      "__base": "var instance = document.createElement('body'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
     },
     "HTMLBRElement": {
-      "__base": "var instance = document.createElement('br');"
+      "__base": "var instance = document.createElement('br'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
     },
     "HTMLButtonElement": {
-      "__base": "var instance = document.createElement('button');"
+      "__base": "var instance = document.createElement('button'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
     },
     "HTMLCanvasElement": {
-      "__base": "var instance = document.createElement('canvas');"
+      "__base": "var instance = document.createElement('canvas'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
     },
     "HTMLContentElement": {
-      "__base": "var instance = document.createElement('content');"
+      "__base": "var instance = document.createElement('content'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
     },
     "HTMLDataElement": {
-      "__base": "var instance = document.createElement('data');"
+      "__base": "var instance = document.createElement('data'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
     },
     "HTMLDataListElement": {
-      "__base": "var instance = document.createElement('datalist');"
+      "__base": "var instance = document.createElement('datalist'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
     },
     "HTMLDetailsElement": {
-      "__base": "var instance = document.createElement('details');"
+      "__base": "var instance = document.createElement('details'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
     },
     "HTMLDialogElement": {
-      "__base": "var instance = document.createElement('dialog');"
+      "__base": "var instance = document.createElement('dialog'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
     },
     "HTMLDivElement": {
-      "__base": "var instance = document.createElement('div');"
+      "__base": "var instance = document.createElement('div'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
     },
     "HTMLDListElement": {
-      "__base": "var instance = document.createElement('dl');"
+      "__base": "var instance = document.createElement('dl'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
     },
     "HTMLElement": {
       "__base": "<%api.HTMLParagraphElement:instance%>"
     },
     "HTMLEmbedElement": {
-      "__base": "var instance = document.createElement('embed');"
+      "__base": "var instance = document.createElement('embed'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
     },
     "HTMLFieldSetElement": {
-      "__base": "var instance = document.createElement('fieldset');"
+      "__base": "var instance = document.createElement('fieldset'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
     },
     "HTMLFontElement": {
-      "__base": "var instance = document.createElement('font');"
+      "__base": "var instance = document.createElement('font'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
     },
     "HTMLFormElement": {
-      "__base": "var instance = document.createElement('form');"
+      "__base": "var instance = document.createElement('form'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
     },
     "HTMLFrameElement": {
-      "__base": "var instance = document.createElement('frame');"
+      "__base": "var instance = document.createElement('frame'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
     },
     "HTMLFrameSetElement": {
-      "__base": "var instance = document.createElement('frameset');"
+      "__base": "var instance = document.createElement('frameset'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
     },
     "HTMLHeadElement": {
-      "__base": "var instance = document.createElement('head');"
+      "__base": "var instance = document.createElement('head'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
     },
     "HTMLHeadingElement": {
-      "__base": "var instance = document.createElement('h1');"
+      "__base": "var instance = document.createElement('h1'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
     },
     "HTMLHRElement": {
-      "__base": "var instance = document.createElement('hr');"
+      "__base": "var instance = document.createElement('hr'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
     },
     "HTMLHtmlElement": {
-      "__base": "var instance = document.createElement('html');"
+      "__base": "var instance = document.createElement('html'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
     },
     "HTMLIFrameElement": {
-      "__base": "var instance = document.createElement('iframe');"
+      "__base": "var instance = document.createElement('iframe'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
     },
     "HTMLImageElement": {
-      "__base": "var instance = document.createElement('img');"
+      "__base": "var instance = document.createElement('img'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
     },
     "HTMLInputElement": {
-      "__base": "var instance = document.createElement('input');"
+      "__base": "var instance = document.createElement('input'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
     },
     "HTMLIsIndexElement": {
-      "__base": "var instance = document.createElement('isindex');"
+      "__base": "var instance = document.createElement('isindex'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
     },
     "HTMLKeygenElement": {
-      "__base": "var instance = document.createElement('keygen');"
+      "__base": "var instance = document.createElement('keygen'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
     },
     "HTMLLabelElement": {
-      "__base": "var instance = document.createElement('label');"
+      "__base": "var instance = document.createElement('label'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
     },
     "HTMLLegendElement": {
-      "__base": "var instance = document.createElement('legend');"
+      "__base": "var instance = document.createElement('legend'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
     },
     "HTMLLIElement": {
-      "__base": "var instance = document.createElement('li');"
+      "__base": "var instance = document.createElement('li'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
     },
     "HTMLLinkElement": {
-      "__base": "var instance = document.createElement('link');"
+      "__base": "var instance = document.createElement('link'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
     },
     "HTMLMapElement": {
-      "__base": "var instance = document.createElement('map');"
+      "__base": "var instance = document.createElement('map'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
     },
     "HTMLMarqueeElement": {
-      "__base": "var instance = document.createElement('marquee');"
+      "__base": "var instance = document.createElement('marquee'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
     },
     "HTMLMediaElement": {
       "__base": "<%api.HTMLVideoElement:instance%>"
     },
     "HTMLMenuElement": {
-      "__base": "var instance = document.createElement('menu');"
+      "__base": "var instance = document.createElement('menu'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
     },
     "HTMLMenuItemElement": {
-      "__base": "var instance = document.createElement('menuitem');"
+      "__base": "var instance = document.createElement('menuitem'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
     },
     "HTMLMetaElement": {
-      "__base": "var instance = document.createElement('meta');"
+      "__base": "var instance = document.createElement('meta'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
     },
     "HTMLMeterElement": {
-      "__base": "var instance = document.createElement('meter');"
+      "__base": "var instance = document.createElement('meter'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
     },
     "HTMLModElement": {
-      "__base": "var instance = document.createElement('del');"
+      "__base": "var instance = document.createElement('del'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
     },
     "HTMLObjectElement": {
-      "__base": "var instance = document.createElement('object');"
+      "__base": "var instance = document.createElement('object'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
     },
     "HTMLOListElement": {
-      "__base": "var instance = document.createElement('ol');"
+      "__base": "var instance = document.createElement('ol'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
     },
     "HTMLOptGroupElement": {
-      "__base": "var instance = document.createElement('optgroup');"
+      "__base": "var instance = document.createElement('optgroup'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
     },
     "HTMLOptionElement": {
-      "__base": "var instance = document.createElement('option');"
+      "__base": "var instance = document.createElement('option'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
     },
     "HTMLOutputElement": {
-      "__base": "var instance = document.createElement('output');"
+      "__base": "var instance = document.createElement('output'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
     },
     "HTMLParagraphElement": {
-      "__base": "var instance = document.createElement('p');"
+      "__base": "var instance = document.createElement('p'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
     },
     "HTMLParamElement": {
-      "__base": "var instance = document.createElement('param');"
+      "__base": "var instance = document.createElement('param'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
     },
     "HTMLPictureElement": {
-      "__base": "var instance = document.createElement('picture');"
+      "__base": "var instance = document.createElement('picture'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
     },
     "HTMLPreElement": {
-      "__base": "var instance = document.createElement('pre');"
+      "__base": "var instance = document.createElement('pre'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
     },
     "HTMLProgressElement": {
-      "__base": "var instance = document.createElement('progress');"
+      "__base": "var instance = document.createElement('progress'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
     },
     "HTMLQuoteElement": {
-      "__base": "var instance = document.createElement('blockquote');"
+      "__base": "var instance = document.createElement('blockquote'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
     },
     "HTMLScriptElement": {
-      "__base": "var instance = document.createElement('script');"
+      "__base": "var instance = document.createElement('script'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
     },
     "HTMLSelectElement": {
-      "__base": "var instance = document.createElement('select');"
+      "__base": "var instance = document.createElement('select'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
     },
     "HTMLShadowElement": {
-      "__base": "var instance = document.createElement('shadow');"
+      "__base": "var instance = document.createElement('shadow'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
     },
     "HTMLSlotElement": {
-      "__base": "var instance = document.createElement('slot');"
+      "__base": "var instance = document.createElement('slot'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
     },
     "HTMLSourceElement": {
-      "__base": "var instance = document.createElement('source');"
+      "__base": "var instance = document.createElement('source'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
     },
     "HTMLSpanElement": {
-      "__base": "var instance = document.createElement('span');"
+      "__base": "var instance = document.createElement('span'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
     },
     "HTMLStyleElement": {
-      "__base": "var instance = document.createElement('style');"
+      "__base": "var instance = document.createElement('style'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
     },
     "HTMLTableCaptionElement": {
-      "__base": "var instance = document.createElement('caption');"
+      "__base": "var instance = document.createElement('caption'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
     },
     "HTMLTableCellElement": {
-      "__base": "var instance = document.createElement('td');"
+      "__base": "var instance = document.createElement('td'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
     },
     "HTMLTableColElement": {
-      "__base": "var instance = document.createElement('col');"
+      "__base": "var instance = document.createElement('col'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
     },
     "HTMLTableElement": {
-      "__base": "var instance = document.createElement('table');"
+      "__base": "var instance = document.createElement('table'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
     },
     "HTMLTableRowElement": {
-      "__base": "var instance = document.createElement('tr');"
+      "__base": "var instance = document.createElement('tr'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
     },
     "HTMLTableSectionElement": {
-      "__base": "var instance = document.createElement('tbody');"
+      "__base": "var instance = document.createElement('tbody'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
     },
     "HTMLTemplateElement": {
-      "__base": "var instance = document.createElement('template');"
+      "__base": "var instance = document.createElement('template'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
     },
     "HTMLTextAreaElement": {
-      "__base": "var instance = document.createElement('textarea');"
+      "__base": "var instance = document.createElement('textarea'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
     },
     "HTMLTimeElement": {
-      "__base": "var instance = document.createElement('time');"
+      "__base": "var instance = document.createElement('time'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
     },
     "HTMLTitleElement": {
-      "__base": "var instance = document.createElement('title');"
+      "__base": "var instance = document.createElement('title'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
     },
     "HTMLTrackElement": {
-      "__base": "var instance = document.createElement('track');"
+      "__base": "var instance = document.createElement('track'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
     },
     "HTMLUListElement": {
-      "__base": "var instance = document.createElement('ul');"
+      "__base": "var instance = document.createElement('ul'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
     },
     "HTMLUnknownElement": {
       "__base": "var instance = document.createElement('unknown');"
     },
     "HTMLVideoElement": {
-      "__base": "var instance = document.createElement('video');"
+      "__base": "var instance = document.createElement('video'); if (instance.constructor.name === 'HTMLUnknownElement') {return false;}"
     },
     "IIRFilterNode": {
       "__resources": ["audioContext"],
