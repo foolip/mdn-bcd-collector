@@ -13,6 +13,10 @@
         "type": "instance",
         "src": "return new (window.AudioContext || window.webkitAudioContext)();"
       },
+      "stylesheet": {
+        "type": "instance",
+        "src": "var el = document.createElement('style'); el.innerHTML = 'p {color: red;}'; document.head.appendChild(el); el.sheet.disabled = true; return el.sheet;"
+      },
       "webGL": {
         "type": "instance",
         "src": "var canvas = document.createElement('canvas'); if (!canvas) {return false}; return canvas.getContext('webgl2') || canvas.getContext('webgl') || canvas.getContext('experimental-webgl');"
@@ -94,19 +98,23 @@
       "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createConvolver();"
     },
     "CSSRule": {
+      "__resources": ["stylesheet"],
       "__base": "<%api.CSSRuleList:cssRules%> var instance = cssRules.item(0);"
     },
     "CSSRuleList": {
-      "__base": "<%api.CSSStyleSheet:styleSheet%> var instance = styleSheet.cssRules;"
+      "__resources": ["stylesheet"],
+      "__base": "<%api.CSSStyleSheet:stylesheet%> var instance = stylesheet.cssRules;"
     },
     "CSSStyleDeclaration": {
       "__base": "var el = document.createElement('p'); var instance = el.style;"
     },
     "CSSStyleRule": {
+      "__resources": ["stylesheet"],
       "__base": "<%api.CSSRule:instance%>"
     },
     "CSSStyleSheet": {
-      "__base": "if (!document.styleSheets) {return false;} var instance = document.styleSheets[0];"
+      "__resources": ["stylesheet"],
+      "__base": "var instance = reusableInstances.stylesheet;"
     },
     "DelayNode": {
       "__resources": ["audioContext"],
