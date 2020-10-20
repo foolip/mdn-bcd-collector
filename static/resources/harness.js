@@ -402,46 +402,6 @@
 
     updateStatus('Posting results to server...');
 
-    var resultsEl = document.getElementById('results');
-
-    if (resultsEl && !hideResults) {
-      resultsEl.appendChild(document.createElement('hr'));
-
-      for (var i=0; i<results.length; i++) {
-        var result = results[i];
-
-        var thisResultEl = document.createElement('div');
-        thisResultEl.className = 'result';
-
-        var resultNameEl = document.createElement('p');
-
-        resultNameEl.innerHTML = result.name;
-        if (result.name.indexOf('css.') != 0) {
-          resultNameEl.innerHTML += ' (' + result.info.exposure + ' exposure)';
-        }
-        resultNameEl.innerHTML += ':&nbsp;';
-
-        var resultValueEl = document.createElement('strong');
-        resultValueEl.innerHTML = result.result;
-        if (result.prefix) {
-          resultValueEl.innerHTML += ' (' + result.prefix + ' prefix)';
-        }
-        if (result.message) {
-          resultValueEl.innerHTML += ' (' + result.message + ')';
-        }
-        resultNameEl.appendChild(resultValueEl);
-        thisResultEl.appendChild(resultNameEl);
-
-        var codeEl = document.createElement('code');
-        codeEl.innerHTML = result.info.code.replace(/\n/g, '<br />');
-        thisResultEl.appendChild(codeEl);
-        thisResultEl.appendChild(document.createElement('br'));
-        thisResultEl.appendChild(document.createElement('br'));
-
-        resultsEl.appendChild(thisResultEl);
-      }
-    }
-
     try {
       var body = JSON.stringify(results);
 
@@ -472,6 +432,48 @@
     } catch (e) {
       updateStatus('Failed to upload results: client error.');
       consoleError(e);
+    }
+
+    var resultsEl = document.getElementById('results');
+
+    if (resultsEl && !hideResults) {
+      resultsEl.appendChild(document.createElement('hr'));
+
+      for (var i=0; i<results.length; i++) {
+        var result = results[i];
+
+        var thisResultEl = document.createElement('div');
+        thisResultEl.className = 'result';
+
+        var resultNameEl = document.createElement('p');
+
+        resultNameEl.innerHTML = result.name;
+        if (result.name.indexOf('css.') != 0) {
+          resultNameEl.innerHTML += ' (' + result.info.exposure + ' exposure)';
+        }
+        resultNameEl.innerHTML += ':&nbsp;';
+
+        var resultValueEl = document.createElement('strong');
+        resultValueEl.innerHTML = result.result;
+        if (result.prefix) {
+          resultValueEl.innerHTML += ' (' + result.prefix + ' prefix)';
+        }
+        if (result.message) {
+          resultValueEl.innerHTML += ' (' + result.message + ')';
+        }
+        resultNameEl.appendChild(resultValueEl);
+        thisResultEl.appendChild(resultNameEl);
+
+        if (result.info.code) {
+          var codeEl = document.createElement('code');
+          codeEl.innerHTML = result.info.code.replace(/\n/g, '<br />');
+          thisResultEl.appendChild(codeEl);
+          thisResultEl.appendChild(document.createElement('br'));
+          thisResultEl.appendChild(document.createElement('br'));
+        }
+
+        resultsEl.appendChild(thisResultEl);
+      }
     }
   }
 
