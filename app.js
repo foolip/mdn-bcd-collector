@@ -176,7 +176,8 @@ app.all('/tests/*', (req, res) => {
       title: `${ident || 'All Tests'}`,
       layout: false,
       tests: foundTests,
-      hideResults: req.query.hideResults
+      hideResults: req.query.hideResults,
+      blacklist: (req.query.blacklist ? req.query.blacklist.split(',') : [])
     });
   } else {
     res.status(404).render('testnotfound', {

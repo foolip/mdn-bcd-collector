@@ -54,7 +54,9 @@
         bcd.addInstance("<%- instanceId %>", "<%- instance.src %>");
       <% }; %>
       <% tests.forEach(function(test) { %>
-        bcd.addTest("<%- test.ident %>", <%- JSON.stringify(test.tests) %>, "<%- test.exposure %>");
+        <% if (!blacklist.includes(test.ident)) { %>
+          bcd.addTest("<%- test.ident %>", <%- JSON.stringify(test.tests) %>, "<%- test.exposure %>");
+        <% } %>
       <% }); %>
       window.onload = function() {
         bcd.run(undefined, <%-Object.entries(resources)
