@@ -591,6 +591,9 @@
     "SVGDescElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'desc'); if (instance.constructor.name === 'SVGElement') {return false;}"
     },
+    "SVGElement": {
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'unknown');"
+    },
     "SVGEllipseElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'ellipse'); if (instance.constructor.name === 'SVGElement') {return false;}"
     },
@@ -620,9 +623,6 @@
     },
     "SVGFEDropShadowElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'fedropshadow'); if (instance.constructor.name === 'SVGElement') {return false;}"
-    },
-    "SVGElement": {
-      "__base": "<%api.SVGSVGElement:instance%>"
     },
     "SVGFEFloodElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feflood'); if (instance.constructor.name === 'SVGElement') {return false;}"
