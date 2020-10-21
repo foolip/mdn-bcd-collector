@@ -177,7 +177,7 @@ app.all('/tests/*', (req, res) => {
       layout: false,
       tests: foundTests,
       hideResults: req.query.hideResults,
-      blacklist: (req.query.blacklist ? req.query.blacklist.split(',') : [])
+      ignore: (req.query.ignore ? req.query.ignore.split(',') : [])
     });
   } else {
     res.status(404).render('testnotfound', {
