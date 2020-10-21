@@ -294,7 +294,7 @@ const runAll = async (limitBrowsers, oses) => {
 
   // eslint-disable-next-line guard-for-in
   for (const browser in browsersToTest) {
-    for (const version of browsersToTest[browser]) {
+    for (const version of browsersToTest[browser].reverse()) {
       for (const os of oses) {
         if (browser === 'safari' && os === 'Windows') {
           // Don't test Safari on Windows
