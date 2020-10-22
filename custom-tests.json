@@ -544,265 +544,265 @@
       "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createStereoPanner();"
     },
     "SVGAElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'a'); if (instance.constructor.name === 'SVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'a'); if (instance.constructor.name === 'SVGAElement') {return false;}"
     },
     "SVGAltGlyphDefElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'altGlyphDef'); if (instance.constructor.name === 'SVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'altGlyphDef'); if (instance.constructor.name === 'SVGAltGlyphDefElement') {return false;}"
     },
     "SVGAltGlyphElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'altGlyph'); if (instance.constructor.name === 'SVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'altGlyph'); if (instance.constructor.name === 'SVGAltGlyphElement') {return false;}"
     },
     "SVGAltGlyphItemElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'altGlyphItem'); if (instance.constructor.name === 'SVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'altGlyphItem'); if (instance.constructor.name === 'SVGAltGlyphItemElement') {return false;}"
     },
     "SVGAnimateColorElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'animateColor'); if (instance.constructor.name === 'SVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'animateColor'); if (instance.constructor.name === 'SVGAnimateColorElement') {return false;}"
     },
     "SVGAnimateElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'animate'); if (instance.constructor.name === 'SVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'animate'); if (instance.constructor.name === 'SVGAnimateElement') {return false;}"
     },
     "SVGAnimateMotionElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'animateMotion'); if (instance.constructor.name === 'SVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'animateMotion'); if (instance.constructor.name === 'SVGAnimateMotionElement') {return false;}"
     },
     "SVGAnimateTransformElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'animateTransform'); if (instance.constructor.name === 'SVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'animateTransform'); if (instance.constructor.name === 'SVGAnimateTransformElement') {return false;}"
     },
     "SVGAnimationElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'animation'); if (instance.constructor.name === 'SVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'animation'); if (instance.constructor.name === 'SVGAnimationElement') {return false;}"
     },
     "SVGCircleElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'circle'); if (instance.constructor.name === 'SVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'circle'); if (instance.constructor.name === 'SVGCircleElement') {return false;}"
     },
     "SVGClipPathElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'clipPath'); if (instance.constructor.name === 'SVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'clipPath'); if (instance.constructor.name === 'SVGClipPathElement') {return false;}"
     },
     "SVGColorProfileElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'color-profile'); if (instance.constructor.name === 'SVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'color-profile'); if (instance.constructor.name === 'SVGColorProfileElement') {return false;}"
     },
     "SVGCursorElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'cursor'); if (instance.constructor.name === 'SVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'cursor'); if (instance.constructor.name === 'SVGCursorElement') {return false;}"
     },
     "SVGDefsElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'defs'); if (instance.constructor.name === 'SVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'defs'); if (instance.constructor.name === 'SVGDefsElement') {return false;}"
     },
     "SVGDescElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'desc'); if (instance.constructor.name === 'SVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'desc'); if (instance.constructor.name === 'SVGDescElement') {return false;}"
     },
     "SVGElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'unknown');"
     },
     "SVGEllipseElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'ellipse'); if (instance.constructor.name === 'SVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'ellipse'); if (instance.constructor.name === 'SVGEllipseElement') {return false;}"
     },
     "SVGFEBlendElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feBlend'); if (instance.constructor.name === 'SVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feBlend'); if (instance.constructor.name === 'SVGFEBlendElement') {return false;}"
     },
     "SVGFEColorMatrixElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feColorMatrix'); if (instance.constructor.name === 'SVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feColorMatrix'); if (instance.constructor.name === 'SVGFEColorMatrixElement') {return false;}"
     },
     "SVGFEComponentTransferElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feComponentTransfer'); if (instance.constructor.name === 'SVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feComponentTransfer'); if (instance.constructor.name === 'SVGFEComponentTransferElement') {return false;}"
     },
     "SVGFECompositeElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feComposite'); if (instance.constructor.name === 'SVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feComposite'); if (instance.constructor.name === 'SVGFECompositeElement') {return false;}"
     },
     "SVGFEConvolveMatrixElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feConvolveMatrix'); if (instance.constructor.name === 'SVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feConvolveMatrix'); if (instance.constructor.name === 'SVGFEConvolveMatrixElement') {return false;}"
     },
     "SVGFEDiffuseLightingElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feDiffuseLighting'); if (instance.constructor.name === 'SVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feDiffuseLighting'); if (instance.constructor.name === 'SVGFEDiffuseLightingElement') {return false;}"
     },
     "SVGFEDisplacementMapElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feDisplacementMap'); if (instance.constructor.name === 'SVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feDisplacementMap'); if (instance.constructor.name === 'SVGFEDisplacementMapElement') {return false;}"
     },
     "SVGFEDistantLightElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feDistantLight'); if (instance.constructor.name === 'SVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feDistantLight'); if (instance.constructor.name === 'SVGFEDistantLightElement') {return false;}"
     },
     "SVGFEDropShadowElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feDropShadow'); if (instance.constructor.name === 'SVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feDropShadow'); if (instance.constructor.name === 'SVGFEDropShadowElement') {return false;}"
     },
     "SVGFEFloodElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feFlood'); if (instance.constructor.name === 'SVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feFlood'); if (instance.constructor.name === 'SVGFEFloodElement') {return false;}"
     },
     "SVGFEFuncAElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feFuncA'); if (instance.constructor.name === 'SVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feFuncA'); if (instance.constructor.name === 'SVGFEFuncAElement') {return false;}"
     },
     "SVGFEFuncBElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feFuncB'); if (instance.constructor.name === 'SVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feFuncB'); if (instance.constructor.name === 'SVGFEFuncBElement') {return false;}"
     },
     "SVGFEFuncGElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feFuncG'); if (instance.constructor.name === 'SVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feFuncG'); if (instance.constructor.name === 'SVGFEFuncGElement') {return false;}"
     },
     "SVGFEFuncRElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feFuncR'); if (instance.constructor.name === 'SVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feFuncR'); if (instance.constructor.name === 'SVGFEFuncRElement') {return false;}"
     },
     "SVGFEGaussianBlurElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feGaussianBlur'); if (instance.constructor.name === 'SVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feGaussianBlur'); if (instance.constructor.name === 'SVGFEGaussianBlurElement') {return false;}"
     },
     "SVGFEImageElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feImage'); if (instance.constructor.name === 'SVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feImage'); if (instance.constructor.name === 'SVGFEImageElement') {return false;}"
     },
     "SVGFEMergeElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feMerge'); if (instance.constructor.name === 'SVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feMerge'); if (instance.constructor.name === 'SVGFEMergeElement') {return false;}"
     },
     "SVGFEMergeNodeElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feMergeNode'); if (instance.constructor.name === 'SVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feMergeNode'); if (instance.constructor.name === 'SVGFEMergeNodeElement') {return false;}"
     },
     "SVGFEMorphologyElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feMorphology'); if (instance.constructor.name === 'SVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feMorphology'); if (instance.constructor.name === 'SVGFEMorphologyElement') {return false;}"
     },
     "SVGFEOffsetElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feOffset'); if (instance.constructor.name === 'SVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feOffset'); if (instance.constructor.name === 'SVGFEOffsetElement') {return false;}"
     },
     "SVGFEPointLightElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'fePointLight'); if (instance.constructor.name === 'SVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'fePointLight'); if (instance.constructor.name === 'SVGFEPointLightElement') {return false;}"
     },
     "SVGFESpecularLightingElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feSpecularLighting'); if (instance.constructor.name === 'SVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feSpecularLighting'); if (instance.constructor.name === 'SVGFESpecularLightingElement') {return false;}"
     },
     "SVGFESpotLightElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feSpotLight'); if (instance.constructor.name === 'SVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feSpotLight'); if (instance.constructor.name === 'SVGFESpotLightElement') {return false;}"
     },
     "SVGFETileElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feTile'); if (instance.constructor.name === 'SVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feTile'); if (instance.constructor.name === 'SVGFETileElement') {return false;}"
     },
     "SVGFETurbulenceElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feTurbulence'); if (instance.constructor.name === 'SVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feTurbulence'); if (instance.constructor.name === 'SVGFETurbulenceElement') {return false;}"
     },
     "SVGFilterElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'filter'); if (instance.constructor.name === 'SVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'filter'); if (instance.constructor.name === 'SVGFilterElement') {return false;}"
     },
     "SVGFontElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'font'); if (instance.constructor.name === 'SVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'font'); if (instance.constructor.name === 'SVGFontElement') {return false;}"
     },
     "SVGFontFaceElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'font-face'); if (instance.constructor.name === 'SVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'font-face'); if (instance.constructor.name === 'SVGFontFaceElement') {return false;}"
     },
     "SVGFontFaceFormatElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'font-face-format'); if (instance.constructor.name === 'SVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'font-face-format'); if (instance.constructor.name === 'SVGFontFaceFormatElement') {return false;}"
     },
     "SVGFontFaceNameElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'font-face-name'); if (instance.constructor.name === 'SVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'font-face-name'); if (instance.constructor.name === 'SVGFontFaceNameElement') {return false;}"
     },
     "SVGFontFaceSrcElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'font-face-src'); if (instance.constructor.name === 'SVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'font-face-src'); if (instance.constructor.name === 'SVGFontFaceSrcElement') {return false;}"
     },
     "SVGFontFaceUriElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'font-face-uri'); if (instance.constructor.name === 'SVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'font-face-uri'); if (instance.constructor.name === 'SVGFontFaceUriElement') {return false;}"
     },
     "SVGForeignObjectElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'foreignObject'); if (instance.constructor.name === 'SVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'foreignObject'); if (instance.constructor.name === 'SVGForeignObjectElement') {return false;}"
     },
     "SVGGElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'g'); if (instance.constructor.name === 'SVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'g'); if (instance.constructor.name === 'SVGGElement') {return false;}"
     },
     "SVGGeometryElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'geometry'); if (instance.constructor.name === 'SVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'geometry'); if (instance.constructor.name === 'SVGGeometryElement') {return false;}"
     },
     "SVGGlyphElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'glyph'); if (instance.constructor.name === 'SVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'glyph'); if (instance.constructor.name === 'SVGGlyphElement') {return false;}"
     },
     "SVGGlyphRefElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'glyphRef'); if (instance.constructor.name === 'SVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'glyphRef'); if (instance.constructor.name === 'SVGGlyphRefElement') {return false;}"
     },
     "SVGGradientElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'gradient'); if (instance.constructor.name === 'SVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'gradient'); if (instance.constructor.name === 'SVGGradientElement') {return false;}"
     },
     "SVGHKernElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'hkern'); if (instance.constructor.name === 'SVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'hkern'); if (instance.constructor.name === 'SVGHKernElement') {return false;}"
     },
     "SVGImageElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'image'); if (instance.constructor.name === 'SVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'image'); if (instance.constructor.name === 'SVGImageElement') {return false;}"
     },
     "SVGLinearGradientElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient'); if (instance.constructor.name === 'SVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient'); if (instance.constructor.name === 'SVGLinearGradientElement') {return false;}"
     },
     "SVGLineElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'line'); if (instance.constructor.name === 'SVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'line'); if (instance.constructor.name === 'SVGLineElement') {return false;}"
     },
     "SVGMaskElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'mask'); if (instance.constructor.name === 'SVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'mask'); if (instance.constructor.name === 'SVGMaskElement') {return false;}"
     },
     "SVGMeshElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'mesh'); if (instance.constructor.name === 'SVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'mesh'); if (instance.constructor.name === 'SVGMeshElement') {return false;}"
     },
     "SVGMetadataElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'metadata'); if (instance.constructor.name === 'SVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'metadata'); if (instance.constructor.name === 'SVGMetadataElement') {return false;}"
     },
     "SVGMissingGlyphElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'missing-glyph'); if (instance.constructor.name === 'SVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'missing-glyph'); if (instance.constructor.name === 'SVGMissingGlyphElement') {return false;}"
     },
     "SVGMPathElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'mpath'); if (instance.constructor.name === 'SVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'mpath'); if (instance.constructor.name === 'SVGMPathElement') {return false;}"
     },
     "SVGPathElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'path'); if (instance.constructor.name === 'SVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'path'); if (instance.constructor.name === 'SVGPathElement') {return false;}"
     },
     "SVGPatternElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'pattern'); if (instance.constructor.name === 'SVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'pattern'); if (instance.constructor.name === 'SVGPatternElement') {return false;}"
     },
     "SVGPolygonElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'polygon'); if (instance.constructor.name === 'SVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'polygon'); if (instance.constructor.name === 'SVGPolygonElement') {return false;}"
     },
     "SVGPolylineElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'polyline'); if (instance.constructor.name === 'SVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'polyline'); if (instance.constructor.name === 'SVGPolylineElement') {return false;}"
     },
     "SVGRadialGradientElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'radialGradient'); if (instance.constructor.name === 'SVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'radialGradient'); if (instance.constructor.name === 'SVGRadialGradientElement') {return false;}"
     },
     "SVGRectElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'rect'); if (instance.constructor.name === 'SVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'rect'); if (instance.constructor.name === 'SVGRectElement') {return false;}"
     },
     "SVGScriptElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'script'); if (instance.constructor.name === 'SVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'script'); if (instance.constructor.name === 'SVGScriptElement') {return false;}"
     },
     "SVGSetElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'set'); if (instance.constructor.name === 'SVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'set'); if (instance.constructor.name === 'SVGSetElement') {return false;}"
     },
     "SVGSolidcolorElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'solidcolor'); if (instance.constructor.name === 'SVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'solidcolor'); if (instance.constructor.name === 'SVGSolidcolorElement') {return false;}"
     },
     "SVGStopElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'stop'); if (instance.constructor.name === 'SVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'stop'); if (instance.constructor.name === 'SVGStopElement') {return false;}"
     },
     "SVGStyleElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'style'); if (instance.constructor.name === 'SVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'style'); if (instance.constructor.name === 'SVGStyleElement') {return false;}"
     },
     "SVGSVGElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'svg'); if (instance.constructor.name === 'SVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'svg'); if (instance.constructor.name === 'SVGSVGElement') {return false;}"
     },
     "SVGSwitchElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'switch'); if (instance.constructor.name === 'SVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'switch'); if (instance.constructor.name === 'SVGSwitchElement') {return false;}"
     },
     "SVGSymbolElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'symbol'); if (instance.constructor.name === 'SVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'symbol'); if (instance.constructor.name === 'SVGSymbolElement') {return false;}"
     },
     "SVGTextElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'text'); if (instance.constructor.name === 'SVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'text'); if (instance.constructor.name === 'SVGTextElement') {return false;}"
     },
     "SVGTextPathElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'textPath'); if (instance.constructor.name === 'SVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'textPath'); if (instance.constructor.name === 'SVGTextPathElement') {return false;}"
     },
     "SVGTitleElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'title'); if (instance.constructor.name === 'SVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'title'); if (instance.constructor.name === 'SVGTitleElement') {return false;}"
     },
     "SVGTRefElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'tref'); if (instance.constructor.name === 'SVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'tref'); if (instance.constructor.name === 'SVGTRefElement') {return false;}"
     },
     "SVGTSpanElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'tspan'); if (instance.constructor.name === 'SVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'tspan'); if (instance.constructor.name === 'SVGTSpanElement') {return false;}"
     },
     "SVGUnknownElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'unknown'); if (instance.constructor.name === 'SVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'unknown'); if (instance.constructor.name === 'SVGUnknownElement') {return false;}"
     },
     "SVGUseElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'use'); if (instance.constructor.name === 'SVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'use'); if (instance.constructor.name === 'SVGUseElement') {return false;}"
     },
     "SVGViewElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'view'); if (instance.constructor.name === 'SVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'view'); if (instance.constructor.name === 'SVGViewElement') {return false;}"
     },
     "SVGVKernElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'vkern'); if (instance.constructor.name === 'SVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'vkern'); if (instance.constructor.name === 'SVGVKernElement') {return false;}"
     },
     "TreeWalker": {
       "__base": "var instance = document.createTreeWalker(document);"
