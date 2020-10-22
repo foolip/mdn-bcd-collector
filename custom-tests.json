@@ -205,49 +205,49 @@
       "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createGain();"
     },
     "HTMLAnchorElement": {
-      "__base": "var instance = document.createElement('a'); if (instance.constructor.name =!= 'HTMLAnchorElement') {return false;}"
+      "__base": "var instance = document.createElement('a'); if (instance.constructor.name !== 'HTMLAnchorElement') {return false;}"
     },
     "HTMLAreaElement": {
-      "__base": "var instance = document.createElement('area'); if (instance.constructor.name!=== 'HTMLAreaElement') {return false;}"
+      "__base": "var instance = document.createElement('area'); if (instance.constructor.name !== 'HTMLAreaElement') {return false;}"
     },
     "HTMLAudioElement": {
       "__base": "var instance = document.createElement('audio'); if (instance.constructor.name !== 'HTMLAudioElement') {return false;}"
     },
     "HTMLBaseElement": {
-      "__base": "var instance = document.createElement('base'); if (instance.constructor.name!=== 'HTMLBaseElement') {return false;}"
+      "__base": "var instance = document.createElement('base'); if (instance.constructor.name !== 'HTMLBaseElement') {return false;}"
     },
     "HTMLBaseFontElement": {
-      "__base": "var instance = document.createElement('basefont'); if (instance.constructor.name ===!'HTMLBaseFontElement') {return false;}"
+      "__base": "var instance = document.createElement('basefont'); if (instance.constructor.name !== 'HTMLBaseFontElement') {return false;}"
     },
     "HTMLBodyElement": {
-      "__base": "var instance = document.createElement('body'); if (instance.constructor.name!=== 'HTMLBodyElement') {return false;}"
+      "__base": "var instance = document.createElement('body'); if (instance.constructor.name !== 'HTMLBodyElement') {return false;}"
     },
     "HTMLBRElement": {
-      "__base": "var instance = document.createElement('br'); if (instance.constructor.na!e === 'HTMLBRElement') {return false;}"
+      "__base": "var instance = document.createElement('br'); if (instance.constructor.name !== 'HTMLBRElement') {return false;}"
     },
     "HTMLButtonElement": {
-      "__base": "var instance = document.createElement('button'); if (instance.constructor.name =!= 'HTMLButtonElement') {return false;}"
+      "__base": "var instance = document.createElement('button'); if (instance.constructor.name !== 'HTMLButtonElement') {return false;}"
     },
     "HTMLCanvasElement": {
-      "__base": "var instance = document.createElement('canvas'); if (instance.constructor.name =!= 'HTMLCanvasElement') {return false;}"
+      "__base": "var instance = document.createElement('canvas'); if (instance.constructor.name !== 'HTMLCanvasElement') {return false;}"
     },
     "HTMLContentElement": {
-      "__base": "var instance = document.createElement('content'); if (instance.constructor.name ==! 'HTMLContentElement') {return false;}"
+      "__base": "var instance = document.createElement('content'); if (instance.constructor.name !== 'HTMLContentElement') {return false;}"
     },
     "HTMLDataElement": {
-      "__base": "var instance = document.createElement('data'); if (instance.constructor.name!=== 'HTMLDataElement') {return false;}"
+      "__base": "var instance = document.createElement('data'); if (instance.constructor.name !== 'HTMLDataElement') {return false;}"
     },
     "HTMLDataListElement": {
-      "__base": "var instance = document.createElement('datalist'); if (instance.constructor.name ===!'HTMLDataListElement') {return false;}"
+      "__base": "var instance = document.createElement('datalist'); if (instance.constructor.name !== 'HTMLDataListElement') {return false;}"
     },
     "HTMLDetailsElement": {
-      "__base": "var instance = document.createElement('details'); if (instance.constructor.name ==! 'HTMLDetailsElement') {return false;}"
+      "__base": "var instance = document.createElement('details'); if (instance.constructor.name !== 'HTMLDetailsElement') {return false;}"
     },
     "HTMLDialogElement": {
-      "__base": "var instance = document.createElement('dialog'); if (instance.constructor.name =!= 'HTMLDialogElement') {return false;}"
+      "__base": "var instance = document.createElement('dialog'); if (instance.constructor.name !== 'HTMLDialogElement') {return false;}"
     },
     "HTMLDivElement": {
-      "__base": "var instance = document.createElement('div'); if (instance.constructor.nam! === 'HTMLDivElement') {return false;}"
+      "__base": "var instance = document.createElement('div'); if (instance.constructor.name !== 'HTMLDivElement') {return false;}"
     },
     "HTMLDListElement": {
       "__base": "var instance = document.createElement('dl'); if (instance.constructor.name !== 'HTMLDListElement') {return false;}"
@@ -259,34 +259,34 @@
       "__base": "var instance = document.createElement('embed'); if (instance.constructor.name !== 'HTMLEmbedElement') {return false;}"
     },
     "HTMLFieldSetElement": {
-      "__base": "var instance = document.createElement('fieldset'); if (instance.constructor.name ===!'HTMLFieldSetElement') {return false;}"
+      "__base": "var instance = document.createElement('fieldset'); if (instance.constructor.name !== 'HTMLFieldSetElement') {return false;}"
     },
     "HTMLFontElement": {
-      "__base": "var instance = document.createElement('font'); if (instance.constructor.name!=== 'HTMLFontElement') {return false;}"
+      "__base": "var instance = document.createElement('font'); if (instance.constructor.name !== 'HTMLFontElement') {return false;}"
     },
     "HTMLFormElement": {
-      "__base": "var instance = document.createElement('form'); if (instance.constructor.name!=== 'HTMLFormElement') {return false;}"
+      "__base": "var instance = document.createElement('form'); if (instance.constructor.name !== 'HTMLFormElement') {return false;}"
     },
     "HTMLFrameElement": {
       "__base": "var instance = document.createElement('frame'); if (instance.constructor.name !== 'HTMLFrameElement') {return false;}"
     },
     "HTMLFrameSetElement": {
-      "__base": "var instance = document.createElement('frameset'); if (instance.constructor.name ===!'HTMLFrameSetElement') {return false;}"
+      "__base": "var instance = document.createElement('frameset'); if (instance.constructor.name !== 'HTMLFrameSetElement') {return false;}"
     },
     "HTMLHeadElement": {
-      "__base": "var instance = document.createElement('head'); if (instance.constructor.name!=== 'HTMLHeadElement') {return false;}"
+      "__base": "var instance = document.createElement('head'); if (instance.constructor.name !== 'HTMLHeadElement') {return false;}"
     },
     "HTMLHeadingElement": {
-      "__base": "var instance = document.createElement('h1'); if (instance.constructor.name ==! 'HTMLHeadingElement') {return false;}"
+      "__base": "var instance = document.createElement('h1'); if (instance.constructor.name !== 'HTMLHeadingElement') {return false;}"
     },
     "HTMLHRElement": {
-      "__base": "var instance = document.createElement('hr'); if (instance.constructor.na!e === 'HTMLHRElement') {return false;}"
+      "__base": "var instance = document.createElement('hr'); if (instance.constructor.name !== 'HTMLHRElement') {return false;}"
     },
     "HTMLHtmlElement": {
-      "__base": "var instance = document.createElement('html'); if (instance.constructor.name!=== 'HTMLHtmlElement') {return false;}"
+      "__base": "var instance = document.createElement('html'); if (instance.constructor.name !== 'HTMLHtmlElement') {return false;}"
     },
     "HTMLIFrameElement": {
-      "__base": "var instance = document.createElement('iframe'); if (instance.constructor.name =!= 'HTMLIFrameElement') {return false;}"
+      "__base": "var instance = document.createElement('iframe'); if (instance.constructor.name !== 'HTMLIFrameElement') {return false;}"
     },
     "HTMLImageElement": {
       "__base": "var instance = document.createElement('img'); if (instance.constructor.name !== 'HTMLImageElement') {return false;}"
@@ -295,127 +295,127 @@
       "__base": "var instance = document.createElement('input'); if (instance.constructor.name !== 'HTMLInputElement') {return false;}"
     },
     "HTMLIsIndexElement": {
-      "__base": "var instance = document.createElement('isindex'); if (instance.constructor.name ==! 'HTMLIsIndexElement') {return false;}"
+      "__base": "var instance = document.createElement('isindex'); if (instance.constructor.name !== 'HTMLIsIndexElement') {return false;}"
     },
     "HTMLKeygenElement": {
-      "__base": "var instance = document.createElement('keygen'); if (instance.constructor.name =!= 'HTMLKeygenElement') {return false;}"
+      "__base": "var instance = document.createElement('keygen'); if (instance.constructor.name !== 'HTMLKeygenElement') {return false;}"
     },
     "HTMLLabelElement": {
       "__base": "var instance = document.createElement('label'); if (instance.constructor.name !== 'HTMLLabelElement') {return false;}"
     },
     "HTMLLegendElement": {
-      "__base": "var instance = document.createElement('legend'); if (instance.constructor.name =!= 'HTMLLegendElement') {return false;}"
+      "__base": "var instance = document.createElement('legend'); if (instance.constructor.name !== 'HTMLLegendElement') {return false;}"
     },
     "HTMLLIElement": {
-      "__base": "var instance = document.createElement('li'); if (instance.constructor.na!e === 'HTMLLIElement') {return false;}"
+      "__base": "var instance = document.createElement('li'); if (instance.constructor.name !== 'HTMLLIElement') {return false;}"
     },
     "HTMLLinkElement": {
-      "__base": "var instance = document.createElement('link'); if (instance.constructor.name!=== 'HTMLLinkElement') {return false;}"
+      "__base": "var instance = document.createElement('link'); if (instance.constructor.name !== 'HTMLLinkElement') {return false;}"
     },
     "HTMLMapElement": {
-      "__base": "var instance = document.createElement('map'); if (instance.constructor.nam! === 'HTMLMapElement') {return false;}"
+      "__base": "var instance = document.createElement('map'); if (instance.constructor.name !== 'HTMLMapElement') {return false;}"
     },
     "HTMLMarqueeElement": {
-      "__base": "var instance = document.createElement('marquee'); if (instance.constructor.name ==! 'HTMLMarqueeElement') {return false;}"
+      "__base": "var instance = document.createElement('marquee'); if (instance.constructor.name !== 'HTMLMarqueeElement') {return false;}"
     },
     "HTMLMediaElement": {
       "__base": "<%api.HTMLVideoElement:instance%>"
     },
     "HTMLMenuElement": {
-      "__base": "var instance = document.createElement('menu'); if (instance.constructor.name!=== 'HTMLMenuElement') {return false;}"
+      "__base": "var instance = document.createElement('menu'); if (instance.constructor.name !== 'HTMLMenuElement') {return false;}"
     },
     "HTMLMenuItemElement": {
-      "__base": "var instance = document.createElement('menuitem'); if (instance.constructor.name ===!'HTMLMenuItemElement') {return false;}"
+      "__base": "var instance = document.createElement('menuitem'); if (instance.constructor.name !== 'HTMLMenuItemElement') {return false;}"
     },
     "HTMLMetaElement": {
-      "__base": "var instance = document.createElement('meta'); if (instance.constructor.name!=== 'HTMLMetaElement') {return false;}"
+      "__base": "var instance = document.createElement('meta'); if (instance.constructor.name !== 'HTMLMetaElement') {return false;}"
     },
     "HTMLMeterElement": {
       "__base": "var instance = document.createElement('meter'); if (instance.constructor.name !== 'HTMLMeterElement') {return false;}"
     },
     "HTMLModElement": {
-      "__base": "var instance = document.createElement('del'); if (instance.constructor.nam! === 'HTMLModElement') {return false;}"
+      "__base": "var instance = document.createElement('del'); if (instance.constructor.name !== 'HTMLModElement') {return false;}"
     },
     "HTMLObjectElement": {
-      "__base": "var instance = document.createElement('object'); if (instance.constructor.name =!= 'HTMLObjectElement') {return false;}"
+      "__base": "var instance = document.createElement('object'); if (instance.constructor.name !== 'HTMLObjectElement') {return false;}"
     },
     "HTMLOListElement": {
       "__base": "var instance = document.createElement('ol'); if (instance.constructor.name !== 'HTMLOListElement') {return false;}"
     },
     "HTMLOptGroupElement": {
-      "__base": "var instance = document.createElement('optgroup'); if (instance.constructor.name ===!'HTMLOptGroupElement') {return false;}"
+      "__base": "var instance = document.createElement('optgroup'); if (instance.constructor.name !== 'HTMLOptGroupElement') {return false;}"
     },
     "HTMLOptionElement": {
-      "__base": "var instance = document.createElement('option'); if (instance.constructor.name =!= 'HTMLOptionElement') {return false;}"
+      "__base": "var instance = document.createElement('option'); if (instance.constructor.name !== 'HTMLOptionElement') {return false;}"
     },
     "HTMLOutputElement": {
-      "__base": "var instance = document.createElement('output'); if (instance.constructor.name =!= 'HTMLOutputElement') {return false;}"
+      "__base": "var instance = document.createElement('output'); if (instance.constructor.name !== 'HTMLOutputElement') {return false;}"
     },
     "HTMLParagraphElement": {
-      "__base": "var instance = document.createElement('p'); if (instance.constructor.name === !HTMLParagraphElement') {return false;}"
+      "__base": "var instance = document.createElement('p'); if (instance.constructor.name !== 'HTMLParagraphElement') {return false;}"
     },
     "HTMLParamElement": {
       "__base": "var instance = document.createElement('param'); if (instance.constructor.name !== 'HTMLParamElement') {return false;}"
     },
     "HTMLPictureElement": {
-      "__base": "var instance = document.createElement('picture'); if (instance.constructor.name ==! 'HTMLPictureElement') {return false;}"
+      "__base": "var instance = document.createElement('picture'); if (instance.constructor.name !== 'HTMLPictureElement') {return false;}"
     },
     "HTMLPreElement": {
-      "__base": "var instance = document.createElement('pre'); if (instance.constructor.nam! === 'HTMLPreElement') {return false;}"
+      "__base": "var instance = document.createElement('pre'); if (instance.constructor.name !== 'HTMLPreElement') {return false;}"
     },
     "HTMLProgressElement": {
-      "__base": "var instance = document.createElement('progress'); if (instance.constructor.name ===!'HTMLProgressElement') {return false;}"
+      "__base": "var instance = document.createElement('progress'); if (instance.constructor.name !== 'HTMLProgressElement') {return false;}"
     },
     "HTMLQuoteElement": {
       "__base": "var instance = document.createElement('blockquote'); if (instance.constructor.name !== 'HTMLQuoteElement') {return false;}"
     },
     "HTMLScriptElement": {
-      "__base": "var instance = document.createElement('script'); if (instance.constructor.name =!= 'HTMLScriptElement') {return false;}"
+      "__base": "var instance = document.createElement('script'); if (instance.constructor.name !== 'HTMLScriptElement') {return false;}"
     },
     "HTMLSelectElement": {
-      "__base": "var instance = document.createElement('select'); if (instance.constructor.name =!= 'HTMLSelectElement') {return false;}"
+      "__base": "var instance = document.createElement('select'); if (instance.constructor.name !== 'HTMLSelectElement') {return false;}"
     },
     "HTMLShadowElement": {
-      "__base": "var instance = document.createElement('shadow'); if (instance.constructor.name =!= 'HTMLShadowElement') {return false;}"
+      "__base": "var instance = document.createElement('shadow'); if (instance.constructor.name !== 'HTMLShadowElement') {return false;}"
     },
     "HTMLSlotElement": {
-      "__base": "var instance = document.createElement('slot'); if (instance.constructor.name!=== 'HTMLSlotElement') {return false;}"
+      "__base": "var instance = document.createElement('slot'); if (instance.constructor.name !== 'HTMLSlotElement') {return false;}"
     },
     "HTMLSourceElement": {
-      "__base": "var instance = document.createElement('source'); if (instance.constructor.name =!= 'HTMLSourceElement') {return false;}"
+      "__base": "var instance = document.createElement('source'); if (instance.constructor.name !== 'HTMLSourceElement') {return false;}"
     },
     "HTMLSpanElement": {
-      "__base": "var instance = document.createElement('span'); if (instance.constructor.name!=== 'HTMLSpanElement') {return false;}"
+      "__base": "var instance = document.createElement('span'); if (instance.constructor.name !== 'HTMLSpanElement') {return false;}"
     },
     "HTMLStyleElement": {
       "__base": "var instance = document.createElement('style'); if (instance.constructor.name !== 'HTMLStyleElement') {return false;}"
     },
     "HTMLTableCaptionElement": {
-      "__base": "var instance = document.createElement('caption'); if (instance.constructor.name === 'HT!LTableCaptionElement') {return false;}"
+      "__base": "var instance = document.createElement('caption'); if (instance.constructor.name !== 'HTMLTableCaptionElement') {return false;}"
     },
     "HTMLTableCellElement": {
-      "__base": "var instance = document.createElement('td'); if (instance.constructor.name === !HTMLTableCellElement') {return false;}"
+      "__base": "var instance = document.createElement('td'); if (instance.constructor.name !== 'HTMLTableCellElement') {return false;}"
     },
     "HTMLTableColElement": {
-      "__base": "var instance = document.createElement('col'); if (instance.constructor.name ===!'HTMLTableColElement') {return false;}"
+      "__base": "var instance = document.createElement('col'); if (instance.constructor.name !== 'HTMLTableColElement') {return false;}"
     },
     "HTMLTableElement": {
       "__base": "var instance = document.createElement('table'); if (instance.constructor.name !== 'HTMLTableElement') {return false;}"
     },
     "HTMLTableRowElement": {
-      "__base": "var instance = document.createElement('tr'); if (instance.constructor.name ===!'HTMLTableRowElement') {return false;}"
+      "__base": "var instance = document.createElement('tr'); if (instance.constructor.name !== 'HTMLTableRowElement') {return false;}"
     },
     "HTMLTableSectionElement": {
-      "__base": "var instance = document.createElement('tbody'); if (instance.constructor.name === 'HT!LTableSectionElement') {return false;}"
+      "__base": "var instance = document.createElement('tbody'); if (instance.constructor.name !== 'HTMLTableSectionElement') {return false;}"
     },
     "HTMLTemplateElement": {
-      "__base": "var instance = document.createElement('template'); if (instance.constructor.name ===!'HTMLTemplateElement') {return false;}"
+      "__base": "var instance = document.createElement('template'); if (instance.constructor.name !== 'HTMLTemplateElement') {return false;}"
     },
     "HTMLTextAreaElement": {
-      "__base": "var instance = document.createElement('textarea'); if (instance.constructor.name ===!'HTMLTextAreaElement') {return false;}"
+      "__base": "var instance = document.createElement('textarea'); if (instance.constructor.name !== 'HTMLTextAreaElement') {return false;}"
     },
     "HTMLTimeElement": {
-      "__base": "var instance = document.createElement('time'); if (instance.constructor.name!=== 'HTMLTimeElement') {return false;}"
+      "__base": "var instance = document.createElement('time'); if (instance.constructor.name !== 'HTMLTimeElement') {return false;}"
     },
     "HTMLTitleElement": {
       "__base": "var instance = document.createElement('title'); if (instance.constructor.name !== 'HTMLTitleElement') {return false;}"
@@ -427,7 +427,7 @@
       "__base": "var instance = document.createElement('ul'); if (instance.constructor.name !== 'HTMLUListElement') {return false;}"
     },
     "HTMLUnknownElement": {
-      "__base": "var instance = document.createElement('unknown'); if (instance.constructor.name === 'HTMLElement') {return false;}"
+      "__base": "var instance = document.createElement('unknown'); if (instance.constructor.name !== 'HTMLUnknownElement') {return false;}"
     },
     "HTMLVideoElement": {
       "__base": "var instance = document.createElement('video'); if (instance.constructor.name !== 'HTMLVideoElement') {return false;}"
