@@ -39,13 +39,6 @@ jobs:
     - name: Deploy to Staging
       run: gcloud app deploy --version=staging --no-promote
     - if: steps.version-updated.outputs.has-updated
-      name: Update `prod` branch
-      uses: Embraser01/update-git-branch-action@v1.0.0
-      with:
-        branch: prod
-        force: false
-        githubToken: ${{ secrets.GITHUB_TOKEN }}
-    - if: steps.version-updated.outputs.has-updated
       name: Deploy to Production
       run: gcloud app deploy --version=production --promote
 env:
