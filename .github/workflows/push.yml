@@ -42,8 +42,7 @@ jobs:
       name: Deploy to Production
       run: |
         git branch prod -f
-        git checkout prod
-        git push
+        git push --set-upstream origin prod
         gcloud app deploy --version=production --promote
 env:
   FORCE_COLOR: 3
