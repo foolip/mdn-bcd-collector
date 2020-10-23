@@ -36,8 +36,10 @@ jobs:
     - run: echo "$SECRETS_JSON" | base64 --decode > secrets.json
       env:
         SECRETS_JSON: ${{ secrets.SECRETS_JSON }}
-    - run: gcloud app deploy --version=staging --no-promote
+    - name: Deploy to Staging
+      run: gcloud app deploy --version=staging --no-promote
     - if: steps.version-updated.outputs.has-updated
+      name: Deploy to Production
       run: |
         git branch prod -f
         git checkout prod
