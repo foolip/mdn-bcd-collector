@@ -136,6 +136,11 @@ input::placeholder {
 }
 /* End */
 
+h1 .version {
+  font-size: 40%;
+  opacity: 0.4;
+}
+
 #homeInfo {
   margin-right: 50px;
 }
