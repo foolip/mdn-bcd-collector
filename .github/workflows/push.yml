@@ -41,7 +41,7 @@ jobs:
     - if: steps.version-updated.outputs.has-updated
       name: Deploy to Production
       run: |
-        git checkout prod
+        git checkout -b prod origin/prod
         git merge origin/main
         git push --set-upstream origin prod
         gcloud app deploy --version=production --promote
