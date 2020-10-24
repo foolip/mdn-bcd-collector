@@ -108,6 +108,14 @@ const getSafariOS = (version) => {
 const buildDriver = async (browser, version, os) => {
   let osesToTest = [];
 
+  if (
+    ct === 'browserstack' && browser === 'safari' &&
+    ['10', '11', '12', '13'].includes(version)
+  ) {
+    // BrowserStack doesn't support the Safari x.0 versions
+    return undefined;
+  }
+
   switch (os) {
     case 'Windows':
       osesToTest = [
