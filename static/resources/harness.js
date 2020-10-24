@@ -200,7 +200,9 @@
       if ('Worker' in self) {
         try {
           myWorker = new Worker('/resources/worker.js');
-        } catch (e) {}
+        } catch (e) {
+          // eslint-disable-next-rule no-empty
+        }
       }
 
       if (myWorker) {
@@ -244,11 +246,13 @@
   function runSharedWorker(callback, results) {
     if ('SharedWorker' in pending) {
       var myWorker = null;
-      
+
       if ('SharedWorker' in self) {
         try {
           myWorker = new SharedWorker('/resources/sharedworker.js');
-        } catch (e) {}
+        } catch (e) {
+          // eslint-disable-next-rule no-empty
+        }
       }
 
       if (myWorker) {
