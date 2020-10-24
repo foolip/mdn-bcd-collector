@@ -85,7 +85,7 @@ const filterVersions = (data, earliestVersion) => {
     }
   }
 
-  return versions;
+  return versions.sort((a, b) => (a - b));
 };
 
 const getSafariOS = (version) => {
