@@ -39,6 +39,12 @@ const seleniumUrl = secrets.selenium.url && secrets.selenium.url
     .replace('$USERNAME$', secrets.selenium.username)
     .replace('$ACCESSKEY$', secrets.selenium.accesskey);
 
+const ct = seleniumUrl.includes('saucelabs') ?
+           'saucelabs' :
+           seleniumUrl.includes('browserstack') ?
+           'browserstack' :
+           'unknown';
+
 const spinner = ora();
 
 const prettyName = (browser, version, os) => {
@@ -101,7 +107,6 @@ const getSafariOS = (version) => {
 
 const buildDriver = async (browser, version, os) => {
   let osesToTest = [];
-  const saucelabs = seleniumUrl.includes('saucelabs');
 
   switch (os) {
     case 'Windows':
@@ -110,7 +115,9 @@ const buildDriver = async (browser, version, os) => {
       ];
       break;
     case 'macOS':
-      osesToTest = sauceLabs ? [['macOS', '10.14']] : [['OS X', 'Mojave'], ['OS X', 'El Capitan']];
+      osesToTest = ct === 'saucelabs' ?
+                   [['macOS', '10.14']] :
+                   [['OS X', 'Mojave'], ['OS X', 'El Capitan']];
       break;
     default:
       throw new Error(`Unknown/unsupported OS: ${os}`);
@@ -128,7 +135,7 @@ const buildDriver = async (browser, version, os) => {
         'name', `mdn-bcd-collector: ${prettyName(browser, version, os)}`
     );
 
-    if (saucelabs) {
+    if (ct === 'saucelabs') {
       if (browser === 'safari') {
         capabilities.set('platform', getSafariOS(version));
       } else {
