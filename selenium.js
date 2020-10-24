@@ -151,7 +151,9 @@ const buildDriver = async (browser, version, os) => {
       }
     } else {
       capabilities.set('os', osName);
-      capabilities.set('os_version', osVersion);
+      if (browser !== 'safari') {
+        capabilities.set('os_version', osVersion);
+      }
     }
 
     const prefs = new logging.Preferences();
