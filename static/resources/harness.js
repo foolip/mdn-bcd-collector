@@ -195,9 +195,15 @@
 
   function runWorker(callback, results) {
     if ('Worker' in pending) {
-      if ('Worker' in self) {
-        var myWorker = new Worker('/resources/worker.js');
+      var myWorker = null;
 
+      if ('Worker' in self) {
+        try {
+          myWorker = new Worker('/resources/worker.js');
+        } catch (e) {}
+      }
+
+      if (myWorker) {
         myWorker.onmessage = function(event) {
           callback(results.concat(event.data));
         };
@@ -237,9 +243,15 @@
 
   function runSharedWorker(callback, results) {
     if ('SharedWorker' in pending) {
+      var myWorker = null;
+      
       if ('SharedWorker' in self) {
-        var myWorker = new SharedWorker('/resources/sharedworker.js');
+        try {
+          myWorker = new SharedWorker('/resources/sharedworker.js');
+        } catch (e) {}
+      }
 
+      if (myWorker) {
         myWorker.port.onmessage = function(event) {
           callback(results.concat(event.data));
         };
