@@ -39,6 +39,12 @@ const seleniumUrl = secrets.selenium.url && secrets.selenium.url
     .replace('$USERNAME$', secrets.selenium.username)
     .replace('$ACCESSKEY$', secrets.selenium.accesskey);
 
+const ct = seleniumUrl.includes('saucelabs') ?
+           'saucelabs' :
+           seleniumUrl.includes('browserstack') ?
+           'browserstack' :
+           'unknown';
+
 const spinner = ora();
 
 const prettyName = (browser, version, os) => {
@@ -88,12 +94,12 @@ const getSafariOS = (version) => {
 
   switch (version) {
     case '10':
-      return '10.11';
+      return 'OS X 10.11';
     case '11':
-      return '10.12';
+      return 'macOS 10.12';
     case '12':
     case '13':
-      return '10.13';
+      return 'macOS 10.13';
     default:
       return undefined;
   }
@@ -101,7 +107,14 @@ const getSafariOS = (version) => {
 
 const buildDriver = async (browser, version, os) => {
   let osesToTest = [];
-  const safariOnSauceLabs = browser === 'safari' && seleniumUrl.includes('saucelabs');
+
+  if (
+    ct === 'browserstack' && browser === 'safari' &&
+    ['10', '11', '12', '13'].includes(version)
+  ) {
+    // BrowserStack doesn't support the Safari x.0 versions
+    return undefined;
+  }
 
   switch (os) {
     case 'Windows':
@@ -110,8 +123,9 @@ const buildDriver = async (browser, version, os) => {
       ];
       break;
     case 'macOS':
-      osesToTest = [['OS X', safariOnSauceLabs && getSafariOS(version)]
-      ];
+      osesToTest = ct === 'saucelabs' ?
+                   [['macOS', '10.14']] :
+                   [['OS X', 'Mojave'], ['OS X', 'El Capitan']];
       break;
     default:
       throw new Error(`Unknown/unsupported OS: ${os}`);
@@ -129,8 +143,14 @@ const buildDriver = async (browser, version, os) => {
         'name', `mdn-bcd-collector: ${prettyName(browser, version, os)}`
     );
 
-    capabilities.set('os', osName);
-    if (osVersion) {
+    if (ct === 'saucelabs') {
+      if (browser === 'safari') {
+        capabilities.set('platform', getSafariOS(version));
+      } else {
+        capabilities.set('platform', `${osName} ${osVersion}`);
+      }
+    } else {
+      capabilities.set('os', osName);
       capabilities.set('os_version', osVersion);
     }
 
