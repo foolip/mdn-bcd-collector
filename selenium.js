@@ -237,6 +237,8 @@ const run = async (browser, version, os) => {
 
     log('Running tests...');
     await awaitPage(driver, `${host}/tests/?hideResults=on`, browser, version);
+
+    await driver.wait(until.elementLocated(By.id('status')), 5000);
     statusEl = await driver.findElement(By.id('status'));
     try {
       await driver.wait(until.elementTextContains(statusEl, 'upload'), 30000);
