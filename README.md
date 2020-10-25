@@ -39,7 +39,7 @@ To test using the latest deployed version, run:
 npm run selenium
 ```
 
-In `secrets.json`, configure your Selenium remote(s) by the service name as the key, and the URL as the value (ex. `"browserstack": "https://USERNAME:KEY@hub-cloud.browserstack.com/wd/hub"`).  Please check with your CT on how to configure your WebDriver URL.
+In `secrets.json`, configure your Selenium remote(s) by the service name as the key, and the URL as the value (ex. `"browserstack": "https://USERNAME:KEY@hub-cloud.browserstack.com/wd/hub"`). Please check with your CT on how to configure your WebDriver URL.
 
 You can also limit the browsers to test by defining browsers as arguments:
 
