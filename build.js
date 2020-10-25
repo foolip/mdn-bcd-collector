@@ -416,7 +416,6 @@ const validateIDL = (ast) => {
     'constructor-member',
     'dict-arg-default',
     'no-nointerfaceobject',
-    'replace-void',
     'require-exposed'
   ]);
 
@@ -499,7 +498,7 @@ const validateIDL = (ast) => {
     'unsigned long', // https://heycam.github.io/webidl/#idl-unsigned-long
     'unsigned short', // https://heycam.github.io/webidl/#idl-unsigned-short
     'USVString', // https://heycam.github.io/webidl/#idl-USVString
-    'void' // https://heycam.github.io/webidl/#idl-undefined (renamed)
+    'undefined' // https://heycam.github.io/webidl/#idl-undefined
   ]);
   // Add any types defined by the (flattened) spec and custom IDL.
   for (const dfn of ast) {

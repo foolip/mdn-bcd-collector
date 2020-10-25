@@ -25,7 +25,7 @@ interface MutationEvent : Event {
   readonly attribute DOMString attrName;
   readonly attribute unsigned short attrChange;
 
-  void initMutationEvent(DOMString type, boolean bubbles, boolean cancelable, Node? relatedNode, DOMString prevValue, DOMString newValue, DOMString attrName, unsigned short attrChange);
+  undefined initMutationEvent(DOMString type, boolean bubbles, boolean cancelable, Node? relatedNode, DOMString prevValue, DOMString newValue, DOMString attrName, unsigned short attrChange);
 };
 
 partial interface WheelEvent {

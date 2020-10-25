@@ -4,15 +4,15 @@
 interface BlobBuilder {
   constructor();
   Blob getBlob (optional DOMString contentType);
-  void append (DOMString text, optional DOMString endings);
-  void append (Blob data);
-  void append (ArrayBuffer data);
+  undefined append (DOMString text, optional DOMString endings);
+  undefined append (Blob data);
+  undefined append (ArrayBuffer data);
 };
 
 [Exposed=Window,Worker]
 interface FileSaver : EventTarget {
   constructor(Blob data);
-  void abort ();
+  undefined abort ();
   const unsigned short INIT = 0;
   const unsigned short WRITING = 1;
   const unsigned short DONE = 2;
@@ -35,16 +35,16 @@ interface FileSaverSync {
 interface FileWriter : FileSaver {
   readonly attribute unsigned long long position;
   readonly attribute unsigned long long length;
-  void write (Blob data);
-  void seek (long long offset);
-  void truncate (unsigned long long size);
+  undefined write (Blob data);
+  undefined seek (long long offset);
+  undefined truncate (unsigned long long size);
 };
 
 [Exposed=Window,Worker]
 interface FileWriterSync {
   readonly attribute unsigned long long position;
   readonly attribute unsigned long long length;
-  void write (Blob data);
-  void seek (long long offset);
-  void truncate (unsigned long long size);
+  undefined write (Blob data);
+  undefined seek (long long offset);
+  undefined truncate (unsigned long long size);
 };

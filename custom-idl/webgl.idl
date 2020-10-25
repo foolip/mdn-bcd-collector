@@ -7,9 +7,9 @@
 [LegacyNoInterfaceObject]
 interface ANGLE_instanced_arrays {
   const GLenum VERTEX_ATTRIB_ARRAY_DIVISOR_ANGLE = 0x88FE;
-  void drawArraysInstancedANGLE(GLenum mode, GLint first, GLsizei count, GLsizei primcount);
-  void drawElementsInstancedANGLE(GLenum mode, GLsizei count, GLenum type, GLintptr offset, GLsizei primcount);
-  void vertexAttribDivisorANGLE(GLuint index, GLuint divisor);
+  undefined drawArraysInstancedANGLE(GLenum mode, GLint first, GLsizei count, GLsizei primcount);
+  undefined drawElementsInstancedANGLE(GLenum mode, GLsizei count, GLenum type, GLintptr offset, GLsizei primcount);
+  undefined vertexAttribDivisorANGLE(GLuint index, GLuint divisor);
 };
 
 // https://www.khronos.org/registry/webgl/extensions/EXT_blend_minmax/
@@ -55,11 +55,11 @@ interface EXT_disjoint_timer_query {
   const GLenum GPU_DISJOINT_EXT = 0x8FBB;
 
   WebGLTimerQueryEXT? createQueryEXT();
-  void deleteQueryEXT(WebGLTimerQueryEXT? query);
+  undefined deleteQueryEXT(WebGLTimerQueryEXT? query);
   boolean isQueryEXT(WebGLTimerQueryEXT? query);
-  void beginQueryEXT(GLenum target, WebGLTimerQueryEXT query);
-  void endQueryEXT(GLenum target);
-  void queryCounterEXT(WebGLTimerQueryEXT query, GLenum target);
+  undefined beginQueryEXT(GLenum target, WebGLTimerQueryEXT query);
+  undefined endQueryEXT(GLenum target);
+  undefined queryCounterEXT(WebGLTimerQueryEXT query, GLenum target);
   any getQueryEXT(GLenum target, GLenum pname);
   any getQueryObjectEXT(WebGLTimerQueryEXT query, GLenum pname);
 };
