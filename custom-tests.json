@@ -205,232 +205,306 @@
       "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createGain();"
     },
     "HTMLAnchorElement": {
-      "__base": "var instance = document.createElement('a'); if (instance.constructor.name !== 'HTMLAnchorElement') {return false;}"
+      "__base": "var instance = document.createElement('a');",
+      "__test": "if (instance.constructor.name !== 'HTMLAnchorElement') {return false;} return !!instance;"
     },
     "HTMLAreaElement": {
-      "__base": "var instance = document.createElement('area'); if (instance.constructor.name !== 'HTMLAreaElement') {return false;}"
+      "__base": "var instance = document.createElement('area');",
+      "__test": "if (instance.constructor.name !== 'HTMLAreaElement') {return false;} return !!instance;"
     },
     "HTMLAudioElement": {
-      "__base": "var instance = document.createElement('audio'); if (instance.constructor.name !== 'HTMLAudioElement') {return false;}"
+      "__base": "var instance = document.createElement('audio');",
+      "__test": "if (instance.constructor.name !== 'HTMLAudioElement') {return false;} return !!instance;"
     },
     "HTMLBaseElement": {
-      "__base": "var instance = document.createElement('base'); if (instance.constructor.name !== 'HTMLBaseElement') {return false;}"
+      "__base": "var instance = document.createElement('base');",
+      "__test": "if (instance.constructor.name !== 'HTMLBaseElement') {return false;} return !!instance;"
     },
     "HTMLBaseFontElement": {
-      "__base": "var instance = document.createElement('basefont'); if (instance.constructor.name !== 'HTMLBaseFontElement') {return false;}"
+      "__base": "var instance = document.createElement('basefont');",
+      "__test": "if (instance.constructor.name !== 'HTMLBaseFontElement') {return false;} return !!instance;"
     },
     "HTMLBodyElement": {
-      "__base": "var instance = document.createElement('body'); if (instance.constructor.name !== 'HTMLBodyElement') {return false;}"
+      "__base": "var instance = document.createElement('body');",
+      "__test": "if (instance.constructor.name !== 'HTMLBodyElement') {return false;} return !!instance;"
     },
     "HTMLBRElement": {
-      "__base": "var instance = document.createElement('br'); if (instance.constructor.name !== 'HTMLBRElement') {return false;}"
+      "__base": "var instance = document.createElement('br');",
+      "__test": "if (instance.constructor.name !== 'HTMLBRElement') {return false;} return !!instance;"
     },
     "HTMLButtonElement": {
-      "__base": "var instance = document.createElement('button'); if (instance.constructor.name !== 'HTMLButtonElement') {return false;}"
+      "__base": "var instance = document.createElement('button');",
+      "__test": "if (instance.constructor.name !== 'HTMLButtonElement') {return false;} return !!instance;"
     },
     "HTMLCanvasElement": {
-      "__base": "var instance = document.createElement('canvas'); if (instance.constructor.name !== 'HTMLCanvasElement') {return false;}"
+      "__base": "var instance = document.createElement('canvas');",
+      "__test": "if (instance.constructor.name !== 'HTMLCanvasElement') {return false;} return !!instance;"
     },
     "HTMLContentElement": {
-      "__base": "var instance = document.createElement('content'); if (instance.constructor.name !== 'HTMLContentElement') {return false;}"
+      "__base": "var instance = document.createElement('content');",
+      "__test": "if (instance.constructor.name !== 'HTMLContentElement') {return false;} return !!instance;"
     },
     "HTMLDataElement": {
-      "__base": "var instance = document.createElement('data'); if (instance.constructor.name !== 'HTMLDataElement') {return false;}"
+      "__base": "var instance = document.createElement('data');",
+      "__test": "if (instance.constructor.name !== 'HTMLDataElement') {return false;} return !!instance;"
     },
     "HTMLDataListElement": {
-      "__base": "var instance = document.createElement('datalist'); if (instance.constructor.name !== 'HTMLDataListElement') {return false;}"
+      "__base": "var instance = document.createElement('datalist');",
+      "__test": "if (instance.constructor.name !== 'HTMLDataListElement') {return false;} return !!instance;"
     },
     "HTMLDetailsElement": {
-      "__base": "var instance = document.createElement('details'); if (instance.constructor.name !== 'HTMLDetailsElement') {return false;}"
+      "__base": "var instance = document.createElement('details');",
+      "__test": "if (instance.constructor.name !== 'HTMLDetailsElement') {return false;} return !!instance;"
     },
     "HTMLDialogElement": {
-      "__base": "var instance = document.createElement('dialog'); if (instance.constructor.name !== 'HTMLDialogElement') {return false;}"
+      "__base": "var instance = document.createElement('dialog');",
+      "__test": "if (instance.constructor.name !== 'HTMLDialogElement') {return false;} return !!instance;"
     },
     "HTMLDivElement": {
-      "__base": "var instance = document.createElement('div'); if (instance.constructor.name !== 'HTMLDivElement') {return false;}"
+      "__base": "var instance = document.createElement('div');",
+      "__test": "if (instance.constructor.name !== 'HTMLDivElement') {return false;} return !!instance;"
     },
     "HTMLDListElement": {
-      "__base": "var instance = document.createElement('dl'); if (instance.constructor.name !== 'HTMLDListElement') {return false;}"
+      "__base": "var instance = document.createElement('dl');",
+      "__test": "if (instance.constructor.name !== 'HTMLDListElement') {return false;} return !!instance;"
     },
     "HTMLElement": {
       "__base": "<%api.HTMLParagraphElement:instance%>"
     },
     "HTMLEmbedElement": {
-      "__base": "var instance = document.createElement('embed'); if (instance.constructor.name !== 'HTMLEmbedElement') {return false;}"
+      "__base": "var instance = document.createElement('embed');",
+      "__test": "if (instance.constructor.name !== 'HTMLEmbedElement') {return false;} return !!instance;"
     },
     "HTMLFieldSetElement": {
-      "__base": "var instance = document.createElement('fieldset'); if (instance.constructor.name !== 'HTMLFieldSetElement') {return false;}"
+      "__base": "var instance = document.createElement('fieldset');",
+      "__test": "if (instance.constructor.name !== 'HTMLFieldSetElement') {return false;} return !!instance;"
     },
     "HTMLFontElement": {
-      "__base": "var instance = document.createElement('font'); if (instance.constructor.name !== 'HTMLFontElement') {return false;}"
+      "__base": "var instance = document.createElement('font');",
+      "__test": "if (instance.constructor.name !== 'HTMLFontElement') {return false;} return !!instance;"
     },
     "HTMLFormElement": {
-      "__base": "var instance = document.createElement('form'); if (instance.constructor.name !== 'HTMLFormElement') {return false;}"
+      "__base": "var instance = document.createElement('form');",
+      "__test": "if (instance.constructor.name !== 'HTMLFormElement') {return false;} return !!instance;"
     },
     "HTMLFrameElement": {
-      "__base": "var instance = document.createElement('frame'); if (instance.constructor.name !== 'HTMLFrameElement') {return false;}"
+      "__base": "var instance = document.createElement('frame');",
+      "__test": "if (instance.constructor.name !== 'HTMLFrameElement') {return false;} return !!instance;"
     },
     "HTMLFrameSetElement": {
-      "__base": "var instance = document.createElement('frameset'); if (instance.constructor.name !== 'HTMLFrameSetElement') {return false;}"
+      "__base": "var instance = document.createElement('frameset');",
+      "__test": "if (instance.constructor.name !== 'HTMLFrameSetElement') {return false;} return !!instance;"
     },
     "HTMLHeadElement": {
-      "__base": "var instance = document.createElement('head'); if (instance.constructor.name !== 'HTMLHeadElement') {return false;}"
+      "__base": "var instance = document.createElement('head');",
+      "__test": "if (instance.constructor.name !== 'HTMLHeadElement') {return false;} return !!instance;"
     },
     "HTMLHeadingElement": {
-      "__base": "var instance = document.createElement('h1'); if (instance.constructor.name !== 'HTMLHeadingElement') {return false;}"
+      "__base": "var instance = document.createElement('h1');",
+      "__test": "if (instance.constructor.name !== 'HTMLHeadingElement') {return false;} return !!instance;"
     },
     "HTMLHRElement": {
-      "__base": "var instance = document.createElement('hr'); if (instance.constructor.name !== 'HTMLHRElement') {return false;}"
+      "__base": "var instance = document.createElement('hr');",
+      "__test": "if (instance.constructor.name !== 'HTMLHRElement') {return false;} return !!instance;"
     },
     "HTMLHtmlElement": {
-      "__base": "var instance = document.createElement('html'); if (instance.constructor.name !== 'HTMLHtmlElement') {return false;}"
+      "__base": "var instance = document.createElement('html');",
+      "__test": "if (instance.constructor.name !== 'HTMLHtmlElement') {return false;} return !!instance;"
     },
     "HTMLIFrameElement": {
-      "__base": "var instance = document.createElement('iframe'); if (instance.constructor.name !== 'HTMLIFrameElement') {return false;}"
+      "__base": "var instance = document.createElement('iframe');",
+      "__test": "if (instance.constructor.name !== 'HTMLIFrameElement') {return false;} return !!instance;"
     },
     "HTMLImageElement": {
-      "__base": "var instance = document.createElement('img'); if (instance.constructor.name !== 'HTMLImageElement') {return false;}"
+      "__base": "var instance = document.createElement('img');",
+      "__test": "if (instance.constructor.name !== 'HTMLImageElement') {return false;} return !!instance;"
     },
     "HTMLInputElement": {
-      "__base": "var instance = document.createElement('input'); if (instance.constructor.name !== 'HTMLInputElement') {return false;}"
+      "__base": "var instance = document.createElement('input');",
+      "__test": "if (instance.constructor.name !== 'HTMLInputElement') {return false;} return !!instance;"
     },
     "HTMLIsIndexElement": {
-      "__base": "var instance = document.createElement('isindex'); if (instance.constructor.name !== 'HTMLIsIndexElement') {return false;}"
+      "__base": "var instance = document.createElement('isindex');",
+      "__test": "if (instance.constructor.name !== 'HTMLIsIndexElement') {return false;} return !!instance;"
     },
     "HTMLKeygenElement": {
-      "__base": "var instance = document.createElement('keygen'); if (instance.constructor.name !== 'HTMLKeygenElement') {return false;}"
+      "__base": "var instance = document.createElement('keygen');",
+      "__test": "if (instance.constructor.name !== 'HTMLKeygenElement') {return false;} return !!instance;"
     },
     "HTMLLabelElement": {
-      "__base": "var instance = document.createElement('label'); if (instance.constructor.name !== 'HTMLLabelElement') {return false;}"
+      "__base": "var instance = document.createElement('label');",
+      "__test": "if (instance.constructor.name !== 'HTMLLabelElement') {return false;} return !!instance;"
     },
     "HTMLLegendElement": {
-      "__base": "var instance = document.createElement('legend'); if (instance.constructor.name !== 'HTMLLegendElement') {return false;}"
+      "__base": "var instance = document.createElement('legend');",
+      "__test": "if (instance.constructor.name !== 'HTMLLegendElement') {return false;} return !!instance;"
     },
     "HTMLLIElement": {
-      "__base": "var instance = document.createElement('li'); if (instance.constructor.name !== 'HTMLLIElement') {return false;}"
+      "__base": "var instance = document.createElement('li');",
+      "__test": "if (instance.constructor.name !== 'HTMLLIElement') {return false;} return !!instance;"
     },
     "HTMLLinkElement": {
-      "__base": "var instance = document.createElement('link'); if (instance.constructor.name !== 'HTMLLinkElement') {return false;}"
+      "__base": "var instance = document.createElement('link');",
+      "__test": "if (instance.constructor.name !== 'HTMLLinkElement') {return false;} return !!instance;"
     },
     "HTMLMapElement": {
-      "__base": "var instance = document.createElement('map'); if (instance.constructor.name !== 'HTMLMapElement') {return false;}"
+      "__base": "var instance = document.createElement('map');",
+      "__test": "if (instance.constructor.name !== 'HTMLMapElement') {return false;} return !!instance;"
     },
     "HTMLMarqueeElement": {
-      "__base": "var instance = document.createElement('marquee'); if (instance.constructor.name !== 'HTMLMarqueeElement') {return false;}"
+      "__base": "var instance = document.createElement('marquee');",
+      "__test": "if (instance.constructor.name !== 'HTMLMarqueeElement') {return false;} return !!instance;"
     },
     "HTMLMediaElement": {
       "__base": "<%api.HTMLVideoElement:instance%>"
     },
     "HTMLMenuElement": {
-      "__base": "var instance = document.createElement('menu'); if (instance.constructor.name !== 'HTMLMenuElement') {return false;}"
+      "__base": "var instance = document.createElement('menu');",
+      "__test": "if (instance.constructor.name !== 'HTMLMenuElement') {return false;} return !!instance;"
     },
     "HTMLMenuItemElement": {
-      "__base": "var instance = document.createElement('menuitem'); if (instance.constructor.name !== 'HTMLMenuItemElement') {return false;}"
+      "__base": "var instance = document.createElement('menuitem');",
+      "__test": "if (instance.constructor.name !== 'HTMLMenuItemElement') {return false;} return !!instance;"
     },
     "HTMLMetaElement": {
-      "__base": "var instance = document.createElement('meta'); if (instance.constructor.name !== 'HTMLMetaElement') {return false;}"
+      "__base": "var instance = document.createElement('meta');",
+      "__test": "if (instance.constructor.name !== 'HTMLMetaElement') {return false;} return !!instance;"
     },
     "HTMLMeterElement": {
-      "__base": "var instance = document.createElement('meter'); if (instance.constructor.name !== 'HTMLMeterElement') {return false;}"
+      "__base": "var instance = document.createElement('meter');",
+      "__test": "if (instance.constructor.name !== 'HTMLMeterElement') {return false;} return !!instance;"
     },
     "HTMLModElement": {
-      "__base": "var instance = document.createElement('del'); if (instance.constructor.name !== 'HTMLModElement') {return false;}"
+      "__base": "var instance = document.createElement('del');",
+      "__test": "if (instance.constructor.name !== 'HTMLModElement') {return false;} return !!instance;"
     },
     "HTMLObjectElement": {
-      "__base": "var instance = document.createElement('object'); if (instance.constructor.name !== 'HTMLObjectElement') {return false;}"
+      "__base": "var instance = document.createElement('object');",
+      "__test": "if (instance.constructor.name !== 'HTMLObjectElement') {return false;} return !!instance;"
     },
     "HTMLOListElement": {
-      "__base": "var instance = document.createElement('ol'); if (instance.constructor.name !== 'HTMLOListElement') {return false;}"
+      "__base": "var instance = document.createElement('ol');",
+      "__test": "if (instance.constructor.name !== 'HTMLOListElement') {return false;} return !!instance;"
     },
     "HTMLOptGroupElement": {
-      "__base": "var instance = document.createElement('optgroup'); if (instance.constructor.name !== 'HTMLOptGroupElement') {return false;}"
+      "__base": "var instance = document.createElement('optgroup');",
+      "__test": "if (instance.constructor.name !== 'HTMLOptGroupElement') {return false;} return !!instance;"
     },
     "HTMLOptionElement": {
-      "__base": "var instance = document.createElement('option'); if (instance.constructor.name !== 'HTMLOptionElement') {return false;}"
+      "__base": "var instance = document.createElement('option');",
+      "__test": "if (instance.constructor.name !== 'HTMLOptionElement') {return false;} return !!instance;"
     },
     "HTMLOutputElement": {
-      "__base": "var instance = document.createElement('output'); if (instance.constructor.name !== 'HTMLOutputElement') {return false;}"
+      "__base": "var instance = document.createElement('output');",
+      "__test": "if (instance.constructor.name !== 'HTMLOutputElement') {return false;} return !!instance;"
     },
     "HTMLParagraphElement": {
-      "__base": "var instance = document.createElement('p'); if (instance.constructor.name !== 'HTMLParagraphElement') {return false;}"
+      "__base": "var instance = document.createElement('p');",
+      "__test": "if (instance.constructor.name !== 'HTMLParagraphElement') {return false;} return !!instance;"
     },
     "HTMLParamElement": {
-      "__base": "var instance = document.createElement('param'); if (instance.constructor.name !== 'HTMLParamElement') {return false;}"
+      "__base": "var instance = document.createElement('param');",
+      "__test": "if (instance.constructor.name !== 'HTMLParamElement') {return false;} return !!instance;"
     },
     "HTMLPictureElement": {
-      "__base": "var instance = document.createElement('picture'); if (instance.constructor.name !== 'HTMLPictureElement') {return false;}"
+      "__base": "var instance = document.createElement('picture');",
+      "__test": "if (instance.constructor.name !== 'HTMLPictureElement') {return false;} return !!instance;"
     },
     "HTMLPreElement": {
-      "__base": "var instance = document.createElement('pre'); if (instance.constructor.name !== 'HTMLPreElement') {return false;}"
+      "__base": "var instance = document.createElement('pre');",
+      "__test": "if (instance.constructor.name !== 'HTMLPreElement') {return false;} return !!instance;"
     },
     "HTMLProgressElement": {
-      "__base": "var instance = document.createElement('progress'); if (instance.constructor.name !== 'HTMLProgressElement') {return false;}"
+      "__base": "var instance = document.createElement('progress');",
+      "__test": "if (instance.constructor.name !== 'HTMLProgressElement') {return false;} return !!instance;"
     },
     "HTMLQuoteElement": {
-      "__base": "var instance = document.createElement('blockquote'); if (instance.constructor.name !== 'HTMLQuoteElement') {return false;}"
+      "__base": "var instance = document.createElement('blockquote');",
+      "__test": "if (instance.constructor.name !== 'HTMLQuoteElement') {return false;} return !!instance;"
     },
     "HTMLScriptElement": {
-      "__base": "var instance = document.createElement('script'); if (instance.constructor.name !== 'HTMLScriptElement') {return false;}"
+      "__base": "var instance = document.createElement('script');",
+      "__test": "if (instance.constructor.name !== 'HTMLScriptElement') {return false;} return !!instance;"
     },
     "HTMLSelectElement": {
-      "__base": "var instance = document.createElement('select'); if (instance.constructor.name !== 'HTMLSelectElement') {return false;}"
+      "__base": "var instance = document.createElement('select');",
+      "__test": "if (instance.constructor.name !== 'HTMLSelectElement') {return false;} return !!instance;"
     },
     "HTMLShadowElement": {
-      "__base": "var instance = document.createElement('shadow'); if (instance.constructor.name !== 'HTMLShadowElement') {return false;}"
+      "__base": "var instance = document.createElement('shadow');",
+      "__test": "if (instance.constructor.name !== 'HTMLShadowElement') {return false;} return !!instance;"
     },
     "HTMLSlotElement": {
-      "__base": "var instance = document.createElement('slot'); if (instance.constructor.name !== 'HTMLSlotElement') {return false;}"
+      "__base": "var instance = document.createElement('slot');",
+      "__test": "if (instance.constructor.name !== 'HTMLSlotElement') {return false;} return !!instance;"
     },
     "HTMLSourceElement": {
-      "__base": "var instance = document.createElement('source'); if (instance.constructor.name !== 'HTMLSourceElement') {return false;}"
+      "__base": "var instance = document.createElement('source');",
+      "__test": "if (instance.constructor.name !== 'HTMLSourceElement') {return false;} return !!instance;"
     },
     "HTMLSpanElement": {
-      "__base": "var instance = document.createElement('span'); if (instance.constructor.name !== 'HTMLSpanElement') {return false;}"
+      "__base": "var instance = document.createElement('span');",
+      "__test": "if (instance.constructor.name !== 'HTMLSpanElement') {return false;} return !!instance;"
     },
     "HTMLStyleElement": {
-      "__base": "var instance = document.createElement('style'); if (instance.constructor.name !== 'HTMLStyleElement') {return false;}"
+      "__base": "var instance = document.createElement('style');",
+      "__test": "if (instance.constructor.name !== 'HTMLStyleElement') {return false;} return !!instance;"
     },
     "HTMLTableCaptionElement": {
-      "__base": "var instance = document.createElement('caption'); if (instance.constructor.name !== 'HTMLTableCaptionElement') {return false;}"
+      "__base": "var instance = document.createElement('caption');",
+      "__test": "if (instance.constructor.name !== 'HTMLTableCaptionElement') {return false;} return !!instance;"
     },
     "HTMLTableCellElement": {
-      "__base": "var instance = document.createElement('td'); if (instance.constructor.name !== 'HTMLTableCellElement') {return false;}"
+      "__base": "var instance = document.createElement('td');",
+      "__test": "if (instance.constructor.name !== 'HTMLTableCellElement') {return false;} return !!instance;"
     },
     "HTMLTableColElement": {
-      "__base": "var instance = document.createElement('col'); if (instance.constructor.name !== 'HTMLTableColElement') {return false;}"
+      "__base": "var instance = document.createElement('col');",
+      "__test": "if (instance.constructor.name !== 'HTMLTableColElement') {return false;} return !!instance;"
     },
     "HTMLTableElement": {
-      "__base": "var instance = document.createElement('table'); if (instance.constructor.name !== 'HTMLTableElement') {return false;}"
+      "__base": "var instance = document.createElement('table');",
+      "__test": "if (instance.constructor.name !== 'HTMLTableElement') {return false;} return !!instance;"
     },
     "HTMLTableRowElement": {
-      "__base": "var instance = document.createElement('tr'); if (instance.constructor.name !== 'HTMLTableRowElement') {return false;}"
+      "__base": "var instance = document.createElement('tr');",
+      "__test": "if (instance.constructor.name !== 'HTMLTableRowElement') {return false;} return !!instance;"
     },
     "HTMLTableSectionElement": {
-      "__base": "var instance = document.createElement('tbody'); if (instance.constructor.name !== 'HTMLTableSectionElement') {return false;}"
+      "__base": "var instance = document.createElement('tbody');",
+      "__test": "if (instance.constructor.name !== 'HTMLTableSectionElement') {return false;} return !!instance;"
     },
     "HTMLTemplateElement": {
-      "__base": "var instance = document.createElement('template'); if (instance.constructor.name !== 'HTMLTemplateElement') {return false;}"
+      "__base": "var instance = document.createElement('template');",
+      "__test": "if (instance.constructor.name !== 'HTMLTemplateElement') {return false;} return !!instance;"
     },
     "HTMLTextAreaElement": {
-      "__base": "var instance = document.createElement('textarea'); if (instance.constructor.name !== 'HTMLTextAreaElement') {return false;}"
+      "__base": "var instance = document.createElement('textarea');",
+      "__test": "if (instance.constructor.name !== 'HTMLTextAreaElement') {return false;} return !!instance;"
     },
     "HTMLTimeElement": {
-      "__base": "var instance = document.createElement('time'); if (instance.constructor.name !== 'HTMLTimeElement') {return false;}"
+      "__base": "var instance = document.createElement('time');",
+      "__test": "if (instance.constructor.name !== 'HTMLTimeElement') {return false;} return !!instance;"
     },
     "HTMLTitleElement": {
-      "__base": "var instance = document.createElement('title'); if (instance.constructor.name !== 'HTMLTitleElement') {return false;}"
+      "__base": "var instance = document.createElement('title');",
+      "__test": "if (instance.constructor.name !== 'HTMLTitleElement') {return false;} return !!instance;"
     },
     "HTMLTrackElement": {
-      "__base": "var instance = document.createElement('track'); if (instance.constructor.name !== 'HTMLTrackElement') {return false;}"
+      "__base": "var instance = document.createElement('track');",
+      "__test": "if (instance.constructor.name !== 'HTMLTrackElement') {return false;} return !!instance;"
     },
     "HTMLUListElement": {
-      "__base": "var instance = document.createElement('ul'); if (instance.constructor.name !== 'HTMLUListElement') {return false;}"
+      "__base": "var instance = document.createElement('ul');",
+      "__test": "if (instance.constructor.name !== 'HTMLUListElement') {return false;} return !!instance;"
     },
     "HTMLUnknownElement": {
-      "__base": "var instance = document.createElement('unknown'); if (instance.constructor.name !== 'HTMLUnknownElement') {return false;}"
+      "__base": "var instance = document.createElement('unknown');",
+      "__test": "if (instance.constructor.name !== 'HTMLUnknownElement') {return false;} return !!instance;"
     },
     "HTMLVideoElement": {
-      "__base": "var instance = document.createElement('video'); if (instance.constructor.name !== 'HTMLVideoElement') {return false;}"
+      "__base": "var instance = document.createElement('video');",
+      "__test": "if (instance.constructor.name !== 'HTMLVideoElement') {return false;} return !!instance;"
     },
     "IIRFilterNode": {
       "__resources": ["audioContext"],
@@ -544,265 +618,351 @@
       "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createStereoPanner();"
     },
     "SVGAElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'a'); if (instance.constructor.name === 'SVGAElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'a');",
+      "__test": "if (instance.constructor.name === 'SVGAElement') {return false;} return !!instance;"
     },
     "SVGAltGlyphDefElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'altGlyphDef'); if (instance.constructor.name === 'SVGAltGlyphDefElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'altGlyphDef');",
+      "__test": "if (instance.constructor.name === 'SVGAltGlyphDefElement') {return false;} return !!instance;"
     },
     "SVGAltGlyphElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'altGlyph'); if (instance.constructor.name === 'SVGAltGlyphElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'altGlyph');",
+      "__test": "if (instance.constructor.name === 'SVGAltGlyphElement') {return false;} return !!instance;"
     },
     "SVGAltGlyphItemElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'altGlyphItem'); if (instance.constructor.name === 'SVGAltGlyphItemElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'altGlyphItem');",
+      "__test": "if (instance.constructor.name === 'SVGAltGlyphItemElement') {return false;} return !!instance;"
     },
     "SVGAnimateColorElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'animateColor'); if (instance.constructor.name === 'SVGAnimateColorElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'animateColor');",
+      "__test": "if (instance.constructor.name === 'SVGAnimateColorElement') {return false;} return !!instance;"
     },
     "SVGAnimateElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'animate'); if (instance.constructor.name === 'SVGAnimateElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'animate');",
+      "__test": "if (instance.constructor.name === 'SVGAnimateElement') {return false;} return !!instance;"
     },
     "SVGAnimateMotionElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'animateMotion'); if (instance.constructor.name === 'SVGAnimateMotionElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'animateMotion');",
+      "__test": "if (instance.constructor.name === 'SVGAnimateMotionElement') {return false;} return !!instance;"
     },
     "SVGAnimateTransformElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'animateTransform'); if (instance.constructor.name === 'SVGAnimateTransformElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'animateTransform');",
+      "__test": "if (instance.constructor.name === 'SVGAnimateTransformElement') {return false;} return !!instance;"
     },
     "SVGAnimationElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'animation'); if (instance.constructor.name === 'SVGAnimationElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'animation');",
+      "__test": "if (instance.constructor.name === 'SVGAnimationElement') {return false;} return !!instance;"
     },
     "SVGCircleElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'circle'); if (instance.constructor.name === 'SVGCircleElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'circle');",
+      "__test": "if (instance.constructor.name === 'SVGCircleElement') {return false;} return !!instance;"
     },
     "SVGClipPathElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'clipPath'); if (instance.constructor.name === 'SVGClipPathElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'clipPath');",
+      "__test": "if (instance.constructor.name === 'SVGClipPathElement') {return false;} return !!instance;"
     },
     "SVGColorProfileElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'color-profile'); if (instance.constructor.name === 'SVGColorProfileElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'color-profile');",
+      "__test": "if (instance.constructor.name === 'SVGColorProfileElement') {return false;} return !!instance;"
     },
     "SVGCursorElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'cursor'); if (instance.constructor.name === 'SVGCursorElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'cursor');",
+      "__test": "if (instance.constructor.name === 'SVGCursorElement') {return false;} return !!instance;"
     },
     "SVGDefsElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'defs'); if (instance.constructor.name === 'SVGDefsElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'defs');",
+      "__test": "if (instance.constructor.name === 'SVGDefsElement') {return false;} return !!instance;"
     },
     "SVGDescElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'desc'); if (instance.constructor.name === 'SVGDescElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'desc');",
+      "__test": "if (instance.constructor.name === 'SVGDescElement') {return false;} return !!instance;"
     },
     "SVGElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'unknown');"
     },
     "SVGEllipseElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'ellipse'); if (instance.constructor.name === 'SVGEllipseElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'ellipse');",
+      "__test": "if (instance.constructor.name === 'SVGEllipseElement') {return false;} return !!instance;"
     },
     "SVGFEBlendElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feBlend'); if (instance.constructor.name === 'SVGFEBlendElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feBlend');",
+      "__test": "if (instance.constructor.name === 'SVGFEBlendElement') {return false;} return !!instance;"
     },
     "SVGFEColorMatrixElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feColorMatrix'); if (instance.constructor.name === 'SVGFEColorMatrixElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feColorMatrix');",
+      "__test": "if (instance.constructor.name === 'SVGFEColorMatrixElement') {return false;} return !!instance;"
     },
     "SVGFEComponentTransferElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feComponentTransfer'); if (instance.constructor.name === 'SVGFEComponentTransferElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feComponentTransfer');",
+      "__test": "if (instance.constructor.name === 'SVGFEComponentTransferElement') {return false;} return !!instance;"
     },
     "SVGFECompositeElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feComposite'); if (instance.constructor.name === 'SVGFECompositeElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feComposite');",
+      "__test": "if (instance.constructor.name === 'SVGFECompositeElement') {return false;} return !!instance;"
     },
     "SVGFEConvolveMatrixElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feConvolveMatrix'); if (instance.constructor.name === 'SVGFEConvolveMatrixElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feConvolveMatrix');",
+      "__test": "if (instance.constructor.name === 'SVGFEConvolveMatrixElement') {return false;} return !!instance;"
     },
     "SVGFEDiffuseLightingElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feDiffuseLighting'); if (instance.constructor.name === 'SVGFEDiffuseLightingElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feDiffuseLighting');",
+      "__test": "if (instance.constructor.name === 'SVGFEDiffuseLightingElement') {return false;} return !!instance;"
     },
     "SVGFEDisplacementMapElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feDisplacementMap'); if (instance.constructor.name === 'SVGFEDisplacementMapElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feDisplacementMap');",
+      "__test": "if (instance.constructor.name === 'SVGFEDisplacementMapElement') {return false;} return !!instance;"
     },
     "SVGFEDistantLightElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feDistantLight'); if (instance.constructor.name === 'SVGFEDistantLightElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feDistantLight');",
+      "__test": "if (instance.constructor.name === 'SVGFEDistantLightElement') {return false;} return !!instance;"
     },
     "SVGFEDropShadowElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feDropShadow'); if (instance.constructor.name === 'SVGFEDropShadowElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feDropShadow');",
+      "__test": "if (instance.constructor.name === 'SVGFEDropShadowElement') {return false;} return !!instance;"
     },
     "SVGFEFloodElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feFlood'); if (instance.constructor.name === 'SVGFEFloodElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feFlood');",
+      "__test": "if (instance.constructor.name === 'SVGFEFloodElement') {return false;} return !!instance;"
     },
     "SVGFEFuncAElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feFuncA'); if (instance.constructor.name === 'SVGFEFuncAElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feFuncA');",
+      "__test": "if (instance.constructor.name === 'SVGFEFuncAElement') {return false;} return !!instance;"
     },
     "SVGFEFuncBElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feFuncB'); if (instance.constructor.name === 'SVGFEFuncBElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feFuncB');",
+      "__test": "if (instance.constructor.name === 'SVGFEFuncBElement') {return false;} return !!instance;"
     },
     "SVGFEFuncGElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feFuncG'); if (instance.constructor.name === 'SVGFEFuncGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feFuncG');",
+      "__test": "if (instance.constructor.name === 'SVGFEFuncGElement') {return false;} return !!instance;"
     },
     "SVGFEFuncRElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feFuncR'); if (instance.constructor.name === 'SVGFEFuncRElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feFuncR');",
+      "__test": "if (instance.constructor.name === 'SVGFEFuncRElement') {return false;} return !!instance;"
     },
     "SVGFEGaussianBlurElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feGaussianBlur'); if (instance.constructor.name === 'SVGFEGaussianBlurElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feGaussianBlur');",
+      "__test": "if (instance.constructor.name === 'SVGFEGaussianBlurElement') {return false;} return !!instance;"
     },
     "SVGFEImageElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feImage'); if (instance.constructor.name === 'SVGFEImageElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feImage');",
+      "__test": "if (instance.constructor.name === 'SVGFEImageElement') {return false;} return !!instance;"
     },
     "SVGFEMergeElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feMerge'); if (instance.constructor.name === 'SVGFEMergeElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feMerge');",
+      "__test": "if (instance.constructor.name === 'SVGFEMergeElement') {return false;} return !!instance;"
     },
     "SVGFEMergeNodeElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feMergeNode'); if (instance.constructor.name === 'SVGFEMergeNodeElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feMergeNode');",
+      "__test": "if (instance.constructor.name === 'SVGFEMergeNodeElement') {return false;} return !!instance;"
     },
     "SVGFEMorphologyElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feMorphology'); if (instance.constructor.name === 'SVGFEMorphologyElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feMorphology');",
+      "__test": "if (instance.constructor.name === 'SVGFEMorphologyElement') {return false;} return !!instance;"
     },
     "SVGFEOffsetElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feOffset'); if (instance.constructor.name === 'SVGFEOffsetElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feOffset');",
+      "__test": "if (instance.constructor.name === 'SVGFEOffsetElement') {return false;} return !!instance;"
     },
     "SVGFEPointLightElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'fePointLight'); if (instance.constructor.name === 'SVGFEPointLightElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'fePointLight');",
+      "__test": "if (instance.constructor.name === 'SVGFEPointLightElement') {return false;} return !!instance;"
     },
     "SVGFESpecularLightingElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feSpecularLighting'); if (instance.constructor.name === 'SVGFESpecularLightingElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feSpecularLighting');",
+      "__test": "if (instance.constructor.name === 'SVGFESpecularLightingElement') {return false;} return !!instance;"
     },
     "SVGFESpotLightElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feSpotLight'); if (instance.constructor.name === 'SVGFESpotLightElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feSpotLight');",
+      "__test": "if (instance.constructor.name === 'SVGFESpotLightElement') {return false;} return !!instance;"
     },
     "SVGFETileElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feTile'); if (instance.constructor.name === 'SVGFETileElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feTile');",
+      "__test": "if (instance.constructor.name === 'SVGFETileElement') {return false;} return !!instance;"
     },
     "SVGFETurbulenceElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feTurbulence'); if (instance.constructor.name === 'SVGFETurbulenceElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feTurbulence');",
+      "__test": "if (instance.constructor.name === 'SVGFETurbulenceElement') {return false;} return !!instance;"
     },
     "SVGFilterElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'filter'); if (instance.constructor.name === 'SVGFilterElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'filter');",
+      "__test": "if (instance.constructor.name === 'SVGFilterElement') {return false;} return !!instance;"
     },
     "SVGFontElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'font'); if (instance.constructor.name === 'SVGFontElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'font');",
+      "__test": "if (instance.constructor.name === 'SVGFontElement') {return false;} return !!instance;"
     },
     "SVGFontFaceElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'font-face'); if (instance.constructor.name === 'SVGFontFaceElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'font-face');",
+      "__test": "if (instance.constructor.name === 'SVGFontFaceElement') {return false;} return !!instance;"
     },
     "SVGFontFaceFormatElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'font-face-format'); if (instance.constructor.name === 'SVGFontFaceFormatElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'font-face-format');",
+      "__test": "if (instance.constructor.name === 'SVGFontFaceFormatElement') {return false;} return !!instance;"
     },
     "SVGFontFaceNameElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'font-face-name'); if (instance.constructor.name === 'SVGFontFaceNameElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'font-face-name');",
+      "__test": "if (instance.constructor.name === 'SVGFontFaceNameElement') {return false;} return !!instance;"
     },
     "SVGFontFaceSrcElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'font-face-src'); if (instance.constructor.name === 'SVGFontFaceSrcElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'font-face-src');",
+      "__test": "if (instance.constructor.name === 'SVGFontFaceSrcElement') {return false;} return !!instance;"
     },
     "SVGFontFaceUriElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'font-face-uri'); if (instance.constructor.name === 'SVGFontFaceUriElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'font-face-uri');",
+      "__test": "if (instance.constructor.name === 'SVGFontFaceUriElement') {return false;} return !!instance;"
     },
     "SVGForeignObjectElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'foreignObject'); if (instance.constructor.name === 'SVGForeignObjectElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'foreignObject');",
+      "__test": "if (instance.constructor.name === 'SVGForeignObjectElement') {return false;} return !!instance;"
     },
     "SVGGElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'g'); if (instance.constructor.name === 'SVGGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'g');",
+      "__test": "if (instance.constructor.name === 'SVGGElement') {return false;} return !!instance;"
     },
     "SVGGeometryElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'geometry'); if (instance.constructor.name === 'SVGGeometryElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'geometry');",
+      "__test": "if (instance.constructor.name === 'SVGGeometryElement') {return false;} return !!instance;"
     },
     "SVGGlyphElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'glyph'); if (instance.constructor.name === 'SVGGlyphElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'glyph');",
+      "__test": "if (instance.constructor.name === 'SVGGlyphElement') {return false;} return !!instance;"
     },
     "SVGGlyphRefElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'glyphRef'); if (instance.constructor.name === 'SVGGlyphRefElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'glyphRef');",
+      "__test": "if (instance.constructor.name === 'SVGGlyphRefElement') {return false;} return !!instance;"
     },
     "SVGGradientElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'gradient'); if (instance.constructor.name === 'SVGGradientElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'gradient');",
+      "__test": "if (instance.constructor.name === 'SVGGradientElement') {return false;} return !!instance;"
     },
     "SVGHKernElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'hkern'); if (instance.constructor.name === 'SVGHKernElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'hkern');",
+      "__test": "if (instance.constructor.name === 'SVGHKernElement') {return false;} return !!instance;"
     },
     "SVGImageElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'image'); if (instance.constructor.name === 'SVGImageElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'image');",
+      "__test": "if (instance.constructor.name === 'SVGImageElement') {return false;} return !!instance;"
     },
     "SVGLinearGradientElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient'); if (instance.constructor.name === 'SVGLinearGradientElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient');",
+      "__test": "if (instance.constructor.name === 'SVGLinearGradientElement') {return false;} return !!instance;"
     },
     "SVGLineElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'line'); if (instance.constructor.name === 'SVGLineElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'line');",
+      "__test": "if (instance.constructor.name === 'SVGLineElement') {return false;} return !!instance;"
     },
     "SVGMaskElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'mask'); if (instance.constructor.name === 'SVGMaskElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'mask');",
+      "__test": "if (instance.constructor.name === 'SVGMaskElement') {return false;} return !!instance;"
     },
     "SVGMeshElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'mesh'); if (instance.constructor.name === 'SVGMeshElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'mesh');",
+      "__test": "if (instance.constructor.name === 'SVGMeshElement') {return false;} return !!instance;"
     },
     "SVGMetadataElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'metadata'); if (instance.constructor.name === 'SVGMetadataElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'metadata');",
+      "__test": "if (instance.constructor.name === 'SVGMetadataElement') {return false;} return !!instance;"
     },
     "SVGMissingGlyphElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'missing-glyph'); if (instance.constructor.name === 'SVGMissingGlyphElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'missing-glyph');",
+      "__test": "if (instance.constructor.name === 'SVGMissingGlyphElement') {return false;} return !!instance;"
     },
     "SVGMPathElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'mpath'); if (instance.constructor.name === 'SVGMPathElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'mpath');",
+      "__test": "if (instance.constructor.name === 'SVGMPathElement') {return false;} return !!instance;"
     },
     "SVGPathElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'path'); if (instance.constructor.name === 'SVGPathElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'path');",
+      "__test": "if (instance.constructor.name === 'SVGPathElement') {return false;} return !!instance;"
     },
     "SVGPatternElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'pattern'); if (instance.constructor.name === 'SVGPatternElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'pattern');",
+      "__test": "if (instance.constructor.name === 'SVGPatternElement') {return false;} return !!instance;"
     },
     "SVGPolygonElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'polygon'); if (instance.constructor.name === 'SVGPolygonElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');",
+      "__test": "if (instance.constructor.name === 'SVGPolygonElement') {return false;} return !!instance;"
     },
     "SVGPolylineElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'polyline'); if (instance.constructor.name === 'SVGPolylineElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');",
+      "__test": "if (instance.constructor.name === 'SVGPolylineElement') {return false;} return !!instance;"
     },
     "SVGRadialGradientElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'radialGradient'); if (instance.constructor.name === 'SVGRadialGradientElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'radialGradient');",
+      "__test": "if (instance.constructor.name === 'SVGRadialGradientElement') {return false;} return !!instance;"
     },
     "SVGRectElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'rect'); if (instance.constructor.name === 'SVGRectElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'rect');",
+      "__test": "if (instance.constructor.name === 'SVGRectElement') {return false;} return !!instance;"
     },
     "SVGScriptElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'script'); if (instance.constructor.name === 'SVGScriptElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'script');",
+      "__test": "if (instance.constructor.name === 'SVGScriptElement') {return false;} return !!instance;"
     },
     "SVGSetElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'set'); if (instance.constructor.name === 'SVGSetElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'set');",
+      "__test": "if (instance.constructor.name === 'SVGSetElement') {return false;} return !!instance;"
     },
     "SVGSolidcolorElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'solidcolor'); if (instance.constructor.name === 'SVGSolidcolorElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'solidcolor');",
+      "__test": "if (instance.constructor.name === 'SVGSolidcolorElement') {return false;} return !!instance;"
     },
     "SVGStopElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'stop'); if (instance.constructor.name === 'SVGStopElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'stop');",
+      "__test": "if (instance.constructor.name === 'SVGStopElement') {return false;} return !!instance;"
     },
     "SVGStyleElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'style'); if (instance.constructor.name === 'SVGStyleElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'style');",
+      "__test": "if (instance.constructor.name === 'SVGStyleElement') {return false;} return !!instance;"
     },
     "SVGSVGElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'svg'); if (instance.constructor.name === 'SVGSVGElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'svg');",
+      "__test": "if (instance.constructor.name === 'SVGSVGElement') {return false;} return !!instance;"
     },
     "SVGSwitchElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'switch'); if (instance.constructor.name === 'SVGSwitchElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'switch');",
+      "__test": "if (instance.constructor.name === 'SVGSwitchElement') {return false;} return !!instance;"
     },
     "SVGSymbolElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'symbol'); if (instance.constructor.name === 'SVGSymbolElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'symbol');",
+      "__test": "if (instance.constructor.name === 'SVGSymbolElement') {return false;} return !!instance;"
     },
     "SVGTextElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'text'); if (instance.constructor.name === 'SVGTextElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'text');",
+      "__test": "if (instance.constructor.name === 'SVGTextElement') {return false;} return !!instance;"
     },
     "SVGTextPathElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'textPath'); if (instance.constructor.name === 'SVGTextPathElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'textPath');",
+      "__test": "if (instance.constructor.name === 'SVGTextPathElement') {return false;} return !!instance;"
     },
     "SVGTitleElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'title'); if (instance.constructor.name === 'SVGTitleElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'title');",
+      "__test": "if (instance.constructor.name === 'SVGTitleElement') {return false;} return !!instance;"
     },
     "SVGTRefElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'tref'); if (instance.constructor.name === 'SVGTRefElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'tref');",
+      "__test": "if (instance.constructor.name === 'SVGTRefElement') {return false;} return !!instance;"
     },
     "SVGTSpanElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'tspan'); if (instance.constructor.name === 'SVGTSpanElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');",
+      "__test": "if (instance.constructor.name === 'SVGTSpanElement') {return false;} return !!instance;"
     },
     "SVGUnknownElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'unknown'); if (instance.constructor.name === 'SVGUnknownElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'unknown');",
+      "__test": "if (instance.constructor.name === 'SVGUnknownElement') {return false;} return !!instance;"
     },
     "SVGUseElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'use'); if (instance.constructor.name === 'SVGUseElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'use');",
+      "__test": "if (instance.constructor.name === 'SVGUseElement') {return false;} return !!instance;"
     },
     "SVGViewElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'view'); if (instance.constructor.name === 'SVGViewElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'view');",
+      "__test": "if (instance.constructor.name === 'SVGViewElement') {return false;} return !!instance;"
     },
     "SVGVKernElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'vkern'); if (instance.constructor.name === 'SVGVKernElement') {return false;}"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'vkern');",
+      "__test": "if (instance.constructor.name === 'SVGVKernElement') {return false;} return !!instance;"
     },
     "TreeWalker": {
       "__base": "var instance = document.createTreeWalker(document);"
