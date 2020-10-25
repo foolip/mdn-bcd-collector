@@ -482,7 +482,7 @@
 
         if (result.info.code) {
           var codeEl = document.createElement('code');
-          codeEl.innerHTML = result.info.code.replace(/\n/g, '<br />');
+          codeEl.innerHTML = result.info.code.replace(/ /g, '&nbsp;').replace(/\n/g, '<br />');
           thisResultEl.appendChild(codeEl);
           thisResultEl.appendChild(document.createElement('br'));
           thisResultEl.appendChild(document.createElement('br'));
