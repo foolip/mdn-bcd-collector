@@ -146,6 +146,9 @@ const buildDriver = async (browser, version, os) => {
       const prefs = new logging.Preferences();
       prefs.setLevel(logging.Type.BROWSER, logging.Level.SEVERE);
       capabilities.setLoggingPrefs(prefs);
+      if (service === 'browserstack') {
+        capabilities.set('browserstack.console', 'errors');
+      }
 
       try {
         const driverBuilder = new Builder().usingServer(seleniumUrl)
