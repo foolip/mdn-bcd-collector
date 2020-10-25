@@ -210,6 +210,14 @@ const goToPage = async (driver, page, browser, version) => {
   await awaitPageReady(driver);
 };
 
+const click = async (driver, elementId, browser) => {
+  if (browser === 'safari') {
+    await driver.executeScript(`document.getElementById('${elementId}').click()`);
+  } else {
+    await driver.findElement(By.id(elementId)).click();
+  }
+};
+
 const run = async (browser, version, os) => {
   log('Starting...');
 
@@ -223,8 +231,8 @@ const run = async (browser, version, os) => {
   try {
     log('Loading homepage...');
     await goToPage(driver, host, browser, version);
-    await driver.findElement(By.id('hideResults')).click();
-    await driver.findElement(By.id('start')).click();
+    await click(driver, 'hideResults', browser);
+    await click(driver, 'start', browser);
 
     log('Running tests...');
     await awaitPage(driver, `${host}/tests/?hideResults=on`, browser, version);
