@@ -206,305 +206,305 @@
     },
     "HTMLAnchorElement": {
       "__base": "var instance = document.createElement('a');",
-      "__test": "if (instance.constructor.name !== 'HTMLAnchorElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'HTMLAnchorElement' && Object.prototype.toString.call(instance) !== '[object HTMLAnchorElement]') {return false;} return !!instance;"
     },
     "HTMLAreaElement": {
       "__base": "var instance = document.createElement('area');",
-      "__test": "if (instance.constructor.name !== 'HTMLAreaElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'HTMLAreaElement' && Object.prototype.toString.call(instance) !== '[object HTMLAreaElement]') {return false;} return !!instance;"
     },
     "HTMLAudioElement": {
       "__base": "var instance = document.createElement('audio');",
-      "__test": "if (instance.constructor.name !== 'HTMLAudioElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'HTMLAudioElement' && Object.prototype.toString.call(instance) !== '[object HTMLAudioElement]') {return false;} return !!instance;"
     },
     "HTMLBaseElement": {
       "__base": "var instance = document.createElement('base');",
-      "__test": "if (instance.constructor.name !== 'HTMLBaseElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'HTMLBaseElement' && Object.prototype.toString.call(instance) !== '[object HTMLBaseElement]') {return false;} return !!instance;"
     },
     "HTMLBaseFontElement": {
       "__base": "var instance = document.createElement('basefont');",
-      "__test": "if (instance.constructor.name !== 'HTMLBaseFontElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'HTMLBaseFontElement' && Object.prototype.toString.call(instance) !== '[object HTMLBaseFontElement]') {return false;} return !!instance;"
     },
     "HTMLBodyElement": {
       "__base": "var instance = document.createElement('body');",
-      "__test": "if (instance.constructor.name !== 'HTMLBodyElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'HTMLBodyElement' && Object.prototype.toString.call(instance) !== '[object HTMLBodyElement]') {return false;} return !!instance;"
     },
     "HTMLBRElement": {
       "__base": "var instance = document.createElement('br');",
-      "__test": "if (instance.constructor.name !== 'HTMLBRElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'HTMLBRElement' && Object.prototype.toString.call(instance) !== '[object HTMLBRElement]') {return false;} return !!instance;"
     },
     "HTMLButtonElement": {
       "__base": "var instance = document.createElement('button');",
-      "__test": "if (instance.constructor.name !== 'HTMLButtonElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'HTMLButtonElement' && Object.prototype.toString.call(instance) !== '[object HTMLButtonElement]') {return false;} return !!instance;"
     },
     "HTMLCanvasElement": {
       "__base": "var instance = document.createElement('canvas');",
-      "__test": "if (instance.constructor.name !== 'HTMLCanvasElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'HTMLCanvasElement' && Object.prototype.toString.call(instance) !== '[object HTMLCanvasElement]') {return false;} return !!instance;"
     },
     "HTMLContentElement": {
       "__base": "var instance = document.createElement('content');",
-      "__test": "if (instance.constructor.name !== 'HTMLContentElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'HTMLContentElement' && Object.prototype.toString.call(instance) !== '[object HTMLContentElement]') {return false;} return !!instance;"
     },
     "HTMLDataElement": {
       "__base": "var instance = document.createElement('data');",
-      "__test": "if (instance.constructor.name !== 'HTMLDataElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'HTMLDataElement' && Object.prototype.toString.call(instance) !== '[object HTMLDataElement]') {return false;} return !!instance;"
     },
     "HTMLDataListElement": {
       "__base": "var instance = document.createElement('datalist');",
-      "__test": "if (instance.constructor.name !== 'HTMLDataListElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'HTMLDataListElement' && Object.prototype.toString.call(instance) !== '[object HTMLDataListElement]') {return false;} return !!instance;"
     },
     "HTMLDetailsElement": {
       "__base": "var instance = document.createElement('details');",
-      "__test": "if (instance.constructor.name !== 'HTMLDetailsElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'HTMLDetailsElement' && Object.prototype.toString.call(instance) !== '[object HTMLDetailsElement]') {return false;} return !!instance;"
     },
     "HTMLDialogElement": {
       "__base": "var instance = document.createElement('dialog');",
-      "__test": "if (instance.constructor.name !== 'HTMLDialogElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'HTMLDialogElement' && Object.prototype.toString.call(instance) !== '[object HTMLDialogElement]') {return false;} return !!instance;"
     },
     "HTMLDivElement": {
       "__base": "var instance = document.createElement('div');",
-      "__test": "if (instance.constructor.name !== 'HTMLDivElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'HTMLDivElement' && Object.prototype.toString.call(instance) !== '[object HTMLDivElement]') {return false;} return !!instance;"
     },
     "HTMLDListElement": {
       "__base": "var instance = document.createElement('dl');",
-      "__test": "if (instance.constructor.name !== 'HTMLDListElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'HTMLDListElement' && Object.prototype.toString.call(instance) !== '[object HTMLDListElement]') {return false;} return !!instance;"
     },
     "HTMLElement": {
       "__base": "<%api.HTMLParagraphElement:instance%>"
     },
     "HTMLEmbedElement": {
       "__base": "var instance = document.createElement('embed');",
-      "__test": "if (instance.constructor.name !== 'HTMLEmbedElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'HTMLEmbedElement' && Object.prototype.toString.call(instance) !== '[object HTMLEmbedElement]') {return false;} return !!instance;"
     },
     "HTMLFieldSetElement": {
       "__base": "var instance = document.createElement('fieldset');",
-      "__test": "if (instance.constructor.name !== 'HTMLFieldSetElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'HTMLFieldSetElement' && Object.prototype.toString.call(instance) !== '[object HTMLFieldSetElement]') {return false;} return !!instance;"
     },
     "HTMLFontElement": {
       "__base": "var instance = document.createElement('font');",
-      "__test": "if (instance.constructor.name !== 'HTMLFontElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'HTMLFontElement' && Object.prototype.toString.call(instance) !== '[object HTMLFontElement]') {return false;} return !!instance;"
     },
     "HTMLFormElement": {
       "__base": "var instance = document.createElement('form');",
-      "__test": "if (instance.constructor.name !== 'HTMLFormElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'HTMLFormElement' && Object.prototype.toString.call(instance) !== '[object HTMLFormElement]') {return false;} return !!instance;"
     },
     "HTMLFrameElement": {
       "__base": "var instance = document.createElement('frame');",
-      "__test": "if (instance.constructor.name !== 'HTMLFrameElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'HTMLFrameElement' && Object.prototype.toString.call(instance) !== '[object HTMLFrameElement]') {return false;} return !!instance;"
     },
     "HTMLFrameSetElement": {
       "__base": "var instance = document.createElement('frameset');",
-      "__test": "if (instance.constructor.name !== 'HTMLFrameSetElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'HTMLFrameSetElement' && Object.prototype.toString.call(instance) !== '[object HTMLFrameSetElement]') {return false;} return !!instance;"
     },
     "HTMLHeadElement": {
       "__base": "var instance = document.createElement('head');",
-      "__test": "if (instance.constructor.name !== 'HTMLHeadElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'HTMLHeadElement' && Object.prototype.toString.call(instance) !== '[object HTMLHeadElement]') {return false;} return !!instance;"
     },
     "HTMLHeadingElement": {
       "__base": "var instance = document.createElement('h1');",
-      "__test": "if (instance.constructor.name !== 'HTMLHeadingElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'HTMLHeadingElement' && Object.prototype.toString.call(instance) !== '[object HTMLHeadingElement]') {return false;} return !!instance;"
     },
     "HTMLHRElement": {
       "__base": "var instance = document.createElement('hr');",
-      "__test": "if (instance.constructor.name !== 'HTMLHRElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'HTMLHRElement' && Object.prototype.toString.call(instance) !== '[object HTMLHRElement]') {return false;} return !!instance;"
     },
     "HTMLHtmlElement": {
       "__base": "var instance = document.createElement('html');",
-      "__test": "if (instance.constructor.name !== 'HTMLHtmlElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'HTMLHtmlElement' && Object.prototype.toString.call(instance) !== '[object HTMLHtmlElement]') {return false;} return !!instance;"
     },
     "HTMLIFrameElement": {
       "__base": "var instance = document.createElement('iframe');",
-      "__test": "if (instance.constructor.name !== 'HTMLIFrameElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'HTMLIFrameElement' && Object.prototype.toString.call(instance) !== '[object HTMLIFrameElement]') {return false;} return !!instance;"
     },
     "HTMLImageElement": {
       "__base": "var instance = document.createElement('img');",
-      "__test": "if (instance.constructor.name !== 'HTMLImageElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'HTMLImageElement' && Object.prototype.toString.call(instance) !== '[object HTMLImageElement]') {return false;} return !!instance;"
     },
     "HTMLInputElement": {
       "__base": "var instance = document.createElement('input');",
-      "__test": "if (instance.constructor.name !== 'HTMLInputElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'HTMLInputElement' && Object.prototype.toString.call(instance) !== '[object HTMLInputElement]') {return false;} return !!instance;"
     },
     "HTMLIsIndexElement": {
       "__base": "var instance = document.createElement('isindex');",
-      "__test": "if (instance.constructor.name !== 'HTMLIsIndexElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'HTMLIsIndexElement' && Object.prototype.toString.call(instance) !== '[object HTMLIsIndexElement]') {return false;} return !!instance;"
     },
     "HTMLKeygenElement": {
       "__base": "var instance = document.createElement('keygen');",
-      "__test": "if (instance.constructor.name !== 'HTMLKeygenElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'HTMLKeygenElement' && Object.prototype.toString.call(instance) !== '[object HTMLKeygenElement]') {return false;} return !!instance;"
     },
     "HTMLLabelElement": {
       "__base": "var instance = document.createElement('label');",
-      "__test": "if (instance.constructor.name !== 'HTMLLabelElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'HTMLLabelElement' && Object.prototype.toString.call(instance) !== '[object HTMLLabelElement]') {return false;} return !!instance;"
     },
     "HTMLLegendElement": {
       "__base": "var instance = document.createElement('legend');",
-      "__test": "if (instance.constructor.name !== 'HTMLLegendElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'HTMLLegendElement' && Object.prototype.toString.call(instance) !== '[object HTMLLegendElement]') {return false;} return !!instance;"
     },
     "HTMLLIElement": {
       "__base": "var instance = document.createElement('li');",
-      "__test": "if (instance.constructor.name !== 'HTMLLIElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'HTMLLIElement' && Object.prototype.toString.call(instance) !== '[object HTMLLIElement]') {return false;} return !!instance;"
     },
     "HTMLLinkElement": {
       "__base": "var instance = document.createElement('link');",
-      "__test": "if (instance.constructor.name !== 'HTMLLinkElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'HTMLLinkElement' && Object.prototype.toString.call(instance) !== '[object HTMLLinkElement]') {return false;} return !!instance;"
     },
     "HTMLMapElement": {
       "__base": "var instance = document.createElement('map');",
-      "__test": "if (instance.constructor.name !== 'HTMLMapElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'HTMLMapElement' && Object.prototype.toString.call(instance) !== '[object HTMLMapElement]') {return false;} return !!instance;"
     },
     "HTMLMarqueeElement": {
       "__base": "var instance = document.createElement('marquee');",
-      "__test": "if (instance.constructor.name !== 'HTMLMarqueeElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'HTMLMarqueeElement' && Object.prototype.toString.call(instance) !== '[object HTMLMarqueeElement]') {return false;} return !!instance;"
     },
     "HTMLMediaElement": {
       "__base": "<%api.HTMLVideoElement:instance%>"
     },
     "HTMLMenuElement": {
       "__base": "var instance = document.createElement('menu');",
-      "__test": "if (instance.constructor.name !== 'HTMLMenuElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'HTMLMenuElement' && Object.prototype.toString.call(instance) !== '[object HTMLMenuElement]') {return false;} return !!instance;"
     },
     "HTMLMenuItemElement": {
       "__base": "var instance = document.createElement('menuitem');",
-      "__test": "if (instance.constructor.name !== 'HTMLMenuItemElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'HTMLMenuItemElement' && Object.prototype.toString.call(instance) !== '[object HTMLMenuItemElement]') {return false;} return !!instance;"
     },
     "HTMLMetaElement": {
       "__base": "var instance = document.createElement('meta');",
-      "__test": "if (instance.constructor.name !== 'HTMLMetaElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'HTMLMetaElement' && Object.prototype.toString.call(instance) !== '[object HTMLMetaElement]') {return false;} return !!instance;"
     },
     "HTMLMeterElement": {
       "__base": "var instance = document.createElement('meter');",
-      "__test": "if (instance.constructor.name !== 'HTMLMeterElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'HTMLMeterElement' && Object.prototype.toString.call(instance) !== '[object HTMLMeterElement]') {return false;} return !!instance;"
     },
     "HTMLModElement": {
       "__base": "var instance = document.createElement('del');",
-      "__test": "if (instance.constructor.name !== 'HTMLModElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'HTMLModElement' && Object.prototype.toString.call(instance) !== '[object HTMLModElement]') {return false;} return !!instance;"
     },
     "HTMLObjectElement": {
       "__base": "var instance = document.createElement('object');",
-      "__test": "if (instance.constructor.name !== 'HTMLObjectElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'HTMLObjectElement' && Object.prototype.toString.call(instance) !== '[object HTMLObjectElement]') {return false;} return !!instance;"
     },
     "HTMLOListElement": {
       "__base": "var instance = document.createElement('ol');",
-      "__test": "if (instance.constructor.name !== 'HTMLOListElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'HTMLOListElement' && Object.prototype.toString.call(instance) !== '[object HTMLOListElement]') {return false;} return !!instance;"
     },
     "HTMLOptGroupElement": {
       "__base": "var instance = document.createElement('optgroup');",
-      "__test": "if (instance.constructor.name !== 'HTMLOptGroupElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'HTMLOptGroupElement' && Object.prototype.toString.call(instance) !== '[object HTMLOptGroupElement]') {return false;} return !!instance;"
     },
     "HTMLOptionElement": {
       "__base": "var instance = document.createElement('option');",
-      "__test": "if (instance.constructor.name !== 'HTMLOptionElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'HTMLOptionElement' && Object.prototype.toString.call(instance) !== '[object HTMLOptionElement]') {return false;} return !!instance;"
     },
     "HTMLOutputElement": {
       "__base": "var instance = document.createElement('output');",
-      "__test": "if (instance.constructor.name !== 'HTMLOutputElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'HTMLOutputElement' && Object.prototype.toString.call(instance) !== '[object HTMLOutputElement]') {return false;} return !!instance;"
     },
     "HTMLParagraphElement": {
       "__base": "var instance = document.createElement('p');",
-      "__test": "if (instance.constructor.name !== 'HTMLParagraphElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'HTMLParagraphElement' && Object.prototype.toString.call(instance) !== '[object HTMLParagraphElement]') {return false;} return !!instance;"
     },
     "HTMLParamElement": {
       "__base": "var instance = document.createElement('param');",
-      "__test": "if (instance.constructor.name !== 'HTMLParamElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'HTMLParamElement' && Object.prototype.toString.call(instance) !== '[object HTMLParamElement]') {return false;} return !!instance;"
     },
     "HTMLPictureElement": {
       "__base": "var instance = document.createElement('picture');",
-      "__test": "if (instance.constructor.name !== 'HTMLPictureElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'HTMLPictureElement' && Object.prototype.toString.call(instance) !== '[object HTMLPictureElement]') {return false;} return !!instance;"
     },
     "HTMLPreElement": {
       "__base": "var instance = document.createElement('pre');",
-      "__test": "if (instance.constructor.name !== 'HTMLPreElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'HTMLPreElement' && Object.prototype.toString.call(instance) !== '[object HTMLPreElement]') {return false;} return !!instance;"
     },
     "HTMLProgressElement": {
       "__base": "var instance = document.createElement('progress');",
-      "__test": "if (instance.constructor.name !== 'HTMLProgressElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'HTMLProgressElement' && Object.prototype.toString.call(instance) !== '[object HTMLProgressElement]') {return false;} return !!instance;"
     },
     "HTMLQuoteElement": {
       "__base": "var instance = document.createElement('blockquote');",
-      "__test": "if (instance.constructor.name !== 'HTMLQuoteElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'HTMLQuoteElement' && Object.prototype.toString.call(instance) !== '[object HTMLQuoteElement]') {return false;} return !!instance;"
     },
     "HTMLScriptElement": {
       "__base": "var instance = document.createElement('script');",
-      "__test": "if (instance.constructor.name !== 'HTMLScriptElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'HTMLScriptElement' && Object.prototype.toString.call(instance) !== '[object HTMLScriptElement]') {return false;} return !!instance;"
     },
     "HTMLSelectElement": {
       "__base": "var instance = document.createElement('select');",
-      "__test": "if (instance.constructor.name !== 'HTMLSelectElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'HTMLSelectElement' && Object.prototype.toString.call(instance) !== '[object HTMLSelectElement]') {return false;} return !!instance;"
     },
     "HTMLShadowElement": {
       "__base": "var instance = document.createElement('shadow');",
-      "__test": "if (instance.constructor.name !== 'HTMLShadowElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'HTMLShadowElement' && Object.prototype.toString.call(instance) !== '[object HTMLShadowElement]') {return false;} return !!instance;"
     },
     "HTMLSlotElement": {
       "__base": "var instance = document.createElement('slot');",
-      "__test": "if (instance.constructor.name !== 'HTMLSlotElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'HTMLSlotElement' && Object.prototype.toString.call(instance) !== '[object HTMLSlotElement]') {return false;} return !!instance;"
     },
     "HTMLSourceElement": {
       "__base": "var instance = document.createElement('source');",
-      "__test": "if (instance.constructor.name !== 'HTMLSourceElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'HTMLSourceElement' && Object.prototype.toString.call(instance) !== '[object HTMLSourceElement]') {return false;} return !!instance;"
     },
     "HTMLSpanElement": {
       "__base": "var instance = document.createElement('span');",
-      "__test": "if (instance.constructor.name !== 'HTMLSpanElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'HTMLSpanElement' && Object.prototype.toString.call(instance) !== '[object HTMLSpanElement]') {return false;} return !!instance;"
     },
     "HTMLStyleElement": {
       "__base": "var instance = document.createElement('style');",
-      "__test": "if (instance.constructor.name !== 'HTMLStyleElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'HTMLStyleElement' && Object.prototype.toString.call(instance) !== '[object HTMLStyleElement]') {return false;} return !!instance;"
     },
     "HTMLTableCaptionElement": {
       "__base": "var instance = document.createElement('caption');",
-      "__test": "if (instance.constructor.name !== 'HTMLTableCaptionElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'HTMLTableCaptionElement' && Object.prototype.toString.call(instance) !== '[object HTMLTableCaptionElement]') {return false;} return !!instance;"
     },
     "HTMLTableCellElement": {
       "__base": "var instance = document.createElement('td');",
-      "__test": "if (instance.constructor.name !== 'HTMLTableCellElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'HTMLTableCellElement' && Object.prototype.toString.call(instance) !== '[object HTMLTableCellElement]') {return false;} return !!instance;"
     },
     "HTMLTableColElement": {
       "__base": "var instance = document.createElement('col');",
-      "__test": "if (instance.constructor.name !== 'HTMLTableColElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'HTMLTableColElement' && Object.prototype.toString.call(instance) !== '[object HTMLTableColElement]') {return false;} return !!instance;"
     },
     "HTMLTableElement": {
       "__base": "var instance = document.createElement('table');",
-      "__test": "if (instance.constructor.name !== 'HTMLTableElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'HTMLTableElement' && Object.prototype.toString.call(instance) !== '[object HTMLTableElement]') {return false;} return !!instance;"
     },
     "HTMLTableRowElement": {
       "__base": "var instance = document.createElement('tr');",
-      "__test": "if (instance.constructor.name !== 'HTMLTableRowElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'HTMLTableRowElement' && Object.prototype.toString.call(instance) !== '[object HTMLTableRowElement]') {return false;} return !!instance;"
     },
     "HTMLTableSectionElement": {
       "__base": "var instance = document.createElement('tbody');",
-      "__test": "if (instance.constructor.name !== 'HTMLTableSectionElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'HTMLTableSectionElement' && Object.prototype.toString.call(instance) !== '[object HTMLTableSectionElement]') {return false;} return !!instance;"
     },
     "HTMLTemplateElement": {
       "__base": "var instance = document.createElement('template');",
-      "__test": "if (instance.constructor.name !== 'HTMLTemplateElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'HTMLTemplateElement' && Object.prototype.toString.call(instance) !== '[object HTMLTemplateElement]') {return false;} return !!instance;"
     },
     "HTMLTextAreaElement": {
       "__base": "var instance = document.createElement('textarea');",
-      "__test": "if (instance.constructor.name !== 'HTMLTextAreaElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'HTMLTextAreaElement' && Object.prototype.toString.call(instance) !== '[object HTMLTextAreaElement]') {return false;} return !!instance;"
     },
     "HTMLTimeElement": {
       "__base": "var instance = document.createElement('time');",
-      "__test": "if (instance.constructor.name !== 'HTMLTimeElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'HTMLTimeElement' && Object.prototype.toString.call(instance) !== '[object HTMLTimeElement]') {return false;} return !!instance;"
     },
     "HTMLTitleElement": {
       "__base": "var instance = document.createElement('title');",
-      "__test": "if (instance.constructor.name !== 'HTMLTitleElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'HTMLTitleElement' && Object.prototype.toString.call(instance) !== '[object HTMLTitleElement]') {return false;} return !!instance;"
     },
     "HTMLTrackElement": {
       "__base": "var instance = document.createElement('track');",
-      "__test": "if (instance.constructor.name !== 'HTMLTrackElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'HTMLTrackElement' && Object.prototype.toString.call(instance) !== '[object HTMLTrackElement]') {return false;} return !!instance;"
     },
     "HTMLUListElement": {
       "__base": "var instance = document.createElement('ul');",
-      "__test": "if (instance.constructor.name !== 'HTMLUListElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'HTMLUListElement' && Object.prototype.toString.call(instance) !== '[object HTMLUListElement]') {return false;} return !!instance;"
     },
     "HTMLUnknownElement": {
       "__base": "var instance = document.createElement('unknown');",
-      "__test": "if (instance.constructor.name !== 'HTMLUnknownElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'HTMLUnknownElement' && Object.prototype.toString.call(instance) !== '[object HTMLUnknownElement]') {return false;} return !!instance;"
     },
     "HTMLVideoElement": {
       "__base": "var instance = document.createElement('video');",
-      "__test": "if (instance.constructor.name !== 'HTMLVideoElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'HTMLVideoElement' && Object.prototype.toString.call(instance) !== '[object HTMLVideoElement]') {return false;} return !!instance;"
     },
     "IIRFilterNode": {
       "__resources": ["audioContext"],
@@ -619,350 +619,350 @@
     },
     "SVGAElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'a');",
-      "__test": "if (instance.constructor.name !== 'SVGAElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGAElement' && Object.prototype.toString.call(instance) !== '[object SVGAElement]') {return false;} return !!instance;"
     },
     "SVGAltGlyphDefElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'altGlyphDef');",
-      "__test": "if (instance.constructor.name !== 'SVGAltGlyphDefElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGAltGlyphDefElement' && Object.prototype.toString.call(instance) !== '[object SVGAltGlyphDefElement]') {return false;} return !!instance;"
     },
     "SVGAltGlyphElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'altGlyph');",
-      "__test": "if (instance.constructor.name !== 'SVGAltGlyphElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGAltGlyphElement' && Object.prototype.toString.call(instance) !== '[object SVGAltGlyphElement]') {return false;} return !!instance;"
     },
     "SVGAltGlyphItemElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'altGlyphItem');",
-      "__test": "if (instance.constructor.name !== 'SVGAltGlyphItemElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGAltGlyphItemElement' && Object.prototype.toString.call(instance) !== '[object SVGAltGlyphItemElement]') {return false;} return !!instance;"
     },
     "SVGAnimateColorElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'animateColor');",
-      "__test": "if (instance.constructor.name !== 'SVGAnimateColorElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGAnimateColorElement' && Object.prototype.toString.call(instance) !== '[object SVGAnimateColorElement]') {return false;} return !!instance;"
     },
     "SVGAnimateElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'animate');",
-      "__test": "if (instance.constructor.name !== 'SVGAnimateElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGAnimateElement' && Object.prototype.toString.call(instance) !== '[object SVGAnimateElement]') {return false;} return !!instance;"
     },
     "SVGAnimateMotionElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'animateMotion');",
-      "__test": "if (instance.constructor.name !== 'SVGAnimateMotionElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGAnimateMotionElement' && Object.prototype.toString.call(instance) !== '[object SVGAnimateMotionElement]') {return false;} return !!instance;"
     },
     "SVGAnimateTransformElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'animateTransform');",
-      "__test": "if (instance.constructor.name !== 'SVGAnimateTransformElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGAnimateTransformElement' && Object.prototype.toString.call(instance) !== '[object SVGAnimateTransformElement]') {return false;} return !!instance;"
     },
     "SVGAnimationElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'animation');",
-      "__test": "if (instance.constructor.name !== 'SVGAnimationElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGAnimationElement' && Object.prototype.toString.call(instance) !== '[object SVGAnimationElement]') {return false;} return !!instance;"
     },
     "SVGCircleElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'circle');",
-      "__test": "if (instance.constructor.name !== 'SVGCircleElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGCircleElement' && Object.prototype.toString.call(instance) !== '[object SVGCircleElement]') {return false;} return !!instance;"
     },
     "SVGClipPathElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'clipPath');",
-      "__test": "if (instance.constructor.name !== 'SVGClipPathElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGClipPathElement' && Object.prototype.toString.call(instance) !== '[object SVGClipPathElement]') {return false;} return !!instance;"
     },
     "SVGColorProfileElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'color-profile');",
-      "__test": "if (instance.constructor.name !== 'SVGColorProfileElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGColorProfileElement' && Object.prototype.toString.call(instance) !== '[object SVGColorProfileElement]') {return false;} return !!instance;"
     },
     "SVGCursorElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'cursor');",
-      "__test": "if (instance.constructor.name !== 'SVGCursorElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGCursorElement' && Object.prototype.toString.call(instance) !== '[object SVGCursorElement]') {return false;} return !!instance;"
     },
     "SVGDefsElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'defs');",
-      "__test": "if (instance.constructor.name !== 'SVGDefsElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGDefsElement' && Object.prototype.toString.call(instance) !== '[object SVGDefsElement]') {return false;} return !!instance;"
     },
     "SVGDescElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'desc');",
-      "__test": "if (instance.constructor.name !== 'SVGDescElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGDescElement' && Object.prototype.toString.call(instance) !== '[object SVGDescElement]') {return false;} return !!instance;"
     },
     "SVGElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'unknown');"
     },
     "SVGEllipseElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'ellipse');",
-      "__test": "if (instance.constructor.name !== 'SVGEllipseElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGEllipseElement' && Object.prototype.toString.call(instance) !== '[object SVGEllipseElement]') {return false;} return !!instance;"
     },
     "SVGFEBlendElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feBlend');",
-      "__test": "if (instance.constructor.name !== 'SVGFEBlendElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGFEBlendElement' && Object.prototype.toString.call(instance) !== '[object SVGFEBlendElement]') {return false;} return !!instance;"
     },
     "SVGFEColorMatrixElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feColorMatrix');",
-      "__test": "if (instance.constructor.name !== 'SVGFEColorMatrixElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGFEColorMatrixElement' && Object.prototype.toString.call(instance) !== '[object SVGFEColorMatrixElement]') {return false;} return !!instance;"
     },
     "SVGFEComponentTransferElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feComponentTransfer');",
-      "__test": "if (instance.constructor.name !== 'SVGFEComponentTransferElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGFEComponentTransferElement' && Object.prototype.toString.call(instance) !== '[object SVGFEComponentTransferElement]') {return false;} return !!instance;"
     },
     "SVGFECompositeElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feComposite');",
-      "__test": "if (instance.constructor.name !== 'SVGFECompositeElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGFECompositeElement' && Object.prototype.toString.call(instance) !== '[object SVGFECompositeElement]') {return false;} return !!instance;"
     },
     "SVGFEConvolveMatrixElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feConvolveMatrix');",
-      "__test": "if (instance.constructor.name !== 'SVGFEConvolveMatrixElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGFEConvolveMatrixElement' && Object.prototype.toString.call(instance) !== '[object SVGFEConvolveMatrixElement]') {return false;} return !!instance;"
     },
     "SVGFEDiffuseLightingElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feDiffuseLighting');",
-      "__test": "if (instance.constructor.name !== 'SVGFEDiffuseLightingElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGFEDiffuseLightingElement' && Object.prototype.toString.call(instance) !== '[object SVGFEDiffuseLightingElement]') {return false;} return !!instance;"
     },
     "SVGFEDisplacementMapElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feDisplacementMap');",
-      "__test": "if (instance.constructor.name !== 'SVGFEDisplacementMapElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGFEDisplacementMapElement' && Object.prototype.toString.call(instance) !== '[object SVGFEDisplacementMapElement]') {return false;} return !!instance;"
     },
     "SVGFEDistantLightElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feDistantLight');",
-      "__test": "if (instance.constructor.name !== 'SVGFEDistantLightElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGFEDistantLightElement' && Object.prototype.toString.call(instance) !== '[object SVGFEDistantLightElement]') {return false;} return !!instance;"
     },
     "SVGFEDropShadowElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feDropShadow');",
-      "__test": "if (instance.constructor.name !== 'SVGFEDropShadowElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGFEDropShadowElement' && Object.prototype.toString.call(instance) !== '[object SVGFEDropShadowElement]') {return false;} return !!instance;"
     },
     "SVGFEFloodElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feFlood');",
-      "__test": "if (instance.constructor.name !== 'SVGFEFloodElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGFEFloodElement' && Object.prototype.toString.call(instance) !== '[object SVGFEFloodElement]') {return false;} return !!instance;"
     },
     "SVGFEFuncAElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feFuncA');",
-      "__test": "if (instance.constructor.name !== 'SVGFEFuncAElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGFEFuncAElement' && Object.prototype.toString.call(instance) !== '[object SVGFEFuncAElement]') {return false;} return !!instance;"
     },
     "SVGFEFuncBElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feFuncB');",
-      "__test": "if (instance.constructor.name !== 'SVGFEFuncBElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGFEFuncBElement' && Object.prototype.toString.call(instance) !== '[object SVGFEFuncBElement]') {return false;} return !!instance;"
     },
     "SVGFEFuncGElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feFuncG');",
-      "__test": "if (instance.constructor.name !== 'SVGFEFuncGElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGFEFuncGElement' && Object.prototype.toString.call(instance) !== '[object SVGFEFuncGElement]') {return false;} return !!instance;"
     },
     "SVGFEFuncRElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feFuncR');",
-      "__test": "if (instance.constructor.name !== 'SVGFEFuncRElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGFEFuncRElement' && Object.prototype.toString.call(instance) !== '[object SVGFEFuncRElement]') {return false;} return !!instance;"
     },
     "SVGFEGaussianBlurElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feGaussianBlur');",
-      "__test": "if (instance.constructor.name !== 'SVGFEGaussianBlurElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGFEGaussianBlurElement' && Object.prototype.toString.call(instance) !== '[object SVGFEGaussianBlurElement]') {return false;} return !!instance;"
     },
     "SVGFEImageElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feImage');",
-      "__test": "if (instance.constructor.name !== 'SVGFEImageElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGFEImageElement' && Object.prototype.toString.call(instance) !== '[object SVGFEImageElement]') {return false;} return !!instance;"
     },
     "SVGFEMergeElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feMerge');",
-      "__test": "if (instance.constructor.name !== 'SVGFEMergeElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGFEMergeElement' && Object.prototype.toString.call(instance) !== '[object SVGFEMergeElement]') {return false;} return !!instance;"
     },
     "SVGFEMergeNodeElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feMergeNode');",
-      "__test": "if (instance.constructor.name !== 'SVGFEMergeNodeElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGFEMergeNodeElement' && Object.prototype.toString.call(instance) !== '[object SVGFEMergeNodeElement]') {return false;} return !!instance;"
     },
     "SVGFEMorphologyElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feMorphology');",
-      "__test": "if (instance.constructor.name !== 'SVGFEMorphologyElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGFEMorphologyElement' && Object.prototype.toString.call(instance) !== '[object SVGFEMorphologyElement]') {return false;} return !!instance;"
     },
     "SVGFEOffsetElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feOffset');",
-      "__test": "if (instance.constructor.name !== 'SVGFEOffsetElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGFEOffsetElement' && Object.prototype.toString.call(instance) !== '[object SVGFEOffsetElement]') {return false;} return !!instance;"
     },
     "SVGFEPointLightElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'fePointLight');",
-      "__test": "if (instance.constructor.name !== 'SVGFEPointLightElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGFEPointLightElement' && Object.prototype.toString.call(instance) !== '[object SVGFEPointLightElement]') {return false;} return !!instance;"
     },
     "SVGFESpecularLightingElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feSpecularLighting');",
-      "__test": "if (instance.constructor.name !== 'SVGFESpecularLightingElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGFESpecularLightingElement' && Object.prototype.toString.call(instance) !== '[object SVGFESpecularLightingElement]') {return false;} return !!instance;"
     },
     "SVGFESpotLightElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feSpotLight');",
-      "__test": "if (instance.constructor.name !== 'SVGFESpotLightElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGFESpotLightElement' && Object.prototype.toString.call(instance) !== '[object SVGFESpotLightElement]') {return false;} return !!instance;"
     },
     "SVGFETileElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feTile');",
-      "__test": "if (instance.constructor.name !== 'SVGFETileElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGFETileElement' && Object.prototype.toString.call(instance) !== '[object SVGFETileElement]') {return false;} return !!instance;"
     },
     "SVGFETurbulenceElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feTurbulence');",
-      "__test": "if (instance.constructor.name !== 'SVGFETurbulenceElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGFETurbulenceElement' && Object.prototype.toString.call(instance) !== '[object SVGFETurbulenceElement]') {return false;} return !!instance;"
     },
     "SVGFilterElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'filter');",
-      "__test": "if (instance.constructor.name !== 'SVGFilterElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGFilterElement' && Object.prototype.toString.call(instance) !== '[object SVGFilterElement]') {return false;} return !!instance;"
     },
     "SVGFontElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'font');",
-      "__test": "if (instance.constructor.name !== 'SVGFontElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGFontElement' && Object.prototype.toString.call(instance) !== '[object SVGFontElement]') {return false;} return !!instance;"
     },
     "SVGFontFaceElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'font-face');",
-      "__test": "if (instance.constructor.name !== 'SVGFontFaceElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGFontFaceElement' && Object.prototype.toString.call(instance) !== '[object SVGFontFaceElement]') {return false;} return !!instance;"
     },
     "SVGFontFaceFormatElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'font-face-format');",
-      "__test": "if (instance.constructor.name !== 'SVGFontFaceFormatElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGFontFaceFormatElement' && Object.prototype.toString.call(instance) !== '[object SVGFontFaceFormatElement]') {return false;} return !!instance;"
     },
     "SVGFontFaceNameElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'font-face-name');",
-      "__test": "if (instance.constructor.name !== 'SVGFontFaceNameElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGFontFaceNameElement' && Object.prototype.toString.call(instance) !== '[object SVGFontFaceNameElement]') {return false;} return !!instance;"
     },
     "SVGFontFaceSrcElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'font-face-src');",
-      "__test": "if (instance.constructor.name !== 'SVGFontFaceSrcElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGFontFaceSrcElement' && Object.prototype.toString.call(instance) !== '[object SVGFontFaceSrcElement]') {return false;} return !!instance;"
     },
     "SVGFontFaceUriElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'font-face-uri');",
-      "__test": "if (instance.constructor.name !== 'SVGFontFaceUriElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGFontFaceUriElement' && Object.prototype.toString.call(instance) !== '[object SVGFontFaceUriElement]') {return false;} return !!instance;"
     },
     "SVGForeignObjectElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'foreignObject');",
-      "__test": "if (instance.constructor.name !== 'SVGForeignObjectElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGForeignObjectElement' && Object.prototype.toString.call(instance) !== '[object SVGForeignObjectElement]') {return false;} return !!instance;"
     },
     "SVGGElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'g');",
-      "__test": "if (instance.constructor.name !== 'SVGGElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGGElement' && Object.prototype.toString.call(instance) !== '[object SVGGElement]') {return false;} return !!instance;"
     },
     "SVGGeometryElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'geometry');",
-      "__test": "if (instance.constructor.name !== 'SVGGeometryElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGGeometryElement' && Object.prototype.toString.call(instance) !== '[object SVGGeometryElement]') {return false;} return !!instance;"
     },
     "SVGGlyphElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'glyph');",
-      "__test": "if (instance.constructor.name !== 'SVGGlyphElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGGlyphElement' && Object.prototype.toString.call(instance) !== '[object SVGGlyphElement]') {return false;} return !!instance;"
     },
     "SVGGlyphRefElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'glyphRef');",
-      "__test": "if (instance.constructor.name !== 'SVGGlyphRefElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGGlyphRefElement' && Object.prototype.toString.call(instance) !== '[object SVGGlyphRefElement]') {return false;} return !!instance;"
     },
     "SVGGradientElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'gradient');",
-      "__test": "if (instance.constructor.name !== 'SVGGradientElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGGradientElement' && Object.prototype.toString.call(instance) !== '[object SVGGradientElement]') {return false;} return !!instance;"
     },
     "SVGHKernElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'hkern');",
-      "__test": "if (instance.constructor.name !== 'SVGHKernElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGHKernElement' && Object.prototype.toString.call(instance) !== '[object SVGHKernElement]') {return false;} return !!instance;"
     },
     "SVGImageElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'image');",
-      "__test": "if (instance.constructor.name !== 'SVGImageElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGImageElement' && Object.prototype.toString.call(instance) !== '[object SVGImageElement]') {return false;} return !!instance;"
     },
     "SVGLinearGradientElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient');",
-      "__test": "if (instance.constructor.name !== 'SVGLinearGradientElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGLinearGradientElement' && Object.prototype.toString.call(instance) !== '[object SVGLinearGradientElement]') {return false;} return !!instance;"
     },
     "SVGLineElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'line');",
-      "__test": "if (instance.constructor.name !== 'SVGLineElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGLineElement' && Object.prototype.toString.call(instance) !== '[object SVGLineElement]') {return false;} return !!instance;"
     },
     "SVGMaskElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'mask');",
-      "__test": "if (instance.constructor.name !== 'SVGMaskElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGMaskElement' && Object.prototype.toString.call(instance) !== '[object SVGMaskElement]') {return false;} return !!instance;"
     },
     "SVGMeshElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'mesh');",
-      "__test": "if (instance.constructor.name !== 'SVGMeshElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGMeshElement' && Object.prototype.toString.call(instance) !== '[object SVGMeshElement]') {return false;} return !!instance;"
     },
     "SVGMetadataElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'metadata');",
-      "__test": "if (instance.constructor.name !== 'SVGMetadataElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGMetadataElement' && Object.prototype.toString.call(instance) !== '[object SVGMetadataElement]') {return false;} return !!instance;"
     },
     "SVGMissingGlyphElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'missing-glyph');",
-      "__test": "if (instance.constructor.name !== 'SVGMissingGlyphElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGMissingGlyphElement' && Object.prototype.toString.call(instance) !== '[object SVGMissingGlyphElement]') {return false;} return !!instance;"
     },
     "SVGMPathElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'mpath');",
-      "__test": "if (instance.constructor.name !== 'SVGMPathElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGMPathElement' && Object.prototype.toString.call(instance) !== '[object SVGMPathElement]') {return false;} return !!instance;"
     },
     "SVGPathElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'path');",
-      "__test": "if (instance.constructor.name !== 'SVGPathElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGPathElement' && Object.prototype.toString.call(instance) !== '[object SVGPathElement]') {return false;} return !!instance;"
     },
     "SVGPatternElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'pattern');",
-      "__test": "if (instance.constructor.name !== 'SVGPatternElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGPatternElement' && Object.prototype.toString.call(instance) !== '[object SVGPatternElement]') {return false;} return !!instance;"
     },
     "SVGPolygonElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');",
-      "__test": "if (instance.constructor.name !== 'SVGPolygonElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGPolygonElement' && Object.prototype.toString.call(instance) !== '[object SVGPolygonElement]') {return false;} return !!instance;"
     },
     "SVGPolylineElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');",
-      "__test": "if (instance.constructor.name !== 'SVGPolylineElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGPolylineElement' && Object.prototype.toString.call(instance) !== '[object SVGPolylineElement]') {return false;} return !!instance;"
     },
     "SVGRadialGradientElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'radialGradient');",
-      "__test": "if (instance.constructor.name !== 'SVGRadialGradientElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGRadialGradientElement' && Object.prototype.toString.call(instance) !== '[object SVGRadialGradientElement]') {return false;} return !!instance;"
     },
     "SVGRectElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'rect');",
-      "__test": "if (instance.constructor.name !== 'SVGRectElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGRectElement' && Object.prototype.toString.call(instance) !== '[object SVGRectElement]') {return false;} return !!instance;"
     },
     "SVGScriptElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'script');",
-      "__test": "if (instance.constructor.name !== 'SVGScriptElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGScriptElement' && Object.prototype.toString.call(instance) !== '[object SVGScriptElement]') {return false;} return !!instance;"
     },
     "SVGSetElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'set');",
-      "__test": "if (instance.constructor.name !== 'SVGSetElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGSetElement' && Object.prototype.toString.call(instance) !== '[object SVGSetElement]') {return false;} return !!instance;"
     },
     "SVGSolidcolorElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'solidcolor');",
-      "__test": "if (instance.constructor.name !== 'SVGSolidcolorElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGSolidcolorElement' && Object.prototype.toString.call(instance) !== '[object SVGSolidcolorElement]') {return false;} return !!instance;"
     },
     "SVGStopElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'stop');",
-      "__test": "if (instance.constructor.name !== 'SVGStopElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGStopElement' && Object.prototype.toString.call(instance) !== '[object SVGStopElement]') {return false;} return !!instance;"
     },
     "SVGStyleElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'style');",
-      "__test": "if (instance.constructor.name !== 'SVGStyleElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGStyleElement' && Object.prototype.toString.call(instance) !== '[object SVGStyleElement]') {return false;} return !!instance;"
     },
     "SVGSVGElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'svg');",
-      "__test": "if (instance.constructor.name !== 'SVGSVGElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGSVGElement' && Object.prototype.toString.call(instance) !== '[object SVGSVGElement]') {return false;} return !!instance;"
     },
     "SVGSwitchElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'switch');",
-      "__test": "if (instance.constructor.name !== 'SVGSwitchElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGSwitchElement' && Object.prototype.toString.call(instance) !== '[object SVGSwitchElement]') {return false;} return !!instance;"
     },
     "SVGSymbolElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'symbol');",
-      "__test": "if (instance.constructor.name !== 'SVGSymbolElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGSymbolElement' && Object.prototype.toString.call(instance) !== '[object SVGSymbolElement]') {return false;} return !!instance;"
     },
     "SVGTextElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'text');",
-      "__test": "if (instance.constructor.name !== 'SVGTextElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGTextElement' && Object.prototype.toString.call(instance) !== '[object SVGTextElement]') {return false;} return !!instance;"
     },
     "SVGTextPathElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'textPath');",
-      "__test": "if (instance.constructor.name !== 'SVGTextPathElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGTextPathElement' && Object.prototype.toString.call(instance) !== '[object SVGTextPathElement]') {return false;} return !!instance;"
     },
     "SVGTitleElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'title');",
-      "__test": "if (instance.constructor.name !== 'SVGTitleElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGTitleElement' && Object.prototype.toString.call(instance) !== '[object SVGTitleElement]') {return false;} return !!instance;"
     },
     "SVGTRefElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'tref');",
-      "__test": "if (instance.constructor.name !== 'SVGTRefElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGTRefElement' && Object.prototype.toString.call(instance) !== '[object SVGTRefElement]') {return false;} return !!instance;"
     },
     "SVGTSpanElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');",
-      "__test": "if (instance.constructor.name !== 'SVGTSpanElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGTSpanElement' && Object.prototype.toString.call(instance) !== '[object SVGTSpanElement]') {return false;} return !!instance;"
     },
     "SVGUnknownElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'unknown');",
-      "__test": "if (instance.constructor.name !== 'SVGUnknownElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGUnknownElement' && Object.prototype.toString.call(instance) !== '[object SVGUnknownElement]') {return false;} return !!instance;"
     },
     "SVGUseElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'use');",
-      "__test": "if (instance.constructor.name !== 'SVGUseElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGUseElement' && Object.prototype.toString.call(instance) !== '[object SVGUseElement]') {return false;} return !!instance;"
     },
     "SVGViewElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'view');",
-      "__test": "if (instance.constructor.name !== 'SVGViewElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGViewElement' && Object.prototype.toString.call(instance) !== '[object SVGViewElement]') {return false;} return !!instance;"
     },
     "SVGVKernElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'vkern');",
-      "__test": "if (instance.constructor.name !== 'SVGVKernElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGVKernElement' && Object.prototype.toString.call(instance) !== '[object SVGVKernElement]') {return false;} return !!instance;"
     },
     "TreeWalker": {
       "__base": "var instance = document.createTreeWalker(document);"
