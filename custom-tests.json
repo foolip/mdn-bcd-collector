@@ -619,350 +619,350 @@
     },
     "SVGAElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'a');",
-      "__test": "if (instance.constructor.name === 'SVGAElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGAElement') {return false;} return !!instance;"
     },
     "SVGAltGlyphDefElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'altGlyphDef');",
-      "__test": "if (instance.constructor.name === 'SVGAltGlyphDefElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGAltGlyphDefElement') {return false;} return !!instance;"
     },
     "SVGAltGlyphElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'altGlyph');",
-      "__test": "if (instance.constructor.name === 'SVGAltGlyphElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGAltGlyphElement') {return false;} return !!instance;"
     },
     "SVGAltGlyphItemElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'altGlyphItem');",
-      "__test": "if (instance.constructor.name === 'SVGAltGlyphItemElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGAltGlyphItemElement') {return false;} return !!instance;"
     },
     "SVGAnimateColorElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'animateColor');",
-      "__test": "if (instance.constructor.name === 'SVGAnimateColorElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGAnimateColorElement') {return false;} return !!instance;"
     },
     "SVGAnimateElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'animate');",
-      "__test": "if (instance.constructor.name === 'SVGAnimateElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGAnimateElement') {return false;} return !!instance;"
     },
     "SVGAnimateMotionElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'animateMotion');",
-      "__test": "if (instance.constructor.name === 'SVGAnimateMotionElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGAnimateMotionElement') {return false;} return !!instance;"
     },
     "SVGAnimateTransformElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'animateTransform');",
-      "__test": "if (instance.constructor.name === 'SVGAnimateTransformElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGAnimateTransformElement') {return false;} return !!instance;"
     },
     "SVGAnimationElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'animation');",
-      "__test": "if (instance.constructor.name === 'SVGAnimationElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGAnimationElement') {return false;} return !!instance;"
     },
     "SVGCircleElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'circle');",
-      "__test": "if (instance.constructor.name === 'SVGCircleElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGCircleElement') {return false;} return !!instance;"
     },
     "SVGClipPathElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'clipPath');",
-      "__test": "if (instance.constructor.name === 'SVGClipPathElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGClipPathElement') {return false;} return !!instance;"
     },
     "SVGColorProfileElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'color-profile');",
-      "__test": "if (instance.constructor.name === 'SVGColorProfileElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGColorProfileElement') {return false;} return !!instance;"
     },
     "SVGCursorElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'cursor');",
-      "__test": "if (instance.constructor.name === 'SVGCursorElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGCursorElement') {return false;} return !!instance;"
     },
     "SVGDefsElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'defs');",
-      "__test": "if (instance.constructor.name === 'SVGDefsElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGDefsElement') {return false;} return !!instance;"
     },
     "SVGDescElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'desc');",
-      "__test": "if (instance.constructor.name === 'SVGDescElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGDescElement') {return false;} return !!instance;"
     },
     "SVGElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'unknown');"
     },
     "SVGEllipseElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'ellipse');",
-      "__test": "if (instance.constructor.name === 'SVGEllipseElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGEllipseElement') {return false;} return !!instance;"
     },
     "SVGFEBlendElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feBlend');",
-      "__test": "if (instance.constructor.name === 'SVGFEBlendElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGFEBlendElement') {return false;} return !!instance;"
     },
     "SVGFEColorMatrixElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feColorMatrix');",
-      "__test": "if (instance.constructor.name === 'SVGFEColorMatrixElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGFEColorMatrixElement') {return false;} return !!instance;"
     },
     "SVGFEComponentTransferElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feComponentTransfer');",
-      "__test": "if (instance.constructor.name === 'SVGFEComponentTransferElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGFEComponentTransferElement') {return false;} return !!instance;"
     },
     "SVGFECompositeElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feComposite');",
-      "__test": "if (instance.constructor.name === 'SVGFECompositeElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGFECompositeElement') {return false;} return !!instance;"
     },
     "SVGFEConvolveMatrixElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feConvolveMatrix');",
-      "__test": "if (instance.constructor.name === 'SVGFEConvolveMatrixElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGFEConvolveMatrixElement') {return false;} return !!instance;"
     },
     "SVGFEDiffuseLightingElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feDiffuseLighting');",
-      "__test": "if (instance.constructor.name === 'SVGFEDiffuseLightingElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGFEDiffuseLightingElement') {return false;} return !!instance;"
     },
     "SVGFEDisplacementMapElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feDisplacementMap');",
-      "__test": "if (instance.constructor.name === 'SVGFEDisplacementMapElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGFEDisplacementMapElement') {return false;} return !!instance;"
     },
     "SVGFEDistantLightElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feDistantLight');",
-      "__test": "if (instance.constructor.name === 'SVGFEDistantLightElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGFEDistantLightElement') {return false;} return !!instance;"
     },
     "SVGFEDropShadowElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feDropShadow');",
-      "__test": "if (instance.constructor.name === 'SVGFEDropShadowElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGFEDropShadowElement') {return false;} return !!instance;"
     },
     "SVGFEFloodElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feFlood');",
-      "__test": "if (instance.constructor.name === 'SVGFEFloodElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGFEFloodElement') {return false;} return !!instance;"
     },
     "SVGFEFuncAElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feFuncA');",
-      "__test": "if (instance.constructor.name === 'SVGFEFuncAElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGFEFuncAElement') {return false;} return !!instance;"
     },
     "SVGFEFuncBElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feFuncB');",
-      "__test": "if (instance.constructor.name === 'SVGFEFuncBElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGFEFuncBElement') {return false;} return !!instance;"
     },
     "SVGFEFuncGElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feFuncG');",
-      "__test": "if (instance.constructor.name === 'SVGFEFuncGElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGFEFuncGElement') {return false;} return !!instance;"
     },
     "SVGFEFuncRElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feFuncR');",
-      "__test": "if (instance.constructor.name === 'SVGFEFuncRElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGFEFuncRElement') {return false;} return !!instance;"
     },
     "SVGFEGaussianBlurElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feGaussianBlur');",
-      "__test": "if (instance.constructor.name === 'SVGFEGaussianBlurElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGFEGaussianBlurElement') {return false;} return !!instance;"
     },
     "SVGFEImageElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feImage');",
-      "__test": "if (instance.constructor.name === 'SVGFEImageElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGFEImageElement') {return false;} return !!instance;"
     },
     "SVGFEMergeElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feMerge');",
-      "__test": "if (instance.constructor.name === 'SVGFEMergeElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGFEMergeElement') {return false;} return !!instance;"
     },
     "SVGFEMergeNodeElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feMergeNode');",
-      "__test": "if (instance.constructor.name === 'SVGFEMergeNodeElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGFEMergeNodeElement') {return false;} return !!instance;"
     },
     "SVGFEMorphologyElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feMorphology');",
-      "__test": "if (instance.constructor.name === 'SVGFEMorphologyElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGFEMorphologyElement') {return false;} return !!instance;"
     },
     "SVGFEOffsetElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feOffset');",
-      "__test": "if (instance.constructor.name === 'SVGFEOffsetElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGFEOffsetElement') {return false;} return !!instance;"
     },
     "SVGFEPointLightElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'fePointLight');",
-      "__test": "if (instance.constructor.name === 'SVGFEPointLightElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGFEPointLightElement') {return false;} return !!instance;"
     },
     "SVGFESpecularLightingElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feSpecularLighting');",
-      "__test": "if (instance.constructor.name === 'SVGFESpecularLightingElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGFESpecularLightingElement') {return false;} return !!instance;"
     },
     "SVGFESpotLightElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feSpotLight');",
-      "__test": "if (instance.constructor.name === 'SVGFESpotLightElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGFESpotLightElement') {return false;} return !!instance;"
     },
     "SVGFETileElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feTile');",
-      "__test": "if (instance.constructor.name === 'SVGFETileElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGFETileElement') {return false;} return !!instance;"
     },
     "SVGFETurbulenceElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feTurbulence');",
-      "__test": "if (instance.constructor.name === 'SVGFETurbulenceElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGFETurbulenceElement') {return false;} return !!instance;"
     },
     "SVGFilterElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'filter');",
-      "__test": "if (instance.constructor.name === 'SVGFilterElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGFilterElement') {return false;} return !!instance;"
     },
     "SVGFontElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'font');",
-      "__test": "if (instance.constructor.name === 'SVGFontElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGFontElement') {return false;} return !!instance;"
     },
     "SVGFontFaceElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'font-face');",
-      "__test": "if (instance.constructor.name === 'SVGFontFaceElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGFontFaceElement') {return false;} return !!instance;"
     },
     "SVGFontFaceFormatElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'font-face-format');",
-      "__test": "if (instance.constructor.name === 'SVGFontFaceFormatElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGFontFaceFormatElement') {return false;} return !!instance;"
     },
     "SVGFontFaceNameElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'font-face-name');",
-      "__test": "if (instance.constructor.name === 'SVGFontFaceNameElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGFontFaceNameElement') {return false;} return !!instance;"
     },
     "SVGFontFaceSrcElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'font-face-src');",
-      "__test": "if (instance.constructor.name === 'SVGFontFaceSrcElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGFontFaceSrcElement') {return false;} return !!instance;"
     },
     "SVGFontFaceUriElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'font-face-uri');",
-      "__test": "if (instance.constructor.name === 'SVGFontFaceUriElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGFontFaceUriElement') {return false;} return !!instance;"
     },
     "SVGForeignObjectElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'foreignObject');",
-      "__test": "if (instance.constructor.name === 'SVGForeignObjectElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGForeignObjectElement') {return false;} return !!instance;"
     },
     "SVGGElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'g');",
-      "__test": "if (instance.constructor.name === 'SVGGElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGGElement') {return false;} return !!instance;"
     },
     "SVGGeometryElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'geometry');",
-      "__test": "if (instance.constructor.name === 'SVGGeometryElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGGeometryElement') {return false;} return !!instance;"
     },
     "SVGGlyphElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'glyph');",
-      "__test": "if (instance.constructor.name === 'SVGGlyphElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGGlyphElement') {return false;} return !!instance;"
     },
     "SVGGlyphRefElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'glyphRef');",
-      "__test": "if (instance.constructor.name === 'SVGGlyphRefElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGGlyphRefElement') {return false;} return !!instance;"
     },
     "SVGGradientElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'gradient');",
-      "__test": "if (instance.constructor.name === 'SVGGradientElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGGradientElement') {return false;} return !!instance;"
     },
     "SVGHKernElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'hkern');",
-      "__test": "if (instance.constructor.name === 'SVGHKernElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGHKernElement') {return false;} return !!instance;"
     },
     "SVGImageElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'image');",
-      "__test": "if (instance.constructor.name === 'SVGImageElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGImageElement') {return false;} return !!instance;"
     },
     "SVGLinearGradientElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient');",
-      "__test": "if (instance.constructor.name === 'SVGLinearGradientElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGLinearGradientElement') {return false;} return !!instance;"
     },
     "SVGLineElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'line');",
-      "__test": "if (instance.constructor.name === 'SVGLineElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGLineElement') {return false;} return !!instance;"
     },
     "SVGMaskElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'mask');",
-      "__test": "if (instance.constructor.name === 'SVGMaskElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGMaskElement') {return false;} return !!instance;"
     },
     "SVGMeshElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'mesh');",
-      "__test": "if (instance.constructor.name === 'SVGMeshElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGMeshElement') {return false;} return !!instance;"
     },
     "SVGMetadataElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'metadata');",
-      "__test": "if (instance.constructor.name === 'SVGMetadataElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGMetadataElement') {return false;} return !!instance;"
     },
     "SVGMissingGlyphElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'missing-glyph');",
-      "__test": "if (instance.constructor.name === 'SVGMissingGlyphElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGMissingGlyphElement') {return false;} return !!instance;"
     },
     "SVGMPathElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'mpath');",
-      "__test": "if (instance.constructor.name === 'SVGMPathElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGMPathElement') {return false;} return !!instance;"
     },
     "SVGPathElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'path');",
-      "__test": "if (instance.constructor.name === 'SVGPathElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGPathElement') {return false;} return !!instance;"
     },
     "SVGPatternElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'pattern');",
-      "__test": "if (instance.constructor.name === 'SVGPatternElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGPatternElement') {return false;} return !!instance;"
     },
     "SVGPolygonElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');",
-      "__test": "if (instance.constructor.name === 'SVGPolygonElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGPolygonElement') {return false;} return !!instance;"
     },
     "SVGPolylineElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');",
-      "__test": "if (instance.constructor.name === 'SVGPolylineElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGPolylineElement') {return false;} return !!instance;"
     },
     "SVGRadialGradientElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'radialGradient');",
-      "__test": "if (instance.constructor.name === 'SVGRadialGradientElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGRadialGradientElement') {return false;} return !!instance;"
     },
     "SVGRectElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'rect');",
-      "__test": "if (instance.constructor.name === 'SVGRectElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGRectElement') {return false;} return !!instance;"
     },
     "SVGScriptElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'script');",
-      "__test": "if (instance.constructor.name === 'SVGScriptElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGScriptElement') {return false;} return !!instance;"
     },
     "SVGSetElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'set');",
-      "__test": "if (instance.constructor.name === 'SVGSetElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGSetElement') {return false;} return !!instance;"
     },
     "SVGSolidcolorElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'solidcolor');",
-      "__test": "if (instance.constructor.name === 'SVGSolidcolorElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGSolidcolorElement') {return false;} return !!instance;"
     },
     "SVGStopElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'stop');",
-      "__test": "if (instance.constructor.name === 'SVGStopElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGStopElement') {return false;} return !!instance;"
     },
     "SVGStyleElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'style');",
-      "__test": "if (instance.constructor.name === 'SVGStyleElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGStyleElement') {return false;} return !!instance;"
     },
     "SVGSVGElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'svg');",
-      "__test": "if (instance.constructor.name === 'SVGSVGElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGSVGElement') {return false;} return !!instance;"
     },
     "SVGSwitchElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'switch');",
-      "__test": "if (instance.constructor.name === 'SVGSwitchElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGSwitchElement') {return false;} return !!instance;"
     },
     "SVGSymbolElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'symbol');",
-      "__test": "if (instance.constructor.name === 'SVGSymbolElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGSymbolElement') {return false;} return !!instance;"
     },
     "SVGTextElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'text');",
-      "__test": "if (instance.constructor.name === 'SVGTextElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGTextElement') {return false;} return !!instance;"
     },
     "SVGTextPathElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'textPath');",
-      "__test": "if (instance.constructor.name === 'SVGTextPathElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGTextPathElement') {return false;} return !!instance;"
     },
     "SVGTitleElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'title');",
-      "__test": "if (instance.constructor.name === 'SVGTitleElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGTitleElement') {return false;} return !!instance;"
     },
     "SVGTRefElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'tref');",
-      "__test": "if (instance.constructor.name === 'SVGTRefElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGTRefElement') {return false;} return !!instance;"
     },
     "SVGTSpanElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');",
-      "__test": "if (instance.constructor.name === 'SVGTSpanElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGTSpanElement') {return false;} return !!instance;"
     },
     "SVGUnknownElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'unknown');",
-      "__test": "if (instance.constructor.name === 'SVGUnknownElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGUnknownElement') {return false;} return !!instance;"
     },
     "SVGUseElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'use');",
-      "__test": "if (instance.constructor.name === 'SVGUseElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGUseElement') {return false;} return !!instance;"
     },
     "SVGViewElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'view');",
-      "__test": "if (instance.constructor.name === 'SVGViewElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGViewElement') {return false;} return !!instance;"
     },
     "SVGVKernElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'vkern');",
-      "__test": "if (instance.constructor.name === 'SVGVKernElement') {return false;} return !!instance;"
+      "__test": "if (instance.constructor.name !== 'SVGVKernElement') {return false;} return !!instance;"
     },
     "TreeWalker": {
       "__base": "var instance = document.createTreeWalker(document);"
