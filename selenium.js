@@ -146,6 +146,9 @@ const buildDriver = async (browser, version, os) => {
       const prefs = new logging.Preferences();
       prefs.setLevel(logging.Type.BROWSER, logging.Level.SEVERE);
       capabilities.setLoggingPrefs(prefs);
+      if (service === 'browserstack') {
+        capabilities.set('browserstack.console', 'errors');
+      }
 
       try {
         const driverBuilder = new Builder().usingServer(seleniumUrl)
@@ -179,7 +182,7 @@ const awaitPageReady = async (driver) => {
   await driver.executeScript('return document.readyState');
 };
 
-const changeProtocol = (page, browser, version) => {
+const changeProtocol = (browser, version, page) => {
   let useHttp = false;
   switch (browser) {
     case 'chrome':
@@ -197,14 +200,22 @@ const changeProtocol = (page, browser, version) => {
   return page;
 };
 
-const awaitPage = async (driver, page, browser, version) => {
-  await driver.wait(until.urlIs(changeProtocol(page, browser, version)), 30000);
+const awaitPage = async (driver, browser, version, page) => {
+  await driver.wait(until.urlIs(changeProtocol(browser, version, page)), 30000);
   await awaitPageReady(driver);
 };
 
-const goToPage = async (driver, page, browser, version) => {
-  await driver.get(changeProtocol(page, browser, version), 30000);
+const goToPage = async (driver, browser, version, page) => {
+  await driver.get(changeProtocol(browser, version, page), 30000);
   await awaitPageReady(driver);
+};
+
+const click = async (driver, browser, elementId) => {
+  if (browser === 'safari') {
+    await driver.executeScript(`document.getElementById('${elementId}').click()`);
+  } else {
+    await driver.findElement(By.id(elementId)).click();
+  }
 };
 
 const run = async (browser, version, os) => {
@@ -219,12 +230,12 @@ const run = async (browser, version, os) => {
 
   try {
     log('Loading homepage...');
-    await goToPage(driver, host, browser, version);
-    await driver.findElement(By.id('hideResults')).click();
-    await driver.findElement(By.id('start')).click();
+    await goToPage(driver, browser, version, host);
+    await click(driver, browser, 'hideResults');
+    await click(driver, browser, 'start');
 
     log('Running tests...');
-    await awaitPage(driver, `${host}/tests/?hideResults=on`, browser, version);
+    await awaitPage(driver, browser, version, `${host}/tests/?hideResults=on`);
 
     await driver.wait(until.elementLocated(By.id('status')), 5000);
     statusEl = await driver.findElement(By.id('status'));
@@ -245,9 +256,9 @@ const run = async (browser, version, os) => {
       log('Attempting to download results...');
       if (browser === 'chrome' || browser === 'firefox' ||
         (browser === 'edge' && version >= 79)) {
-        await goToPage(driver, `view-source:${host}/api/results`, browser, version);
+        await goToPage(driver, browser, version, `view-source:${host}/api/results`);
       } else {
-        await goToPage(driver, `${host}/api/results`, browser, version);
+        await goToPage(driver, browser, version, `${host}/api/results`);
       }
       const reportBody = await driver.wait(until.elementLocated(By.css('body')), 10000);
       const reportString = await reportBody.getAttribute('textContent');
@@ -260,7 +271,7 @@ const run = async (browser, version, os) => {
     } catch (e) {
       // If we can't download the results, fallback to GitHub
       log('Uploading results to GitHub...');
-      await goToPage(driver, `${host}/results`, browser, version);
+      await goToPage(driver, browser, version, `${host}/results`);
       statusEl = await driver.findElement(By.id('status'));
       await driver.wait(until.elementTextContains(statusEl, 'to'));
       if ((await statusEl.getText()).search('Failed') !== -1) {
