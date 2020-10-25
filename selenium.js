@@ -168,7 +168,7 @@ const buildDriver = async (browser, version, os) => {
       return driver;
     } catch (e) {
       if (
-        e.message.startsWith('Misconfigured -- Unsupported OS/browser/version/device combo')) ||
+        e.message.startsWith('Misconfigured -- Unsupported OS/browser/version/device combo') ||
         e.message.startsWith('OS/Browser combination invalid') ||
         e.message.startsWith('Browser/Browser_Version not supported')
       ) {
