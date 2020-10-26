@@ -139,7 +139,7 @@ app.post('/api/results/export/github', (req, res) => {
   storage.getAll(req.sessionID)
       .then(async (results) => {
         if (Object.entries(results).length === 0) {
-          res.status(204).end();
+          res.status(412).end();
           return;
         }
 

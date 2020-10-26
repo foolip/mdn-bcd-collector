@@ -31,11 +31,11 @@ function exportGitHub() {
   status.innerHTML = 'Exporting...';
   client.onreadystatechange = function() {
     if (client.readyState == 4) {
-      if (client.status == 204) {
-        status.innerHTML = 'No results to export';
-      } else if (client.status >= 200 && client.status <= 299) {
+      if (client.status >= 200 && client.status <= 299) {
         status.innerHTML = 'Exported to';
         link.href = link.innerHTML = client.responseText;
+      } else if (client.status == 412) {
+        status.innerHTML = 'No results to export';
       } else {
         status.innerHTML = 'Failed to export: ' + client.responseText;
       }
