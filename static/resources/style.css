@@ -1,9 +1,14 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Roboto:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Roboto:wght@400;700&family=Montserrat&display=swap');
 
 body {
   font-family: 'Roboto', Arial, sans-serif;
   background-color: white;
   color: black;
+}
+
+h1, h2 {
+  text-align: center;
+  margin-top: 0;
 }
 
 a {
@@ -58,86 +63,45 @@ input::placeholder {
   border-radius: 8px;
 }
 
-.notice {
+.error-notice {
   color: #700;
   font-weight: bold;
 }
 
-/* https://codepo8.github.io/css-fork-on-github-ribbon/ */
-
-#forkongithub {
-  position: absolute;
-  display: block;
-  top: 0;
-  right: 0;
-  width: 180px;
-  height: 180px;
-  overflow: hidden;
-  z-index: 9999;
-}
-
-#forkongithub a {
-  background: #3d8a3f;
-  color: #fff;
-  text-decoration: none;
-  text-align: center;
+.warning-notice {
+  color: #770;
   font-weight: bold;
-  padding: 5px 40px;
-  font-size: 0.75rem;
-  line-height: 1.5rem;
-  transition: 0.2s;
-
-  width: 150px;
-  position: absolute;
-  top: 50px;
-  right: -50px;
-  transform: rotate(45deg);
-  -webkit-transform: rotate(45deg);
-  -ms-transform: rotate(45deg);
-  -moz-transform: rotate(45deg);
-  -o-transform: rotate(45deg);
-  box-shadow: 4px 4px 10px rgba(0,0,0,0.8);
 }
 
-#forkongithub a:hover {
-  background: #4caf50;
-  color: #fff;
+.success-notice {
+  color: #070;
+  font-weight: bold;
 }
 
-#forkongithub a::before,#forkongithub a::after {
-  content: "";
-  width: 100%;
-  display: block;
-  position: absolute;
-  top: 1px;
-  left: 0;
-  height: 1px;
-  background: #fff;
+#copyright {
+  text-align: center;
+  opacity: 0.75;
 }
 
-#forkongithub a::after {
-  bottom: 1px;
-  top: auto;
+#copyright * {
+  display: inline-block;
+  margin-left: 4px;
 }
 
-@media screen and (max-width: 600px), screen and (max-device-width: 600px) {
-  #forkongithub {
-    width: 120px;
-    height: 120px;
-  }
-
-  #forkongithub a {
-    font-size: 0.5rem;
-    line-height: 1rem;
-    width: 100px;
-    top: 30px;
-    right: -50px;
-  }
-}
-/* End */
+/* Homepage */
 
 #title {
   color: #097923;
+  font-family: Montserrat;
+  font-size: 36pt;
+  text-align: center;
+  margin-top: 0.5em;
+  margin-bottom: 0.1em;
+}
+
+#title img {
+  width: 48px;
+  height: 48px;
 }
 
 #title .version {
@@ -145,33 +109,80 @@ input::placeholder {
   opacity: 0.4;
 }
 
-#homeInfo {
-  margin-right: 50px;
+#subtitle {
+  width: 90%;
+  margin: auto;
+  font-size: 16pt;
+  text-align: center;
 }
 
-@media screen and (max-width: 600px), screen and (max-device-width: 600px) {
-  #homeInfo {
-    margin-right: 5px;
-  }
+#run-tests {
+  width: intrinsic;
+  width: -webkit-max-content;
+  width: -moz-max-content;
+  width: max-content;
+  margin: auto;
+  margin-top: 2em;
+  padding: 2em;
+  text-align: center;
 }
 
-#compat-table .compat-table-entry {
+#runTests #test-entry {
+  display: block;
+}
+
+#hide-results {
+  display: none;
+}
+
+#supported-browsers {
+  margin-top: 2em;
+  padding-top: 0.5em;
+  padding-bottom: 1em;
+}
+
+.compat-table {
+  width: intrinsic;
+  width: -webkit-max-content;
+  width: -moz-max-content;
+  width: max-content;
+  margin: auto;
+  text-align: center;
+}
+
+.compat-table .compat-table-entry {
   display: inline-block;
   margin-right: 16px;
 }
 
-#compat-table .compat-table-entry img {
+.compat-table .compat-table-entry img {
   display: inline-block;
   width: 32px;
   height: 32px;
   vertical-align: middle;
 }
 
-#compat-table .compat-table-entry p {
+.compat-table .compat-table-entry p {
   display: inline-block;
   margin: 0;
   margin-left: 8px;
 }
+
+.compat-table .compat-table-separator {
+  display: none;
+}
+
+@media screen and (max-width: 900px), screen and (max-device-width: 900px) {
+  .compat-table .compat-table-separator {
+    display: block;
+  }
+}
+
+#known-caveats {
+  background: rgba(119,0,0,0.05);
+}
+
+/* End: Homepage */
 
 .result p {
   margin-bottom: 0;
@@ -195,11 +206,27 @@ input::placeholder {
     background-color: #191919;
   }
 
-  .notice {
+  .error-notice {
     color: #faa;
   }
+
+  .warning-notice {
+    color: #ffa;
+  }
+
+  .success-notice {
+    color: #afa;
+  }
+
+  /* Homepage */
 
   #title {
     color: #88f6a2;
   }
+
+  #known-caveats {
+    background: rgba(255,170,170,0.05);
+  }
+
+  /* End: Homepage */
 }
