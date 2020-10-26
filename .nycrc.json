@@ -6,6 +6,7 @@
     "**/coverage/**",
     "**/resources/custom-tests/**",
     "**/json3.min.js",
-    "selenium.js"
+    "selenium.js",
+    "scripts.js"
   ]
 }

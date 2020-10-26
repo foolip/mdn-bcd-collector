@@ -30,18 +30,21 @@
   };
   var reusableInstances = {};
 
+  /* istanbul ignore next */
   function consoleLog(message) {
     if ('console' in self) {
       console.log(message);
     }
   }
 
+  /* istanbul ignore next */
   function consoleError(message) {
     if ('console' in self) {
       console.error(message);
     }
   }
 
+  /* istanbul ignore next */
   function stringify(value) {
     try {
       return String(value);
@@ -50,6 +53,7 @@
     }
   }
 
+  /* istanbul ignore next */
   function stringIncludes(string, search) {
     if (string.includes) {
       return string.includes(search);

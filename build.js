@@ -740,6 +740,8 @@ const copyResources = async () => {
     ['chai/chai.js', 'unittest'],
     ['mocha/mocha.css', 'unittest'],
     ['mocha/mocha.js', 'unittest'],
+    ['mocha/mocha.js.map', 'unittest'],
+    ['sinon/pkg/sinon.js', 'unittest'],
     ['@browser-logos/chrome/chrome_64x64.png', 'browser-logos', 'chrome.png'],
     ['@browser-logos/edge/edge_64x64.png', 'browser-logos', 'edge.png'],
     ['@browser-logos/firefox/firefox_64x64.png', 'browser-logos', 'firefox.png'],
