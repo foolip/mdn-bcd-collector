@@ -243,7 +243,7 @@ const run = async (browser, version, os) => {
   try {
     log('Loading homepage...');
     await goToPage(driver, browser, version, host);
-    await click(driver, browser, 'hideResults');
+    await click(driver, browser, 'hide-results');
     await click(driver, browser, 'start');
 
     log('Running tests...');
