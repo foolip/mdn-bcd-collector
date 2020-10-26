@@ -175,7 +175,6 @@ app.all('/tests/*', (req, res) => {
   if (foundTests && foundTests.length) {
     res.render('tests', {
       title: `${ident || 'All Tests'}`,
-      layout: false,
       tests: foundTests,
       hideResults: req.query.hideResults,
       ignore: (req.query.ignore ? req.query.ignore.split(',') : [])
