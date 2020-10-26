@@ -29,13 +29,19 @@ function exportGitHub() {
       if (client.status >= 200 && client.status <= 299) {
         status.innerHTML = 'Exported to';
         link.href = link.innerHTML = client.responseText;
-        status.classList.add('success-notice');
+        if (status.classList) {
+          status.classList.add('success-notice');
+        }
       } else if (client.status == 412) {
         status.innerHTML = 'No results to export';
-        status.classList.add('warning-notice');
+        if (status.classList) {
+          status.classList.add('warning-notice');
+        }
       } else {
         status.innerHTML = 'Failed to export: ' + client.responseText;
-        status.classList.add('error-notice');
+        if (status.classList) {
+          status.classList.add('error-notice');
+        }
       }
     }
   }
