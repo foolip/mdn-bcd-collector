@@ -8,6 +8,11 @@ interface MerchantValidationEvent : Event {
   undefined complete(Promise<any> merchantSessionPromise);
 };
 
+dictionary MerchantValidationEventInit : EventInit {
+  DOMString methodName = "";
+  USVString validationURL = "";
+};
+
 partial interface PaymentRequest {
   attribute EventHandler onmerchantvalidation;
 };
