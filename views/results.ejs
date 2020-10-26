@@ -9,7 +9,6 @@
 <div>
   <a href="/">Back to start page</a>
 </div>
-<script src="/resources/json3.min.js"></script>
 <script>
 function exportGitHub() {
   var status = document.getElementById('status');
@@ -32,19 +31,11 @@ function exportGitHub() {
   status.innerHTML = 'Exporting...';
   client.onreadystatechange = function() {
     if (client.readyState == 4) {
-      var response = {};
-
-      try {
-        response = JSON.parse(client.responseText);
-      } catch (e) {
-        response.error = client.responseText;
-      }
-
-      if (response.error) {
-        status.innerHTML = 'Failed to export: ' + response.error;
-      } else {
+      if (client.status >= 200 && client.status <= 299 && client.status != 204) {
         status.innerHTML = 'Exported to';
-        link.href = link.innerHTML = response.html_url;
+        link.href = link.innerHTML = client.responseText;
+      } else {
+        status.innerHTML = 'Failed to export: ' + client.responseText;
       }
     }
   }

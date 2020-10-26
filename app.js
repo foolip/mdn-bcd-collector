@@ -69,7 +69,7 @@ const catchError = (err, res, method) => {
   if (method === 'json') {
     res.json({error: errorToDisplay});
   } else {
-    res.text(errorToDisplay);
+    res.send(errorToDisplay);
   }
 };
 
@@ -139,19 +139,19 @@ app.post('/api/results/export/github', (req, res) => {
   storage.getAll(req.sessionID)
       .then(async (results) => {
         if (Object.entries(results).length === 0) {
-          res.json({error: 'No results to export'});
+          res.status(204).send('No results to export');
           return;
         }
 
         const report = createReport(results, req);
         const response = await github.exportAsPR(report);
         if (response) {
-          res.json(response);
+          res.send(response.html_url);
         } else {
-          res.status(500).json({error: 'Server error'});
+          res.status(500).send('Server error');
         }
       })
-      .catch(/* istanbul ignore next */ (err) => catchError(err, res, 'json'));
+      .catch(/* istanbul ignore next */ (err) => catchError(err, res, 'text'));
 });
 
 // Views
