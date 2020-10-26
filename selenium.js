@@ -235,7 +235,7 @@ const run = async (browser, version, os) => {
 
   const driver = await buildDriver(browser, version, os);
   if (!driver) {
-    throw new Error('Selenium grid does not support browser/OS config');
+    throw new Error('Browser/OS config unsupported');
   }
 
   let statusEl;
