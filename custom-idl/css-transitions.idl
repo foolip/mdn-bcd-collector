@@ -1,7 +1,0 @@
-// https://drafts.csswg.org/css-transitions-2/#the-CSSTransition-interface
-// Needed here because of https://github.com/w3c/webref/issues/60
-
-[Exposed=Window]
-interface CSSTransition : Animation {
-  readonly attribute CSSOMString transitionProperty;
-};

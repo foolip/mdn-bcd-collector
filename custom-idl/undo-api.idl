@@ -8,7 +8,7 @@ interface UndoItem {
   readonly attribute boolean merged;
 };
 
-callback UndoItemCallback = void ();
+callback UndoItemCallback = undefined ();
 
 dictionary UndoItemInit {
   required DOMString label;
@@ -19,12 +19,12 @@ dictionary UndoItemInit {
 
 [Exposed=Window]
 interface UndoManager {
-  void undo();
-  void redo();
-  void clearUndo();
-  void clearRedo();
-  void addItem(UndoItem item);
-  void removeItem(unsigned long index);
+  undefined undo();
+  undefined redo();
+  undefined clearUndo();
+  undefined clearRedo();
+  undefined addItem(UndoItem item);
+  undefined removeItem(unsigned long index);
   UndoItem item(unsigned long index);
   readonly attribute unsigned long length;
   readonly attribute unsigned long position;

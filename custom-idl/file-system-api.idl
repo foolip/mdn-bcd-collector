@@ -4,15 +4,15 @@
 // https://wicg.github.io/entries-api/, with adjusted names/types, and
 // [Exposed=Window,Worker] to test it everywhere, just to be safe.
 
-callback MetadataCallback = void (Metadata metadata);
-callback FileSystemCallback = void (FileSystem fileSystem);
-callback FileWriterCallback = void (FileWriter fileWriter);
+callback MetadataCallback = undefined (Metadata metadata);
+callback FileSystemCallback = undefined (FileSystem fileSystem);
+callback FileWriterCallback = undefined (FileWriter fileWriter);
 
 interface mixin LocalFileSystem {
   const unsigned short TEMPORARY = 0;
   const unsigned short PERSISTENT = 1;
-  void requestFileSystem(unsigned short type, unsigned long long size, FileSystemCallback successCallback, optional ErrorCallback errorCallback);
-  void resolveLocalFileSystemURL(DOMString url, FileSystemEntryCallback successCallback, optional ErrorCallback errorCallback);
+  undefined requestFileSystem(unsigned short type, unsigned long long size, FileSystemCallback successCallback, optional ErrorCallback errorCallback);
+  undefined resolveLocalFileSystemURL(DOMString url, FileSystemEntryCallback successCallback, optional ErrorCallback errorCallback);
 };
 Window includes LocalFileSystem;
 WorkerGlobalScope includes LocalFileSystem;
@@ -32,15 +32,15 @@ interface Metadata {
 };
 
 partial interface FileSystemEntry {
-  void getMetadata(MetadataCallback successCallback, optional ErrorCallback errorCallback);
-  void moveTo(FileSystemDirectoryEntry parent, optional DOMString name, optional FileSystemEntryCallback successCallback, optional ErrorCallback errorCallback);
-  void copyTo(FileSystemDirectoryEntry parent, optional DOMString name, optional FileSystemEntryCallback successCallback, optional ErrorCallback errorCallback);
+  undefined getMetadata(MetadataCallback successCallback, optional ErrorCallback errorCallback);
+  undefined moveTo(FileSystemDirectoryEntry parent, optional DOMString name, optional FileSystemEntryCallback successCallback, optional ErrorCallback errorCallback);
+  undefined copyTo(FileSystemDirectoryEntry parent, optional DOMString name, optional FileSystemEntryCallback successCallback, optional ErrorCallback errorCallback);
   DOMString toURL();
-  void remove(VoidFunction successCallback, optional ErrorCallback errorCallback);
+  undefined remove(undefinedFunction successCallback, optional ErrorCallback errorCallback);
 };
 
 partial interface FileSystemFileEntry {
-  void createWriter(FileWriterCallback successCallback,
+  undefined createWriter(FileWriterCallback successCallback,
                     optional ErrorCallback errorCallback);
 };
 
@@ -55,9 +55,9 @@ interface FileSystemSync {
 [Exposed=Window,Worker]
 interface DirectoryEntry {
   DirectoryReader createReader();
-  void getFile(DOMString path, optional FileSystemFlags options, optional FileSystemEntryCallback successCallback, optional ErrorCallback errorCallback);
-  void getDirectory(DOMString path, optional FileSystemFlags options, optional FileSystemEntryCallback successCallback, optional ErrorCallback errorCallback);
-  void removeRecursively(VoidFunction successCallback, optional ErrorCallback errorCallback);
+  undefined getFile(DOMString path, optional FileSystemFlags options, optional FileSystemEntryCallback successCallback, optional ErrorCallback errorCallback);
+  undefined getDirectory(DOMString path, optional FileSystemFlags options, optional FileSystemEntryCallback successCallback, optional ErrorCallback errorCallback);
+  undefined removeRecursively(undefinedFunction successCallback, optional ErrorCallback errorCallback);
 };
 
 [Exposed=Window,Worker]
@@ -65,7 +65,7 @@ interface DirectoryEntrySync {
   DirectoryReaderSync createReader();
   FileEntrySync getFile(DOMString path, optional FileSystemFlags options = {});
   DirectoryEntrySync getDirectory(DOMString path, optional FileSystemFlags options = {});
-  void removeRecursively();
+  undefined removeRecursively();
 };
 
 // The old names of things, before FileSystem prefixing

@@ -2,12 +2,12 @@
 // https://trac.webkit.org/changeset/205065/webkit
 partial interface AudioBufferSourceNode {
   attribute boolean looping;
-  void noteOn(double when);
-  void noteGrainOn(double when, double grainOffset, double grainDuration);
-  void noteOff(double when);
+  undefined noteOn(double when);
+  undefined noteGrainOn(double when, double grainOffset, double grainDuration);
+  undefined noteOff(double when);
   attribute EventHandler onended;
   // start() is still in the spec (override with 3 arguments)
-  void stop(optional double when = 0);
+  undefined stop(optional double when = 0);
 };
 
 partial interface AudioContext {
@@ -21,11 +21,11 @@ partial interface AudioContext {
 partial interface AudioListener {
   attribute float dopplerFactor;
   attribute float speedOfSound;
-  void setVelocity(float x, float y, float z);
+  undefined setVelocity(float x, float y, float z);
 };
 
 partial interface AudioParam {
-  void setTargetValueAtTime(float targetValue, float time, float timeConstant);
+  undefined setTargetValueAtTime(float targetValue, float time, float timeConstant);
   // https://chromium.googlesource.com/chromium/src/+/4260025dd80eed380e0c1fff0e4be2bdd0ae0e8a
   // https://chromium.googlesource.com/chromium/src/+/f5e8986bdcd359c7ca82d83907c81642dd01f55e
   AudioParam cancelValuesAndHoldAtTime(double startTime);
@@ -44,8 +44,8 @@ partial interface BiquadFilterNode {
 
 partial interface ConstantSourceNode {
   attribute EventHandler onended;
-  void start(optional double when = 0);
-  void stop(optional double when = 0);
+  undefined start(optional double when = 0);
+  undefined stop(optional double when = 0);
 };
 
 partial interface OscillatorNode {
@@ -55,11 +55,11 @@ partial interface OscillatorNode {
   const unsigned short TRIANGLE = 3;
   const unsigned short CUSTOM = 4;
 
-  void noteOn(double when);
-  void noteOff(double when);
+  undefined noteOn(double when);
+  undefined noteOff(double when);
   attribute EventHandler onended;
-  void start(optional double when = 0);
-  void stop(optional double when = 0);
+  undefined start(optional double when = 0);
+  undefined stop(optional double when = 0);
 };
 
 partial interface PannerNode {
@@ -71,5 +71,5 @@ partial interface PannerNode {
   const unsigned short EXPONENTIAL_DISTANCE = 2;
 
   // https://chromium.googlesource.com/chromium/src/+/9848564877f0057f4dcbc98bce061dfa17a9202c
-  void setVelocity(float x, float y, float z);
+  undefined setVelocity(float x, float y, float z);
 };

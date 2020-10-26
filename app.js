@@ -158,7 +158,8 @@ app.post('/api/results/export/github', (req, res) => {
 
 app.get('/', (req, res) => {
   res.render('index', {
-    tests: tests.listEndpoints('/tests')
+    tests: tests.listEndpoints('/tests'),
+    appversion
   });
 });
 
@@ -176,11 +177,12 @@ app.all('/tests/*', (req, res) => {
       title: `${ident || 'All Tests'}`,
       layout: false,
       tests: foundTests,
-      hideResults: req.query.hideResults
+      hideResults: req.query.hideResults,
+      ignore: (req.query.ignore ? req.query.ignore.split(',') : [])
     });
   } else {
     res.status(404).render('testnotfound', {
-      ident: ident,
+      ident,
       suggestion: tests.didYouMean(ident),
       query: '?' + querystring.encode(req.query)
     });

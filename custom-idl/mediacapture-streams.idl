@@ -1,10 +1,20 @@
 partial interface Navigator {
   // Gecko has navigator.mozGetUserMedia
-  void mozGetUserMedia(MediaStreamConstraints constraints,
+  undefined mozGetUserMedia(MediaStreamConstraints constraints,
                        NavigatorUserMediaSuccessCallback successCallback,
                        NavigatorUserMediaErrorCallback errorCallback);
   // Chromium has navigator.webkitGetUserMedia
-  void webkitGetUserMedia(MediaStreamConstraints constraints,
+  undefined webkitGetUserMedia(MediaStreamConstraints constraints,
                           NavigatorUserMediaSuccessCallback successCallback,
                           NavigatorUserMediaErrorCallback errorCallback);
+};
+
+// https://w3c.github.io/mediacapture-main/#overconstrainederror-object is
+// defined using ECMA-ese. Approximate it here using Web IDL.
+[Exposed=Window]
+interface OverconstrainedError {
+  constructor(DOMString constraint, DOMString message);
+  readonly attribute DOMString constraint;
+  readonly attribute DOMString message;
+  readonly attribute DOMString name;
 };

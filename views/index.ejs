@@ -1,5 +1,5 @@
 <%- contentFor('body') %>
-<h1>mdn-bcd-collector</h1>
+<h1 id="title">mdn-bcd-collector <span class="version">v<%- appversion %></span></h1>
 <div id="homeInfo">
   <p>Data collection service for <a href="https://github.com/mdn/browser-compat-data">@mdn/browser-compat-data</a>. This website provides automatic feature detection for Web APIs and CSS properties, to assist in obtaining data for the BCD project.</p>
   <p id="betaNotice" class="notice">Note: this website is in beta; not all feature detection is accurate yet. If you find any errors, please <a href="https://github.com/foolip/mdn-bcd-collector/issues/new">file an issue</a> in the GitHub repository.</p>
@@ -35,7 +35,8 @@
 
 <h2>Known Caveats</h2>
 <ul>
-  <li>Detection for features under alternative names is not yet supported</li>
+  <li>Detection for features under prefixes are not yet supported</li>
+  <li>Detection for features under alternative names are not yet supported</li>
   <li>In older browsers, some attributes aren't initialized in the API prototypes, resulting in false negatives (see <a href="https://github.com/foolip/mdn-bcd-collector/issues/406">#406</a>)</li>
   <li>Some APIs are accessed through other APIs and aren't exposed on their own; custom tests have not been written for them all</li>
 </ul>

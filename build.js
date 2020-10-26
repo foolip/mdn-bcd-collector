@@ -32,9 +32,14 @@ const compileCustomTest = (code, format = true) => {
       if (!(name in customTests.api && '__base' in customTests.api[name])) {
         return `throw 'Test is malformed: ${match} is an invalid reference';`;
       }
-      return compileCustomTest(customTests.api[name].__base, false).replace(
+      let importcode = compileCustomTest(customTests.api[name].__base, false);
+      importcode = importcode.replace(
           /var instance/g, `var ${instancevar}`
       );
+      if (instancevar !== 'instance') {
+        importcode += ` if (!${instancevar}) {return false;}`;
+      }
+      return importcode;
     }
 
     // TODO: add CSS category
@@ -411,7 +416,6 @@ const validateIDL = (ast) => {
     'constructor-member',
     'dict-arg-default',
     'no-nointerfaceobject',
-    'replace-void',
     'require-exposed'
   ]);
 
@@ -494,7 +498,7 @@ const validateIDL = (ast) => {
     'unsigned long', // https://heycam.github.io/webidl/#idl-unsigned-long
     'unsigned short', // https://heycam.github.io/webidl/#idl-unsigned-short
     'USVString', // https://heycam.github.io/webidl/#idl-USVString
-    'void' // https://heycam.github.io/webidl/#idl-undefined (renamed)
+    'undefined' // https://heycam.github.io/webidl/#idl-undefined
   ]);
   // Add any types defined by the (flattened) spec and custom IDL.
   for (const dfn of ast) {

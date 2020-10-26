@@ -17,7 +17,7 @@ partial interface BluetoothDevice {
   readonly attribute boolean paired;
   readonly attribute short productVersion;
   readonly attribute short productID;
-  void unwatchAdvertisements();
+  undefined unwatchAdvertisements();
   readonly attribute FrozenArray<long> uuids;
   readonly attribute long vendorID;
   readonly attribute long vendorIDSource;

@@ -4,7 +4,7 @@
 [Exposed=ServiceWorker]
 interface AbortPaymentEvent : ExtendableEvent {
   constructor(DOMString type, optional ExtendableEventInit eventInitDict = {});
-  void respondWith(Promise<boolean> paymentAbortedResponse);
+  undefined respondWith(Promise<boolean> paymentAbortedResponse);
 };
 partial interface ServiceWorkerGlobalScope {
   attribute EventHandler onabortpayment;
