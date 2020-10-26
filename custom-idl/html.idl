@@ -14,13 +14,13 @@ dictionary HitRegionOptions {
 
 partial interface CanvasRenderingContext2D {
   // https://github.com/whatwg/html/pull/1942
-  void addHitRegion(optional HitRegionOptions options);
-  void removeHitRegion(DOMString id);
-  void clearHitRegions();
+  undefined addHitRegion(optional HitRegionOptions options);
+  undefined removeHitRegion(DOMString id);
+  undefined clearHitRegions();
 
   attribute DOMMatrix currentTransform;
-  void drawWidgetAsOnScreen(Window window);
-  void drawWindow(Window window, double x, double y, double w, double h, DOMString bgColor, optional byte flags);
+  undefined drawWidgetAsOnScreen(Window window);
+  undefined drawWindow(Window window, double x, double y, double w, double h, DOMString bgColor, optional byte flags);
 };
 
 partial interface CloseEvent {
@@ -29,12 +29,12 @@ partial interface CloseEvent {
 
 // https://hg.mozilla.org/mozilla-central/file/a451ebba378efcce0967e508a8107ab14dd5edcb/dom/webidl/DataTransfer.webidl#l44
 partial interface DataTransfer {
-  void addElement(Element element);
+  undefined addElement(Element element);
   readonly attribute unsigned long mozItemCount;
   attribute DOMString mozCursor;
   DOMStringList mozTypesAt(unsigned long index);
-  void mozClearDataAt(DOMString format, unsigned long index);
-  void mozSetDataAt(DOMString format, any data, unsigned long index);
+  undefined mozClearDataAt(DOMString format, unsigned long index);
+  undefined mozSetDataAt(DOMString format, any data, unsigned long index);
   any mozGetDataAt(DOMString format, unsigned long index);
   readonly attribute boolean mozUserCancelled;
   readonly attribute Node? mozSourceNode;
@@ -69,13 +69,13 @@ partial interface Element {
 partial interface HTMLAudioElement {
   // https://developer.mozilla.org/en-US/docs/Web/API/HTMLAudioElement#Obsolete_Mozilla-only_methods
   unsigned long long mozCurrentSampleOffset();
-  void mozSetup(unsigned long channels, unsigned long rate);
+  undefined mozSetup(unsigned long channels, unsigned long rate);
   unsigned long mozWriteAudio(any data);
 };
 
 partial interface HTMLCanvasElement {
   // https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/mozFetchAsStream
-  void mozFetchAsStream(VoidFunction callback, optional DOMString type = "image/png");
+  undefined mozFetchAsStream(undefinedFunction callback, optional DOMString type = "image/png");
   // https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/mozGetAsFile
   File mozGetAsFile(DOMString name, optional DOMString type = "image/png");
   // https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/mozOpaque
@@ -109,9 +109,9 @@ partial interface HTMLInputElement {
   // https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/mozGetFileNameArray
   sequence<DOMString> mozGetFileNameArray();
   // https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/mozSetFileNameArray
-  void mozSetFileNameArray(sequence<DOMString> fileNames);
+  undefined mozSetFileNameArray(sequence<DOMString> fileNames);
   // https://hg.mozilla.org/mozilla-central/file/f22c20641704d783097b1b128d826c8460de7354/dom/webidl/HTMLInputElement.webidl#l163
-  void mozSetFileArray(sequence<File> files);
+  undefined mozSetFileArray(sequence<File> files);
 };
 
 partial interface HTMLMediaElement {
@@ -130,7 +130,7 @@ partial interface HTMLMediaElement {
   MediaStream mozCaptureStream();
   MediaStream mozCaptureStreamUntilEnded();
   object mozGetMetadata();
-  void mozLoadFrom(HTMLMediaElement other);
+  undefined mozLoadFrom(HTMLMediaElement other);
 
   // https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement#Obsolete_event_handlers
   attribute EventHandler onmozinterruptbegin;
@@ -176,8 +176,8 @@ partial interface Navigator {
 
 partial interface Window {
   long webkitRequestAnimationFrame(FrameRequestCallback callback);
-  void webkitCancelRequestAnimationFrame(long id);
-  void webkitCancelAnimationFrame(long id);
+  undefined webkitCancelRequestAnimationFrame(long id);
+  undefined webkitCancelAnimationFrame(long id);
 
   // https://github.com/whatwg/html/issues/2379
   readonly attribute Navigator clientInformation;

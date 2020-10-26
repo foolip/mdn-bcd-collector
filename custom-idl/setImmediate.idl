@@ -2,6 +2,6 @@
 
 interface mixin WindowTimersExtension {
   long setImmediate(any handler, any... args);
-  void clearImmediate(long handle);
+  undefined clearImmediate(long handle);
 };
 Window includes WindowTimersExtension;

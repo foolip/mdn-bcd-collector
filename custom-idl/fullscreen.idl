@@ -3,53 +3,53 @@
 partial interface HTMLVideoElement {
   readonly attribute boolean webkitSupportsFullscreen;
   readonly attribute boolean webkitDisplayingFullscreen;
-  void webkitEnterFullscreen();
-  void webkitExitFullscreen();
-  void webkitEnterFullScreen();
-  void webkitExitFullScreen();
+  undefined webkitEnterFullscreen();
+  undefined webkitExitFullscreen();
+  undefined webkitEnterFullScreen();
+  undefined webkitExitFullScreen();
 };
 
 partial interface Element {
   const unsigned short ALLOW_KEYBOARD_INPUT = 1;
-  void webkitRequestFullScreen(unsigned short flags);
+  undefined webkitRequestFullScreen(unsigned short flags);
 };
 
 partial interface Document {
   readonly attribute boolean webkitIsFullScreen;
   readonly attribute boolean webkitFullScreenKeyboardInputAllowed;
   readonly attribute Element? webkitCurrentFullScreenElement;
-  void webkitCancelFullScreen();
+  undefined webkitCancelFullScreen();
 };
 
 partial interface Element {
-  void mozRequestFullScreen();
+  undefined mozRequestFullScreen();
 };
 
 partial interface Document {
   readonly attribute boolean mozFullScreen;
   readonly attribute boolean mozFullScreenEnabled;
   readonly attribute Element? mozFullScreenElement;
-  void mozCancelFullScreen();
+  undefined mozCancelFullScreen();
 };
 
 partial interface Element {
-  void webkitRequestFullscreen();
+  undefined webkitRequestFullscreen();
 };
 
 partial interface Document {
   readonly attribute boolean webkitFullscreenEnabled;
   readonly attribute Element? webkitFullscreenElement;
-  void webkitExitFullscreen();
+  undefined webkitExitFullscreen();
 };
 
 partial interface Element {
-  void msRequestFullscreen();
+  undefined msRequestFullscreen();
 };
 
 partial interface Document {
   readonly attribute boolean msFullscreenEnabled;
   readonly attribute Element? msFullscreenElement;
-  void msExitFullscreen();
+  undefined msExitFullscreen();
 };
 
 // Event handler attributes, added widely to find them wherever they are.

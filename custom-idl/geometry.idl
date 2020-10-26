@@ -1,6 +1,6 @@
 partial interface DOMMatrixReadOnly {
-  void scaleNonUniformSelf(optional unrestricted double scaleX = 1, optional unrestricted double scaleY = 1);
-  void transform();
+  undefined scaleNonUniformSelf(optional unrestricted double scaleX = 1, optional unrestricted double scaleY = 1);
+  undefined transform();
 };
 
 partial interface Window {
