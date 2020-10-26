@@ -28,7 +28,7 @@ function exportGitHub() {
   }
 
   client.open('POST', '/api/results/export/github', true);
-  client.send();
+  client.send('');
   status.innerHTML = 'Exporting...';
   client.onreadystatechange = function() {
     if (client.readyState == 4) {
