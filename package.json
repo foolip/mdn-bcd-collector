@@ -20,7 +20,7 @@
     "gcp-build": "npm run build",
     "deploy": "gcloud app deploy",
     "start": "node app.js",
-    "start-dev": "npm i && nodemon -e idl --exec \"npm run build && npm start\"",
+    "start-dev": "npm i && nodemon -e js,json,idl --exec \"npm run build && npm start\"",
     "unittest": "node scripts.js unittest",
     "coverage": "nyc report -r lcov && open-cli coverage/lcov-report/index.html",
     "test": "npm run lint && npm run unittest",
