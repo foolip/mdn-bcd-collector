@@ -235,7 +235,7 @@ const run = async (browser, version, os) => {
 
   const driver = await buildDriver(browser, version, os);
   if (!driver) {
-    throw new Error('Selenium grid does not support browser/OS config');
+    throw new Error('Browser/OS config unsupported');
   }
 
   let statusEl;
@@ -331,18 +331,13 @@ const runAll = async (limitBrowsers, oses) => {
   for (const browser in browsersToTest) {
     for (const version of browsersToTest[browser].reverse()) {
       for (const os of oses) {
-        if (browser === 'safari' && os === 'Windows') {
+        if (os === 'macOS' && ['edge', 'ie'].includes(browser) && version <= 18) {
+          // Don't test Internet Explorer / EdgeHTML on macOS
+          continue;
+        }
+
+        if (os === 'Windows' && browser === 'safari') {
           // Don't test Safari on Windows
-          continue;
-        }
-
-        if (browser === 'edge' && os === 'macOS' && version <= 18) {
-          // Don't test EdgeHTML on macOS
-          continue;
-        }
-
-        if (browser === 'ie' && os === 'macOS') {
-          // Don't test Internet Explorer on macOS
           continue;
         }
 
