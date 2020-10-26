@@ -97,6 +97,18 @@ const getSafariOS = (version) => {
 
 const buildDriver = async (browser, version, os) => {
   for (const [service, seleniumUrl] of Object.entries(secrets.selenium)) {
+    if (service === 'browserstack') {
+      if (browser === 'edge' && ['12', '13', '14'].includes(version)) {
+        // BrowserStack remaps Edge 12-14 as Edge 15
+        continue;
+      }
+
+      if (browser === 'safari' && ['10', '11', '12', '13'].includes(version)) {
+        // BrowserStack doesn't support the Safari x.0 versions
+        continue;
+      }
+    }
+
     let osesToTest = [];
 
     switch (os) {
