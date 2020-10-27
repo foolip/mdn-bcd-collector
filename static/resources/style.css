@@ -142,10 +142,6 @@ input::placeholder {
 }
 
 .compat-table {
-  width: intrinsic;
-  width: -webkit-max-content;
-  width: -moz-max-content;
-  width: max-content;
   margin: auto;
   text-align: center;
 }
