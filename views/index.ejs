@@ -6,7 +6,7 @@
   <h2>Run Tests</h2>
   <form id="test-form" action="/api/get" method="post">
     <div id="test-entry">
-      <input type="submit" id="start" value="Run" />
+      <button type="submit" id="start"><span class="mdi mdi-play"></span> Run</button>
       <datalist id="tests">
         <% tests.forEach(function(test) { %>
           <option value="<%- test %>"></option>
@@ -16,7 +16,7 @@
     </div>
     <br />
     <div id="limit-exposure-box">
-      <label for="limitExposure">Limit Exposure:</label>
+      <label for="limitExposure"><span class="mdi mdi-lock"></span> Limit Exposure:</label>
       <select id="limit-exposure" name="limitExposure">
         <option value="">All Global Exposures</option>
         <option value="Window">Window</option>

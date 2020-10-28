@@ -8,6 +8,8 @@ body {
   background: linear-gradient(30deg, rgba(255,255,255,1) 0%, rgba(242,255,244,1) 100%);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#ffffff",endColorstr="#f2fff4",GradientType=1);
   color: black;
+
+  min-height: 100vh;
 }
 
 h1, h2 {
@@ -181,6 +183,8 @@ footer > * {
 
 #known-caveats {
   background: rgba(119,0,0,0.05);
+  text-align: center;
+  list-style-position: inside;
 }
 
 /* End: Homepage */
