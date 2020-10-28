@@ -3,6 +3,10 @@
 body {
   font-family: 'Roboto', Arial, sans-serif;
   background-color: white;
+  background: -moz-linear-gradient(30deg, rgba(255,255,255,1) 0%, rgba(242,255,244,1) 100%);
+  background: -webkit-linear-gradient(30deg, rgba(255,255,255,1) 0%, rgba(242,255,244,1) 100%);
+  background: linear-gradient(30deg, rgba(255,255,255,1) 0%, rgba(242,255,244,1) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#ffffff",endColorstr="#f2fff4",GradientType=1);
   color: black;
 }
 
@@ -188,6 +192,10 @@ input::placeholder {
 @media (prefers-color-scheme: dark) {
   body {
     background-color: #111;
+    background: -moz-linear-gradient(30deg, rgba(17,17,17,1) 0%, rgba(3,23,6,1) 100%);
+    background: -webkit-linear-gradient(30deg, rgba(17,17,17,1) 0%, rgba(3,23,6,1) 100%);
+    background: linear-gradient(30deg, rgba(17,17,17,1) 0%, rgba(3,23,6,1) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#111111",endColorstr="#031706",GradientType=1);
     color: white;
   }
 
