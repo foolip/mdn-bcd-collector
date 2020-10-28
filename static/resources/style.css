@@ -40,7 +40,7 @@ button, select, input {
   display: inline-block;
   font-size: 14px;
   transition: background-color 0.2s;
-  padding: 8px 8px 8px 16px;
+  padding: 8px;
 }
 
 input {
@@ -136,6 +136,10 @@ footer > * {
 
 #runTests #test-entry {
   display: block;
+}
+
+#test-selection {
+  padding-left: 16px;
 }
 
 #hide-results {
