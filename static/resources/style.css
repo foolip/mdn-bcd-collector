@@ -82,12 +82,12 @@ input::placeholder {
   font-weight: bold;
 }
 
-#copyright {
+footer {
   text-align: center;
   opacity: 0.75;
 }
 
-#copyright * {
+footer > * {
   display: inline-block;
   margin-left: 4px;
 }
