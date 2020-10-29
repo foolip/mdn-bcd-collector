@@ -76,7 +76,7 @@
     "puppeteer": "5.3.1",
     "puppeteer-to-istanbul": "1.4.0",
     "selenium-webdriver": "3.6.0",
-    "sinon": "9.2.0",
+    "sinon": "9.2.1",
     "webidl2": "23.13.0",
     "webref": "github:foolip/webref#mdn-bcd-updater-fixes-2"
   }
