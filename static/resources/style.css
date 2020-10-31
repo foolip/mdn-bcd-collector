@@ -86,6 +86,7 @@ input::placeholder {
 }
 
 footer {
+  display: block;
   text-align: center;
   opacity: 0.75;
 }
