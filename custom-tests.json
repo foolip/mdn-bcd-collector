@@ -456,7 +456,7 @@
     },
     "HTMLTableCellElement": {
       "__base": "var instance = document.createElement('td');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLTableCellElement' && Object.prototype.toString.call(instance) !== '[object HTMLTableCellElement]') {return false;} return !!instance;"
+      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLTableCellElement' && Object.prototype.toString.call(instance) !== '[object HTMLTableCellElement]' && Object.prototype.toString.call(instance) !== '[object HTMLTableDataCellElement]') {return false;} return !!instance;"
     },
     "HTMLTableColElement": {
       "__base": "var instance = document.createElement('col');",
