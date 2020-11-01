@@ -198,7 +198,7 @@
   }
 
   function runWorker(callback, results) {
-    if ('Worker' in pending) {
+    if (pending.Worker) {
       var myWorker = null;
 
       if ('Worker' in self) {
@@ -248,7 +248,7 @@
   }
 
   function runSharedWorker(callback, results) {
-    if ('SharedWorker' in pending) {
+    if (pending.SharedWorker) {
       var myWorker = null;
 
       if ('SharedWorker' in self) {
@@ -298,7 +298,7 @@
   }
 
   function runServiceWorker(callback, results) {
-    if ('ServiceWorker' in pending) {
+    if (pending.ServiceWorker) {
       if ('serviceWorker' in navigator) {
         window.__workerCleanup().then(function() {
           navigator.serviceWorker.register('/resources/serviceworker.js', {
