@@ -410,6 +410,9 @@
   }
 
   function report(results, hideResults) {
+    console.log('Tests complete');
+    updateStatus('Posting results to server...');
+
     var css = document.createElement('link');
     css.rel = 'stylesheet';
     css.type = 'text/css';
@@ -419,8 +422,6 @@
     } catch (e) {
       // If we fail to import the CSS, it's not a big deal
     }
-
-    updateStatus('Posting results to server...');
 
     try {
       var body = JSON.stringify(results);
