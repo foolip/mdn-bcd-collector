@@ -72,6 +72,8 @@
     } else {
       statusElement.innerHTML = newStatus;
     }
+
+    consoleLog(statusElement.innerHTML);
   }
 
   function addInstance(name, code) {
@@ -216,7 +218,6 @@
 
         myWorker.postMessage(pending.Worker);
       } else {
-        consoleLog('No worker support');
         updateStatus('No worker support, skipping Worker/DedicatedWorker tests');
 
         for (var i = 0; i < pending.Worker.length; i++) {
@@ -266,7 +267,6 @@
 
         myWorker.port.postMessage(pending.SharedWorker);
       } else {
-        consoleLog('No shared worker support');
         updateStatus('No shared worker support, skipping SharedWorker tests');
 
         for (var i = 0; i < pending.SharedWorker.length; i++) {
@@ -320,7 +320,6 @@
           });
         });
       } else {
-        consoleLog('No service worker support, skipping');
         updateStatus('No service worker support, skipping ServiceWorker tests');
 
         for (var i = 0; i < pending.ServiceWorker.length; i++) {
