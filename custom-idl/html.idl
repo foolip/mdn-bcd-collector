@@ -12,6 +12,9 @@ dictionary HitRegionOptions {
   DOMString? role = null;
 };
 
+// https://trac.webkit.org/browser/webkit/trunk/Source/WebCore/html/HTMLVideoElement.idl?rev=267813#L63
+enum VideoPresentationMode { "inline", "fullscreen", "picture-in-picture" };
+
 partial interface CanvasRenderingContext2D {
   // https://github.com/whatwg/html/pull/1942
   undefined addHitRegion(optional HitRegionOptions options);
@@ -64,6 +67,9 @@ partial interface Element {
 
   // https://github.com/whatwg/html/issues/667
   attribute EventHandler onsearch;
+
+  // https://trac.webkit.org/browser/webkit/trunk/Source/WebCore/dom/Element.idl?rev=267813#L132
+  attribute EventHandler onwebkitpresentationmodechanged;
 };
 
 partial interface HTMLAudioElement {
@@ -167,6 +173,11 @@ partial interface HTMLVideoElement {
   readonly attribute unsigned long mozPaintedFrames;
   readonly attribute double mozFrameDelay;
   readonly attribute boolean mozHasAudio;
+
+  // https://trac.webkit.org/browser/webkit/trunk/Source/WebCore/html/HTMLVideoElement.idl?rev=267813#L58
+  boolean webkitSupportsPresentationMode(VideoPresentationMode mode);
+  readonly attribute VideoPresentationMode webkitPresentationMode;
+  undefined webkitSetPresentationMode(VideoPresentationMode mode);
 };
 
 partial interface Navigator {
