@@ -150,7 +150,7 @@
       }
     },
     "Element": {
-      "__base": "var instance =  document.createElementNS('', 'p');"
+      "__base": "var instance = null; if (document.createElementNS) {instance = document.createElementNS('', 'p');} else {document.createElement('p');}"
     },
     "DynamicsCompressorNode": {
       "__resources": ["audioContext"],
