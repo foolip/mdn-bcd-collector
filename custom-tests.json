@@ -150,7 +150,7 @@
       }
     },
     "Element": {
-      "__base": "<%api.HTMLElement:instance%>"
+      "__base": "var instance =  document.createElementNS('', 'p');"
     },
     "DynamicsCompressorNode": {
       "__resources": ["audioContext"],
@@ -269,7 +269,7 @@
       "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLDListElement' && Object.prototype.toString.call(instance) !== '[object HTMLDListElement]') {return false;} return !!instance;"
     },
     "HTMLElement": {
-      "__base": "<%api.HTMLParagraphElement:instance%>"
+      "__base": "var instance = document.createElement('element');"
     },
     "HTMLEmbedElement": {
       "__base": "var instance = document.createElement('embed');",
