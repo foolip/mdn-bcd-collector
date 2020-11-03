@@ -72,6 +72,8 @@
     } else {
       statusElement.innerHTML = newStatus;
     }
+
+    consoleLog(statusElement.innerHTML);
   }
 
   function addInstance(name, code) {
@@ -198,7 +200,7 @@
   }
 
   function runWorker(callback, results) {
-    if ('Worker' in pending) {
+    if (pending.Worker) {
       var myWorker = null;
 
       if ('Worker' in self) {
@@ -216,7 +218,6 @@
 
         myWorker.postMessage(pending.Worker);
       } else {
-        consoleLog('No worker support');
         updateStatus('No worker support, skipping Worker/DedicatedWorker tests');
 
         for (var i = 0; i < pending.Worker.length; i++) {
@@ -248,7 +249,7 @@
   }
 
   function runSharedWorker(callback, results) {
-    if ('SharedWorker' in pending) {
+    if (pending.SharedWorker) {
       var myWorker = null;
 
       if ('SharedWorker' in self) {
@@ -266,7 +267,6 @@
 
         myWorker.port.postMessage(pending.SharedWorker);
       } else {
-        consoleLog('No shared worker support');
         updateStatus('No shared worker support, skipping SharedWorker tests');
 
         for (var i = 0; i < pending.SharedWorker.length; i++) {
@@ -298,7 +298,7 @@
   }
 
   function runServiceWorker(callback, results) {
-    if ('ServiceWorker' in pending) {
+    if (pending.ServiceWorker) {
       if ('serviceWorker' in navigator) {
         window.__workerCleanup().then(function() {
           navigator.serviceWorker.register('/resources/serviceworker.js', {
@@ -320,7 +320,6 @@
           });
         });
       } else {
-        consoleLog('No service worker support, skipping');
         updateStatus('No service worker support, skipping ServiceWorker tests');
 
         for (var i = 0; i < pending.ServiceWorker.length; i++) {
@@ -410,6 +409,9 @@
   }
 
   function report(results, hideResults) {
+    console.log('Tests complete');
+    updateStatus('Posting results to server...');
+
     var css = document.createElement('link');
     css.rel = 'stylesheet';
     css.type = 'text/css';
@@ -419,8 +421,6 @@
     } catch (e) {
       // If we fail to import the CSS, it's not a big deal
     }
-
-    updateStatus('Posting results to server...');
 
     try {
       var body = JSON.stringify(results);
