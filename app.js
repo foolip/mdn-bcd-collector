@@ -95,7 +95,7 @@ app.use(express.json({limit: '32mb'}));
 app.use(express.static('static'));
 app.use(express.static('generated'));
 
-app.use(function (req, res, next) {
+app.use((req, res, next) => {
   app.locals.appversion = appversion;
   app.locals.browser = parseUA(req.get('User-Agent'), bcdBrowsers);
   next();
