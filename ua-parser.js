@@ -29,8 +29,9 @@ const getBrowserAndVersion = (userAgent, browsers = bcd.browsers) => {
   }
 
   // https://github.com/mdn/browser-compat-data/blob/master/docs/data-guidelines.md#safari-for-ios-versioning
-  const version = browser.id === 'safari_ios' ?
-      ua.os.version : ua.browser.version;
+  const version = getMajorMinorVersion(
+    browser.id === 'safari_ios' ? ua.os.version : ua.browser.version
+  );
 
   if (!(browser.id in browsers)) {
     return {browser, version, inBcd: undefined};
@@ -64,7 +65,7 @@ const getBrowserAndVersion = (userAgent, browsers = bcd.browsers) => {
     }
   }
 
-  return {browser, version: getMajorMinorVersion(version), inBcd: false};
+  return {browser, version, inBcd: false};
 };
 
 module.exports = {
