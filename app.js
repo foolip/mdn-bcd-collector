@@ -93,6 +93,11 @@ app.use(express.json({limit: '32mb'}));
 app.use(express.static('static'));
 app.use(express.static('generated'));
 
+app.use(function (req, res, next) {
+  app.locals.appversion = appversion;
+  next();
+});
+
 // Backend API
 
 app.post('/api/get', (req, res) => {
@@ -158,8 +163,7 @@ app.post('/api/results/export/github', (req, res) => {
 
 app.get('/', (req, res) => {
   res.render('index', {
-    tests: tests.listEndpoints('/tests'),
-    appversion
+    tests: tests.listEndpoints('/tests')
   });
 });
 
