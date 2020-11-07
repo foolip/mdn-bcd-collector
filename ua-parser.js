@@ -12,7 +12,7 @@ const getMajorMinorVersion = (version) => {
 const getBrowserAndVersion = (userAgent, browsers = bcd.browsers) => {
   const ua = uaParser(userAgent);
 
-  let browser = {
+  const browser = {
     id: ua.browser.name.toLowerCase().replace(/ /g, '_'),
     name: ua.browser.name
   };
