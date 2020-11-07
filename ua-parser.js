@@ -12,13 +12,16 @@ const getMajorMinorVersion = (version) => {
 const getBrowserAndVersion = (userAgent, browsers = bcd.browsers) => {
   const ua = uaParser(userAgent);
 
-  let browser = {id: ua.browser.name.toLowerCase(), name: ua.browser.name};
+  let browser = {
+    id: ua.browser.name.toLowerCase().replace(/ /g, '_'),
+    name: ua.browser.name
+  };
 
   const os = ua.os.name.toLowerCase();
-  if (browser.id === 'mobile safari') {
+  if (browser.id === 'mobile_safari') {
     browser.id = 'safari_ios';
   }
-  if (browser.id === 'samsung browser') {
+  if (browser.id === 'samsung_browser') {
     browser.id = 'samsunginternet';
   }
   if (os === 'android') {
