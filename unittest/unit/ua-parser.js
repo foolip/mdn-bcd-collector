@@ -61,8 +61,8 @@ describe('getBrowserAndVersion', () => {
     assert.deepEqual(getBrowserAndVersion('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.121 Safari/537.36', browsers), {browser: {id: 'chrome', name: 'Chrome'}, version: '85', inBcd: true});
   });
 
-  it('Chrome 100 (not in BCD)', () => {
-    assert.deepEqual(getBrowserAndVersion('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4183.121 Safari/537.36', browsers), {browser: {id: 'chrome', name: 'Chrome'}, version: '100.0', inBcd: false});
+  it('Chrome 1000.1 (not in BCD)', () => {
+    assert.deepEqual(getBrowserAndVersion('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/1000.1.4183.121 Safari/537.36', browsers), {browser: {id: 'chrome', name: 'Chrome'}, version: '1000.1', inBcd: false});
   });
 
   it('Chrome Android', () => {

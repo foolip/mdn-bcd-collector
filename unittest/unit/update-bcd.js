@@ -365,6 +365,19 @@ const reports = [
       ]
     },
     userAgent: 'Mozilla/5.0 (Windows NT 6.3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 YaBrowser/17.6.1.749 Yowser/2.5 Safari/537.36'
+  },
+  {
+    __version: '0.3.1',
+    results: {
+      'https://mdn-bcd-collector.appspot.com/tests/': [
+        {
+          name: 'api.AbortController',
+          info: {exposure: 'Window'},
+          result: false
+        }
+      ]
+    },
+    userAgent: 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/1000.1.4183.83 Safari/537.36'
   }
 ];
 
@@ -523,7 +536,8 @@ describe('BCD updater', () => {
         ])]])]
       ]));
 
-      assert.isTrue(logger.warn.calledWith('Ignoring unknown browser/version: Mozilla/5.0 (Windows NT 6.3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 YaBrowser/17.6.1.749 Yowser/2.5 Safari/537.36'));
+      assert.isTrue(logger.warn.calledWith('Ignoring unknown browser Yandex 17.6 (Mozilla/5.0 (Windows NT 6.3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 YaBrowser/17.6.1.749 Yowser/2.5 Safari/537.36)'));
+      assert.isTrue(logger.warn.calledWith('Ignoring unknown Chrome version 1000.1 (Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/1000.1.4183.83 Safari/537.36)'));
     });
 
     afterEach(() => {
