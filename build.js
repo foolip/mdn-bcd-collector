@@ -352,6 +352,12 @@ const flattenMembers = (iface) => {
     // Test generation doesn't use constructor arguments, so they aren't copied
     members.push({name: iface.name, type: 'constructor'});
   }
+  if (getExtAttr(iface, 'LegacyFactoryFunction')) {
+    members.push({
+      name: getExtAttr(iface, 'LegacyFactoryFunction').rhs.value,
+      type: 'constructor'
+    });
+  }
 
   return members.sort((a, b) => a.name.localeCompare(b.name));
 };
