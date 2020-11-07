@@ -16,10 +16,7 @@
 
 const {assert} = require('chai');
 
-const {
-  getMajorMinorVersion,
-  getBrowserAndVersion
-} = require('../../ua-parser');
+const {getMajorMinorVersion, parseUA} = require('../../ua-parser');
 
 const browsers = {
   chrome: {name: 'Chrome', releases: {82: {}, 83: {}, 84: {}, 85: {}}},
@@ -56,52 +53,52 @@ describe('getMajorMinorVersion', () => {
   });
 });
 
-describe('getBrowserAndVersion', () => {
+describe('parseUA', () => {
   it('Chrome', () => {
-    assert.deepEqual(getBrowserAndVersion('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.121 Safari/537.36', browsers), {browser: {id: 'chrome', name: 'Chrome'}, version: '85', inBcd: true});
+    assert.deepEqual(parseUA('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.121 Safari/537.36', browsers), {browser: {id: 'chrome', name: 'Chrome'}, version: '85', inBcd: true});
   });
 
   it('Chrome 1000.1 (not in BCD)', () => {
-    assert.deepEqual(getBrowserAndVersion('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/1000.1.4183.121 Safari/537.36', browsers), {browser: {id: 'chrome', name: 'Chrome'}, version: '1000.1', inBcd: false});
+    assert.deepEqual(parseUA('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/1000.1.4183.121 Safari/537.36', browsers), {browser: {id: 'chrome', name: 'Chrome'}, version: '1000.1', inBcd: false});
   });
 
   it('Chrome Android', () => {
-    assert.deepEqual(getBrowserAndVersion('Mozilla/5.0 (Linux; Android 11; Pixel 2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.101 Mobile Safari/537.36', browsers), {browser: {id: 'chrome_android', name: 'Chrome Android'}, version: '85', inBcd: true});
+    assert.deepEqual(parseUA('Mozilla/5.0 (Linux; Android 11; Pixel 2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/85.0.4183.101 Mobile Safari/537.36', browsers), {browser: {id: 'chrome_android', name: 'Chrome Android'}, version: '85', inBcd: true});
   });
 
   it('Edge (EdgeHTML)', () => {
-    assert.deepEqual(getBrowserAndVersion('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36 Edge/16.16299', browsers), {browser: {id: 'edge', name: 'Edge'}, version: '16', inBcd: true});
+    assert.deepEqual(parseUA('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.36 Edge/16.16299', browsers), {browser: {id: 'edge', name: 'Edge'}, version: '16', inBcd: true});
   });
 
   it('Edge (Chromium)', () => {
-    assert.deepEqual(getBrowserAndVersion('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.125 Safari/537.36 Edg/84.0.522.59', browsers), {browser: {id: 'edge', name: 'Edge'}, version: '84', inBcd: true});
+    assert.deepEqual(parseUA('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.125 Safari/537.36 Edg/84.0.522.59', browsers), {browser: {id: 'edge', name: 'Edge'}, version: '84', inBcd: true});
   });
 
   it('Safari 14', () => {
-    assert.deepEqual(getBrowserAndVersion('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Safari/605.1.15', browsers), {browser: {id: 'safari', name: 'Safari'}, version: '14', inBcd: true});
+    assert.deepEqual(parseUA('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Safari/605.1.15', browsers), {browser: {id: 'safari', name: 'Safari'}, version: '14', inBcd: true});
   });
 
   it('Safari 14.1 (not in BCD)', () => {
-    assert.deepEqual(getBrowserAndVersion('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.1 Safari/605.1.15', browsers), {browser: {id: 'safari', name: 'Safari'}, version: '14.1', inBcd: false});
+    assert.deepEqual(parseUA('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.1 Safari/605.1.15', browsers), {browser: {id: 'safari', name: 'Safari'}, version: '14.1', inBcd: false});
   });
 
   it('Safari iOS', () => {
-    assert.deepEqual(getBrowserAndVersion('Mozilla/5.0 (iPhone; CPU iPhone OS 13_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1.1 Mobile/15E148 Safari/604.1', browsers), {browser: {id: 'safari_ios', name: 'iOS Safari'}, version: '13.4', inBcd: true});
+    assert.deepEqual(parseUA('Mozilla/5.0 (iPhone; CPU iPhone OS 13_5_1 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1.1 Mobile/15E148 Safari/604.1', browsers), {browser: {id: 'safari_ios', name: 'iOS Safari'}, version: '13.4', inBcd: true});
   });
 
   it('Samsung Internet (10.1)', () => {
-    assert.deepEqual(getBrowserAndVersion('Mozilla/5.0 (Linux; Android 9; SAMSUNG SM-G960U) AppleWebKit/537.36 (KHTML, like Gecko) SamsungBrowser/10.1 Chrome/71.0.3578.99 Mobile Safari/537.36', browsers), {browser: {id: 'samsunginternet_android', name: 'Samsung Internet'}, version: '10.0', inBcd: true});
+    assert.deepEqual(parseUA('Mozilla/5.0 (Linux; Android 9; SAMSUNG SM-G960U) AppleWebKit/537.36 (KHTML, like Gecko) SamsungBrowser/10.1 Chrome/71.0.3578.99 Mobile Safari/537.36', browsers), {browser: {id: 'samsunginternet_android', name: 'Samsung Internet'}, version: '10.0', inBcd: true});
   });
 
   it('Samsung Internet (12.0)', () => {
-    assert.deepEqual(getBrowserAndVersion('Mozilla/5.0 (Linux; Android 11; Pixel 2) AppleWebKit/537.36 (KHTML, like Gecko) SamsungBrowser/12.0 Chrome/79.0.3945.136 Mobile Safari/537.36', browsers), {browser: {id: 'samsunginternet_android', name: 'Samsung Internet'}, version: '12.0', inBcd: true});
+    assert.deepEqual(parseUA('Mozilla/5.0 (Linux; Android 11; Pixel 2) AppleWebKit/537.36 (KHTML, like Gecko) SamsungBrowser/12.0 Chrome/79.0.3945.136 Mobile Safari/537.36', browsers), {browser: {id: 'samsunginternet_android', name: 'Samsung Internet'}, version: '12.0', inBcd: true});
   });
 
   it('Samsung Internet (12.1)', () => {
-    assert.deepEqual(getBrowserAndVersion('Mozilla/5.0 (Linux; Android 11; Pixel 2) AppleWebKit/537.36 (KHTML, like Gecko) SamsungBrowser/12.1 Chrome/79.0.3945.136 Mobile Safari/537.36', browsers), {browser: {id: 'samsunginternet_android', name: 'Samsung Internet'}, version: '12.1', inBcd: true});
+    assert.deepEqual(parseUA('Mozilla/5.0 (Linux; Android 11; Pixel 2) AppleWebKit/537.36 (KHTML, like Gecko) SamsungBrowser/12.1 Chrome/79.0.3945.136 Mobile Safari/537.36', browsers), {browser: {id: 'samsunginternet_android', name: 'Samsung Internet'}, version: '12.1', inBcd: true});
   });
 
   it('Yandex Browser (not in BCD)', () => {
-    assert.deepEqual(getBrowserAndVersion('Mozilla/5.0 (Windows NT 6.3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 YaBrowser/17.6.1.749 Yowser/2.5 Safari/537.36', browsers), {browser: {id: 'yandex', name: 'Yandex'}, version: '17.6', inBcd: undefined});
+    assert.deepEqual(parseUA('Mozilla/5.0 (Windows NT 6.3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 YaBrowser/17.6.1.749 Yowser/2.5 Safari/537.36', browsers), {browser: {id: 'yandex', name: 'Yandex'}, version: '17.6', inBcd: undefined});
   });
 });

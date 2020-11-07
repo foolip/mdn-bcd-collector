@@ -8,7 +8,7 @@ const path = require('path');
 
 const logger = require('./logger');
 const overrides = require('./overrides').filter(Array.isArray);
-const {getBrowserAndVersion} = require('./ua-parser');
+const {parseUA} = require('./ua-parser');
 
 const findEntry = (bcd, path) => {
   if (!path) {
@@ -79,9 +79,7 @@ const getSupportMatrix = (browsers, reports) => {
   const supportMatrix = new Map;
 
   for (const report of reports) {
-    const {browser, version, inBcd} = getBrowserAndVersion(
-        report.userAgent, browsers
-    );
+    const {browser, version, inBcd} = parseUA(report.userAgent, browsers);
     if (!inBcd) {
       if (inBcd === false) {
         logger.warn(`Ignoring unknown ${browser.name} version ${version} (${report.userAgent})`);
