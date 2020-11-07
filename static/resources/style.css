@@ -96,6 +96,15 @@ footer > * {
   margin-left: 4px;
 }
 
+#browserinfo {
+  position: absolute;
+  top: 0.5em;
+  right: 1em;
+  margin: 0;
+  opacity: 0.5;
+  pointer-events: none;
+}
+
 /* Homepage */
 
 #title {

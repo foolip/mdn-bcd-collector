@@ -16,6 +16,7 @@
 
 const path = require('path');
 const querystring = require('querystring');
+const bcdBrowsers = require('@mdn/browser-compat-data').browsers;
 
 const express = require('express');
 const cookieParser = require('cookie-parser');
@@ -24,6 +25,7 @@ const expressLayouts = require('express-ejs-layouts');
 
 const logger = require('./logger');
 const storage = require('./storage').getStorage();
+const {parseUA} = require('./ua-parser');
 
 const appversion = require('./package.json').version;
 
@@ -95,6 +97,7 @@ app.use(express.static('generated'));
 
 app.use(function (req, res, next) {
   app.locals.appversion = appversion;
+  app.locals.browser = parseUA(req.get('User-Agent'), bcdBrowsers);
   next();
 });
 
