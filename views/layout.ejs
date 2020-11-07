@@ -38,7 +38,7 @@
     <link rel="stylesheet" type="text/css" href="/resources/materialdesignicons.min.css" />
   </head>
   <body>
-    <p id="browserinfo" <% if (!browser.inBcd) { %>class="error"<% } %>>Detected Browser: <%- browser.browser.name %> <%- browser.version %> <% if (!browser.inBcd) { %>(not in BCD)<% } %></p>
+    <p id="browserinfo" <% if (!browser.inBcd) { %>class="error"<% } %>><% if (browser.browser.name) { %>Detected Browser: <%- browser.browser.name %> <%- browser.version %> <% if (!browser.inBcd) { %>(not in BCD)<% } %><% } else {%>Could not determine browser<% } %></p>
     <%- body %>
 
     <footer>
