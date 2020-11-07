@@ -12,7 +12,7 @@ const parseUA = (userAgent, browsers) => {
   const ua = uaParser(userAgent);
 
   if (!ua.browser.name) {
-    return null;
+    return {browser: {id: null, name: null}, version: null, inBcd: undefined};
   }
 
   const browser = {
