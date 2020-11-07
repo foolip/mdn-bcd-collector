@@ -25,6 +25,7 @@ const getBrowserAndVersion = (userAgent, browsers) => {
   }
   if (os === 'android') {
     browser.id += '_android';
+    browser.name += ' Android';
   }
 
   // https://github.com/mdn/browser-compat-data/blob/master/docs/data-guidelines.md#safari-for-ios-versioning
