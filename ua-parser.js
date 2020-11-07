@@ -8,7 +8,7 @@ const getMajorMinorVersion = (version) => {
   return `${major}.${minor || 0}`;
 };
 
-const getBrowserAndVersion = (userAgent, browsers) => {
+const parseUA = (userAgent, browsers) => {
   const ua = uaParser(userAgent);
 
   const browser = {
@@ -70,5 +70,5 @@ const getBrowserAndVersion = (userAgent, browsers) => {
 
 module.exports = {
   getMajorMinorVersion,
-  getBrowserAndVersion
+  parseUA
 };
