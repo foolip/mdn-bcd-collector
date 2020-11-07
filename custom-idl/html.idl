@@ -12,6 +12,13 @@ dictionary HitRegionOptions {
   DOMString? role = null;
 };
 
+// https://www.w3.org/html/wg/spec/common-dom-interfaces.html#domsettabletokenlist-0
+interface DOMSettableTokenList : DOMTokenList {
+  attribute DOMString value;
+};
+
+interface MediaController {};
+
 // https://trac.webkit.org/browser/webkit/trunk/Source/WebCore/html/HTMLVideoElement.idl?rev=267813#L63
 enum VideoPresentationMode { "inline", "fullscreen", "picture-in-picture" };
 
@@ -69,11 +76,35 @@ partial interface Element {
   attribute EventHandler onwebkitpresentationmodechanged;
 };
 
+partial interface HTMLAnchorElement {
+  attribute DOMString media;
+};
+
+partial interface HTMLAreaElement {
+  attribute DOMString hreflang;
+  attribute DOMString media;
+  attribute DOMString type;
+};
+
+[LegacyFactoryFunction=Audio(optional DOMString src)]
 partial interface HTMLAudioElement {
   // https://developer.mozilla.org/en-US/docs/Web/API/HTMLAudioElement#Obsolete_Mozilla-only_methods
   unsigned long long mozCurrentSampleOffset();
   undefined mozSetup(unsigned long channels, unsigned long rate);
   unsigned long mozWriteAudio(any data);
+};
+
+// https://www.w3.org/TR/DOM-Level-2-HTML/html.html#ID-32774408
+[Exposed=Window]
+interface HTMLBaseFontElement : HTMLElement {
+  attribute DOMString color;
+  attribute DOMString face;
+  attribute long size;
+};
+
+partial interface HTMLButtonElement {
+  attribute boolean autofocus;
+  attribute HTMLMenuElement menu;
 };
 
 partial interface HTMLCanvasElement {
@@ -83,6 +114,12 @@ partial interface HTMLCanvasElement {
   File mozGetAsFile(DOMString name, optional DOMString type = "image/png");
   // https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/mozOpaque
   attribute boolean mozOpaque;
+};
+
+// https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/core/html/html_content_element.idl
+[Exposed=Window] interface HTMLContentElement : HTMLElement {
+  [Reflect] attribute DOMString select;
+  NodeList getDistributedNodes();
 };
 
 // https://github.com/whatwg/html/issues/4792
@@ -99,15 +136,48 @@ partial interface HTMLElement {
   [PutForwards=value] readonly attribute DOMTokenList itemProp;
   readonly attribute HTMLPropertiesCollection properties;
   attribute any itemValue; // acts as DOMString on setting
+
+  attribute HTMLMenuElement? contextMenu;
+  attribute DOMSettableTokenList dropzone;
+  undefined forceSpellCheck();
+  attribute boolean inert;
+  attribute boolean noModule;
+  attribute EventHandler onModule;
+
+  // https://github.com/whatwg/html/issues/668
+  attribute DOMString outerText;
+};
+
+partial interface HTMLFormElement {
+  undefined requestAutocomplete();
 };
 
 partial interface HTMLFrameSetElement {
+  attribute EventHandler onlanguage;
   attribute EventHandler onorientationchange;
+};
+
+partial interface HTMLHeadElement {
+  attribute DOMString profile;
+};
+
+partial interface HTMLIFrameElement {
+  undefined setNfcFocus();
+};
+
+partial interface HTMLImageElement {
+  attribute USVString lowSrc;
+  attribute EventHandler onerror;
 };
 
 partial interface HTMLInputElement {
   // https://github.com/whatwg/html/issues/667
   attribute boolean incremental;
+
+  attribute boolean autofocus;
+  attribute DOMString formEncType;
+  attribute EventHandler onsearch;
+  attribute any weight;
 
   // https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/mozGetFileNameArray
   sequence<DOMString> mozGetFileNameArray();
@@ -117,7 +187,30 @@ partial interface HTMLInputElement {
   undefined mozSetFileArray(sequence<File> files);
 };
 
+[Exposed=Window]
+interface HTMLIsIndexElement : HTMLElement {
+  readonly attribute HTMLFormElement form;
+  attribute DOMString prompt;
+};
+
+[Exposed=Window]
+interface HTMLKeygenElement : HTMLElement {};
+
+partial interface HTMLMarqueeElement {
+  attribute DOMString bgcolor;
+  attribute unsigned long scrollamount;
+  attribute unsigned long scrolldelay;
+  attribute boolean truespeed;
+};
+
 partial interface HTMLMediaElement {
+  attribute MediaController controller;
+  readonly attribute DOMTokenList controlsList;
+  readonly attribute double initialTime;
+  attribute DOMString mediaGroup;
+  attribute EventHandler onerror;
+  Promise<undefined> seekToNextFrame();
+
   // Chromium extensions
   readonly attribute unsigned long long webkitAudioDecodedByteCount;
   readonly attribute unsigned long long webkitVideoDecodedByteCount;

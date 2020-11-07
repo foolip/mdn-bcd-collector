@@ -23,3 +23,28 @@ interface GamepadButtonEvent : GamepadEvent {
   readonly attribute unsigned long button;
   readonly attribute double value;
 };
+
+// https://docs.google.com/document/d/1jPKzVRNzzU4dUsvLpSXm1VXPQZ8FP-0lKMT-R_p-s6g
+
+enum GamepadHapticEffectType {
+    "dual-rumble"
+};
+
+dictionary GamepadEffectParameters {
+    double duration;
+    double startDelay;
+    double strongMagnitude;
+    double weakMagnitude;
+};
+
+partial interface GamepadHapticActuator {
+  Promise<undefined> playEffect(
+    GamepadHapticEffectType type,
+    optional GamepadEffectParameters params
+  );
+  Promise<undefined> reset();
+};
+
+partial interface Gamepad {
+  readonly attribute GamepadHapticActuator? vibrationActuator;
+};
