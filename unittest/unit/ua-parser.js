@@ -22,12 +22,12 @@ const {
 } = require('../../ua-parser');
 
 const browsers = {
-  chrome: {releases: {82: {}, 83: {}, 84: {}, 85: {}}},
-  chrome_android: {releases: {85: {}}},
-  edge: {releases: {16: {}, 84: {}}},
-  safari: {releases: {13: {}, 13.1: {}, 14: {}}},
-  safari_ios: {releases: {13: {}, 13.3: {}, 13.4: {}, 14: {}}},
-  samsunginternet_android: {releases: {'10.0': {}, 10.2: {}, '11.0': {}, 11.2: {}, '12.0': {}, 12.1: {}}}
+  chrome: {name: 'Chrome', releases: {82: {}, 83: {}, 84: {}, 85: {}}},
+  chrome_android: {name: 'Chrome Android', releases: {85: {}}},
+  edge: {name: 'Edge', releases: {16: {}, 84: {}}},
+  safari: {name: 'Safari', releases: {13: {}, 13.1: {}, 14: {}}},
+  safari_ios: {name: 'iOS Safari', releases: {13: {}, 13.3: {}, 13.4: {}, 14: {}}},
+  samsunginternet_android: {name: 'Samsung Internet', releases: {'10.0': {}, 10.2: {}, '11.0': {}, 11.2: {}, '12.0': {}, 12.1: {}}}
 };
 
 describe('getMajorMinorVersion', () => {
