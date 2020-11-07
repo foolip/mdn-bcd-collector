@@ -101,4 +101,8 @@ describe('parseUA', () => {
   it('Yandex Browser (not in BCD)', () => {
     assert.deepEqual(parseUA('Mozilla/5.0 (Windows NT 6.3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 YaBrowser/17.6.1.749 Yowser/2.5 Safari/537.36', browsers), {browser: {id: 'yandex', name: 'Yandex'}, version: '17.6', inBcd: undefined});
   });
+
+  it('node-superagent (unparseable)', () => {
+    assert.deepEqual(parseUA('node-superagent/1.2.3'), {browser: {id: null, name: null}, version: null, inBcd: undefined});
+  });
 });
