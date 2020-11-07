@@ -12,24 +12,28 @@ const getMajorMinorVersion = (version) => {
 const getBrowserAndVersion = (userAgent, browsers = bcd.browsers) => {
   const ua = uaParser(userAgent);
 
-  let browser = ua.browser.name.toLowerCase();
+  let browser = {id: ua.browser.name.toLowerCase(), name: ua.browser.name};
+
   const os = ua.os.name.toLowerCase();
-  if (browser === 'mobile safari') {
-    browser = 'safari_ios';
+  if (browser.id === 'mobile safari') {
+    browser.id = 'safari_ios';
   }
-  if (browser === 'samsung browser') {
-    browser = 'samsunginternet';
+  if (browser.id === 'samsung browser') {
+    browser.id = 'samsunginternet';
   }
   if (os === 'android') {
-    browser += '_android';
-  }
-  if (!(browser in browsers)) {
-    return [null, null];
+    browser.id += '_android';
   }
 
   // https://github.com/mdn/browser-compat-data/blob/master/docs/data-guidelines.md#safari-for-ios-versioning
   const version = browser === 'safari_ios' ?
       ua.os.version : ua.browser.version;
+
+  if (!(browser.id in browsers)) {
+    return {browser, version, inBcd: undefined};
+  }
+
+  browser.name = browsers[browser].name;
 
   const versions = Object.keys(browsers[browser].releases);
   versions.sort(compareVersions);
@@ -45,19 +49,19 @@ const getBrowserAndVersion = (userAgent, browsers = bcd.browsers) => {
     if (next) {
       if (compareVersions.compare(version, current, '>=') &&
           compareVersions.compare(version, next, '<')) {
-        return [browser, current];
+        return {browser, version: current, inBcd: true};
       }
     } else {
       // This is the last entry in |versions|. With no |next| to compare against
       // we have to match the version more conservatively, requiring major and
       // minor versions to match. "10.0" and "10" are seen as equivalent.
       if (getMajorMinorVersion(version) === getMajorMinorVersion(current)) {
-        return [browser, current];
+        return {browser, version: current, inBcd: true};
       }
     }
   }
 
-  return [browser, null];
+  return {browser, version, inBcd: false};
 };
 
 module.exports = {
