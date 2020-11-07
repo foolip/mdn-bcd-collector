@@ -88,7 +88,7 @@ const getSupportMatrix = (browsers, reports) => {
       } else {
         logger.warn(`Ignoring unknown browser ${browser.name} ${version} (${report.userAgent})`);
       }
-      
+
       continue;
     }
 
