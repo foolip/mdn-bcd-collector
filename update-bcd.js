@@ -79,10 +79,10 @@ const getSupportMatrix = (browsers, reports) => {
   const supportMatrix = new Map;
 
   for (const report of reports) {
-    const [browser, version] = getBrowserAndVersion(
+    const {browser: {name: browser}, version, inBcd} = getBrowserAndVersion(
         report.userAgent, browsers
     );
-    if (!browser || !version) {
+    if (!inBcd) {
       logger.warn(`Ignoring unknown browser/version: ${report.userAgent}`);
       continue;
     }
