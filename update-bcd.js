@@ -83,8 +83,10 @@ const getSupportMatrix = (browsers, reports) => {
     if (!inBcd) {
       if (inBcd === false) {
         logger.warn(`Ignoring unknown ${browser.name} version ${version} (${report.userAgent})`);
-      } else {
+      } else if (browser.name) {
         logger.warn(`Ignoring unknown browser ${browser.name} ${version} (${report.userAgent})`);
+      } else {
+        logger.warn(`Unable to parse browser from UA ${report.userAgent}`);
       }
 
       continue;
