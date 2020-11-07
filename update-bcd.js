@@ -79,7 +79,7 @@ const getSupportMatrix = (browsers, reports) => {
   const supportMatrix = new Map;
 
   for (const report of reports) {
-    const {browser: {name: browser}, version, inBcd} = getBrowserAndVersion(
+    const {browser: {id: browser}, version, inBcd} = getBrowserAndVersion(
         report.userAgent, browsers
     );
     if (!inBcd) {
