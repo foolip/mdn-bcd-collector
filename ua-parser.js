@@ -29,16 +29,16 @@ const getBrowserAndVersion = (userAgent, browsers = bcd.browsers) => {
   }
 
   // https://github.com/mdn/browser-compat-data/blob/master/docs/data-guidelines.md#safari-for-ios-versioning
-  const version = browser === 'safari_ios' ?
+  const version = browser.id === 'safari_ios' ?
       ua.os.version : ua.browser.version;
 
   if (!(browser.id in browsers)) {
     return {browser, version, inBcd: undefined};
   }
 
-  browser.name = browsers[browser].name;
+  browser.name = browsers[browser.id].name;
 
-  const versions = Object.keys(browsers[browser].releases);
+  const versions = Object.keys(browsers[browser.id].releases);
   versions.sort(compareVersions);
 
   // The |version| from the UA string is typically more precise than |versions|
