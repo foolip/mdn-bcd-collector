@@ -59,9 +59,6 @@ partial interface Document {
 };
 
 partial interface Element {
-  // https://github.com/mdn/browser-compat-data/issues/6697
-  readonly attribute DOMString accessKey;
-
   // https://github.com/mdn/browser-compat-data/issues/6683
   readonly attribute DOMString name;
 
