@@ -64,7 +64,7 @@ const getBrowserAndVersion = (userAgent, browsers = bcd.browsers) => {
     }
   }
 
-  return {browser, version, inBcd: false};
+  return {browser, version: getMajorMinorVersion(version), inBcd: false};
 };
 
 module.exports = {
