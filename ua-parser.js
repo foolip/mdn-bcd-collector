@@ -2,14 +2,13 @@
 
 const compareVersions = require('compare-versions');
 const uaParser = require('ua-parser-js');
-const bcd = require('@mdn/browser-compat-data');
 
 const getMajorMinorVersion = (version) => {
   const [major, minor] = version.split('.');
   return `${major}.${minor || 0}`;
 };
 
-const getBrowserAndVersion = (userAgent, browsers = bcd.browsers) => {
+const getBrowserAndVersion = (userAgent, browsers) => {
   const ua = uaParser(userAgent);
 
   const browser = {
