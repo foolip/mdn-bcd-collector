@@ -11,3 +11,7 @@ interface FeaturePolicy {
   sequence<DOMString> allowedFeatures();
   sequence<DOMString> getAllowlistForFeature(DOMString feature);
 };
+
+partial interface HTMLIFrameElement {
+  attribute FeaturePolicy featurePolicy;
+};

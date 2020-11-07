@@ -16,3 +16,7 @@ dictionary MerchantValidationEventInit : EventInit {
 partial interface PaymentRequest {
   attribute EventHandler onmerchantvalidation;
 };
+
+partial interface HTMLIFrameElement {
+  attribute boolean allowPaymentRequest;
+};
