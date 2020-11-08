@@ -69,7 +69,10 @@ const getCustomTestAPI = (name, member) => {
         test = testbase ? testbase + 'return !!instance;' : false;
       }
     } else {
-      if (member in customTests.api[name]) {
+      if (
+        member in customTests.api[name] &&
+        typeof(customTests.api[name][member]) === 'string'
+      ) {
         test = testbase + customTests.api[name][member];
       } else {
         if (name === member) {
