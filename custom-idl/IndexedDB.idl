@@ -1,3 +1,21 @@
+interface IDBDatabaseException {};
+interface IDBEnvironment {};
+
+partial interface IDBIndex {
+  readonly attribute boolean isAutoLocale;
+  readonly attribute DOMString locale;
+};
+
+interface IDBLocaleAwareKeyRange {};
+
+partial interface IDBVersionChangeEvent {
+  readonly attribute unsigned long long? version;
+};
+
+interface IDBVersionChangeRequest {
+  IDBVersionChangeRequest setVersion(DOMString version);
+};
+
 // https://bugs.chromium.org/p/chromium/issues/detail?id=711586
 
 enum IDBDataLossAmount {

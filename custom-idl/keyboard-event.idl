@@ -1,0 +1,7 @@
+partial interface KeyboardEvent {
+  // https://www.w3.org/TR/2009/WD-DOM-Level-3-Events-20090908/#events-Events-KeyboardEvent-keyIdentifier
+  readonly attribute DOMString keyIdentifier;
+
+  // https://www.w3.org/TR/2014/WD-DOM-Level-3-Events-20140925/#widl-KeyboardEvent-which
+  readonly attribute unsigned long which;
+};

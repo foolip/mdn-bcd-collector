@@ -1,0 +1,3 @@
+partial interface NDEFReader {
+  attribute EventHandler onread;
+};

@@ -1,0 +1,3 @@
+interface InstallEvent : ExtendableEvent {
+  constructor(DOMString type, optional object init);
+};
