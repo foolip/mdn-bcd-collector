@@ -1,0 +1,13 @@
+partial interface MouseEvent {
+  undefined initMouseEvent();
+  readonly attribute DOMString region;
+  readonly attribute byte which;
+};
+
+interface MouseScrollEvent : Event {};
+
+interface MouseWheelEvent : Event {
+  readonly attribute long wheelDelta;
+  readonly attribute long? wheelDeltaX;
+  readonly attribute long? wheelDeltaY;
+};

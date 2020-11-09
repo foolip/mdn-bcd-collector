@@ -9,6 +9,10 @@ partial interface Navigator {
                           NavigatorUserMediaErrorCallback errorCallback);
 };
 
+interface LocalMediaStream : MediaStream {
+  undefined stop();
+};
+
 // https://w3c.github.io/mediacapture-main/#overconstrainederror-object is
 // defined using ECMA-ese. Approximate it here using Web IDL.
 [Exposed=Window]

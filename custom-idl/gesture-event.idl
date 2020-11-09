@@ -6,3 +6,23 @@ interface GestureEvent {
   readonly attribute float rotation;
   readonly attribute float scale;
 };
+
+// https://developer.mozilla.org/en-US/docs/Web/API/MSGestureEvent
+
+typedef object MSGesture;
+
+interface MSGestureEvent : UIEvent {
+  constructor();
+  undefined initGestureEvent();
+
+  readonly attribute double expansion;
+  readonly attribute MSGesture gestureObject;
+  readonly attribute double rotation;
+  readonly attribute double scale;
+  readonly attribute double translationX;
+  readonly attribute double translationY;
+  readonly attribute double velocityAngular;
+  readonly attribute double velocityExpansion;
+  readonly attribute double velocityX;
+  readonly attribute double velocityY;
+};

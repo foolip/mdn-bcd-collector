@@ -1,0 +1,6 @@
+partial interface Location {
+    attribute USVString password;
+    attribute USVString username;
+
+    stringifier;
+};

@@ -233,6 +233,29 @@ partial interface HTMLMediaElement {
   attribute EventHandler onmozinterruptend;
 };
 
+// https://www.w3.org/TR/html51/interactive-elements.html#htmlmenuelement-htmlmenuelement
+partial interface HTMLMenuElement {
+  attribute DOMString type;
+  attribute DOMString label;
+};
+
+// https://www.w3.org/TR/html51/interactive-elements.html#htmlmenuitemelement-htmlmenuitemelement
+interface HTMLMenuItemElement : HTMLElement {
+  attribute DOMString type;
+  attribute DOMString label;
+  attribute DOMString icon;
+  attribute boolean disabled;
+  attribute boolean checked;
+  attribute DOMString radiogroup;
+  attribute boolean default;
+
+  attribute DOMString command;
+};
+
+partial interface HTMLObjectElement {
+  attribute boolean typeMustMatch;
+};
+
 // https://github.com/whatwg/html/pull/213
 interface HTMLPropertiesCollection : HTMLCollection {
   // inherits length and item()
@@ -244,9 +267,34 @@ interface PropertyNodeList : NodeList {
   PropertyValueArray getValues();
 };
 
+partial interface HTMLSelectElement {
+  attribute boolean autofocus;
+  undefined blur();
+  undefined focus();
+};
+
+interface HTMLShadowElement : HTMLElement {
+  NodeList getDistributedNodes();
+};
+
+partial interface HTMLSourceElement {
+  attribute any keySystem;
+};
+
 partial interface HTMLStyleElement {
   // https://github.com/whatwg/html/issues/5590
   attribute boolean disabled;
+
+  attribute boolean scoped;
+};
+
+partial interface HTMLTableElement {
+  attribute boolean sortable;
+  undefined stopSorting();
+};
+
+partial interface HTMLTextAreaElement {
+  attribute DOMString autocapitalize;
 };
 
 partial interface HTMLVideoElement {
