@@ -756,7 +756,12 @@ const copyResources = async () => {
     ['@browser-logos/firefox/firefox_64x64.png', 'browser-logos', 'firefox.png'],
     ['@browser-logos/internet-explorer_9-11/internet-explorer_9-11_64x64.png', 'browser-logos', 'ie.png'],
     ['@browser-logos/opera/opera_64x64.png', 'browser-logos', 'opera.png'],
-    ['@browser-logos/safari/safari_64x64.png', 'browser-logos', 'safari.png']
+    ['@browser-logos/safari/safari_64x64.png', 'browser-logos', 'safari.png'],
+    ['@mdi/font/css/materialdesignicons.min.css', 'resources'],
+    ['@mdi/font/fonts/materialdesignicons-webfont.eot', 'fonts'],
+    ['@mdi/font/fonts/materialdesignicons-webfont.ttf', 'fonts'],
+    ['@mdi/font/fonts/materialdesignicons-webfont.woff', 'fonts'],
+    ['@mdi/font/fonts/materialdesignicons-webfont.woff2', 'fonts']
   ];
   for (const [srcInModules, destInGenerated, newFilename] of resources) {
     const src = require.resolve(srcInModules);

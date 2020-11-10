@@ -1,18 +1,30 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Roboto:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Roboto:wght@400;700&family=Montserrat:wght@500&display=swap');
 
 body {
   font-family: 'Roboto', Arial, sans-serif;
-  background-color: white;
-  color: black;
+
+  background-color: #111;
+  background: -moz-linear-gradient(30deg, rgba(17,17,17,1) 0%, rgba(3,23,6,1) 100%);
+  background: -webkit-linear-gradient(30deg, rgba(17,17,17,1) 0%, rgba(3,23,6,1) 100%);
+  background: linear-gradient(30deg, rgba(17,17,17,1) 0%, rgba(3,23,6,1) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#111111",endColorstr="#031706",GradientType=1);
+  color: white;
+
+  min-height: 100vh;
+}
+
+h1, h2 {
+  text-align: center;
+  margin-top: 0;
 }
 
 a {
-  color: #00f;
+  color: #99f;
   transition: color 0.2s;
 }
 
 a:hover {
-  color: #44f;
+  color: #bbf;
 }
 
 code {
@@ -29,7 +41,7 @@ button, select, input {
   display: inline-block;
   font-size: 14px;
   transition: background-color 0.2s;
-  padding: 8px 8px 8px 16px;
+  padding: 8px;
 }
 
 input {
@@ -53,91 +65,61 @@ input::placeholder {
 
 .paper {
   padding: 12px 8px;
-  background-color: #eee;
+  background-color: #191919;
   box-shadow: 0 0 10px black;
   border-radius: 8px;
 }
 
-.notice {
-  color: #700;
+.error-notice {
+  color: #faa;
   font-weight: bold;
 }
 
-/* https://codepo8.github.io/css-fork-on-github-ribbon/ */
-
-#forkongithub {
-  position: absolute;
-  display: block;
-  top: 0;
-  right: 0;
-  width: 180px;
-  height: 180px;
-  overflow: hidden;
-  z-index: 9999;
+.warning-notice {
+  color: #ffa;
+  font-weight: bold;
 }
 
-#forkongithub a {
-  background: #3d8a3f;
-  color: #fff;
-  text-decoration: none;
+.success-notice {
+  color: #afa;
+  font-weight: bold;
+}
+
+footer {
+  display: block;
   text-align: center;
-  font-weight: bold;
-  padding: 5px 40px;
-  font-size: 0.75rem;
-  line-height: 1.5rem;
-  transition: 0.2s;
+  opacity: 0.75;
+}
 
-  width: 150px;
+footer > * {
+  display: inline-block;
+  margin-left: 4px;
+}
+
+#browserinfo {
   position: absolute;
-  top: 50px;
-  right: -50px;
-  transform: rotate(45deg);
-  -webkit-transform: rotate(45deg);
-  -ms-transform: rotate(45deg);
-  -moz-transform: rotate(45deg);
-  -o-transform: rotate(45deg);
-  box-shadow: 4px 4px 10px rgba(0,0,0,0.8);
+  top: 0.5em;
+  right: 1em;
+  margin: 0;
+  opacity: 0.5;
+  pointer-events: none;
 }
 
-#forkongithub a:hover {
-  background: #4caf50;
-  color: #fff;
-}
-
-#forkongithub a::before,#forkongithub a::after {
-  content: "";
-  width: 100%;
-  display: block;
-  position: absolute;
-  top: 1px;
-  left: 0;
-  height: 1px;
-  background: #fff;
-}
-
-#forkongithub a::after {
-  bottom: 1px;
-  top: auto;
-}
-
-@media screen and (max-width: 600px), screen and (max-device-width: 600px) {
-  #forkongithub {
-    width: 120px;
-    height: 120px;
-  }
-
-  #forkongithub a {
-    font-size: 0.5rem;
-    line-height: 1rem;
-    width: 100px;
-    top: 30px;
-    right: -50px;
-  }
-}
-/* End */
+/* Homepage */
 
 #title {
-  color: #097923;
+  color: #88f6a2;
+  font-family: Montserrat;
+  font-size: 36pt;
+  font-weight: 500;
+  text-align: center;
+  margin-top: 0.5em;
+  margin-bottom: 0.1em;
+}
+
+#title img {
+  width: 48px;
+  height: 48px;
 }
 
 #title .version {
@@ -145,61 +127,136 @@ input::placeholder {
   opacity: 0.4;
 }
 
-#homeInfo {
-  margin-right: 50px;
+#subtitle {
+  width: 90%;
+  margin: auto;
+  font-size: 16pt;
+  text-align: center;
 }
 
-@media screen and (max-width: 600px), screen and (max-device-width: 600px) {
-  #homeInfo {
-    margin-right: 5px;
-  }
+#run-tests {
+  width: intrinsic;
+  width: -webkit-max-content;
+  width: -moz-max-content;
+  width: max-content;
+  margin: auto;
+  margin-top: 2em;
+  padding: 2em;
+  text-align: center;
 }
 
-#compat-table .compat-table-entry {
+#runTests #test-entry {
+  display: block;
+}
+
+#test-selection {
+  padding-left: 16px;
+}
+
+#hide-results {
+  display: none;
+}
+
+#supported-browsers {
+  margin-top: 2em;
+  padding-top: 0.5em;
+  padding-bottom: 1em;
+}
+
+.compat-table {
+  margin: auto;
+  text-align: center;
+}
+
+.compat-table .compat-table-entry {
   display: inline-block;
   margin-right: 16px;
 }
 
-#compat-table .compat-table-entry img {
+.compat-table .compat-table-entry img {
   display: inline-block;
   width: 32px;
   height: 32px;
   vertical-align: middle;
 }
 
-#compat-table .compat-table-entry p {
+.compat-table .compat-table-entry p {
   display: inline-block;
   margin: 0;
   margin-left: 8px;
 }
 
+.compat-table .compat-table-separator {
+  display: none;
+}
+
+@media screen and (max-width: 900px), screen and (max-device-width: 900px) {
+  .compat-table .compat-table-separator {
+    display: block;
+  }
+}
+
+#known-caveats {
+  background: rgba(255,170,170,0.05);
+  width: intrinsic;
+  width: -webkit-max-content;
+  width: -moz-max-content;
+  width: max-content;
+  margin: auto;
+  padding: 2em;
+  text-align: center;
+  list-style-position: inside;
+}
+
+/* End: Homepage */
+
 .result p {
   margin-bottom: 0;
 }
 
-@media (prefers-color-scheme: dark) {
+@media (prefers-color-scheme: light) {
   body {
-    background-color: #111;
-    color: white;
+    background-color: white;
+    background: -moz-linear-gradient(30deg, rgba(255,255,255,1) 0%, rgba(242,255,244,1) 100%);
+    background: -webkit-linear-gradient(30deg, rgba(255,255,255,1) 0%, rgba(242,255,244,1) 100%);
+    background: linear-gradient(30deg, rgba(255,255,255,1) 0%, rgba(242,255,244,1) 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#ffffff",endColorstr="#f2fff4",GradientType=1);
+    color: black;
   }
 
   a {
-    color: #99f;
+    color: #00f;
   }
 
   a:hover {
-    color: #bbf;
+    color: #44f;
   }
 
   .paper {
-    background-color: #191919;
+    background-color: #eee;
   }
 
-  .notice {
-    color: #faa;
+  .error-notice {
+    color: #700;
   }
+
+  .warning-notice {
+    color: #770;
+  }
+
+  .success-notice {
+    color: #070;
+  }
+
+  /* Homepage */
 
   #title {
-    color: #88f6a2;
+    color: #097923;
   }
+
+  #known-caveats {
+    background: rgba(119,0,0,0.05);
+  }
+
+  /* End: Homepage */
 }

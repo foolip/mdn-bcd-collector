@@ -16,6 +16,7 @@
 
 const path = require('path');
 const querystring = require('querystring');
+const bcdBrowsers = require('@mdn/browser-compat-data').browsers;
 
 const express = require('express');
 const cookieParser = require('cookie-parser');
@@ -24,6 +25,7 @@ const expressLayouts = require('express-ejs-layouts');
 
 const logger = require('./logger');
 const storage = require('./storage').getStorage();
+const {parseUA} = require('./ua-parser');
 
 const appversion = require('./package.json').version;
 
@@ -93,6 +95,12 @@ app.use(express.json({limit: '32mb'}));
 app.use(express.static('static'));
 app.use(express.static('generated'));
 
+app.use((req, res, next) => {
+  app.locals.appversion = appversion;
+  app.locals.browser = parseUA(req.get('User-Agent'), bcdBrowsers);
+  next();
+});
+
 // Backend API
 
 app.post('/api/get', (req, res) => {
@@ -158,8 +166,7 @@ app.post('/api/results/export/github', (req, res) => {
 
 app.get('/', (req, res) => {
   res.render('index', {
-    tests: tests.listEndpoints('/tests'),
-    appversion
+    tests: tests.listEndpoints('/tests')
   });
 });
 
@@ -175,7 +182,6 @@ app.all('/tests/*', (req, res) => {
   if (foundTests && foundTests.length) {
     res.render('tests', {
       title: `${ident || 'All Tests'}`,
-      layout: false,
       tests: foundTests,
       hideResults: req.query.hideResults,
       ignore: (req.query.ignore ? req.query.ignore.split(',') : [])
