@@ -224,3 +224,7 @@ partial interface Range {
   undefined expand(optional DOMString unit = "");
   short compareNode(Node node);
 };
+
+partial interface ShadowRoot {
+  readonly attribute boolean delegatesFocus;
+};

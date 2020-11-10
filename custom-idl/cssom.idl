@@ -107,3 +107,5 @@ partial interface Element {
   // https://docs.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/aa703996(v=vs.85)
   readonly attribute MSStyleCSSProperties? runtimeStyle;
 };
+
+interface WebKitCSSMatrix : DOMMatrix {};

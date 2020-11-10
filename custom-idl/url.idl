@@ -1,0 +1,17 @@
+partial interface URL {
+  stringifier DOMString();
+};
+
+interface URLUtilsReadOnly {
+  readonly attribute DOMString hash;
+  readonly attribute DOMString host;
+  readonly attribute DOMString hostname;
+  readonly attribute DOMString href;
+  readonly attribute DOMString origin;
+  readonly attribute DOMString pathname;
+  readonly attribute DOMString port;
+  readonly attribute DOMString protocol;
+  readonly attribute DOMString search;
+  
+  stringifier DOMString();
+};

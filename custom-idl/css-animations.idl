@@ -2,9 +2,20 @@ partial interface AnimationEvent {
   undefined initAnimationEvent(DOMString type, boolean bubbles, boolean cancelable, DOMString animationName, float elapsedTime);
 };
 
+partial interface TransitionEvent {
+  readonly attribute DOMString animationName;
+  TransitionEvent initTransitionEvent();
+};
+
 // https://drafts.csswg.org/web-animations-2/#the-keyframeeffect-interface
 enum IterationCompositeOperation { "replace", "accumulate" };
 
 partial interface KeyframeEffect {
   attribute IterationCompositeOperation iterationComposite;
+};
+
+// http://w3.org/TR/2009/WD-css3-2d-transforms-20090320/#point-interface
+interface Point {
+  attribute float x;
+  attribute float y;
 };

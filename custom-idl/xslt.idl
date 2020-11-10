@@ -1,3 +1,20 @@
+interface XDomain {
+  undefined abort();
+  attribute EventHandler onerror;
+  attribute EventHandler onload;
+  attribute EventHandler onprogress;
+  attribute EventHandler ontimeout;
+  undefined open();
+  readonly attribute DOMString responseText;
+  undefined send();
+  readonly attribute long timeout;
+};
+
+partial interface XMLDocument {
+  attribute boolean async;
+  undefined load();
+};
+
 // https://wiki.whatwg.org/wiki/DOM_XSLTProcessor
 
 [Exposed=Window]
