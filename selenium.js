@@ -138,10 +138,16 @@ const buildDriver = async (browser, version, os) => {
           Capability.BROWSER_NAME,
           Browser[browser.toUpperCase()]
       );
-      capabilities.set(Capability.VERSION, version.split('.')[0]);
-      capabilities.set(
-          'name', `mdn-bcd-collector: ${prettyName(browser, version, os)}`
-      );
+
+      if (
+        service === 'browserstack' &&
+        browser === 'safari' &&
+        version === '6.1'
+      ) {
+        capabilities.set(Capability.VERSION, '6.2');
+      } else {
+        capabilities.set(Capability.VERSION, version.split('.')[0]);
+      }
 
       if (service === 'saucelabs') {
         if (browser === 'safari') {
@@ -162,6 +168,10 @@ const buildDriver = async (browser, version, os) => {
       if (service === 'browserstack') {
         capabilities.set('browserstack.console', 'errors');
       }
+
+      capabilities.set(
+          'name', `mdn-bcd-collector: ${prettyName(browser, version, os)}`
+      );
 
       try {
         const driverBuilder = new Builder().usingServer(seleniumUrl)
