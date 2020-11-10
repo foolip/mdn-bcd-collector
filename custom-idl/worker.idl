@@ -1,0 +1,17 @@
+partial interface ServiceWorkerContainer {
+  attribute EventHandler onerror;
+};
+
+partial interface ServiceWorkerGlobalScope {
+  readonly attribute CacheStorage caches;
+};
+
+interface ServiceWorkerMessageEvent {
+  constructor();
+
+  readonly attribute any data;
+  readonly attribute DOMString lastEventId;
+  readonly attribute any origin;
+  readonly attribute MessagePort ports;
+  readonly attribute any source;
+};

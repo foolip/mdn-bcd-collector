@@ -1,0 +1,48 @@
+partial interface PaymentAddress {
+  readonly attribute DOMString languageCode;
+  readonly attribute DOMString regionCode;
+};
+
+partial interface PaymentRequest {
+  readonly attribute PaymentAddress? paymentAddress;
+   readonly attribute DOMString requestId;
+};
+
+// https://github.com/w3c/payment-request/pull/929
+
+[SecureContext, Exposed=Window]
+interface MerchantValidationEvent : Event {
+  constructor(DOMString type, optional MerchantValidationEventInit eventInitDict = {});
+  readonly attribute DOMString methodName;
+  readonly attribute USVString validationURL;
+  undefined complete(Promise<any> merchantSessionPromise);
+};
+
+dictionary MerchantValidationEventInit : EventInit {
+  DOMString methodName = "";
+  USVString validationURL = "";
+};
+
+partial interface PaymentRequest {
+  attribute EventHandler onmerchantvalidation;
+};
+
+partial interface HTMLIFrameElement {
+  attribute boolean allowPaymentRequest;
+};
+
+// https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/modules/payments/abort_payment_event.idl;drc=c2e7d4f0b24814b0d1c51a964db34ec5b4930756
+// https://github.com/w3c/payment-handler/pull/170
+// https://github.com/w3c/payment-handler/pull/207
+[Exposed=ServiceWorker]
+interface AbortPaymentEvent : ExtendableEvent {
+  constructor(DOMString type, optional ExtendableEventInit eventInitDict = {});
+  undefined respondWith(Promise<boolean> paymentAbortedResponse);
+};
+partial interface ServiceWorkerGlobalScope {
+  attribute EventHandler onabortpayment;
+};
+
+partial interface CanMakePaymentEvent {
+  readonly attribute FrozenArray<PaymentDetailsModifier> modifiers;
+};

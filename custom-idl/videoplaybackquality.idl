@@ -1,0 +1,3 @@
+partial interface VideoPlaybackQuality {
+  readonly attribute double totalFrameDelay;
+};

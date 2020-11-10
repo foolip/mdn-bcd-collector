@@ -351,4 +351,44 @@ partial interface Window {
 
   // https://github.com/whatwg/html/issues/667
   attribute EventHandler onsearch;
+
+  // https://www.w3.org/TR/2009/WD-css3-2d-transforms-20090320/#window-interface
+  Point convertPointFromPageToNode(Node node, Point point);
+  Point convertPointFromNodeToPage(Node node, Point point);
+
+  readonly attribute any dialogArguments;
+  undefined getAttention();
+  undefined getAttentionWithCycleCount();
+  CSSStyleDeclaration getDefaultComputedStyle(Element element, DOMString? pseudoAlt);
+  readonly attribute any globalStorage;
+  undefined home();
+  undefined maximize();
+  undefined minimize();
+  attribute EventHandler onappinstalled;
+  attribute EventHandler onbeforeinstallprompt;
+  attribute EventHandler ongamepadconnected;
+  attribute EventHandler ongamepaddisconnected;
+  attribute EventHandler onpaint;
+  undefined openDialog();
+  attribute object pkcs11;
+  any returnValue();
+  undefined scrollByLines();
+  undefined scrollByPages();
+  undefined scrollMaxX();
+  undefined scrollMaxY();
+  undefined setCursor();
+  undefined setResizable();
+  undefined showModalDialog();
+  object sidebar();
+  undefined sizeToContent();
+  undefined updateCommands();
+
+  readonly attribute double mozAnimationStartTime;
+  readonly attribute double mozInnerScreenX;
+  readonly attribute double mozInnerScreenY;
+  readonly attribute long long mozPaintCount;
+};
+
+partial interface Plugin {
+  readonly attribute DOMString version;
 };

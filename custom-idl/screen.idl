@@ -1,0 +1,10 @@
+partial interface Screen {
+  readonly attribute long left;
+  readonly attribute long top;
+  attribute EventHandler onorientationchange;
+  undefined lockOrientation();
+  undefined unlockOrientation();
+
+  attribute double mozBrightness;
+  attribute boolean mozEnabled;
+};

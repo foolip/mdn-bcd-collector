@@ -1,3 +1,77 @@
+partial interface SVGElement {
+  readonly attribute long offsetHeight;
+  readonly attribute long offsetLeft;
+  readonly attribute long offsetParent;
+  readonly attribute long offsetTop;
+  readonly attribute long offsetWidth;
+};
+
+partial interface SVGImageElement {
+  undefined decode();
+  readonly attribute boolean decoding;
+};
+
+interface SVGPoint {
+  undefined matrixTransform();
+  attribute long x;
+  attribute long y;
+};
+
+interface SVGMeshElement : SVGGeometryElement {};
+interface SVGSolidcolorElement : SVGElement {};
+interface SVGStylable {};
+interface SVGTransformable {};
+interface SVGUnknownElement {};
+interface SVGZoomAndPan {};
+
+typedef object SVGViewSpec;
+typedef object SVGPathSegClosePath;
+typedef object SVGPathSegMovetoAbs;
+typedef object SVGPathSegMovetoRel;
+typedef object SVGPathSegLinetoAbs;
+typedef object SVGPathSegLinetoRel;
+typedef object SVGPathSegCurvetoCubicAbs;
+typedef object SVGPathSegCurvetoCubicRel;
+typedef object SVGPathSegCurvetoQuadraticAbs;
+typedef object SVGPathSegCurvetoQuadraticRel;
+typedef object SVGPathSegArcAbs;
+typedef object SVGPathSegArcRel;
+typedef object SVGPathSegLinetoHorizontalAbs;
+typedef object SVGPathSegLinetoHorizontalRel;
+typedef object SVGPathSegLinetoVerticalAbs;
+typedef object SVGPathSegLinetoVerticalRel;
+typedef object SVGPathSegCurvetoCubicSmoothAbs;
+typedef object SVGPathSegCurvetoCubicSmoothRel;
+typedef object SVGPathSegCurvetoQuadraticSmoothAbs;
+typedef object SVGPathSegCurvetoQuadraticSmoothRel;
+
+// https://www.w3.org/TR/SVG11/text.html#InterfaceSVGAltGlyphDefElement
+interface SVGAltGlyphDefElement : SVGElement {};
+
+// https://www.w3.org/TR/SVG11/text.html#InterfaceSVGAltGlyphElement
+interface SVGAltGlyphElement : SVGTextPositioningElement {
+  attribute DOMString glyphRef;
+  attribute DOMString format;
+};
+
+// https://www.w3.org/TR/SVG11/text.html#InterfaceSVGAltGlyphItemElement
+interface SVGAltGlyphItemElement : SVGElement {};
+
+// https://www.w3.org/TR/SVG11/animate.html#InterfaceSVGAnimateColorElement
+interface SVGAnimateColorElement : SVGAnimationElement {};
+
+// https://www.w3.org/TR/SVG11/shapes.html#InterfaceSVGAnimatedPoints
+interface SVGAnimatedPoints {
+  readonly attribute SVGPointList points;
+  readonly attribute SVGPointList animatedPoints;
+};
+
+// https://www.w3.org/TR/SVG11/color.html#InterfaceSVGColorProfileElement
+interface SVGColorProfileElement : SVGElement {
+  attribute DOMString local;
+  attribute DOMString name;
+  attribute unsigned short renderingIntent;
+};
 
 // https://www.w3.org/TR/2016/CR-SVG2-20160915/interact.html#InterfaceSVGCursorElement
 [Exposed=Window]
@@ -6,3 +80,157 @@ interface SVGCursorElement : SVGElement {
   [SameObject] readonly attribute SVGAnimatedLength y;
 };
 SVGCursorElement includes SVGURIReference;
+
+// https://www.w3.org/TR/SVG11/types.html#InterfaceSVGExternalResourcesRequired
+interface SVGExternalResourcesRequired {
+  readonly attribute SVGAnimatedBoolean externalResourcesRequired;
+};
+
+// https://www.w3.org/TR/SVG11/filters.html#InterfaceSVGFilterPrimitiveStandardAttributes
+interface SVGFilterPrimitiveStandardAttributes : SVGStylable {
+  readonly attribute SVGAnimatedLength x;
+  readonly attribute SVGAnimatedLength y;
+  readonly attribute SVGAnimatedLength width;
+  readonly attribute SVGAnimatedLength height;
+  readonly attribute SVGAnimatedString result;
+};
+
+// https://www.w3.org/TR/SVG11/fonts.html#InterfaceSVGFontElement
+interface SVGFontElement : SVGElement {};
+
+// https://www.w3.org/TR/SVG11/fonts.html#InterfaceSVGFontFaceElement
+interface SVGFontFaceElement : SVGElement {};
+
+// https://www.w3.org/TR/SVG11/fonts.html#InterfaceSVGFontFaceFormatElement
+interface SVGFontFaceFormatElement : SVGElement {};
+
+// https://www.w3.org/TR/SVG11/fonts.html#InterfaceSVGFontFaceNameElement
+interface SVGFontFaceNameElement : SVGElement {};
+
+// https://www.w3.org/TR/SVG11/fonts.html#InterfaceSVGFontFaceSrcElement
+interface SVGFontFaceSrcElement : SVGElement {};
+
+// https://www.w3.org/TR/SVG11/fonts.html#InterfaceSVGFontFaceUriElement
+interface SVGFontFaceUriElement : SVGElement {};
+
+// https://www.w3.org/TR/SVG11/fonts.html#InterfaceSVGGlyphElement
+interface SVGGlyphElement : SVGElement {};
+
+// https://www.w3.org/TR/SVG11/text.html#InterfaceSVGGlyphRefElement
+interface SVGGlyphRefElement : SVGElement {
+  attribute DOMString glyphRef;
+  attribute DOMString format;
+  attribute float x;
+  attribute float y;
+  attribute float dx;
+  attribute float dy;
+};
+
+// https://www.w3.org/TR/SVG11/fonts.html#InterfaceSVGHKernElement
+interface SVGHKernlement : SVGElement {};
+
+// https://www.w3.org/TR/SVG11/coords.html#InterfaceSVGMatrix
+interface SVGMatrix {
+  attribute float a;
+  attribute float b;
+  attribute float c;
+  attribute float d;
+  attribute float e;
+  attribute float f;
+
+  SVGMatrix multiply(SVGMatrix secondMatrix);
+  SVGMatrix inverse();
+  SVGMatrix translate(float x, float y);
+  SVGMatrix scale(float scaleFactor);
+  SVGMatrix scaleNonUniform(float scaleFactorX, float scaleFactorY);
+  SVGMatrix rotate(float angle);
+  SVGMatrix rotateFromVector(float x, float y);
+  SVGMatrix flipX();
+  SVGMatrix flipY();
+  SVGMatrix skewX(float angle);
+  SVGMatrix skewY(float angle);
+};
+
+// https://www.w3.org/TR/SVG11/fonts.html#InterfaceSVGMissingGlyphElement
+interface SVGMissingGlyphElement : SVGElement {};
+
+// https://www.w3.org/TR/SVG11/paths.html#InterfaceSVGPathElement
+partial interface SVGPathElement {
+  unsigned long getPathSegAtLength(float distance);
+  SVGPathSegClosePath createSVGPathSegClosePath();
+  SVGPathSegMovetoAbs createSVGPathSegMovetoAbs(float x, float y);
+  SVGPathSegMovetoRel createSVGPathSegMovetoRel(float x, float y);
+  SVGPathSegLinetoAbs createSVGPathSegLinetoAbs(float x, float y);
+  SVGPathSegLinetoRel createSVGPathSegLinetoRel(float x, float y);
+  SVGPathSegCurvetoCubicAbs createSVGPathSegCurvetoCubicAbs(float x, float y, float x1, float y1, float x2, float y2);
+  SVGPathSegCurvetoCubicRel createSVGPathSegCurvetoCubicRel(float x, float y, float x1, float y1, float x2, float y2);
+  SVGPathSegCurvetoQuadraticAbs createSVGPathSegCurvetoQuadraticAbs(float x, float y, float x1, float y1);
+  SVGPathSegCurvetoQuadraticRel createSVGPathSegCurvetoQuadraticRel(float x, float y, float x1, float y1);
+  SVGPathSegArcAbs createSVGPathSegArcAbs(float x, float y, float r1, float r2, float angle, boolean largeArcFlag, boolean sweepFlag);
+  SVGPathSegArcRel createSVGPathSegArcRel(float x, float y, float r1, float r2, float angle, boolean largeArcFlag, boolean sweepFlag);
+  SVGPathSegLinetoHorizontalAbs createSVGPathSegLinetoHorizontalAbs(float x);
+  SVGPathSegLinetoHorizontalRel createSVGPathSegLinetoHorizontalRel(float x);
+  SVGPathSegLinetoVerticalAbs createSVGPathSegLinetoVerticalAbs(float y);
+  SVGPathSegLinetoVerticalRel createSVGPathSegLinetoVerticalRel(float y);
+  SVGPathSegCurvetoCubicSmoothAbs createSVGPathSegCurvetoCubicSmoothAbs(float x, float y, float x2, float y2);
+  SVGPathSegCurvetoCubicSmoothRel createSVGPathSegCurvetoCubicSmoothRel(float x, float y, float x2, float y2);
+  SVGPathSegCurvetoQuadraticSmoothAbs createSVGPathSegCurvetoQuadraticSmoothAbs(float x, float y);
+  SVGPathSegCurvetoQuadraticSmoothRel createSVGPathSegCurvetoQuadraticSmoothRel(float x, float y);
+};
+
+// https://www.w3.org/TR/SVG11/types.html#InterfaceSVGRect
+interface SVGRect {
+  attribute float x;
+  attribute float y;
+  attribute float width;
+  attribute float height;
+};
+
+// https://www.w3.org/TR/SVG11/types.html#InterfaceSVGRenderingIntent
+interface SVGRenderingIntent {
+  // Rendering Intent Types
+  const unsigned short RENDERING_INTENT_UNKNOWN = 0;
+  const unsigned short RENDERING_INTENT_AUTO = 1;
+  const unsigned short RENDERING_INTENT_PERCEPTUAL = 2;
+  const unsigned short RENDERING_INTENT_RELATIVE_COLORIMETRIC = 3;
+  const unsigned short RENDERING_INTENT_SATURATION = 4;
+  const unsigned short RENDERING_INTENT_ABSOLUTE_COLORIMETRIC = 5;
+};
+
+partial interface SVGSVGElement {
+  // https://www.w3.org/TR/SVG11/struct.html#InterfaceSVGSVGElement
+  attribute DOMString contentScriptType;
+  attribute DOMString contentStyleType;
+  readonly attribute SVGRect viewport;
+  readonly attribute float pixelUnitToMillimeterX;
+  readonly attribute float pixelUnitToMillimeterY;
+  readonly attribute float screenPixelToMillimeterX;
+  readonly attribute float screenPixelToMillimeterY;
+  readonly attribute boolean useCurrentView;
+  readonly attribute SVGViewSpec currentView;
+};
+
+// https://www.w3.org/TR/SVG11/text.html#InterfaceSVGTRefElement
+interface SVGTRefElement : SVGTextPositioningElement {};
+
+// https://www.w3.org/TR/SVG11/types.html#InterfaceSVGTests
+interface SVGTests {
+  readonly attribute SVGStringList requiredFeatures;
+  readonly attribute SVGStringList requiredExtensions;
+  readonly attribute SVGStringList systemLanguage;
+
+  boolean hasExtension(DOMString extension);
+};
+
+// https://www.w3.org/TR/SVG11/types.html#InterfaceSVGURIReference
+interface SVGURIReference {
+  readonly attribute SVGAnimatedString href;
+};
+
+// https://www.w3.org/TR/SVG11/fonts.html#InterfaceSVGVKernElement
+interface SVGVKernElement : SVGElement {};
+
+partial interface SVGViewElement {
+  // https://www.w3.org/TR/SVG11/linking.html#InterfaceSVGViewElement
+  readonly attribute SVGStringList viewTarget;
+};

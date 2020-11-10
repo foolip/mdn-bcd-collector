@@ -1,0 +1,19 @@
+interface PushRegistration {};
+
+partial interface PushManager {
+  Promise<boolean> hasPermission();
+  Promise<PushRegistration> register();
+  Promise<sequence<PushRegistration>> registrations();
+  Promise<PushRegistration> unregister();
+};
+
+interface PushRegistrationManager {
+  Promise<PushRegistration> getRegistration();
+  Promise<boolean> hasPermission();
+  Promise<PushRegistration> register();
+  Promise<PushRegistration> unregister();
+};
+
+partial interface PushSubscription {
+  readonly attribute DOMString subscriptionId;
+};

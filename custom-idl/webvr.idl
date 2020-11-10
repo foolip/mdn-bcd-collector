@@ -87,6 +87,7 @@ interface VRStageParameters {
   readonly attribute Float32Array sittingToStandingTransform;
 
   readonly attribute float sizeX;
+  readonly attribute float sizeY;
   readonly attribute float sizeZ;
 };
 
@@ -134,4 +135,33 @@ partial interface Gamepad {
 interface HMDVRDevice {
   VREyeParameters getEyeParameters(DOMString whichEye);
   undefined setFieldOfView(VRFieldOfView leftFOV, VRFieldOfView rightFOV, double zNear, double zFar);
+};
+
+interface PositionSensorVRDevice {
+  any getImmediateState();
+  any getState();
+  undefined resetSensor();
+};
+
+partial interface VRDisplay {
+  VRPose getImmediatePose();
+  attribute DOMString hardwareUnitId;
+};
+
+partial interface VREyeParameters {
+  readonly attribute VRFieldOfView minimumFieldOfView;
+  readonly attribute VRFieldOfView maximumFieldOfView;
+  readonly attribute VRFieldOfView recommendedFieldOfView;
+  readonly attribute DOMRect renderRect;
+};
+
+partial interface VRFieldOfView {
+  constructor();
+};
+
+partial interface VRPose {
+  boolean hasOrientation();
+  boolean hasPosition();
+
+  readonly attribute long long timestamp;
 };
