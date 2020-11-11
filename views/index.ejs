@@ -55,8 +55,6 @@
 </div>
 
 <div id="known-caveats" class="paper">
-  <p id="beta-notice" class="error-notice">Note: this website is in beta; not all feature detection is accurate yet. If you find any errors, please <a href="https://github.com/foolip/mdn-bcd-collector/issues/new"><span class="mdi mdi-alert-circle-outline"></span> file an issue</a> in the GitHub repository.</p>
-
   <p>Known caveats:</p>
   <ul>
     <li>Detection for features under prefixes are not yet supported</li>
@@ -64,6 +62,8 @@
     <li>In older browsers, some attributes aren't initialized in the API prototypes, resulting in false negatives (see <a href="https://github.com/foolip/mdn-bcd-collector/issues/406">#406</a>)</li>
     <li>Some APIs are accessed through other APIs and aren't exposed on their own; custom tests have not been written for them all</li>
   </ul>
+  
+  <p class="error-notice">If you find any errors in feature detection, please <a href="https://github.com/foolip/mdn-bcd-collector/issues/new"><span class="mdi mdi-alert-circle-outline"></span> file an issue</a> in the GitHub repository.</p>
 </div>
 
 <script>
