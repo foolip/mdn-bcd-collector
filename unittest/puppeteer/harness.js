@@ -25,7 +25,7 @@ const pti = require('puppeteer-to-istanbul');
 const {app} = require('../../app');
 
 // Firefox is temporarily disabled due to issues on CI
-const products = ['chrome']; //['chrome', 'firefox'];
+const products = ['chrome']; // ['chrome', 'firefox'];
 
 // Workaround for https://github.com/puppeteer/puppeteer/issues/6255
 const consoleLogType = {
