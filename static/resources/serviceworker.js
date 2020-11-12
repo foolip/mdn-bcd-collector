@@ -33,10 +33,20 @@ self.addEventListener('message', function(event) {
   var results = [];
 
   if (pending) {
-    for (var i = 0; i < pending.length; i++) {
-      results.push(bcd.test(pending[i]));
-    }
-  }
+    var completedTests = 0;
 
-  event.ports[0].postMessage(results);
+    var oncomplete = function(result) {
+      results.push(result);
+      completedTests += 1;
+      if (completedTests >= pending.length) {
+        event.ports[0].postMessage(results);
+      }
+    };
+
+    for (var i = 0; i < pending.length; i++) {
+      bcd.test(pending[i], oncomplete);
+    }
+  } else {
+    event.ports[0].postMessage(results);
+  }
 });

@@ -131,6 +131,39 @@
     return result;
   }
 
+  function processValue(value, data, test, result) {
+    if (value && typeof value === 'object' && 'result' in value) {
+      result.result = value.result;
+      if (value.message) {
+        result.message = value.message;
+      }
+    } else if (typeof value === 'boolean') {
+      result.result = value;
+    } else if (value instanceof Error) {
+      result.result = null;
+      result.message = 'threw ' + stringify(value);
+    } else {
+      result.result = null;
+      result.message = 'returned ' + stringify(value);
+    }
+
+    if (result.result !== false) {
+      result.info.code = test.code;
+      if (test.prefix) {
+        result.info.prefix = test.prefix;
+      }
+    } else {
+      result.info.code = data.tests[0].code;
+    }
+
+    if (data.info !== undefined) {
+      result.info = Object.assign({}, result.info, data.info);
+    }
+    result.info.exposure = data.exposure;
+
+    return result;
+  }
+
   // Each test is mapped to an object like this:
   // {
   //   "name": "api.Attr.localName",
@@ -144,59 +177,62 @@
   //
   // If the test doesn't return true or false, or if it throws, `result` will
   // be null and a `message` property is set to an explanation.
-  function test(data) {
+  function test(data, callback) {
     var result = {name: data.name, info: {}};
 
-    for (var i = 0; i < data.tests.length; i++) {
+    function runTest(i, callback) {
+      function process(value) {
+        processValue(value, data, test, result);
+        if (result.result === true) {
+          callback(result);
+          return;
+        } else {
+          runTest(i + 1, callback);
+        }
+      }
+
+      if (i >= data.tests.length) {
+        callback(result);
+        return;
+      }
+
       var test = data.tests[i];
 
       try {
         var value = eval(test.code);
-        if (value && typeof value === 'object' && 'result' in value) {
-          result.result = value.result;
-          if (value.message) {
-            result.message = value.message;
-          }
-        } else if (typeof value === 'boolean') {
-          result.result = value;
+
+        if ('Promise' in self && value instanceof Promise) {
+          Promise.resolve(value).then(process, process);
         } else {
-          result.result = null;
-          result.message = 'returned ' + stringify(value);
+          process(value);
         }
       } catch (err) {
-        result.result = null;
-        result.message = 'threw ' + stringify(err);
-      }
-
-      if (result.result !== false) {
-        result.info.code = test.code;
-        if (test.prefix) {
-          result.info.prefix = test.prefix;
-        }
-        break;
+        processValue(err, data, test, result);
+        runTest(i + 1, callback);
       }
     }
 
-    if (data.info !== undefined) {
-      result.info = Object.assign({}, result.info, data.info);
-    }
-
-    if (result.result === false) {
-      result.info.code = data.tests[0].code;
-    }
-    result.info.exposure = data.exposure;
-
-    return result;
+    runTest(0, callback);
   }
 
   function runWindow(callback, results) {
     if (pending.Window) {
-      for (var i = 0; i < pending.Window.length; i++) {
-        results.push(test(pending.Window[i]));
-      }
-    }
+      var completedTests = 0;
 
-    callback(results);
+      var oncomplete = function(result) {
+        results.push(result);
+        completedTests += 1;
+        if (completedTests >= pending.Window.length) {
+          callback(results);
+        }
+      };
+
+      for (var i = 0; i < pending.Window.length; i++) {
+        test(pending.Window[i], oncomplete);
+      }
+    } else {
+      callback(results);
+    }
   }
 
   function runWorker(callback, results) {
@@ -507,10 +543,11 @@
           if (!serviceWorker) {
             // If the service worker isn't installing, it was probably
             // interrupted during a test.
-            window.location.reload();
+            window.__workerCleanup().then(function() {
+              window.location.reload();
+            });
 
-            return reject(new Error('The service worker is not installing. ' +
-              'Is the test environment clean?'));
+            return reject(new Error('Service worker not installing, cleaning and retrying...'));
           }
 
           function stateListener(evt) {

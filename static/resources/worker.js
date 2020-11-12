@@ -22,10 +22,20 @@ self.onmessage = function(event) {
   var results = [];
 
   if (pending) {
-    for (var i = 0; i < pending.length; i++) {
-      results.push(bcd.test(pending[i]));
-    }
-  }
+    var completedTests = 0;
 
-  self.postMessage(results);
+    var oncomplete = function(result) {
+      results.push(result);
+      completedTests += 1;
+      if (completedTests >= pending.length) {
+        self.postMessage(results);
+      }
+    };
+
+    for (var i = 0; i < pending.length; i++) {
+      bcd.test(pending[i], oncomplete);
+    }
+  } else {
+    self.postMessage(results);
+  }
 };

@@ -26,6 +26,8 @@ const specData = require('./spec-data');
 const generatedDir = path.join(__dirname, 'generated');
 
 const compileCustomTest = (code, format = true) => {
+  const promise = code.includes('var promise');
+
   // Import code from other tests
   code = code.replace(/<%(\w+)\.(\w+)(?:\.(\w+))?:(\w+)%> ?/g, (match, category, name, member, instancevar) => {
     if (category === 'api') {
@@ -33,11 +35,21 @@ const compileCustomTest = (code, format = true) => {
         return `throw 'Test is malformed: ${match} is an invalid reference';`;
       }
       let importcode = compileCustomTest(customTests.api[name].__base, false);
-      importcode = importcode.replace(
-          /var instance/g, `var ${instancevar}`
-      );
-      if (instancevar !== 'instance') {
-        importcode += ` if (!${instancevar}) {return false;}`;
+
+      if (promise) {
+        importcode = importcode.replace(
+            /var promise/g, `var ${instancevar}`
+        );
+        if (instancevar !== 'promise') {
+          importcode += ` if (!${instancevar}) {reject();}`;
+        }
+      } else {
+        importcode = importcode.replace(
+            /var instance/g, `var ${instancevar}`
+        );
+        if (instancevar !== 'instance') {
+          importcode += ` if (!${instancevar}) {return false;}`;
+        }
       }
       return importcode;
     }
@@ -48,7 +60,11 @@ const compileCustomTest = (code, format = true) => {
 
   if (format) {
     // Wrap in a function
-    code = `(function () {${code}})()`;
+    if (promise) {
+      code = `new Promise(function(resolve, reject) {${code}})`;
+    } else {
+      code = `(function () {${code}})()`;
+    }
 
     // Format
     code = prettier.format(code, {singleQuote: true, parser: 'babel'}).trim();
@@ -62,11 +78,14 @@ const getCustomTestAPI = (name, member) => {
 
   if (name in customTests.api) {
     const testbase = customTests.api[name].__base || '';
+    const promise = testbase.includes('var promise');
     if (member === undefined) {
       if ('__test' in customTests.api[name]) {
         test = testbase + customTests.api[name].__test;
       } else {
-        test = testbase ? testbase + 'return !!instance;' : false;
+        test = testbase ? testbase + (
+          promise ? 'promise.then(function(instance) {resolve(!!instance)});' : 'return !!instance;'
+        ) : false;
       }
     } else {
       if (
@@ -79,8 +98,9 @@ const getCustomTestAPI = (name, member) => {
           // Constructors need special testing
           test = false;
         } else {
-          test = testbase ?
-            testbase + `return '${member}' in instance;` : false;
+          test = testbase ? testbase + (
+            promise ? `promise.then(function(instance) {resolve('${member}' in instance)});` : `return '${member}' in instance;`
+          ) : false;
         }
       }
     }
