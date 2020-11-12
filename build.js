@@ -26,6 +26,8 @@ const specData = require('./spec-data');
 const generatedDir = path.join(__dirname, 'generated');
 
 const compileCustomTest = (code, format = true) => {
+  const promise = code.includes('var promise');
+
   // Import code from other tests
   code = code.replace(/<%(\w+)\.(\w+)(?:\.(\w+))?:(\w+)%> ?/g, (match, category, name, member, instancevar) => {
     if (category === 'api') {
@@ -37,7 +39,11 @@ const compileCustomTest = (code, format = true) => {
           /var instance/g, `var ${instancevar}`
       );
       if (instancevar !== 'instance') {
-        importcode += ` if (!${instancevar}) {return false;}`;
+        if (promise) {
+          importcode += ` if (!${instancevar}) {reject();}`;
+        } else {
+          importcode += ` if (!${instancevar}) {return false;}`;
+        }
       }
       return importcode;
     }
@@ -48,6 +54,9 @@ const compileCustomTest = (code, format = true) => {
 
   if (format) {
     // Wrap in a function
+    if (promise) {
+      code = `return new Promise(function(resolve, reject) {${code}})`;
+    }
     code = `(function () {${code}})()`;
 
     // Format
@@ -62,11 +71,14 @@ const getCustomTestAPI = (name, member) => {
 
   if (name in customTests.api) {
     const testbase = customTests.api[name].__base || '';
+    const promise = testbase.includes('var promise');
     if (member === undefined) {
       if ('__test' in customTests.api[name]) {
         test = testbase + customTests.api[name].__test;
       } else {
-        test = testbase ? testbase + 'return !!instance;' : false;
+        test = testbase ? testbase + (
+          promise ? 'promise.then(function(instance) {resolve(!!instance)});' : 'return !!instance;'
+        ) : false;
       }
     } else {
       if (
@@ -79,8 +91,9 @@ const getCustomTestAPI = (name, member) => {
           // Constructors need special testing
           test = false;
         } else {
-          test = testbase ?
-            testbase + `return '${member}' in instance;` : false;
+          test = testbase ? testbase + (
+            promise ? `promise.then(function(instance) {resolve('${member}' in instance)});` : `return '${member}' in instance;`
+          ) : false;
         }
       }
     }
