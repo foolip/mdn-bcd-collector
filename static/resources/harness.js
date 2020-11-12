@@ -131,6 +131,39 @@
     return result;
   }
 
+  function processValue(value, data, test, result) {
+    if (value && typeof value === 'object' && 'result' in value) {
+      result.result = value.result;
+      if (value.message) {
+        result.message = value.message;
+      }
+    } else if (typeof value === 'boolean') {
+      result.result = value;
+    } else if (value instanceof Error) {
+      result.result = null;
+      result.message = 'threw ' + stringify(err);
+    } else {
+      result.result = null;
+      result.message = 'returned ' + stringify(value);
+    }
+
+    if (result.result !== false) {
+      result.info.code = test.code;
+      if (test.prefix) {
+        result.info.prefix = test.prefix;
+      }
+    } else {
+      result.info.code = data.tests[0].code;
+    }
+
+    if (data.info !== undefined) {
+      result.info = Object.assign({}, result.info, data.info);
+    }
+    result.info.exposure = data.exposure;
+
+    return result;
+  }
+
   // Each test is mapped to an object like this:
   // {
   //   "name": "api.Attr.localName",
@@ -144,7 +177,7 @@
   //
   // If the test doesn't return true or false, or if it throws, `result` will
   // be null and a `message` property is set to an explanation.
-  function test(data) {
+  function test(data, callback) {
     var result = {name: data.name, info: {}};
 
     for (var i = 0; i < data.tests.length; i++) {
@@ -152,47 +185,19 @@
 
       try {
         var value = eval(test.code);
-        if (value && typeof value === 'object' && 'result' in value) {
-          result.result = value.result;
-          if (value.message) {
-            result.message = value.message;
-          }
-        } else if (typeof value === 'boolean') {
-          result.result = value;
-        } else {
-          result.result = null;
-          result.message = 'returned ' + stringify(value);
-        }
+        processValue(value, data, test, result);
       } catch (err) {
-        result.result = null;
-        result.message = 'threw ' + stringify(err);
-      }
-
-      if (result.result !== false) {
-        result.info.code = test.code;
-        if (test.prefix) {
-          result.info.prefix = test.prefix;
-        }
-        break;
+        processValue(err, data, test, result);
       }
     }
 
-    if (data.info !== undefined) {
-      result.info = Object.assign({}, result.info, data.info);
-    }
-
-    if (result.result === false) {
-      result.info.code = data.tests[0].code;
-    }
-    result.info.exposure = data.exposure;
-
-    return result;
+    callback(result);
   }
 
   function runWindow(callback, results) {
     if (pending.Window) {
       for (var i = 0; i < pending.Window.length; i++) {
-        results.push(test(pending.Window[i]));
+        test(pending.Window[i], function(result) {results.push(result)});
       }
     }
 

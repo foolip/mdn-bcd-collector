@@ -23,7 +23,7 @@ self.onmessage = function(event) {
 
   if (pending) {
     for (var i = 0; i < pending.length; i++) {
-      results.push(bcd.test(pending[i]));
+      bcd.test(pending[i], function(result) {results.push(result)});
     }
   }
 
