@@ -180,28 +180,50 @@
   function test(data, callback) {
     var result = {name: data.name, info: {}};
 
-    for (var i = 0; i < data.tests.length; i++) {
+    function runTest(i, callback) {
+      if (i >= data.tests.length) {
+        callback(result);
+        return;
+      };
+
       var test = data.tests[i];
 
       try {
         var value = eval(test.code);
         processValue(value, data, test, result);
+        if (result.result === true) {
+          callback(result);
+          return;
+        } else {
+          runTest(i + 1, callback);
+        }
       } catch (err) {
         processValue(err, data, test, result);
+        runTest(i + 1, callback);
       }
     }
 
-    callback(result);
+    runTest(0, callback);
   }
 
   function runWindow(callback, results) {
     if (pending.Window) {
-      for (var i = 0; i < pending.Window.length; i++) {
-        test(pending.Window[i], function(result) {results.push(result)});
-      }
-    }
+      var completedTests = 0;
 
-    callback(results);
+      var oncomplete = function(result) {
+        results.push(result);
+        completedTests += 1;
+        if (completedTests >= pending.Window.length) {
+          callback(results);
+        }
+      }
+
+      for (var i = 0; i < pending.Window.length; i++) {
+        test(pending.Window[i], oncomplete);
+      }
+    } else {
+      callback(results);
+    }
   }
 
   function runWorker(callback, results) {

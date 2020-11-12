@@ -24,11 +24,21 @@ self.onconnect = function(connectEvent) {
     var results = [];
 
     if (pending) {
-      for (var i = 0; i < pending.length; i++) {
-        bcd.test(pending[i], function(result) {results.push(result)});
-      }
-    }
+      var completedTests = 0;
 
-    port.postMessage(results);
+      var oncomplete = function(result) {
+        results.push(result);
+        completedTests += 1;
+        if (completedTests >= pending.length) {
+          port.postMessage(results);
+        }
+      }
+
+      for (var i = 0; i < pending.length; i++) {
+        bcd.test(pending[i], oncomplete);
+      }
+    } else {
+      port.postMessage(results);
+    }
   };
 };
