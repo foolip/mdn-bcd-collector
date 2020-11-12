@@ -141,7 +141,7 @@
       result.result = value;
     } else if (value instanceof Error) {
       result.result = null;
-      result.message = 'threw ' + stringify(err);
+      result.message = 'threw ' + stringify(value);
     } else {
       result.result = null;
       result.message = 'returned ' + stringify(value);
