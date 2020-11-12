@@ -181,6 +181,16 @@
     var result = {name: data.name, info: {}};
 
     function runTest(i, callback) {
+      function process(value) {
+        processValue(value, data, test, result);
+        if (result.result === true) {
+          callback(result);
+          return;
+        } else {
+          runTest(i + 1, callback);
+        }
+      }
+
       if (i >= data.tests.length) {
         callback(result);
         return;
@@ -190,12 +200,11 @@
 
       try {
         var value = eval(test.code);
-        processValue(value, data, test, result);
-        if (result.result === true) {
-          callback(result);
-          return;
+
+        if ('then' in value) {
+          Promise.resolve(value).then(process);
         } else {
-          runTest(i + 1, callback);
+          process(value);
         }
       } catch (err) {
         processValue(err, data, test, result);
