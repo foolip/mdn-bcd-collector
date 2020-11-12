@@ -512,10 +512,11 @@
           if (!serviceWorker) {
             // If the service worker isn't installing, it was probably
             // interrupted during a test.
-            window.location.reload();
+            window.__workerCleanup().then(function() {
+              window.location.reload();
+            });
 
-            return reject(new Error('The service worker is not installing. ' +
-              'Is the test environment clean?'));
+            return reject(new Error('Service worker not installing, cleaning and retrying...'));
           }
 
           function stateListener(evt) {
