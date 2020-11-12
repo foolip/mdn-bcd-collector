@@ -17,6 +17,9 @@
           <% } %>
         </<%-resource.type%>>
         <% break;
+      case 'image': %>
+        <img id="resource-<%-resourceId%>" src="/resources/custom-tests<%-src%>" />
+        <% break;
     }
   }; %>
 </div>

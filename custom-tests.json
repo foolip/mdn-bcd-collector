@@ -9,6 +9,10 @@
         "type": "video",
         "src": ["/media/blank.mp4", "/media/blank.webm"]
       },
+      "image-black": {
+        "type": "image",
+        "src": "/media/black.png"
+      },
       "audioContext": {
         "type": "instance",
         "src": "return new (window.AudioContext || window.webkitAudioContext)();"
@@ -216,9 +220,15 @@
       "__resources": ["webGL"],
       "__base": "if (!reusableInstances.webGL) {return false}; var instance = reusableInstances.webGL.getExtension('EXT_texture_filter_anisotropic');"
     },
+    "FontFace": {
+      "__base": "var instance = new FontFace();"
+    },
     "GainNode": {
       "__resources": ["audioContext"],
       "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createGain();"
+    },
+    "History": {
+      "__base": "var instance = history;"
     },
     "HTMLAnchorElement": {
       "__base": "var instance = document.createElement('a');",
@@ -525,6 +535,13 @@
     "IIRFilterNode": {
       "__resources": ["audioContext"],
       "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createIIRFilter([1], [1]);"
+    },
+    "ImageBitmap": {
+      "__resources": ["image-black"],
+      "__base": "var instance = createImageBitmap(document.getElementById('image-black'));"
+    },
+    "ImageData": {
+      "__base": "<%api.CanvasRenderingContext2D:ctx%> var instance = ctx.createImageData(16, 16);"
     },
     "KHR_parallel_shader_compile": {
       "__resources": ["webGL"],
