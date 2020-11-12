@@ -201,7 +201,7 @@
       try {
         var value = eval(test.code);
 
-        if ('then' in value) {
+        if ('Promise' in self && value instanceof Promise) {
           Promise.resolve(value).then(process);
         } else {
           process(value);
