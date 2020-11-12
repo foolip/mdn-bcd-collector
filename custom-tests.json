@@ -79,6 +79,9 @@
       "__resources": ["audioContext"],
       "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createBiquadFilter();"
     },
+    "Blob": {
+      "__base": "try {var instance = new Blob();} catch(e) {var instance = new BlobBuilder();}"
+    },
     "CanvasRenderingContext2D": {
       "__base": "var canvas = document.createElement('canvas'); if (!canvas) {return false}; return canvas.getContext('2d');"
     },
@@ -90,6 +93,9 @@
       "__resources": ["audioContext"],
       "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createChannelSplitter();"
     },
+    "CharacterData": {
+      "__base": "<%api.Text:instance%>"
+    },
     "ConstantSourceNode": {
       "__resources": ["audioContext"],
       "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createConstantSource();"
@@ -97,6 +103,12 @@
     "ConvolverNode": {
       "__resources": ["audioContext"],
       "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createConvolver();"
+    },
+    "Crypto": {
+      "__base": "var instance = window.crypto;"
+    },
+    "CryptoKey": {
+      "__base": "<%api.SubtleCrypto:subtlecrypto%> var promise = window.crypto.subtle.generateKey({name: 'RSA-OAEP', modulusLength: 4096, publicExponent: new Uint8Array([1, 0, 1]), hash: 'SHA-256' }, true, ['encrypt', 'decrypt']);"
     },
     "CSSKeyframeRule": {
       "__resources": ["createStyleSheet"],
@@ -144,18 +156,21 @@
     "Document": {
       "__base": "var instance = document;"
     },
+    "DocumentType": {
+      "__base": "var instance = document.doctype;"
+    },
     "DOMTokenList": {
       "__additional": {
         "trim_whitespace": "var elm = document.createElement('b'); elm.className = ' foo bar foo '; elm.classList.remove('bar'); return elm.className === 'foo foo' || elm.className === 'foo';",
         "remove_duplicates": "var elm = document.createElement('b'); elm.className = ' foo bar foo '; elm.classList.remove('bar'); return elm.className === 'foo';"
       }
     },
-    "Element": {
-      "__base": "var instance = null; if (document.createElementNS) {instance = document.createElementNS('', 'p');} else {document.createElement('p');}"
-    },
     "DynamicsCompressorNode": {
       "__resources": ["audioContext"],
       "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createDynamicsCompressor();"
+    },
+    "Element": {
+      "__base": "var instance = null; if (document.createElementNS) {instance = document.createElementNS('', 'p');} else {document.createElement('p');}"
     },
     "EXT_blend_minmax": {
       "__resources": ["webGL"],
@@ -612,6 +627,9 @@
       "__resources": ["audioContext"],
       "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createStereoPanner();"
     },
+    "SubtleCrypto": {
+      "__base": "<%api.Crypto:crypto%> var instance = crypto.subtle;"
+    },
     "SVGAElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'a');",
       "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGAElement' && Object.prototype.toString.call(instance) !== '[object SVGAElement]') {return false;} return !!instance;"
@@ -958,6 +976,9 @@
     "SVGVKernElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'vkern');",
       "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGVKernElement' && Object.prototype.toString.call(instance) !== '[object SVGVKernElement]') {return false;} return !!instance;"
+    },
+    "Text": {
+      "__base": "var el = document.createElement('p'); el.innerText = 'foo bar'; var instance = el.childNodes[0];"
     },
     "TreeWalker": {
       "__base": "var instance = document.createTreeWalker(document);"
