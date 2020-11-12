@@ -74,6 +74,9 @@
       "__resources": ["audioContext"],
       "__base.disabled": "await if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.audioWorklet.addModule('/resources/custom-tests/api/AudioWorkletNode/WhiteNoiseProcessor.js'); var instance = new AudioWorkletNode(audioContext, 'white-noise-processor');"
     },
+    "BatteryManager": {
+      "__base": "var promise = navigator.getBattery();"
+    },
     "BiquadFilterNode": {
       "__resources": ["audioContext"],
       "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createBiquadFilter();"
