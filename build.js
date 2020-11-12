@@ -36,18 +36,13 @@ const compileCustomTest = (code, format = true) => {
       }
       let importcode = compileCustomTest(customTests.api[name].__base, false);
 
-      if (promise) {
-        importcode = importcode.replace(
-            /var promise/g, `var ${instancevar}`
-        );
-        if (instancevar !== 'promise') {
+      importcode = importcode.replace(
+          /var (instance|promise)/g, `var ${instancevar}`
+      );
+      if (instancevar !== 'instance' && instancevar !== 'promise') {
+        if (promise) {
           importcode += ` if (!${instancevar}) {reject();}`;
-        }
-      } else {
-        importcode = importcode.replace(
-            /var instance/g, `var ${instancevar}`
-        );
-        if (instancevar !== 'instance') {
+        } else {
           importcode += ` if (!${instancevar}) {return false;}`;
         }
       }

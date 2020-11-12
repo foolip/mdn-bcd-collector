@@ -58,8 +58,7 @@
       "__base": "<%api.GainNode:gainNode%> var instance = gainNode.gain;"
     },
     "AudioParamMap": {
-      "__TODO": "DEPENDS ON PROMISE TESTING SUPPORT",
-      "__base.disabled": "<%api.AudioWorkletNode:worklet%> var instance = worklet.parameters;"
+      "__base": "<%api.AudioWorkletNode:worklet%> promise.then(function(worklet) {return worklet.parameters});"
     },
     "AudioTrack": {
       "__resources": ["audio-blip"],
@@ -70,9 +69,8 @@
       "__base": "var el = document.getElementById('resource-audio-blip'); var instance = el.audioTracks;"
     },
     "AudioWorkletNode": {
-      "__TODO": "DEPENDS ON PROMISE TESTING SUPPORT",
       "__resources": ["audioContext"],
-      "__base.disabled": "await if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.audioWorklet.addModule('/resources/custom-tests/api/AudioWorkletNode/WhiteNoiseProcessor.js'); var instance = new AudioWorkletNode(audioContext, 'white-noise-processor');"
+      "__base": "if (!reusableInstances.audioContext) {return false;} var promise = reusableInstances.audioContext.audioWorklet.addModule('/resources/custom-tests/api/AudioWorkletNode/WhiteNoiseProcessor.js').then(function() {return new AudioWorkletNode(audioContext, 'white-noise-processor')});"
     },
     "BatteryManager": {
       "__base": "var promise = navigator.getBattery();"
@@ -524,8 +522,7 @@
       "__base": "var instance = navigator.mediaCapabilities;"
     },
     "MediaDeviceInfo": {
-      "__TODO": "DEPENDS ON PROMISE TESTING SUPPORT",
-      "__base.disabled": "<%api.MediaDevices:mediaDevices%> var devices = await navigator.mediaDevices.enumerateDevices(); var instance = devices[0];"
+      "__base": "<%api.MediaDevices:mediaDevices%> var promise = navigator.mediaDevices.enumerateDevices().then(function(devices) {return devices[0];});"
     },
     "MediaDevices": {
       "__base": "var instance = navigator.mediaDevices;"
@@ -538,33 +535,28 @@
       "__base": "var instance = navigator.MediaSession;"
     },
     "MediaSettingsRange": {
-      "__TODO": "DEPENDS ON PROMISE TESTING SUPPORT",
-      "__base.disabled": "<%api.MediaStreamTrack:track%> if (!track) {return false;} var imageCapture = new ImageCapture(track); var instance = imageCapture.track.getSettings();"
+      "__base": "<%api.MediaStreamTrack:track%> if (!track) {return false;} var imageCapture = new ImageCapture(track); var promise = imageCapture.track.getSettings();"
     },
     "MediaSource": {
       "__base": "var instance = new MediaSource();"
     },
     "MediaStream": {
-      "__TODO": "DEPENDS ON PROMISE TESTING SUPPORT",
-      "__base.disabled": "<%api.MediaDevices:mediaDevices%> var instance = await mediaDevices.getUserMedia({video: true});"
+      "__base": "<%api.MediaDevices:mediaDevices%> var promise = mediaDevices.getUserMedia({video: true});"
     },
     "MediaStreamAudioDestinationNode": {
       "__resources": ["audioContext"],
       "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createMediaStreamDestination();"
     },
     "MediaStreamAudioSourceNode": {
-      "__TODO": "DEPENDS ON PROMISE TESTING SUPPORT",
       "__resources": ["audioContext"],
-      "__base.disabled": "<%api.MediaStream:mediaStream%> if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createMediaStreamSource(mediaStream);"
+      "__base": "<%api.MediaStream:mediaStream%> if (!reusableInstances.audioContext) {return false;} promise.then(function(mediaStream) {return reusableInstances.audioContext.createMediaStreamSource(mediaStream)});"
     },
     "MediaStreamTrack": {
-      "__TODO": "DEPENDS ON PROMISE TESTING SUPPORT",
-      "__base.disabled": "<%api.MediaStream:mediaStream%> var instance = mediaStream.getVideoTracks()[0];"
+      "__base": "<%api.MediaStream:mediaStream%> promise.then(function(mediaStream) {return mediaStream.getVideoTracks()[0]});"
     },
     "MediaStreamTrackAudioSourceNode": {
-      "__TODO": "DEPENDS ON PROMISE TESTING SUPPORT",
       "__resources": ["audioContext"],
-      "__base.disabled": "<%api.MediaStream:mediaStream%> if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createMediaStreamTrackSource(mediaStream);"
+      "__base": "<%api.MediaStream:mediaStream%> if (!reusableInstances.audioContext) {return false;} promise.then(function(mediaStream) {return reusableInstances.audioContext.createMediaStreamTrackSource(mediaStream)});"
     },
     "Navigator": {
       "__base": "var instance = window.navigator;"
