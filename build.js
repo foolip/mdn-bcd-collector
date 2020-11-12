@@ -39,7 +39,7 @@ const compileCustomTest = (code, format = true) => {
       importcode = importcode.replace(
           /var (instance|promise)/g, `var ${instancevar}`
       );
-      if (instancevar !== 'instance' || instancevar !== 'promise') {
+      if (instancevar !== 'instance' && instancevar !== 'promise') {
         if (promise) {
           importcode += ` if (!${instancevar}) {reject();}`;
         } else {
