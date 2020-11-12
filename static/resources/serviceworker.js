@@ -41,7 +41,7 @@ self.addEventListener('message', function(event) {
       if (completedTests >= pending.length) {
         event.ports[0].postMessage(results);
       }
-    }
+    };
 
     for (var i = 0; i < pending.length; i++) {
       bcd.test(pending[i], oncomplete);

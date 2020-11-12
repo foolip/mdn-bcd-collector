@@ -32,7 +32,7 @@ self.onconnect = function(connectEvent) {
         if (completedTests >= pending.length) {
           port.postMessage(results);
         }
-      }
+      };
 
       for (var i = 0; i < pending.length; i++) {
         bcd.test(pending[i], oncomplete);

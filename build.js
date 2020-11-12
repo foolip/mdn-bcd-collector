@@ -35,7 +35,7 @@ const compileCustomTest = (code, format = true) => {
         return `throw 'Test is malformed: ${match} is an invalid reference';`;
       }
       let importcode = compileCustomTest(customTests.api[name].__base, false);
-      
+
       if (promise) {
         importcode = importcode.replace(
             /var promise/g, `var ${instancevar}`

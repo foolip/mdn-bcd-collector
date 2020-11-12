@@ -194,7 +194,7 @@
       if (i >= data.tests.length) {
         callback(result);
         return;
-      };
+      }
 
       var test = data.tests[i];
 
@@ -225,7 +225,7 @@
         if (completedTests >= pending.Window.length) {
           callback(results);
         }
-      }
+      };
 
       for (var i = 0; i < pending.Window.length; i++) {
         test(pending.Window[i], oncomplete);

@@ -30,7 +30,7 @@ self.onmessage = function(event) {
       if (completedTests >= pending.length) {
         self.postMessage(results);
       }
-    }
+    };
 
     for (var i = 0; i < pending.length; i++) {
       bcd.test(pending[i], oncomplete);
