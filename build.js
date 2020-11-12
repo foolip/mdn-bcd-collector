@@ -62,7 +62,11 @@ const compileCustomTest = (code, format = true) => {
     }
 
     // Format
-    code = prettier.format(code, {singleQuote: true, parser: 'babel'}).trim();
+    try {
+      code = prettier.format(code, {singleQuote: true, parser: 'babel'}).trim();
+    } catch (e) {
+      return `throw 'Test is malformed: ${e}'`;
+    }
   }
 
   return code;
@@ -105,8 +109,13 @@ const getCustomTestAPI = (name, member) => {
     return false;
   }
 
+  test = compileCustomTest(test);
 
-  return compileCustomTest(test);
+  if (test.includes('Test is malformed')) {
+    console.error(`api.${name}${member ? `.${member}` : ''}: ${test.replace('throw ', '')}`);
+  }
+
+  return test;
 };
 
 const getCustomSubtestsAPI = (name) => {
