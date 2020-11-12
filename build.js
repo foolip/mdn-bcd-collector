@@ -35,13 +35,19 @@ const compileCustomTest = (code, format = true) => {
         return `throw 'Test is malformed: ${match} is an invalid reference';`;
       }
       let importcode = compileCustomTest(customTests.api[name].__base, false);
-      importcode = importcode.replace(
-          /var instance/g, `var ${instancevar}`
-      );
-      if (instancevar !== 'instance') {
-        if (promise) {
+      
+      if (promise) {
+        importcode = importcode.replace(
+            /var promise/g, `var ${instancevar}`
+        );
+        if (instancevar !== 'promise') {
           importcode += ` if (!${instancevar}) {reject();}`;
-        } else {
+        }
+      } else {
+        importcode = importcode.replace(
+            /var instance/g, `var ${instancevar}`
+        );
+        if (instancevar !== 'instance') {
           importcode += ` if (!${instancevar}) {return false;}`;
         }
       }
@@ -55,9 +61,10 @@ const compileCustomTest = (code, format = true) => {
   if (format) {
     // Wrap in a function
     if (promise) {
-      code = `return new Promise(function(resolve, reject) {${code}})`;
+      code = `new Promise(function(resolve, reject) {${code}})`;
+    } else {
+      code = `(function () {${code}})()`;
     }
-    code = `(function () {${code}})()`;
 
     // Format
     code = prettier.format(code, {singleQuote: true, parser: 'babel'}).trim();
