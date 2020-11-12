@@ -36,9 +36,11 @@ Each API interface is written in the following structure:
 
 You can define a custom method to test the interface instance itself via `__test`. The `__test` should be a return statement that returns `true` or `false`. If no `__test` is defined, it will default to `return !!instance`.
 
-Each member can have a custom test by defining a property as the member name. Like `__test`, it should be a return statement that returns `true` or `false`. If no custom test is defined, it will default to `return instance && 'MEMBER' in instance`.
+Each member can have a custom test by defining a property as the member name. Like `__test`, it should be a return statement that returns `true` or `false`. If no custom test is defined, it will default to `return 'MEMBER' in instance`.
 
 Note: If an interface with a `__base` has a constructor test, but a custom test isn't defined for the constructor, the code will default to normal generation.
+
+Sometimes, tests require promises and callbacks.  To define a custom test as a promise, simply create a `promise` variable in place of `instance`, and the system will automatically create a promise instead.
 
 Certain tests may require resources, like audio or video. To allow the resources to load before running the tests, rather than create and add an element with JavaScript, we can define resources to be loaded through the `__resources` object.
 
