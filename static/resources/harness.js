@@ -131,7 +131,9 @@
     return result;
   }
 
-  function processValue(value, data, test, result) {
+  function processTestResult(value, data, test, i, callback) {
+    var result = {name: data.name, info: {}};
+
     if (value && typeof value === 'object' && 'result' in value) {
       result.result = value.result;
       if (value.message) {
@@ -161,7 +163,16 @@
     }
     result.info.exposure = data.exposure;
 
-    return result;
+    if (result.result === true) {
+      callback(result);
+      return;
+    } else {
+      if (i + 1 >= data.tests.length) {
+        callback(result);
+      } else {
+        runTest(data, i + 1, callback);
+      }
+    }
   }
 
   // Each test is mapped to an object like this:
@@ -177,42 +188,30 @@
   //
   // If the test doesn't return true or false, or if it throws, `result` will
   // be null and a `message` property is set to an explanation.
-  function test(data, callback) {
-    var result = {name: data.name, info: {}};
+  //
+  // Once the test is complete, it will call `callback(result)` with the test
+  // result as the argument.
+  function runTest(data, i, callback) {
+    var test = data.tests[i];
 
-    function runTest(i, callback) {
-      function process(value) {
-        processValue(value, data, test, result);
-        if (result.result === true) {
-          callback(result);
-          return;
-        } else {
-          runTest(i + 1, callback);
-        }
+    try {
+      var value = eval(test.code);
+
+      if ('Promise' in self && value instanceof Promise) {
+        Promise.resolve(value).then(
+            function(value) {
+              processTestResult(value, data, test, i, callback);
+            },
+            function(fail) {
+              processTestResult(new Error(fail), data, test, i, callback);
+            }
+        );
+      } else {
+        processTestResult(value, data, test, i, callback);
       }
-
-      if (i >= data.tests.length) {
-        callback(result);
-        return;
-      }
-
-      var test = data.tests[i];
-
-      try {
-        var value = eval(test.code);
-
-        if ('Promise' in self && value instanceof Promise) {
-          Promise.resolve(value).then(process, process);
-        } else {
-          process(value);
-        }
-      } catch (err) {
-        processValue(err, data, test, result);
-        runTest(i + 1, callback);
-      }
+    } catch (err) {
+      processTestResult(err, data, test, i, callback);
     }
-
-    runTest(0, callback);
   }
 
   function runWindow(callback, results) {
@@ -228,7 +227,7 @@
       };
 
       for (var i = 0; i < pending.Window.length; i++) {
-        test(pending.Window[i], oncomplete);
+        runTest(pending.Window[i], 0, oncomplete);
       }
     } else {
       callback(results);
@@ -598,7 +597,7 @@
     testConstructor: testConstructor,
     addInstance: addInstance,
     addTest: addTest,
-    test: test,
+    runTest: runTest,
     run: run
   };
 })(this);
