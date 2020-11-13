@@ -37,7 +37,7 @@ const github = (options) => {
     const browser = `${ua.browser.name} ${ua.browser.version}`;
     const os = `${ua.os.name} ${ua.os.version}`;
     const desc = `${browser} / ${os}`;
-    const title = `Results from ${desc} / Collector v${version}${dev ? ' (Dev)' : ''}`;
+    const title = `${dev ? '(Dev) ' : ''}Results from ${desc} / Collector v${version}`;
     
     const slug = `${version}-${slugify(desc, {lower: true})}-${digest}`;
     const filename = `${slug}.json`;
