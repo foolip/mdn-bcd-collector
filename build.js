@@ -40,11 +40,7 @@ const compileCustomTest = (code, format = true) => {
           /var (instance|promise)/g, `var ${instancevar}`
       );
       if (instancevar !== 'instance' && instancevar !== 'promise') {
-        if (promise) {
-          importcode += ` if (!${instancevar}) {resolve(false);}`;
-        } else {
-          importcode += ` if (!${instancevar}) {return false;}`;
-        }
+        importcode += ` if (!${instancevar}) {return false;}`;
       }
       return importcode;
     }
@@ -55,9 +51,7 @@ const compileCustomTest = (code, format = true) => {
 
   if (format) {
     // Wrap in a function
-    if (promise) {
-      code = `new Promise(function(resolve, reject) {${code}})`;
-    } else {
+    if (!promise) {
       code = `(function () {${code}})()`;
     }
 
@@ -83,7 +77,7 @@ const getCustomTestAPI = (name, member) => {
         test = testbase + customTests.api[name].__test;
       } else {
         test = testbase ? testbase + (
-          promise ? 'promise.then(function(instance) {resolve(!!instance)});' : 'return !!instance;'
+          promise ? 'promise.then(function(instance) {return !!instance});' : 'return !!instance;'
         ) : false;
       }
     } else {
@@ -98,7 +92,7 @@ const getCustomTestAPI = (name, member) => {
           test = false;
         } else {
           test = testbase ? testbase + (
-            promise ? `promise.then(function(instance) {resolve('${member}' in instance)});` : `return '${member}' in instance;`
+            promise ? `promise.then(function(instance) {return '${member}' in instance});` : `return '${member}' in instance;`
           ) : false;
         }
       }
