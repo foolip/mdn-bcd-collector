@@ -44,7 +44,7 @@ const github = (options) => {
     const branch = `collector/${filename.replace('.json', '')}`;
 
     return {
-      json, digest, ua, browser, os, desc, title, slug, filename, branch
+      json, buffer, digest, ua, browser, os, desc, title, slug, filename, branch
     };
   };
 
