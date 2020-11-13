@@ -9,6 +9,10 @@
         "type": "video",
         "src": ["/media/blank.mp4", "/media/blank.webm"]
       },
+      "image-black": {
+        "type": "image",
+        "src": "/media/black.png"
+      },
       "audioContext": {
         "type": "instance",
         "src": "return new (window.AudioContext || window.webkitAudioContext)();"
@@ -21,6 +25,9 @@
         "type": "instance",
         "src": "var canvas = document.createElement('canvas'); if (!canvas) {return false}; return canvas.getContext('webgl2') || canvas.getContext('webgl') || canvas.getContext('experimental-webgl');"
       }
+    },
+    "Attr": {
+      "__base": "var el = document.createElement('p'); el.setAttribute('data-foo', 'bar'); var instance = el.getAttributeNode('data-foo');"
     },
     "ANGLE_instanced_arrays": {
       "__resources": ["webGL"],
@@ -40,7 +47,8 @@
     },
     "AudioContext": {
       "__TODO": "Add webkit prefix",
-      "__base": "var instance = new window.AudioContext();"
+      "__base": "var instance = reusableInstances.audioContext;",
+      "__test": "!!(new window.AudioContext());"
     },
     "AudioDestinationNode": {
       "__resources": ["audioContext"],
@@ -70,7 +78,7 @@
     },
     "AudioWorkletNode": {
       "__resources": ["audioContext"],
-      "__base": "if (!reusableInstances.audioContext) {return false;} var promise = reusableInstances.audioContext.audioWorklet.addModule('/resources/custom-tests/api/AudioWorkletNode/WhiteNoiseProcessor.js').then(function() {return new AudioWorkletNode(audioContext, 'white-noise-processor')});"
+      "__base": "if (!reusableInstances.audioContext) {return false;} var promise = reusableInstances.audioContext.audioWorklet.addModule('/resources/custom-tests/api/AudioWorkletNode/WhiteNoiseProcessor.js').then(function() {return new AudioWorkletNode(reusableInstances.audioContext, 'white-noise-processor')});"
     },
     "BatteryManager": {
       "__base": "var promise = navigator.getBattery();"
@@ -81,6 +89,9 @@
     },
     "Blob": {
       "__base": "try {var instance = new Blob();} catch(e) {var instance = new BlobBuilder();}"
+    },
+    "CacheStorage": {
+      "__base": "if ('window' in self) {/* Window exposure */ var instance = window.caches} else {/* Worker exposure */ var instance = caches};"
     },
     "CanvasRenderingContext2D": {
       "__base": "var canvas = document.createElement('canvas'); if (!canvas) {return false}; return canvas.getContext('2d');"
@@ -159,6 +170,12 @@
     "DocumentType": {
       "__base": "var instance = document.doctype;"
     },
+    "DOMError": {
+      "__base": "var instance = new DOMError('DOMError');"
+    },
+    "DOMException": {
+      "__base": "var instance = new DOMException('DOMException');"
+    },
     "DOMTokenList": {
       "__additional": {
         "trim_whitespace": "var elm = document.createElement('b'); elm.className = ' foo bar foo '; elm.classList.remove('bar'); return elm.className === 'foo foo' || elm.className === 'foo';",
@@ -170,7 +187,13 @@
       "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createDynamicsCompressor();"
     },
     "Element": {
-      "__base": "var instance = null; if (document.createElementNS) {instance = document.createElementNS('', 'p');} else {document.createElement('p');}"
+      "__base": "if (document.createElementNS) {var instance = document.createElementNS('', 'p');} else {var instance = document.createElement('p');}"
+    },
+    "Event": {
+      "__base": "try {var instance = new Event('Event');} catch(e) {var instance = Event.createEvent('Event');}"
+    },
+    "EventSource": {
+      "__base": "var instance = new EventSource('/');"
     },
     "EXT_blend_minmax": {
       "__resources": ["webGL"],
@@ -216,9 +239,15 @@
       "__resources": ["webGL"],
       "__base": "if (!reusableInstances.webGL) {return false}; var instance = reusableInstances.webGL.getExtension('EXT_texture_filter_anisotropic');"
     },
+    "FontFace": {
+      "__base": "var instance = new FontFace();"
+    },
     "GainNode": {
       "__resources": ["audioContext"],
       "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createGain();"
+    },
+    "History": {
+      "__base": "var instance = history;"
     },
     "HTMLAnchorElement": {
       "__base": "var instance = document.createElement('a');",
@@ -526,6 +555,13 @@
       "__resources": ["audioContext"],
       "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createIIRFilter([1], [1]);"
     },
+    "ImageBitmap": {
+      "__resources": ["image-black"],
+      "__base": "var instance = createImageBitmap(document.getElementById('resource-image-black'));"
+    },
+    "ImageData": {
+      "__base": "<%api.CanvasRenderingContext2D:ctx%> var instance = ctx.createImageData(16, 16);"
+    },
     "KHR_parallel_shader_compile": {
       "__resources": ["webGL"],
       "__base": "if (!reusableInstances.webGL) {return false}; var instance = reusableInstances.webGL.getExtension('KHR_parallel_shader_compile');"
@@ -545,6 +581,9 @@
     "MediaElementAudioSourceNode": {
       "__resources": ["audio-blip", "audioContext"],
       "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createMediaElementSource(document.getElementById('resource-audio-blip'));"
+    },
+    "MediaQuery": {
+      "__base": "var instance = window.matchMedia('screen and max-width: 800px;');"
     },
     "MediaSession": {
       "__base": "var instance = navigator.MediaSession;"
@@ -573,11 +612,29 @@
       "__resources": ["audioContext"],
       "__base": "<%api.MediaStream:mediaStream%> if (!reusableInstances.audioContext) {return false;} promise.then(function(mediaStream) {return reusableInstances.audioContext.createMediaStreamTrackSource(mediaStream)});"
     },
+    "MessageChannel": {
+      "__base": "var instance = new MessageChannel();"
+    },
+    "MessagePort": {
+      "__base": "<%api.MessageChannel:channel%> var instance = channel.port1;"
+    },
+    "MimeType": {
+      "__base": "var instance = window.navigator.mimeTypes[0];"
+    },
     "Navigator": {
       "__base": "var instance = window.navigator;"
     },
+    "Node": {
+      "__base": "var instance = document;"
+    },
     "NodeIterator": {
       "__base": "var instance = document.createNodeIterator(document);"
+    },
+    "Notification": {
+      "__base": "var instance = new Notification('');"
+    },
+    "OfflineAudioContext": {
+      "__base": "var instance = new OfflineAudioContext(2,44100*40,44100);"
     },
     "OscillatorNode": {
       "__resources": ["audioContext"],
@@ -623,9 +680,49 @@
       "__resources": ["audioContext"],
       "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createPanner();"
     },
+    "Performance": {
+      "__base": "var instance = window.performance;"
+    },
+    "PerformanceEntry": {
+      "__base": "<%api.Performance:performance%> var instance = performance.mark();"
+    },
+    "PerformanceNavigation": {
+      "__base": "<%api.Performance:performance%> var instance = performance.navigation;"
+    },
+    "PerformanceTiming": {
+      "__base": "<%api.Performance:performance%> var instance = performance.timing;"
+    },
+    "ProcessingInstruction": {
+      "__base": "var instance = document.createProcessingInstruction('xml', \"version='1.0' encoding='UTF-8'\");"
+    },
+    "Range": {
+      "__base": "var instance = document.createRange();"
+    },
+    "Request": {
+      "__base": "var instance = new Request();"
+    },
+    "Response": {
+      "__base": "var instance = new Response();"
+    },
+    "Screen": {
+      "__base": "var instance = window.screen;"
+    },
+    "ScriptProcessorNode": {
+      "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createProcessor();"
+    },
+    "Selection": {
+      "__base": "var instance = window.getSelection();"
+    },
+    "ShadowRoot": {
+      "__base": "var el = document.createElement('div'); el.attachShadow({mode: 'open'}); var instance = el.shadowRoot;"
+    },
     "StereoPannerNode": {
       "__resources": ["audioContext"],
       "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createStereoPanner();"
+    },
+    "StyleSheet": {
+      "__resources": ["createStyleSheet"],
+      "__base": "<%api.CSSStyleSheet:instance%>"
     },
     "SubtleCrypto": {
       "__base": "<%api.Crypto:crypto%> var instance = crypto.subtle;"
@@ -942,6 +1039,9 @@
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'text');",
       "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGTextElement' && Object.prototype.toString.call(instance) !== '[object SVGTextElement]') {return false;} return !!instance;"
     },
+    "SVGTextContentElement": {
+      "__base": "<%api.SVGTextElement:instance%>"
+    },
     "SVGTextPathElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'textPath');",
       "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGTextPathElement' && Object.prototype.toString.call(instance) !== '[object SVGTextPathElement]') {return false;} return !!instance;"
@@ -979,6 +1079,12 @@
     },
     "Text": {
       "__base": "var el = document.createElement('p'); el.innerText = 'foo bar'; var instance = el.childNodes[0];"
+    },
+    "TextDecoder": {
+      "__base": "var instance = new TextDecoder();"
+    },
+    "TextEncoder": {
+      "__base": "var instance = new TextEncoder();"
     },
     "TreeWalker": {
       "__base": "var instance = document.createTreeWalker(document);"

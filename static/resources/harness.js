@@ -435,10 +435,15 @@
       };
 
       // Load resources
-      var resourceElements = document.querySelectorAll('audio, video');
-      for (var i = 0; i < resourceElements.length; i++) {
-        resourceElements[i].load();
-        resourceElements[i].onloadeddata = resourceLoaded;
+      var i;
+      var resourceMedia = document.querySelectorAll('#resources audio, #resources video');
+      for (i = 0; i < resourceMedia.length; i++) {
+        resourceMedia[i].load();
+        resourceMedia[i].onloadeddata = resourceLoaded;
+      }
+      var resourceImages = document.querySelectorAll('#resources img');
+      for (i = 0; i < resourceImages.length; i++) {
+        resourceImages[i].onload = resourceLoaded;
       }
     } else {
       startTests();
