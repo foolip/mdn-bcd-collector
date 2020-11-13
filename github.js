@@ -31,27 +31,29 @@ const github = (options) => {
     const hash = crypto.createHash('sha1');
     const digest = hash.update(buffer).digest('hex').substr(0, 10);
 
-    const prod = process.env.GAE_VERSION == 'production';
     const version = `${report.__version}${prod ? '' : '-dev'}`;
+    const dev = process.env.GAE_VERSION != 'production';
     const ua = uaParser(report.userAgent);
     const browser = `${ua.browser.name} ${ua.browser.version}`;
     const os = `${ua.os.name} ${ua.os.version}`;
     const desc = `${browser} / ${os}`;
     const title = `Results from ${desc} / Collector v${version}`;
+    const title = `Results from ${desc} / Collector v${version}${dev ? ' (Dev)' : ''}`;
     
     const slug = `${version}-${slugify(desc, {lower: true})}-${digest}`;
     const filename = `${slug}.json`;
     const branch = `collector/${slug}`;
 
     return {
-      json, buffer, digest, ua, browser, os, desc, title, slug, filename, branch
+      json, buffer, digest, dev, ua, browser,
+      os, desc, title, slug, filename, branch
     };
   };
 
   const createBody = (meta) => {
     return `User Agent: ${meta.ua}\nBrowser: ${meta.browser} (on ${meta.os})` +
             `\nHash Digest: ${meta.digest}\n` +
-            (meta.prod ? '' : '\n**WARNING:** this PR was created from a development/staging version!');
+            (meta.dev && '\n**WARNING:** this PR was created from a development/staging version!');
   };
 
   const exportAsPR = async (report) => {
