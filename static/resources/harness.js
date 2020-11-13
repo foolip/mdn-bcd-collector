@@ -434,15 +434,21 @@
       };
 
       // Load resources
-      var i;
-      var resourceMedia = document.querySelectorAll('#resources audio, #resources video');
-      for (i = 0; i < resourceMedia.length; i++) {
-        resourceMedia[i].load();
-        resourceMedia[i].onloadeddata = resourceLoaded;
-      }
-      var resourceImages = document.querySelectorAll('#resources img');
-      for (i = 0; i < resourceImages.length; i++) {
-        resourceImages[i].onload = resourceLoaded;
+      try {
+        var i;
+        var resourceMedia = document.querySelectorAll('#resources audio, #resources video');
+        for (i = 0; i < resourceMedia.length; i++) {
+          resourceMedia[i].load();
+          resourceMedia[i].onloadeddata = resourceLoaded;
+        }
+        var resourceImages = document.querySelectorAll('#resources img');
+        for (i = 0; i < resourceImages.length; i++) {
+          resourceImages[i].onload = resourceLoaded;
+        }
+      } catch (e) {
+        // Couldn't use resource loading code, start anyways
+        consoleError(e);
+        startTests();
       }
     } else {
       startTests();
