@@ -38,13 +38,13 @@
     <link rel="stylesheet" type="text/css" href="/resources/materialdesignicons.min.css" />
   </head>
   <body>
-    <p id="browserinfo" <% if (!browser.inBcd) { %>class="error"<% } %>><% if (browser.browser.name) { %>Detected Browser: <%- browser.browser.name %> <%- browser.version %> <% if (!browser.inBcd) { %>(not in BCD)<% } %><% } else {%>Could not determine browser<% } %></p>
     <%- body %>
 
     <footer>
       <p>Made with <span class="mdi mdi-heart"></span> by <a href="https://foolip.org">@foolip</a> and <a href="https://www.queengoob.org">@vinyldarkscratch</a></p>
       <p>v<%- appversion %></p>
       <a href="https://github.com/foolip/mdn-bcd-collector"><span class="mdi mdi-github"></span></a>
+      <p id="browserinfo" <% if (!browser.inBcd) { %>class="error"<% } %>><% if (browser.browser.name) { %>Detected Browser: <%- browser.browser.name %> <%- browser.version %> <% if (!browser.inBcd) { %>(not in BCD)<% } %><% } else {%>Could not determine browser<% } %></p>
     </footer>
 
     <%- script %>
