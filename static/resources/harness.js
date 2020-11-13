@@ -131,6 +131,24 @@
     return result;
   }
 
+  // Once a test is evaluated and run, it calls this function with the result.
+  // This function then compiles a result object from the given result value,
+  // and then passes the result to `callback()` (or if the result is not true
+  // and there are more test variants, run the next test variant).
+  // 
+  // If the test result is an error or non-boolean, the result value is set to
+  // `null` and the original value is mentioned in the result message.
+  //
+  // Test results are mapped into objects like this:
+  // {
+  //   "name": "api.Attr.localName",
+  //   "result": true,
+  //   "prefix": "",
+  //   "info": {
+  //     "code": "'localName' in Attr.prototype",
+  //     "exposure": "Window"
+  //   }
+  // }
   function processTestResult(value, data, i, callback) {
     var result = {name: data.name, info: {}};
 
@@ -175,22 +193,6 @@
     }
   }
 
-  // Each test is mapped to an object like this:
-  // {
-  //   "name": "api.Attr.localName",
-  //   "result": true,
-  //   "prefix": "",
-  //   "info": {
-  //     "code": "'localName' in Attr.prototype",
-  //     "exposure": "Window"
-  //   }
-  // }
-  //
-  // If the test doesn't return true or false, or if it throws, `result` will
-  // be null and a `message` property is set to an explanation.
-  //
-  // Once the test is complete, it will call `callback(result)` with the test
-  // result as the argument.
   function runTest(data, i, callback) {
     var test = data.tests[i];
 
