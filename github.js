@@ -31,24 +31,32 @@ const github = (options) => {
     const hash = crypto.createHash('sha1');
     const digest = hash.update(buffer).digest('hex').substr(0, 10);
 
+    const dev = process.env.GAE_VERSION != 'production';
+    const version = report.__version;
     const ua = uaParser(report.userAgent);
     const browser = `${ua.browser.name} ${ua.browser.version}`;
     const os = `${ua.os.name} ${ua.os.version}`;
     const desc = `${browser} / ${os}`;
-    const title = `Results from ${desc} / Collector v${report.__version}`;
-    const slug = slugify(desc, {lower: true});
+    const title = `${dev ? '(Dev) ' : ''}Results from ${desc} / Collector v${version}`;
 
-    const filename = `${report.__version}-${slug}-${digest}.json`;
-    const branch = `collector/${filename.replace('.json', '')}`;
+    const slug = `${version}-${slugify(desc, {lower: true})}-${digest}`;
+    const filename = `${slug}.json`;
+    const branch = `collector/${slug}`;
 
     return {
-      json, buffer, hash, digest, ua, browser, os,
-      desc, title, slug, filename, branch
+      json, buffer, digest, dev, ua, browser,
+      os, desc, title, slug, filename, branch
     };
   };
 
+  const createBody = (meta) => {
+    return `User Agent: ${meta.ua.ua}\nBrowser: ${meta.browser} (on ${meta.os})` +
+            `\nHash Digest: ${meta.digest}\n` +
+            (meta.dev && '\n**WARNING:** this PR was created from a development/staging version!');
+  };
+
   const exportAsPR = async (report) => {
-    const reportMeta = getReportMeta(report);
+    const meta = getReportMeta(report);
 
     if ((await octokit.auth()).type == 'unauthenticated') {
       return false;
@@ -57,7 +65,7 @@ const github = (options) => {
     await octokit.git.createRef({
       owner: 'foolip',
       repo: 'mdn-bcd-results',
-      ref: `refs/heads/${reportMeta.branch}`,
+      ref: `refs/heads/${meta.branch}`,
       // first commit in repo
       sha: '753c6ed8e991e9729353a63d650ff0f5bd902b69'
     });
@@ -65,24 +73,25 @@ const github = (options) => {
     await octokit.repos.createOrUpdateFileContents({
       owner: 'foolip',
       repo: 'mdn-bcd-results',
-      path: `${reportMeta.filename}`,
-      message: reportMeta.title,
-      content: reportMeta.buffer.toString('base64'),
-      branch: reportMeta.branch
+      path: `${meta.filename}`,
+      message: meta.title,
+      content: meta.buffer.toString('base64'),
+      branch: meta.branch
     });
 
     const {data} = await octokit.pulls.create({
       owner: 'foolip',
       repo: 'mdn-bcd-results',
-      title: reportMeta.title,
-      head: reportMeta.branch,
+      title: meta.title,
+      head: meta.branch,
+      body: createBody(meta),
       base: 'main'
     });
 
     return data;
   };
 
-  return {getReportMeta, exportAsPR};
+  return {getReportMeta, createBody, exportAsPR};
 };
 
 module.exports = github;

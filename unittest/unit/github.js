@@ -67,7 +67,7 @@ describe('GitHub export', () => {
           owner: 'foolip',
           repo: 'mdn-bcd-results',
           path: `1.2.3-safari-12.0-mac-os-10.14-0aed9f1f74.json`,
-          message: 'Results from Safari 12.0 / Mac OS 10.14 / Collector v1.2.3',
+          message: '(Dev) Results from Safari 12.0 / Mac OS 10.14 / Collector v1.2.3',
           content: sinon.match.string,
           branch: `collector/1.2.3-safari-12.0-mac-os-10.14-0aed9f1f74`
         }));
@@ -75,8 +75,9 @@ describe('GitHub export', () => {
     mock.pulls.expects('create').once().withArgs({
       owner: 'foolip',
       repo: 'mdn-bcd-results',
-      title: 'Results from Safari 12.0 / Mac OS 10.14 / Collector v1.2.3',
+      title: '(Dev) Results from Safari 12.0 / Mac OS 10.14 / Collector v1.2.3',
       head: `collector/1.2.3-safari-12.0-mac-os-10.14-0aed9f1f74`,
+      body: github.createBody(github.getReportMeta(REPORT)),
       base: 'main'
     }).resolves({data: RESULT});
 
