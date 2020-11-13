@@ -12,8 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/* global self, JSON */
-/* global bcd */
+/* global self, bcd */
 
 self.importScripts('json3.min.js');
 self.importScripts('harness.js');
