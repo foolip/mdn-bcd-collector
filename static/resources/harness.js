@@ -435,10 +435,11 @@
       };
 
       // Load resources
-      var resourceElements = document.querySelectorAll('audio, video');
-      for (var i = 0; i < resourceElements.length; i++) {
-        resourceElements[i].load();
-        resourceElements[i].onloadeddata = resourceLoaded;
+      var resourceMedia = document.querySelectorAll('#resources audio, #resources video');
+      for (var i = 0; i < resourceMedia.length; i++) {
+        resourceMedia[i].load();
+        resourceMedia[i].onloadeddata = resourceLoaded;
+      }
       }
     } else {
       startTests();
