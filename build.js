@@ -26,8 +26,6 @@ const specData = require('./spec-data');
 const generatedDir = path.join(__dirname, 'generated');
 
 const compileCustomTest = (code, format = true) => {
-  const promise = code.includes('var promise');
-
   // Import code from other tests
   code = code.replace(/<%(\w+)\.(\w+)(?:\.(\w+))?:(\w+)%> ?/g, (match, category, name, member, instancevar) => {
     if (category === 'api') {
