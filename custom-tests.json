@@ -44,7 +44,8 @@
     },
     "AudioContext": {
       "__TODO": "Add webkit prefix",
-      "__base": "var instance = new window.AudioContext();"
+      "__base": "var instance = reusableInstances.audioContext;",
+      "__test": "!!(new window.AudioContext());"
     },
     "AudioDestinationNode": {
       "__resources": ["audioContext"],
