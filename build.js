@@ -583,7 +583,7 @@ const buildIDLTests = (ast) => {
 
     const adjustedIfaceName = getName(iface);
 
-    if (adjustedIfaceName.endsWith("Event") && adjustedIfaceName !== "Event") {
+    if (adjustedIfaceName.endsWith('Event') && adjustedIfaceName !== 'Event') {
       // TODO: event interfaces are not always exposed on their own and will
       // require the event to be fired.
       continue;

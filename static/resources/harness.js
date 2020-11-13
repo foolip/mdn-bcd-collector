@@ -435,13 +435,14 @@
       };
 
       // Load resources
+      var i;
       var resourceMedia = document.querySelectorAll('#resources audio, #resources video');
-      for (var i = 0; i < resourceMedia.length; i++) {
+      for (i = 0; i < resourceMedia.length; i++) {
         resourceMedia[i].load();
         resourceMedia[i].onloadeddata = resourceLoaded;
       }
       var resourceImages = document.querySelectorAll('#resources img');
-      for (var i = 0; i < resourceImages.length; i++) {
+      for (i = 0; i < resourceImages.length; i++) {
         resourceImages[i].onload = resourceLoaded;
       }
     } else {
