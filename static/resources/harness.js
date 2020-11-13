@@ -346,7 +346,6 @@
             var messageChannel = new MessageChannel();
 
             messageChannel.port1.onmessage = function(event) {
-              consoleLog(event);
               callback(results.concat(event.data));
             };
 
