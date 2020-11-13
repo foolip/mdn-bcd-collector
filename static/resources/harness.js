@@ -450,7 +450,7 @@
   }
 
   function report(results, hideResults) {
-    console.log('Tests complete');
+    consoleLog('Tests complete');
     updateStatus('Posting results to server...');
 
     var css = document.createElement('link');
