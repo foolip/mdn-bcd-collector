@@ -131,7 +131,27 @@
     return result;
   }
 
-  function processValue(value, data, test, result) {
+  // Once a test is evaluated and run, it calls this function with the result.
+  // This function then compiles a result object from the given result value,
+  // and then passes the result to `callback()` (or if the result is not true
+  // and there are more test variants, run the next test variant).
+  //
+  // If the test result is an error or non-boolean, the result value is set to
+  // `null` and the original value is mentioned in the result message.
+  //
+  // Test results are mapped into objects like this:
+  // {
+  //   "name": "api.Attr.localName",
+  //   "result": true,
+  //   "prefix": "",
+  //   "info": {
+  //     "code": "'localName' in Attr.prototype",
+  //     "exposure": "Window"
+  //   }
+  // }
+  function processTestResult(value, data, i, callback) {
+    var result = {name: data.name, info: {}};
+
     if (value && typeof value === 'object' && 'result' in value) {
       result.result = value.result;
       if (value.message) {
@@ -148,9 +168,9 @@
     }
 
     if (result.result !== false) {
-      result.info.code = test.code;
-      if (test.prefix) {
-        result.info.prefix = test.prefix;
+      result.info.code = data.tests[i].code;
+      if (data.tests[i].prefix) {
+        result.info.prefix = data.tests[i].prefix;
       }
     } else {
       result.info.code = data.tests[0].code;
@@ -161,58 +181,39 @@
     }
     result.info.exposure = data.exposure;
 
-    return result;
-  }
-
-  // Each test is mapped to an object like this:
-  // {
-  //   "name": "api.Attr.localName",
-  //   "result": true,
-  //   "prefix": "",
-  //   "info": {
-  //     "code": "'localName' in Attr.prototype",
-  //     "exposure": "Window"
-  //   }
-  // }
-  //
-  // If the test doesn't return true or false, or if it throws, `result` will
-  // be null and a `message` property is set to an explanation.
-  function test(data, callback) {
-    var result = {name: data.name, info: {}};
-
-    function runTest(i, callback) {
-      function process(value) {
-        processValue(value, data, test, result);
-        if (result.result === true) {
-          callback(result);
-          return;
-        } else {
-          runTest(i + 1, callback);
-        }
-      }
-
-      if (i >= data.tests.length) {
+    if (result.result === true) {
+      callback(result);
+      return;
+    } else {
+      if (i + 1 >= data.tests.length) {
         callback(result);
-        return;
-      }
-
-      var test = data.tests[i];
-
-      try {
-        var value = eval(test.code);
-
-        if ('Promise' in self && value instanceof Promise) {
-          Promise.resolve(value).then(process, process);
-        } else {
-          process(value);
-        }
-      } catch (err) {
-        processValue(err, data, test, result);
-        runTest(i + 1, callback);
+      } else {
+        runTest(data, i + 1, callback);
       }
     }
+  }
 
-    runTest(0, callback);
+  function runTest(data, i, callback) {
+    var test = data.tests[i];
+
+    try {
+      var value = eval(test.code);
+
+      if (typeof value === 'object' && value !== null && typeof value.then === 'function') {
+        value.then(
+            function(value) {
+              processTestResult(value, data, i, callback);
+            },
+            function(fail) {
+              processTestResult(new Error(fail), data, i, callback);
+            }
+        );
+      } else {
+        processTestResult(value, data, i, callback);
+      }
+    } catch (err) {
+      processTestResult(err, data, i, callback);
+    }
   }
 
   function runWindow(callback, results) {
@@ -228,7 +229,7 @@
       };
 
       for (var i = 0; i < pending.Window.length; i++) {
-        test(pending.Window[i], oncomplete);
+        runTest(pending.Window[i], 0, oncomplete);
       }
     } else {
       callback(results);
@@ -598,7 +599,7 @@
     testConstructor: testConstructor,
     addInstance: addInstance,
     addTest: addTest,
-    test: test,
+    runTest: runTest,
     run: run
   };
 })(this);

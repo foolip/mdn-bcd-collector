@@ -33,7 +33,7 @@ self.onmessage = function(event) {
     };
 
     for (var i = 0; i < pending.length; i++) {
-      bcd.test(pending[i], oncomplete);
+      bcd.runTest(pending[i], 0, oncomplete);
     }
   } else {
     self.postMessage(results);
