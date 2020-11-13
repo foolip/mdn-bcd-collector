@@ -526,7 +526,7 @@
         resultNameEl.innerHTML += ':&nbsp;';
 
         var resultValueEl = document.createElement('strong');
-        resultValueEl.innerHTML = result.result;
+        resultValueEl.innerHTML = stringify(result.result);
         if (result.prefix) {
           resultValueEl.innerHTML += ' (' + result.prefix + ' prefix)';
         }
