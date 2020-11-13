@@ -77,6 +77,9 @@ const github = (options) => {
       repo: 'mdn-bcd-results',
       title: meta.title,
       head: meta.branch,
+      body: `User Agent: ${meta.ua}\nBrowser: ${meta.browser} (on ${meta.os})` + 
+            `\nHash Digest: ${meta.digest}\n` + 
+            (meta.prod ? '' : '\n**WARNING:** this PR was created from a development/staging version!'),
       base: 'main'
     });
 
