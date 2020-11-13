@@ -51,9 +51,7 @@ const compileCustomTest = (code, format = true) => {
 
   if (format) {
     // Wrap in a function
-    if (!promise) {
-      code = `(function () {${code}})()`;
-    }
+    code = `(function () {${code}})()`;
 
     // Format
     try {
@@ -77,7 +75,7 @@ const getCustomTestAPI = (name, member) => {
         test = testbase + customTests.api[name].__test;
       } else {
         test = testbase ? testbase + (
-          promise ? 'promise.then(function(instance) {return !!instance});' : 'return !!instance;'
+          promise ? 'return promise.then(function(instance) {return !!instance});' : 'return !!instance;'
         ) : false;
       }
     } else {
@@ -92,7 +90,7 @@ const getCustomTestAPI = (name, member) => {
           test = false;
         } else {
           test = testbase ? testbase + (
-            promise ? `promise.then(function(instance) {return '${member}' in instance});` : `return '${member}' in instance;`
+            promise ? `return promise.then(function(instance) {return '${member}' in instance});` : `return '${member}' in instance;`
           ) : false;
         }
       }
