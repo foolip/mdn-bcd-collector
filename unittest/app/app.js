@@ -20,7 +20,7 @@ chai.use(chaiHttp);
 const assert = chai.assert;
 const expect = chai.expect;
 
-const {app} = require('../../app');
+const {app, version} = require('../../app');
 const agent = chai.request.agent(app);
 
 const tests = Object.entries(require('../../tests.json'));
@@ -47,7 +47,7 @@ describe('/api/results', () => {
     const res = await agent.get('/api/results');
     assert.equal(res.status, 200);
     assert.deepEqual(res.body, {
-      __version: process.env.npm_package_version,
+      __version: version,
       results: {},
       userAgent: userAgent
     });
@@ -68,7 +68,7 @@ describe('/api/results', () => {
     const res = await agent.get('/api/results');
     assert.equal(res.status, 200);
     assert.deepEqual(res.body, {
-      __version: process.env.npm_package_version,
+      __version: version,
       results: {[testURL]: {x: 1}},
       userAgent: userAgent
     });
@@ -85,7 +85,7 @@ describe('/api/results', () => {
     const res = await agent.get('/api/results');
     assert.equal(res.status, 200);
     assert.deepEqual(res.body, {
-      __version: process.env.npm_package_version,
+      __version: version,
       results: {[testURL]: {x: 2}},
       userAgent: userAgent
     });
@@ -103,7 +103,7 @@ describe('/api/results', () => {
     const res = await agent.get('/api/results');
     assert.equal(res.status, 200);
     assert.deepEqual(res.body, {
-      __version: process.env.npm_package_version,
+      __version: version,
       results: {[testURL]: {x: 2}, [testURL2]: {y: 3}},
       userAgent: userAgent
     });

@@ -27,6 +27,8 @@ const logger = require('./logger');
 const storage = require('./storage').getStorage();
 const {parseUA} = require('./ua-parser');
 
+const appversion = require('./package.json').version;
+
 const PORT = process.env.PORT || 8080;
 
 /* istanbul ignore next */
@@ -74,7 +76,7 @@ const catchError = (err, res, method) => {
 };
 
 const createReport = (results, req) => {
-  return {__version: process.env.npm_package_version, results, userAgent: req.get('User-Agent')};
+  return {__version: appversion, results, userAgent: req.get('User-Agent')};
 };
 
 const app = express();
@@ -94,7 +96,7 @@ app.use(express.static('static'));
 app.use(express.static('generated'));
 
 app.use((req, res, next) => {
-  app.locals.appversion = process.env.npm_package_version;
+  app.locals.appversion = appversion;
   app.locals.browser = parseUA(req.get('User-Agent'), bcdBrowsers);
   next();
 });
@@ -202,7 +204,10 @@ app.use((req, res) => {
   });
 });
 
-module.exports = {app};
+module.exports = {
+  app,
+  version: appversion
+};
 
 /* istanbul ignore if */
 if (require.main === module) {
