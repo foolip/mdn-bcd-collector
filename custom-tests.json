@@ -539,7 +539,7 @@
     },
     "ImageBitmap": {
       "__resources": ["image-black"],
-      "__base": "var instance = createImageBitmap(document.getElementById('image-black'));"
+      "__base": "var instance = createImageBitmap(document.getElementById('resource-image-black'));"
     },
     "ImageData": {
       "__base": "<%api.CanvasRenderingContext2D:ctx%> var instance = ctx.createImageData(16, 16);"
