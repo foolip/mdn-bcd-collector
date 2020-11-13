@@ -31,13 +31,12 @@ const github = (options) => {
     const hash = crypto.createHash('sha1');
     const digest = hash.update(buffer).digest('hex').substr(0, 10);
 
-    const version = `${report.__version}${prod ? '' : '-dev'}`;
     const dev = process.env.GAE_VERSION != 'production';
+    const version = report.__version;
     const ua = uaParser(report.userAgent);
     const browser = `${ua.browser.name} ${ua.browser.version}`;
     const os = `${ua.os.name} ${ua.os.version}`;
     const desc = `${browser} / ${os}`;
-    const title = `Results from ${desc} / Collector v${version}`;
     const title = `Results from ${desc} / Collector v${version}${dev ? ' (Dev)' : ''}`;
     
     const slug = `${version}-${slugify(desc, {lower: true})}-${digest}`;

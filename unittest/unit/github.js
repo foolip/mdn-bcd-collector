@@ -57,7 +57,7 @@ describe('GitHub export', () => {
 
     mock.git.expects('createRef').once().withArgs({
       owner: 'foolip',
-      ref: `refs/heads/collector/1.2.3-dev-safari-12.0-mac-os-10.14-0aed9f1f74`,
+      ref: `refs/heads/collector/1.2.3-safari-12.0-mac-os-10.14-0aed9f1f74`,
       repo: 'mdn-bcd-results',
       sha: '753c6ed8e991e9729353a63d650ff0f5bd902b69'
     });
@@ -66,17 +66,17 @@ describe('GitHub export', () => {
         .once().withArgs(sinon.match({
           owner: 'foolip',
           repo: 'mdn-bcd-results',
-          path: `1.2.3-dev-safari-12.0-mac-os-10.14-0aed9f1f74.json`,
-          message: 'Results from Safari 12.0 / Mac OS 10.14 / Collector v1.2.3-dev',
+          path: `1.2.3-safari-12.0-mac-os-10.14-0aed9f1f74.json`,
+          message: 'Results from Safari 12.0 / Mac OS 10.14 / Collector v1.2.3 (Dev)',
           content: sinon.match.string,
-          branch: `collector/1.2.3-dev-safari-12.0-mac-os-10.14-0aed9f1f74`
+          branch: `collector/1.2.3-safari-12.0-mac-os-10.14-0aed9f1f74`
         }));
 
     mock.pulls.expects('create').once().withArgs({
       owner: 'foolip',
       repo: 'mdn-bcd-results',
-      title: 'Results from Safari 12.0 / Mac OS 10.14 / Collector v1.2.3-dev',
-      head: `collector/1.2.3-dev-safari-12.0-mac-os-10.14-0aed9f1f74`,
+      title: 'Results from Safari 12.0 / Mac OS 10.14 / Collector v1.2.3 (Dev)',
+      head: `collector/1.2.3-safari-12.0-mac-os-10.14-0aed9f1f74`,
       body: github.createBody(REPORT),
       base: 'main'
     }).resolves({data: RESULT});
