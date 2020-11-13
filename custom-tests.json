@@ -563,6 +563,9 @@
       "__resources": ["audio-blip", "audioContext"],
       "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createMediaElementSource(document.getElementById('resource-audio-blip'));"
     },
+    "MediaQuery": {
+      "__base": "var instance = window.matchMedia('screen and max-width: 800px;');"
+    },
     "MediaSession": {
       "__base": "var instance = navigator.MediaSession;"
     },
@@ -590,11 +593,29 @@
       "__resources": ["audioContext"],
       "__base": "<%api.MediaStream:mediaStream%> if (!reusableInstances.audioContext) {return false;} promise.then(function(mediaStream) {return reusableInstances.audioContext.createMediaStreamTrackSource(mediaStream)});"
     },
+    "MessageChannel": {
+      "__base": "var instance = new MessageChannel();"
+    },
+    "MessagePort": {
+      "__base": "<%api.MessageChannel:channel%> var instance = channel.port1;"
+    },
+    "MimeType": {
+      "__base": "var instance = window.navigator.mimeTypes[0];"
+    },
     "Navigator": {
       "__base": "var instance = window.navigator;"
     },
+    "Node": {
+      "__base": "var instance = document;"
+    },
     "NodeIterator": {
       "__base": "var instance = document.createNodeIterator(document);"
+    },
+    "Notification": {
+      "__base": "var instance = new Notification('');"
+    },
+    "OfflineAudioContext": {
+      "__base": "var instance = new OfflineAudioContext(2,44100*40,44100);"
     },
     "OscillatorNode": {
       "__resources": ["audioContext"],
@@ -639,6 +660,21 @@
     "PannerNode": {
       "__resources": ["audioContext"],
       "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createPanner();"
+    },
+    "Performance": {
+      "__base": "var instance = window.performance;"
+    },
+    "PerformanceEntry": {
+      "__base": "<%api.Performance:performance%> var instance = performance.mark();"
+    },
+    "PerformanceNavigation": {
+      "__base": "<%api.Performance:performance%> var instance = performance.navigation;"
+    },
+    "PerformanceTiming": {
+      "__base": "<%api.Performance:performance%> var instance = performance.timing;"
+    },
+    "ProcessingInstruction": {
+      "__base": "var instance = document.createProcessingInstruction('xml', \"version='1.0' encoding='UTF-8'\");"
     },
     "StereoPannerNode": {
       "__resources": ["audioContext"],
