@@ -50,7 +50,7 @@ const github = (options) => {
   };
 
   const createBody = (meta) => {
-    return `User Agent: ${meta.ua}\nBrowser: ${meta.browser} (on ${meta.os})` +
+    return `User Agent: ${meta.ua.ua}\nBrowser: ${meta.browser} (on ${meta.os})` +
             `\nHash Digest: ${meta.digest}\n` +
             (meta.dev && '\n**WARNING:** this PR was created from a development/staging version!');
   };
