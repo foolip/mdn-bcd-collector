@@ -12,9 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/* global self, caches, Request, Response */
+/* global self, caches, Request, Response, JSON */
 /* global bcd */
 
+self.importScripts('json3.min.js');
 self.importScripts('harness.js');
 
 self.addEventListener('install', function(event) {
@@ -29,9 +30,7 @@ self.addEventListener('install', function(event) {
 });
 
 self.addEventListener('message', function(event) {
-  var pending = event.data;
-  bcd.runTests(pending, function(results) {
-    // Must be wrapped in a function, else illegal invocation
-    event.ports[0].postMessage(results);
+  bcd.runTests(JSON.parse(event.data), function(results) {
+    event.ports[0].postMessage(JSON.stringify(results));
   });
 });

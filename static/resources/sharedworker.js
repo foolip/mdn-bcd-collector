@@ -12,18 +12,17 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/* global self */
+/* global self, JSON */
 /* global bcd */
 
+self.importScripts('json3.min.js');
 self.importScripts('harness.js');
 
 self.onconnect = function(connectEvent) {
   var port = connectEvent.ports[0];
   port.onmessage = function(event) {
-    var pending = event.data;
-    bcd.runTests(pending, function(results) {
-      // Must be wrapped in a function, else illegal invocation
-      port.postMessage(results);
+    bcd.runTests(JSON.parse(event.data), function(results) {
+      port.postMessage(JSON.stringify(results));
     });
   };
 };

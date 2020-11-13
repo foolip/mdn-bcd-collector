@@ -255,10 +255,10 @@
 
       if (myWorker) {
         myWorker.onmessage = function(event) {
-          callback(results.concat(event.data));
+          callback(results.concat(JSON.parse(event.data)));
         };
 
-        myWorker.postMessage(pending.Worker);
+        myWorker.postMessage(JSON.stringify(pending.Worker));
       } else {
         updateStatus('No worker support, skipping Worker/DedicatedWorker tests');
 
@@ -304,11 +304,10 @@
 
       if (myWorker) {
         myWorker.port.onmessage = function(event) {
-          console.log(event.data);
-          callback(results.concat(event.data));
+          callback(results.concat(JSON.parse(event.data)));
         };
 
-        myWorker.port.postMessage(pending.SharedWorker);
+        myWorker.port.postMessage(JSON.stringify(pending.SharedWorker));
       } else {
         updateStatus('No shared worker support, skipping SharedWorker tests');
 
@@ -352,11 +351,11 @@
             var messageChannel = new MessageChannel();
 
             messageChannel.port1.onmessage = function(event) {
-              callback(results.concat(event.data));
+              callback(results.concat(JSON.parse(event.data)));
             };
 
             reg.active.postMessage(
-                pending.ServiceWorker,
+                JSON.stringify(pending.ServiceWorker),
                 [messageChannel.port2]
             );
           });
