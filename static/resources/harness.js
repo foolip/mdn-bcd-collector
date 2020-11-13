@@ -135,7 +135,7 @@
   // This function then compiles a result object from the given result value,
   // and then passes the result to `callback()` (or if the result is not true
   // and there are more test variants, run the next test variant).
-  // 
+  //
   // If the test result is an error or non-boolean, the result value is set to
   // `null` and the original value is mentioned in the result message.
   //
