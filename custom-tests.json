@@ -677,9 +677,34 @@
     "ProcessingInstruction": {
       "__base": "var instance = document.createProcessingInstruction('xml', \"version='1.0' encoding='UTF-8'\");"
     },
+    "Range": {
+      "__base": "var instance = document.createRange();"
+    },
+    "Request": {
+      "__base": "var instance = new Request();"
+    },
+    "Response": {
+      "__base": "var instance = new Response();"
+    },
+    "Screen": {
+      "__base": "var instance = window.screen;"
+    },
+    "ScriptProcessorNode": {
+      "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createProcessor();"
+    },
+    "Selection": {
+      "__base": "var instance = window.getSelection();"
+    },
+    "ShadowRoot": {
+      "__base": "var el = document.createElement('div'); el.attachShadow({mode: 'open'}); var instance = el.shadowRoot;"
+    },
     "StereoPannerNode": {
       "__resources": ["audioContext"],
       "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createStereoPanner();"
+    },
+    "StyleSheet": {
+      "__resources": ["createStyleSheet"],
+      "__base": "<%api.CSSStyleSheet:instance%>"
     },
     "SubtleCrypto": {
       "__base": "<%api.Crypto:crypto%> var instance = crypto.subtle;"
@@ -996,6 +1021,9 @@
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'text');",
       "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGTextElement' && Object.prototype.toString.call(instance) !== '[object SVGTextElement]') {return false;} return !!instance;"
     },
+    "SVGTextContentElement": {
+      "__base": "<%api.SVGTextElement:instance%>"
+    },
     "SVGTextPathElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'textPath');",
       "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGTextPathElement' && Object.prototype.toString.call(instance) !== '[object SVGTextPathElement]') {return false;} return !!instance;"
@@ -1033,6 +1061,12 @@
     },
     "Text": {
       "__base": "var el = document.createElement('p'); el.innerText = 'foo bar'; var instance = el.childNodes[0];"
+    },
+    "TextDecoder": {
+      "__base": "var instance = new TextDecoder();"
+    },
+    "TextEncoder": {
+      "__base": "var instance = new TextEncoder();"
     },
     "TreeWalker": {
       "__base": "var instance = document.createTreeWalker(document);"
