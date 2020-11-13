@@ -15,7 +15,7 @@
       },
       "audioContext": {
         "type": "instance",
-        "src": "return new (window.AudioContext || window.webkitAudioContext)();"
+        "src": "var constructor = (window.AudioContext || window.webkitAudioContext); if (!constructor) {return false;} return new constructor();"
       },
       "createStyleSheet": {
         "type": "instance",

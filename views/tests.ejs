@@ -38,7 +38,7 @@
     <% } %>
   <% }); %>
   window.onload = function() {
-    bcd.run(undefined, <%-Object.entries(resources)
+    bcd.go(undefined, <%-Object.entries(resources)
     .filter((item) => (item[1].type !== 'instance')).length%>, <%- !!hideResults %>)
   };
 </script>

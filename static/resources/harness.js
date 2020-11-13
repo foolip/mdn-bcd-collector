@@ -216,21 +216,26 @@
     }
   }
 
+  function runTests(tests, callback) {
+    var results = [];
+    var completedTests = 0;
+
+    var oncomplete = function(result) {
+      results.push(result);
+      completedTests += 1;
+      if (completedTests >= tests.length) {
+        callback(results);
+      }
+    };
+
+    for (var i = 0; i < tests.length; i++) {
+      runTest(tests[i], 0, oncomplete);
+    }
+  }
+
   function runWindow(callback, results) {
     if (pending.Window) {
-      var completedTests = 0;
-
-      var oncomplete = function(result) {
-        results.push(result);
-        completedTests += 1;
-        if (completedTests >= pending.Window.length) {
-          callback(results);
-        }
-      };
-
-      for (var i = 0; i < pending.Window.length; i++) {
-        runTest(pending.Window[i], 0, oncomplete);
-      }
+      runTests(pending.Window, callback);
     } else {
       callback(results);
     }
@@ -250,10 +255,10 @@
 
       if (myWorker) {
         myWorker.onmessage = function(event) {
-          callback(results.concat(event.data));
+          callback(results.concat(JSON.parse(event.data)));
         };
 
-        myWorker.postMessage(pending.Worker);
+        myWorker.postMessage(JSON.stringify(pending.Worker));
       } else {
         updateStatus('No worker support, skipping Worker/DedicatedWorker tests');
 
@@ -299,10 +304,10 @@
 
       if (myWorker) {
         myWorker.port.onmessage = function(event) {
-          callback(results.concat(event.data));
+          callback(results.concat(JSON.parse(event.data)));
         };
 
-        myWorker.port.postMessage(pending.SharedWorker);
+        myWorker.port.postMessage(JSON.stringify(pending.SharedWorker));
       } else {
         updateStatus('No shared worker support, skipping SharedWorker tests');
 
@@ -346,12 +351,11 @@
             var messageChannel = new MessageChannel();
 
             messageChannel.port1.onmessage = function(event) {
-              consoleLog(event);
-              callback(results.concat(event.data));
+              callback(results.concat(JSON.parse(event.data)));
             };
 
             reg.active.postMessage(
-                pending.ServiceWorker,
+                JSON.stringify(pending.ServiceWorker),
                 [messageChannel.port2]
             );
           });
@@ -385,7 +389,7 @@
     }
   }
 
-  function run(callback, resourceCount, hideResults) {
+  function go(callback, resourceCount, hideResults) {
     var startTests = function() {
       resources.testsStarted = true;
 
@@ -435,15 +439,21 @@
       };
 
       // Load resources
-      var i;
-      var resourceMedia = document.querySelectorAll('#resources audio, #resources video');
-      for (i = 0; i < resourceMedia.length; i++) {
-        resourceMedia[i].load();
-        resourceMedia[i].onloadeddata = resourceLoaded;
-      }
-      var resourceImages = document.querySelectorAll('#resources img');
-      for (i = 0; i < resourceImages.length; i++) {
-        resourceImages[i].onload = resourceLoaded;
+      try {
+        var i;
+        var resourceMedia = document.querySelectorAll('#resources audio, #resources video');
+        for (i = 0; i < resourceMedia.length; i++) {
+          resourceMedia[i].load();
+          resourceMedia[i].onloadeddata = resourceLoaded;
+        }
+        var resourceImages = document.querySelectorAll('#resources img');
+        for (i = 0; i < resourceImages.length; i++) {
+          resourceImages[i].onload = resourceLoaded;
+        }
+      } catch (e) {
+        // Couldn't use resource loading code, start anyways
+        consoleError(e);
+        startTests();
       }
     } else {
       startTests();
@@ -451,7 +461,7 @@
   }
 
   function report(results, hideResults) {
-    console.log('Tests complete');
+    consoleLog('Tests complete');
     updateStatus('Posting results to server...');
 
     var css = document.createElement('link');
@@ -516,7 +526,7 @@
         resultNameEl.innerHTML += ':&nbsp;';
 
         var resultValueEl = document.createElement('strong');
-        resultValueEl.innerHTML = result.result;
+        resultValueEl.innerHTML = stringify(result.result);
         if (result.prefix) {
           resultValueEl.innerHTML += ' (' + result.prefix + ' prefix)';
         }
@@ -604,7 +614,7 @@
     testConstructor: testConstructor,
     addInstance: addInstance,
     addTest: addTest,
-    runTest: runTest,
-    run: run
+    runTests: runTests,
+    go: go
   };
 })(this);
