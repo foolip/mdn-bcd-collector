@@ -1,16 +1,24 @@
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Roboto:wght@400;700&family=Montserrat:wght@500&display=swap');
 
+html {
+  background: #111;
+}
+
 body {
   font-family: 'Roboto', Arial, sans-serif;
-
-  background-color: #111;
-  background: -moz-linear-gradient(30deg, rgba(17,17,17,1) 0%, rgba(3,23,6,1) 100%);
-  background: -webkit-linear-gradient(30deg, rgba(17,17,17,1) 0%, rgba(3,23,6,1) 100%);
-  background: linear-gradient(30deg, rgba(17,17,17,1) 0%, rgba(3,23,6,1) 100%);
-  filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#111111",endColorstr="#031706",GradientType=1);
   color: white;
-
   min-height: 100vh;
+  margin: 0;
+  padding: 8px;
+
+  background: #111111; /* Old browsers */
+  background: -moz-linear-gradient(30deg,  #111111 0%, #031706 100%); /* FF3.6-15 */
+  background: -webkit-gradient(linear, left bottom, right top, color-stop(0%,#111111), color-stop(100%,#031706)); /* Chrome4-9,Safari4-5 */
+  background: -webkit-linear-gradient(30deg,  #111111 0%,#031706 100%); /* Chrome10-25,Safari5.1-6 */
+  background: -o-linear-gradient(30deg,  #111111 0%,#031706 100%); /* Opera 11.10-11.50 */
+  background: -ms-linear-gradient(30deg,  #111111 0%,#031706 100%); /* IE10 preview */
+  background: linear-gradient(30deg,  #111111 0%,#031706 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+  /*filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#111111",endColorstr="#031706",GradientType=1);*/ /* IE6-9 fallback on horizontal gradient */
 }
 
 h1, h2 {
@@ -224,13 +232,21 @@ hr {
 }
 
 @media (prefers-color-scheme: light) {
+  html {
+    background: white;
+  }
+
   body {
-    background-color: white;
-    background: -moz-linear-gradient(30deg, rgba(255,255,255,1) 0%, rgba(242,255,244,1) 100%);
-    background: -webkit-linear-gradient(30deg, rgba(255,255,255,1) 0%, rgba(242,255,244,1) 100%);
-    background: linear-gradient(30deg, rgba(255,255,255,1) 0%, rgba(242,255,244,1) 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#ffffff",endColorstr="#f2fff4",GradientType=1);
     color: black;
+
+    background: #ffffff; /* Old browsers */
+    background: -moz-linear-gradient(30deg,  #ffffff 0%, #f2fff4 100%); /* FF3.6-15 */
+    background: -webkit-gradient(linear, left bottom, right top, color-stop(0%,#ffffff), color-stop(100%,#f2fff4)); /* Chrome4-9,Safari4-5 */
+    background: -webkit-linear-gradient(30deg,  #ffffff 0%,#f2fff4 100%); /* Chrome10-25,Safari5.1-6 */
+    background: -o-linear-gradient(30deg,  #ffffff 0%,#f2fff4 100%); /* Opera 11.10-11.50 */
+    background: -ms-linear-gradient(30deg,  #ffffff 0%,#f2fff4 100%); /* IE10 preview */
+    background: linear-gradient(30deg,  #ffffff 0%,#f2fff4 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+    /*filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#ffffff",endColorstr="#f2fff4",GradientType=1);*/ /* IE6-9 fallback on horizontal gradient */
   }
 
   a {
