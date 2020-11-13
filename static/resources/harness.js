@@ -390,7 +390,7 @@
     }
   }
 
-  function run(callback, resourceCount, hideResults) {
+  function go(callback, resourceCount, hideResults) {
     var startTests = function() {
       resources.testsStarted = true;
 
@@ -616,6 +616,6 @@
     addInstance: addInstance,
     addTest: addTest,
     runTests: runTests,
-    run: run
+    go: go
   };
 })(this);
