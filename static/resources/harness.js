@@ -207,6 +207,10 @@
             function(fail) {
               processTestResult(new Error(fail), data, i, callback);
             }
+        ).catch(
+            function(err) {
+              processTestResult(err, data, i, callback);
+            }
         );
       } else {
         processTestResult(value, data, i, callback);

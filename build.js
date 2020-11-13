@@ -26,8 +26,6 @@ const specData = require('./spec-data');
 const generatedDir = path.join(__dirname, 'generated');
 
 const compileCustomTest = (code, format = true) => {
-  const promise = code.includes('var promise');
-
   // Import code from other tests
   code = code.replace(/<%(\w+)\.(\w+)(?:\.(\w+))?:(\w+)%> ?/g, (match, category, name, member, instancevar) => {
     if (category === 'api') {
@@ -51,9 +49,7 @@ const compileCustomTest = (code, format = true) => {
 
   if (format) {
     // Wrap in a function
-    if (!promise) {
-      code = `(function () {${code}})()`;
-    }
+    code = `(function () {${code}})()`;
 
     // Format
     try {
@@ -77,7 +73,7 @@ const getCustomTestAPI = (name, member) => {
         test = testbase + customTests.api[name].__test;
       } else {
         test = testbase ? testbase + (
-          promise ? 'promise.then(function(instance) {return !!instance});' : 'return !!instance;'
+          promise ? 'return promise.then(function(instance) {return !!instance});' : 'return !!instance;'
         ) : false;
       }
     } else {
@@ -92,7 +88,7 @@ const getCustomTestAPI = (name, member) => {
           test = false;
         } else {
           test = testbase ? testbase + (
-            promise ? `promise.then(function(instance) {return '${member}' in instance});` : `return '${member}' in instance;`
+            promise ? `return promise.then(function(instance) {return '${member}' in instance});` : `return '${member}' in instance;`
           ) : false;
         }
       }
