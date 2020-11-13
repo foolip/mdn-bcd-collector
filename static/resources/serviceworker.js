@@ -30,23 +30,8 @@ self.addEventListener('install', function(event) {
 
 self.addEventListener('message', function(event) {
   var pending = event.data;
-  var results = [];
-
-  if (pending) {
-    var completedTests = 0;
-
-    var oncomplete = function(result) {
-      results.push(result);
-      completedTests += 1;
-      if (completedTests >= pending.length) {
-        event.ports[0].postMessage(results);
-      }
-    };
-
-    for (var i = 0; i < pending.length; i++) {
-      bcd.runTest(pending[i], 0, oncomplete);
-    }
-  } else {
+  bcd.runTests(pending, function(results) {
+    // Must be wrapped in a function, else illegal invocation
     event.ports[0].postMessage(results);
-  }
+  });
 });

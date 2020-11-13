@@ -216,21 +216,26 @@
     }
   }
 
+  function runTests(tests, callback) {
+    var results = [];
+    var completedTests = 0;
+
+    var oncomplete = function(result) {
+      results.push(result);
+      completedTests += 1;
+      if (completedTests >= tests.length) {
+        callback(results);
+      }
+    };
+
+    for (var i = 0; i < tests.length; i++) {
+      runTest(tests[i], 0, oncomplete);
+    }
+  }
+
   function runWindow(callback, results) {
     if (pending.Window) {
-      var completedTests = 0;
-
-      var oncomplete = function(result) {
-        results.push(result);
-        completedTests += 1;
-        if (completedTests >= pending.Window.length) {
-          callback(results);
-        }
-      };
-
-      for (var i = 0; i < pending.Window.length; i++) {
-        runTest(pending.Window[i], 0, oncomplete);
-      }
+      runTests(pending.Window, callback);
     } else {
       callback(results);
     }
@@ -299,6 +304,7 @@
 
       if (myWorker) {
         myWorker.port.onmessage = function(event) {
+          console.log(event.data);
           callback(results.concat(event.data));
         };
 
@@ -609,7 +615,7 @@
     testConstructor: testConstructor,
     addInstance: addInstance,
     addTest: addTest,
-    runTest: runTest,
+    runTests: runTests,
     run: run
   };
 })(this);
