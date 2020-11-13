@@ -131,7 +131,7 @@
     return result;
   }
 
-  function processTestResult(value, data, test, i, callback) {
+  function processTestResult(value, data, i, callback) {
     var result = {name: data.name, info: {}};
 
     if (value && typeof value === 'object' && 'result' in value) {
@@ -150,9 +150,9 @@
     }
 
     if (result.result !== false) {
-      result.info.code = test.code;
-      if (test.prefix) {
-        result.info.prefix = test.prefix;
+      result.info.code = data.tests[i].code;
+      if (data.tests[i].prefix) {
+        result.info.prefix = data.tests[i].prefix;
       }
     } else {
       result.info.code = data.tests[0].code;
@@ -200,17 +200,17 @@
       if ('Promise' in self && value instanceof Promise) {
         Promise.resolve(value).then(
             function(value) {
-              processTestResult(value, data, test, i, callback);
+              processTestResult(value, data, i, callback);
             },
             function(fail) {
-              processTestResult(new Error(fail), data, test, i, callback);
+              processTestResult(new Error(fail), data, i, callback);
             }
         );
       } else {
-        processTestResult(value, data, test, i, callback);
+        processTestResult(value, data, i, callback);
       }
     } catch (err) {
-      processTestResult(err, data, test, i, callback);
+      processTestResult(err, data, i, callback);
     }
   }
 
