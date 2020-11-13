@@ -199,8 +199,8 @@
     try {
       var value = eval(test.code);
 
-      if ('Promise' in self && value instanceof Promise) {
-        Promise.resolve(value).then(
+      if (typeof value === 'object' && typeof value.then === 'function') {
+        value.then(
             function(value) {
               processTestResult(value, data, i, callback);
             },
