@@ -48,6 +48,12 @@ const github = (options) => {
     };
   };
 
+  const createBody = (meta) => {
+    return `User Agent: ${meta.ua}\nBrowser: ${meta.browser} (on ${meta.os})` +
+            `\nHash Digest: ${meta.digest}\n` +
+            (meta.prod ? '' : '\n**WARNING:** this PR was created from a development/staging version!');
+  };
+
   const exportAsPR = async (report) => {
     const meta = getReportMeta(report);
 
@@ -77,16 +83,14 @@ const github = (options) => {
       repo: 'mdn-bcd-results',
       title: meta.title,
       head: meta.branch,
-      body: `User Agent: ${meta.ua}\nBrowser: ${meta.browser} (on ${meta.os})` + 
-            `\nHash Digest: ${meta.digest}\n` + 
-            (meta.prod ? '' : '\n**WARNING:** this PR was created from a development/staging version!'),
+      body: createBody(meta),
       base: 'main'
     });
 
     return data;
   };
 
-  return {getReportMeta, exportAsPR};
+  return {getReportMeta, createBody, exportAsPR};
 };
 
 module.exports = github;
