@@ -75,7 +75,7 @@
     },
     "AudioWorkletNode": {
       "__resources": ["audioContext"],
-      "__base": "if (!reusableInstances.audioContext) {return false;} var promise = reusableInstances.audioContext.audioWorklet.addModule('/resources/custom-tests/api/AudioWorkletNode/WhiteNoiseProcessor.js').then(function() {return new AudioWorkletNode(audioContext, 'white-noise-processor')});"
+      "__base": "if (!reusableInstances.audioContext) {return false;} var promise = reusableInstances.audioContext.audioWorklet.addModule('/resources/custom-tests/api/AudioWorkletNode/WhiteNoiseProcessor.js').then(function() {return new AudioWorkletNode(reusableInstances.audioContext, 'white-noise-processor')});"
     },
     "BatteryManager": {
       "__base": "var promise = navigator.getBattery();"
