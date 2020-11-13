@@ -78,6 +78,12 @@ footer > * {
   margin-left: 4px;
 }
 
+footer #browserinfo {
+  display: block;
+  margin: 0;
+  padding-bottom: 1em;
+}
+
 hr {
   width: 100vw;
   margin-left: -8px;
@@ -103,15 +109,6 @@ hr {
 .success-notice {
   color: #afa;
   font-weight: bold;
-}
-
-#browserinfo {
-  position: absolute;
-  top: 0.5em;
-  right: 1em;
-  margin: 0;
-  opacity: 0.5;
-  pointer-events: none;
 }
 
 /* Homepage */
