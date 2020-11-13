@@ -41,7 +41,7 @@ const compileCustomTest = (code, format = true) => {
       );
       if (instancevar !== 'instance' && instancevar !== 'promise') {
         if (promise) {
-          importcode += ` if (!${instancevar}) {reject();}`;
+          importcode += ` if (!${instancevar}) {resolve(false);}`;
         } else {
           importcode += ` if (!${instancevar}) {return false;}`;
         }
