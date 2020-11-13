@@ -49,7 +49,7 @@ const github = (options) => {
   };
 
   const exportAsPR = async (report) => {
-    const reportMeta = getReportMeta(report);
+    const meta = getReportMeta(report);
 
     if ((await octokit.auth()).type == 'unauthenticated') {
       return false;
@@ -58,7 +58,7 @@ const github = (options) => {
     await octokit.git.createRef({
       owner: 'foolip',
       repo: 'mdn-bcd-results',
-      ref: `refs/heads/${reportMeta.branch}`,
+      ref: `refs/heads/${meta.branch}`,
       // first commit in repo
       sha: '753c6ed8e991e9729353a63d650ff0f5bd902b69'
     });
@@ -66,17 +66,17 @@ const github = (options) => {
     await octokit.repos.createOrUpdateFileContents({
       owner: 'foolip',
       repo: 'mdn-bcd-results',
-      path: `${reportMeta.filename}`,
-      message: reportMeta.title,
-      content: reportMeta.buffer.toString('base64'),
-      branch: reportMeta.branch
+      path: `${meta.filename}`,
+      message: meta.title,
+      content: meta.buffer.toString('base64'),
+      branch: meta.branch
     });
 
     const {data} = await octokit.pulls.create({
       owner: 'foolip',
       repo: 'mdn-bcd-results',
-      title: reportMeta.title,
-      head: reportMeta.branch,
+      title: meta.title,
+      head: meta.branch,
       base: 'main'
     });
 
