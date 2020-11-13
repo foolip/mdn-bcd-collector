@@ -199,7 +199,7 @@
     try {
       var value = eval(test.code);
 
-      if (typeof value === 'object' && typeof value.then === 'function') {
+      if (typeof value === 'object' && value !== null && typeof value.then === 'function') {
         value.then(
             function(value) {
               processTestResult(value, data, i, callback);
