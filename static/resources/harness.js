@@ -440,6 +440,9 @@
         resourceMedia[i].load();
         resourceMedia[i].onloadeddata = resourceLoaded;
       }
+      var resourceImages = document.querySelectorAll('#resources img');
+      for (var i = 0; i < resourceImages.length; i++) {
+        resourceImages[i].onload = resourceLoaded;
       }
     } else {
       startTests();
