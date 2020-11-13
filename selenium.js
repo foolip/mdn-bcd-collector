@@ -241,7 +241,7 @@ const click = async (driver, browser, elementId) => {
   }
 };
 
-const run = async (browser, version, os) => {
+const run = async (browser, version, os, showlogs) => {
   log('Starting...');
 
   const driver = await buildDriver(browser, version, os);
@@ -307,19 +307,21 @@ const run = async (browser, version, os) => {
     error(e);
   }
 
-  try {
-    const logs = await driver.manage().logs().get(logging.Type.BROWSER);
-    logs.forEach((entry) => {
-      console.info(`[Browser Logger: ${entry.level.name}] ${entry.message}`);
-    });
-  } catch (e) {
-    // If we couldn't get the browser logs, ignore and continue
+  if (showlogs) {
+    try {
+      const logs = await driver.manage().logs().get(logging.Type.BROWSER);
+      logs.forEach((entry) => {
+        console.info(`[Browser Logger: ${entry.level.name}] ${entry.message}`);
+      });
+    } catch (e) {
+      // If we couldn't get the browser logs, ignore and continue
+    }
   }
 
   await driver.quit();
 };
 
-const runAll = async (limitBrowsers, oses) => {
+const runAll = async (limitBrowsers, oses, showlogs) => {
   if (!Object.keys(secrets.selenium).length) {
     console.error('A Selenium remote WebDriver URL is not defined in secrets.json.  Please define your Selenium remote(s).');
     return false;
@@ -355,7 +357,7 @@ const runAll = async (limitBrowsers, oses) => {
         spinner.start(prettyName(browser, version, os));
 
         try {
-          await run(browser, version, os);
+          await run(browser, version, os, showlogs);
         } catch (e) {
           error(e);
         }
@@ -384,6 +386,12 @@ if (require.main === module) {
               type: 'array',
               choices: ['Windows', 'macOS'],
               default: ['Windows', 'macOS']
+            })
+            .option('showlogs', {
+              alias: 'v',
+              describe: 'Show the console logs from the browser',
+              type: 'boolean',
+              default: false
             });
       }
   );
