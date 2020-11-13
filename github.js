@@ -31,14 +31,16 @@ const github = (options) => {
     const hash = crypto.createHash('sha1');
     const digest = hash.update(buffer).digest('hex').substr(0, 10);
 
+    const prod = process.env.GAE_VERSION == 'production';
+    const version = `${report.__version}${prod ? '' : '-dev'}`;
     const ua = uaParser(report.userAgent);
     const browser = `${ua.browser.name} ${ua.browser.version}`;
     const os = `${ua.os.name} ${ua.os.version}`;
     const desc = `${browser} / ${os}`;
-    const title = `Results from ${desc} / Collector v${report.__version}`;
+    const title = `Results from ${desc} / Collector v${version}`;
     const slug = slugify(desc, {lower: true});
 
-    const filename = `${report.__version}-${slug}-${digest}.json`;
+    const filename = `${version}-${slug}-${digest}.json`;
     const branch = `collector/${filename.replace('.json', '')}`;
 
     return {
