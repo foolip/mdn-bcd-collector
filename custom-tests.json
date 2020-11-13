@@ -175,7 +175,7 @@
       "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createDynamicsCompressor();"
     },
     "Element": {
-      "__base": "var instance = null; if (document.createElementNS) {instance = document.createElementNS('', 'p');} else {document.createElement('p');}"
+      "__base": "if (document.createElementNS) {var instance = document.createElementNS('', 'p');} else {var instance = document.createElement('p');}"
     },
     "EXT_blend_minmax": {
       "__resources": ["webGL"],
