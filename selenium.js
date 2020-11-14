@@ -263,7 +263,7 @@ const run = async (browser, version, os, showlogs) => {
     await driver.wait(until.elementLocated(By.id('status')), 5000);
     statusEl = await driver.findElement(By.id('status'));
     try {
-      await driver.wait(until.elementTextContains(statusEl, 'upload'), 30000);
+      await driver.wait(until.elementTextContains(statusEl, 'upload'), 45000);
     } catch (e) {
       if (e.name == 'TimeoutError') {
         throw new Error('Timed out waiting for results to upload');
