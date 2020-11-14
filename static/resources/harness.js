@@ -401,7 +401,7 @@
       var timeout = setTimeout(function() {
         updateStatus('<br />This test seems to be taking a long time; ' +
             'it may have crashed. Check the console for errors.', true);
-      }, 20000);
+      }, 30000);
 
       runWindow(function(results) {
         runWorker(function(results) {
