@@ -7,10 +7,12 @@
   Object.assign(resources, test.resources)
 }); %>
 <div id="resources" style="display: none;">
-  <% for (const [resourceId, resource] of Object.entries(resources)) {
+  <% let resourceCount = 0;
+  for (const [resourceId, resource] of Object.entries(resources)) {
     switch (resource.type) {
       case 'audio':
-      case 'video': %>
+      case 'video': 
+        resourceCount += 1; %>
         <<%-resource.type%> id="resource-<%-resourceId%>">
           <% for (const src of resource.src) { %>
             <source src="/resources/custom-tests<%-src%>" />
@@ -38,7 +40,6 @@
     <% } %>
   <% }); %>
   window.onload = function() {
-    bcd.go(undefined, <%-Object.entries(resources)
-    .filter((item) => (item[1].type !== 'instance')).length%>, <%- !!hideResults %>)
+    bcd.go(undefined, <%-resourceCount%>, <%- !!hideResults %>)
   };
 </script>

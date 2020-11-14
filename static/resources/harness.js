@@ -227,14 +227,15 @@
     var oncomplete = function(result) {
       results.push(result);
       completedTests += 1;
+
       if (completedTests >= tests.length) {
         callback(results);
+      } else {
+        runTest(tests[completedTests], 0, oncomplete);
       }
     };
 
-    for (var i = 0; i < tests.length; i++) {
-      runTest(tests[i], 0, oncomplete);
-    }
+    runTest(tests[0], 0, oncomplete);
   }
 
   function runWindow(callback, results) {
@@ -400,13 +401,13 @@
       var timeout = setTimeout(function() {
         updateStatus('<br />This test seems to be taking a long time; ' +
             'it may have crashed. Check the console for errors.', true);
-      }, 10000);
+      }, 20000);
 
       runWindow(function(results) {
         runWorker(function(results) {
           runSharedWorker(function(results) {
             runServiceWorker(function(results) {
-              pending = [];
+              pending = {};
 
               clearTimeout(timeout);
               if (typeof callback == 'function') {
