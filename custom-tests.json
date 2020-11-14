@@ -127,7 +127,7 @@
     },
     "CSSImportRule": {
       "__resources": ["createStyleSheet"],
-      "__base": "var stylesheet = reusableInstances.createStyleSheet('@import url(/style.css);'); var instance = stylesheet.cssRules.item(0);"
+      "__base": "var stylesheet = reusableInstances.createStyleSheet('@import url(/resources/style.css);'); var instance = stylesheet.cssRules.item(0);"
     },
     "CSSKeyframeRule": {
       "__resources": ["createStyleSheet"],
