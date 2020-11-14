@@ -407,7 +407,7 @@
         runWorker(function(results) {
           runSharedWorker(function(results) {
             runServiceWorker(function(results) {
-              pending = [];
+              pending = {};
 
               clearTimeout(timeout);
               if (typeof callback == 'function') {
