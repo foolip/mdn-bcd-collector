@@ -318,7 +318,11 @@ const run = async (browser, version, os, showlogs) => {
     }
   }
 
-  await driver.quit();
+  try {
+    driver.quit();
+  } catch(e) {
+    // The driver will expire on its own
+  }
 };
 
 const runAll = async (limitBrowsers, oses, showlogs) => {
