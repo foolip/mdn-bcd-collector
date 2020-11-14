@@ -27,6 +27,7 @@ h1, h2 {
 }
 
 a {
+  text-decoration: none;
   color: #99f;
   transition: color 0.2s;
 }
