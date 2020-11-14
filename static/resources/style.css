@@ -27,6 +27,7 @@ h1, h2 {
 }
 
 a {
+  text-decoration: none;
   color: #99f;
   transition: color 0.2s;
 }
@@ -117,6 +118,11 @@ hr {
 .success-notice {
   color: #afa;
   font-weight: bold;
+}
+
+.mdi:before {
+  /* Ensure that *something* shows up on older browsers */
+  content: "\FFFD";
 }
 
 /* Homepage */
