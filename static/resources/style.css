@@ -120,6 +120,11 @@ hr {
   font-weight: bold;
 }
 
+.mdi:before {
+  /* Ensure that *something* shows up on older browsers */
+  content: "\FFFD";
+}
+
 /* Homepage */
 
 #title {
