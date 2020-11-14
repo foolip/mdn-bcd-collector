@@ -597,7 +597,7 @@
       "__base": "var instance = navigator.MediaSession;"
     },
     "MediaSettingsRange": {
-      "__base": "<%api.MediaStreamTrack:track%> if (!track) {return false;} var imageCapture = new ImageCapture(track); var promise = imageCapture.track.getSettings();"
+      "__base": "<%api.MediaStreamTrack:track%> var promise = track.then(function(t) {var imageCapture = new ImageCapture(t); return imageCapture.track.getSettings()});"
     },
     "MediaSource": {
       "__base": "var instance = new MediaSource();"
@@ -611,14 +611,14 @@
     },
     "MediaStreamAudioSourceNode": {
       "__resources": ["audioContext"],
-      "__base": "<%api.MediaStream:mediaStream%> if (!reusableInstances.audioContext) {return false;} promise.then(function(mediaStream) {return reusableInstances.audioContext.createMediaStreamSource(mediaStream)});"
+      "__base": "<%api.MediaStream:mediaStream%> if (!reusableInstances.audioContext) {return false;} var promise = mediaStream.then(function(ms) {return reusableInstances.audioContext.createMediaStreamSource(ms)});"
     },
     "MediaStreamTrack": {
-      "__base": "<%api.MediaStream:mediaStream%> promise.then(function(mediaStream) {return mediaStream.getVideoTracks()[0]});"
+      "__base": "<%api.MediaStream:mediaStream%> var promise = mediaStream.then(function(ms) {return ms.getVideoTracks()[0]});"
     },
     "MediaStreamTrackAudioSourceNode": {
       "__resources": ["audioContext"],
-      "__base": "<%api.MediaStream:mediaStream%> if (!reusableInstances.audioContext) {return false;} promise.then(function(mediaStream) {return reusableInstances.audioContext.createMediaStreamTrackSource(mediaStream)});"
+      "__base": "<%api.MediaStream:mediaStream%> if (!reusableInstances.audioContext) {return false;} var promise = mediaStream.then(function(ms) {return reusableInstances.audioContext.createMediaStreamTrackSource(ms)});"
     },
     "MessageChannel": {
       "__base": "var instance = new MessageChannel();"
