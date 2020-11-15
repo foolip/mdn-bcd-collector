@@ -294,7 +294,7 @@ const run = async (browser, version, os, showlogs) => {
     } catch (e) {
       // If we can't download the results, fallback to GitHub
       log('Uploading results to GitHub...');
-      await goToPage(driver, browser, version, `${host}/results`);
+      await goToPage(driver, browser, version, `${host}/export`);
       statusEl = await driver.findElement(By.id('status'));
       await driver.wait(until.elementTextContains(statusEl, 'to'));
       if ((await statusEl.getText()).search('Failed') !== -1) {

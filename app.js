@@ -178,9 +178,9 @@ app.get('/', (req, res) => {
   });
 });
 
-app.get('/results', (req, res) => {
-  res.render('results', {
-    title: 'Test Results'
+app.get('/export', (req, res) => {
+  res.render('export', {
+    title: 'Export Results'
   });
 });
 
