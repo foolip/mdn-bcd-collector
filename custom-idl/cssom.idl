@@ -30,9 +30,9 @@ interface CSSPrimitiveValue : CSSValue {
   const unsigned short CSS_RGBCOLOR = 25;
 
   readonly attribute unsigned short primitiveType;
-  void setFloatValue(unsigned short unitType, float floatValue);
+  undefined setFloatValue(unsigned short unitType, float floatValue);
   float getFloatValue(unsigned short unitType);
-  void setStringValue(unsigned short stringType, DOMString stringValue);
+  undefined setStringValue(unsigned short stringType, DOMString stringValue);
   DOMString getStringValue();
   Counter getCounterValue();
   Rect getRectValue();
@@ -90,7 +90,7 @@ partial interface Document {
   readonly attribute DOMString? lastStyleSheetSet;
   readonly attribute DOMString? preferredStyleSheetSet;
   readonly attribute FrozenArray<DOMString> styleSheetSets;
-  void enableStyleSheetsForSet(DOMString? name);
+  undefined enableStyleSheetsForSet(DOMString? name);
 
   // https://developer.mozilla.org/en-US/docs/Web/API/Document/width
   readonly attribute long width;
@@ -107,3 +107,5 @@ partial interface Element {
   // https://docs.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/aa703996(v=vs.85)
   readonly attribute MSStyleCSSProperties? runtimeStyle;
 };
+
+interface WebKitCSSMatrix : DOMMatrix {};

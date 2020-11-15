@@ -4,18 +4,18 @@
 // and releaseEvent(). Those are on Document and Window, so do the same here.
 
 partial interface Document {
-  void routeEvent();
+  undefined routeEvent();
 };
 
 partial interface Window {
-  void routeEvent();
+  undefined routeEvent();
 };
 
 // https://www.w3.org/TR/1999/WD-DOM-Level-2-19990719/idl-definitions.html
 
 partial interface Event {
-  void preventBubble();
-  void preventCapture();
+  undefined preventBubble();
+  undefined preventCapture();
 };
 
 // https://www.w3.org/TR/DOM-Level-2-Traversal-Range/idl-definitions.html
@@ -43,7 +43,7 @@ partial interface Document {
   readonly attribute DOMString xmlVersion;
   attribute boolean strictErrorChecking;
   readonly attribute DOMConfiguration domConfig;
-  void normalizeDocument();
+  undefined normalizeDocument();
   Node renameNode(Node n, DOMString namespaceURI, DOMString qualifiedName);
 };
 
@@ -55,7 +55,7 @@ partial interface DocumentType {
 
 [Exposed=Window]
 interface DOMConfiguration {
-  void setParameter(DOMString name, DOMUserData value);
+  undefined setParameter(DOMString name, DOMUserData value);
   DOMUserData getParameter(DOMString name);
   boolean canSetParameter(DOMString name, DOMUserData value);
   readonly attribute DOMStringList parameterNames;
@@ -110,9 +110,9 @@ interface DOMLocator {
 
 partial interface Element {
   readonly attribute TypeInfo schemaTypeInfo;
-  void setIdAttribute(DOMString name, boolean isId);
-  void setIdAttributeNS(DOMString namespaceURI, DOMString localName, boolean isId);
-  void setIdAttributeNode(Attr idAttr, boolean isId);
+  undefined setIdAttribute(DOMString name, boolean isId);
+  undefined setIdAttributeNS(DOMString namespaceURI, DOMString localName, boolean isId);
+  undefined setIdAttributeNode(Attr idAttr, boolean isId);
 };
 
 [Exposed=Window]
@@ -176,7 +176,7 @@ interface UserDataHandler {
   const unsigned short NODE_RENAMED = 4;
   const unsigned short NODE_ADOPTED = 5;
 
-  void handle(unsigned short operation, DOMString key, DOMUserData data, Node src, Node dst);
+  undefined handle(unsigned short operation, DOMString key, DOMUserData data, Node src, Node dst);
 };
 
 // Non-standard stuff
@@ -187,8 +187,8 @@ partial interface Document {
   readonly attribute Node? popupNode;
   readonly attribute Node? tooltipNode;
   object getBoxObjectFor(Element element);
-  void loadOverlay(DOMString url, object observer);
-  void queryCommandText();
+  undefined loadOverlay(DOMString url, object observer);
+  undefined queryCommandText();
 
   // https://docs.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/jj160755(v%3Dvs.85)
   boolean execCommandShowHelp(DOMString name);
@@ -197,18 +197,18 @@ partial interface Document {
   boolean contains();
 
   // https://developer.mozilla.org/en-US/docs/Web/API/Document/mozSetImageElement
-  void mozSetImageElement(DOMString imageElementId, Element? imageElement);
+  undefined mozSetImageElement(DOMString imageElementId, Element? imageElement);
 
   // https://developer.mozilla.org/en-US/docs/Web/API/Document/mozSyntheticDocument
   readonly attribute boolean mozSyntheticDocument;
 
   // https://www.w3.org/Bugs/Public/show_bug.cgi?id=14600
-  void releaseCapture();
+  undefined releaseCapture();
 };
 
 partial interface Element {
   // https://www.w3.org/Bugs/Public/show_bug.cgi?id=14600
-  void setCapture(optional boolean retargetToElement);
+  undefined setCapture(optional boolean retargetToElement);
 };
 
 partial interface Event {
@@ -221,6 +221,10 @@ partial interface Event {
 };
 
 partial interface Range {
-  void expand(optional DOMString unit = "");
+  undefined expand(optional DOMString unit = "");
   short compareNode(Node node);
+};
+
+partial interface ShadowRoot {
+  readonly attribute boolean delegatesFocus;
 };

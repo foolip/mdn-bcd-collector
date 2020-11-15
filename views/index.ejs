@@ -1,26 +1,23 @@
 <%- contentFor('body') %>
-<h1>mdn-bcd-collector</h1>
-<div id="homeInfo">
-  <p>Data collection service for <a href="https://github.com/mdn/browser-compat-data">@mdn/browser-compat-data</a>. This website provides automatic feature detection for Web APIs and CSS properties, to assist in obtaining data for the BCD project.</p>
-  <p id="betaNotice" class="notice">Note: this website is in beta; not all feature detection is accurate yet. If you find any errors, please <a href="https://github.com/foolip/mdn-bcd-collector/issues/new">file an issue</a> in the GitHub repository.</p>
-</div>
+<h1 id="title"><img src="/favicon/favicon-96x96.png" /> mdn-bcd-collector <span class="version">v<%- appversion %></span></h1>
+<p id="subtitle">Web API and CSS property feature detections to assist the <a href="https://github.com/mdn/browser-compat-data">@mdn/browser-compat-data</a> project</p>
 
-<span id="forkongithub"><a href="https://github.com/foolip/mdn-bcd-collector">Fork me on GitHub</a></span>
-
-<h2>Run Tests</h2>
-<div class="paper">
-  <form id="testForm" action="/api/get" method="post">
-    <input type="submit" id="start" value="Run" />
-    <datalist id="tests">
-      <% tests.forEach(function(test) { %>
-        <option value="<%- test %>"></option>
-      <% }); %>
-    </datalist>
-    <input id="testSelection" name="testSelection" list="tests" placeholder="All Tests" size="40" />
-    <br /><br />
-    <div id="limitExposureBox">
-      <label for="limitExposure">Limit Exposure:</label>
-      <select id="limitExposure" name="limitExposure">
+<div id="run-tests" class="paper">
+  <h2>Run Tests</h2>
+  <form id="test-form" action="/api/get" method="post">
+    <div id="test-entry">
+      <button type="submit" id="start"><span class="mdi mdi-play"></span> Run</button>
+      <datalist id="tests">
+        <% tests.forEach(function(test) { %>
+          <option value="<%- test %>"></option>
+        <% }); %>
+      </datalist>
+      <input id="test-selection" name="testSelection" list="tests" placeholder="All Tests" />
+    </div>
+    <br />
+    <div id="limit-exposure-box">
+      <label for="limitExposure"><span class="mdi mdi-lock"></span> Limit Exposure:</label>
+      <select id="limit-exposure" name="limitExposure">
         <option value="">All Global Exposures</option>
         <option value="Window">Window</option>
         <option value="Worker">Dedicated Worker</option>
@@ -28,46 +25,53 @@
         <option value="ServiceWorker">Service Worker</option>
       </select>
     </div>
-    <label for="hideResults">Hide results?</label>
-    <input id="hideResults" name="hideResults" type="checkbox" />
+    <input id="hide-results" name="hideResults" type="checkbox" />
   </form>
 </div>
 
-<h2>Known Caveats</h2>
-<ul>
-  <li>Detection for features under alternative names is not yet supported</li>
-  <li>In older browsers, some attributes aren't initialized in the API prototypes, resulting in false negatives (see <a href="https://github.com/foolip/mdn-bcd-collector/issues/406">#406</a>)</li>
-  <li>Some APIs are accessed through other APIs and aren't exposed on their own; custom tests have not been written for them all</li>
-</ul>
+<div id="supported-browsers">
+  <h2>Supported Browsers</h2>
+  <div class="compat-table">
+    <div class="compat-table-entry">
+      <img src="/browser-logos/chrome.png" /><p>Chrome 1+</p>
+    </div>
+    <div class="compat-table-entry">
+      <img src="/browser-logos/edge.png" /><p>Edge 12+</p>
+    </div>
+    <div class="compat-table-entry">
+      <img src="/browser-logos/firefox.png" /><p>Firefox 1+</p>
+    </div>
+    <div class="compat-table-separator"></div>
+    <div class="compat-table-entry">
+      <img src="/browser-logos/ie.png" /><p>Internet Explorer 5.5+</p>
+    </div>
+    <div class="compat-table-entry">
+      <img src="/browser-logos/opera.png" /><p>Opera 9.5+</p>
+    </div>
+    <div class="compat-table-entry">
+      <img src="/browser-logos/safari.png" /><p>Safari 3+</p>
+    </div>
+  </div>
+</div>
 
-<h2>Supported Browsers</h2>
-<div id="compat-table">
-  <div class="compat-table-entry">
-    <img src="/browser-logos/chrome.png" /><p>Chrome 1+</p>
-  </div>
-  <div class="compat-table-entry">
-    <img src="/browser-logos/edge.png" /><p>Edge 12+</p>
-  </div>
-  <div class="compat-table-entry">
-    <img src="/browser-logos/firefox.png" /><p>Firefox 1+</p>
-  </div>
-  <div class="compat-table-entry">
-    <img src="/browser-logos/ie.png" /><p>Internet Explorer 5.5+</p>
-  </div>
-  <div class="compat-table-entry">
-    <img src="/browser-logos/opera.png" /><p>Opera 9.5+</p>
-  </div>
-  <div class="compat-table-entry">
-    <img src="/browser-logos/safari.png" /><p>Safari 3+</p>
-  </div>
+<div id="known-caveats" class="paper">
+  <p>Known caveats:</p>
+  <ul>
+    <li>Detection for features under prefixes are not yet supported</li>
+    <li>Detection for features under alternative names are not yet supported</li>
+    <li>In older browsers, some attributes aren't initialized in the API prototypes, resulting in false negatives (see <a href="https://github.com/foolip/mdn-bcd-collector/issues/406">#406</a>)</li>
+    <li>Some APIs are accessed through other APIs and aren't exposed on their own; custom tests have not been written for them all</li>
+  </ul>
+  
+  <p class="error-notice">If you find any errors in feature detection, please <a href="https://github.com/foolip/mdn-bcd-collector/issues/new"><span class="mdi mdi-alert-circle-outline"></span> file an issue</a> in the GitHub repository.</p>
 </div>
 
 <script>
   function main() {
-    var form = document.getElementById('testForm');
-    var testSelection = document.getElementById('testSelection');
-    var limitExposure = document.getElementById('limitExposure');
-    var limitExposureBox = document.getElementById('limitExposureBox');
+    var form = document.getElementById('test-form');
+    var testSelection = document.getElementById('test-selection');
+    var limitExposure = document.getElementById('limit-exposure');
+    var limitExposureBox = document.getElementById('limit-exposure-box');
 
     testSelection.onchange = function() {
       if (testSelection.value == '' || testSelection.value.indexOf('api') == 0) {

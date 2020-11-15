@@ -12,15 +12,25 @@ dictionary HitRegionOptions {
   DOMString? role = null;
 };
 
+// https://www.w3.org/html/wg/spec/common-dom-interfaces.html#domsettabletokenlist-0
+interface DOMSettableTokenList : DOMTokenList {
+  attribute DOMString value;
+};
+
+interface MediaController {};
+
+// https://trac.webkit.org/browser/webkit/trunk/Source/WebCore/html/HTMLVideoElement.idl?rev=267813#L63
+enum VideoPresentationMode { "inline", "fullscreen", "picture-in-picture" };
+
 partial interface CanvasRenderingContext2D {
   // https://github.com/whatwg/html/pull/1942
-  void addHitRegion(optional HitRegionOptions options);
-  void removeHitRegion(DOMString id);
-  void clearHitRegions();
+  undefined addHitRegion(optional HitRegionOptions options);
+  undefined removeHitRegion(DOMString id);
+  undefined clearHitRegions();
 
   attribute DOMMatrix currentTransform;
-  void drawWidgetAsOnScreen(Window window);
-  void drawWindow(Window window, double x, double y, double w, double h, DOMString bgColor, optional byte flags);
+  undefined drawWidgetAsOnScreen(Window window);
+  undefined drawWindow(Window window, double x, double y, double w, double h, DOMString bgColor, optional byte flags);
 };
 
 partial interface CloseEvent {
@@ -29,12 +39,12 @@ partial interface CloseEvent {
 
 // https://hg.mozilla.org/mozilla-central/file/a451ebba378efcce0967e508a8107ab14dd5edcb/dom/webidl/DataTransfer.webidl#l44
 partial interface DataTransfer {
-  void addElement(Element element);
+  undefined addElement(Element element);
   readonly attribute unsigned long mozItemCount;
   attribute DOMString mozCursor;
   DOMStringList mozTypesAt(unsigned long index);
-  void mozClearDataAt(DOMString format, unsigned long index);
-  void mozSetDataAt(DOMString format, any data, unsigned long index);
+  undefined mozClearDataAt(DOMString format, unsigned long index);
+  undefined mozSetDataAt(DOMString format, any data, unsigned long index);
   any mozGetDataAt(DOMString format, unsigned long index);
   readonly attribute boolean mozUserCancelled;
   readonly attribute Node? mozSourceNode;
@@ -56,30 +66,60 @@ partial interface Document {
 };
 
 partial interface Element {
-  // https://github.com/mdn/browser-compat-data/issues/6697
-  readonly attribute DOMString accessKey;
-
   // https://github.com/mdn/browser-compat-data/issues/6683
   readonly attribute DOMString name;
 
   // https://github.com/whatwg/html/issues/667
   attribute EventHandler onsearch;
+
+  // https://trac.webkit.org/browser/webkit/trunk/Source/WebCore/dom/Element.idl?rev=267813#L132
+  attribute EventHandler onwebkitpresentationmodechanged;
 };
 
+partial interface HTMLAnchorElement {
+  attribute DOMString media;
+};
+
+partial interface HTMLAreaElement {
+  attribute DOMString hreflang;
+  attribute DOMString media;
+  attribute DOMString type;
+};
+
+[LegacyFactoryFunction=Audio(optional DOMString src)]
 partial interface HTMLAudioElement {
   // https://developer.mozilla.org/en-US/docs/Web/API/HTMLAudioElement#Obsolete_Mozilla-only_methods
   unsigned long long mozCurrentSampleOffset();
-  void mozSetup(unsigned long channels, unsigned long rate);
+  undefined mozSetup(unsigned long channels, unsigned long rate);
   unsigned long mozWriteAudio(any data);
+};
+
+// https://www.w3.org/TR/DOM-Level-2-HTML/html.html#ID-32774408
+[Exposed=Window]
+interface HTMLBaseFontElement : HTMLElement {
+  attribute DOMString color;
+  attribute DOMString face;
+  attribute long size;
+};
+
+partial interface HTMLButtonElement {
+  attribute boolean autofocus;
+  attribute HTMLMenuElement menu;
 };
 
 partial interface HTMLCanvasElement {
   // https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/mozFetchAsStream
-  void mozFetchAsStream(VoidFunction callback, optional DOMString type = "image/png");
+  undefined mozFetchAsStream(undefinedFunction callback, optional DOMString type = "image/png");
   // https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/mozGetAsFile
   File mozGetAsFile(DOMString name, optional DOMString type = "image/png");
   // https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/mozOpaque
   attribute boolean mozOpaque;
+};
+
+// https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/core/html/html_content_element.idl
+[Exposed=Window] interface HTMLContentElement : HTMLElement {
+  [Reflect] attribute DOMString select;
+  NodeList getDistributedNodes();
 };
 
 // https://github.com/whatwg/html/issues/4792
@@ -96,25 +136,81 @@ partial interface HTMLElement {
   [PutForwards=value] readonly attribute DOMTokenList itemProp;
   readonly attribute HTMLPropertiesCollection properties;
   attribute any itemValue; // acts as DOMString on setting
+
+  attribute HTMLMenuElement? contextMenu;
+  attribute DOMSettableTokenList dropzone;
+  undefined forceSpellCheck();
+  attribute boolean inert;
+  attribute boolean noModule;
+  attribute EventHandler onModule;
+
+  // https://github.com/whatwg/html/issues/668
+  attribute DOMString outerText;
+};
+
+partial interface HTMLFormElement {
+  undefined requestAutocomplete();
 };
 
 partial interface HTMLFrameSetElement {
+  attribute EventHandler onlanguage;
   attribute EventHandler onorientationchange;
+};
+
+partial interface HTMLHeadElement {
+  attribute DOMString profile;
+};
+
+partial interface HTMLIFrameElement {
+  undefined setNfcFocus();
+};
+
+partial interface HTMLImageElement {
+  attribute USVString lowSrc;
+  attribute EventHandler onerror;
 };
 
 partial interface HTMLInputElement {
   // https://github.com/whatwg/html/issues/667
   attribute boolean incremental;
 
+  attribute boolean autofocus;
+  attribute DOMString formEncType;
+  attribute EventHandler onsearch;
+  attribute any weight;
+
   // https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/mozGetFileNameArray
   sequence<DOMString> mozGetFileNameArray();
   // https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/mozSetFileNameArray
-  void mozSetFileNameArray(sequence<DOMString> fileNames);
+  undefined mozSetFileNameArray(sequence<DOMString> fileNames);
   // https://hg.mozilla.org/mozilla-central/file/f22c20641704d783097b1b128d826c8460de7354/dom/webidl/HTMLInputElement.webidl#l163
-  void mozSetFileArray(sequence<File> files);
+  undefined mozSetFileArray(sequence<File> files);
+};
+
+[Exposed=Window]
+interface HTMLIsIndexElement : HTMLElement {
+  readonly attribute HTMLFormElement form;
+  attribute DOMString prompt;
+};
+
+[Exposed=Window]
+interface HTMLKeygenElement : HTMLElement {};
+
+partial interface HTMLMarqueeElement {
+  attribute DOMString bgcolor;
+  attribute unsigned long scrollamount;
+  attribute unsigned long scrolldelay;
+  attribute boolean truespeed;
 };
 
 partial interface HTMLMediaElement {
+  attribute MediaController controller;
+  readonly attribute DOMTokenList controlsList;
+  readonly attribute double initialTime;
+  attribute DOMString mediaGroup;
+  attribute EventHandler onerror;
+  Promise<undefined> seekToNextFrame();
+
   // Chromium extensions
   readonly attribute unsigned long long webkitAudioDecodedByteCount;
   readonly attribute unsigned long long webkitVideoDecodedByteCount;
@@ -130,11 +226,34 @@ partial interface HTMLMediaElement {
   MediaStream mozCaptureStream();
   MediaStream mozCaptureStreamUntilEnded();
   object mozGetMetadata();
-  void mozLoadFrom(HTMLMediaElement other);
+  undefined mozLoadFrom(HTMLMediaElement other);
 
   // https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement#Obsolete_event_handlers
   attribute EventHandler onmozinterruptbegin;
   attribute EventHandler onmozinterruptend;
+};
+
+// https://www.w3.org/TR/html51/interactive-elements.html#htmlmenuelement-htmlmenuelement
+partial interface HTMLMenuElement {
+  attribute DOMString type;
+  attribute DOMString label;
+};
+
+// https://www.w3.org/TR/html51/interactive-elements.html#htmlmenuitemelement-htmlmenuitemelement
+interface HTMLMenuItemElement : HTMLElement {
+  attribute DOMString type;
+  attribute DOMString label;
+  attribute DOMString icon;
+  attribute boolean disabled;
+  attribute boolean checked;
+  attribute DOMString radiogroup;
+  attribute boolean default;
+
+  attribute DOMString command;
+};
+
+partial interface HTMLObjectElement {
+  attribute boolean typeMustMatch;
 };
 
 // https://github.com/whatwg/html/pull/213
@@ -148,9 +267,34 @@ interface PropertyNodeList : NodeList {
   PropertyValueArray getValues();
 };
 
+partial interface HTMLSelectElement {
+  attribute boolean autofocus;
+  undefined blur();
+  undefined focus();
+};
+
+interface HTMLShadowElement : HTMLElement {
+  NodeList getDistributedNodes();
+};
+
+partial interface HTMLSourceElement {
+  attribute any keySystem;
+};
+
 partial interface HTMLStyleElement {
   // https://github.com/whatwg/html/issues/5590
   attribute boolean disabled;
+
+  attribute boolean scoped;
+};
+
+partial interface HTMLTableElement {
+  attribute boolean sortable;
+  undefined stopSorting();
+};
+
+partial interface HTMLTextAreaElement {
+  attribute DOMString autocapitalize;
 };
 
 partial interface HTMLVideoElement {
@@ -167,6 +311,11 @@ partial interface HTMLVideoElement {
   readonly attribute unsigned long mozPaintedFrames;
   readonly attribute double mozFrameDelay;
   readonly attribute boolean mozHasAudio;
+
+  // https://trac.webkit.org/browser/webkit/trunk/Source/WebCore/html/HTMLVideoElement.idl?rev=267813#L58
+  boolean webkitSupportsPresentationMode(VideoPresentationMode mode);
+  readonly attribute VideoPresentationMode webkitPresentationMode;
+  undefined webkitSetPresentationMode(VideoPresentationMode mode);
 };
 
 partial interface Navigator {
@@ -176,8 +325,8 @@ partial interface Navigator {
 
 partial interface Window {
   long webkitRequestAnimationFrame(FrameRequestCallback callback);
-  void webkitCancelRequestAnimationFrame(long id);
-  void webkitCancelAnimationFrame(long id);
+  undefined webkitCancelRequestAnimationFrame(long id);
+  undefined webkitCancelAnimationFrame(long id);
 
   // https://github.com/whatwg/html/issues/2379
   readonly attribute Navigator clientInformation;
@@ -202,4 +351,44 @@ partial interface Window {
 
   // https://github.com/whatwg/html/issues/667
   attribute EventHandler onsearch;
+
+  // https://www.w3.org/TR/2009/WD-css3-2d-transforms-20090320/#window-interface
+  Point convertPointFromPageToNode(Node node, Point point);
+  Point convertPointFromNodeToPage(Node node, Point point);
+
+  readonly attribute any dialogArguments;
+  undefined getAttention();
+  undefined getAttentionWithCycleCount();
+  CSSStyleDeclaration getDefaultComputedStyle(Element element, DOMString? pseudoAlt);
+  readonly attribute any globalStorage;
+  undefined home();
+  undefined maximize();
+  undefined minimize();
+  attribute EventHandler onappinstalled;
+  attribute EventHandler onbeforeinstallprompt;
+  attribute EventHandler ongamepadconnected;
+  attribute EventHandler ongamepaddisconnected;
+  attribute EventHandler onpaint;
+  undefined openDialog();
+  attribute object pkcs11;
+  any returnValue();
+  undefined scrollByLines();
+  undefined scrollByPages();
+  undefined scrollMaxX();
+  undefined scrollMaxY();
+  undefined setCursor();
+  undefined setResizable();
+  undefined showModalDialog();
+  object sidebar();
+  undefined sizeToContent();
+  undefined updateCommands();
+
+  readonly attribute double mozAnimationStartTime;
+  readonly attribute double mozInnerScreenX;
+  readonly attribute double mozInnerScreenY;
+  readonly attribute long long mozPaintCount;
+};
+
+partial interface Plugin {
+  readonly attribute DOMString version;
 };

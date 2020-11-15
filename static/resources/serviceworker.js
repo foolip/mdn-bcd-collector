@@ -12,9 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/* global self, caches, Request, Response */
-/* global bcd */
+/* global self, caches, Request, Response, bcd */
 
+self.importScripts('json3.min.js');
 self.importScripts('harness.js');
 
 self.addEventListener('install', function(event) {
@@ -29,14 +29,7 @@ self.addEventListener('install', function(event) {
 });
 
 self.addEventListener('message', function(event) {
-  var pending = event.data;
-  var results = [];
-
-  if (pending) {
-    for (var i = 0; i < pending.length; i++) {
-      results.push(bcd.test(pending[i]));
-    }
-  }
-
-  event.ports[0].postMessage(results);
+  bcd.runTests(JSON.parse(event.data), function(results) {
+    event.ports[0].postMessage(JSON.stringify(results));
+  });
 });

@@ -1,4 +1,0 @@
-// TODO: remove this as we don't generate any tests from dictionary definitions.
-partial dictionary BasicCardRequest {
-  sequence<DOMString> supportedTypes = [];
-};

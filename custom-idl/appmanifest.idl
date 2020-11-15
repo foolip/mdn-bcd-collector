@@ -22,5 +22,5 @@ interface BeforeInstallPromptEvent : Event {
   constructor(DOMString type, optional BeforeInstallPromptEventInit eventInitDict = {});
   readonly attribute FrozenArray<DOMString> platforms;
   readonly attribute Promise<AppBannerPromptResult> userChoice;
-  Promise<void> prompt();
+  Promise<undefined> prompt();
 };

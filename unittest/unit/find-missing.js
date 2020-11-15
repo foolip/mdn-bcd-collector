@@ -17,6 +17,7 @@
 const assert = require('chai').assert;
 
 const proxyquire = require('proxyquire').noCallThru();
+const sinon = require('sinon');
 
 const tests = {
   'api.AbortController': {},
@@ -73,6 +74,10 @@ describe('find-missing', () => {
   });
 
   describe('getMissing', () => {
+    beforeEach(() => {
+      sinon.stub(console, 'log');
+    });
+
     it('collector -> bcd', () => {
       assert.deepEqual(getMissing(), [
         'api.AbortController.dummy',
@@ -86,6 +91,21 @@ describe('find-missing', () => {
       assert.deepEqual(getMissing('bcd-to-collector'), [
         'javascript.builtins.array'
       ]);
+    });
+
+    it('unknown direction', () => {
+      assert.deepEqual(getMissing('foo-to-bar'), [
+        'api.AbortController.dummy',
+        'api.DummyAPI',
+        'api.DummyAPI.dummy',
+        'css.properties.font-face'
+      ]);
+
+      assert.isTrue(console.log.calledWith('Direction \'foo-to-bar\' is unknown; defaulting to collector -> bcd'));
+    });
+
+    afterEach(() => {
+      console.log.restore();
     });
   });
 });

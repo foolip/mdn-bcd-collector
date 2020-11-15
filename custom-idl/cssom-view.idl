@@ -4,7 +4,7 @@ partial interface Document {
 };
 
 partial interface Element {
-  void scrollIntoViewIfNeeded(optional boolean centerIfNeeded);
+  undefined scrollIntoViewIfNeeded(optional boolean centerIfNeeded);
 
   // https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollLeftMax
   readonly attribute long scrollLeftMax;

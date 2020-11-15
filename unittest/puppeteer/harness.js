@@ -24,7 +24,8 @@ const pti = require('puppeteer-to-istanbul');
 
 const {app} = require('../../app');
 
-const products = ['chrome', 'firefox'];
+// Firefox is temporarily disabled due to issues on CI
+const products = ['chrome']; // ['chrome', 'firefox'];
 
 // Workaround for https://github.com/puppeteer/puppeteer/issues/6255
 const consoleLogType = {
@@ -43,7 +44,7 @@ describe('harness.js', () => {
   for (const product of products) {
     it(product, async function() {
       if (product === 'firefox' && process.platform === 'win32' &&
-        require('../../package.json').devDependencies.puppeteer === '5.3.1') {
+        require('../../package.json').devDependencies.puppeteer === '5.4.1') {
         // Browser.close() Firefox support is broken on Windows and causes hang
         // https://github.com/puppeteer/puppeteer/issues/5673
         /* eslint-disable no-invalid-this */

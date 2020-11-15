@@ -16,6 +16,7 @@
 
 const path = require('path');
 const querystring = require('querystring');
+const bcdBrowsers = require('@mdn/browser-compat-data').browsers;
 
 const express = require('express');
 const cookieParser = require('cookie-parser');
@@ -24,8 +25,9 @@ const expressLayouts = require('express-ejs-layouts');
 
 const logger = require('./logger');
 const storage = require('./storage').getStorage();
+const {parseUA} = require('./ua-parser');
 
-const appversion = require('./package.json').version;
+const appversion = require('./package.json').version + (process.env.GAE_VERSION != 'production' ? ' Dev' : '');
 
 const PORT = process.env.PORT || 8080;
 
@@ -69,7 +71,7 @@ const catchError = (err, res, method) => {
   if (method === 'json') {
     res.json({error: errorToDisplay});
   } else {
-    res.text(errorToDisplay);
+    res.send(errorToDisplay);
   }
 };
 
@@ -92,6 +94,12 @@ app.use(express.urlencoded({extended: true}));
 app.use(express.json({limit: '32mb'}));
 app.use(express.static('static'));
 app.use(express.static('generated'));
+
+app.use((req, res, next) => {
+  app.locals.appversion = appversion;
+  app.locals.browser = parseUA(req.get('User-Agent'), bcdBrowsers);
+  next();
+});
 
 // Backend API
 
@@ -139,19 +147,27 @@ app.post('/api/results/export/github', (req, res) => {
   storage.getAll(req.sessionID)
       .then(async (results) => {
         if (Object.entries(results).length === 0) {
-          res.json({error: 'No results to export'});
+          res.status(412).end();
           return;
         }
 
         const report = createReport(results, req);
         const response = await github.exportAsPR(report);
         if (response) {
-          res.json(response);
+          res.send(response.html_url);
         } else {
-          res.status(500).json({error: 'Server error'});
+          res.status(500).send('Server error');
         }
       })
-      .catch(/* istanbul ignore next */ (err) => catchError(err, res, 'json'));
+      .catch(/* istanbul ignore next */ (err) => catchError(err, res, 'text'));
+});
+
+// Test Resources
+
+// api.EventSource
+app.get('/eventstream', (req, res) => {
+  res.header('Content-Type', 'text/event-stream');
+  res.send('event: ping\ndata: Hello world!\ndata: {"foo": "bar"}\ndata: Goodbye world!');
 });
 
 // Views
@@ -174,13 +190,13 @@ app.all('/tests/*', (req, res) => {
   if (foundTests && foundTests.length) {
     res.render('tests', {
       title: `${ident || 'All Tests'}`,
-      layout: false,
       tests: foundTests,
-      hideResults: req.query.hideResults
+      hideResults: req.query.hideResults,
+      ignore: (req.query.ignore ? req.query.ignore.split(',') : [])
     });
   } else {
     res.status(404).render('testnotfound', {
-      ident: ident,
+      ident,
       suggestion: tests.didYouMean(ident),
       query: '?' + querystring.encode(req.query)
     });

@@ -12,20 +12,13 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/* global self */
-/* global bcd */
+/* global self, bcd */
 
+self.importScripts('json3.min.js');
 self.importScripts('harness.js');
 
 self.onmessage = function(event) {
-  var pending = event.data;
-  var results = [];
-
-  if (pending) {
-    for (var i = 0; i < pending.length; i++) {
-      results.push(bcd.test(pending[i]));
-    }
-  }
-
-  self.postMessage(results);
+  bcd.runTests(JSON.parse(event.data), function(results) {
+    self.postMessage(JSON.stringify(results));
+  });
 };

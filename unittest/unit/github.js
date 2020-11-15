@@ -77,6 +77,7 @@ describe('GitHub export', () => {
       repo: 'mdn-bcd-results',
       title: 'Results from Safari 12.0 / Mac OS 10.14 / Collector v1.2.3',
       head: `collector/1.2.3-safari-12.0-mac-os-10.14-0aed9f1f74`,
+      body: github.createBody(github.getReportMeta(REPORT)),
       base: 'main'
     }).resolves({data: RESULT});
 

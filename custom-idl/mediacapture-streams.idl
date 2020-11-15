@@ -1,12 +1,16 @@
 partial interface Navigator {
   // Gecko has navigator.mozGetUserMedia
-  void mozGetUserMedia(MediaStreamConstraints constraints,
+  undefined mozGetUserMedia(MediaStreamConstraints constraints,
                        NavigatorUserMediaSuccessCallback successCallback,
                        NavigatorUserMediaErrorCallback errorCallback);
   // Chromium has navigator.webkitGetUserMedia
-  void webkitGetUserMedia(MediaStreamConstraints constraints,
+  undefined webkitGetUserMedia(MediaStreamConstraints constraints,
                           NavigatorUserMediaSuccessCallback successCallback,
                           NavigatorUserMediaErrorCallback errorCallback);
+};
+
+interface LocalMediaStream : MediaStream {
+  undefined stop();
 };
 
 // https://w3c.github.io/mediacapture-main/#overconstrainederror-object is

@@ -1,0 +1,9 @@
+partial interface UIEvent {
+  undefined cancelBubble();
+  UIEvent initUIEvent();
+  readonly attribute boolean isChar;
+  readonly attribute long layerX;
+  readonly attribute long layerY;
+  readonly attribute long pageX;
+  readonly attribute long pageY;
+};

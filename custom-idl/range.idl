@@ -1,0 +1,17 @@
+partial interface Range {
+  readonly attribute boolean collapsed;
+  readonly attribute Node endContainer;
+  readonly attribute long endOffset;
+  readonly attribute Node startContainer;
+  readonly attribute long startOffset;
+};
+
+partial interface StaticRange {
+  readonly attribute boolean collapsed;
+  readonly attribute Node startContainer;
+  readonly attribute unsigned long startOffset;
+  readonly attribute Node endContainer;
+  readonly attribute unsigned long endOffset;
+
+  Range toRange();
+};

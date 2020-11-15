@@ -13,7 +13,7 @@ partial interface HTMLInputElement {
   readonly attribute boolean isFilesAndDirectoriesSupported;
   Promise<sequence<(File or Directory)>> getFilesAndDirectories();
   Promise<sequence<File>> getFiles(optional boolean recursiveFlag=false);
-  void chooseDirectory();
+  undefined chooseDirectory();
 };
 
 partial interface DataTransfer {

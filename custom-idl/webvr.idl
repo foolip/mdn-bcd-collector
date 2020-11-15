@@ -1,0 +1,167 @@
+// https://immersive-web.github.io/webvr/spec/1.1
+
+interface VRDisplay : EventTarget {
+  readonly attribute boolean isConnected;
+  readonly attribute boolean isPresenting;
+
+  [SameObject] readonly attribute VRDisplayCapabilities capabilities;
+  readonly attribute VRStageParameters? stageParameters;
+  VREyeParameters getEyeParameters(VREye whichEye);
+  readonly attribute unsigned long displayId;
+  readonly attribute DOMString displayName;
+  boolean getFrameData(VRFrameData frameData);
+  [NewObject] VRPose getPose();
+  undefined resetPose();
+  attribute double depthNear;
+  attribute double depthFar;
+  long requestAnimationFrame(FrameRequestCallback callback);
+  undefined cancelAnimationFrame(long handle);
+  Promise<undefined> requestPresent(sequence<VRLayerInit> layers);
+  Promise<undefined> exitPresent();
+  sequence<VRLayerInit> getLayers();
+  undefined submitFrame();
+};
+
+typedef (HTMLCanvasElement or OffscreenCanvas) VRSource;
+
+dictionary VRLayerInit {
+  VRSource? source = null;
+
+  sequence<float> leftBounds = [ ];
+  sequence<float> rightBounds = [ ];
+};
+
+interface VRDisplayCapabilities {
+  readonly attribute boolean hasPosition;
+  readonly attribute boolean hasOrientation;
+  readonly attribute boolean hasExternalDisplay;
+  readonly attribute boolean canPresent;
+  readonly attribute unsigned long maxLayers;
+};
+
+enum VREye {
+  "left",
+  "right"
+};
+
+interface VRFieldOfView {
+  readonly attribute double upDegrees;
+  readonly attribute double rightDegrees;
+  readonly attribute double downDegrees;
+  readonly attribute double leftDegrees;
+};
+
+interface VRPose {
+  readonly attribute Float32Array? position;
+  readonly attribute Float32Array? linearVelocity;
+  readonly attribute Float32Array? linearAcceleration;
+
+  readonly attribute Float32Array? orientation;
+  readonly attribute Float32Array? angularVelocity;
+  readonly attribute Float32Array? angularAcceleration;
+};
+
+[Constructor]
+interface VRFrameData {
+  readonly attribute DOMHighResTimeStamp timestamp;
+
+  readonly attribute Float32Array leftProjectionMatrix;
+  readonly attribute Float32Array leftViewMatrix;
+
+  readonly attribute Float32Array rightProjectionMatrix;
+  readonly attribute Float32Array rightViewMatrix;
+
+  readonly attribute VRPose pose;
+};
+
+interface VREyeParameters {
+  readonly attribute Float32Array offset;
+
+  [SameObject] readonly attribute VRFieldOfView fieldOfView;
+
+  readonly attribute unsigned long renderWidth;
+  readonly attribute unsigned long renderHeight;
+};
+
+interface VRStageParameters {
+  readonly attribute Float32Array sittingToStandingTransform;
+
+  readonly attribute float sizeX;
+  readonly attribute float sizeY;
+  readonly attribute float sizeZ;
+};
+
+partial interface Navigator {
+  Promise<sequence<VRDisplay>> getVRDisplays();
+  readonly attribute FrozenArray<VRDisplay> activeVRDisplays;
+};
+
+enum VRDisplayEventReason {
+  "mounted",
+  "navigation",
+  "requested",
+  "unmounted"
+};
+
+[Constructor(DOMString type, VRDisplayEventInit eventInitDict)]
+interface VRDisplayEvent : Event {
+  readonly attribute VRDisplay display;
+  readonly attribute VRDisplayEventReason? reason;
+};
+
+dictionary VRDisplayEventInit : EventInit {
+  required VRDisplay display;
+  VRDisplayEventReason reason;
+};
+
+partial interface Window {
+  attribute EventHandler onvrdisplayconnect;
+  attribute EventHandler onvrdisplaydisconnect;
+  attribute EventHandler onvrdisplayactivate;
+  attribute EventHandler onvrdisplaydeactivate;
+  attribute EventHandler onvrdisplayblur;
+  attribute EventHandler onvrdisplayfocus;
+  attribute EventHandler onvrdisplaypresentchange;
+  attribute EventHandler onvrdisplaypointerrestricted;
+  attribute EventHandler onvrdisplaypointerunrestricted;
+};
+
+partial interface Gamepad {
+  readonly attribute unsigned long displayId;
+};
+
+// Custom-written
+
+interface HMDVRDevice {
+  VREyeParameters getEyeParameters(DOMString whichEye);
+  undefined setFieldOfView(VRFieldOfView leftFOV, VRFieldOfView rightFOV, double zNear, double zFar);
+};
+
+interface PositionSensorVRDevice {
+  any getImmediateState();
+  any getState();
+  undefined resetSensor();
+};
+
+partial interface VRDisplay {
+  VRPose getImmediatePose();
+  attribute DOMString hardwareUnitId;
+};
+
+partial interface VREyeParameters {
+  readonly attribute VRFieldOfView minimumFieldOfView;
+  readonly attribute VRFieldOfView maximumFieldOfView;
+  readonly attribute VRFieldOfView recommendedFieldOfView;
+  readonly attribute DOMRect renderRect;
+};
+
+partial interface VRFieldOfView {
+  constructor();
+};
+
+partial interface VRPose {
+  boolean hasOrientation();
+  boolean hasPosition();
+
+  readonly attribute long long timestamp;
+};

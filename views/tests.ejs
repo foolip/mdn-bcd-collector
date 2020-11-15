@@ -1,65 +1,45 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<%- contentFor('body') %>
+<p id="status">Running tests...</p>
+<div id="results"></div>
 
-    <title><%= title %></title>
+<% let resources = {}; %>
+<% tests.forEach(function(test) {
+  Object.assign(resources, test.resources)
+}); %>
+<div id="resources" style="display: none;">
+  <% let resourceCount = 0;
+  for (const [resourceId, resource] of Object.entries(resources)) {
+    switch (resource.type) {
+      case 'audio':
+      case 'video': 
+        resourceCount += 1; %>
+        <<%-resource.type%> id="resource-<%-resourceId%>">
+          <% for (const src of resource.src) { %>
+            <source src="/resources/custom-tests<%-src%>" />
+          <% } %>
+        </<%-resource.type%>>
+        <% break;
+      case 'image': %>
+        <img id="resource-<%-resourceId%>" src="/resources/custom-tests<%-resource.src%>" />
+        <% break;
+    }
+  }; %>
+</div>
 
-    <style>
-      body {
-        background-color: white;
-        color: black;
-      }
-
-      @media (prefers-color-scheme: dark) {
-        body {
-          background-color: #111;
-          color: white;
-        }
-      }
-    </style>
-  </head>
-  <body>
-    <p id="status">Running tests...</p>
-    <div id="results"></div>
-
-    <% let resources = {}; %>
-    <% tests.forEach(function(test) {
-      Object.assign(resources, test.resources)
-    }); %>
-    <div id="resources" style="display: none;">
-      <% for (const [resourceId, resource] of Object.entries(resources)) {
-        switch (resource.type) {
-          case 'audio':
-          case 'video': %>
-            <<%-resource.type%> id="resource-<%-resourceId%>">
-              <% for (const src of resource.src) { %>
-                <source src="/resources/custom-tests<%-src%>" />
-              <% } %>
-            </<%-resource.type%>>
-            <% break;
-        }
-      }; %>
-    </div>
-
-    <!-- TODO: https://github.com/foolip/mdn-bcd-collector/issues/407 -->
-    <script src="/resources/json3.min.js"></script>
-    <script src="/resources/harness.js"></script>
-    <script>
-      <% for (const [instanceId, instance] of Object.entries(resources)
-        .filter((item) => (item[1].type === 'instance'))) { %>
-        bcd.addInstance("<%- instanceId %>", "<%- instance.src %>");
-      <% }; %>
-      <% tests.forEach(function(test) { %>
-        bcd.addTest("<%- test.ident %>", <%- JSON.stringify(test.tests) %>, "<%- test.exposure %>");
-      <% }); %>
-      window.onload = function() {
-        bcd.run(undefined, <%-Object.entries(resources)
-        .filter((item) => (item[1].type !== 'instance')).length%>, <%- !!hideResults %>)
-      };
-    </script>
-  </body>
-</html>
+<!-- TODO: https://github.com/foolip/mdn-bcd-collector/issues/407 -->
+<script src="/resources/json3.min.js"></script>
+<script src="/resources/harness.js"></script>
+<script>
+  <% for (const [instanceId, instance] of Object.entries(resources)
+    .filter((item) => (item[1].type === 'instance'))) { %>
+    bcd.addInstance("<%- instanceId %>", "<%- instance.src %>");
+  <% }; %>
+  <% tests.forEach(function(test) { %>
+    <% if (!ignore.includes(test.ident)) { %>
+      bcd.addTest("<%- test.ident %>", <%- JSON.stringify(test.tests) %>, "<%- test.exposure %>");
+    <% } %>
+  <% }); %>
+  window.onload = function() {
+    bcd.go(undefined, <%-resourceCount%>, <%- !!hideResults %>)
+  };
+</script>

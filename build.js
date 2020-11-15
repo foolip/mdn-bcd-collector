@@ -33,10 +33,11 @@ const compileCustomTest = (code, format = true) => {
         return `throw 'Test is malformed: ${match} is an invalid reference';`;
       }
       let importcode = compileCustomTest(customTests.api[name].__base, false);
+
       importcode = importcode.replace(
-          /var instance/g, `var ${instancevar}`
+          /var (instance|promise)/g, `var ${instancevar}`
       );
-      if (instancevar !== 'instance') {
+      if (instancevar !== 'instance' && instancevar !== 'promise') {
         importcode += ` if (!${instancevar}) {return null;}`;
       }
       return importcode;
@@ -51,7 +52,11 @@ const compileCustomTest = (code, format = true) => {
     code = `(function () {${code}})()`;
 
     // Format
-    code = prettier.format(code, {singleQuote: true, parser: 'babel'}).trim();
+    try {
+      code = prettier.format(code, {singleQuote: true, parser: 'babel'}).trim();
+    } catch (e) {
+      return `throw 'Test is malformed: ${e}'`;
+    }
   }
 
   return code;
@@ -62,22 +67,29 @@ const getCustomTestAPI = (name, member) => {
 
   if (name in customTests.api) {
     const testbase = customTests.api[name].__base || '';
+    const promise = testbase.includes('var promise');
     if (member === undefined) {
       if ('__test' in customTests.api[name]) {
         test = testbase + customTests.api[name].__test;
       } else {
-        test = testbase ? testbase + 'return !!instance;' : false;
+        test = testbase ? testbase + (
+          promise ? 'return promise.then(function(instance) {return !!instance});' : 'return !!instance;'
+        ) : false;
       }
     } else {
-      if (member in customTests.api[name]) {
+      if (
+        member in customTests.api[name] &&
+        typeof(customTests.api[name][member]) === 'string'
+      ) {
         test = testbase + customTests.api[name][member];
       } else {
         if (name === member) {
           // Constructors need special testing
           test = false;
         } else {
-          test = testbase ?
-            testbase + `return '${member}' in instance;` : false;
+          test = testbase ? testbase + (
+            promise ? `return promise.then(function(instance) {return '${member}' in instance});` : `return '${member}' in instance;`
+          ) : false;
         }
       }
     }
@@ -87,8 +99,13 @@ const getCustomTestAPI = (name, member) => {
     return false;
   }
 
+  test = compileCustomTest(test);
 
-  return compileCustomTest(test);
+  if (test.includes('Test is malformed')) {
+    console.error(`api.${name}${member ? `.${member}` : ''}: ${test.replace('throw ', '')}`);
+  }
+
+  return test;
 };
 
 const getCustomSubtestsAPI = (name) => {
@@ -352,6 +369,12 @@ const flattenMembers = (iface) => {
     // Test generation doesn't use constructor arguments, so they aren't copied
     members.push({name: iface.name, type: 'constructor'});
   }
+  if (getExtAttr(iface, 'LegacyFactoryFunction')) {
+    members.push({
+      name: getExtAttr(iface, 'LegacyFactoryFunction').rhs.value,
+      type: 'constructor'
+    });
+  }
 
   return members.sort((a, b) => a.name.localeCompare(b.name));
 };
@@ -416,7 +439,6 @@ const validateIDL = (ast) => {
     'constructor-member',
     'dict-arg-default',
     'no-nointerfaceobject',
-    'replace-void',
     'require-exposed'
   ]);
 
@@ -499,7 +521,7 @@ const validateIDL = (ast) => {
     'unsigned long', // https://heycam.github.io/webidl/#idl-unsigned-long
     'unsigned short', // https://heycam.github.io/webidl/#idl-unsigned-short
     'USVString', // https://heycam.github.io/webidl/#idl-USVString
-    'void' // https://heycam.github.io/webidl/#idl-undefined (renamed)
+    'undefined' // https://heycam.github.io/webidl/#idl-undefined
   ]);
   // Add any types defined by the (flattened) spec and custom IDL.
   for (const dfn of ast) {
@@ -555,9 +577,16 @@ const buildIDLTests = (ast) => {
       continue;
     }
 
+    const adjustedIfaceName = getName(iface);
+
+    if (adjustedIfaceName.endsWith('Event') && adjustedIfaceName !== 'Event') {
+      // TODO: event interfaces are not always exposed on their own and will
+      // require the event to be fired.
+      continue;
+    }
+
     const exposureSet = getExposureSet(iface);
     const isGlobal = !!getExtAttr(iface, 'Global');
-    const adjustedIfaceName = getName(iface);
     const customIfaceTest = getCustomTestAPI(adjustedIfaceName);
     const resources = getCustomResourcesAPI(adjustedIfaceName);
 
@@ -741,12 +770,19 @@ const copyResources = async () => {
     ['chai/chai.js', 'unittest'],
     ['mocha/mocha.css', 'unittest'],
     ['mocha/mocha.js', 'unittest'],
+    ['mocha/mocha.js.map', 'unittest'],
+    ['sinon/pkg/sinon.js', 'unittest'],
     ['@browser-logos/chrome/chrome_64x64.png', 'browser-logos', 'chrome.png'],
     ['@browser-logos/edge/edge_64x64.png', 'browser-logos', 'edge.png'],
     ['@browser-logos/firefox/firefox_64x64.png', 'browser-logos', 'firefox.png'],
     ['@browser-logos/internet-explorer_9-11/internet-explorer_9-11_64x64.png', 'browser-logos', 'ie.png'],
     ['@browser-logos/opera/opera_64x64.png', 'browser-logos', 'opera.png'],
-    ['@browser-logos/safari/safari_64x64.png', 'browser-logos', 'safari.png']
+    ['@browser-logos/safari/safari_64x64.png', 'browser-logos', 'safari.png'],
+    ['@mdi/font/css/materialdesignicons.min.css', 'resources'],
+    ['@mdi/font/fonts/materialdesignicons-webfont.eot', 'fonts'],
+    ['@mdi/font/fonts/materialdesignicons-webfont.ttf', 'fonts'],
+    ['@mdi/font/fonts/materialdesignicons-webfont.woff', 'fonts'],
+    ['@mdi/font/fonts/materialdesignicons-webfont.woff2', 'fonts']
   ];
   for (const [srcInModules, destInGenerated, newFilename] of resources) {
     const src = require.resolve(srcInModules);

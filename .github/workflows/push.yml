@@ -2,7 +2,6 @@ on:
   push:
     branches:
     - main
-    - prod
 name: Push
 jobs:
   test:
@@ -22,6 +21,12 @@ jobs:
     needs: test
     runs-on: ubuntu-latest
     steps:
+    - uses: MontyD/package-json-updated-action@1.0.1
+      id: version-updated
+      with:
+        path: package.json
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - uses: actions/checkout@v2
     - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
       with:
@@ -31,9 +36,10 @@ jobs:
     - run: echo "$SECRETS_JSON" | base64 --decode > secrets.json
       env:
         SECRETS_JSON: ${{ secrets.SECRETS_JSON }}
-    - if: ${{ github.ref == 'refs/heads/main' }}
+    - name: Deploy to Staging
       run: gcloud app deploy --version=staging --no-promote
-    - if: ${{ github.ref == 'refs/heads/prod' }}
+    - if: steps.version-updated.outputs.has-updated
+      name: Deploy to Production
       run: gcloud app deploy --version=production --promote
 env:
   FORCE_COLOR: 3

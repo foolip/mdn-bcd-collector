@@ -30,18 +30,21 @@
   };
   var reusableInstances = {};
 
+  /* istanbul ignore next */
   function consoleLog(message) {
     if ('console' in self) {
       console.log(message);
     }
   }
 
+  /* istanbul ignore next */
   function consoleError(message) {
     if ('console' in self) {
       console.error(message);
     }
   }
 
+  /* istanbul ignore next */
   function stringify(value) {
     try {
       return String(value);
@@ -50,6 +53,7 @@
     }
   }
 
+  /* istanbul ignore next */
   function stringIncludes(string, search) {
     if (string.includes) {
       return string.includes(search);
@@ -68,6 +72,8 @@
     } else {
       statusElement.innerHTML = newStatus;
     }
+
+    consoleLog(statusElement.innerHTML.replace(/<br>/g, '\n'));
   }
 
   function addInstance(name, code) {
@@ -125,7 +131,15 @@
     return result;
   }
 
-  // Each test is mapped to an object like this:
+  // Once a test is evaluated and run, it calls this function with the result.
+  // This function then compiles a result object from the given result value,
+  // and then passes the result to `callback()` (or if the result is not true
+  // and there are more test variants, run the next test variant).
+  //
+  // If the test result is an error or non-boolean, the result value is set to
+  // `null` and the original value is mentioned in the result message.
+  //
+  // Test results are mapped into objects like this:
   // {
   //   "name": "api.Attr.localName",
   //   "result": true,
@@ -135,76 +149,123 @@
   //     "exposure": "Window"
   //   }
   // }
-  //
-  // If the test doesn't return true or false, or if it throws, `result` will
-  // be null and a `message` property is set to an explanation.
-  function test(data) {
+  function processTestResult(value, data, i, callback) {
     var result = {name: data.name, info: {}};
 
-    for (var i = 0; i < data.tests.length; i++) {
-      var test = data.tests[i];
-
-      try {
-        var value = eval(test.code);
-        if (value && typeof value === 'object' && 'result' in value) {
-          result.result = value.result;
-          if (value.message) {
-            result.message = value.message;
-          }
-        } else if (typeof value === 'boolean') {
-          result.result = value;
-        } else {
-          result.result = null;
-          result.message = 'returned ' + stringify(value);
-        }
-      } catch (err) {
-        result.result = null;
-        result.message = 'threw ' + stringify(err);
+    if (value && typeof value === 'object' && 'result' in value) {
+      result.result = value.result;
+      if (value.message) {
+        result.message = value.message;
       }
+    } else if (typeof value === 'boolean') {
+      result.result = value;
+    } else if (value instanceof Error) {
+      result.result = null;
+      result.message = 'threw ' + stringify(value);
+    } else {
+      result.result = null;
+      result.message = 'returned ' + stringify(value);
+    }
 
-      if (result.result !== false) {
-        result.info.code = test.code;
-        if (test.prefix) {
-          result.info.prefix = test.prefix;
-        }
-        break;
+    if (result.result !== false) {
+      result.info.code = data.tests[i].code;
+      if (data.tests[i].prefix) {
+        result.info.prefix = data.tests[i].prefix;
       }
+    } else {
+      result.info.code = data.tests[0].code;
     }
 
     if (data.info !== undefined) {
       result.info = Object.assign({}, result.info, data.info);
     }
-
-    if (result.result === false) {
-      result.info.code = data.tests[0].code;
-    }
     result.info.exposure = data.exposure;
 
-    return result;
+    if (result.result === true) {
+      callback(result);
+      return;
+    } else {
+      if (i + 1 >= data.tests.length) {
+        callback(result);
+      } else {
+        runTest(data, i + 1, callback);
+      }
+    }
+  }
+
+  function runTest(data, i, callback) {
+    var test = data.tests[i];
+
+    try {
+      var value = eval(test.code);
+
+      if (typeof value === 'object' && value !== null && typeof value.then === 'function') {
+        value.then(
+            function(value) {
+              processTestResult(value, data, i, callback);
+            },
+            function(fail) {
+              processTestResult(new Error(fail), data, i, callback);
+            }
+        );
+        value['catch'](
+            function(err) {
+              processTestResult(err, data, i, callback);
+            }
+        );
+      } else {
+        processTestResult(value, data, i, callback);
+      }
+    } catch (err) {
+      processTestResult(err, data, i, callback);
+    }
+  }
+
+  function runTests(tests, callback) {
+    var results = [];
+    var completedTests = 0;
+
+    var oncomplete = function(result) {
+      results.push(result);
+      completedTests += 1;
+
+      if (completedTests >= tests.length) {
+        callback(results);
+      }
+    };
+
+    for (var i = 0; i < tests.length; i++) {
+      runTest(tests[i], 0, oncomplete);
+    }
   }
 
   function runWindow(callback, results) {
     if (pending.Window) {
-      for (var i = 0; i < pending.Window.length; i++) {
-        results.push(test(pending.Window[i]));
-      }
+      runTests(pending.Window, callback);
+    } else {
+      callback(results);
     }
-
-    callback(results);
   }
 
   function runWorker(callback, results) {
-    if ('Worker' in pending) {
-      if ('Worker' in self) {
-        var myWorker = new Worker('/resources/worker.js');
+    if (pending.Worker) {
+      var myWorker = null;
 
+      if ('Worker' in self) {
+        try {
+          myWorker = new Worker('/resources/worker.js');
+        } catch (e) {
+          // eslint-disable-next-rule no-empty
+        }
+      }
+
+      if (myWorker) {
         myWorker.onmessage = function(event) {
-          callback(results.concat(event.data));
+          callback(results.concat(JSON.parse(event.data)));
         };
 
-        myWorker.postMessage(pending.Worker);
+        myWorker.postMessage(JSON.stringify(pending.Worker));
       } else {
-        consoleLog('No worker support');
         updateStatus('No worker support, skipping Worker/DedicatedWorker tests');
 
         for (var i = 0; i < pending.Worker.length; i++) {
@@ -236,17 +297,24 @@
   }
 
   function runSharedWorker(callback, results) {
-    if ('SharedWorker' in pending) {
-      if ('SharedWorker' in self) {
-        var myWorker = new SharedWorker('/resources/sharedworker.js');
+    if (pending.SharedWorker) {
+      var myWorker = null;
 
+      if ('SharedWorker' in self) {
+        try {
+          myWorker = new SharedWorker('/resources/sharedworker.js');
+        } catch (e) {
+          // eslint-disable-next-rule no-empty
+        }
+      }
+
+      if (myWorker) {
         myWorker.port.onmessage = function(event) {
-          callback(results.concat(event.data));
+          callback(results.concat(JSON.parse(event.data)));
         };
 
-        myWorker.port.postMessage(pending.SharedWorker);
+        myWorker.port.postMessage(JSON.stringify(pending.SharedWorker));
       } else {
-        consoleLog('No shared worker support');
         updateStatus('No shared worker support, skipping SharedWorker tests');
 
         for (var i = 0; i < pending.SharedWorker.length; i++) {
@@ -278,7 +346,7 @@
   }
 
   function runServiceWorker(callback, results) {
-    if ('ServiceWorker' in pending) {
+    if (pending.ServiceWorker) {
       if ('serviceWorker' in navigator) {
         window.__workerCleanup().then(function() {
           navigator.serviceWorker.register('/resources/serviceworker.js', {
@@ -289,18 +357,16 @@
             var messageChannel = new MessageChannel();
 
             messageChannel.port1.onmessage = function(event) {
-              consoleLog(event);
-              callback(results.concat(event.data));
+              callback(results.concat(JSON.parse(event.data)));
             };
 
             reg.active.postMessage(
-                pending.ServiceWorker,
+                JSON.stringify(pending.ServiceWorker),
                 [messageChannel.port2]
             );
           });
         });
       } else {
-        consoleLog('No service worker support, skipping');
         updateStatus('No service worker support, skipping ServiceWorker tests');
 
         for (var i = 0; i < pending.ServiceWorker.length; i++) {
@@ -329,20 +395,24 @@
     }
   }
 
-  function run(callback, resourceCount, hideResults) {
+  function go(callback, resourceCount, hideResults) {
     var startTests = function() {
       resources.testsStarted = true;
 
       var timeout = setTimeout(function() {
         updateStatus('<br />This test seems to be taking a long time; ' +
             'it may have crashed. Check the console for errors.', true);
-      }, 10000);
+      }, 30000);
 
       runWindow(function(results) {
         runWorker(function(results) {
           runSharedWorker(function(results) {
             runServiceWorker(function(results) {
-              pending = [];
+              pending = {};
+
+              if ('serviceWorker' in navigator) {
+                window.__workerCleanup();
+              }
 
               clearTimeout(timeout);
               if (typeof callback == 'function') {
@@ -379,10 +449,21 @@
       };
 
       // Load resources
-      var resourceElements = document.querySelectorAll('audio, video');
-      for (var i = 0; i < resourceElements.length; i++) {
-        resourceElements[i].load();
-        resourceElements[i].onloadeddata = resourceLoaded;
+      try {
+        var i;
+        var resourceMedia = document.querySelectorAll('#resources audio, #resources video');
+        for (i = 0; i < resourceMedia.length; i++) {
+          resourceMedia[i].load();
+          resourceMedia[i].onloadeddata = resourceLoaded;
+        }
+        var resourceImages = document.querySelectorAll('#resources img');
+        for (i = 0; i < resourceImages.length; i++) {
+          resourceImages[i].onload = resourceLoaded;
+        }
+      } catch (e) {
+        // Couldn't use resource loading code, start anyways
+        consoleError(e);
+        startTests();
       }
     } else {
       startTests();
@@ -390,57 +471,8 @@
   }
 
   function report(results, hideResults) {
-    var css = document.createElement('link');
-    css.rel = 'stylesheet';
-    css.type = 'text/css';
-    css.href = '/resources/style.css';
-    try {
-      document.head.appendChild(css);
-    } catch (e) {
-      // If we fail to import the CSS, it's not a big deal
-    }
-
+    consoleLog('Tests complete');
     updateStatus('Posting results to server...');
-
-    var resultsEl = document.getElementById('results');
-
-    if (resultsEl && !hideResults) {
-      resultsEl.appendChild(document.createElement('hr'));
-
-      for (var i=0; i<results.length; i++) {
-        var result = results[i];
-
-        var thisResultEl = document.createElement('div');
-        thisResultEl.className = 'result';
-
-        var resultNameEl = document.createElement('p');
-
-        resultNameEl.innerHTML = result.name;
-        if (result.name.indexOf('css.') != 0) {
-          resultNameEl.innerHTML += ' (' + result.info.exposure + ' exposure)';
-        }
-        resultNameEl.innerHTML += ':&nbsp;';
-
-        var resultValueEl = document.createElement('strong');
-        resultValueEl.innerHTML = result.result;
-        if (result.prefix) {
-          resultValueEl.innerHTML += ' (' + result.prefix + ' prefix)';
-        }
-        if (result.message) {
-          resultValueEl.innerHTML += ' (' + result.message + ')';
-        }
-        resultNameEl.appendChild(resultValueEl);
-        thisResultEl.appendChild(resultNameEl);
-
-        var codeEl = document.createElement('code');
-        codeEl.innerHTML = result.info.code.replace(/\n/g, '<br />');
-        thisResultEl.appendChild(codeEl);
-        thisResultEl.appendChild(document.createElement('br'));
-        thisResultEl.appendChild(document.createElement('br'));
-
-        resultsEl.appendChild(thisResultEl);
-      }
-    }
 
     try {
       var body = JSON.stringify(results);
@@ -473,6 +505,48 @@
       updateStatus('Failed to upload results: client error.');
       consoleError(e);
     }
+
+    var resultsEl = document.getElementById('results');
+
+    if (resultsEl && !hideResults) {
+      resultsEl.appendChild(document.createElement('hr'));
+
+      for (var i=0; i<results.length; i++) {
+        var result = results[i];
+
+        var thisResultEl = document.createElement('div');
+        thisResultEl.className = 'result';
+
+        var resultNameEl = document.createElement('p');
+
+        resultNameEl.innerHTML = result.name;
+        if (result.name.indexOf('css.') != 0) {
+          resultNameEl.innerHTML += ' (' + result.info.exposure + ' exposure)';
+        }
+        resultNameEl.innerHTML += ':&nbsp;';
+
+        var resultValueEl = document.createElement('strong');
+        resultValueEl.innerHTML = stringify(result.result);
+        if (result.prefix) {
+          resultValueEl.innerHTML += ' (' + result.prefix + ' prefix)';
+        }
+        if (result.message) {
+          resultValueEl.innerHTML += ' (' + result.message + ')';
+        }
+        resultNameEl.appendChild(resultValueEl);
+        thisResultEl.appendChild(resultNameEl);
+
+        if (result.info.code) {
+          var codeEl = document.createElement('code');
+          codeEl.innerHTML = result.info.code.replace(/ /g, '&nbsp;').replace(/\n/g, '<br />');
+          thisResultEl.appendChild(codeEl);
+          thisResultEl.appendChild(document.createElement('br'));
+          thisResultEl.appendChild(document.createElement('br'));
+        }
+
+        resultsEl.appendChild(thisResultEl);
+      }
+    }
   }
 
   // Service Worker helpers
@@ -485,10 +559,11 @@
           if (!serviceWorker) {
             // If the service worker isn't installing, it was probably
             // interrupted during a test.
-            window.location.reload();
+            window.__workerCleanup().then(function() {
+              window.location.reload();
+            });
 
-            return reject(new Error('The service worker is not installing. ' +
-              'Is the test environment clean?'));
+            return reject(new Error('Service worker not installing, cleaning and retrying...'));
           }
 
           function stateListener(evt) {
@@ -539,7 +614,7 @@
     testConstructor: testConstructor,
     addInstance: addInstance,
     addTest: addTest,
-    test: test,
-    run: run
+    runTests: runTests,
+    go: go
   };
 })(this);

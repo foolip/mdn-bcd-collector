@@ -4,7 +4,7 @@ partial interface Selection {
   readonly attribute Node? extentNode;
   readonly attribute unsigned long extentOffset;
 
-  void modify(optional DOMString alter = "",
+  undefined modify(optional DOMString alter = "",
               optional DOMString direction = "",
               optional DOMString granularity = "");
 };
