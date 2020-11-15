@@ -252,12 +252,11 @@ const run = async (browser, version, os, showlogs) => {
 
   try {
     log('Loading homepage...');
-    await goToPage(driver, browser, version, host);
-    await driver.executeScript(`document.getElementById('hide-results').click()`);
+    await goToPage(driver, browser, version, `${host}/?selenium=true`);
     await click(driver, browser, 'start');
 
     log('Running tests...');
-    await awaitPage(driver, browser, version, `${host}/tests/?hideResults=on`);
+    await awaitPage(driver, browser, version, `${host}/tests/?selenium=true`);
 
     await driver.wait(until.elementLocated(By.id('status')), 5000);
     statusEl = await driver.findElement(By.id('status'));
@@ -302,10 +301,8 @@ const run = async (browser, version, os, showlogs) => {
       statusEl = await driver.findElement(By.id('status'));
       await driver.wait(until.elementTextContains(statusEl, 'to'));
 
-      if (!testenv) {
-        if ((await statusEl.getText()).search('Failed') !== -1) {
-          throw new Error('Pull request failed to submit');
-        }
+      if ((await statusEl.getText()).search('Failed') !== -1) {
+        throw new Error('Pull request failed to submit');
       }
 
       warn('Exported to GitHub');
