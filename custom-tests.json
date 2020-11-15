@@ -78,7 +78,7 @@
     },
     "AudioWorkletNode": {
       "__resources": ["audioContext"],
-      "__base": "if (!reusableInstances.audioContext) {return false;} if (!reusableInstances.audioContext.audioWorklet) {return false;} var promise = reusableInstances.audioContext.audioWorklet.addModule('/resources/custom-tests/api/AudioWorkletNode/WhiteNoiseProcessor.js').then(function() {return new AudioWorkletNode(reusableInstances.audioContext, 'white-noise-processor')});"
+      "__base": "if (!reusableInstances.audioContext) {return false;} if (!reusableInstances.audioContext.audioWorklet) {return false;} var promise = reusableInstances.audioContext.audioWorklet.addModule('/resources/custom-tests/api/AudioWorkletNode/WhiteNoiseProcessor.js').then(function() {return new AudioWorkletNode(reusableInstances.audioContext, 'white-noise-processor')}); promise.then(function() {});"
     },
     "BatteryManager": {
       "__base": "var promise = navigator.getBattery();"
@@ -116,10 +116,10 @@
       "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createConvolver();"
     },
     "Crypto": {
-      "__base": "var instance = window.crypto;"
+      "__base": "if (!('crypto' in self)) {return false}; var instance = crypto;"
     },
     "CryptoKey": {
-      "__base": "<%api.SubtleCrypto:subtlecrypto%> var promise = window.crypto.subtle.generateKey({name: 'RSA-OAEP', modulusLength: 4096, publicExponent: new Uint8Array([1, 0, 1]), hash: 'SHA-256' }, true, ['encrypt', 'decrypt']);"
+      "__base": "<%api.SubtleCrypto:subtlecrypto%> var promise = subtlecrypto.generateKey({name: 'RSA-OAEP', modulusLength: 4096, publicExponent: new Uint8Array([1, 0, 1]), hash: 'SHA-256' }, true, ['encrypt', 'decrypt']);"
     },
     "CSSFontFaceRule": {
       "__resources": ["createStyleSheet"],
@@ -603,7 +603,7 @@
       "__base": "var instance = new MediaSource();"
     },
     "MediaStream": {
-      "__base": "<%api.MediaDevices:mediaDevices%> var promise = mediaDevices.getUserMedia({video: true});"
+      "__base": "<%api.MediaDevices:mediaDevices%> var promise = mediaDevices.getUserMedia({video: true}); promise.then(function() {});"
     },
     "MediaStreamAudioDestinationNode": {
       "__resources": ["audioContext"],

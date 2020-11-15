@@ -207,7 +207,8 @@
             function(fail) {
               processTestResult(new Error(fail), data, i, callback);
             }
-        ).catch(
+        );
+        value['catch'](
             function(err) {
               processTestResult(err, data, i, callback);
             }
@@ -230,12 +231,12 @@
 
       if (completedTests >= tests.length) {
         callback(results);
-      } else {
-        runTest(tests[completedTests], 0, oncomplete);
       }
     };
 
-    runTest(tests[0], 0, oncomplete);
+    for (var i = 0; i < tests.length; i++) {
+      runTest(tests[i], 0, oncomplete);
+    }
   }
 
   function runWindow(callback, results) {
@@ -401,13 +402,17 @@
       var timeout = setTimeout(function() {
         updateStatus('<br />This test seems to be taking a long time; ' +
             'it may have crashed. Check the console for errors.', true);
-      }, 20000);
+      }, 30000);
 
       runWindow(function(results) {
         runWorker(function(results) {
           runSharedWorker(function(results) {
             runServiceWorker(function(results) {
               pending = {};
+
+              if ('serviceWorker' in navigator) {
+                window.__workerCleanup();
+              }
 
               clearTimeout(timeout);
               if (typeof callback == 'function') {
