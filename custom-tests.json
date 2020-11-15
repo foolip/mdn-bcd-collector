@@ -78,7 +78,7 @@
     },
     "AudioWorkletNode": {
       "__resources": ["audioContext"],
-      "__base": "if (!reusableInstances.audioContext) {return false;} if (!reusableInstances.audioContext.audioWorklet) {return false;} var promise = reusableInstances.audioContext.audioWorklet.addModule('/resources/custom-tests/api/AudioWorkletNode/WhiteNoiseProcessor.js').then(function() {return new AudioWorkletNode(reusableInstances.audioContext, 'white-noise-processor')});"
+      "__base": "if (!reusableInstances.audioContext) {return false;} if (!reusableInstances.audioContext.audioWorklet) {return false;} var promise = reusableInstances.audioContext.audioWorklet.addModule('/resources/custom-tests/api/AudioWorkletNode/WhiteNoiseProcessor.js').then(function() {return new AudioWorkletNode(reusableInstances.audioContext, 'white-noise-processor')}); promise.then(function() {});"
     },
     "BatteryManager": {
       "__base": "var promise = navigator.getBattery();"
@@ -603,7 +603,7 @@
       "__base": "var instance = new MediaSource();"
     },
     "MediaStream": {
-      "__base": "<%api.MediaDevices:mediaDevices%> var promise = mediaDevices.getUserMedia({video: true});"
+      "__base": "<%api.MediaDevices:mediaDevices%> var promise = mediaDevices.getUserMedia({video: true}); promise.then(function() {});"
     },
     "MediaStreamAudioDestinationNode": {
       "__resources": ["audioContext"],
