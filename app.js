@@ -166,7 +166,7 @@ app.post('/api/results/export/github', (req, res) => {
 
 // api.EventSource
 app.get('/eventstream', (req, res) => {
-  res.header("Content-Type", "text/event-stream");
+  res.header('Content-Type', 'text/event-stream');
   res.send('event: ping\ndata: Hello world!\ndata: {"foo": "bar"}\ndata: Goodbye world!');
 });
 
