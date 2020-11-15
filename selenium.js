@@ -32,9 +32,7 @@ const secrets = require('./secrets.json');
 const resultsDir = path.join(__dirname, '..', 'mdn-bcd-results');
 
 const testenv = process.env.NODE_ENV === 'test';
-const host = testenv ?
-      `http://localhost:8080` :
-      'https://mdn-bcd-collector.appspot.com';
+const host = `https://${testenv ? 'staging-dot-' : ''}mdn-bcd-collector.appspot.com`;
 
 const spinner = ora();
 
