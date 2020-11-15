@@ -81,7 +81,7 @@
       "__base": "if (!reusableInstances.audioContext) {return false;} if (!reusableInstances.audioContext.audioWorklet) {return false;} var promise = reusableInstances.audioContext.audioWorklet.addModule('/resources/custom-tests/api/AudioWorkletNode/WhiteNoiseProcessor.js').then(function() {return new AudioWorkletNode(reusableInstances.audioContext, 'white-noise-processor')}); promise.then(function() {});"
     },
     "BatteryManager": {
-      "__base": "var promise = navigator.getBattery();"
+      "__base.disabled": "var promise = navigator.getBattery();"
     },
     "BiquadFilterNode": {
       "__resources": ["audioContext"],
