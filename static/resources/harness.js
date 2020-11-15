@@ -409,7 +409,10 @@
           runSharedWorker(function(results) {
             runServiceWorker(function(results) {
               pending = {};
-              window.__workerCleanup();
+
+              if ('serviceWorker' in navigator) {
+                window.__workerCleanup();
+              }
 
               clearTimeout(timeout);
               if (typeof callback == 'function') {
