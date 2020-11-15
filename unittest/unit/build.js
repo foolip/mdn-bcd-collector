@@ -22,6 +22,7 @@ const expect = chai.expect;
 
 const WebIDL2 = require('webidl2');
 const proxyquire = require('proxyquire').noCallThru();
+const sinon = require('sinon');
 
 const {
   flattenIDL,
@@ -42,6 +43,10 @@ const {
 
 describe('build', () => {
   describe('getCustomTestAPI', () => {
+    beforeEach(() => {
+      sinon.stub(console, 'error');
+    });
+
     describe('no custom tests', () => {
       const {getCustomTestAPI} = proxyquire('../../build', {
         './custom-tests.json': {api: {__resources: {}}, css: {}}
@@ -212,6 +217,57 @@ describe('build', () => {
       });
     });
 
+    it('custom test with invalid syntax', () => {
+      const {getCustomTestAPI} = proxyquire('../../build', {
+        './custom-tests.json': {
+          api: {
+            foo: {
+              __base: 'var a = await func);'
+            }
+          }
+        }
+      });
+
+      assert.include(getCustomTestAPI('foo'), 'throw \'Test is malformed:');
+      assert.isTrue(console.error.calledOnce);
+    });
+
+    describe('promise-based custom tests', () => {
+      const {getCustomTestAPI} = proxyquire('../../build', {
+        './custom-tests.json': {
+          api: {
+            foo: {
+              __base: 'var promise = somePromise();'
+            },
+            foobar: {
+              __base: '<%api.foo:foopromise%> var promise = foopromise.then(function() {});'
+            }
+          }
+        }
+      });
+
+      it('interface', () => {
+        assert.equal(
+            getCustomTestAPI('foo'),
+            '(function () {\n  var promise = somePromise();\n  return promise.then(function (instance) {\n    return !!instance;\n  });\n})();'
+        );
+      });
+
+      it('member', () => {
+        assert.equal(
+            getCustomTestAPI('foo', 'bar'),
+            '(function () {\n  var promise = somePromise();\n  return promise.then(function (instance) {\n    return \'bar\' in instance;\n  });\n})();'
+        );
+      });
+
+      it('interface with import', () => {
+        assert.equal(
+            getCustomTestAPI('foobar'),
+            '(function () {\n  var foopromise = somePromise();\n  if (!foopromise) {\n    return false;\n  }\n  var promise = foopromise.then(function () {});\n  return promise.then(function (instance) {\n    return !!instance;\n  });\n})();'
+        );
+      });
+    });
+
     describe('import other test', () => {
       const {getCustomTestAPI} = proxyquire('../../build', {
         './custom-tests.json': {
@@ -259,7 +315,12 @@ describe('build', () => {
             getCustomTestAPI('bad'),
             '(function () {\n  throw \'Test is malformed: <%api.foobar:apple%> is an invalid reference\';\n  return !!instance;\n})();'
         );
+        assert.isTrue(console.error.calledOnce);
       });
+    });
+
+    afterEach(() => {
+      console.error.restore();
     });
   });
 

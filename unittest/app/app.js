@@ -57,6 +57,11 @@ describe('/api/results', () => {
   const testURL = `http://localhost:8080/tests/api`;
   const testURL2 = `https://host.test/tests/css`;
 
+  it('GitHub export, no results', async () => {
+    const res = await agent.post('/api/results/export/github').send();
+    assert.equal(res.status, 412);
+  });
+
   it('submit valid results', async () => {
     const res = await agent.post('/api/results')
         .query({for: testURL})
@@ -119,6 +124,11 @@ describe('/api/results', () => {
         .send('my bad results');
     assert.equal(res.status, 400);
   });
+
+  it('GitHub export with results', async () => {
+    const res = await agent.post('/api/results/export/github?mock=true').send();
+    assert.equal(res.status, 200);
+  });
 });
 
 describe('/api/get', () => {
@@ -174,6 +184,14 @@ describe('/api/get', () => {
     const res = await agent.post('/api/get')
         .send({testSelection: 'api.AbortController.signal', limitExposure: 'Window', selenium: true});
     expect(res).to.redirectTo(/\/tests\/api\/AbortController\/signal\?selenium=true&exposure=Window$/);
+  });
+});
+
+describe('test assets', () => {
+  it('/eventstream', async () => {
+    const res = await agent.get(`/eventstream`);
+    assert.equal(res.status, 200);
+    assert.equal(res.headers['content-type'], 'text/event-stream; charset=utf-8');
   });
 });
 

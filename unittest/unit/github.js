@@ -20,11 +20,34 @@ const proxyquire = require('proxyquire').noCallThru();
 const sinon = require('sinon');
 const {Octokit} = require('@octokit/rest');
 
-const REPORT = {
-  __version: '1.2.3',
-  results: {},
-  userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.0 Safari/605.1.15'
-};
+const REPORTS = [
+  {
+    report: {
+      __dev: false,
+      __version: '1.2.3',
+      results: {},
+      userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.0 Safari/605.1.15'
+    },
+    expected: {
+      slug: '1.2.3-safari-12.0-mac-os-10.14-95b1ec9f25',
+      sha: '753c6ed8e991e9729353a63d650ff0f5bd902b69',
+      title: 'Results from Safari 12.0 / Mac OS 10.14 / Collector v1.2.3'
+    }
+  },
+  {
+    report: {
+      __dev: true,
+      __version: 'abcdef0',
+      results: {},
+      userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 11_0_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36'
+    },
+    expected: {
+      slug: 'abcdef0-chrome-86.0.4240.198-mac-os-11.0.0-ca3393fa01',
+      sha: '753c6ed8e991e9729353a63d650ff0f5bd902b69',
+      title: 'Results from Chrome 86.0.4240.198 / Mac OS 11.0.0 / Collector vabcdef0'
+    }
+  }
+];
 
 const RESULT = {
   html_url: 'https://github.com/foolip/mdn-bcd-results/pull/42'
@@ -33,7 +56,7 @@ const RESULT = {
 describe('GitHub export', () => {
   afterEach(() => sinon.restore());
 
-  it('happy path', async () => {
+  describe('happy path', async () => {
     let octokit;
     const github = proxyquire('../../github', {
       '@octokit/rest': {
@@ -45,44 +68,61 @@ describe('GitHub export', () => {
         }
       }
     })();
+    let mock;
 
-    const mock = {
-      octokit: sinon.mock(octokit),
-      git: sinon.mock(octokit.git),
-      repos: sinon.mock(octokit.repos),
-      pulls: sinon.mock(octokit.pulls)
-    };
-
-    mock.octokit.expects('auth').once().resolves({type: 'mocked'});
-
-    mock.git.expects('createRef').once().withArgs({
-      owner: 'foolip',
-      ref: `refs/heads/collector/1.2.3-safari-12.0-mac-os-10.14-0aed9f1f74`,
-      repo: 'mdn-bcd-results',
-      sha: '753c6ed8e991e9729353a63d650ff0f5bd902b69'
+    beforeEach(() => {
+      mock = {
+        octokit: sinon.mock(octokit),
+        git: sinon.mock(octokit.git),
+        repos: sinon.mock(octokit.repos),
+        pulls: sinon.mock(octokit.pulls)
+      };
     });
 
-    mock.repos.expects('createOrUpdateFileContents')
-        .once().withArgs(sinon.match({
+    // eslint-disable-next-line guard-for-in
+    for (const i in REPORTS) {
+      it(`Report #${Number(i) + 1}`, async () => {
+        const {report, expected} = REPORTS[i];
+
+        mock.octokit.expects('auth').once().resolves({type: 'mocked'});
+
+        mock.git.expects('createRef').once().withArgs({
+          owner: 'foolip',
+          ref: `refs/heads/collector/${expected.slug}`,
+          repo: 'mdn-bcd-results',
+          sha: expected.sha
+        });
+
+        mock.repos.expects('createOrUpdateFileContents')
+            .once().withArgs(sinon.match({
+              owner: 'foolip',
+              repo: 'mdn-bcd-results',
+              path: `${expected.slug}.json`,
+              message: expected.title,
+              content: sinon.match.string,
+              branch: `collector/${expected.slug}`
+            }));
+
+        mock.pulls.expects('create').once().withArgs({
           owner: 'foolip',
           repo: 'mdn-bcd-results',
-          path: `1.2.3-safari-12.0-mac-os-10.14-0aed9f1f74.json`,
-          message: 'Results from Safari 12.0 / Mac OS 10.14 / Collector v1.2.3',
-          content: sinon.match.string,
-          branch: `collector/1.2.3-safari-12.0-mac-os-10.14-0aed9f1f74`
-        }));
+          title: expected.title,
+          head: `collector/${expected.slug}`,
+          body: github.createBody(github.getReportMeta(report)),
+          base: 'main'
+        }).resolves({data: RESULT});
 
-    mock.pulls.expects('create').once().withArgs({
-      owner: 'foolip',
-      repo: 'mdn-bcd-results',
-      title: 'Results from Safari 12.0 / Mac OS 10.14 / Collector v1.2.3',
-      head: `collector/1.2.3-safari-12.0-mac-os-10.14-0aed9f1f74`,
-      body: github.createBody(github.getReportMeta(REPORT)),
-      base: 'main'
-    }).resolves({data: RESULT});
+        const result = await github.exportAsPR(report);
+        assert.equal(result, RESULT);
+      });
+    }
 
-    const result = await github.exportAsPR(REPORT);
-    assert.equal(result, RESULT);
+    afterEach(() => {
+      mock.octokit.restore();
+      mock.git.restore();
+      mock.repos.restore();
+      mock.pulls.restore();
+    });
   });
 
   it('no auth token', async () => {
@@ -95,7 +135,7 @@ describe('GitHub export', () => {
       }
     })();
 
-    const result = await github.exportAsPR(REPORT);
+    const result = await github.exportAsPR(REPORTS[0].report);
     assert.equal(result, false);
   });
 });
