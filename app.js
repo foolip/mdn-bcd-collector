@@ -27,7 +27,7 @@ const logger = require('./logger');
 const storage = require('./storage').getStorage();
 const {parseUA} = require('./ua-parser');
 
-const appversion = require('./package.json').version;
+const appversion = require('./package.json').version + (process.env.GAE_VERSION != 'production' ? ' Dev' : '');
 
 const PORT = process.env.PORT || 8080;
 
