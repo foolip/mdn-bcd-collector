@@ -166,14 +166,14 @@ describe('/api/get', () => {
 
   it('get specific test, hide results', async () => {
     const res = await agent.post('/api/get')
-        .send({testSelection: 'api.AbortController.signal', limitExposure: '', hideResults: true});
-    expect(res).to.redirectTo(/\/tests\/api\/AbortController\/signal\?hideResults=true$/);
+        .send({testSelection: 'api.AbortController.signal', limitExposure: '', selenium: true});
+    expect(res).to.redirectTo(/\/tests\/api\/AbortController\/signal\?selenium=true$/);
   });
 
   it('get specific test, limit exposure and hide results', async () => {
     const res = await agent.post('/api/get')
-        .send({testSelection: 'api.AbortController.signal', limitExposure: 'Window', hideResults: true});
-    expect(res).to.redirectTo(/\/tests\/api\/AbortController\/signal\?hideResults=true&exposure=Window$/);
+        .send({testSelection: 'api.AbortController.signal', limitExposure: 'Window', selenium: true});
+    expect(res).to.redirectTo(/\/tests\/api\/AbortController\/signal\?selenium=true&exposure=Window$/);
   });
 });
 
