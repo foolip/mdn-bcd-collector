@@ -230,12 +230,12 @@
 
       if (completedTests >= tests.length) {
         callback(results);
-      } else {
-        runTest(tests[completedTests], 0, oncomplete);
       }
     };
 
-    runTest(tests[0], 0, oncomplete);
+    for (var i = 0; i < tests.length; i++) {
+      runTest(tests[i], 0, oncomplete);
+    }
   }
 
   function runWindow(callback, results) {
