@@ -180,8 +180,8 @@ describe('rendered pages', () => {
     assert.include(res.text, 'mdn-bcd-collector');
   });
 
-  it('/results', async () => {
-    const res = await agent.get(`/results`);
+  it('/export', async () => {
+    const res = await agent.get(`/export`);
     assert.equal(res.status, 200);
     assert.include(res.text, 'Download results JSON');
   });

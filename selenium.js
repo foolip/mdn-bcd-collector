@@ -31,9 +31,8 @@ const secrets = require('./secrets.json');
 
 const resultsDir = path.join(__dirname, '..', 'mdn-bcd-results');
 
-const host = process.env.NODE_ENV === 'test' ?
-      `http://localhost:8080` :
-      'https://mdn-bcd-collector.appspot.com';
+const testenv = process.env.NODE_ENV === 'test';
+const host = `https://${testenv ? 'staging-dot-' : ''}mdn-bcd-collector.appspot.com`;
 
 const spinner = ora();
 
@@ -286,19 +285,27 @@ const run = async (browser, version, os, showlogs) => {
       const reportBody = await driver.wait(until.elementLocated(By.css('body')), 10000);
       const reportString = await reportBody.getAttribute('textContent');
       log('Saving results...');
-      const report = JSON.parse(reportString);
-      const {filename} = github.getReportMeta(report);
-      await fs.writeJson(path.join(resultsDir, filename), report, {spaces: 2});
+
+      if (!testenv) {
+        const report = JSON.parse(reportString);
+        const {filename} = github.getReportMeta(report);
+        await fs.writeJson(
+            path.join(resultsDir, filename), report, {spaces: 2}
+        );
+      }
 
       succeed();
     } catch (e) {
       // If we can't download the results, fallback to GitHub
       log('Uploading results to GitHub...');
-      await goToPage(driver, browser, version, `${host}/results`);
+      await goToPage(driver, browser, version, `${host}/export${testenv ? '?mock=true' : ''}`);
       statusEl = await driver.findElement(By.id('status'));
       await driver.wait(until.elementTextContains(statusEl, 'to'));
-      if ((await statusEl.getText()).search('Failed') !== -1) {
-        throw new Error('Pull request failed to submit');
+
+      if (!testenv) {
+        if ((await statusEl.getText()).search('Failed') !== -1) {
+          throw new Error('Pull request failed to submit');
+        }
       }
 
       warn('Exported to GitHub');
@@ -329,6 +336,10 @@ const runAll = async (limitBrowsers, oses, showlogs) => {
   if (!Object.keys(secrets.selenium).length) {
     console.error('A Selenium remote WebDriver URL is not defined in secrets.json.  Please define your Selenium remote(s).');
     return false;
+  }
+
+  if (testenv) {
+    console.warn('Test mode: results are not saved.');
   }
 
   let browsersToTest = {

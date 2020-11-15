@@ -495,7 +495,7 @@
       client.onreadystatechange = function() {
         if (client.readyState == 4) {
           if (client.status >= 200 && client.status <= 299) {
-            updateStatus('Results uploaded. <a href="/results" id="submit">Submit to GitHub</a>');
+            updateStatus('Results uploaded. <a href="/export" id="submit">Submit to GitHub</a>');
           } else {
             updateStatus('Failed to upload results: server error.');
           }
