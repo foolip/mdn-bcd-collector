@@ -21,16 +21,23 @@ function exportGitHub() {
     return;
   }
 
-  client.open('POST', '/api/results/export/github', true);
+  client.open('POST', '/api/results/export/github<%- mock ? '?mock=true' : '' %>', true);
   client.send('');
   status.innerHTML = 'Exporting...';
   client.onreadystatechange = function() {
     if (client.readyState == 4) {
       if (client.status >= 200 && client.status <= 299) {
-        status.innerHTML = 'Exported to';
-        link.href = link.innerHTML = client.responseText;
-        if (status.classList) {
-          status.classList.add('success-notice');
+        if (client.responseText == 'DISABLED') {
+          status.innerHTML = 'Mock mode; export to GitHub disabled';
+          if (status.classList) {
+            status.classList.add('warning-notice');
+          }
+        } else {
+          status.innerHTML = 'Exported to';
+          link.href = link.innerHTML = client.responseText;
+          if (status.classList) {
+            status.classList.add('success-notice');
+          }
         }
       } else if (client.status == 412) {
         status.innerHTML = 'No results to export';

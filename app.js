@@ -152,6 +152,11 @@ app.post('/api/results/export/github', (req, res) => {
         }
 
         const report = createReport(results, req);
+        if (req.query.mock) {
+          res.send('DISABLED');
+          return;
+        }
+
         const response = await github.exportAsPR(report);
         if (response) {
           res.send(response.html_url);
@@ -180,7 +185,8 @@ app.get('/', (req, res) => {
 
 app.get('/export', (req, res) => {
   res.render('export', {
-    title: 'Export Results'
+    title: 'Export Results',
+    mock: req.query.mock
   });
 });
 
