@@ -320,7 +320,7 @@ const run = async (browser, version, os, showlogs) => {
 
   try {
     driver.quit();
-  } catch(e) {
+  } catch (e) {
     // The driver will expire on its own
   }
 };
