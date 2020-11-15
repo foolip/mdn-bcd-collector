@@ -162,6 +162,14 @@ app.post('/api/results/export/github', (req, res) => {
       .catch(/* istanbul ignore next */ (err) => catchError(err, res, 'text'));
 });
 
+// Test Resources
+
+// api.EventSource
+app.get('/eventstream', (req, res) => {
+  res.header("Content-Type", "text/event-stream");
+  res.send('event: ping\ndata: Hello world!\ndata: {"foo": "bar"}\ndata: Goodbye world!');
+});
+
 // Views
 
 app.get('/', (req, res) => {
@@ -193,11 +201,6 @@ app.all('/tests/*', (req, res) => {
       query: '?' + querystring.encode(req.query)
     });
   }
-});
-
-app.get('/eventstream', (req, res) => {
-  res.header("Content-Type", "text/event-stream");
-  res.send('event: ping\ndata: Hello world!\ndata: {"foo": "bar"}\ndata: Goodbye world!');
 });
 
 // Page Not Found Handler
