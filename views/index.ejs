@@ -25,7 +25,9 @@
         <option value="ServiceWorker">Service Worker</option>
       </select>
     </div>
-    <input id="hide-results" name="hideResults" type="checkbox" />
+    <% if (selenium) { %>
+      <input id="selenium" name="selenium" type="hidden" value="true" />
+    <% } %>
   </form>
 </div>
 
