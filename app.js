@@ -30,10 +30,11 @@ const {parseUA} = require('./ua-parser');
 const PORT = process.env.PORT || 8080;
 
 /* istanbul ignore next */
-const appversion = process.env.GAE_VERSION === 'production' ?
-  require('./package.json').version :
-  require('child_process').execSync('git rev-parse HEAD').toString()
-      .trim().substr(0, 7);
+// const appversion = process.env.GAE_VERSION === 'production' ?
+//   require('./package.json').version :
+//   require('child_process').execSync('git rev-parse HEAD').toString()
+//       .trim().substr(0, 7);
+const appversion = require('./package.json').version;
 
 /* istanbul ignore next */
 const secrets = process.env.NODE_ENV === 'test' ?
