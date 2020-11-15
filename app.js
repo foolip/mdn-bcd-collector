@@ -27,12 +27,13 @@ const logger = require('./logger');
 const storage = require('./storage').getStorage();
 const {parseUA} = require('./ua-parser');
 
+const PORT = process.env.PORT || 8080;
+
+/* istanbul ignore next */
 const appversion = process.env.GAE_VERSION === 'production' ?
   require('./package.json').version :
   require('child_process').execSync('git rev-parse HEAD').toString()
       .trim().substr(0, 7);
-
-const PORT = process.env.PORT || 8080;
 
 /* istanbul ignore next */
 const secrets = process.env.NODE_ENV === 'test' ?
@@ -160,12 +161,16 @@ app.post('/api/results/export/github', (req, res) => {
         }
 
         const report = createReport(results, req);
+
+        /* istanbul ignore next */
         if (req.query.mock) {
           res.send('DISABLED');
           return;
         }
 
+        /* istanbul ignore next */
         const response = await github.exportAsPR(report);
+        /* istanbul ignore next */
         if (response) {
           res.send(response.html_url);
         } else {
