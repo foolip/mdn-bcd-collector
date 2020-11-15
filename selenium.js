@@ -289,7 +289,9 @@ const run = async (browser, version, os, showlogs) => {
       if (!testenv) {
         const report = JSON.parse(reportString);
         const {filename} = github.getReportMeta(report);
-        await fs.writeJson(path.join(resultsDir, filename), report, {spaces: 2});
+        await fs.writeJson(
+            path.join(resultsDir, filename), report, {spaces: 2}
+        );
       }
 
       succeed();
