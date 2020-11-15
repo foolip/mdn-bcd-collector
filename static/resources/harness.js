@@ -207,7 +207,8 @@
             function(fail) {
               processTestResult(new Error(fail), data, i, callback);
             }
-        ).catch(
+        );
+        value['catch'](
             function(err) {
               processTestResult(err, data, i, callback);
             }
