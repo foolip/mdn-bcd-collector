@@ -27,7 +27,10 @@ const logger = require('./logger');
 const storage = require('./storage').getStorage();
 const {parseUA} = require('./ua-parser');
 
-const appversion = require('./package.json').version + (process.env.GAE_VERSION != 'production' ? ' Dev' : '');
+const appversion = process.env.GAE_VERSION === 'production' ?
+  require('./package.json').version :
+  'Dev ' + require('child_process').execSync('git rev-parse HEAD').toString()
+      .trim().substr(0, 7);
 
 const PORT = process.env.PORT || 8080;
 
