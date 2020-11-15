@@ -201,7 +201,7 @@
       "__base": "try {var instance = new Event('Event');} catch(e) {var instance = Event.createEvent('Event');}"
     },
     "EventSource": {
-      "__base": "var instance = new EventSource('/');"
+      "__base": "var instance = new EventSource('/eventstream');"
     },
     "EXT_blend_minmax": {
       "__resources": ["webGL"],
