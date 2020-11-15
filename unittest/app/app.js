@@ -47,6 +47,7 @@ describe('/api/results', () => {
     const res = await agent.get('/api/results');
     assert.equal(res.status, 200);
     assert.deepEqual(res.body, {
+      __dev: true,
       __version: version,
       results: {},
       userAgent: userAgent
@@ -68,6 +69,7 @@ describe('/api/results', () => {
     const res = await agent.get('/api/results');
     assert.equal(res.status, 200);
     assert.deepEqual(res.body, {
+      __dev: true,
       __version: version,
       results: {[testURL]: {x: 1}},
       userAgent: userAgent
@@ -85,6 +87,7 @@ describe('/api/results', () => {
     const res = await agent.get('/api/results');
     assert.equal(res.status, 200);
     assert.deepEqual(res.body, {
+      __dev: true,
       __version: version,
       results: {[testURL]: {x: 2}},
       userAgent: userAgent
@@ -103,6 +106,7 @@ describe('/api/results', () => {
     const res = await agent.get('/api/results');
     assert.equal(res.status, 200);
     assert.deepEqual(res.body, {
+      __dev: true,
       __version: version,
       results: {[testURL]: {x: 2}, [testURL2]: {y: 3}},
       userAgent: userAgent

@@ -32,7 +32,7 @@ const github = (options) => {
     const digest = hash.update(buffer).digest('hex').substr(0, 10);
 
     const version = report.__version;
-    const dev = version.includes('Dev');
+    const dev = report.__dev;
     const ua = uaParser(report.userAgent);
     const browser = `${ua.browser.name} ${ua.browser.version}`;
     const os = `${ua.os.name} ${ua.os.version}`;
