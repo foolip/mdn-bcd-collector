@@ -73,7 +73,7 @@
       statusElement.innerHTML = newStatus;
     }
 
-    consoleLog(statusElement.innerHTML);
+    consoleLog(statusElement.innerHTML.replace(/<br>/g, '\n'));
   }
 
   function addInstance(name, code) {
