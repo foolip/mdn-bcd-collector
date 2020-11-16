@@ -189,7 +189,7 @@ app.get('/', (req, res) => {
   res.render('index', {
     tests: tests.listEndpoints('/tests'),
     selenium: req.query.selenium,
-    ignore: req.body.ignore
+    ignore: req.query.ignore
   });
 });
 
