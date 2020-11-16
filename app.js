@@ -76,12 +76,7 @@ const catchError = (err, res, method) => {
 };
 
 const createReport = (results, req) => {
-  return {
-    __dev: process.env.GAE_VERSION !== 'production',
-    __version: appversion,
-    results,
-    userAgent: req.get('User-Agent')
-  };
+  return {__version: appversion, results, userAgent: req.get('User-Agent')};
 };
 
 const app = express();

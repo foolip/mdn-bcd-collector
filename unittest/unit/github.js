@@ -23,28 +23,24 @@ const {Octokit} = require('@octokit/rest');
 const REPORTS = [
   {
     report: {
-      __dev: false,
       __version: '1.2.3',
       results: {},
       userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.0 Safari/605.1.15'
     },
     expected: {
-      slug: '1.2.3-safari-12.0-mac-os-10.14-95b1ec9f25',
-      sha: '753c6ed8e991e9729353a63d650ff0f5bd902b69',
+      slug: '1.2.3-safari-12.0-mac-os-10.14-0aed9f1f74',
       title: 'Results from Safari 12.0 / Mac OS 10.14 / Collector v1.2.3'
     }
   },
   {
     report: {
-      __dev: true,
-      __version: 'abcdef0',
+      __version: 'Dev',
       results: {},
       userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 11_0_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36'
     },
     expected: {
-      slug: 'abcdef0-chrome-86.0.4240.198-mac-os-11.0.0-ca3393fa01',
-      sha: '753c6ed8e991e9729353a63d650ff0f5bd902b69',
-      title: 'Results from Chrome 86.0.4240.198 / Mac OS 11.0.0 / Collector vabcdef0'
+      slug: 'dev-chrome-86.0.4240.198-mac-os-11.0.0-4c53c96588',
+      title: 'Results from Chrome 86.0.4240.198 / Mac OS 11.0.0 / Collector vDev'
     }
   }
 ];
@@ -90,7 +86,7 @@ describe('GitHub export', () => {
           owner: 'foolip',
           ref: `refs/heads/collector/${expected.slug}`,
           repo: 'mdn-bcd-results',
-          sha: expected.sha
+          sha: '753c6ed8e991e9729353a63d650ff0f5bd902b69'
         });
 
         mock.repos.expects('createOrUpdateFileContents')
