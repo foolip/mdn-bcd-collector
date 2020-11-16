@@ -25,11 +25,8 @@ const bcd = require('@mdn/browser-compat-data');
 const fs = require('fs-extra');
 const path = require('path');
 const chalk = require('chalk');
-const Listr = require('listr');
+const {Listr} = require('listr2');
 const stringify = require('json-stable-stringify');
-
-// TODO temporary until https://github.com/SamVerschueren/listr/issues/150 fixed
-const ListrRenderer = require('listr-verbose-renderer');
 
 const github = require('./github')();
 const secrets = require('./secrets.json');
@@ -52,7 +49,7 @@ const prettyName = (browser, version, os) => {
 
 const log = (task, message) => {
   // TODO temporary until https://github.com/SamVerschueren/listr/issues/150 fixed
-  task.output = task.output = task.title + ' - ' + message;
+  task.output = task.title + ' - ' + message;
 
   // eslint-disable-next-line max-len
   // task.output = new Date(Date.now()).toLocaleTimeString(undefined, {hour12: false}) + ': ' + message;
@@ -365,9 +362,13 @@ const runAll = async (limitBrowsers, oses, nonConcurrent) => {
     });
   }
 
-  const taskrun = new Listr(tasks, {
-    renderer: ListrRenderer, exitOnError: false
+  // TODO remove verbose when https://github.com/SamVerschueren/listr/issues/150 fixed
+  const taskrun = new Listr(tasks, {exitOnError: false, renderer: 'verbose',
+    rendererOptions: {
+      collapseSkips: false, collapseErrors: false
+    }
   });
+
   try {
     await taskrun.run({testenv});
     return true;
