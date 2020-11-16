@@ -306,7 +306,7 @@ const runAll = async (limitBrowsers, oses) => {
     edge: filterVersions(bcd.browsers.edge.releases, 12),
     firefox: filterVersions(bcd.browsers.firefox.releases, 4),
     ie: filterVersions(bcd.browsers.ie.releases, 6),
-    safari: filterVersions(bcd.browsers.safari.releases, 5.1)
+    safari: filterVersions(bcd.browsers.safari.releases, 4)
   };
 
   if (limitBrowsers) {
