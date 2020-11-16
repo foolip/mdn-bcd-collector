@@ -42,8 +42,8 @@ const prettyName = (browser, version, os) => {
 };
 
 const log = (task, message) => {
-  task.output = task.title + ' - ' + new Date(Date.now()).toLocaleTimeString(undefined, {hour12: false})
-      + ': ' + message;
+  task.output = task.title + ' - ' + new Date(Date.now()).toLocaleTimeString(undefined, {hour12: false}) +
+      ': ' + message;
 };
 
 const filterVersions = (data, earliestVersion) => {
@@ -338,15 +338,17 @@ const runAll = async (limitBrowsers, oses) => {
         browsertasks.push({
           title: prettyName(browser, version, os),
           task: (ctx, task) => run(browser, version, os, ctx, task)
-        })
+        });
       }
     }
 
     tasks.push({
       title: bcd.browsers[browser].name,
-      task: () => {return new Listr(browsertasks, {
-        concurrent: 5, exitOnError: false
-      })}
+      task: () => {
+        return new Listr(browsertasks, {
+          concurrent: 5, exitOnError: false
+        });
+      }
     });
   }
 
@@ -354,7 +356,7 @@ const runAll = async (limitBrowsers, oses) => {
   try {
     await taskrun.run({testenv, exitOnError: false});
     return true;
-  } catch(e) {
+  } catch (e) {
     console.error(e);
     return false;
   }
