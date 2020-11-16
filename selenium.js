@@ -37,6 +37,13 @@ const resultsDir = path.join(__dirname, '..', 'mdn-bcd-results');
 const testenv = process.env.NODE_ENV === 'test';
 const host = `https://${testenv ? 'staging-dot-' : ''}mdn-bcd-collector.appspot.com`;
 
+const ignore = {
+  chrome: {
+    25: 'api.MediaStreamAudioDestinationNode',
+    26: 'api.MediaStreamAudioDestinationNode'
+  }
+};
+
 const prettyName = (browser, version, os) => {
   return `${bcd.browsers[browser].name} ${version} on ${os}`;
 };
@@ -234,13 +241,16 @@ const run = async (browser, version, os, ctx, task) => {
 
   let statusEl;
 
+  const ignorelist = ignore[browser] && ignore[browser][version];
+  const getvars = `?selenium=true${ignorelist ? `&ignore=${ignorelist}` : ''}`;
+
   try {
     log(task, 'Loading homepage...');
-    await goToPage(driver, browser, version, `${host}/?selenium=true`);
+    await goToPage(driver, browser, version, `${host}/${getvars}`);
     await click(driver, browser, 'start');
 
     log(task, 'Running tests...');
-    await awaitPage(driver, browser, version, `${host}/tests/?selenium=true`);
+    await awaitPage(driver, browser, version, `${host}/tests/${getvars}`);
 
     await driver.wait(until.elementLocated(By.id('status')), 5000);
     statusEl = await driver.findElement(By.id('status'));
