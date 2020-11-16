@@ -29,12 +29,7 @@ const {parseUA} = require('./ua-parser');
 
 const PORT = process.env.PORT || 8080;
 
-/* istanbul ignore next */
-// const appversion = process.env.GAE_VERSION === 'production' ?
-//   require('./package.json').version :
-//   require('child_process').execSync('git rev-parse HEAD').toString()
-//       .trim().substr(0, 7);
-const appversion = require('./package.json').version;
+const appversion = process.env.GAE_VERSION === 'production' ? require('./package.json').version : 'Dev';
 
 /* istanbul ignore next */
 const secrets = process.env.NODE_ENV === 'test' ?
@@ -81,12 +76,7 @@ const catchError = (err, res, method) => {
 };
 
 const createReport = (results, req) => {
-  return {
-    __dev: process.env.GAE_VERSION !== 'production',
-    __version: appversion,
-    results,
-    userAgent: req.get('User-Agent')
-  };
+  return {__version: appversion, results, userAgent: req.get('User-Agent')};
 };
 
 const app = express();
