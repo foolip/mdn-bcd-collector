@@ -23,8 +23,8 @@ const {
 } = require('selenium-webdriver');
 const bcd = require('@mdn/browser-compat-data');
 const fs = require('fs-extra');
-const ora = require('ora');
 const path = require('path');
+const Listr = require('listr');
 
 const github = require('./github')();
 const secrets = require('./secrets.json');
@@ -34,32 +34,13 @@ const resultsDir = path.join(__dirname, '..', 'mdn-bcd-results');
 const testenv = process.env.NODE_ENV === 'test';
 const host = `https://${testenv ? 'staging-dot-' : ''}mdn-bcd-collector.appspot.com`;
 
-const spinner = ora();
-
 const prettyName = (browser, version, os) => {
   return `${bcd.browsers[browser].name} ${version} on ${os}`;
 };
 
-const timestamp = () => {
-  const now = new Date(Date.now());
-  return now.toLocaleTimeString(undefined, {hour12: false});
-};
-
-const error = (e) => {
-  spinner.fail(spinner.text.split(' - ')[0] + ' - ' + timestamp() + ': ' +
-    (e.name === 'Error' ? e.message : e.stack));
-};
-
-const warn = (message) => {
-  spinner.warn(spinner.text.split(' - ')[0] + ' - ' + message);
-};
-
-const log = (message) => {
-  spinner.text = spinner.text.split(' - ')[0] + ' - ' + timestamp() + ': ' + message;
-};
-
-const succeed = () => {
-  spinner.succeed(spinner.text.split(' - ')[0]);
+const log = (task, message) => {
+  task.output = new Date(Date.now()).toLocaleTimeString(undefined, {hour12: false})
+      + ': ' + message;
 };
 
 const filterVersions = (data, earliestVersion) => {
@@ -240,8 +221,8 @@ const click = async (driver, browser, elementId) => {
   }
 };
 
-const run = async (browser, version, os) => {
-  log('Starting...');
+const run = async (browser, version, os, ctx, task) => {
+  log(task, 'Starting...');
 
   const driver = await buildDriver(browser, version, os);
   if (!driver) {
@@ -251,11 +232,11 @@ const run = async (browser, version, os) => {
   let statusEl;
 
   try {
-    log('Loading homepage...');
+    log(task, 'Loading homepage...');
     await goToPage(driver, browser, version, `${host}/?selenium=true`);
     await click(driver, browser, 'start');
 
-    log('Running tests...');
+    log(task, 'Running tests...');
     await awaitPage(driver, browser, version, `${host}/tests/?selenium=true`);
 
     await driver.wait(until.elementLocated(By.id('status')), 5000);
@@ -274,7 +255,7 @@ const run = async (browser, version, os) => {
     }
 
     try {
-      log('Attempting to download results...');
+      log(task, 'Attempting to download results...');
       if (browser === 'chrome' || browser === 'firefox' ||
         (browser === 'edge' && version >= 79)) {
         await goToPage(driver, browser, version, `view-source:${host}/api/results`);
@@ -283,21 +264,19 @@ const run = async (browser, version, os) => {
       }
       const reportBody = await driver.wait(until.elementLocated(By.css('body')), 10000);
       const reportString = await reportBody.getAttribute('textContent');
-      log('Saving results...');
+      log(task, 'Saving results...');
 
-      if (!testenv) {
+      if (!ctx.testenv) {
         const report = JSON.parse(reportString);
         const {filename} = github.getReportMeta(report);
         await fs.writeJson(
             path.join(resultsDir, filename), report, {spaces: 2}
         );
       }
-
-      succeed();
     } catch (e) {
       // If we can't download the results, fallback to GitHub
-      log('Uploading results to GitHub...');
-      await goToPage(driver, browser, version, `${host}/export${testenv ? '?mock=true' : ''}`);
+      log(task, 'Uploading results to GitHub...');
+      await goToPage(driver, browser, version, `${host}/export${ctx.testenv ? '?mock=true' : ''}`);
       statusEl = await driver.findElement(By.id('status'));
       await driver.wait(until.elementTextContains(statusEl, 'to'));
 
@@ -305,13 +284,11 @@ const run = async (browser, version, os) => {
         throw new Error('Pull request failed to submit');
       }
 
-      warn('Exported to GitHub');
+      // warn('Exported to GitHub');
     }
-  } catch (e) {
-    error(e);
+  } finally {
+    driver.quit().catch(() => {});
   }
-
-  driver.quit().catch(() => {});
 };
 
 const runAll = async (limitBrowsers, oses) => {
@@ -337,8 +314,12 @@ const runAll = async (limitBrowsers, oses) => {
         .filter(([k]) => (limitBrowsers.includes(k))));
   }
 
+  const tasks = [];
+
   // eslint-disable-next-line guard-for-in
   for (const browser in browsersToTest) {
+    const browsertasks = [];
+
     for (const version of browsersToTest[browser].reverse()) {
       for (const os of oses) {
         if (os === 'macOS' && ['edge', 'ie'].includes(browser) && version <= 18) {
@@ -351,19 +332,29 @@ const runAll = async (limitBrowsers, oses) => {
           continue;
         }
 
-        spinner.start(prettyName(browser, version, os));
-
-        try {
-          await run(browser, version, os);
-        } catch (e) {
-          error(e);
-        }
+        browsertasks.push({
+          title: prettyName(browser, version, os),
+          task: (ctx, task) => run(browser, version, os, ctx, task)
+        })
       }
     }
+
+    tasks.push({
+      title: bcd.browsers[browser].name,
+      task: () => {return new Listr(browsertasks, {
+        concurrent: 5, exitOnError: false
+      })}
+    });
   }
 
-  spinner.stop();
-  return true;
+  const taskrun = new Listr(tasks);
+  try {
+    await taskrun.run({testenv, exitOnError: false});
+    return true;
+  } catch(e) {
+    console.error(e);
+    return false;
+  }
 };
 
 /* istanbul ignore if */
