@@ -106,9 +106,12 @@ app.use((req, res, next) => {
 app.post('/api/get', (req, res) => {
   const testSelection = (req.body.testSelection || '').replace(/\./g, '/');
   const queryParams = {
-    ...(req.body.selenium && {selenium: req.body.selenium}),
-    ...(req.body.limitExposure && {exposure: req.body.limitExposure})
+    selenium: req.body.selenium,
+    exposure: req.body.limitExposure
   };
+  Object.keys(queryParams).forEach(
+    key => !queryParams[key] && delete queryParams[key]
+  );
   const query = querystring.encode(queryParams);
 
   res.redirect(`/tests/${testSelection}${query ? `?${query}`: ''}`);
