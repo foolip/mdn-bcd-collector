@@ -59,6 +59,7 @@
     "chai-fs": "2.0.0",
     "chai-http": "4.3.0",
     "chai-subset": "1.6.0",
+    "chalk": "4.1.0",
     "ejs-lint": "1.1.0",
     "eslint": "7.13.0",
     "eslint-config-google": "0.14.0",

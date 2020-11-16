@@ -24,6 +24,7 @@ const {
 const bcd = require('@mdn/browser-compat-data');
 const fs = require('fs-extra');
 const path = require('path');
+const chalk = require('chalk');
 const Listr = require('listr');
 
 // TODO temporary until https://github.com/SamVerschueren/listr/issues/150 fixed
@@ -306,12 +307,12 @@ const run = async (browser, version, os, ctx, task) => {
 
 const runAll = async (limitBrowsers, oses) => {
   if (!Object.keys(secrets.selenium).length) {
-    console.error('A Selenium remote WebDriver URL is not defined in secrets.json.  Please define your Selenium remote(s).');
+    console.error(chalk`{red.bold A Selenium remote WebDriver URL is not defined in secrets.json.  Please define your Selenium remote(s).}`);
     return false;
   }
 
   if (testenv) {
-    console.warn('Test mode: results are not saved.');
+    console.warn(chalk`{yellow.bold Test mode: results are not saved.}`);
   }
 
   let browsersToTest = {
