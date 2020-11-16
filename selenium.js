@@ -23,8 +23,11 @@ const {
 } = require('selenium-webdriver');
 const bcd = require('@mdn/browser-compat-data');
 const fs = require('fs-extra');
-const ora = require('ora');
 const path = require('path');
+const Listr = require('listr');
+
+// TODO temporary until https://github.com/SamVerschueren/listr/issues/150 fixed
+const ListrRenderer = require('listr-verbose-renderer');
 
 const github = require('./github')();
 const secrets = require('./secrets.json');
@@ -34,39 +37,20 @@ const resultsDir = path.join(__dirname, '..', 'mdn-bcd-results');
 const testenv = process.env.NODE_ENV === 'test';
 const host = `https://${testenv ? 'staging-dot-' : ''}mdn-bcd-collector.appspot.com`;
 
-const spinner = ora();
-
-const prettyName = (browser, version, os) => {
-  return `${bcd.browsers[browser].name} ${version} on ${os}`;
-};
-
-const timestamp = () => {
-  const now = new Date(Date.now());
-  return now.toLocaleTimeString(undefined, {hour12: false});
-};
-
-const error = (e) => {
-  spinner.fail(spinner.text.split(' - ')[0] + ' - ' + timestamp() + ': ' +
-    (e.name === 'Error' ? e.message : e.stack));
-};
-
-const warn = (message) => {
-  spinner.warn(spinner.text.split(' - ')[0] + ' - ' + message);
-};
-
-const log = (message) => {
-  spinner.text = spinner.text.split(' - ')[0] + ' - ' + timestamp() + ': ' + message;
-};
-
-const succeed = () => {
-  spinner.succeed(spinner.text.split(' - ')[0]);
-};
-
 const ignore = {
   chrome: {
     25: 'api.MediaStreamAudioDestinationNode',
     26: 'api.MediaStreamAudioDestinationNode'
   }
+};
+
+const prettyName = (browser, version, os) => {
+  return `${bcd.browsers[browser].name} ${version} on ${os}`;
+};
+
+const log = (task, message) => {
+  task.output = task.title + ' - ' + new Date(Date.now()).toLocaleTimeString(undefined, {hour12: false}) +
+      ': ' + message;
 };
 
 const filterVersions = (data, earliestVersion) => {
@@ -247,8 +231,8 @@ const click = async (driver, browser, elementId) => {
   }
 };
 
-const run = async (browser, version, os, showlogs) => {
-  log('Starting...');
+const run = async (browser, version, os, ctx, task) => {
+  log(task, 'Starting...');
 
   const driver = await buildDriver(browser, version, os);
   if (!driver) {
@@ -261,11 +245,11 @@ const run = async (browser, version, os, showlogs) => {
   const getvars = `?selenium=true${ignorelist ? `&ignore=${ignorelist}` : ''}`;
 
   try {
-    log('Loading homepage...');
+    log(task, 'Loading homepage...');
     await goToPage(driver, browser, version, `${host}/${getvars}`);
     await click(driver, browser, 'start');
 
-    log('Running tests...');
+    log(task, 'Running tests...');
     await awaitPage(driver, browser, version, `${host}/tests/${getvars}`);
 
     await driver.wait(until.elementLocated(By.id('status')), 5000);
@@ -284,7 +268,7 @@ const run = async (browser, version, os, showlogs) => {
     }
 
     try {
-      log('Attempting to download results...');
+      log(task, 'Attempting to download results...');
       if (browser === 'chrome' || browser === 'firefox' ||
         (browser === 'edge' && version >= 79)) {
         await goToPage(driver, browser, version, `view-source:${host}/api/results`);
@@ -293,21 +277,19 @@ const run = async (browser, version, os, showlogs) => {
       }
       const reportBody = await driver.wait(until.elementLocated(By.css('body')), 10000);
       const reportString = await reportBody.getAttribute('textContent');
-      log('Saving results...');
+      log(task, 'Saving results...');
 
-      if (!testenv) {
+      if (!ctx.testenv) {
         const report = JSON.parse(reportString);
         const {filename} = github.getReportMeta(report);
         await fs.writeJson(
             path.join(resultsDir, filename), report, {spaces: 2}
         );
       }
-
-      succeed();
     } catch (e) {
       // If we can't download the results, fallback to GitHub
-      log('Uploading results to GitHub...');
-      await goToPage(driver, browser, version, `${host}/export${testenv ? '?mock=true' : ''}`);
+      log(task, 'Uploading results to GitHub...');
+      await goToPage(driver, browser, version, `${host}/export${ctx.testenv ? '?mock=true' : ''}`);
       statusEl = await driver.findElement(By.id('status'));
       await driver.wait(until.elementTextContains(statusEl, 'to'));
 
@@ -315,31 +297,14 @@ const run = async (browser, version, os, showlogs) => {
         throw new Error('Pull request failed to submit');
       }
 
-      warn('Exported to GitHub');
+      // warn('Exported to GitHub');
     }
-  } catch (e) {
-    error(e);
-  }
-
-  if (showlogs) {
-    try {
-      const logs = await driver.manage().logs().get(logging.Type.BROWSER);
-      logs.forEach((entry) => {
-        console.info(`[Browser Logger: ${entry.level.name}] ${entry.message}`);
-      });
-    } catch (e) {
-      // If we couldn't get the browser logs, ignore and continue
-    }
-  }
-
-  try {
-    driver.quit();
-  } catch (e) {
-    // The driver will expire on its own
+  } finally {
+    driver.quit().catch(() => {});
   }
 };
 
-const runAll = async (limitBrowsers, oses, showlogs) => {
+const runAll = async (limitBrowsers, oses) => {
   if (!Object.keys(secrets.selenium).length) {
     console.error('A Selenium remote WebDriver URL is not defined in secrets.json.  Please define your Selenium remote(s).');
     return false;
@@ -354,7 +319,7 @@ const runAll = async (limitBrowsers, oses, showlogs) => {
     edge: filterVersions(bcd.browsers.edge.releases, 12),
     firefox: filterVersions(bcd.browsers.firefox.releases, 4),
     ie: filterVersions(bcd.browsers.ie.releases, 6),
-    safari: filterVersions(bcd.browsers.safari.releases, 5.1)
+    safari: filterVersions(bcd.browsers.safari.releases, 4)
   };
 
   if (limitBrowsers) {
@@ -362,8 +327,12 @@ const runAll = async (limitBrowsers, oses, showlogs) => {
         .filter(([k]) => (limitBrowsers.includes(k))));
   }
 
+  const tasks = [];
+
   // eslint-disable-next-line guard-for-in
   for (const browser in browsersToTest) {
+    const browsertasks = [];
+
     for (const version of browsersToTest[browser].reverse()) {
       for (const os of oses) {
         if (os === 'macOS' && ['edge', 'ie'].includes(browser) && version <= 18) {
@@ -376,19 +345,31 @@ const runAll = async (limitBrowsers, oses, showlogs) => {
           continue;
         }
 
-        spinner.start(prettyName(browser, version, os));
-
-        try {
-          await run(browser, version, os, showlogs);
-        } catch (e) {
-          error(e);
-        }
+        browsertasks.push({
+          title: prettyName(browser, version, os),
+          task: (ctx, task) => run(browser, version, os, ctx, task)
+        });
       }
     }
+
+    tasks.push({
+      title: bcd.browsers[browser].name,
+      task: () => {
+        return new Listr(browsertasks, {
+          concurrent: 5, exitOnError: false
+        });
+      }
+    });
   }
 
-  spinner.stop();
-  return true;
+  const taskrun = new Listr(tasks, {renderer: ListrRenderer});
+  try {
+    await taskrun.run({testenv, exitOnError: false});
+    return true;
+  } catch (e) {
+    console.error(e);
+    return false;
+  }
 };
 
 /* istanbul ignore if */
@@ -408,12 +389,6 @@ if (require.main === module) {
               type: 'array',
               choices: ['Windows', 'macOS'],
               default: ['Windows', 'macOS']
-            })
-            .option('showlogs', {
-              alias: 'v',
-              describe: 'Show the console logs from the browser',
-              type: 'boolean',
-              default: false
             });
       }
   );
