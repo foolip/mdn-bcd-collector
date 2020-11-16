@@ -62,6 +62,13 @@ const succeed = () => {
   spinner.succeed(spinner.text.split(' - ')[0]);
 };
 
+const ignore = {
+  chrome: {
+    25: 'api.MediaStreamAudioDestinationNode',
+    26: 'api.MediaStreamAudioDestinationNode'
+  }
+};
+
 const filterVersions = (data, earliestVersion) => {
   const versions = [];
 
@@ -250,13 +257,16 @@ const run = async (browser, version, os, showlogs) => {
 
   let statusEl;
 
+  const ignorelist = ignorelist[browser] && ignorelist[browser][version];
+  const getvars = `?selenium=true${ignorelist ? `&ignore=${ignorelist}` : ''}`;
+
   try {
     log('Loading homepage...');
-    await goToPage(driver, browser, version, `${host}/?selenium=true`);
+    await goToPage(driver, browser, version, `${host}/${getvars}`);
     await click(driver, browser, 'start');
 
     log('Running tests...');
-    await awaitPage(driver, browser, version, `${host}/tests/?selenium=true`);
+    await awaitPage(driver, browser, version, `${host}/tests/${getvars}`);
 
     await driver.wait(until.elementLocated(By.id('status')), 5000);
     statusEl = await driver.findElement(By.id('status'));
