@@ -378,6 +378,8 @@ if (require.main === module) {
       }
   );
 
+  console.clear();
+
   if (runAll(argv.browser, argv.os) === false) {
     process.exit(1);
   }
