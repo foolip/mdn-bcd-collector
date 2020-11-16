@@ -107,6 +107,7 @@ app.post('/api/get', (req, res) => {
   const testSelection = (req.body.testSelection || '').replace(/\./g, '/');
   const queryParams = {
     selenium: req.body.selenium,
+    ignore: req.body.ignore,
     exposure: req.body.limitExposure
   };
   Object.keys(queryParams).forEach(
@@ -187,7 +188,8 @@ app.get('/eventstream', (req, res) => {
 app.get('/', (req, res) => {
   res.render('index', {
     tests: tests.listEndpoints('/tests'),
-    selenium: req.query.selenium
+    selenium: req.query.selenium,
+    ignore: req.body.ignore
   });
 });
 
