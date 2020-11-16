@@ -257,7 +257,7 @@ const run = async (browser, version, os, showlogs) => {
 
   let statusEl;
 
-  const ignorelist = ignorelist[browser] && ignorelist[browser][version];
+  const ignorelist = ignore[browser] && ignore[browser][version];
   const getvars = `?selenium=true${ignorelist ? `&ignore=${ignorelist}` : ''}`;
 
   try {
