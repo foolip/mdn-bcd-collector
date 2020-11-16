@@ -308,7 +308,7 @@ const run = async (browser, version, os, ctx, task) => {
   }
 };
 
-const runAll = async (limitBrowsers, oses) => {
+const runAll = async (limitBrowsers, oses, nonConsecutive) => {
   if (!Object.keys(secrets.selenium).length) {
     console.error(chalk`{red.bold A Selenium remote WebDriver URL is not defined in secrets.json.  Please define your Selenium remote(s).}`);
     return false;
@@ -360,7 +360,7 @@ const runAll = async (limitBrowsers, oses) => {
       title: bcd.browsers[browser].name,
       task: () => {
         return new Listr(browsertasks, {
-          concurrent: 5, exitOnError: false
+          concurrent: nonConsecutive ? false : 5, exitOnError: false
         });
       }
     });
@@ -393,11 +393,17 @@ if (require.main === module) {
               type: 'array',
               choices: ['Windows', 'macOS'],
               default: ['Windows', 'macOS']
+            })
+            .option('non-consecutive', {
+              describe: 'Run browsers non-consecutively (one at a time)',
+              alias: 's',
+              type: 'boolean',
+              nargs: 0
             });
       }
   );
 
-  if (runAll(argv.browser, argv.os) === false) {
+  if (runAll(argv.browser, argv.os, argv.nonConsecutive) === false) {
     process.exit(1);
   }
 }
