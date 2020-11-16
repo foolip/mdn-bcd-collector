@@ -26,6 +26,9 @@ const fs = require('fs-extra');
 const path = require('path');
 const Listr = require('listr');
 
+// TODO temporary until https://github.com/SamVerschueren/listr/issues/150 fixed
+const ListrRenderer = require('listr-verbose-renderer');
+
 const github = require('./github')();
 const secrets = require('./secrets.json');
 
@@ -39,7 +42,7 @@ const prettyName = (browser, version, os) => {
 };
 
 const log = (task, message) => {
-  task.output = new Date(Date.now()).toLocaleTimeString(undefined, {hour12: false})
+  task.output = task.title + ' - ' + new Date(Date.now()).toLocaleTimeString(undefined, {hour12: false})
       + ': ' + message;
 };
 
@@ -347,7 +350,7 @@ const runAll = async (limitBrowsers, oses) => {
     });
   }
 
-  const taskrun = new Listr(tasks);
+  const taskrun = new Listr(tasks, {renderer: ListrRenderer});
   try {
     await taskrun.run({testenv, exitOnError: false});
     return true;
@@ -377,8 +380,6 @@ if (require.main === module) {
             });
       }
   );
-
-  console.clear();
 
   if (runAll(argv.browser, argv.os) === false) {
     process.exit(1);
