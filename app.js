@@ -111,7 +111,7 @@ app.post('/api/get', (req, res) => {
     exposure: req.body.limitExposure
   };
   Object.keys(queryParams).forEach(
-    key => !queryParams[key] && delete queryParams[key]
+      (key) => !queryParams[key] && delete queryParams[key]
   );
   const query = querystring.encode(queryParams);
 
