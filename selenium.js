@@ -66,7 +66,7 @@ const filterVersions = (data, earliestVersion) => {
     }
   }
 
-  return versions.sort((a, b) => (a - b));
+  return versions.sort((a, b) => (b - a));
 };
 
 const getSafariOS = (version) => {
@@ -334,7 +334,7 @@ const runAll = async (limitBrowsers, oses) => {
   for (const browser in browsersToTest) {
     const browsertasks = [];
 
-    for (const version of browsersToTest[browser].reverse()) {
+    for (const version of browsersToTest[browser]) {
       for (const os of oses) {
         if (os === 'macOS' && ['edge', 'ie'].includes(browser) && version <= 18) {
           // Don't test Internet Explorer / EdgeHTML on macOS
