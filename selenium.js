@@ -50,8 +50,11 @@ const prettyName = (browser, version, os) => {
 };
 
 const log = (task, message) => {
-  task.output = task.title + ' - ' + new Date(Date.now()).toLocaleTimeString(undefined, {hour12: false}) +
-      ': ' + message;
+  // TODO temporary until https://github.com/SamVerschueren/listr/issues/150 fixed
+  task.output = task.output = task.title + ' - ' + message;
+
+  // eslint-disable-next-line max-len
+  // task.output = new Date(Date.now()).toLocaleTimeString(undefined, {hour12: false}) + ': ' + message;
 };
 
 const filterVersions = (data, earliestVersion) => {
