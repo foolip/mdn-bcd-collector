@@ -366,9 +366,9 @@ const runAll = async (limitBrowsers, oses, nonConsecutive) => {
     });
   }
 
-  const taskrun = new Listr(tasks, {renderer: ListrRenderer});
+  const taskrun = new Listr(tasks, {renderer: ListrRenderer, exitOnError: false});
   try {
-    await taskrun.run({testenv, exitOnError: false});
+    await taskrun.run({testenv});
     return true;
   } catch (e) {
     console.error(e);
