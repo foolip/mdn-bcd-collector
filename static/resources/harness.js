@@ -261,7 +261,7 @@
 
   function runWindow(callback) {
     setCurrentExposure('Window');
-    
+
     if (pending.Window) {
       runTests(pending.Window, callback);
     } else {
