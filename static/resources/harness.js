@@ -29,6 +29,7 @@
   };
   var state = {
     started: false,
+    currentExposure: "",
     completed: false
   };
   var reusableInstances = {};
@@ -77,6 +78,11 @@
     }
 
     consoleLog(statusElement.innerHTML.replace(/<br>/g, '\n'));
+  }
+
+  function setCurrentExposure(exposure) {
+    state.currentExposure = exposure;
+    updateStatus("Running tests for " + exposure + "...");
   }
 
   function addInstance(name, code) {
@@ -252,6 +258,7 @@
 
   function runWindow(callback, results) {
     if (pending.Window) {
+      setCurrentExposure("Window");
       runTests(pending.Window, callback);
     } else {
       callback(results);
@@ -271,6 +278,8 @@
       }
 
       if (myWorker) {
+        setCurrentExposure("Worker");
+
         myWorker.onmessage = function(event) {
           callback(results.concat(JSON.parse(event.data)));
         };
@@ -320,6 +329,8 @@
       }
 
       if (myWorker) {
+        setCurrentExposure("Shared Worker");
+
         myWorker.port.onmessage = function(event) {
           callback(results.concat(JSON.parse(event.data)));
         };
@@ -365,6 +376,8 @@
           }).then(function(reg) {
             return window.__waitForSWState(reg, 'activated');
           }).then(navigator.serviceWorker.ready).then(function(reg) {
+            setCurrentExposure("Service Worker");
+
             var messageChannel = new MessageChannel();
 
             messageChannel.port1.onmessage = function(event) {
