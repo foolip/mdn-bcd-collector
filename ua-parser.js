@@ -65,7 +65,7 @@ const parseUA = (userAgent, browsers) => {
   // and |versions| entries "10.0" and "10.2", return "10.2". Given |version|
   // "11.0", skip.
   if (version.split('.')[0] === versions[versions.length-1].split('.')[0]) {
-    return {browser, version: current, inBcd: true};
+    return {browser, version: versions[versions.length-1], inBcd: true};
   }
 
   return {browser, version, inBcd: false};
