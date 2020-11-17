@@ -36,7 +36,7 @@ const getSupportMap = (report) => {
   }
 
   if (testMap.size === 0) {
-    throw new Error('No results!');
+    throw new Error(`Report for "${report.userAgent}" has no results!`);
   }
 
   // Transform `testMap` to map from test name (BCD path) to flattened support.
