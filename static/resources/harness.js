@@ -30,6 +30,7 @@
   var state = {
     started: false,
     currentExposure: "",
+    timedout: false,
     completed: false
   };
   var reusableInstances = {};
@@ -65,14 +66,16 @@
     return string.indexOf(search) !== -1;
   }
 
-  function updateStatus(newStatus, append) {
+  function updateStatus(newStatus) {
     var statusElement = document.getElementById('status');
     if (!statusElement) {
       return;
     }
 
-    if (append) {
-      statusElement.innerHTML = statusElement.innerHTML + newStatus;
+    if (state.timedout) {
+      statusElement.innerHTML = newStatus + 
+            '<br />This test seems to be taking a long time; ' +
+            'it may have crashed. Check the console for errors.';
     } else {
       statusElement.innerHTML = newStatus;
     }
@@ -424,8 +427,7 @@
       state.started = true;
 
       var timeout = setTimeout(function() {
-        updateStatus('<br />This test seems to be taking a long time; ' +
-            'it may have crashed. Check the console for errors.', true);
+        state.timedout = true;
       }, 30000);
 
       runWindow(function(results) {
@@ -439,12 +441,13 @@
 
               pending = {};
               state.completed = true;
+              state.timedout = false;
+              clearTimeout(timeout);
 
               if ('serviceWorker' in navigator) {
                 window.__workerCleanup();
               }
 
-              clearTimeout(timeout);
               if (typeof callback == 'function') {
                 callback(results);
               } else {
@@ -501,8 +504,7 @@
   }
 
   function report(results, hideResults) {
-    consoleLog('Tests complete');
-    updateStatus('Posting results to server...');
+    updateStatus('Tests complete. Posting results to server...');
 
     try {
       var body = JSON.stringify(results);
