@@ -260,8 +260,9 @@
   }
 
   function runWindow(callback) {
+    setCurrentExposure('Window');
+    
     if (pending.Window) {
-      setCurrentExposure('Window');
       runTests(pending.Window, callback);
     } else {
       callback([]);
@@ -269,6 +270,8 @@
   }
 
   function runWorker(callback) {
+    setCurrentExposure('Worker');
+
     if (pending.Worker) {
       var myWorker = null;
 
@@ -281,8 +284,6 @@
       }
 
       if (myWorker) {
-        setCurrentExposure('Worker');
-
         myWorker.onmessage = function(event) {
           callback(JSON.parse(event.data));
         };
@@ -321,6 +322,8 @@
   }
 
   function runSharedWorker(callback) {
+    setCurrentExposure('SharedWorker');
+
     if (pending.SharedWorker) {
       var myWorker = null;
 
@@ -333,8 +336,6 @@
       }
 
       if (myWorker) {
-        setCurrentExposure('SharedWorker');
-
         myWorker.port.onmessage = function(event) {
           callback(JSON.parse(event.data));
         };
@@ -373,6 +374,8 @@
   }
 
   function runServiceWorker(callback) {
+    setCurrentExposure('ServiceWorker');
+
     if (pending.ServiceWorker) {
       if ('serviceWorker' in navigator) {
         window.__workerCleanup().then(function() {
@@ -381,8 +384,6 @@
           }).then(function(reg) {
             return window.__waitForSWState(reg, 'activated');
           }).then(navigator.serviceWorker.ready).then(function(reg) {
-            setCurrentExposure('ServiceWorker');
-
             var messageChannel = new MessageChannel();
 
             messageChannel.port1.onmessage = function(event) {
