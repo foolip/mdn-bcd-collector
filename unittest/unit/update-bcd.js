@@ -451,8 +451,8 @@ describe('BCD updater', () => {
 
     it('no results', () => {
       assert.throws(() => {
-        getSupportMap({results: {}});
-      }, Error, 'No results!');
+        getSupportMap({results: {}, userAgent: 'abc/1.2.3-beta'});
+      }, Error, 'Report for "abc/1.2.3-beta" has no results!');
     });
   });
 
