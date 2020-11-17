@@ -152,16 +152,24 @@
   function processTestResult(value, data, i, callback) {
     var result = {name: data.name, info: {}};
 
-    if (value && typeof value === 'object' && 'result' in value) {
-      result.result = value.result;
-      if (value.message) {
-        result.message = value.message;
-      }
-    } else if (typeof value === 'boolean') {
+    if (typeof value === 'boolean') {
       result.result = value;
     } else if (value instanceof Error) {
       result.result = null;
       result.message = 'threw ' + stringify(value);
+    } else if (value && typeof value === 'object') {
+      if ('name' in value && stringIncludes(value.name, 'NS_ERROR')) {
+        result.result = null;
+        result.message = 'threw ' + stringify(value.message);
+      } else if ('result' in value) {
+        result.result = value.result;
+        if (value.message) {
+          result.message = value.message;
+        }
+      } else {
+        result.result = null;
+        result.message = 'returned ' + stringify(value);
+      }
     } else {
       result.result = null;
       result.message = 'returned ' + stringify(value);
