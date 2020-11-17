@@ -323,7 +323,7 @@ const main = async (reportPaths, categories) => {
   // This will load and parse parts of BCD twice, but it's simple.
   const {browsers} = require(BCD_DIR);
   const bcdFiles = await loadJsonFiles(
-    categories.map((cat) => path.join(BCD_DIR, ...cat.split('.')))
+      categories.map((cat) => path.join(BCD_DIR, ...cat.split('.')))
   );
 
   const reports = Object.values(await loadJsonFiles(reportPaths));
