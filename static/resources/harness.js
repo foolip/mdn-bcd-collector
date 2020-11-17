@@ -259,16 +259,16 @@
     }
   }
 
-  function runWindow(callback, results) {
+  function runWindow(callback) {
     if (pending.Window) {
       setCurrentExposure('Window');
       runTests(pending.Window, callback);
     } else {
-      callback(results);
+      callback([]);
     }
   }
 
-  function runWorker(callback, results) {
+  function runWorker(callback) {
     if (pending.Worker) {
       var myWorker = null;
 
@@ -284,13 +284,14 @@
         setCurrentExposure('Worker');
 
         myWorker.onmessage = function(event) {
-          callback(results.concat(JSON.parse(event.data)));
+          callback(JSON.parse(event.data));
         };
 
         myWorker.postMessage(JSON.stringify(pending.Worker));
       } else {
         updateStatus('No worker support, skipping Worker/DedicatedWorker tests');
 
+        var results = [];
         for (var i = 0; i < pending.Worker.length; i++) {
           var result = {
             name: pending.Worker[i].name,
@@ -315,11 +316,11 @@
         callback(results);
       }
     } else {
-      callback(results);
+      callback([]);
     }
   }
 
-  function runSharedWorker(callback, results) {
+  function runSharedWorker(callback) {
     if (pending.SharedWorker) {
       var myWorker = null;
 
@@ -335,13 +336,14 @@
         setCurrentExposure('SharedWorker');
 
         myWorker.port.onmessage = function(event) {
-          callback(results.concat(JSON.parse(event.data)));
+          callback(JSON.parse(event.data));
         };
 
         myWorker.port.postMessage(JSON.stringify(pending.SharedWorker));
       } else {
         updateStatus('No shared worker support, skipping SharedWorker tests');
 
+        var results = [];
         for (var i = 0; i < pending.SharedWorker.length; i++) {
           var result = {
             name: pending.SharedWorker[i].name,
@@ -366,11 +368,11 @@
         callback(results);
       }
     } else {
-      callback(results);
+      callback([]);
     }
   }
 
-  function runServiceWorker(callback, results) {
+  function runServiceWorker(callback) {
     if (pending.ServiceWorker) {
       if ('serviceWorker' in navigator) {
         window.__workerCleanup().then(function() {
@@ -384,7 +386,7 @@
             var messageChannel = new MessageChannel();
 
             messageChannel.port1.onmessage = function(event) {
-              callback(results.concat(JSON.parse(event.data)));
+              callback(JSON.parse(event.data));
             };
 
             reg.active.postMessage(
@@ -396,6 +398,7 @@
       } else {
         updateStatus('No service worker support, skipping ServiceWorker tests');
 
+        var results = [];
         for (var i = 0; i < pending.ServiceWorker.length; i++) {
           var result = {
             name: pending.ServiceWorker[i].name,
@@ -418,11 +421,19 @@
         callback(results);
       }
     } else {
-      callback(results);
+      callback([]);
     }
   }
 
   function go(callback, resourceCount, hideResults) {
+    var allresults = [];
+    state = {
+      started: false,
+      currentExposure: '',
+      timedout: false,
+      completed: false
+    };
+
     var startTests = function() {
       state.started = true;
 
@@ -436,11 +447,15 @@
           return;
         }
 
+        allresults = allresults.concat(results);
+
         runWorker(function(results) {
           if (state.completed || state.currentExposure !== 'Worker') {
             consoleError('Warning: Tests for Worker exposure were completed multiple times!');
             return;
           }
+
+          allresults = allresults.concat(results);
 
           runSharedWorker(function(results) {
             if (state.completed || state.currentExposure !== 'SharedWorker') {
@@ -448,11 +463,15 @@
               return;
             }
 
+            allresults = allresults.concat(results);
+
             runServiceWorker(function(results) {
               if (state.completed) {
                 consoleError('Warning: Tests for ServiceWorker exposure were completed multiple times!');
                 return;
               }
+
+              allresults = allresults.concat(results);
 
               pending = {};
               state.completed = true;
@@ -464,14 +483,14 @@
               }
 
               if (typeof callback == 'function') {
-                callback(results);
+                callback(allresults);
               } else {
-                report(results, hideResults);
+                report(allresults, hideResults);
               }
-            }, results);
-          }, results);
-        }, results);
-      }, []);
+            });
+          });
+        });
+      });
     };
 
     if (resourceCount) {
