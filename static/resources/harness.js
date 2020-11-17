@@ -419,7 +419,13 @@
         runWorker(function(results) {
           runSharedWorker(function(results) {
             runServiceWorker(function(results) {
+              if (state.completed) {
+                consoleError("Warning: tests have been completed multiple times!");
+                return;
+              }
+
               pending = {};
+              state.completed = true;
 
               if ('serviceWorker' in navigator) {
                 window.__workerCleanup();
