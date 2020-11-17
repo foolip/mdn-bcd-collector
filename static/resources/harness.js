@@ -428,7 +428,7 @@
 
       var timeout = setTimeout(function() {
         state.timedout = true;
-      }, 30000);
+      }, 20000);
 
       runWindow(function(results) {
         runWorker(function(results) {
