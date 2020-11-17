@@ -332,7 +332,7 @@
       }
 
       if (myWorker) {
-        setCurrentExposure('Shared Worker');
+        setCurrentExposure('SharedWorker');
 
         myWorker.port.onmessage = function(event) {
           callback(results.concat(JSON.parse(event.data)));
@@ -379,7 +379,7 @@
           }).then(function(reg) {
             return window.__waitForSWState(reg, 'activated');
           }).then(navigator.serviceWorker.ready).then(function(reg) {
-            setCurrentExposure('Service Worker');
+            setCurrentExposure('ServiceWorker');
 
             var messageChannel = new MessageChannel();
 
@@ -431,11 +431,26 @@
       }, 20000);
 
       runWindow(function(results) {
+        if (state.completed || state.currentExposure !== 'Window') {
+          consoleError('Warning: Tests for Window exposure were completed multiple times!');
+          return;
+        }
+
         runWorker(function(results) {
+          if (state.completed || state.currentExposure !== 'Worker') {
+            consoleError('Warning: Tests for Worker exposure were completed multiple times!');
+            return;
+          }
+
           runSharedWorker(function(results) {
+            if (state.completed || state.currentExposure !== 'SharedWorker') {
+              consoleError('Warning: Tests for SharedWorker exposure were completed multiple times!');
+              return;
+            }
+
             runServiceWorker(function(results) {
               if (state.completed) {
-                consoleError('Warning: tests have been completed multiple times!');
+                consoleError('Warning: Tests for ServiceWorker exposure were completed multiple times!');
                 return;
               }
 
