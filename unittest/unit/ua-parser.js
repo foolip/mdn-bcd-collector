@@ -78,8 +78,12 @@ describe('parseUA', () => {
     assert.deepEqual(parseUA('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Safari/605.1.15', browsers), {browser: {id: 'safari', name: 'Safari'}, version: '14', inBcd: true});
   });
 
-  it('Safari 14.1 (not in BCD)', () => {
-    assert.deepEqual(parseUA('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.1 Safari/605.1.15', browsers), {browser: {id: 'safari', name: 'Safari'}, version: '14.1', inBcd: false});
+  it('Safari 14.1 (read as Safari 14)', () => {
+    assert.deepEqual(parseUA('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.1 Safari/605.1.15', browsers), {browser: {id: 'safari', name: 'Safari'}, version: '14', inBcd: true});
+  });
+
+  it('Safari 15 (not in BCD)', () => {
+    assert.deepEqual(parseUA('Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.0 Safari/605.1.15', browsers), {browser: {id: 'safari', name: 'Safari'}, version: '15.0', inBcd: false});
   });
 
   it('Safari iOS', () => {
