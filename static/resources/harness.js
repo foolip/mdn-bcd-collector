@@ -25,8 +25,13 @@
   var pending = {};
   var resources = {
     required: 0,
-    loaded: 0,
-    testsStarted: false
+    loaded: 0
+  };
+  var state = {
+    started: false,
+    currentExposure: '',
+    timedout: false,
+    completed: false
   };
   var reusableInstances = {};
 
@@ -61,19 +66,26 @@
     return string.indexOf(search) !== -1;
   }
 
-  function updateStatus(newStatus, append) {
+  function updateStatus(newStatus) {
     var statusElement = document.getElementById('status');
     if (!statusElement) {
       return;
     }
 
-    if (append) {
-      statusElement.innerHTML = statusElement.innerHTML + newStatus;
+    if (state.timedout) {
+      statusElement.innerHTML = newStatus +
+            '<br />This test seems to be taking a long time; ' +
+            'it may have crashed. Check the console for errors.';
     } else {
       statusElement.innerHTML = newStatus;
     }
 
     consoleLog(statusElement.innerHTML.replace(/<br>/g, '\n'));
+  }
+
+  function setCurrentExposure(exposure) {
+    state.currentExposure = exposure;
+    updateStatus('Running tests for ' + exposure + '...');
   }
 
   function addInstance(name, code) {
@@ -247,15 +259,19 @@
     }
   }
 
-  function runWindow(callback, results) {
+  function runWindow(callback) {
+    setCurrentExposure('Window');
+
     if (pending.Window) {
       runTests(pending.Window, callback);
     } else {
-      callback(results);
+      callback([]);
     }
   }
 
-  function runWorker(callback, results) {
+  function runWorker(callback) {
+    setCurrentExposure('Worker');
+
     if (pending.Worker) {
       var myWorker = null;
 
@@ -269,13 +285,14 @@
 
       if (myWorker) {
         myWorker.onmessage = function(event) {
-          callback(results.concat(JSON.parse(event.data)));
+          callback(JSON.parse(event.data));
         };
 
         myWorker.postMessage(JSON.stringify(pending.Worker));
       } else {
         updateStatus('No worker support, skipping Worker/DedicatedWorker tests');
 
+        var results = [];
         for (var i = 0; i < pending.Worker.length; i++) {
           var result = {
             name: pending.Worker[i].name,
@@ -300,11 +317,13 @@
         callback(results);
       }
     } else {
-      callback(results);
+      callback([]);
     }
   }
 
-  function runSharedWorker(callback, results) {
+  function runSharedWorker(callback) {
+    setCurrentExposure('SharedWorker');
+
     if (pending.SharedWorker) {
       var myWorker = null;
 
@@ -318,13 +337,14 @@
 
       if (myWorker) {
         myWorker.port.onmessage = function(event) {
-          callback(results.concat(JSON.parse(event.data)));
+          callback(JSON.parse(event.data));
         };
 
         myWorker.port.postMessage(JSON.stringify(pending.SharedWorker));
       } else {
         updateStatus('No shared worker support, skipping SharedWorker tests');
 
+        var results = [];
         for (var i = 0; i < pending.SharedWorker.length; i++) {
           var result = {
             name: pending.SharedWorker[i].name,
@@ -349,11 +369,13 @@
         callback(results);
       }
     } else {
-      callback(results);
+      callback([]);
     }
   }
 
-  function runServiceWorker(callback, results) {
+  function runServiceWorker(callback) {
+    setCurrentExposure('ServiceWorker');
+
     if (pending.ServiceWorker) {
       if ('serviceWorker' in navigator) {
         window.__workerCleanup().then(function() {
@@ -365,7 +387,7 @@
             var messageChannel = new MessageChannel();
 
             messageChannel.port1.onmessage = function(event) {
-              callback(results.concat(JSON.parse(event.data)));
+              callback(JSON.parse(event.data));
             };
 
             reg.active.postMessage(
@@ -377,6 +399,7 @@
       } else {
         updateStatus('No service worker support, skipping ServiceWorker tests');
 
+        var results = [];
         for (var i = 0; i < pending.ServiceWorker.length; i++) {
           var result = {
             name: pending.ServiceWorker[i].name,
@@ -399,39 +422,76 @@
         callback(results);
       }
     } else {
-      callback(results);
+      callback([]);
     }
   }
 
   function go(callback, resourceCount, hideResults) {
+    var allresults = [];
+    state = {
+      started: false,
+      currentExposure: '',
+      timedout: false,
+      completed: false
+    };
+
     var startTests = function() {
-      resources.testsStarted = true;
+      state.started = true;
 
       var timeout = setTimeout(function() {
-        updateStatus('<br />This test seems to be taking a long time; ' +
-            'it may have crashed. Check the console for errors.', true);
-      }, 30000);
+        state.timedout = true;
+      }, 20000);
 
       runWindow(function(results) {
+        if (state.completed || state.currentExposure !== 'Window') {
+          consoleError('Warning: Tests for Window exposure were completed multiple times!');
+          return;
+        }
+
+        allresults = allresults.concat(results);
+
         runWorker(function(results) {
+          if (state.completed || state.currentExposure !== 'Worker') {
+            consoleError('Warning: Tests for Worker exposure were completed multiple times!');
+            return;
+          }
+
+          allresults = allresults.concat(results);
+
           runSharedWorker(function(results) {
+            if (state.completed || state.currentExposure !== 'SharedWorker') {
+              consoleError('Warning: Tests for SharedWorker exposure were completed multiple times!');
+              return;
+            }
+
+            allresults = allresults.concat(results);
+
             runServiceWorker(function(results) {
+              if (state.completed) {
+                consoleError('Warning: Tests for ServiceWorker exposure were completed multiple times!');
+                return;
+              }
+
+              allresults = allresults.concat(results);
+
               pending = {};
+              state.completed = true;
+              state.timedout = false;
+              clearTimeout(timeout);
 
               if ('serviceWorker' in navigator) {
                 window.__workerCleanup();
               }
 
-              clearTimeout(timeout);
               if (typeof callback == 'function') {
-                callback(results);
+                callback(allresults);
               } else {
-                report(results, hideResults);
+                report(allresults, hideResults);
               }
-            }, results);
-          }, results);
-        }, results);
-      }, []);
+            });
+          });
+        });
+      });
     };
 
     if (resourceCount) {
@@ -444,7 +504,7 @@
       }, 5000);
 
       var resourceLoaded = function() {
-        if (resources.testsStarted) {
+        if (state.started) {
           // No need to restart the tests
           return;
         }
@@ -479,8 +539,7 @@
   }
 
   function report(results, hideResults) {
-    consoleLog('Tests complete');
-    updateStatus('Posting results to server...');
+    updateStatus('Tests complete. Posting results to server...');
 
     try {
       var body = JSON.stringify(results);
