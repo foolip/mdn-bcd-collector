@@ -318,14 +318,13 @@ const loadJsonFiles = async (paths) => {
 };
 
 /* istanbul ignore next */
-const main = async (reportPaths) => {
+const main = async (reportPaths, categories) => {
   const BCD_DIR = process.env.BCD_DIR || `../browser-compat-data`;
   // This will load and parse parts of BCD twice, but it's simple.
   const {browsers} = require(BCD_DIR);
-  const bcdFiles = await loadJsonFiles([
-    path.join(BCD_DIR, 'api'),
-    path.join(BCD_DIR, 'css')
-  ]);
+  const bcdFiles = await loadJsonFiles(
+      categories.map((cat) => path.join(BCD_DIR, ...cat.split('.')))
+  );
 
   const reports = Object.values(await loadJsonFiles(reportPaths));
   const supportMatrix = getSupportMatrix(browsers, reports);
@@ -354,18 +353,25 @@ module.exports = {
 /* istanbul ignore if */
 if (require.main === module) {
   const {argv} = require('yargs').command(
-      '$0 <files..>',
+      '$0 <reports..>',
       'Update BCD from a specified set of report files',
       (yargs) => {
         yargs
-            .positional('files', {
+            .positional('reports', {
               describe: 'The report files to update from (also accepts folders)',
               type: 'string'
+            })
+            .option('category', {
+              alias: 'c',
+              describe: 'The BCD categories to update',
+              type: 'array',
+              choices: ['api', 'css.properties'],
+              default: ['api', 'css.properties']
             });
       }
   );
 
-  main(argv.files).catch((error) => {
+  main(argv.reports, argv.category).catch((error) => {
     logger.error(error.stack);
     process.exit(1);
   });
