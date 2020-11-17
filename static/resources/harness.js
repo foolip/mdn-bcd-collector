@@ -29,7 +29,7 @@
   };
   var state = {
     started: false,
-    currentExposure: "",
+    currentExposure: '',
     timedout: false,
     completed: false
   };
@@ -73,7 +73,7 @@
     }
 
     if (state.timedout) {
-      statusElement.innerHTML = newStatus + 
+      statusElement.innerHTML = newStatus +
             '<br />This test seems to be taking a long time; ' +
             'it may have crashed. Check the console for errors.';
     } else {
@@ -85,7 +85,7 @@
 
   function setCurrentExposure(exposure) {
     state.currentExposure = exposure;
-    updateStatus("Running tests for " + exposure + "...");
+    updateStatus('Running tests for ' + exposure + '...');
   }
 
   function addInstance(name, code) {
@@ -261,7 +261,7 @@
 
   function runWindow(callback, results) {
     if (pending.Window) {
-      setCurrentExposure("Window");
+      setCurrentExposure('Window');
       runTests(pending.Window, callback);
     } else {
       callback(results);
@@ -281,7 +281,7 @@
       }
 
       if (myWorker) {
-        setCurrentExposure("Worker");
+        setCurrentExposure('Worker');
 
         myWorker.onmessage = function(event) {
           callback(results.concat(JSON.parse(event.data)));
@@ -332,7 +332,7 @@
       }
 
       if (myWorker) {
-        setCurrentExposure("Shared Worker");
+        setCurrentExposure('Shared Worker');
 
         myWorker.port.onmessage = function(event) {
           callback(results.concat(JSON.parse(event.data)));
@@ -379,7 +379,7 @@
           }).then(function(reg) {
             return window.__waitForSWState(reg, 'activated');
           }).then(navigator.serviceWorker.ready).then(function(reg) {
-            setCurrentExposure("Service Worker");
+            setCurrentExposure('Service Worker');
 
             var messageChannel = new MessageChannel();
 
@@ -435,7 +435,7 @@
           runSharedWorker(function(results) {
             runServiceWorker(function(results) {
               if (state.completed) {
-                consoleError("Warning: tests have been completed multiple times!");
+                consoleError('Warning: tests have been completed multiple times!');
                 return;
               }
 
