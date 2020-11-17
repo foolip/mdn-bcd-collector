@@ -25,8 +25,11 @@
   var pending = {};
   var resources = {
     required: 0,
-    loaded: 0,
-    testsStarted: false
+    loaded: 0
+  };
+  var state = {
+    started: false,
+    completed: false
   };
   var reusableInstances = {};
 
@@ -405,7 +408,7 @@
 
   function go(callback, resourceCount, hideResults) {
     var startTests = function() {
-      resources.testsStarted = true;
+      state.started = true;
 
       var timeout = setTimeout(function() {
         updateStatus('<br />This test seems to be taking a long time; ' +
@@ -444,7 +447,7 @@
       }, 5000);
 
       var resourceLoaded = function() {
-        if (resources.testsStarted) {
+        if (state.started) {
           // No need to restart the tests
           return;
         }
