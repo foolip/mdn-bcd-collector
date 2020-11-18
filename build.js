@@ -62,7 +62,7 @@ const compileCustomTest = (code, format = true) => {
   return code;
 };
 
-const getCustomTestAPI = (name, member) => {
+const getCustomTestAPI = (name, member, type) => {
   let test = false;
 
   if (name in customTests.api) {
@@ -83,7 +83,7 @@ const getCustomTestAPI = (name, member) => {
       ) {
         test = testbase + customTests.api[name][member];
       } else {
-        if (name === member) {
+        if (type === 'constructor') {
           // Constructors need special testing
           test = false;
         } else {
@@ -155,9 +155,10 @@ const compileTestCode = (test, prefix = '', ownerPrefix = '') => {
     ));
   }
 
+  const rawproperty = test.property.replace(/(Symbol|constructor)\./, '');
   const property = prefix ?
-    prefix + test.property.charAt(0).toUpperCase() +
-    test.property.slice(1) : test.property;
+    prefix + rawproperty.charAt(0).toUpperCase() +
+    rawproperty.slice(1) : rawproperty;
   const ownerAsProperty = prefix ?
       prefix + test.owner.charAt(0).toUpperCase() +
       test.owner.slice(1) : test.owner;
@@ -165,8 +166,8 @@ const compileTestCode = (test, prefix = '', ownerPrefix = '') => {
       ownerPrefix + test.owner.charAt(0).toUpperCase() +
       test.owner.slice(1) : test.owner;
 
-  if (test.property == 'constructor') {
-    return `bcd.testConstructor("${ownerAsProperty}");`;
+  if (test.property.startsWith('constructor')) {
+    return `bcd.testConstructor("${property}");`;
   }
   if (test.owner === 'CSS.supports') {
     const thisPrefix = prefix ? `-${prefix}-` : '';
@@ -611,7 +612,9 @@ const buildIDLTests = (ast) => {
       }
 
       let expr;
-      const customTestMember = getCustomTestAPI(adjustedIfaceName, member.name);
+      const customTestMember = getCustomTestAPI(
+          adjustedIfaceName, member.name, member.type
+      );
 
       if (customTestMember) {
         expr = customTestMember;
@@ -638,7 +641,7 @@ const buildIDLTests = (ast) => {
             }
             break;
           case 'constructor':
-            expr = {property: 'constructor', owner: iface.name};
+            expr = {property: `constructor.${member.name}`, owner: iface.name};
             break;
           case 'symbol':
             // eslint-disable-next-line no-case-declarations

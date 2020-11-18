@@ -88,7 +88,7 @@ describe('build', () => {
       });
 
       it('constructor', () => {
-        assert.equal(getCustomTestAPI('foo', 'foo'), false);
+        assert.equal(getCustomTestAPI('foo', 'foo', 'constructor'), false);
       });
     });
 
@@ -463,7 +463,7 @@ describe('build', () => {
     });
 
     describe('constructor', () => {
-      const test = {property: 'constructor', owner: 'AudioContext'};
+      const test = {property: 'constructor.AudioContext', owner: 'AudioContext'};
 
       it('normal', () => {
         assert.equal(compileTestCode(test), 'bcd.testConstructor("AudioContext");');
