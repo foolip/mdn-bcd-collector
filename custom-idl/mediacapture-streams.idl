@@ -12,13 +12,3 @@ partial interface Navigator {
 interface LocalMediaStream : MediaStream {
   undefined stop();
 };
-
-// https://w3c.github.io/mediacapture-main/#overconstrainederror-object is
-// defined using ECMA-ese. Approximate it here using Web IDL.
-[Exposed=Window]
-interface OverconstrainedError {
-  constructor(DOMString constraint, DOMString message);
-  readonly attribute DOMString constraint;
-  readonly attribute DOMString message;
-  readonly attribute DOMString name;
-};
