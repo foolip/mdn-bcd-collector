@@ -463,7 +463,7 @@ describe('build', () => {
     });
 
     describe('constructor', () => {
-      const test = {property: 'constructor:AudioContext', owner: 'AudioContext'};
+      const test = {property: 'constructor.AudioContext', owner: 'AudioContext'};
 
       it('normal', () => {
         assert.equal(compileTestCode(test), 'bcd.testConstructor("AudioContext");');

@@ -155,7 +155,7 @@ const compileTestCode = (test, prefix = '', ownerPrefix = '') => {
     ));
   }
 
-  const rawproperty = test.property.replace('constructor:', '');
+  const rawproperty = test.property.replace(/(Symbol|constructor)\./, '');
   const property = prefix ?
     prefix + rawproperty.charAt(0).toUpperCase() +
     rawproperty.slice(1) : rawproperty;
@@ -641,7 +641,7 @@ const buildIDLTests = (ast) => {
             }
             break;
           case 'constructor':
-            expr = {property: `constructor:${member.name}`, owner: iface.name};
+            expr = {property: `constructor.${member.name}`, owner: iface.name};
             break;
           case 'symbol':
             // eslint-disable-next-line no-case-declarations
