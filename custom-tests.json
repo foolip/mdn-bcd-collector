@@ -474,7 +474,7 @@
     },
     "HTMLQuoteElement": {
       "__base": "var instance = document.createElement('blockquote');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLQuoteElement' && Object.prototype.toString.call(instance) !== '[object HTMLQuoteElement]') {return false;} return !!instance;"
+      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLQuoteElement' && instance.constructor.name !== 'HTMLBlockquoteElementConstructor' && Object.prototype.toString.call(instance) !== '[object HTMLQuoteElement]' && Object.prototype.toString.call(instance) !== '[object HTMLBlockquoteElement]') {return false;} return !!instance;"
     },
     "HTMLScriptElement": {
       "__base": "var instance = document.createElement('script');",
