@@ -25,12 +25,10 @@ const github = (options) => {
   const octokit = new Octokit(options);
 
   const getReportMeta = (report) => {
-    const json = stringify(report, {space: 2}) + '\n';
-    const buffer = zlib.gzipSync(json);
     /* eslint-disable-next-line max-len */
     // like https://github.com/web-platform-tests/wpt.fyi/blob/26805a0122ea01076ac22c0a96313c1cf5cc30d6/results-processor/wptreport.py#L79
     const hash = crypto.createHash('sha1');
-    const digest = hash.update(Buffer.from(json)).digest('hex').substr(0, 10);
+    const digest = hash.update(Buffer.from(stringify(report))).digest('hex').substr(0, 10);
 
     const version = report.__version;
     const ua = uaParser(report.userAgent);
@@ -43,9 +41,7 @@ const github = (options) => {
     const filename = `${slug}.json.gz`;
     const branch = `collector/${slug}`;
 
-    return {
-      json, buffer, digest, ua, browser, os, desc, title, slug, filename, branch
-    };
+    return {digest, ua, browser, os, desc, title, slug, filename, branch};
   };
 
   const createBody = (meta) => {
@@ -56,6 +52,7 @@ const github = (options) => {
 
   const exportAsPR = async (report) => {
     const meta = getReportMeta(report);
+    const filedata = zlib.gzipSync(stringify(report));
 
     if ((await octokit.auth()).type == 'unauthenticated') {
       return false;
@@ -74,7 +71,7 @@ const github = (options) => {
       repo: 'mdn-bcd-results',
       path: `${meta.filename}`,
       message: meta.title,
-      content: meta.buffer.toString('base64'),
+      content: filedata.toString('base64'),
       branch: meta.branch
     });
 

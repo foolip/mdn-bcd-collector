@@ -24,8 +24,10 @@ const {
 const bcd = require('@mdn/browser-compat-data');
 const fs = require('fs-extra');
 const path = require('path');
+const zlib = require('zlib');
 const chalk = require('chalk');
 const Listr = require('listr');
+const stringify = require('json-stable-stringify');
 
 // TODO temporary until https://github.com/SamVerschueren/listr/issues/150 fixed
 const ListrRenderer = require('listr-verbose-renderer');
@@ -285,8 +287,9 @@ const run = async (browser, version, os, ctx, task) => {
 
       if (!ctx.testenv) {
         const report = JSON.parse(reportString);
-        const {filename, buffer} = github.getReportMeta(report);
-        await fs.writeFile(path.join(resultsDir, filename), buffer);
+        const {filename} = github.getReportMeta(report);
+        const filedata = zlib.gzipSync(stringify(report));
+        await fs.writeFile(path.join(resultsDir, filename), filedata);
       }
     } catch (e) {
       // If we can't download the results, fallback to GitHub
