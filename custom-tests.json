@@ -95,7 +95,7 @@
       "__base": "if ('window' in self) {/* Window exposure */ var instance = window.caches} else {/* Worker exposure */ var instance = caches};"
     },
     "CanvasRenderingContext2D": {
-      "__base": "var canvas = document.createElement('canvas'); if (!canvas) {return false}; return canvas.getContext('2d');"
+      "__base": "var canvas = document.createElement('canvas'); if (!canvas) {return false}; var instance = canvas.getContext('2d');"
     },
     "ChannelMergerNode": {
       "__resources": ["audioContext"],
