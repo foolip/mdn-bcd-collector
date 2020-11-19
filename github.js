@@ -19,17 +19,18 @@ const {Octokit} = require('@octokit/rest');
 const slugify = require('slugify');
 const uaParser = require('ua-parser-js');
 const stringify = require('json-stable-stringify');
+const zlib = require('zlib');
 
 const github = (options) => {
   const octokit = new Octokit(options);
 
   const getReportMeta = (report) => {
     const json = stringify(report, {space: 2}) + '\n';
-    const buffer = Buffer.from(json);
+    const buffer = zlib.gzipSync(json);
     /* eslint-disable-next-line max-len */
     // like https://github.com/web-platform-tests/wpt.fyi/blob/26805a0122ea01076ac22c0a96313c1cf5cc30d6/results-processor/wptreport.py#L79
     const hash = crypto.createHash('sha1');
-    const digest = hash.update(buffer).digest('hex').substr(0, 10);
+    const digest = hash.update(Buffer.from(json)).digest('hex').substr(0, 10);
 
     const version = report.__version;
     const ua = uaParser(report.userAgent);
@@ -39,7 +40,7 @@ const github = (options) => {
     const title = `Results from ${desc} / Collector v${version}`;
 
     const slug = `${version.toLowerCase()}-${slugify(desc, {lower: true})}-${digest}`;
-    const filename = `${slug}.json`;
+    const filename = `${slug}.json.gz`;
     const branch = `collector/${slug}`;
 
     return {

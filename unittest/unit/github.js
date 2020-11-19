@@ -93,7 +93,7 @@ describe('GitHub export', () => {
             .once().withArgs(sinon.match({
               owner: 'foolip',
               repo: 'mdn-bcd-results',
-              path: `${expected.slug}.json`,
+              path: `${expected.slug}.json.gz`,
               message: expected.title,
               content: sinon.match.string,
               branch: `collector/${expected.slug}`
