@@ -5,7 +5,6 @@ const deepEqual = require('fast-deep-equal');
 const fs = require('fs').promises;
 const klaw = require('klaw');
 const path = require('path');
-const zlib = require('zlib');
 
 const logger = require('./logger');
 const overrides = require('./overrides').filter(Array.isArray);
@@ -300,10 +299,7 @@ const loadJsonFiles = async (paths) => {
     await new Promise((resolve, reject) => {
       klaw(p, {filter: dotFilter})
           .on('data', (item) => {
-            if (
-              item.path.endsWith('.json') ||
-              item.path.endsWith('.json.gz')
-            ) {
+            if (item.path.endsWith('.json')) {
               jsonFiles.push(item.path);
             }
           })
@@ -314,13 +310,7 @@ const loadJsonFiles = async (paths) => {
 
   const entries = await Promise.all(
       jsonFiles.map(async (file) => {
-        let filedata;
-        if (file.endsWith('.json.gz')) {
-          filedata = zlib.gunzipSync(await fs.readFile(file));
-        } else {
-          filedata = await fs.readFile(file);
-        }
-        const data = JSON.parse(filedata);
+        const data = JSON.parse(await fs.readFile(file));
         return [file, data];
       }));
 
