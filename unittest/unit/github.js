@@ -28,7 +28,7 @@ const REPORTS = [
       userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.0 Safari/605.1.15'
     },
     expected: {
-      slug: '1.2.3-safari-12.0-mac-os-10.14-8fbee54a20',
+      slug: '1.2.3-safari-12.0-mac-os-10.14-0aed9f1f74',
       title: 'Results from Safari 12.0 / Mac OS 10.14 / Collector v1.2.3'
     }
   },
@@ -39,7 +39,7 @@ const REPORTS = [
       userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 11_0_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36'
     },
     expected: {
-      slug: 'dev-chrome-86.0.4240.198-mac-os-11.0.0-ece7bd2b1b',
+      slug: 'dev-chrome-86.0.4240.198-mac-os-11.0.0-4c53c96588',
       title: 'Results from Chrome 86.0.4240.198 / Mac OS 11.0.0 / Collector vDev'
     }
   }

@@ -30,7 +30,7 @@ const github = (options) => {
     /* eslint-disable-next-line max-len */
     // like https://github.com/web-platform-tests/wpt.fyi/blob/26805a0122ea01076ac22c0a96313c1cf5cc30d6/results-processor/wptreport.py#L79
     const hash = crypto.createHash('sha1');
-    const digest = hash.update(buffer).digest('hex').substr(0, 10);
+    const digest = hash.update(Buffer.from(json)).digest('hex').substr(0, 10);
 
     const version = report.__version;
     const ua = uaParser(report.userAgent);
