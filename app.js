@@ -214,7 +214,7 @@ app.all('/tests/*', (req, res) => {
     res.status(404).render('testnotfound', {
       ident,
       suggestion: tests.didYouMean(ident),
-      query: '?' + querystring.encode(req.query)
+      query: querystring.encode(req.query)
     });
   }
 });
