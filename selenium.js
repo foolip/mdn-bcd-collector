@@ -285,8 +285,10 @@ const run = async (browser, version, os, ctx, task) => {
 
       if (!ctx.testenv) {
         const report = JSON.parse(reportString);
-        const {filename, buffer} = github.getReportMeta(report);
-        await fs.writeFile(path.join(resultsDir, filename), buffer);
+        const {filename} = github.getReportMeta(report);
+        await fs.writeJson(
+            path.join(resultsDir, filename), report, {spaces: 2}
+        );
       }
     } catch (e) {
       // If we can't download the results, fallback to GitHub
