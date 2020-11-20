@@ -26,6 +26,7 @@ const fs = require('fs-extra');
 const path = require('path');
 const chalk = require('chalk');
 const Listr = require('listr');
+const stringify = require('json-stable-stringify');
 
 // TODO temporary until https://github.com/SamVerschueren/listr/issues/150 fixed
 const ListrRenderer = require('listr-verbose-renderer');
@@ -286,9 +287,7 @@ const run = async (browser, version, os, ctx, task) => {
       if (!ctx.testenv) {
         const report = JSON.parse(reportString);
         const {filename} = github.getReportMeta(report);
-        await fs.writeJson(
-            path.join(resultsDir, filename), report, {spaces: 2}
-        );
+        await fs.writeFile(path.join(resultsDir, filename), stringify(report));
       }
     } catch (e) {
       // If we can't download the results, fallback to GitHub
