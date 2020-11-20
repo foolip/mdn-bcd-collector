@@ -141,7 +141,7 @@ const inferSupportStatements = (versionMap) => {
   const versions = Array.from(versionMap.keys()).sort(compareVersions);
 
   const statements = [];
-  const lastKnown = {version: null, support: null, prefix: ''};
+  const lastKnown = {version: '0', support: null, prefix: ''};
   let lastWasNull = false;
 
   for (const [_, version] of versions.entries()) {
@@ -151,13 +151,12 @@ const inferSupportStatements = (versionMap) => {
     if (supported === true) {
       if (!lastStatement) {
         statements.push({
-          version_added: (
-            (lastWasNull || lastKnown.support === false) ? '≤' : ''
-          ) + version,
+          version_added:
+            (lastWasNull || lastKnown.support === false) ? `${lastKnown.version}> ≤${version}` : version,
           ...(prefix && {prefix: prefix})
         });
       } else if (!lastStatement.version_added) {
-        lastStatement.version_added = (lastWasNull ? '≤' : '') + version;
+        lastStatement.version_added = lastWasNull ? `${lastKnown.version}> ≤${version}` : version;
       } else if (lastStatement.version_removed) {
         // added back again
         statements.push({
@@ -182,7 +181,7 @@ const inferSupportStatements = (versionMap) => {
         lastStatement.version_added &&
         !lastStatement.version_removed
       ) {
-        lastStatement.version_removed = (lastWasNull ? '≤' : '') + version;
+        lastStatement.version_removed = lastWasNull ? `${lastKnown.version}> ≤${version}` : version;
       } else if (!lastStatement) {
         statements.push({version_added: false});
       }
@@ -256,17 +255,22 @@ const update = (bcd, supportMatrix) => {
         typeof(inferredStatement.version_added) === 'string' &&
         inferredStatement.version_added.includes('≤')
       ) {
+        const range = inferredStatement.version_added.split('> ≤');
         if (compareVersions.compare(
             simpleStatement.version_added.replace('≤', ''),
-            inferredStatement.version_added.replace('≤', ''),
+            range[0],
+            '<='
+        ) || compareVersions.compare(
+            simpleStatement.version_added.replace('≤', ''),
+            range[1],
             '>'
         )) {
-          simpleStatement.version_added = inferredStatement.version_added;
+          simpleStatement.version_added = inferredStatement.version_added.replace('0> ', '');
           modified = true;
         }
       } else if (!(typeof(simpleStatement.version_added) === 'string' &&
             inferredStatement.version_added === true)) {
-        simpleStatement.version_added = inferredStatement.version_added;
+        simpleStatement.version_added = typeof(inferredStatement.version_added) === 'string' ? inferredStatement.version_added.replace('0> ', '') : inferredStatement.version_added;
         modified = true;
       }
 
