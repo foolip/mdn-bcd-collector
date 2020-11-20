@@ -562,10 +562,10 @@ describe('BCD updater', () => {
   describe('inferSupportStatements', () => {
     const expectedResults = {
       'api.AbortController': [
-        {version_added: '≤83'}
+        {version_added: '0> ≤83'}
       ],
       'api.AbortController.abort': [
-        {version_added: '≤84'}
+        {version_added: '0> ≤84'}
       ],
       'api.AbortController.AbortController': [
         {version_added: '85'}
@@ -577,24 +577,24 @@ describe('BCD updater', () => {
         {version_added: '85'}
       ],
       'api.DeprecatedInterface': [
-        {version_added: '≤83', version_removed: '85'}
+        {version_added: '0> ≤83', version_removed: '85'}
       ],
       'api.ExperimentalInterface': [
-        {version_added: '≤83'}
+        {version_added: '0> ≤83'}
       ],
       'api.NewInterfaceNotInBCD': [
         {version_added: '85'}
       ],
       'api.NullAPI': [],
       'api.PrefixedInterface1': [
-        {version_added: '≤83'}
+        {version_added: '0> ≤83'}
       ],
       'api.PrefixedInterface2': [
-        {prefix: 'WebKit', version_added: '≤83'},
+        {prefix: 'WebKit', version_added: '0> ≤83'},
         {version_added: '85'}
       ],
       'api.RemovedInterface': [
-        {version_added: '≤83', version_removed: '84'},
+        {version_added: '0> ≤83', version_removed: '84'},
         {version_added: '85'}
       ],
       'css.properties.font-family': [
