@@ -240,7 +240,10 @@ const update = (bcd, supportMatrix) => {
         // alternative name, but in any case implies that the main feature
         // is not supported. So only update in case new data contradicts that.
         if (inferredStatements.some((statement) => statement.version_added)) {
-          supportStatement.unshift(...inferredStatements);
+          supportStatement.unshift(...inferredStatements.map((item) => {
+            item.version_added = typeof(item.version_added) === 'string' ? item.version_added.replace('0> ', '') : item.version_added;
+            return item;
+          }));
           supportStatement = supportStatement.filter((item, pos, self) => {
             return pos === self.findIndex((el) => deepEqual(el, item));
           });
