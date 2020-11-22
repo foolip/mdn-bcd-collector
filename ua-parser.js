@@ -27,6 +27,9 @@ const parseUA = (userAgent, browsers) => {
   if (browser.id === 'samsung_browser') {
     browser.id = 'samsunginternet';
   }
+  if (browser.id === 'chrome_webview') {
+    browser.id = 'webview';
+  }
   if (os === 'android') {
     browser.id += '_android';
     browser.name += ' Android';
