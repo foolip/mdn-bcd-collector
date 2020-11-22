@@ -410,7 +410,8 @@
       "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLMarqueeElement' && Object.prototype.toString.call(instance) !== '[object HTMLMarqueeElement]') {return false;} return !!instance;"
     },
     "HTMLMediaElement": {
-      "__base": "<%api.HTMLVideoElement:instance%>"
+      "__base": "<%api.HTMLVideoElement:instance%>",
+      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLVideoElement' && Object.prototype.toString.call(instance) !== '[object HTMLVideoElement]') {return false;} return !!instance;"
     },
     "HTMLMenuElement": {
       "__base": "var instance = document.createElement('menu');",
@@ -474,7 +475,7 @@
     },
     "HTMLQuoteElement": {
       "__base": "var instance = document.createElement('blockquote');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLQuoteElement' && instance.constructor.name !== 'HTMLBlockquoteElementConstructor' && Object.prototype.toString.call(instance) !== '[object HTMLQuoteElement]' && Object.prototype.toString.call(instance) !== '[object HTMLBlockquoteElement]') {return false;} return !!instance;"
+      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLQuoteElement' && instance.constructor.name !== 'HTMLBlockElementConstructor' && instance.constructor.name !== 'HTMLBlockquoteElementConstructor' && Object.prototype.toString.call(instance) !== '[object HTMLQuoteElement]' && Object.prototype.toString.call(instance) !== '[object HTMLBlockquoteElement]' && Object.prototype.toString.call(instance) !== '[object HTMLBlockElement]') {return false;} return !!instance;"
     },
     "HTMLScriptElement": {
       "__base": "var instance = document.createElement('script');",
@@ -769,7 +770,8 @@
       "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGAnimateTransformElement' && Object.prototype.toString.call(instance) !== '[object SVGAnimateTransformElement]') {return false;} return !!instance;"
     },
     "SVGAnimationElement": {
-      "__base": "<%api.SVGAnimateElement:instance%>"
+      "__base": "<%api.SVGAnimateElement:instance%>",
+      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGAnimateElement' && Object.prototype.toString.call(instance) !== '[object SVGAnimateElement]') {return false;} return !!instance;"
     },
     "SVGCircleElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'circle');",
@@ -939,7 +941,8 @@
       "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGGElement' && Object.prototype.toString.call(instance) !== '[object SVGGElement]') {return false;} return !!instance;"
     },
     "SVGGeometryElement": {
-      "__base": "<%api.SVGPathElement:instance%>"
+      "__base": "<%api.SVGPathElement:instance%>",
+      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGPathElement' && Object.prototype.toString.call(instance) !== '[object SVGPathElement]') {return false;} return !!instance;"
     },
     "SVGGlyphElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'glyph');",
@@ -950,7 +953,8 @@
       "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGGlyphRefElement' && Object.prototype.toString.call(instance) !== '[object SVGGlyphRefElement]') {return false;} return !!instance;"
     },
     "SVGGradientElement": {
-      "__base": "<%api.SVGLinearGradientElement:instance%>"
+      "__base": "<%api.SVGLinearGradientElement:instance%>",
+      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGLinearGradientElement' && Object.prototype.toString.call(instance) !== '[object SVGLinearGradientElement]') {return false;} return !!instance;"
     },
     "SVGHKernElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'hkern');",
@@ -1049,14 +1053,16 @@
       "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGTextElement' && Object.prototype.toString.call(instance) !== '[object SVGTextElement]') {return false;} return !!instance;"
     },
     "SVGTextContentElement": {
-      "__base": "<%api.SVGTextElement:instance%>"
+      "__base": "<%api.SVGTextElement:instance%>",
+      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGTextElement' && Object.prototype.toString.call(instance) !== '[object SVGTextElement]') {return false;} return !!instance;"
     },
     "SVGTextPathElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'textPath');",
       "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGTextPathElement' && Object.prototype.toString.call(instance) !== '[object SVGTextPathElement]') {return false;} return !!instance;"
     },
     "SVGTextPositioningElement": {
-      "__base": "<%api.SVGTextElement:instance%>"
+      "__base": "<%api.SVGTextElement:instance%>",
+      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGTextElement' && Object.prototype.toString.call(instance) !== '[object SVGTextElement]') {return false;} return !!instance;"
     },
     "SVGTitleElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'title');",
