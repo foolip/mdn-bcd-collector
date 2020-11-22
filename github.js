@@ -16,6 +16,7 @@
 
 const crypto = require('crypto');
 const {Octokit} = require('@octokit/rest');
+const slugify = require('slugify');
 const stringify = require('json-stable-stringify');
 const {parseUA} = require('./ua-parser');
 const bcdBrowsers = require('@mdn/browser-compat-data').browsers;
@@ -38,7 +39,7 @@ const github = (options) => {
     const desc = `${browser} / ${os}`;
     const title = `Results from ${desc} / Collector v${version}`;
 
-    const slug = `${version.toLowerCase()}-${ua.browser.id.replace(/_/g, '-')}-${ua.fullVersion}-${digest}`;
+    const slug = `${version.toLowerCase()}-${ua.browser.id.replace(/_/g, '-')}-${ua.fullVersion}-${slugify(os, {lower: true})}-${digest}`;
     const filename = `${slug}.json`;
     const branch = `collector/${slug}`;
 
