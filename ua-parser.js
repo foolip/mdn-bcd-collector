@@ -26,16 +26,19 @@ const parseUA = (userAgent, browsers) => {
   data.os.name = ua.os.name;
   data.os.version = ua.os.version;
 
+  switch (data.browser.id) {
+    case 'mobile_safari':
+      data.browser.id = 'safari_ios';
+      break;
+    case 'samsung_browser':
+      data.browser.id = 'samsunginternet';
+      break;
+    case 'chrome_webview':
+      data.browser.id = 'webview';
+      break;
+  }
+
   const os = data.os.name.toLowerCase();
-  if (data.browser.id === 'mobile_safari') {
-    data.browser.id = 'safari_ios';
-  }
-  if (data.browser.id === 'samsung_browser') {
-    data.browser.id = 'samsunginternet';
-  }
-  if (data.browser.id === 'chrome_webview') {
-    data.browser.id = 'webview';
-  }
   if (os === 'android') {
     data.browser.id += '_android';
     data.browser.name += ' Android';
