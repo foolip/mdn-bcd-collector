@@ -11,7 +11,6 @@ const overrides = require('./overrides').filter(Array.isArray);
 const {parseUA} = require('./ua-parser');
 
 const BCD_DIR = process.env.BCD_DIR || `../browser-compat-data`;
-// This will load and parse parts of BCD twice, but it's simple.
 const {browsers} = require(BCD_DIR);
 
 const findEntry = (bcd, path) => {
@@ -79,7 +78,7 @@ const getSupportMap = (report) => {
 
 // Load all reports and build a map from BCD path to browser + version
 // and test result (null/true/false) for that version.
-const getSupportMatrix = (browsers, reports) => {
+const getSupportMatrix = (reports) => {
   const supportMatrix = new Map;
 
   for (const report of reports) {
@@ -338,7 +337,7 @@ const main = async (reportPaths, categories, limitBrowsers) => {
   );
 
   const reports = Object.values(await loadJsonFiles(reportPaths));
-  const supportMatrix = getSupportMatrix(browsers, reports);
+  const supportMatrix = getSupportMatrix(reports);
 
   // Should match https://github.com/mdn/browser-compat-data/blob/f10bf2cc7d1b001a390e70b7854cab9435ffb443/test/linter/test-style.js#L63
   // TODO: https://github.com/mdn/browser-compat-data/issues/3617
