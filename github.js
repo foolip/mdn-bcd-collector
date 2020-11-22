@@ -17,8 +17,9 @@
 const crypto = require('crypto');
 const {Octokit} = require('@octokit/rest');
 const slugify = require('slugify');
-const uaParser = require('ua-parser-js');
 const stringify = require('json-stable-stringify');
+const {parseUA} = require('./ua-parser');
+const bcdBrowsers = require('@mdn/browser-compat-data').browsers;
 
 const github = (options) => {
   const octokit = new Octokit(options);
@@ -32,13 +33,13 @@ const github = (options) => {
     const digest = hash.update(buffer).digest('hex').substr(0, 10);
 
     const version = report.__version;
-    const ua = uaParser(report.userAgent);
-    const browser = `${ua.browser.name} ${ua.browser.version}`;
+    const ua = parseUA(report.userAgent, bcdBrowsers);
+    const browser = `${ua.browser.name} ${ua.version}`;
     const os = `${ua.os.name} ${ua.os.version}`;
     const desc = `${browser} / ${os}`;
     const title = `Results from ${desc} / Collector v${version}`;
 
-    const slug = `${version.toLowerCase()}-${slugify(desc, {lower: true})}-${digest}`;
+    const slug = `${version.toLowerCase()}-${ua.browser.id.replace(/_/g, '-')}-${ua.fullVersion}-${slugify(os, {lower: true})}-${digest}`;
     const filename = `${slug}.json`;
     const branch = `collector/${slug}`;
 
@@ -48,7 +49,7 @@ const github = (options) => {
   };
 
   const createBody = (meta) => {
-    return `User Agent: ${meta.ua.ua}\nBrowser: ${meta.browser} (on ${meta.os})` +
+    return `User Agent: ${meta.ua.ua}\nBrowser: ${meta.browser} (on ${meta.os}) ${meta.ua.inBcd ? '' : ' - **Not in BCD**'}` +
             `\nHash Digest: ${meta.digest}\n` +
             (meta.version == 'Dev' ? '\n**WARNING:** this PR was created from a development/staging version!' : '');
   };

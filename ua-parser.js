@@ -10,40 +10,53 @@ const getMajorMinorVersion = (version) => {
 
 const parseUA = (userAgent, browsers) => {
   const ua = uaParser(userAgent);
-
-  if (!ua.browser.name) {
-    return {browser: {id: null, name: null}, version: null, inBcd: undefined};
-  }
-
-  const browser = {
-    id: ua.browser.name.toLowerCase().replace(/ /g, '_'),
-    name: ua.browser.name
+  const data = {
+    browser: {id: null, name: null},
+    version: null,
+    fullVersion: null,
+    os: {name: null, version: null},
+    inBcd: undefined
   };
 
-  const os = ua.os.name.toLowerCase();
-  if (browser.id === 'mobile_safari') {
-    browser.id = 'safari_ios';
+  if (!ua.browser.name) {
+    return data;
   }
-  if (browser.id === 'samsung_browser') {
-    browser.id = 'samsunginternet';
+
+  data.browser.id = ua.browser.name.toLowerCase().replace(/ /g, '_');
+  data.browser.name = ua.browser.name;
+  data.os.name = ua.os.name;
+  data.os.version = ua.os.version;
+
+  switch (data.browser.id) {
+    case 'mobile_safari':
+      data.browser.id = 'safari_ios';
+      break;
+    case 'samsung_browser':
+      data.browser.id = 'samsunginternet';
+      break;
+    case 'chrome_webview':
+      data.browser.id = 'webview';
+      break;
   }
+
+  const os = data.os.name.toLowerCase();
   if (os === 'android') {
-    browser.id += '_android';
-    browser.name += ' Android';
+    data.browser.id += '_android';
+    data.browser.name += ' Android';
   }
 
   // https://github.com/mdn/browser-compat-data/blob/master/docs/data-guidelines.md#safari-for-ios-versioning
-  const version = getMajorMinorVersion(
-    browser.id === 'safari_ios' ? ua.os.version : ua.browser.version
-  );
+  data.fullVersion = data.browser.id === 'safari_ios' ? ua.os.version : ua.browser.version;
+  data.version = getMajorMinorVersion(data.fullVersion);
 
-  if (!(browser.id in browsers)) {
-    return {browser, version, inBcd: undefined};
+  if (!(data.browser.id in browsers)) {
+    return data;
   }
 
-  browser.name = browsers[browser.id].name;
+  data.browser.name = browsers[data.browser.id].name;
+  data.inBcd = false;
 
-  const versions = Object.keys(browsers[browser.id].releases);
+  const versions = Object.keys(browsers[data.browser.id].releases);
   versions.sort(compareVersions);
 
   // The |version| from the UA string is typically more precise than |versions|
@@ -54,9 +67,11 @@ const parseUA = (userAgent, browsers) => {
   for (let i = 0; i < versions.length - 1; i++) {
     const current = versions[i];
     const next = versions[i + 1];
-    if (compareVersions.compare(version, current, '>=') &&
-        compareVersions.compare(version, next, '<')) {
-      return {browser, version: current, inBcd: true};
+    if (compareVersions.compare(data.version, current, '>=') &&
+        compareVersions.compare(data.version, next, '<')) {
+      data.inBcd = true;
+      data.version = current;
+      break;
     }
   }
 
@@ -64,11 +79,12 @@ const parseUA = (userAgent, browsers) => {
   // we have to check that the major versions match. Given |version| "10.3"
   // and |versions| entries "10.0" and "10.2", return "10.2". Given |version|
   // "11.0", skip.
-  if (version.split('.')[0] === versions[versions.length-1].split('.')[0]) {
-    return {browser, version: versions[versions.length-1], inBcd: true};
+  if (data.inBcd == false && data.version.split('.')[0] === versions[versions.length-1].split('.')[0]) {
+    data.inBcd = true;
+    data.version = versions[versions.length-1];
   }
 
-  return {browser, version, inBcd: false};
+  return data;
 };
 
 module.exports = {
