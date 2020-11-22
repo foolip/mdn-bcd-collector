@@ -49,7 +49,7 @@ const github = (options) => {
   };
 
   const createBody = (meta) => {
-    return `User Agent: ${meta.ua.ua}\nBrowser: ${meta.browser} (on ${meta.os})` +
+    return `User Agent: ${meta.ua.ua}\nBrowser: ${meta.browser} (on ${meta.os}) ${meta.ua.inBcd ? '' : ' - **Not in BCD**'}` +
             `\nHash Digest: ${meta.digest}\n` +
             (meta.version == 'Dev' ? '\n**WARNING:** this PR was created from a development/staging version!' : '');
   };
