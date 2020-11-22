@@ -20,20 +20,6 @@ const proxyquire = require('proxyquire').noCallThru();
 const sinon = require('sinon');
 
 const logger = require('../../logger');
-const {
-  findEntry,
-  getSupportMap,
-  getSupportMatrix,
-  inferSupportStatements,
-  update
-} = proxyquire('../../update-bcd', {
-  './overrides': [
-    'Test overrides',
-    ['css.properties.font-family', 'safari', '5.1', false, ''],
-    ['css.properties.font-family', 'chrome', '83', false, ''],
-    ['css.properties.font-face', 'chrome', '*', null, '']
-  ]
-});
 
 const bcd = {
   api: {
@@ -113,6 +99,22 @@ const bcd = {
     }
   }
 };
+
+const {
+  findEntry,
+  getSupportMap,
+  getSupportMatrix,
+  inferSupportStatements,
+  update
+} = proxyquire('../../update-bcd', {
+  './overrides': [
+    'Test overrides',
+    ['css.properties.font-family', 'safari', '5.1', false, ''],
+    ['css.properties.font-family', 'chrome', '83', false, ''],
+    ['css.properties.font-face', 'chrome', '*', null, '']
+  ],
+  '../browser-compat-data': bcd
+});
 
 const reports = [
   {
@@ -462,7 +464,7 @@ describe('BCD updater', () => {
     });
 
     it('normal', () => {
-      assert.deepEqual(getSupportMatrix(bcd.browsers, reports), new Map([
+      assert.deepEqual(getSupportMatrix(reports), new Map([
         ['api.AbortController', new Map([['chrome', new Map([
           ['82', {result: null, prefix: ''}],
           ['83', {result: true, prefix: ''}],
@@ -603,7 +605,7 @@ describe('BCD updater', () => {
       'css.properties.font-face': []
     };
 
-    const supportMatrix = getSupportMatrix(bcd.browsers, reports);
+    const supportMatrix = getSupportMatrix(reports);
     for (const [path, browserMap] of supportMatrix.entries()) {
       for (const [_, versionMap] of browserMap.entries()) {
         it(path, () => {
@@ -629,7 +631,7 @@ describe('BCD updater', () => {
           },
           userAgent: 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.61 Safari/537.36'
         };
-        const versionMap = getSupportMatrix(bcd.browsers, [report])
+        const versionMap = getSupportMatrix([report])
             .entries().next().value[1].entries().next().value[1];
 
         inferSupportStatements(versionMap);
@@ -638,7 +640,7 @@ describe('BCD updater', () => {
   });
 
   describe('update', () => {
-    const supportMatrix = getSupportMatrix(bcd.browsers, reports);
+    const supportMatrix = getSupportMatrix(reports);
     let bcdCopy;
 
     beforeEach(() => {
