@@ -13,6 +13,7 @@ const parseUA = (userAgent, browsers) => {
   const data = {
     browser: {id: null, name: null},
     version: null,
+    fullVersion: null,
     os: {name: null, version: null},
     inBcd: undefined
   };
@@ -45,9 +46,8 @@ const parseUA = (userAgent, browsers) => {
   }
 
   // https://github.com/mdn/browser-compat-data/blob/master/docs/data-guidelines.md#safari-for-ios-versioning
-  data.version = getMajorMinorVersion(
-    data.browser.id === 'safari_ios' ? ua.os.version : ua.browser.version
-  );
+  data.fullVersion = data.browser.id === 'safari_ios' ? ua.os.version : ua.browser.version;
+  data.version = getMajorMinorVersion(data.fullVersion);
 
   if (!(data.browser.id in browsers)) {
     return data;

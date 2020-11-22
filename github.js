@@ -38,7 +38,7 @@ const github = (options) => {
     const desc = `${browser} / ${os}`;
     const title = `Results from ${desc} / Collector v${version}`;
 
-    const slug = `${version.toLowerCase()}-${ua.browser.id.replace(/_/g, '-')}-${ua.version}-${digest}`;
+    const slug = `${version.toLowerCase()}-${ua.browser.id.replace(/_/g, '-')}-${ua.fullVersion}-${digest}`;
     const filename = `${slug}.json`;
     const branch = `collector/${slug}`;
 
