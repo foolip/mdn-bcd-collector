@@ -10,6 +10,9 @@ const logger = require('./logger');
 const overrides = require('./overrides').filter(Array.isArray);
 const {parseUA} = require('./ua-parser');
 
+const BCD_DIR = process.env.BCD_DIR || `../browser-compat-data`;
+const {browsers} = require(BCD_DIR);
+
 const findEntry = (bcd, path) => {
   if (!path) {
     return null;
@@ -75,7 +78,7 @@ const getSupportMap = (report) => {
 
 // Load all reports and build a map from BCD path to browser + version
 // and test result (null/true/false) for that version.
-const getSupportMatrix = (browsers, reports) => {
+const getSupportMatrix = (reports) => {
   const supportMatrix = new Map;
 
   for (const report of reports) {
@@ -201,7 +204,7 @@ const inferSupportStatements = (versionMap) => {
   return statements;
 };
 
-const update = (bcd, supportMatrix) => {
+const update = (bcd, supportMatrix, limitBrowsers) => {
   let modified = false;
 
   for (const [path, browserMap] of supportMatrix.entries()) {
@@ -211,6 +214,9 @@ const update = (bcd, supportMatrix) => {
     }
 
     for (const [browser, versionMap] of browserMap.entries()) {
+      if (limitBrowsers && !limitBrowsers.includes(browser)) {
+        continue;
+      }
       const inferredStatements = inferSupportStatements(versionMap);
       if (inferredStatements.length !== 1) {
         // TODO: handle more complicated scenarios
@@ -325,21 +331,18 @@ const loadJsonFiles = async (paths) => {
 };
 
 /* istanbul ignore next */
-const main = async (reportPaths, categories) => {
-  const BCD_DIR = process.env.BCD_DIR || `../browser-compat-data`;
-  // This will load and parse parts of BCD twice, but it's simple.
-  const {browsers} = require(BCD_DIR);
+const main = async (reportPaths, categories, limitBrowsers) => {
   const bcdFiles = await loadJsonFiles(
       categories.map((cat) => path.join(BCD_DIR, ...cat.split('.')))
   );
 
   const reports = Object.values(await loadJsonFiles(reportPaths));
-  const supportMatrix = getSupportMatrix(browsers, reports);
+  const supportMatrix = getSupportMatrix(reports);
 
   // Should match https://github.com/mdn/browser-compat-data/blob/f10bf2cc7d1b001a390e70b7854cab9435ffb443/test/linter/test-style.js#L63
   // TODO: https://github.com/mdn/browser-compat-data/issues/3617
   for (const [file, data] of Object.entries(bcdFiles)) {
-    const modified = update(data, supportMatrix);
+    const modified = update(data, supportMatrix, limitBrowsers);
     if (!modified) {
       continue;
     }
@@ -374,11 +377,17 @@ if (require.main === module) {
               type: 'array',
               choices: ['api', 'css.properties'],
               default: ['api', 'css.properties']
+            }).option('browser', {
+              alias: 'b',
+              describe: 'The browser to update',
+              type: 'array',
+              choices: Object.keys(browsers),
+              default: null
             });
       }
   );
 
-  main(argv.reports, argv.category).catch((error) => {
+  main(argv.reports, argv.category, argv.browser).catch((error) => {
     logger.error(error.stack);
     process.exit(1);
   });
