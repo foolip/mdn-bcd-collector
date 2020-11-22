@@ -29,7 +29,7 @@ const REPORTS = [
     },
     expected: {
       slug: '1.2.3-safari-12.0-mac-os-10.14-cadc34e83f',
-      title: 'Results from Safari 12.0 / Mac OS 10.14 / Collector v1.2.3'
+      title: 'Results from Safari 12 / Mac OS 10.14 / Collector v1.2.3'
     }
   },
   {
@@ -40,7 +40,18 @@ const REPORTS = [
     },
     expected: {
       slug: 'dev-chrome-86.0.4240.198-mac-os-11.0.0-31072b9b56',
-      title: 'Results from Chrome 86.0.4240.198 / Mac OS 11.0.0 / Collector vDev'
+      title: 'Results from Chrome 86 / Mac OS 11.0.0 / Collector vDev'
+    }
+  },
+  {
+    report: {
+      __version: 'Dev',
+      results: {},
+      userAgent: 'Mozilla/5.0 (Linux; Android 11; Pixel 2) AppleWebKit/537.36 (KHTML, like Gecko) SamsungBrowser/12.1 Chrome/79.0.3945.136 Mobile Safari/537.36'
+    },
+    expected: {
+      slug: 'dev-samsunginternet-android-12.1-android-11-d425ab14a8',
+      title: 'Results from Samsung Internet 12.1 / Android 11 / Collector vDev'
     }
   }
 ];
