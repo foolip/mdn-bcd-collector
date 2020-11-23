@@ -382,7 +382,7 @@ if (require.main === module) {
               describe: 'The browser to update',
               type: 'array',
               choices: Object.keys(browsers),
-              default: null
+              default: []
             });
       }
   );
