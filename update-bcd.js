@@ -214,7 +214,7 @@ const update = (bcd, supportMatrix, limitBrowsers) => {
     }
 
     for (const [browser, versionMap] of browserMap.entries()) {
-      if (limitBrowsers && !limitBrowsers.includes(browser)) {
+      if (limitBrowsers.length && !limitBrowsers.includes(browser)) {
         continue;
       }
       const inferredStatements = inferSupportStatements(versionMap);
