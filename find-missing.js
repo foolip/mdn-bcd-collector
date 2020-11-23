@@ -73,7 +73,7 @@ const main = () => {
 
   const {missingEntries, total} = getMissing(argv.direction);
   console.log(missingEntries.join('\n'));
-  console.log(`\n${missingEntries.length}/${total} (${(missingEntries.length/total*100.0).toFixed(2)}%) missing`)
+  console.log(`\n${missingEntries.length}/${total} (${(missingEntries.length/total*100.0).toFixed(2)}%) missing`);
 };
 
 module.exports = {
