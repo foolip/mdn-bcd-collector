@@ -648,7 +648,7 @@ describe('BCD updater', () => {
     });
 
     it('normal', () => {
-      update(bcdCopy, supportMatrix);
+      update(bcdCopy, supportMatrix, []);
       assert.deepEqual(bcdCopy, {
         api: {
           AbortController: {

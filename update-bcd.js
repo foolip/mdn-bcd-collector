@@ -214,7 +214,7 @@ const update = (bcd, supportMatrix, limitBrowsers) => {
     }
 
     for (const [browser, versionMap] of browserMap.entries()) {
-      if (limitBrowsers && !limitBrowsers.includes(browser)) {
+      if (limitBrowsers.length && !limitBrowsers.includes(browser)) {
         continue;
       }
       const inferredStatements = inferSupportStatements(versionMap);
@@ -382,7 +382,7 @@ if (require.main === module) {
               describe: 'The browser to update',
               type: 'array',
               choices: Object.keys(browsers),
-              default: null
+              default: []
             });
       }
   );
