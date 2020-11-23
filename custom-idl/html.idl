@@ -175,7 +175,6 @@ partial interface HTMLInputElement {
   attribute boolean incremental;
 
   attribute boolean autofocus;
-  attribute DOMString formEncType;
   attribute EventHandler onsearch;
   attribute any weight;
 
