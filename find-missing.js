@@ -32,7 +32,7 @@ const findMissing = (entries1, entries2) => {
     }
   }
 
-  return missingEntries;
+  return {missingEntries, total: entries2.length};
 };
 
 const getMissing = (direction = 'collector-to-bcd') => {
@@ -71,7 +71,9 @@ const main = () => {
       }
   );
 
-  console.log(getMissing(argv.direction).join('\n'));
+  const {missingEntries, total} = getMissing(argv.direction);
+  console.log(missingEntries.join('\n'));
+  console.log(`\n${missingEntries.length}/${total} (${(missingEntries.length/total*100.0).toFixed(2)}%) missing`);
 };
 
 module.exports = {

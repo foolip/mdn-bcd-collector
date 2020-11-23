@@ -79,27 +79,27 @@ describe('find-missing', () => {
     });
 
     it('collector -> bcd', () => {
-      assert.deepEqual(getMissing(), [
+      assert.deepEqual(getMissing(), {missingEntries: [
         'api.AbortController.dummy',
         'api.DummyAPI',
         'api.DummyAPI.dummy',
         'css.properties.font-face'
-      ]);
+      ], total: 4});
     });
 
     it('bcd -> collector', () => {
-      assert.deepEqual(getMissing('bcd-to-collector'), [
+      assert.deepEqual(getMissing('bcd-to-collector'), {missingEntries: [
         'javascript.builtins.array'
-      ]);
+      ], total: 7});
     });
 
     it('unknown direction', () => {
-      assert.deepEqual(getMissing('foo-to-bar'), [
+      assert.deepEqual(getMissing('foo-to-bar'), {missingEntries: [
         'api.AbortController.dummy',
         'api.DummyAPI',
         'api.DummyAPI.dummy',
         'css.properties.font-face'
-      ]);
+      ], total: 4});
 
       assert.isTrue(console.log.calledWith('Direction \'foo-to-bar\' is unknown; defaulting to collector -> bcd'));
     });
