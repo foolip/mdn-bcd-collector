@@ -166,7 +166,6 @@ partial interface HTMLIFrameElement {
 };
 
 partial interface HTMLImageElement {
-  attribute USVString lowSrc;
   attribute EventHandler onerror;
 };
 
