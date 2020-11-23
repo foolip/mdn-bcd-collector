@@ -38,7 +38,7 @@ const compileCustomTest = (code, format = true) => {
           /var (instance|promise)/g, `var ${instancevar}`
       );
       if (instancevar !== 'instance' && instancevar !== 'promise') {
-        importcode += ` if (!${instancevar}) {return false;}`;
+        importcode += ` if (!${instancevar}) {return null;}`;
       }
       return importcode;
     }
