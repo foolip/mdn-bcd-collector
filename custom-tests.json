@@ -637,6 +637,9 @@
     "Node": {
       "__base": "var instance = document;"
     },
+    "NodeList": {
+      "__base": "var instance = document.childNodes;"
+    },
     "NodeIterator": {
       "__base": "var instance = document.createNodeIterator(document);"
     },
