@@ -45,7 +45,8 @@ const github = (options) => {
     const branch = `collector/${slug}`;
 
     return {
-      json, buffer, digest, uaString, ua, browser, os, desc, title, slug, filename, branch
+      json, buffer, digest, uaString, ua, browser,
+      os, desc, title, slug, filename, branch
     };
   };
 
