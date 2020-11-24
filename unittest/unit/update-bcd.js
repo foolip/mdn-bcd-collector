@@ -24,7 +24,10 @@ const logger = require('../../logger');
 const bcd = {
   api: {
     AbortController: {
-      __compat: {support: {chrome: {version_added: '80'}}},
+      __compat: {support: {
+        chrome: {version_added: '80'},
+        safari: {version_added: null}
+      }},
       AbortController: {
         __compat: {support: {chrome: {version_added: null}}}
       },
@@ -388,6 +391,19 @@ const reports = [
         {
           name: 'api.AbortController',
           info: {exposure: 'Window'},
+          result: true
+        }
+      ]
+    },
+    userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/13.1.2 Safari/605.1.15'
+  },
+  {
+    __version: '0.3.1',
+    results: {
+      'https://mdn-bcd-collector.appspot.com/tests/': [
+        {
+          name: 'api.AbortController',
+          info: {exposure: 'Window'},
           result: false
         }
       ]
@@ -465,12 +481,19 @@ describe('BCD updater', () => {
 
     it('normal', () => {
       assert.deepEqual(getSupportMatrix(reports), new Map([
-        ['api.AbortController', new Map([['chrome', new Map([
-          ['82', {result: null, prefix: ''}],
-          ['83', {result: true, prefix: ''}],
-          ['84', {result: true, prefix: ''}],
-          ['85', {result: true, prefix: ''}]
-        ])]])],
+        ['api.AbortController', new Map([
+          ['chrome', new Map([
+            ['82', {result: null, prefix: ''}],
+            ['83', {result: true, prefix: ''}],
+            ['84', {result: true, prefix: ''}],
+            ['85', {result: true, prefix: ''}]
+          ])],
+          ['safari', new Map([
+            ['13', {result: null, prefix: ''}],
+            ['13.1', {result: true, prefix: ''}],
+            ['14', {result: null, prefix: ''}]
+          ])]
+        ])],
         ['api.AbortController.abort', new Map([['chrome', new Map([
           ['82', {result: null, prefix: ''}],
           ['83', {result: null, prefix: ''}],
@@ -563,54 +586,56 @@ describe('BCD updater', () => {
 
   describe('inferSupportStatements', () => {
     const expectedResults = {
-      'api.AbortController': [
+      'api.AbortController': {chrome: [
         {version_added: '0> ≤83'}
-      ],
-      'api.AbortController.abort': [
+      ], safari: [
+        {version_added: '0> ≤13.1'}
+      ]},
+      'api.AbortController.abort': {chrome: [
         {version_added: '0> ≤84'}
-      ],
-      'api.AbortController.AbortController': [
+      ]},
+      'api.AbortController.AbortController': {chrome: [
         {version_added: '85'}
-      ],
-      'api.AudioContext': [
+      ]},
+      'api.AudioContext': {chrome: [
         {version_added: '85'}
-      ],
-      'api.AudioContext.close': [
+      ]},
+      'api.AudioContext.close': {chrome: [
         {version_added: '85'}
-      ],
-      'api.DeprecatedInterface': [
+      ]},
+      'api.DeprecatedInterface': {chrome: [
         {version_added: '0> ≤83', version_removed: '85'}
-      ],
-      'api.ExperimentalInterface': [
+      ]},
+      'api.ExperimentalInterface': {chrome: [
         {version_added: '0> ≤83'}
-      ],
-      'api.NewInterfaceNotInBCD': [
+      ]},
+      'api.NewInterfaceNotInBCD': {chrome: [
         {version_added: '85'}
-      ],
-      'api.NullAPI': [],
-      'api.PrefixedInterface1': [
+      ]},
+      'api.NullAPI': {chrome: []},
+      'api.PrefixedInterface1': {chrome: [
         {version_added: '0> ≤83'}
-      ],
-      'api.PrefixedInterface2': [
+      ]},
+      'api.PrefixedInterface2': {chrome: [
         {prefix: 'WebKit', version_added: '0> ≤83'},
         {version_added: '85'}
-      ],
-      'api.RemovedInterface': [
+      ]},
+      'api.RemovedInterface': {chrome: [
         {version_added: '0> ≤83', version_removed: '84'},
         {version_added: '85'}
-      ],
-      'css.properties.font-family': [
+      ]},
+      'css.properties.font-family': {chrome: [
         {version_added: '84'}
-      ],
-      'css.properties.font-face': []
+      ]},
+      'css.properties.font-face': {chrome: []}
     };
 
     const supportMatrix = getSupportMatrix(reports);
     for (const [path, browserMap] of supportMatrix.entries()) {
-      for (const [_, versionMap] of browserMap.entries()) {
-        it(path, () => {
+      for (const [browser, versionMap] of browserMap.entries()) {
+        it(`${path}: ${browser}`, () => {
           assert.deepEqual(
-              inferSupportStatements(versionMap), expectedResults[path]
+              inferSupportStatements(versionMap), expectedResults[path][browser]
           );
         });
       }
@@ -652,7 +677,10 @@ describe('BCD updater', () => {
       assert.deepEqual(bcdCopy, {
         api: {
           AbortController: {
-            __compat: {support: {chrome: {version_added: '80'}}},
+            __compat: {support: {
+              chrome: {version_added: '80'},
+              safari: {version_added: '≤13.1'}
+            }},
             AbortController: {
               __compat: {support: {chrome: {version_added: '85'}}}
             },
@@ -746,6 +774,13 @@ describe('BCD updater', () => {
             }
           }
         }
+      });
+    });
+
+    it('limit browsers', () => {
+      update(bcdCopy, supportMatrix, ['chrome']);
+      assert.deepEqual(bcdCopy.api.AbortController.__compat.support.safari, {
+        version_added: null
       });
     });
   });
