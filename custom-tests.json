@@ -602,7 +602,8 @@
       "__base": "<%api.MediaStreamTrack:track%> var promise = track.then(function(t) {var imageCapture = new ImageCapture(t); return imageCapture.track.getSettings()});"
     },
     "MediaSource": {
-      "__base": "var instance = new MediaSource();"
+      "__base": "var instance = new MediaSource();",
+      "isTypeSupported": "return 'isTypeSupported' in MediaSource;"
     },
     "MediaStream": {
       "__base": "<%api.MediaDevices:mediaDevices%> var promise = mediaDevices.getUserMedia({video: true}); promise.then(function() {});"
