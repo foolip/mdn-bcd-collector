@@ -33,7 +33,8 @@ const github = (options) => {
     const digest = hash.update(buffer).digest('hex').substr(0, 10);
 
     const version = report.__version;
-    const ua = parseUA(report.userAgent, bcdBrowsers);
+    const uaString = report.userAgent;
+    const ua = parseUA(uaString, bcdBrowsers);
     const browser = `${ua.browser.name} ${ua.version}`;
     const os = `${ua.os.name} ${ua.os.version}`;
     const desc = `${browser} / ${os}`;
@@ -44,12 +45,13 @@ const github = (options) => {
     const branch = `collector/${slug}`;
 
     return {
-      json, buffer, digest, ua, browser, os, desc, title, slug, filename, branch
+      json, buffer, digest, uaString, ua, browser,
+      os, desc, title, slug, filename, branch
     };
   };
 
   const createBody = (meta) => {
-    return `User Agent: ${meta.ua.ua}\nBrowser: ${meta.browser} (on ${meta.os}) ${meta.ua.inBcd ? '' : ' - **Not in BCD**'}` +
+    return `User Agent: ${meta.uaString}\nBrowser: ${meta.browser} (on ${meta.os}) ${meta.ua.inBcd ? '' : ' - **Not in BCD**'}` +
             `\nHash Digest: ${meta.digest}\n` +
             (meta.version == 'Dev' ? '\n**WARNING:** this PR was created from a development/staging version!' : '');
   };
