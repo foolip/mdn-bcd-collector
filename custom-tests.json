@@ -606,7 +606,7 @@
       "isTypeSupported": "return 'isTypeSupported' in MediaSource;"
     },
     "MediaStream": {
-      "__base": "<%api.MediaDevices:mediaDevices%> var promise = mediaDevices.getUserMedia({video: true}); promise.then(function() {});"
+      "__base": "<%api.MediaDevices:mediaDevices%> var promise = mediaDevices.getUserMedia({audio: true, video: true}); promise.then(function() {});"
     },
     "MediaStreamAudioDestinationNode": {
       "__resources": ["audioContext"],
