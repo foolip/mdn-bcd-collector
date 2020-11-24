@@ -43,7 +43,8 @@
     <footer>
       <p>Made with <span class="mdi mdi-heart"></span> by <a href="https://foolip.org">@foolip</a> and <a href="https://www.queengoob.org">@vinyldarkscratch</a></p>
       <p>v<%- appversion %></p>
-      <a href="https://github.com/foolip/mdn-bcd-collector"><span class="mdi mdi-github"></span></a>
+      <a href="https://github.com/foolip/mdn-bcd-collector"><span class="mdi mdi-github"> GitHub</span></a>
+      <a href="/"><span class="mdi mdi-home"> Home</span></a>
       <p id="browserinfo" <% if (!browser.inBcd) { %>class="error"<% } %>><% if (browser.browser.name) { %>Detected Browser: <%- browser.browser.name %> <%- browser.version %> <% if (!browser.inBcd) { %>(not in BCD)<% } %><% } else {%>Could not determine browser<% } %></p>
     </footer>
 
