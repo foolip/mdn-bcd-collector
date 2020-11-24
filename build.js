@@ -406,6 +406,12 @@ const getExposureSet = (node) => {
     default:
       throw new Error(`Unexpected RHS for Exposed extended attribute`);
   }
+
+  if (globals.has('DedicatedWorker')) {
+    globals.delete('DedicatedWorker');
+    globals.add('Worker');
+  }
+
   return globals;
 };
 
