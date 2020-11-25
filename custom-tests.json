@@ -31,7 +31,12 @@
     },
     "ANGLE_instanced_arrays": {
       "__resources": ["webGL"],
-      "__base": "if (!reusableInstances.webGL) {return false}; var instance = reusableInstances.webGL.getExtension('ANGLE_instanced_arrays');"
+      "__base": "if (!reusableInstances.webGL) {return false}; var instance = reusableInstances.webGL.getExtension('ANGLE_instanced_arrays');",
+      "__test": "return !!instance || 'drawArraysInstanced' in reusableInstances.webGL;",
+      "drawArraysInstancedANGLE": "return 'drawArraysInstanced' in reusableInstances.webGL || 'drawArraysInstancedANGLE' in instance;",
+      "drawElementsInstancedANGLE": "return 'drawElementsInstanced' in reusableInstances.webGL || 'drawElementsInstancedANGLE' in instance;",
+      "VERTEX_ATTRIB_ARRAY_DIVISOR_ANGLE": "return 'VERTEX_ATTRIB_ARRAY_DIVISOR' in reusableInstances.webGL || 'VERTEX_ATTRIB_ARRAY_DIVISOR_ANGLE' in instance;",
+      "vertexAttribDivisorANGLE": "return 'vertexAttribDivisor' in reusableInstances.webGL || 'vertexAttribDivisorANGLE' in instance;"
     },
     "AnalyserNode": {
       "__resources": ["audioContext"],
