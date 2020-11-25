@@ -85,8 +85,9 @@ const getCustomTestAPI = (name, member, type) => {
       ) {
         test = testbase + customTests.api[name][member];
       } else {
-        if (type === 'constructor') {
-          // Constructors need special testing
+        if (['constructor', 'static'].includes(type)) {
+          // Constructors, constants, and static attributes should not have
+          // auto-generated custom tests
           test = false;
         } else {
           test = testbase ? testbase + (
@@ -619,16 +620,16 @@ const buildIDLTests = (ast) => {
         continue;
       }
 
+      const isStatic = member.special === 'static' || iface.type === 'namespace';
+
       let expr;
       const customTestMember = getCustomTestAPI(
-          adjustedIfaceName, member.name, member.type
+          adjustedIfaceName, member.name, isStatic ? 'static' : member.type
       );
 
       if (customTestMember) {
         expr = customTestMember;
       } else {
-        const isStatic = member.special === 'static' ||
-                         iface.type === 'namespace';
         switch (member.type) {
           case 'attribute':
           case 'operation':
