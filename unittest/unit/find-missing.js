@@ -78,30 +78,38 @@ describe('find-missing', () => {
       sinon.stub(console, 'log');
     });
 
-    it('collector -> bcd', () => {
+    it('collector <- bcd', () => {
       assert.deepEqual(getMissing(), {missingEntries: [
         'api.AbortController.dummy',
         'api.DummyAPI',
         'api.DummyAPI.dummy',
         'css.properties.font-face'
-      ], total: 4});
-    });
-
-    it('bcd -> collector', () => {
-      assert.deepEqual(getMissing('bcd-to-collector'), {missingEntries: [
-        'javascript.builtins.array'
       ], total: 7});
     });
 
+    it('bcd <- collector', () => {
+      assert.deepEqual(getMissing('bcd-from-collector'), {missingEntries: [
+        'javascript.builtins.array'
+      ], total: 4});
+    });
+
+    it('filter category', () => {
+      assert.deepEqual(getMissing('collector-from-bcd', ['api']), {missingEntries: [
+        'api.AbortController.dummy',
+        'api.DummyAPI',
+        'api.DummyAPI.dummy'
+      ], total: 5});
+    });
+
     it('unknown direction', () => {
-      assert.deepEqual(getMissing('foo-to-bar'), {missingEntries: [
+      assert.deepEqual(getMissing('foo-from-bar'), {missingEntries: [
         'api.AbortController.dummy',
         'api.DummyAPI',
         'api.DummyAPI.dummy',
         'css.properties.font-face'
-      ], total: 4});
+      ], total: 7});
 
-      assert.isTrue(console.log.calledWith('Direction \'foo-to-bar\' is unknown; defaulting to collector -> bcd'));
+      assert.isTrue(console.log.calledWith('Direction \'foo-from-bar\' is unknown; defaulting to collector <- bcd'));
     });
 
     afterEach(() => {
