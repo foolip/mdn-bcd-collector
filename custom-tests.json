@@ -436,7 +436,7 @@
     },
     "HTMLModElement": {
       "__base": "var instance = document.createElement('del');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLModElement' && Object.prototype.toString.call(instance) !== '[object HTMLModElement]') {return false;} return !!instance;"
+      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLModElement' && instance.constructor.name !== 'HTMLDelElement' && Object.prototype.toString.call(instance) !== '[object HTMLModElement]' && Object.prototype.toString.call(instance) !== '[object HTMLDelElement]') {return false;} return !!instance;"
     },
     "HTMLObjectElement": {
       "__base": "var instance = document.createElement('object');",
