@@ -35,12 +35,16 @@ const findMissing = (entries, allEntries) => {
   return {missingEntries, total: allEntries.length};
 };
 
-const getMissing = (direction = 'collector-from-bcd') => {
+const getMissing = (direction = 'collector-from-bcd', category = []) => {
+  const filterCategory = (item) => {
+    return !category.length || category.some((cat) => item.startsWith(`${cat}.`));
+  }
+
   const bcdEntries = [
     ...traverseFeatures(bcd.api, 'api.'),
     ...traverseFeatures(bcd.css.properties, 'css.properties.')
-  ];
-  const collectorEntries = Object.keys(tests);
+  ].filter(filterCategory);
+  const collectorEntries = Object.keys(tests).filter(filterCategory);
 
   switch (direction) {
     case 'bcd-from-collector':
@@ -67,11 +71,18 @@ const main = () => {
               nargs: 1,
               type: 'string',
               default: 'collector-from-bcd'
+            })
+            .option('category', {
+              alias: 'c',
+              describe: 'The BCD categories to filter',
+              type: 'array',
+              choices: ['api', 'css.properties'],
+              default: ['api', 'css.properties']
             });
       }
   );
 
-  const {missingEntries, total} = getMissing(argv.direction);
+  const {missingEntries, total} = getMissing(argv.direction, argv.category);
   console.log(missingEntries.join('\n'));
   console.log(`\n${missingEntries.length}/${total} (${(missingEntries.length/total*100.0).toFixed(2)}%) missing`);
 };
