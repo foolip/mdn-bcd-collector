@@ -38,7 +38,7 @@ const findMissing = (entries, allEntries) => {
 const getMissing = (direction = 'collector-from-bcd', category = []) => {
   const filterCategory = (item) => {
     return !category.length || category.some((cat) => item.startsWith(`${cat}.`));
-  }
+  };
 
   const bcdEntries = [
     ...traverseFeatures(bcd.api, 'api.'),
