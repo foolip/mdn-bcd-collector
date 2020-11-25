@@ -23,19 +23,19 @@ const traverseFeatures = (obj, identifier) => {
   return features;
 };
 
-const findMissing = (entries1, entries2) => {
+const findMissing = (entries, allEntries) => {
   const missingEntries = [];
 
-  for (const entry of entries1) {
-    if (!entries2.includes(entry)) {
+  for (const entry of allEntries) {
+    if (!entries.includes(entry)) {
       missingEntries.push(entry);
     }
   }
 
-  return {missingEntries, total: entries2.length};
+  return {missingEntries, total: allEntries.length};
 };
 
-const getMissing = (direction = 'collector-to-bcd') => {
+const getMissing = (direction = 'collector-from-bcd') => {
   const bcdEntries = [
     ...traverseFeatures(bcd.api, 'api.'),
     ...traverseFeatures(bcd.css.properties, 'css.properties.')
@@ -43,13 +43,13 @@ const getMissing = (direction = 'collector-to-bcd') => {
   const collectorEntries = Object.keys(tests);
 
   switch (direction) {
-    case 'bcd-to-collector':
-      return findMissing(collectorEntries, bcdEntries);
-    default:
-      console.log(`Direction '${direction}' is unknown; defaulting to collector -> bcd`);
-      // eslint-disable-next-line no-fallthrough
-    case 'collector-to-bcd':
+    case 'bcd-from-collector':
       return findMissing(bcdEntries, collectorEntries);
+    default:
+      console.log(`Direction '${direction}' is unknown; defaulting to collector <- bcd`);
+      // eslint-disable-next-line no-fallthrough
+    case 'collector-from-bcd':
+      return findMissing(collectorEntries, bcdEntries);
   }
 };
 
@@ -62,11 +62,11 @@ const main = () => {
         yargs
             .option('direction', {
               alias: 'd',
-              describe: 'Which direction to find missing entries from ("a-to-b" will check what is in a that is missing from b)',
-              choices: ['bcd-to-collector', 'collector-to-bcd'],
+              describe: 'Which direction to find missing entries from ("a-from-b" will check what is in a that is missing from b)',
+              choices: ['bcd-from-collector', 'collector-from-bcd'],
               nargs: 1,
               type: 'string',
-              default: 'collector-to-bcd'
+              default: 'collector-from-bcd'
             });
       }
   );
