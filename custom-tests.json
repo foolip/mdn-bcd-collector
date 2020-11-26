@@ -601,7 +601,7 @@
       "__base": "var instance = window.matchMedia('screen and max-width: 800px;');"
     },
     "MediaSession": {
-      "__base": "var instance = navigator.MediaSession;"
+      "__base": "var instance = navigator.mediaSession;"
     },
     "MediaSettingsRange": {
       "__base": "<%api.MediaStreamTrack:track%> var promise = track.then(function(t) {var imageCapture = new ImageCapture(t); return imageCapture.track.getSettings()});"
