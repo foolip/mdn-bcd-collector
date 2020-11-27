@@ -149,6 +149,9 @@ partial interface HTMLElement {
 };
 
 partial interface HTMLFormElement {
+  // https://github.com/mdn/browser-compat-data/issues/7519
+  attribute DOMString autocapitalize;
+
   undefined requestAutocomplete();
 };
 
@@ -170,6 +173,9 @@ partial interface HTMLImageElement {
 };
 
 partial interface HTMLInputElement {
+  // https://github.com/mdn/browser-compat-data/issues/7519
+  attribute DOMString autocapitalize;
+
   // https://github.com/whatwg/html/issues/667
   attribute boolean incremental;
 
@@ -296,6 +302,7 @@ partial interface HTMLTableElement {
 };
 
 partial interface HTMLTextAreaElement {
+  // https://github.com/mdn/browser-compat-data/issues/7519
   attribute DOMString autocapitalize;
 };
 
