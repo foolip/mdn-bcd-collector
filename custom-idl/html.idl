@@ -229,6 +229,10 @@ partial interface HTMLMediaElement {
   // https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement#Obsolete_event_handlers
   attribute EventHandler onmozinterruptbegin;
   attribute EventHandler onmozinterruptend;
+
+  // Prefixed preservesPitch
+  attribute boolean mozPreservesPitch;
+  attribute boolean webkitPreservesPitch;
 };
 
 // https://www.w3.org/TR/html51/interactive-elements.html#htmlmenuelement-htmlmenuelement
