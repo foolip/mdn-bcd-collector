@@ -703,7 +703,10 @@
       "__base": "var instance = window.performance;"
     },
     "PerformanceEntry": {
-      "__base": "<%api.Performance:performance%> var instance = performance.mark();"
+      "__base": "<%api.PerformanceMark:instance%>"
+    },
+    "PerformanceMark": {
+      "__base": "<%api.Performance:performance%> var instance = performance.mark('mark');"
     },
     "PerformanceNavigation": {
       "__base": "<%api.Performance:performance%> var instance = performance.navigation;"
