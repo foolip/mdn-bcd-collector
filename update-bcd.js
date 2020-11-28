@@ -13,11 +13,11 @@ const {parseUA} = require('./ua-parser');
 const BCD_DIR = process.env.BCD_DIR || `../browser-compat-data`;
 const {browsers} = require(BCD_DIR);
 
-const findEntry = (bcd, path) => {
-  if (!path) {
+const findEntry = (bcd, ident) => {
+  if (!ident) {
     return null;
   }
-  const keys = path.split('.');
+  const keys = ident.split('.');
   let entry = bcd;
   while (entry && keys.length) {
     entry = entry[keys.shift()];
