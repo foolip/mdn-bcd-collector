@@ -22,6 +22,8 @@ const browsers = {
   chrome: {name: 'Chrome', releases: {82: {}, 83: {}, 84: {}, 85: {}}},
   chrome_android: {name: 'Chrome Android', releases: {85: {}}},
   edge: {name: 'Edge', releases: {16: {}, 84: {}}},
+  firefox: {name: 'Firefox', releases: {3.6: {}}},
+  ie: {name: 'Internet Explorer', releases: {8: {}, 11: {}}},
   safari: {name: 'Safari', releases: {13: {}, 13.1: {}, 14: {}}},
   safari_ios: {name: 'iOS Safari', releases: {13: {}, 13.3: {}, 13.4: {}, 14: {}}},
   samsunginternet_android: {name: 'Samsung Internet', releases: {'10.0': {}, 10.2: {}, '11.0': {}, 11.2: {}, '12.0': {}, 12.1: {}}},
@@ -73,6 +75,18 @@ describe('parseUA', () => {
 
   it('Edge (Chromium)', () => {
     assert.deepEqual(parseUA('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/84.0.4147.125 Safari/537.36 Edg/84.0.522.59', browsers), {browser: {id: 'edge', name: 'Edge'}, version: '84', fullVersion: '84.0.522.59', os: {name: 'Windows', version: '10'}, inBcd: true});
+  });
+
+  it('Firefox 3.6.17', () => {
+    assert.deepEqual(parseUA('Mozilla/5.0 (Windows; U; Windows NT 5.2; en-US; rv:1.9.2.17) Gecko/20110420 Firefox/3.6.17 (.NET CLR 3.5.21022)', browsers), {browser: {id: 'firefox', name: 'Firefox'}, version: '3.6', fullVersion: '3.6.17', os: {name: 'Windows', version: 'XP'}, inBcd: true});
+  });
+
+  it('Internet Explorer (Windows XP)', () => {
+    assert.deepEqual(parseUA('Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 5.2; Trident/4.0; .NET CLR 1.1.4322; .NET CLR 2.0.50727; .NET CLR 3.0.04506.648; .NET CLR 3.5.21022)', browsers), {browser: {id: 'ie', name: 'Internet Explorer'}, version: '8', fullVersion: '8.0', os: {name: 'Windows', version: 'XP'}, inBcd: true});
+  });
+
+  it('Internet Explorer (Windows 7)', () => {
+    assert.deepEqual(parseUA('Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; rv:11.0) like Gecko', browsers), {browser: {id: 'ie', name: 'Internet Explorer'}, version: '11', fullVersion: '11.0', os: {name: 'Windows', version: '7'}, inBcd: true});
   });
 
   it('Safari 14', () => {
