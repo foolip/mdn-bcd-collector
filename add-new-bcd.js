@@ -91,7 +91,7 @@ const main = async () => {
   if (!await fs.pathExists(filepath)) {
     console.log('Generating new cache file...');
 
-    await collectMissing();
+    await collectMissing(filepath);
     await updateBcd(['../mdn-bcd-results/'], ['__missing'], []);
   }
 
