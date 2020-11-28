@@ -59,7 +59,7 @@ if (require.main === module) {
       prepare();
       break;
     case 'unittest':
-      exec('nyc mocha --recursive unittest', {NODE_ENV: 'test'});
+      exec('nyc mocha --reporter dot --recursive unittest', {NODE_ENV: 'test'});
       break;
     default:
       console.error(`Unknown command ${argv.command}!`);
