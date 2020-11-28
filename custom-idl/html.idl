@@ -200,13 +200,6 @@ interface HTMLIsIndexElement : HTMLElement {
 [Exposed=Window]
 interface HTMLKeygenElement : HTMLElement {};
 
-partial interface HTMLMarqueeElement {
-  attribute DOMString bgcolor;
-  attribute unsigned long scrollamount;
-  attribute unsigned long scrolldelay;
-  attribute boolean truespeed;
-};
-
 partial interface HTMLMediaElement {
   attribute MediaController controller;
   readonly attribute DOMTokenList controlsList;
