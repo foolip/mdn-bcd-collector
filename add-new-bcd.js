@@ -88,16 +88,16 @@ const collectMissing = async (filepath) => {
 const main = async () => {
   const filepath = path.resolve(path.join(BCD_DIR, '__missing', '__missing.json'));
 
-  console.log('Generating new cache file...');
-
+  console.log('Generating missing BCD...');
   await collectMissing(filepath);
   await updateBcd(['../mdn-bcd-results/'], ['__missing'], []);
 
-  console.log('Adding data...');
+  console.log('Injecting BCD...');
   const data = await fs.readJSON(filepath);
   await traverseFeatures(data.api, ['api']);
 
-  fs.rm(filepath);
+  console.log('Cleaning up...');
+  await fs.remove(filepath);
 
   console.log('Done!');
 }
