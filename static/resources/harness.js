@@ -581,37 +581,45 @@
       for (var i=0; i<results.length; i++) {
         var result = results[i];
 
-        var thisResultEl = document.createElement('div');
-        thisResultEl.className = 'result';
+        var resultEl = document.createElement('details');
+        resultEl.className = 'result';
 
-        var resultNameEl = document.createElement('p');
-
-        resultNameEl.innerHTML = result.name;
+        var resultSummaryEl = document.createElement('summary');
+        resultSummaryEl.innerHTML = result.name;
         if (result.name.indexOf('css.') != 0) {
-          resultNameEl.innerHTML += ' (' + result.info.exposure + ' exposure)';
+          resultSummaryEl.innerHTML += ' (' + result.info.exposure + ' exposure)';
         }
-        resultNameEl.innerHTML += ':&nbsp;';
+        resultSummaryEl.innerHTML += ':&nbsp;';
 
-        var resultValueEl = document.createElement('strong');
-        resultValueEl.innerHTML = stringify(result.result);
+        var resultValue = stringify(result.result);
+        var resultValueEl = document.createElement('span');
+        resultValueEl.className = 'result-value result-value-' + resultValue;
+        resultValueEl.innerHTML = resultValue;
         if (result.prefix) {
           resultValueEl.innerHTML += ' (' + result.prefix + ' prefix)';
         }
+        resultSummaryEl.appendChild(resultValueEl);
+        resultEl.appendChild(resultSummaryEl);
+
+        var resultInfoEl = document.createElement('div');
+        resultInfoEl.className = 'result-info';
+
         if (result.message) {
-          resultValueEl.innerHTML += ' (' + result.message + ')';
+          var resultMessageEl = document.createElement('p');
+          resultMessageEl.className = 'result-message';
+          resultMessageEl.innerHTML = result.message;
+          resultInfoEl.appendChild(resultMessageEl);
         }
-        resultNameEl.appendChild(resultValueEl);
-        thisResultEl.appendChild(resultNameEl);
 
         if (result.info.code) {
-          var codeEl = document.createElement('code');
-          codeEl.innerHTML = result.info.code.replace(/ /g, '&nbsp;').replace(/\n/g, '<br />');
-          thisResultEl.appendChild(codeEl);
-          thisResultEl.appendChild(document.createElement('br'));
-          thisResultEl.appendChild(document.createElement('br'));
+          var resultCodeEl = document.createElement('code');
+          resultCodeEl.className = 'result-code';
+          resultCodeEl.innerHTML = result.info.code.replace(/ /g, '&nbsp;').replace(/\n/g, '<br />');
+          resultInfoEl.appendChild(resultCodeEl);
         }
 
-        resultsEl.appendChild(thisResultEl);
+        resultEl.appendChild(resultInfoEl);
+        resultsEl.appendChild(resultEl);
       }
     }
   }
