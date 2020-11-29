@@ -7,6 +7,7 @@ const {getMissing} = require('./find-missing');
 const {main: updateBcd} = require('./update-bcd');
 
 const BCD_DIR = process.env.BCD_DIR || `../browser-compat-data`;
+const compareFeatures = require(path.join(BCD_DIR, 'scripts', 'compare-features'));
 
 const template = {
   __compat: {
@@ -38,6 +39,18 @@ const recursiveAdd = (ident, i, data, obj) => {
   return data;
 };
 
+function orderFeatures(key, value) {
+  if (value instanceof Object && '__compat' in value) {
+    value = Object.keys(value)
+      .sort(compareFeatures)
+      .reduce((result, key) => {
+        result[key] = value[key];
+        return result;
+      }, {});
+  }
+  return value;
+}
+
 const writeFile = async (ident, obj) => {
   const filepath = path.resolve(path.join(BCD_DIR, ident[0], `${ident[1]}.json`));
 
@@ -48,7 +61,7 @@ const writeFile = async (ident, obj) => {
 
   await fs.writeJSON(filepath, recursiveAdd(
       ident.concat(['__compat']), 0, data, obj.__compat
-  ), {spaces: 2});
+  ), {spaces: 2, replacer: orderFeatures});
 };
 
 const traverseFeatures = async (obj, identifier) => {
