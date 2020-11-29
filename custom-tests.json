@@ -42,6 +42,9 @@
       "__resources": ["audioContext"],
       "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createAnalyser();"
     },
+    "ApplicationCache": {
+      "__base": "var instance = window.applicationCache;"
+    },
     "AudioBuffer": {
       "__resources": ["audioContext"],
       "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createBuffer(2, audioContext.sampleRate * 3, audioContext.sampleRate);"
