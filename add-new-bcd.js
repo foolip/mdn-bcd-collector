@@ -39,14 +39,14 @@ const recursiveAdd = (ident, i, data, obj) => {
   return data;
 };
 
-function orderFeatures(key, value) {
+const orderFeatures = (key, value) => {
   if (value instanceof Object && '__compat' in value) {
     value = Object.keys(value)
-      .sort(compareFeatures)
-      .reduce((result, key) => {
-        result[key] = value[key];
-        return result;
-      }, {});
+        .sort(compareFeatures)
+        .reduce((result, key) => {
+          result[key] = value[key];
+          return result;
+        }, {});
   }
   return value;
 }
