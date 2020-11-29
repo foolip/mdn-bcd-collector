@@ -49,7 +49,7 @@ const orderFeatures = (key, value) => {
         }, {});
   }
   return value;
-}
+};
 
 const writeFile = async (ident, obj) => {
   const filepath = path.resolve(path.join(BCD_DIR, ident[0], `${ident[1]}.json`));
