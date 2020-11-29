@@ -11,21 +11,21 @@ const BCD_DIR = process.env.BCD_DIR || `../browser-compat-data`;
 const template = {
   __compat: {
     support: {
-      chrome: { version_added: null },
-      chrome_android: { version_added: null },
-      edge: { version_added: null },
-      firefox: { version_added: null },
-      firefox_android: { version_added: null },
-      ie: { version_added: null },
-      opera: { version_added: null },
-      opera_android: { version_added: null },
-      safari: { version_added: null },
-      safari_ios: { version_added: null },
-      samsunginternet_android: { version_added: null },
-      webview_android: { version_added: null },
+      chrome: {version_added: null},
+      chrome_android: {version_added: null},
+      edge: {version_added: null},
+      firefox: {version_added: null},
+      firefox_android: {version_added: null},
+      ie: {version_added: null},
+      opera: {version_added: null},
+      opera_android: {version_added: null},
+      safari: {version_added: null},
+      safari_ios: {version_added: null},
+      samsunginternet_android: {version_added: null},
+      webview_android: {version_added: null}
     },
-    status: { experimental: false, standard_track: true, deprecated: false },
-  },
+    status: {experimental: false, standard_track: true, deprecated: false}
+  }
 };
 
 const recursiveAdd = (ident, i, data, obj) => {
@@ -36,18 +36,18 @@ const recursiveAdd = (ident, i, data, obj) => {
               Object.assign({}, obj);
 
   return data;
-}
+};
 
 const writeFile = async (ident, obj) => {
   const filepath = path.resolve(path.join(BCD_DIR, ident[0], `${ident[1]}.json`));
-  
+
   let data = {api: {}};
   if (await fs.pathExists(filepath)) {
     data = await fs.readJSON(filepath);
   }
 
   await fs.writeJSON(filepath, recursiveAdd(
-    ident.concat(['__compat']), 0, data, obj.__compat
+      ident.concat(['__compat']), 0, data, obj.__compat
   ), {spaces: 2});
 };
 
@@ -78,7 +78,7 @@ const collectMissing = async (filepath) => {
 
   for (const entry of getMissing('bcd-from-collector', ['api']).missingEntries) {
     recursiveAdd(entry.split('.'), 0, missing, template);
-  };
+  }
 
   const json = JSON.stringify(missing, null, '  ') + '\n';
   await fs.ensureDir(path.dirname(filepath));
@@ -100,6 +100,6 @@ const main = async () => {
   await fs.remove(filepath);
 
   console.log('Done!');
-}
+};
 
 main();
