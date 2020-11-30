@@ -31,6 +31,20 @@ partial interface CanvasRenderingContext2D {
   attribute DOMMatrix currentTransform;
   undefined drawWidgetAsOnScreen(Window window);
   undefined drawWindow(Window window, double x, double y, double w, double h, DOMString bgColor, optional byte flags);
+
+  // https://trac.webkit.org/changeset/96626/webkit
+  attribute object webkitLineDash;
+  attribute float webkitLineDashOffset;
+
+  // https://trac.webkit.org/changeset/113780/webkit
+  readonly attribute float webkitBackingStorePixelRatio;
+
+  // https://trac.webkit.org/changeset/114150/webkit
+  undefined webkitPutImageDataHD();
+  ImageData webkitGetImageDataHD();
+
+  // https://trac.webkit.org/changeset/117635/webkit
+  attribute boolean webkitImageSmoothingEnabled;
 };
 
 partial interface CloseEvent {
