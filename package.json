@@ -26,7 +26,8 @@
     "test": "npm run lint && npm run unittest",
     "selenium": "node selenium.js",
     "update-bcd": "node update-bcd.js",
-    "find-missing": "node find-missing.js"
+    "find-missing": "node find-missing.js",
+    "add-new-bcd": "node add-new-bcd.js"
   },
   "dependencies": {
     "@google-cloud/logging-winston": "4.0.1",

@@ -8,6 +8,7 @@
     "find-missing.js",
     "scripts.js",
     "selenium.js",
-    "update-bcd.js"
+    "update-bcd.js",
+    "add-new-bcd.js"
   ]
 }
