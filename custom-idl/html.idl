@@ -354,10 +354,6 @@ partial interface Window {
   // https://github.com/whatwg/html/issues/667
   attribute EventHandler onsearch;
 
-  // https://www.w3.org/TR/2009/WD-css3-2d-transforms-20090320/#window-interface
-  Point convertPointFromPageToNode(Node node, Point point);
-  Point convertPointFromNodeToPage(Node node, Point point);
-
   readonly attribute any dialogArguments;
   undefined getAttention();
   undefined getAttentionWithCycleCount();

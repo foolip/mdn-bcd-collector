@@ -357,7 +357,8 @@ module.exports = {
   getSupportMap,
   getSupportMatrix,
   inferSupportStatements,
-  update
+  update,
+  main
 };
 
 /* istanbul ignore if */
