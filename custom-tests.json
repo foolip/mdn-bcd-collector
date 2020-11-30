@@ -724,10 +724,10 @@
       "__base": "var instance = document.createRange();"
     },
     "Request": {
-      "__base": "var instance = new Request();"
+      "__base": "var instance = new Request('');"
     },
     "Response": {
-      "__base": "var instance = new Response();"
+      "__base": "var instance = new Response('');"
     },
     "Screen": {
       "__base": "var instance = window.screen;"
