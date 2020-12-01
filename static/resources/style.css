@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Roboto:wght@400;700&family=Montserrat:wght@500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Roboto:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@500&display=swap');
 
 html {
   background: #111;
@@ -229,8 +229,31 @@ hr {
 
 /* End: Homepage */
 
-.result p {
-  margin-bottom: 0;
+.result {
+  margin-bottom: 0.5em;
+}
+
+.result .result-value {
+  font-weight: bold;
+}
+
+.result-value-true {
+  color: #afa;
+}
+
+.result-value-false {
+  color: #faa;
+}
+
+.result .result-info {
+  display: block;
+  margin-left: 1.5em;
+  margin-bottom: 1em;
+}
+
+.result .result-message {
+  font-style: italic;
+  margin-top: 0;
 }
 
 @media (prefers-color-scheme: light) {
@@ -263,7 +286,7 @@ hr {
     background-color: #eee;
   }
 
-  .error-notice {
+  .error-notice, .result-value-false {
     color: #700;
   }
 
@@ -271,7 +294,7 @@ hr {
     color: #770;
   }
 
-  .success-notice {
+  .success-notice, .result-value-true {
     color: #070;
   }
 
