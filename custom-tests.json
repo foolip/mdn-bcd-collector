@@ -204,6 +204,9 @@
     "Document": {
       "__base": "var instance = document;"
     },
+    "DocumentFragment": {
+      "__base": "var instance = document.createDocumentFragment();"
+    },
     "DocumentType": {
       "__base": "var instance = document.doctype;"
     },
