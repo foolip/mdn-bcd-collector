@@ -1,3 +1,5 @@
+// https://wicg.github.io/aom/explainer.html
+
 [Exposed=Window]
 interface AccessibleNode : EventTarget {
   // members omitted until this is actually shipped
