@@ -85,7 +85,7 @@ const getCustomTestAPI = (name, member, type) => {
       ) {
         test = testbase + customTests.api[name][member];
       } else {
-        if (['constructor', 'static'].includes(type)) {
+        if (['constructor', 'static'].includes(type) || ['toString', 'toJSON'].includes(member)) {
           // Constructors, constants, and static attributes should not have
           // auto-generated custom tests
           test = false;
