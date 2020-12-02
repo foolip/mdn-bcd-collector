@@ -130,9 +130,25 @@
     "CryptoKey": {
       "__base": "<%api.SubtleCrypto:subtlecrypto%> var promise = subtlecrypto.generateKey({name: 'RSA-OAEP', modulusLength: 4096, publicExponent: new Uint8Array([1, 0, 1]), hash: 'SHA-256' }, true, ['encrypt', 'decrypt']);"
     },
+    "CSSConditionRule": {
+     "__resources": ["createStyleSheet"],
+      "__base": "<%api.CSSMediaRule:interface%>"
+    },
+    "CSSCounterStyleRule": {
+      "__resources": ["createStyleSheet"],
+      "__base": "var stylesheet = reusableInstances.createStyleSheet('@counter-style thumbs {system: cyclic; symbols: \"👍\"; suffix: \" \";}'); var instance = stylesheet.cssRules.item(0);"
+    },
     "CSSFontFaceRule": {
       "__resources": ["createStyleSheet"],
       "__base": "var stylesheet = reusableInstances.createStyleSheet('@font-face {font-family: somefont; src: url(somefont.ttf);}'); var instance = stylesheet.cssRules.item(0);"
+    },
+    "CSSFontFeatureValuesRule": {
+      "__resources": ["createStyleSheet"],
+      "__base": "var stylesheet = reusableInstances.createStyleSheet('@font-feature-values Font {@styleset {nice-style: 12;}}'); var instance = stylesheet.cssRules.item(0);"
+    },
+    "CSSGroupingRule": {
+     "__resources": ["createStyleSheet"],
+      "__base": "<%api.CSSMediaRule:interface%>"
     },
     "CSSImportRule": {
       "__resources": ["createStyleSheet"],
@@ -176,6 +192,10 @@
     "CSSSupportsRule": {
       "__resources": ["createStyleSheet"],
       "__base": "var stylesheet = reusableInstances.createStyleSheet('@supports (display: grid) {div {display: grid;}}'); var instance = stylesheet.cssRules.item(0);"
+    },
+    "CSSViewportRule": {
+      "__resources": ["createStyleSheet"],
+      "__base": "var stylesheet = reusableInstances.createStyleSheet('@viewport {width: 100vw;}'); var instance = stylesheet.cssRules.item(0);"
     },
     "DelayNode": {
       "__resources": ["audioContext"],
