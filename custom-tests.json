@@ -239,6 +239,10 @@
       "__resources": ["webGL"],
       "__base": "if (!reusableInstances.webGL) {return false}; var instance = reusableInstances.webGL.getExtension('EXT_blend_minmax');"
     },
+    "EXT_clip_cull_distance": {
+      "__resources": ["webGL"],
+      "__base": "if (!reusableInstances.webGL) {return false}; var instance = reusableInstances.webGL.getExtension('EXT_clip_cull_distance');"
+    },
     "EXT_color_buffer_float": {
       "__resources": ["webGL"],
       "__base": "if (!reusableInstances.webGL) {return false}; var instance = reusableInstances.webGL.getExtension('EXT_color_buffer_float');"
@@ -250,6 +254,10 @@
     "EXT_disjoint_timer_query": {
       "__resources": ["webGL"],
       "__base": "if (!reusableInstances.webGL) {return false}; var instance = reusableInstances.webGL.getExtension('EXT_disjoint_timer_query');"
+    },
+    "EXT_disjoint_timer_query_webgl2": {
+      "__resources": ["webGL"],
+      "__base": "if (!reusableInstances.webGL) {return false}; var instance = reusableInstances.webGL.getExtension('EXT_disjoint_timer_query_webgl2');"
     },
     "EXT_float_blend": {
       "__resources": ["webGL"],
@@ -278,6 +286,10 @@
     "EXT_texture_filter_anisotropic": {
       "__resources": ["webGL"],
       "__base": "if (!reusableInstances.webGL) {return false}; var instance = reusableInstances.webGL.getExtension('EXT_texture_filter_anisotropic');"
+    },
+    "EXT_texture_norm16": {
+      "__resources": ["webGL"],
+      "__base": "if (!reusableInstances.webGL) {return false}; var instance = reusableInstances.webGL.getExtension('EXT_texture_norm16');"
     },
     "FontFace": {
       "__base": "var instance = new FontFace();"
