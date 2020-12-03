@@ -131,7 +131,7 @@
       "__base": "<%api.SubtleCrypto:subtlecrypto%> var promise = subtlecrypto.generateKey({name: 'RSA-OAEP', modulusLength: 4096, publicExponent: new Uint8Array([1, 0, 1]), hash: 'SHA-256' }, true, ['encrypt', 'decrypt']);"
     },
     "CSSConditionRule": {
-     "__resources": ["createStyleSheet"],
+      "__resources": ["createStyleSheet"],
       "__base": "<%api.CSSMediaRule:interface%>"
     },
     "CSSCounterStyleRule": {
@@ -147,7 +147,7 @@
       "__base": "var stylesheet = reusableInstances.createStyleSheet('@font-feature-values Font {@styleset {nice-style: 12;}}'); var instance = stylesheet.cssRules.item(0);"
     },
     "CSSGroupingRule": {
-     "__resources": ["createStyleSheet"],
+      "__resources": ["createStyleSheet"],
       "__base": "<%api.CSSMediaRule:interface%>"
     },
     "CSSImportRule": {
