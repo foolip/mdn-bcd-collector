@@ -85,7 +85,7 @@ const getCustomTestAPI = (name, member, type) => {
       ) {
         test = testbase + customTests.api[name][member];
       } else {
-        if (['constructor', 'static'].includes(type)) {
+        if (['constructor', 'static'].includes(type) || ['toString', 'toJSON'].includes(member)) {
           // Constructors, constants, and static attributes should not have
           // auto-generated custom tests
           test = false;
@@ -315,7 +315,7 @@ const flattenIDL = (specIDLs, customIDLs) => {
 };
 
 const flattenMembers = (iface) => {
-  const members = iface.members.filter((member) => member.name);
+  const members = iface.members.filter((member) => member.name && member.special !== 'inherit');
   for (const member of iface.members.filter((member) => !member.name)) {
     switch (member.type) {
       case 'constructor':

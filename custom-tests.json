@@ -42,6 +42,9 @@
       "__resources": ["audioContext"],
       "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createAnalyser();"
     },
+    "ApplicationCache": {
+      "__base": "var instance = window.applicationCache;"
+    },
     "AudioBuffer": {
       "__resources": ["audioContext"],
       "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createBuffer(2, audioContext.sampleRate * 3, audioContext.sampleRate);"
@@ -127,9 +130,25 @@
     "CryptoKey": {
       "__base": "<%api.SubtleCrypto:subtlecrypto%> var promise = subtlecrypto.generateKey({name: 'RSA-OAEP', modulusLength: 4096, publicExponent: new Uint8Array([1, 0, 1]), hash: 'SHA-256' }, true, ['encrypt', 'decrypt']);"
     },
+    "CSSConditionRule": {
+      "__resources": ["createStyleSheet"],
+      "__base": "<%api.CSSMediaRule:interface%>"
+    },
+    "CSSCounterStyleRule": {
+      "__resources": ["createStyleSheet"],
+      "__base": "var stylesheet = reusableInstances.createStyleSheet('@counter-style thumbs {system: cyclic; symbols: \"👍\"; suffix: \" \";}'); var instance = stylesheet.cssRules.item(0);"
+    },
     "CSSFontFaceRule": {
       "__resources": ["createStyleSheet"],
       "__base": "var stylesheet = reusableInstances.createStyleSheet('@font-face {font-family: somefont; src: url(somefont.ttf);}'); var instance = stylesheet.cssRules.item(0);"
+    },
+    "CSSFontFeatureValuesRule": {
+      "__resources": ["createStyleSheet"],
+      "__base": "var stylesheet = reusableInstances.createStyleSheet('@font-feature-values Font {@styleset {nice-style: 12;}}'); var instance = stylesheet.cssRules.item(0);"
+    },
+    "CSSGroupingRule": {
+      "__resources": ["createStyleSheet"],
+      "__base": "<%api.CSSMediaRule:interface%>"
     },
     "CSSImportRule": {
       "__resources": ["createStyleSheet"],
@@ -174,12 +193,19 @@
       "__resources": ["createStyleSheet"],
       "__base": "var stylesheet = reusableInstances.createStyleSheet('@supports (display: grid) {div {display: grid;}}'); var instance = stylesheet.cssRules.item(0);"
     },
+    "CSSViewportRule": {
+      "__resources": ["createStyleSheet"],
+      "__base": "var stylesheet = reusableInstances.createStyleSheet('@viewport {width: 100vw;}'); var instance = stylesheet.cssRules.item(0);"
+    },
     "DelayNode": {
       "__resources": ["audioContext"],
       "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createDelay();"
     },
     "Document": {
       "__base": "var instance = document;"
+    },
+    "DocumentFragment": {
+      "__base": "var instance = document.createDocumentFragment();"
     },
     "DocumentType": {
       "__base": "var instance = document.doctype;"
@@ -213,6 +239,10 @@
       "__resources": ["webGL"],
       "__base": "if (!reusableInstances.webGL) {return false}; var instance = reusableInstances.webGL.getExtension('EXT_blend_minmax');"
     },
+    "EXT_clip_cull_distance": {
+      "__resources": ["webGL"],
+      "__base": "if (!reusableInstances.webGL) {return false}; var instance = reusableInstances.webGL.getExtension('EXT_clip_cull_distance');"
+    },
     "EXT_color_buffer_float": {
       "__resources": ["webGL"],
       "__base": "if (!reusableInstances.webGL) {return false}; var instance = reusableInstances.webGL.getExtension('EXT_color_buffer_float');"
@@ -224,6 +254,10 @@
     "EXT_disjoint_timer_query": {
       "__resources": ["webGL"],
       "__base": "if (!reusableInstances.webGL) {return false}; var instance = reusableInstances.webGL.getExtension('EXT_disjoint_timer_query');"
+    },
+    "EXT_disjoint_timer_query_webgl2": {
+      "__resources": ["webGL"],
+      "__base": "if (!reusableInstances.webGL) {return false}; var instance = reusableInstances.webGL.getExtension('EXT_disjoint_timer_query_webgl2');"
     },
     "EXT_float_blend": {
       "__resources": ["webGL"],
@@ -252,6 +286,10 @@
     "EXT_texture_filter_anisotropic": {
       "__resources": ["webGL"],
       "__base": "if (!reusableInstances.webGL) {return false}; var instance = reusableInstances.webGL.getExtension('EXT_texture_filter_anisotropic');"
+    },
+    "EXT_texture_norm16": {
+      "__resources": ["webGL"],
+      "__base": "if (!reusableInstances.webGL) {return false}; var instance = reusableInstances.webGL.getExtension('EXT_texture_norm16');"
     },
     "FontFace": {
       "__base": "var instance = new FontFace();"
@@ -318,6 +356,10 @@
     "HTMLDialogElement": {
       "__base": "var instance = document.createElement('dialog');",
       "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLDialogElement' && Object.prototype.toString.call(instance) !== '[object HTMLDialogElement]') {return false;} return !!instance;"
+    },
+    "HTMLDirectoryElement": {
+      "__base": "var instance = document.createElement('dir');",
+      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLDirectoryElement' && Object.prototype.toString.call(instance) !== '[object HTMLDirectoryElement]') {return false;} return !!instance;"
     },
     "HTMLDivElement": {
       "__base": "var instance = document.createElement('div');",
@@ -469,6 +511,10 @@
     "HTMLPictureElement": {
       "__base": "var instance = document.createElement('picture');",
       "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLPictureElement' && Object.prototype.toString.call(instance) !== '[object HTMLPictureElement]') {return false;} return !!instance;"
+    },
+    "HTMLPortalElement": {
+      "__base": "var instance = document.createElement('portal');",
+      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLPortalElement' && Object.prototype.toString.call(instance) !== '[object HTMLPortalElement]') {return false;} return !!instance;"
     },
     "HTMLPreElement": {
       "__base": "var instance = document.createElement('pre');",
@@ -721,10 +767,10 @@
       "__base": "var instance = document.createRange();"
     },
     "Request": {
-      "__base": "var instance = new Request();"
+      "__base": "var instance = new Request('');"
     },
     "Response": {
-      "__base": "var instance = new Response();"
+      "__base": "var instance = new Response('');"
     },
     "Screen": {
       "__base": "var instance = window.screen;"
