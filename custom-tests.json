@@ -705,6 +705,10 @@
       "__resources": ["audioContext"],
       "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createOscillator();"
     },
+    "OES_draw_buffers_indexed": {
+      "__resources": ["webGL"],
+      "__base": "if (!reusableInstances.webGL) {return false}; var instance = reusableInstances.webGL.getExtension('OES_draw_buffers_indexed');"
+    },
     "OES_element_index_uint": {
       "__resources": ["webGL"],
       "__base": "if (!reusableInstances.webGL) {return false}; var instance = reusableInstances.webGL.getExtension('OES_element_index_uint');"
