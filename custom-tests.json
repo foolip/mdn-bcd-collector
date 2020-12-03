@@ -357,6 +357,10 @@
       "__base": "var instance = document.createElement('dialog');",
       "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLDialogElement' && Object.prototype.toString.call(instance) !== '[object HTMLDialogElement]') {return false;} return !!instance;"
     },
+    "HTMLDirectoryElement": {
+      "__base": "var instance = document.createElement('dir');",
+      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLDirectoryElement' && Object.prototype.toString.call(instance) !== '[object HTMLDirectoryElement]') {return false;} return !!instance;"
+    },
     "HTMLDivElement": {
       "__base": "var instance = document.createElement('div');",
       "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLDivElement' && Object.prototype.toString.call(instance) !== '[object HTMLDivElement]') {return false;} return !!instance;"
@@ -507,6 +511,10 @@
     "HTMLPictureElement": {
       "__base": "var instance = document.createElement('picture');",
       "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLPictureElement' && Object.prototype.toString.call(instance) !== '[object HTMLPictureElement]') {return false;} return !!instance;"
+    },
+    "HTMLPortalElement": {
+      "__base": "var instance = document.createElement('portal');",
+      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLPortalElement' && Object.prototype.toString.call(instance) !== '[object HTMLPortalElement]') {return false;} return !!instance;"
     },
     "HTMLPreElement": {
       "__base": "var instance = document.createElement('pre');",
