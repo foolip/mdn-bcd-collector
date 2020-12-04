@@ -859,6 +859,10 @@
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'desc');",
       "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGDescElement' && Object.prototype.toString.call(instance) !== '[object SVGDescElement]') {return false;} return !!instance;"
     },
+    "SVGDiscardElement": {
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'discard');",
+      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGDiscardElement' && Object.prototype.toString.call(instance) !== '[object SVGDiscardElement]') {return false;} return !!instance;"
+    },
     "SVGElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'unknown');"
     },
@@ -1033,6 +1037,10 @@
     "SVGLineElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'line');",
       "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGLineElement' && Object.prototype.toString.call(instance) !== '[object SVGLineElement]') {return false;} return !!instance;"
+    },
+    "SVGMarkerElement": {
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'marker');",
+      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGMarkerElement' && Object.prototype.toString.call(instance) !== '[object SVGMarkerElement]') {return false;} return !!instance;"
     },
     "SVGMaskElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'mask');",
