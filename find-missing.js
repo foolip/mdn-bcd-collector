@@ -1,6 +1,7 @@
 'use strict';
 
-const bcd = require('@mdn/browser-compat-data');
+const BCD_DIR = process.env.BCD_DIR || `../browser-compat-data`;
+const bcd = require(BCD_DIR);
 const tests = require('./tests.json');
 
 const traverseFeatures = (obj, identifier) => {

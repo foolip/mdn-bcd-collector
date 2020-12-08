@@ -57,7 +57,7 @@ const bcd = {
 
 const {traverseFeatures, getMissing} = proxyquire('../../find-missing', {
   './tests.json': tests,
-  '@mdn/browser-compat-data': bcd
+  '../browser-compat-data': bcd
 });
 
 describe('find-missing', () => {
