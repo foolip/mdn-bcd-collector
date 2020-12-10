@@ -1234,17 +1234,6 @@ describe('build', () => {
           category: 'api',
           resources: {},
           exposure: ['Window']
-        },
-        'api.Window.isWindow': {
-          tests: [
-            {
-              code: '"isWindow" in Window',
-              prefix: ''
-            }
-          ],
-          category: 'api',
-          resources: {},
-          exposure: ['Window']
         }
       });
     });
@@ -1387,17 +1376,6 @@ describe('build', () => {
           tests: [
             {
               code: '"WindowOrWorkerGlobalScope" in self',
-              prefix: ''
-            }
-          ],
-          category: 'api',
-          resources: {},
-          exposure: ['Window']
-        },
-        'api.WindowOrWorkerGlobalScope.active': {
-          tests: [
-            {
-              code: '"active" in self',
               prefix: ''
             }
           ],
