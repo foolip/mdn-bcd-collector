@@ -646,6 +646,10 @@
       "__resources": ["audio-blip", "audioContext"],
       "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createMediaElementSource(document.getElementById('resource-audio-blip'));"
     },
+    "MediaList": {
+      "__resources": ["createStyleSheet"],
+      "__base": "var stylesheet = reusableInstances.createStyleSheet('@media (max-width: 600px) {body {background-color: #111;color: white;}}'); var instance = stylesheet.media;"
+    },
     "MediaQuery": {
       "__base": "var instance = window.matchMedia('screen and max-width: 800px;');"
     },
