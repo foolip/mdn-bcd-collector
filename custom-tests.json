@@ -216,6 +216,9 @@
     "DOMException": {
       "__base": "var instance = new DOMException('DOMException');"
     },
+    "DOMRectList": {
+      "__base": "<%api.Element:el%> var instance = el.getClientRects()"
+    },
     "DOMTokenList": {
       "__additional": {
         "trim_whitespace": "var elm = document.createElement('b'); elm.className = ' foo bar foo '; elm.classList.remove('bar'); return elm.className === 'foo foo' || elm.className === 'foo';",
