@@ -686,6 +686,9 @@
     "MimeType": {
       "__base": "var instance = window.navigator.mimeTypes[0];"
     },
+    "NamedNodeMap": {
+      "__base": "var instance = document.body.attributes;"
+    },
     "Navigator": {
       "__base": "var instance = window.navigator;"
     },
