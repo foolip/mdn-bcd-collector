@@ -802,6 +802,9 @@
       "__resources": ["audioContext"],
       "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createStereoPanner();"
     },
+    "StyleMedia": {
+      "__base": "var instance = window.styleMedia;"
+    },
     "StyleSheet": {
       "__resources": ["createStyleSheet"],
       "__base": "<%api.CSSStyleSheet:instance%>"
