@@ -17,6 +17,13 @@
           <% for (const src of resource.src) { %>
             <source src="/resources/custom-tests<%-src%>" />
           <% } %>
+          <% if (resource.subtitles) {
+            let i = 0;
+            for (const sub of resource.subtitles) { %>
+            <track label="<%-sub.label%>" kind="subtitles" srclang="<%-sub.lang%>" src="/resources/custom-tests<%-sub.src%>" <% if (i == 0) { %>default<% } %> />
+          <% i += 1;
+            }
+          } %>
         </<%-resource.type%>>
         <% break;
       case 'image': %>
