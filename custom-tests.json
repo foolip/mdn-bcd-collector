@@ -7,7 +7,14 @@
       },
       "video-blank": {
         "type": "video",
-        "src": ["/media/blank.mp4", "/media/blank.webm"]
+        "src": ["/media/blank.mp4", "/media/blank.webm"],
+        "subtitles": [
+          {
+            "label": "English",
+            "lang": "en",
+            "src": "/media/subtitles.vtt"
+          }
+        ]
       },
       "image-black": {
         "type": "image",
@@ -1184,6 +1191,22 @@
     "TextEncoder": {
       "__base": "var instance = new TextEncoder();"
     },
+    "TextTrack": {
+      "__resources": ["video-blank"],
+      "__base": "<%api.TextTrackList:texttracks%> var instance = texttracks[0];"
+    },
+    "TextTrackCue": {
+      "__resources": ["video-blank"],
+      "__base": "<%api.TextTrackCueList:cues%> var instance = cues[0];"
+    },
+    "TextTrackCueList": {
+      "__resources": ["video-blank"],
+      "__base": "<%api.TextTrack:texttrack%> var instance = texttrack.cues;"
+    },
+    "TextTrackList": {
+      "__resources": ["video-blank"],
+      "__base": "var el = document.getElementById('resource-video-blank'); var instance = el.textTracks;"
+    },
     "TreeWalker": {
       "__base": "var instance = document.createTreeWalker(document);"
     },
@@ -1194,6 +1217,10 @@
     "VideoTrackList": {
       "__resources": ["video-blank"],
       "__base": "var el = document.getElementById('resource-video-blank'); var instance = el.videoTracks;"
+    },
+    "VTTCue": {
+      "__resources": ["video-blank"],
+      "__base": "<%api.TextTrackCue:instance%>"
     },
     "WaveShaperNode": {
       "__resources": ["audioContext"],
