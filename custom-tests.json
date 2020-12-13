@@ -302,7 +302,7 @@
       "__base": "if (!reusableInstances.webGL) {return false}; var instance = reusableInstances.webGL.getExtension('EXT_texture_norm16');"
     },
     "FontFace": {
-      "__base": "var instance = new FontFace();"
+      "__base": "var instance = new FontFace('Roboto', 'https://fonts.googleapis.com/css2?family=Roboto&display=swap');"
     },
     "GainNode": {
       "__resources": ["audioContext"],
