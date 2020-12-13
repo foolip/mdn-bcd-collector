@@ -1210,6 +1210,10 @@
     "TreeWalker": {
       "__base": "var instance = document.createTreeWalker(document);"
     },
+    "URL": {
+      "__base": "if ('URL' in self) {var instance = new URL('https://mdn-bcd-collector.appspot.com')} else {var instance = new webkitURL('https://mdn-bcd-collector.appspot.com')}",
+      "__test": "return 'URL' in self;"
+    },
     "VideoTrack": {
       "__resources": ["video-blank"],
       "__base": "<%api.VideoTrackList:videoTracks%> var instance = videoTracks[0];"
