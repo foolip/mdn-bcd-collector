@@ -379,6 +379,9 @@
       "__base": "var instance = document.createElement('dl');",
       "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLDListElement' && Object.prototype.toString.call(instance) !== '[object HTMLDListElement]') {return false;} return !!instance;"
     },
+    "HTMLDocument": {
+      "__base": "var instance = document;"
+    },
     "HTMLElement": {
       "__base": "var instance = document.createElement('element');"
     },
