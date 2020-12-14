@@ -311,6 +311,9 @@
     "History": {
       "__base": "var instance = history;"
     },
+    "HTMLAllCollection": {
+      "__base": "var instance = document.all; if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLAllCollection' && Object.prototype.toString.call(instance) !== '[object HTMLAllCollection]') {return false;}"
+    },
     "HTMLAnchorElement": {
       "__base": "var instance = document.createElement('a');",
       "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLAnchorElement' && Object.prototype.toString.call(instance) !== '[object HTMLAnchorElement]') {return false;} return !!instance;"
@@ -346,6 +349,9 @@
     "HTMLCanvasElement": {
       "__base": "var instance = document.createElement('canvas');",
       "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLCanvasElement' && Object.prototype.toString.call(instance) !== '[object HTMLCanvasElement]') {return false;} return !!instance;"
+    },
+    "HTMLCollection": {
+      "__base": "var instance = document.forms;"
     },
     "HTMLContentElement": {
       "__base": "var instance = document.createElement('content');",
