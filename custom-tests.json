@@ -224,7 +224,7 @@
       "__base": "var instance = new DOMException('DOMException');"
     },
     "DOMRectList": {
-      "__base": "<%api.Element:el%> var instance = el.getClientRects()"
+      "__base": "<%api.Element:el%> var instance = el.getClientRects();"
     },
     "DOMTokenList": {
       "__additional": {
