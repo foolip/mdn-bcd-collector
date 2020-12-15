@@ -701,7 +701,7 @@
       "__base": "<%api.MediaStream:mediaStream%> if (!reusableInstances.audioContext) {return false;} var promise = mediaStream.then(function(ms) {return reusableInstances.audioContext.createMediaStreamTrackSource(ms)});"
     },
     "MessageChannel": {
-      "__base": "var instance = new MessageChannel();"
+      "__base": "if (!('MessageChannel' in self)) {return false;} var instance = new MessageChannel();"
     },
     "MessagePort": {
       "__base": "<%api.MessageChannel:channel%> var instance = channel.port1;"
