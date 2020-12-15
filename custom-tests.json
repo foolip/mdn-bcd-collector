@@ -642,6 +642,9 @@
       "__resources": ["image-black"],
       "__base": "var instance = createImageBitmap(document.getElementById('resource-image-black'));"
     },
+    "ImageCapture": {
+      "__base": "<%api.MediaStreamTrack:track%> var promise = track.then(function(t) {return new ImageCapture(t);});"
+    },
     "ImageData": {
       "__base": "<%api.CanvasRenderingContext2D:ctx%> var instance = ctx.createImageData(16, 16);"
     },
@@ -676,7 +679,7 @@
       "__base": "var instance = navigator.mediaSession;"
     },
     "MediaSettingsRange": {
-      "__base": "<%api.MediaStreamTrack:track%> var promise = track.then(function(t) {var imageCapture = new ImageCapture(t); return imageCapture.track.getSettings()});"
+      "__base": "<%api.ImageCapture:imagecapture%> var promise = imagecapture.then(function(ic) {return ic.track.getSettings()});"
     },
     "MediaSource": {
       "__base": "var instance = new MediaSource();",
