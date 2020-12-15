@@ -1313,6 +1313,9 @@
     },
     "Window": {
       "__base": "var instance = window;"
+    },
+    "XPathExpression": {
+      "__base": "var xpe = new XPathEvaluator(); var instance = xpe.createExpression('//div');"
     }
   },
   "css": {
