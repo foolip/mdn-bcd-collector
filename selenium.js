@@ -117,7 +117,7 @@ const buildDriver = async (browser, version, os) => {
       case 'macOS':
         osesToTest = service === 'saucelabs' ?
                      [['macOS', '10.14']] :
-                     [['OS X', 'Mojave'], ['OS X', 'El Capitan']];
+                     [['OS X', 'Mojave'], ['OS X', 'Big Sur']];
         break;
       default:
         throw new Error(`Unknown/unsupported OS: ${os}`);
