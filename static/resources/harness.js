@@ -128,7 +128,8 @@
         stringIncludes(err.message, 'argument required') ||
         stringIncludes(err.message, 'arguments required') ||
         stringIncludes(err.message, 'Argument not optional') ||
-        stringIncludes(err.message, 'Arguments can\'t be empty')
+        stringIncludes(err.message, 'Arguments can\'t be empty') ||
+        stringIncludes(err.message, 'undefined is not an object')
       ) {
         // If it failed to construct and it's not illegal or just needs
         // more arguments, the constructor's good
