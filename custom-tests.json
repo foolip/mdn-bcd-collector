@@ -796,6 +796,13 @@
     "PerformanceTiming": {
       "__base": "<%api.Performance:performance%> var instance = performance.timing;"
     },
+    "PeriodicWave": {
+      "__resources": ["audioContext"],
+      "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createPeriodicWave();"
+    },
+    "PluginArray": {
+      "__base": "var instance = navigator.plugins;"
+    },
     "ProcessingInstruction": {
       "__base": "var instance = document.createProcessingInstruction('xml', \"version='1.0' encoding='UTF-8'\");"
     },
