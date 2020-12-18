@@ -1337,6 +1337,9 @@
     },
     "XPathExpression": {
       "__base": "var xpe = new XPathEvaluator(); var instance = xpe.createExpression('//div');"
+    },
+    "XPathResult": {
+      "__base": "<%api.XPathExpression:exp%> var instance = exp.evaluate(document);"
     }
   },
   "css": {
