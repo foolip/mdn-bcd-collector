@@ -842,6 +842,9 @@
       "__resources": ["createStyleSheet"],
       "__base": "<%api.CSSStyleSheet:instance%>"
     },
+    "StyleSheetList": {
+      "__base": "var instance = document.styleSheets;"
+    },
     "SubtleCrypto": {
       "__base": "<%api.Crypto:crypto%> var instance = crypto.subtle;"
     },
