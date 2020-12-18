@@ -1233,6 +1233,10 @@
       "__resources": ["video-blank"],
       "__base": "var el = document.getElementById('resource-video-blank'); var instance = el.textTracks;"
     },
+    "TimeRanges": {
+      "__resources": ["video-blank"],
+      "__base": "var el = document.getElementById('resource-video-blank'); var instance = el.buffered;"
+    },
     "TreeWalker": {
       "__base": "var instance = document.createTreeWalker(document);"
     },
