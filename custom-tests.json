@@ -800,6 +800,10 @@
       "__resources": ["audioContext"],
       "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createPeriodicWave();"
     },
+    "Plugin": {
+      "__todo": "XXX Doesn't work if there are no plugins",
+      "__base": "<%api.PluginArray:plugins%> var instance = plugins[0];"
+    },
     "PluginArray": {
       "__base": "var instance = navigator.plugins;"
     },
