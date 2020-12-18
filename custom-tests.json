@@ -1335,6 +1335,9 @@
       "__resources": ["webGL"],
       "__base": "<%api.EXT_disjoint_timer_query:ext%> var instance = ext.createQueryEXT();"
     },
+    "WebSocket": {
+      "__base": "var instance = new WebSocket('wss://mdn-bcd-collector.appspot.com');"
+    },
     "Window": {
       "__base": "var instance = window;"
     },
