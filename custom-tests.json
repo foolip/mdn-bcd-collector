@@ -795,7 +795,7 @@
       "__base": "<%api.PerformanceMark:instance%>"
     },
     "PerformanceMark": {
-      "__base": "<%api.Performance:performance%> var instance = performance.mark('mark');"
+      "__base": "<%api.Performance:performance%> performance.mark('mark'); var instance = performance.getEntriesByName('mark')[0];"
     },
     "PerformanceNavigation": {
       "__base": "<%api.Performance:performance%> var instance = performance.navigation;"
