@@ -228,7 +228,7 @@
       "__base": "var instance = new DOMException('DOMException');"
     },
     "DOMRectList": {
-      "__base": "<%api.Element:el%> var instance = el.getClientRects();"
+      "__base": "<%api.Element:el%> if (!('getClientRects' in instance)) {return false;} var instance = el.getClientRects();"
     },
     "DOMTokenList": {
       "__additional": {
@@ -833,7 +833,7 @@
       "__base": "var instance = window.getSelection();"
     },
     "ShadowRoot": {
-      "__base": "var el = document.createElement('div'); el.attachShadow({mode: 'open'}); var instance = el.shadowRoot;"
+      "__base": "var el = document.createElement('div'); if (!('attachShadow' in el)) {return false;} el.attachShadow({mode: 'open'}); var instance = el.shadowRoot;"
     },
     "StereoPannerNode": {
       "__resources": ["audioContext"],
