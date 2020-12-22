@@ -227,6 +227,9 @@
     "DOMException": {
       "__base": "var instance = new DOMException('DOMException');"
     },
+    "DOMImplementation": {
+      "__base": "var instance = document.implementation;"
+    },
     "DOMRectList": {
       "__base": "<%api.Element:el%> if (!('getClientRects' in instance)) {return false;} var instance = el.getClientRects();"
     },
