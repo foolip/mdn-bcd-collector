@@ -227,6 +227,9 @@
     "DOMException": {
       "__base": "var instance = new DOMException('DOMException');"
     },
+    "DOMImplementation": {
+      "__base": "var instance = document.implementation;"
+    },
     "DOMRectList": {
       "__base": "<%api.Element:el%> if (!('getClientRects' in instance)) {return false;} var instance = el.getClientRects();"
     },
@@ -792,7 +795,7 @@
       "__base": "<%api.PerformanceMark:instance%>"
     },
     "PerformanceMark": {
-      "__base": "<%api.Performance:performance%> var instance = performance.mark('mark');"
+      "__base": "<%api.Performance:performance%> performance.mark('mark'); var instance = performance.getEntriesByName('mark')[0];"
     },
     "PerformanceNavigation": {
       "__base": "<%api.Performance:performance%> var instance = performance.navigation;"
@@ -855,6 +858,45 @@
     "SVGAElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'a');",
       "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGAElement' && Object.prototype.toString.call(instance) !== '[object SVGAElement]') {return false;} return !!instance;"
+    },
+    "SVGAngle": {
+      "__base": "<%api.SVGSVGElement:el%> var instance = el.createSVGAngle();"
+    },
+    "SVGAnimatedAngle": {
+      "__base": "<%api.SVGMarkerElement:el%> var instance = el.orientAngle;"
+    },
+    "SVGAnimatedBoolean": {
+      "__base": "<%api.SVGFEConvolveMatrixElement:el%> var instance = el.preserveAlpha;"
+    },
+    "SVGAnimatedEnumeration": {
+      "__base": "<%api.SVGMarkerElement:el%> var instance = el.orientType;"
+    },
+    "SVGAnimatedInteger": {
+      "__base": "<%api.SVGFEConvolveMatrixElement:el%> var instance = el.orderX;"
+    },
+    "SVGAnimatedLength": {
+      "__base": "<%api.SVGMarkerElement:el%> var instance = el.refX;"
+    },
+    "SVGAnimatedLengthList": {
+      "__base": "<%api.SVGTextPositioningElement:el%> var instance = el.x;"
+    },
+    "SVGAnimatedNumber": {
+      "__base": "<%api.SVGGeometryElement:el%> var instance = el.pathLength;"
+    },
+    "SVGAnimatedNumberList": {
+      "__base": "<%api.SVGFEConvolveMatrixElement:el%> var instance = el.kernelMatrix;"
+    },
+    "SVGAnimatedPoints": {
+      "__base": "<%api.SVGPolylineElement:instance%>"
+    },
+    "SVGAnimatedPreserveAspectRatio": {
+      "__base": "<%api.SVGFEImageElement:el%> var instance = el.preserveAspectRatio;"
+    },
+    "SVGAnimatedRect": {
+      "__base": "<%api.SVGViewElement:el%> var instance = el.viewBox;"
+    },
+    "SVGAnimatedTransformList": {
+      "__base": "<%api.SVGGraphicsElement:el%> var instance = el.transform;"
     },
     "SVGAltGlyphDefElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'altGlyphDef');",
@@ -1083,6 +1125,12 @@
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'image');",
       "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGImageElement' && Object.prototype.toString.call(instance) !== '[object SVGImageElement]') {return false;} return !!instance;"
     },
+    "SVGLength": {
+      "__base": "<%api.SVGSVGElement:el%> var instance = el.createSVGLength();"
+    },
+    "SVGLengthList": {
+      "__base": "<%api.SVGAnimatedLengthList:list%> var instance = list.baseVal;"
+    },
     "SVGLinearGradientElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient');",
       "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGLinearGradientElement' && Object.prototype.toString.call(instance) !== '[object SVGLinearGradientElement]') {return false;} return !!instance;"
@@ -1115,6 +1163,12 @@
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'mpath');",
       "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGMPathElement' && Object.prototype.toString.call(instance) !== '[object SVGMPathElement]') {return false;} return !!instance;"
     },
+    "SVGNumber": {
+      "__base": "<%api.SVGSVGElement:el%> var instance = el.createSVGNumber();"
+    },
+    "SVGNumberList": {
+      "__base": "<%api.SVGAnimatedNumberList:list%> var instance = list.baseVal;"
+    },
     "SVGPathElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'path');",
       "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGPathElement' && Object.prototype.toString.call(instance) !== '[object SVGPathElement]') {return false;} return !!instance;"
@@ -1122,6 +1176,12 @@
     "SVGPatternElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'pattern');",
       "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGPatternElement' && Object.prototype.toString.call(instance) !== '[object SVGPatternElement]') {return false;} return !!instance;"
+    },
+    "SVGPoint": {
+      "__base": "<%api.SVGSVGElement:el%> var instance = el.createSVGPoint();"
+    },
+    "SVGPointList": {
+      "__base": "<%api.SVGAnimatedPoints:list%> var instance = list.baseVal;"
     },
     "SVGPolygonElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');",
@@ -1134,6 +1194,9 @@
     "SVGRadialGradientElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'radialGradient');",
       "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGRadialGradientElement' && Object.prototype.toString.call(instance) !== '[object SVGRadialGradientElement]') {return false;} return !!instance;"
+    },
+    "SVGRect": {
+      "__base": "<%api.SVGSVGElement:el%> var instance = el.createSVGRect();"
     },
     "SVGRectElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'rect');",
@@ -1190,6 +1253,12 @@
     "SVGTitleElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'title');",
       "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGTitleElement' && Object.prototype.toString.call(instance) !== '[object SVGTitleElement]') {return false;} return !!instance;"
+    },
+    "SVGTransform": {
+      "__base": "<%api.SVGSVGElement:el%> var instance = el.createSVGTransform();"
+    },
+    "SVGTransformList": {
+      "__base": "<%api.SVGAnimatedTransformList:list%> var instance = list.baseVal;"
     },
     "SVGTRefElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'tref');",
@@ -1250,6 +1319,9 @@
     "URL": {
       "__base": "if ('URL' in self) {var instance = new URL('https://mdn-bcd-collector.appspot.com')} else {var instance = new webkitURL('https://mdn-bcd-collector.appspot.com')}",
       "__test": "return 'URL' in self;"
+    },
+    "ValidityState": {
+      "__base": "<%api.HTMLInputElement:el%> var instance = el.validity;"
     },
     "VideoTrack": {
       "__resources": ["video-blank"],

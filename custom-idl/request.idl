@@ -1,3 +1,0 @@
-partial interface Request {
-  readonly attribute any context;
-};
