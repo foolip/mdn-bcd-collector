@@ -859,6 +859,42 @@
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'a');",
       "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGAElement' && Object.prototype.toString.call(instance) !== '[object SVGAElement]') {return false;} return !!instance;"
     },
+    "SVGAnimatedAngle": {
+      "__base": "<%api.SVGMarkerElement:el%> var instance = el.orientAngle;"
+    },
+    "SVGAnimatedBoolean": {
+      "__base": "<%api.SVGFEConvolveMatrixElement:el%> var instance = el.preserveAlpha;"
+    },
+    "SVGAnimatedEnumeration": {
+      "__base": "<%api.SVGMarkerElement:el%> var instance = el.orientType;"
+    },
+    "SVGAnimatedInteger": {
+      "__base": "<%api.SVGFEConvolveMatrixElement:el%> var instance = el.orderX;"
+    },
+    "SVGAnimatedLength": {
+      "__base": "<%api.SVGMarkerElement:el%> var instance = el.refX;"
+    },
+    "SVGAnimatedLengthList": {
+      "__base": "<%api.SVGTextPositioningElement:el%> var instance = el.x;"
+    },
+    "SVGAnimatedNumber": {
+      "__base": "<%api.SVGGeometryElement:el%> var instance = el.pathLength;"
+    },
+    "SVGAnimatedNumberList": {
+      "__base": "<%api.SVGFEConvolveMatrixElement:el%> var instance = el.kernelMatrix;"
+    },
+    "SVGAnimatedPoints": {
+      "__base": "<%api.SVGPolylineElement:instance%>"
+    },
+    "SVGAnimatedPreserveAspectRatio": {
+      "__base": "<%api.SVGFEImageElement:el%> var instance = el.preserveAspectRatio;"
+    },
+    "SVGAnimatedRect": {
+      "__base": "<%api.SVGViewElement:el%> var instance = el.viewBox;"
+    },
+    "SVGAnimatedTransformList": {
+      "__base": "<%api.SVGGraphicsElement:el%> var instance = el.transform;"
+    },
     "SVGAltGlyphDefElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'altGlyphDef');",
       "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGAltGlyphDefElement' && Object.prototype.toString.call(instance) !== '[object SVGAltGlyphDefElement]') {return false;} return !!instance;"
