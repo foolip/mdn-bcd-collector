@@ -1320,6 +1320,9 @@
       "__base": "if ('URL' in self) {var instance = new URL('https://mdn-bcd-collector.appspot.com')} else {var instance = new webkitURL('https://mdn-bcd-collector.appspot.com')}",
       "__test": "return 'URL' in self;"
     },
+    "ValidityState": {
+      "__base": "<%api.HTMLInputElement:el%> var instance = el.validity;"
+    },
     "VideoTrack": {
       "__resources": ["video-blank"],
       "__base": "<%api.VideoTrackList:videoTracks%> var instance = videoTracks[0];"
