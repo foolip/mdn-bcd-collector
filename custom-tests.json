@@ -1199,6 +1199,9 @@
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');",
       "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGPolylineElement' && Object.prototype.toString.call(instance) !== '[object SVGPolylineElement]') {return false;} return !!instance;"
     },
+    "SVGPreserveAspectRatio": {
+      "__base": "<%api.SVGSVGElement:el%> var instance = el.preserveAspectRatio.baseVal;"
+    },
     "SVGRadialGradientElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'radialGradient');",
       "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGRadialGradientElement' && Object.prototype.toString.call(instance) !== '[object SVGRadialGradientElement]') {return false;} return !!instance;"
@@ -1225,6 +1228,9 @@
     "SVGStopElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'stop');",
       "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGStopElement' && Object.prototype.toString.call(instance) !== '[object SVGStopElement]') {return false;} return !!instance;"
+    },
+    "SVGStringList": {
+      "__base": "<%api.SVGGraphicsElement:el%> var instance = el.systemLanguage;"
     },
     "SVGStyleElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'style');",
