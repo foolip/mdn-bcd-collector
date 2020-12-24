@@ -1117,6 +1117,10 @@
       "__base": "<%api.SVGLinearGradientElement:instance%>",
       "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGLinearGradientElement' && Object.prototype.toString.call(instance) !== '[object SVGLinearGradientElement]') {return false;} return !!instance;"
     },
+    "SVGGraphicsElement": {
+      "__base": "<%api.SVGGraphicsElement:el%>",
+      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGImageElement' && Object.prototype.toString.call(instance) !== '[object SVGImageElement]') {return false;} return !!instance;"
+    },
     "SVGHKernElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'hkern');",
       "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGHKernElement' && Object.prototype.toString.call(instance) !== '[object SVGHKernElement]') {return false;} return !!instance;"
