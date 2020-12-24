@@ -86,15 +86,6 @@ interface SVGExternalResourcesRequired {
   readonly attribute SVGAnimatedBoolean externalResourcesRequired;
 };
 
-// https://www.w3.org/TR/SVG11/filters.html#InterfaceSVGFilterPrimitiveStandardAttributes
-interface SVGFilterPrimitiveStandardAttributes : SVGStylable {
-  readonly attribute SVGAnimatedLength x;
-  readonly attribute SVGAnimatedLength y;
-  readonly attribute SVGAnimatedLength width;
-  readonly attribute SVGAnimatedLength height;
-  readonly attribute SVGAnimatedString result;
-};
-
 // https://www.w3.org/TR/SVG11/fonts.html#InterfaceSVGFontElement
 interface SVGFontElement : SVGElement {};
 
