@@ -326,7 +326,7 @@
     },
     "HTMLAnchorElement": {
       "__base": "var instance = document.createElement('a');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLAnchorElement' && Object.prototype.toString.call(instance) !== '[object HTMLAnchorElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'HTMLAnchorElement');"
     },
     "HTMLAreaElement": {
       "__base": "var instance = document.createElement('area');",
