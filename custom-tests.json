@@ -1122,7 +1122,7 @@
       "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGLinearGradientElement' && Object.prototype.toString.call(instance) !== '[object SVGLinearGradientElement]') {return false;} return !!instance;"
     },
     "SVGGraphicsElement": {
-      "__base": "<%api.SVGGraphicsElement:el%>",
+      "__base": "<%api.SVGImageElement:instance%>",
       "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGImageElement' && Object.prototype.toString.call(instance) !== '[object SVGImageElement]') {return false;} return !!instance;"
     },
     "SVGHKernElement": {
