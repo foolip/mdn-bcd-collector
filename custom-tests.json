@@ -942,6 +942,10 @@
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'color-profile');",
       "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGColorProfileElement' && Object.prototype.toString.call(instance) !== '[object SVGColorProfileElement]') {return false;} return !!instance;"
     },
+    "SVGComponentTransferFunctionElement": {
+      "__base": "<%api.SVGFEFuncAElement:instance%>",
+      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGFEFuncAElement' && Object.prototype.toString.call(instance) !== '[object SVGFEFuncAElement]') {return false;} return !!instance;"
+    },
     "SVGCursorElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'cursor');",
       "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGCursorElement' && Object.prototype.toString.call(instance) !== '[object SVGCursorElement]') {return false;} return !!instance;"
