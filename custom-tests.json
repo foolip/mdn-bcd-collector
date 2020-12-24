@@ -886,9 +886,6 @@
     "SVGAnimatedNumberList": {
       "__base": "<%api.SVGFEConvolveMatrixElement:el%> var instance = el.kernelMatrix;"
     },
-    "SVGAnimatedPoints": {
-      "__base": "<%api.SVGPolylineElement:instance%>"
-    },
     "SVGAnimatedPreserveAspectRatio": {
       "__base": "<%api.SVGFEImageElement:el%> var instance = el.preserveAspectRatio;"
     },

@@ -60,12 +60,6 @@ interface SVGAltGlyphItemElement : SVGElement {};
 // https://www.w3.org/TR/SVG11/animate.html#InterfaceSVGAnimateColorElement
 interface SVGAnimateColorElement : SVGAnimationElement {};
 
-// https://www.w3.org/TR/SVG11/shapes.html#InterfaceSVGAnimatedPoints
-interface SVGAnimatedPoints {
-  readonly attribute SVGPointList points;
-  readonly attribute SVGPointList animatedPoints;
-};
-
 // https://www.w3.org/TR/SVG11/color.html#InterfaceSVGColorProfileElement
 interface SVGColorProfileElement : SVGElement {
   attribute DOMString local;
