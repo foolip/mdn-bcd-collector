@@ -720,6 +720,9 @@
     "MimeType": {
       "__base": "var instance = window.navigator.mimeTypes[0];"
     },
+    "MimeTypeArray": {
+      "__base": "var instance = window.navigator.mimeTypes;"
+    },
     "NamedNodeMap": {
       "__base": "var instance = document.body.attributes;"
     },
