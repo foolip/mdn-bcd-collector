@@ -1432,6 +1432,12 @@
     "Window": {
       "__base": "var instance = window;"
     },
+    "WindowOrWorkerGlobalScope": {
+      "__base": "var instance = self;"
+    },
+    "WorkerGlobalScope": {
+      "__base": "var instance = self;"
+    },
     "XPathExpression": {
       "__base": "var xpe = new XPathEvaluator(); var instance = xpe.createExpression('//div');"
     },
