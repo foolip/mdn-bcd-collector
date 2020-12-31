@@ -113,6 +113,10 @@
     "CacheStorage": {
       "__base": "if ('window' in self) {/* Window exposure */ var instance = window.caches} else {/* Worker exposure */ var instance = caches};"
     },
+    "CanvasPattern": {
+      "__resources": ["image-black"],
+      "__base": "<%api.CanvasRenderingContext2D:canvas%> var instance = canvas.createPattern(document.getElementById('resource-image-black'), 'repeat');"
+    },
     "CanvasRenderingContext2D": {
       "__base": "var canvas = document.createElement('canvas'); if (!canvas) {return false}; var instance = canvas.getContext('2d');"
     },
