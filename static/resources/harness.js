@@ -144,6 +144,34 @@
     return result;
   }
 
+  function testObjectName(instance, names) {
+    if (!instance) {
+      return false;
+    }
+
+    if (
+      !instance.constructor.name &&
+      Object.prototype.toString.call(instance) === '[object Object]'
+    ) {
+      return {result: null, message: 'Browser does not support object prototype confirmation methods'};
+    }
+
+    if (typeof(names) === 'string') {
+      names = [names];
+    }
+
+    for (var i = 0; i < names.length; i++) {
+      if (
+        instance.constructor.name === names[i] ||
+        Object.prototype.toString.call(instance) === '[object ' + names[i] + ']'
+      ) {
+        return true;
+      }
+    }
+
+    return {result: false, message: 'Instance prototype does not match accepted names (' + names.join(', ') + ')'};
+  }
+
   // Once a test is evaluated and run, it calls this function with the result.
   // This function then compiles a result object from the given result value,
   // and then passes the result to `callback()` (or if the result is not true
@@ -688,6 +716,7 @@
   global.reusableInstances = reusableInstances;
   global.bcd = {
     testConstructor: testConstructor,
+    testObjectName: testObjectName,
     addInstance: addInstance,
     addTest: addTest,
     runTests: runTests,

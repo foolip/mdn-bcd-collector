@@ -58,7 +58,7 @@
     },
     "AudioBuffer": {
       "__resources": ["audioContext"],
-      "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createBuffer(2, audioContext.sampleRate * 3, audioContext.sampleRate);"
+      "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createBuffer(2, reusableInstances.audioContext.sampleRate * 3, reusableInstances.audioContext.sampleRate);"
     },
     "AudioBufferSourceNode": {
       "__resources": ["audioContext"],
@@ -112,6 +112,10 @@
     },
     "CacheStorage": {
       "__base": "if ('window' in self) {/* Window exposure */ var instance = window.caches} else {/* Worker exposure */ var instance = caches};"
+    },
+    "CanvasPattern": {
+      "__resources": ["image-black"],
+      "__base": "<%api.CanvasRenderingContext2D:canvas%> var instance = canvas.createPattern(document.getElementById('resource-image-black'), 'repeat');"
     },
     "CanvasRenderingContext2D": {
       "__base": "var canvas = document.createElement('canvas'); if (!canvas) {return false}; var instance = canvas.getContext('2d');"
@@ -322,78 +326,79 @@
       "__base": "var instance = history;"
     },
     "HTMLAllCollection": {
-      "__base": "var instance = document.all; if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLAllCollection' && Object.prototype.toString.call(instance) !== '[object HTMLAllCollection]') {return false;}"
+      "__base": "var instance = document.all;",
+      "__test": "return bcd.testObjectName(instance, 'HTMLAllCollection');"
     },
     "HTMLAnchorElement": {
       "__base": "var instance = document.createElement('a');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLAnchorElement' && Object.prototype.toString.call(instance) !== '[object HTMLAnchorElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'HTMLAnchorElement');"
     },
     "HTMLAreaElement": {
       "__base": "var instance = document.createElement('area');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLAreaElement' && Object.prototype.toString.call(instance) !== '[object HTMLAreaElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'HTMLAreaElement');"
     },
     "HTMLAudioElement": {
       "__base": "var instance = document.createElement('audio');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLAudioElement' && Object.prototype.toString.call(instance) !== '[object HTMLAudioElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'HTMLAudioElement');"
     },
     "HTMLBaseElement": {
       "__base": "var instance = document.createElement('base');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLBaseElement' && Object.prototype.toString.call(instance) !== '[object HTMLBaseElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'HTMLBaseElement');"
     },
     "HTMLBaseFontElement": {
       "__base": "var instance = document.createElement('basefont');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLBaseFontElement' && Object.prototype.toString.call(instance) !== '[object HTMLBaseFontElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'HTMLBaseFontElement');"
     },
     "HTMLBodyElement": {
       "__base": "var instance = document.createElement('body');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLBodyElement' && Object.prototype.toString.call(instance) !== '[object HTMLBodyElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'HTMLBodyElement');"
     },
     "HTMLBRElement": {
       "__base": "var instance = document.createElement('br');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLBRElement' && Object.prototype.toString.call(instance) !== '[object HTMLBRElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'HTMLBRElement');"
     },
     "HTMLButtonElement": {
       "__base": "var instance = document.createElement('button');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLButtonElement' && Object.prototype.toString.call(instance) !== '[object HTMLButtonElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'HTMLButtonElement');"
     },
     "HTMLCanvasElement": {
       "__base": "var instance = document.createElement('canvas');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLCanvasElement' && Object.prototype.toString.call(instance) !== '[object HTMLCanvasElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'HTMLCanvasElement');"
     },
     "HTMLCollection": {
       "__base": "var instance = document.forms;"
     },
     "HTMLContentElement": {
       "__base": "var instance = document.createElement('content');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLContentElement' && Object.prototype.toString.call(instance) !== '[object HTMLContentElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'HTMLContentElement');"
     },
     "HTMLDataElement": {
       "__base": "var instance = document.createElement('data');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLDataElement' && Object.prototype.toString.call(instance) !== '[object HTMLDataElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'HTMLDataElement');"
     },
     "HTMLDataListElement": {
       "__base": "var instance = document.createElement('datalist');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLDataListElement' && Object.prototype.toString.call(instance) !== '[object HTMLDataListElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'HTMLDataListElement');"
     },
     "HTMLDetailsElement": {
       "__base": "var instance = document.createElement('details');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLDetailsElement' && Object.prototype.toString.call(instance) !== '[object HTMLDetailsElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'HTMLDetailsElement');"
     },
     "HTMLDialogElement": {
       "__base": "var instance = document.createElement('dialog');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLDialogElement' && Object.prototype.toString.call(instance) !== '[object HTMLDialogElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'HTMLDialogElement');"
     },
     "HTMLDirectoryElement": {
       "__base": "var instance = document.createElement('dir');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLDirectoryElement' && Object.prototype.toString.call(instance) !== '[object HTMLDirectoryElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'HTMLDirectoryElement');"
     },
     "HTMLDivElement": {
       "__base": "var instance = document.createElement('div');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLDivElement' && Object.prototype.toString.call(instance) !== '[object HTMLDivElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'HTMLDivElement');"
     },
     "HTMLDListElement": {
       "__base": "var instance = document.createElement('dl');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLDListElement' && Object.prototype.toString.call(instance) !== '[object HTMLDListElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'HTMLDListElement');"
     },
     "HTMLDocument": {
       "__base": "var instance = document;"
@@ -403,243 +408,243 @@
     },
     "HTMLEmbedElement": {
       "__base": "var instance = document.createElement('embed');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLEmbedElement' && Object.prototype.toString.call(instance) !== '[object HTMLEmbedElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'HTMLEmbedElement');"
     },
     "HTMLFieldSetElement": {
       "__base": "var instance = document.createElement('fieldset');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLFieldSetElement' && Object.prototype.toString.call(instance) !== '[object HTMLFieldSetElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'HTMLFieldSetElement');"
     },
     "HTMLFontElement": {
       "__base": "var instance = document.createElement('font');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLFontElement' && Object.prototype.toString.call(instance) !== '[object HTMLFontElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'HTMLFontElement');"
     },
     "HTMLFormElement": {
       "__base": "var instance = document.createElement('form');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLFormElement' && Object.prototype.toString.call(instance) !== '[object HTMLFormElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'HTMLFormElement');"
     },
     "HTMLFrameElement": {
       "__base": "var instance = document.createElement('frame');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLFrameElement' && Object.prototype.toString.call(instance) !== '[object HTMLFrameElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'HTMLFrameElement');"
     },
     "HTMLFrameSetElement": {
       "__base": "var instance = document.createElement('frameset');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLFrameSetElement' && Object.prototype.toString.call(instance) !== '[object HTMLFrameSetElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'HTMLFrameSetElement');"
     },
     "HTMLHeadElement": {
       "__base": "var instance = document.createElement('head');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLHeadElement' && Object.prototype.toString.call(instance) !== '[object HTMLHeadElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'HTMLHeadElement');"
     },
     "HTMLHeadingElement": {
       "__base": "var instance = document.createElement('h1');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLHeadingElement' && Object.prototype.toString.call(instance) !== '[object HTMLHeadingElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'HTMLHeadingElement');"
     },
     "HTMLHRElement": {
       "__base": "var instance = document.createElement('hr');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLHRElement' && Object.prototype.toString.call(instance) !== '[object HTMLHRElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'HTMLHRElement');"
     },
     "HTMLHtmlElement": {
       "__base": "var instance = document.createElement('html');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLHtmlElement' && Object.prototype.toString.call(instance) !== '[object HTMLHtmlElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'HTMLHtmlElement');"
     },
     "HTMLIFrameElement": {
       "__base": "var instance = document.createElement('iframe');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLIFrameElement' && Object.prototype.toString.call(instance) !== '[object HTMLIFrameElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'HTMLIFrameElement');"
     },
     "HTMLImageElement": {
       "__base": "var instance = document.createElement('img');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLImageElement' && Object.prototype.toString.call(instance) !== '[object HTMLImageElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'HTMLImageElement');"
     },
     "HTMLInputElement": {
       "__base": "var instance = document.createElement('input');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLInputElement' && Object.prototype.toString.call(instance) !== '[object HTMLInputElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'HTMLInputElement');"
     },
     "HTMLIsIndexElement": {
       "__base": "var instance = document.createElement('isindex');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLIsIndexElement' && Object.prototype.toString.call(instance) !== '[object HTMLIsIndexElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'HTMLIsIndexElement');"
     },
     "HTMLKeygenElement": {
       "__base": "var instance = document.createElement('keygen');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLKeygenElement' && Object.prototype.toString.call(instance) !== '[object HTMLKeygenElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'HTMLKeygenElement');"
     },
     "HTMLLabelElement": {
       "__base": "var instance = document.createElement('label');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLLabelElement' && Object.prototype.toString.call(instance) !== '[object HTMLLabelElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'HTMLLabelElement');"
     },
     "HTMLLegendElement": {
       "__base": "var instance = document.createElement('legend');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLLegendElement' && Object.prototype.toString.call(instance) !== '[object HTMLLegendElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'HTMLLegendElement');"
     },
     "HTMLLIElement": {
       "__base": "var instance = document.createElement('li');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLLIElement' && Object.prototype.toString.call(instance) !== '[object HTMLLIElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'HTMLLIElement');"
     },
     "HTMLLinkElement": {
       "__base": "var instance = document.createElement('link');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLLinkElement' && Object.prototype.toString.call(instance) !== '[object HTMLLinkElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'HTMLLinkElement');"
     },
     "HTMLMapElement": {
       "__base": "var instance = document.createElement('map');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLMapElement' && Object.prototype.toString.call(instance) !== '[object HTMLMapElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'HTMLMapElement');"
     },
     "HTMLMarqueeElement": {
       "__base": "var instance = document.createElement('marquee');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLMarqueeElement' && Object.prototype.toString.call(instance) !== '[object HTMLMarqueeElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'HTMLMarqueeElement');"
     },
     "HTMLMediaElement": {
       "__base": "<%api.HTMLVideoElement:instance%>",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLVideoElement' && Object.prototype.toString.call(instance) !== '[object HTMLVideoElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'HTMLVideoElement');"
     },
     "HTMLMenuElement": {
       "__base": "var instance = document.createElement('menu');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLMenuElement' && Object.prototype.toString.call(instance) !== '[object HTMLMenuElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'HTMLMenuElement');"
     },
     "HTMLMenuItemElement": {
       "__base": "var instance = document.createElement('menuitem');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLMenuItemElement' && Object.prototype.toString.call(instance) !== '[object HTMLMenuItemElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'HTMLMenuItemElement');"
     },
     "HTMLMetaElement": {
       "__base": "var instance = document.createElement('meta');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLMetaElement' && Object.prototype.toString.call(instance) !== '[object HTMLMetaElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'HTMLMetaElement');"
     },
     "HTMLMeterElement": {
       "__base": "var instance = document.createElement('meter');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLMeterElement' && Object.prototype.toString.call(instance) !== '[object HTMLMeterElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'HTMLMeterElement');"
     },
     "HTMLModElement": {
       "__base": "var instance = document.createElement('del');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLModElement' && instance.constructor.name !== 'HTMLDelElement' && Object.prototype.toString.call(instance) !== '[object HTMLModElement]' && Object.prototype.toString.call(instance) !== '[object HTMLDelElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, ['HTMLModElement', 'HTMLDelElement']);"
     },
     "HTMLObjectElement": {
       "__base": "var instance = document.createElement('object');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLObjectElement' && Object.prototype.toString.call(instance) !== '[object HTMLObjectElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'HTMLObjectElement');"
     },
     "HTMLOListElement": {
       "__base": "var instance = document.createElement('ol');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLOListElement' && Object.prototype.toString.call(instance) !== '[object HTMLOListElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'HTMLOListElement');"
     },
     "HTMLOptGroupElement": {
       "__base": "var instance = document.createElement('optgroup');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLOptGroupElement' && Object.prototype.toString.call(instance) !== '[object HTMLOptGroupElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'HTMLOptGroupElement');"
     },
     "HTMLOptionElement": {
       "__base": "var instance = document.createElement('option');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLOptionElement' && Object.prototype.toString.call(instance) !== '[object HTMLOptionElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'HTMLOptionElement');"
     },
     "HTMLOutputElement": {
       "__base": "var instance = document.createElement('output');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLOutputElement' && Object.prototype.toString.call(instance) !== '[object HTMLOutputElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'HTMLOutputElement');"
     },
     "HTMLParagraphElement": {
       "__base": "var instance = document.createElement('p');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLParagraphElement' && Object.prototype.toString.call(instance) !== '[object HTMLParagraphElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'HTMLParagraphElement');"
     },
     "HTMLParamElement": {
       "__base": "var instance = document.createElement('param');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLParamElement' && Object.prototype.toString.call(instance) !== '[object HTMLParamElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'HTMLParamElement');"
     },
     "HTMLPictureElement": {
       "__base": "var instance = document.createElement('picture');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLPictureElement' && Object.prototype.toString.call(instance) !== '[object HTMLPictureElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'HTMLPictureElement');"
     },
     "HTMLPortalElement": {
       "__base": "var instance = document.createElement('portal');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLPortalElement' && Object.prototype.toString.call(instance) !== '[object HTMLPortalElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'HTMLPortalElement');"
     },
     "HTMLPreElement": {
       "__base": "var instance = document.createElement('pre');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLPreElement' && Object.prototype.toString.call(instance) !== '[object HTMLPreElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'HTMLPreElement');"
     },
     "HTMLProgressElement": {
       "__base": "var instance = document.createElement('progress');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLProgressElement' && Object.prototype.toString.call(instance) !== '[object HTMLProgressElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'HTMLProgressElement');"
     },
     "HTMLQuoteElement": {
       "__base": "var instance = document.createElement('blockquote');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLQuoteElement' && instance.constructor.name !== 'HTMLBlockElementConstructor' && instance.constructor.name !== 'HTMLBlockquoteElementConstructor' && Object.prototype.toString.call(instance) !== '[object HTMLQuoteElement]' && Object.prototype.toString.call(instance) !== '[object HTMLBlockquoteElement]' && Object.prototype.toString.call(instance) !== '[object HTMLBlockElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, ['HTMLQuoteElement', 'HTMLBlockElement', 'HTMLBlockElementConstructor', 'HTMLBlockquoteElement', 'HTMLBlockquoteElementConstructor']);"
     },
     "HTMLScriptElement": {
       "__base": "var instance = document.createElement('script');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLScriptElement' && Object.prototype.toString.call(instance) !== '[object HTMLScriptElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'HTMLScriptElement');"
     },
     "HTMLSelectElement": {
       "__base": "var instance = document.createElement('select');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLSelectElement' && Object.prototype.toString.call(instance) !== '[object HTMLSelectElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'HTMLSelectElement');"
     },
     "HTMLShadowElement": {
       "__base": "var instance = document.createElement('shadow');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLShadowElement' && Object.prototype.toString.call(instance) !== '[object HTMLShadowElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'HTMLShadowElement');"
     },
     "HTMLSlotElement": {
       "__base": "var instance = document.createElement('slot');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLSlotElement' && Object.prototype.toString.call(instance) !== '[object HTMLSlotElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'HTMLSlotElement');"
     },
     "HTMLSourceElement": {
       "__base": "var instance = document.createElement('source');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLSourceElement' && Object.prototype.toString.call(instance) !== '[object HTMLSourceElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'HTMLSourceElement');"
     },
     "HTMLSpanElement": {
       "__base": "var instance = document.createElement('span');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLSpanElement' && Object.prototype.toString.call(instance) !== '[object HTMLSpanElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'HTMLSpanElement');"
     },
     "HTMLStyleElement": {
       "__base": "var instance = document.createElement('style');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLStyleElement' && Object.prototype.toString.call(instance) !== '[object HTMLStyleElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'HTMLStyleElement');"
     },
     "HTMLTableCaptionElement": {
       "__base": "var instance = document.createElement('caption');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLTableCaptionElement' && Object.prototype.toString.call(instance) !== '[object HTMLTableCaptionElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'HTMLTableCaptionElement');"
     },
     "HTMLTableCellElement": {
       "__base": "var instance = document.createElement('td');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLTableCellElement' && Object.prototype.toString.call(instance) !== '[object HTMLTableCellElement]' && Object.prototype.toString.call(instance) !== '[object HTMLTableDataCellElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, ['HTMLTableCellElement', 'HTMLTableDataCellElement']);"
     },
     "HTMLTableColElement": {
       "__base": "var instance = document.createElement('col');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLTableColElement' && Object.prototype.toString.call(instance) !== '[object HTMLTableColElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'HTMLTableColElement');"
     },
     "HTMLTableElement": {
       "__base": "var instance = document.createElement('table');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLTableElement' && Object.prototype.toString.call(instance) !== '[object HTMLTableElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'HTMLTableElement');"
     },
     "HTMLTableRowElement": {
       "__base": "var instance = document.createElement('tr');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLTableRowElement' && Object.prototype.toString.call(instance) !== '[object HTMLTableRowElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'HTMLTableRowElement');"
     },
     "HTMLTableSectionElement": {
       "__base": "var instance = document.createElement('tbody');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLTableSectionElement' && Object.prototype.toString.call(instance) !== '[object HTMLTableSectionElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'HTMLTableSectionElement');"
     },
     "HTMLTemplateElement": {
       "__base": "var instance = document.createElement('template');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLTemplateElement' && Object.prototype.toString.call(instance) !== '[object HTMLTemplateElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'HTMLTemplateElement');"
     },
     "HTMLTextAreaElement": {
       "__base": "var instance = document.createElement('textarea');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLTextAreaElement' && Object.prototype.toString.call(instance) !== '[object HTMLTextAreaElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'HTMLTextAreaElement');"
     },
     "HTMLTimeElement": {
       "__base": "var instance = document.createElement('time');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLTimeElement' && Object.prototype.toString.call(instance) !== '[object HTMLTimeElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'HTMLTimeElement');"
     },
     "HTMLTitleElement": {
       "__base": "var instance = document.createElement('title');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLTitleElement' && Object.prototype.toString.call(instance) !== '[object HTMLTitleElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'HTMLTitleElement');"
     },
     "HTMLTrackElement": {
       "__base": "var instance = document.createElement('track');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLTrackElement' && Object.prototype.toString.call(instance) !== '[object HTMLTrackElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'HTMLTrackElement');"
     },
     "HTMLUListElement": {
       "__base": "var instance = document.createElement('ul');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLUListElement' && Object.prototype.toString.call(instance) !== '[object HTMLUListElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'HTMLUListElement');"
     },
     "HTMLUnknownElement": {
       "__base": "var instance = document.createElement('unknown');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLUnknownElement' && Object.prototype.toString.call(instance) !== '[object HTMLUnknownElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'HTMLUnknownElement');"
     },
     "HTMLVideoElement": {
       "__base": "var instance = document.createElement('video');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'HTMLVideoElement' && Object.prototype.toString.call(instance) !== '[object HTMLVideoElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'HTMLVideoElement');"
     },
     "IIRFilterNode": {
       "__resources": ["audioContext"],
@@ -719,6 +724,9 @@
     "MimeType": {
       "__base": "var instance = window.navigator.mimeTypes[0];"
     },
+    "MimeTypeArray": {
+      "__base": "var instance = window.navigator.mimeTypes;"
+    },
     "NamedNodeMap": {
       "__base": "var instance = document.body.attributes;"
     },
@@ -795,7 +803,7 @@
       "__base": "<%api.PerformanceMark:instance%>"
     },
     "PerformanceMark": {
-      "__base": "<%api.Performance:performance%> performance.mark('mark'); var instance = performance.getEntriesByName('mark')[0];"
+      "__base": "<%api.Performance:performance%> if (!('mark' in performance)) {return false}; performance.mark('mark'); var instance = performance.getEntriesByName('mark')[0];"
     },
     "PerformanceNavigation": {
       "__base": "<%api.Performance:performance%> var instance = performance.navigation;"
@@ -857,7 +865,7 @@
     },
     "SVGAElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'a');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGAElement' && Object.prototype.toString.call(instance) !== '[object SVGAElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGAElement');"
     },
     "SVGAngle": {
       "__base": "<%api.SVGSVGElement:el%> var instance = el.createSVGAngle();"
@@ -886,9 +894,6 @@
     "SVGAnimatedNumberList": {
       "__base": "<%api.SVGFEConvolveMatrixElement:el%> var instance = el.kernelMatrix;"
     },
-    "SVGAnimatedPoints": {
-      "__base": "<%api.SVGPolylineElement:instance%>"
-    },
     "SVGAnimatedPreserveAspectRatio": {
       "__base": "<%api.SVGFEImageElement:el%> var instance = el.preserveAspectRatio;"
     },
@@ -900,230 +905,238 @@
     },
     "SVGAltGlyphDefElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'altGlyphDef');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGAltGlyphDefElement' && Object.prototype.toString.call(instance) !== '[object SVGAltGlyphDefElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGAltGlyphDefElement');"
     },
     "SVGAltGlyphElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'altGlyph');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGAltGlyphElement' && Object.prototype.toString.call(instance) !== '[object SVGAltGlyphElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGAltGlyphElement');"
     },
     "SVGAltGlyphItemElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'altGlyphItem');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGAltGlyphItemElement' && Object.prototype.toString.call(instance) !== '[object SVGAltGlyphItemElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGAltGlyphItemElement');"
     },
     "SVGAnimateColorElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'animateColor');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGAnimateColorElement' && Object.prototype.toString.call(instance) !== '[object SVGAnimateColorElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGAnimateColorElement');"
     },
     "SVGAnimateElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'animate');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGAnimateElement' && Object.prototype.toString.call(instance) !== '[object SVGAnimateElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGAnimateElement');"
     },
     "SVGAnimateMotionElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'animateMotion');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGAnimateMotionElement' && Object.prototype.toString.call(instance) !== '[object SVGAnimateMotionElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGAnimateMotionElement');"
     },
     "SVGAnimateTransformElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'animateTransform');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGAnimateTransformElement' && Object.prototype.toString.call(instance) !== '[object SVGAnimateTransformElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGAnimateTransformElement');"
     },
     "SVGAnimationElement": {
       "__base": "<%api.SVGAnimateElement:instance%>",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGAnimateElement' && Object.prototype.toString.call(instance) !== '[object SVGAnimateElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGAnimateElement');"
     },
     "SVGCircleElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'circle');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGCircleElement' && Object.prototype.toString.call(instance) !== '[object SVGCircleElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGCircleElement');"
     },
     "SVGClipPathElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'clipPath');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGClipPathElement' && Object.prototype.toString.call(instance) !== '[object SVGClipPathElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGClipPathElement');"
     },
     "SVGColorProfileElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'color-profile');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGColorProfileElement' && Object.prototype.toString.call(instance) !== '[object SVGColorProfileElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGColorProfileElement');"
+    },
+    "SVGComponentTransferFunctionElement": {
+      "__base": "<%api.SVGFEFuncAElement:instance%>",
+      "__test": "return bcd.testObjectName(instance, 'SVGFEFuncAlement');"
     },
     "SVGCursorElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'cursor');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGCursorElement' && Object.prototype.toString.call(instance) !== '[object SVGCursorElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGCursorElement');"
     },
     "SVGDefsElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'defs');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGDefsElement' && Object.prototype.toString.call(instance) !== '[object SVGDefsElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGDefsElement');"
     },
     "SVGDescElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'desc');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGDescElement' && Object.prototype.toString.call(instance) !== '[object SVGDescElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGDescElement');"
     },
     "SVGDiscardElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'discard');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGDiscardElement' && Object.prototype.toString.call(instance) !== '[object SVGDiscardElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGDiscardElement');"
     },
     "SVGElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'unknown');"
     },
     "SVGEllipseElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'ellipse');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGEllipseElement' && Object.prototype.toString.call(instance) !== '[object SVGEllipseElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGEllipseElement');"
     },
     "SVGFEBlendElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feBlend');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGFEBlendElement' && Object.prototype.toString.call(instance) !== '[object SVGFEBlendElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGFEBlendElement');"
     },
     "SVGFEColorMatrixElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feColorMatrix');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGFEColorMatrixElement' && Object.prototype.toString.call(instance) !== '[object SVGFEColorMatrixElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGFEColorMatrixElement');"
     },
     "SVGFEComponentTransferElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feComponentTransfer');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGFEComponentTransferElement' && Object.prototype.toString.call(instance) !== '[object SVGFEComponentTransferElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGFEComponentTransferElement');"
     },
     "SVGFECompositeElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feComposite');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGFECompositeElement' && Object.prototype.toString.call(instance) !== '[object SVGFECompositeElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGFECompositeElement');"
     },
     "SVGFEConvolveMatrixElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feConvolveMatrix');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGFEConvolveMatrixElement' && Object.prototype.toString.call(instance) !== '[object SVGFEConvolveMatrixElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGFEConvolveMatrixElement');"
     },
     "SVGFEDiffuseLightingElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feDiffuseLighting');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGFEDiffuseLightingElement' && Object.prototype.toString.call(instance) !== '[object SVGFEDiffuseLightingElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGFEDiffuseLightingElement');"
     },
     "SVGFEDisplacementMapElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feDisplacementMap');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGFEDisplacementMapElement' && Object.prototype.toString.call(instance) !== '[object SVGFEDisplacementMapElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGFEDisplacementMapElement');"
     },
     "SVGFEDistantLightElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feDistantLight');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGFEDistantLightElement' && Object.prototype.toString.call(instance) !== '[object SVGFEDistantLightElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGFEDistantLightElement');"
     },
     "SVGFEDropShadowElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feDropShadow');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGFEDropShadowElement' && Object.prototype.toString.call(instance) !== '[object SVGFEDropShadowElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGFEDropShadowElement');"
     },
     "SVGFEFloodElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feFlood');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGFEFloodElement' && Object.prototype.toString.call(instance) !== '[object SVGFEFloodElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGFEFloodElement');"
     },
     "SVGFEFuncAElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feFuncA');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGFEFuncAElement' && Object.prototype.toString.call(instance) !== '[object SVGFEFuncAElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGFEFuncAElement');"
     },
     "SVGFEFuncBElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feFuncB');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGFEFuncBElement' && Object.prototype.toString.call(instance) !== '[object SVGFEFuncBElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGFEFuncBElement');"
     },
     "SVGFEFuncGElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feFuncG');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGFEFuncGElement' && Object.prototype.toString.call(instance) !== '[object SVGFEFuncGElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGFEFuncGElement');"
     },
     "SVGFEFuncRElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feFuncR');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGFEFuncRElement' && Object.prototype.toString.call(instance) !== '[object SVGFEFuncRElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGFEFuncRElement');"
     },
     "SVGFEGaussianBlurElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feGaussianBlur');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGFEGaussianBlurElement' && Object.prototype.toString.call(instance) !== '[object SVGFEGaussianBlurElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGFEGaussianBlurElement');"
     },
     "SVGFEImageElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feImage');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGFEImageElement' && Object.prototype.toString.call(instance) !== '[object SVGFEImageElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGFEImageElement');"
     },
     "SVGFEMergeElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feMerge');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGFEMergeElement' && Object.prototype.toString.call(instance) !== '[object SVGFEMergeElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGFEMergeElement');"
     },
     "SVGFEMergeNodeElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feMergeNode');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGFEMergeNodeElement' && Object.prototype.toString.call(instance) !== '[object SVGFEMergeNodeElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGFEMergeNodeElement');"
     },
     "SVGFEMorphologyElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feMorphology');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGFEMorphologyElement' && Object.prototype.toString.call(instance) !== '[object SVGFEMorphologyElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGFEMorphologyElement');"
     },
     "SVGFEOffsetElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feOffset');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGFEOffsetElement' && Object.prototype.toString.call(instance) !== '[object SVGFEOffsetElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGFEOffsetElement');"
     },
     "SVGFEPointLightElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'fePointLight');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGFEPointLightElement' && Object.prototype.toString.call(instance) !== '[object SVGFEPointLightElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGFEPointLightElement');"
     },
     "SVGFESpecularLightingElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feSpecularLighting');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGFESpecularLightingElement' && Object.prototype.toString.call(instance) !== '[object SVGFESpecularLightingElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGFESpecularLightingElement');"
     },
     "SVGFESpotLightElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feSpotLight');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGFESpotLightElement' && Object.prototype.toString.call(instance) !== '[object SVGFESpotLightElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGFESpotLightElement');"
     },
     "SVGFETileElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feTile');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGFETileElement' && Object.prototype.toString.call(instance) !== '[object SVGFETileElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGFETileElement');"
     },
     "SVGFETurbulenceElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'feTurbulence');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGFETurbulenceElement' && Object.prototype.toString.call(instance) !== '[object SVGFETurbulenceElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGFETurbulenceElement');"
     },
     "SVGFilterElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'filter');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGFilterElement' && Object.prototype.toString.call(instance) !== '[object SVGFilterElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGFilterElement');"
     },
     "SVGFontElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'font');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGFontElement' && Object.prototype.toString.call(instance) !== '[object SVGFontElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGFontElement');"
     },
     "SVGFontFaceElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'font-face');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGFontFaceElement' && Object.prototype.toString.call(instance) !== '[object SVGFontFaceElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGFontFaceElement');"
     },
     "SVGFontFaceFormatElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'font-face-format');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGFontFaceFormatElement' && Object.prototype.toString.call(instance) !== '[object SVGFontFaceFormatElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGFontFaceFormatElement');"
     },
     "SVGFontFaceNameElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'font-face-name');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGFontFaceNameElement' && Object.prototype.toString.call(instance) !== '[object SVGFontFaceNameElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGFontFaceNameElement');"
     },
     "SVGFontFaceSrcElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'font-face-src');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGFontFaceSrcElement' && Object.prototype.toString.call(instance) !== '[object SVGFontFaceSrcElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGFontFaceSrcElement');"
     },
     "SVGFontFaceUriElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'font-face-uri');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGFontFaceUriElement' && Object.prototype.toString.call(instance) !== '[object SVGFontFaceUriElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGFontFaceUriElement');"
     },
     "SVGForeignObjectElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'foreignObject');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGForeignObjectElement' && Object.prototype.toString.call(instance) !== '[object SVGForeignObjectElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGForeignObjectElement');"
     },
     "SVGGElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'g');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGGElement' && Object.prototype.toString.call(instance) !== '[object SVGGElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGGElement');"
     },
     "SVGGeometryElement": {
       "__base": "<%api.SVGPathElement:instance%>",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGPathElement' && Object.prototype.toString.call(instance) !== '[object SVGPathElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGPathElement');"
     },
     "SVGGlyphElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'glyph');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGGlyphElement' && Object.prototype.toString.call(instance) !== '[object SVGGlyphElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGGlyphElement');"
     },
     "SVGGlyphRefElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'glyphRef');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGGlyphRefElement' && Object.prototype.toString.call(instance) !== '[object SVGGlyphRefElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGGlyphRefElement');"
     },
     "SVGGradientElement": {
       "__base": "<%api.SVGLinearGradientElement:instance%>",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGLinearGradientElement' && Object.prototype.toString.call(instance) !== '[object SVGLinearGradientElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGLinearGradientElement');"
+    },
+    "SVGGraphicsElement": {
+      "__base": "<%api.SVGImageElement:instance%>",
+      "__test": "return bcd.testObjectName(instance, 'SVGImageElement');"
     },
     "SVGHKernElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'hkern');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGHKernElement' && Object.prototype.toString.call(instance) !== '[object SVGHKernElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGHKernElement');"
     },
     "SVGImageElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'image');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGImageElement' && Object.prototype.toString.call(instance) !== '[object SVGImageElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGImageElement');"
     },
     "SVGLength": {
       "__base": "<%api.SVGSVGElement:el%> var instance = el.createSVGLength();"
@@ -1133,35 +1146,35 @@
     },
     "SVGLinearGradientElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGLinearGradientElement' && Object.prototype.toString.call(instance) !== '[object SVGLinearGradientElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGLinearGradientElement');"
     },
     "SVGLineElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'line');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGLineElement' && Object.prototype.toString.call(instance) !== '[object SVGLineElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGLineElement');"
     },
     "SVGMarkerElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'marker');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGMarkerElement' && Object.prototype.toString.call(instance) !== '[object SVGMarkerElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGMarkerElement');"
     },
     "SVGMaskElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'mask');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGMaskElement' && Object.prototype.toString.call(instance) !== '[object SVGMaskElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGMaskElement');"
     },
     "SVGMeshElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'mesh');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGMeshElement' && Object.prototype.toString.call(instance) !== '[object SVGMeshElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGMeshElement');"
     },
     "SVGMetadataElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'metadata');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGMetadataElement' && Object.prototype.toString.call(instance) !== '[object SVGMetadataElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGMetadataElement');"
     },
     "SVGMissingGlyphElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'missing-glyph');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGMissingGlyphElement' && Object.prototype.toString.call(instance) !== '[object SVGMissingGlyphElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGMissingGlyphElement');"
     },
     "SVGMPathElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'mpath');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGMPathElement' && Object.prototype.toString.call(instance) !== '[object SVGMPathElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGMPathElement');"
     },
     "SVGNumber": {
       "__base": "<%api.SVGSVGElement:el%> var instance = el.createSVGNumber();"
@@ -1171,11 +1184,11 @@
     },
     "SVGPathElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'path');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGPathElement' && Object.prototype.toString.call(instance) !== '[object SVGPathElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGPathElement');"
     },
     "SVGPatternElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'pattern');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGPatternElement' && Object.prototype.toString.call(instance) !== '[object SVGPatternElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGPatternElement');"
     },
     "SVGPoint": {
       "__base": "<%api.SVGSVGElement:el%> var instance = el.createSVGPoint();"
@@ -1185,74 +1198,80 @@
     },
     "SVGPolygonElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGPolygonElement' && Object.prototype.toString.call(instance) !== '[object SVGPolygonElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGPolygonElement');"
     },
     "SVGPolylineElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGPolylineElement' && Object.prototype.toString.call(instance) !== '[object SVGPolylineElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGPolylineElement');"
+    },
+    "SVGPreserveAspectRatio": {
+      "__base": "<%api.SVGSVGElement:el%> var instance = el.preserveAspectRatio.baseVal;"
     },
     "SVGRadialGradientElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'radialGradient');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGRadialGradientElement' && Object.prototype.toString.call(instance) !== '[object SVGRadialGradientElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGRadialGradientElement');"
     },
     "SVGRect": {
       "__base": "<%api.SVGSVGElement:el%> var instance = el.createSVGRect();"
     },
     "SVGRectElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'rect');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGRectElement' && Object.prototype.toString.call(instance) !== '[object SVGRectElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGRectElement');"
     },
     "SVGScriptElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'script');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGScriptElement' && Object.prototype.toString.call(instance) !== '[object SVGScriptElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGScriptElement');"
     },
     "SVGSetElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'set');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGSetElement' && Object.prototype.toString.call(instance) !== '[object SVGSetElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGSetElement');"
     },
     "SVGSolidcolorElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'solidcolor');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGSolidcolorElement' && Object.prototype.toString.call(instance) !== '[object SVGSolidcolorElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGSolidcolorElement');"
     },
     "SVGStopElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'stop');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGStopElement' && Object.prototype.toString.call(instance) !== '[object SVGStopElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGStopElement');"
+    },
+    "SVGStringList": {
+      "__base": "<%api.SVGGraphicsElement:el%> var instance = el.systemLanguage;"
     },
     "SVGStyleElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'style');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGStyleElement' && Object.prototype.toString.call(instance) !== '[object SVGStyleElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGStyleElement');"
     },
     "SVGSVGElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'svg');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGSVGElement' && Object.prototype.toString.call(instance) !== '[object SVGSVGElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGSVGElement');"
     },
     "SVGSwitchElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'switch');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGSwitchElement' && Object.prototype.toString.call(instance) !== '[object SVGSwitchElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGSwitchElement');"
     },
     "SVGSymbolElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'symbol');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGSymbolElement' && Object.prototype.toString.call(instance) !== '[object SVGSymbolElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGSymbolElement');"
     },
     "SVGTextElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'text');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGTextElement' && Object.prototype.toString.call(instance) !== '[object SVGTextElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGTextElement');"
     },
     "SVGTextContentElement": {
       "__base": "<%api.SVGTextElement:instance%>",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGTextElement' && Object.prototype.toString.call(instance) !== '[object SVGTextElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGTextElement');"
     },
     "SVGTextPathElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'textPath');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGTextPathElement' && Object.prototype.toString.call(instance) !== '[object SVGTextPathElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGTextPathElement');"
     },
     "SVGTextPositioningElement": {
       "__base": "<%api.SVGTextElement:instance%>",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGTextElement' && Object.prototype.toString.call(instance) !== '[object SVGTextElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGTextElement');"
     },
     "SVGTitleElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'title');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGTitleElement' && Object.prototype.toString.call(instance) !== '[object SVGTitleElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGTitleElement');"
     },
     "SVGTransform": {
       "__base": "<%api.SVGSVGElement:el%> var instance = el.createSVGTransform();"
@@ -1262,27 +1281,27 @@
     },
     "SVGTRefElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'tref');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGTRefElement' && Object.prototype.toString.call(instance) !== '[object SVGTRefElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGTRefElement');"
     },
     "SVGTSpanElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'tspan');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGTSpanElement' && Object.prototype.toString.call(instance) !== '[object SVGTSpanElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGTSpanElement');"
     },
     "SVGUnknownElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'unknown');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGUnknownElement' && Object.prototype.toString.call(instance) !== '[object SVGUnknownElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGUnknownElement');"
     },
     "SVGUseElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'use');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGUseElement' && Object.prototype.toString.call(instance) !== '[object SVGUseElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGUseElement');"
     },
     "SVGViewElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'view');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGViewElement' && Object.prototype.toString.call(instance) !== '[object SVGViewElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGViewElement');"
     },
     "SVGVKernElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'vkern');",
-      "__test": "if (!instance.constructor.name && Object.prototype.toString.call(instance) === '[object Object]') {return {result: null, message: 'Detection methods unsupported'}} if (instance.constructor.name !== 'SVGVKernElement' && Object.prototype.toString.call(instance) !== '[object SVGVKernElement]') {return false;} return !!instance;"
+      "__test": "return bcd.testObjectName(instance, 'SVGVKernElement');"
     },
     "Text": {
       "__base": "var el = document.createElement('p'); el.innerText = 'foo bar'; var instance = el.childNodes[0];"
@@ -1416,6 +1435,12 @@
     },
     "Window": {
       "__base": "var instance = window;"
+    },
+    "WindowOrWorkerGlobalScope": {
+      "__base": "var instance = self;"
+    },
+    "WorkerGlobalScope": {
+      "__base": "var instance = self;"
     },
     "XPathExpression": {
       "__base": "var xpe = new XPathEvaluator(); var instance = xpe.createExpression('//div');"
