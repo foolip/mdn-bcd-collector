@@ -33,8 +33,6 @@ const {
   validateIDL,
   buildIDLTests,
   buildIDL,
-  collectCSSPropertiesFromBCD,
-  collectCSSPropertiesFromWebref,
   cssPropertyToIDLAttribute,
   buildCSS
 } = proxyquire('../../build', {
@@ -811,125 +809,6 @@ describe('build', () => {
         exposure: ['Window']
       });
     });
-  });
-
-  describe('collectCSSPropertiesFromBCD', () => {
-    it('simple supported', () => {
-      const bcd = {
-        css: {
-          properties: {
-            appearance: {
-              __compat: {
-                support: {}
-              }
-            }
-          }
-        }
-      };
-      const propertySet = new Set();
-      collectCSSPropertiesFromBCD(bcd, propertySet);
-      const properties = Array.from(propertySet);
-      assert.deepEqual(properties, ['appearance']);
-    });
-
-    it('aliased support', () => {
-      const bcd = {
-        css: {
-          properties: {
-            'font-smooth': {
-              __compat: {
-                support: {
-                  safari: {
-                    alternative_name: '-webkit-font-smoothing'
-                  }
-                }
-              }
-            }
-          }
-        }
-      };
-      const propertySet = new Set();
-      collectCSSPropertiesFromBCD(bcd, propertySet);
-      const properties = Array.from(propertySet);
-      assert.deepEqual(properties, ['font-smooth', '-webkit-font-smoothing']);
-    });
-
-    it('support array', () => {
-      const bcd = {
-        css: {
-          properties: {
-            'font-smooth': {
-              __compat: {
-                support: {
-                  safari: [
-                    {
-                      prefix: '-webkit-'
-                    },
-                    {
-                      alternative_name: '-webkit-font-smoothing'
-                    }
-                  ]
-                }
-              }
-            }
-          }
-        }
-      };
-      const propertySet = new Set();
-      collectCSSPropertiesFromBCD(bcd, propertySet);
-      const properties = Array.from(propertySet);
-      assert.deepEqual(properties, ['font-smooth', '-webkit-font-smoothing']);
-    });
-
-    it('no __compat statement', () => {
-      const bcd = {
-        css: {
-          properties: {
-            appearance: {}
-          }
-        }
-      };
-      const propertySet = new Set();
-      collectCSSPropertiesFromBCD(bcd, propertySet);
-      const properties = Array.from(propertySet);
-      assert.deepEqual(properties, ['appearance']);
-    });
-
-    it('no __compat.support statement', () => {
-      const bcd = {
-        css: {
-          properties: {
-            appearance: {
-              __compat: {}
-            }
-          }
-        }
-      };
-      const propertySet = new Set();
-      collectCSSPropertiesFromBCD(bcd, propertySet);
-      const properties = Array.from(propertySet);
-      assert.deepEqual(properties, ['appearance']);
-    });
-  });
-
-  it('collectCSSPropertiesFromWebref', () => {
-    const webrefCSS = {
-      'css-fonts': {
-        properties: {
-          'font-family': {},
-          'font-weight': {}
-        }
-      },
-      'css-grid': {
-        properties: {
-          grid: {}
-        }
-      }
-    };
-    const propertySet = new Set();
-    collectCSSPropertiesFromWebref(webrefCSS, propertySet);
-    const properties = Array.from(propertySet);
-    assert.deepEqual(properties, ['font-family', 'font-weight', 'grid']);
   });
 
   it('cssPropertyToIDLAttribute', () => {
@@ -2070,18 +1949,6 @@ describe('build', () => {
   });
 
   it('buildCSS', () => {
-    const bcd = {
-      css: {
-        properties: {
-          appearance: {
-            __compat: {
-              support: {}
-            }
-          }
-        }
-      }
-    };
-
     const webrefCSS = {
       'css-fonts': {
         properties: {
@@ -2096,18 +1963,13 @@ describe('build', () => {
       }
     };
 
-    assert.deepEqual(buildCSS(webrefCSS, bcd), {
-      'css.properties.appearance': {
-        tests: [
-          {
-            code: '"appearance" in document.body.style || CSS.supports("appearance", "inherit")',
-            prefix: ''
-          }
-        ],
-        category: 'css',
-        resources: {},
-        exposure: ['Window']
-      },
+    const customCSS = {
+      properties: {
+        zoom: {}
+      }
+    };
+
+    assert.deepEqual(buildCSS(webrefCSS, customCSS), {
       'css.properties.font-family': {
         tests: [
           {
@@ -2134,6 +1996,17 @@ describe('build', () => {
         tests: [
           {
             code: '"grid" in document.body.style || CSS.supports("grid", "inherit")',
+            prefix: ''
+          }
+        ],
+        category: 'css',
+        resources: {},
+        exposure: ['Window']
+      },
+      'css.properties.zoom': {
+        tests: [
+          {
+            code: '"zoom" in document.body.style || CSS.supports("zoom", "inherit")',
             prefix: ''
           }
         ],

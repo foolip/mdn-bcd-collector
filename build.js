@@ -17,9 +17,9 @@
 const fs = require('fs-extra');
 const path = require('path');
 const WebIDL2 = require('webidl2');
-const bcd = require('@mdn/browser-compat-data');
 const prettier = require('prettier');
 
+const customCSS = require('./custom-css.json');
 const customTests = require('./custom-tests.json');
 const specData = require('./spec-data');
 
@@ -395,7 +395,7 @@ const getExposureSet = (node) => {
     // TODO: remove this once all interfaces have [Exposed].
     return new Set(['Window']);
   }
-  const globals = new Set;
+  const globals = new Set();
   switch (attr.rhs.type) {
     case 'identifier':
       globals.add(attr.rhs.value);
@@ -695,41 +695,6 @@ const buildIDL = (webrefIDLs, customIDLs) => {
   return buildIDLTests(ast);
 };
 
-const collectCSSPropertiesFromBCD = (bcd, propertySet) => {
-  for (const [prop, data] of Object.entries(bcd.css.properties)) {
-    propertySet.add(prop);
-    if (!data.__compat) {
-      // TODO: this misses stuff like css.properties['row-gap'].flex_content
-      continue;
-    }
-    const support = data.__compat.support;
-    if (!support) {
-      continue;
-    }
-    // eslint-disable-next-line no-inner-declarations
-    const process = (statement) => {
-      if (Array.isArray(statement)) {
-        statement.forEach(process);
-        return;
-      }
-      if (statement.alternative_name) {
-        propertySet.add(statement.alternative_name);
-      }
-    };
-    for (const statement of Object.values(support)) {
-      process(statement);
-    }
-  }
-};
-
-const collectCSSPropertiesFromWebref = (webrefCSS, propertySet) => {
-  for (const data of Object.values(webrefCSS)) {
-    for (const prop of Object.keys(data.properties)) {
-      propertySet.add(prop);
-    }
-  }
-};
-
 // https://drafts.csswg.org/cssom/#css-property-to-idl-attribute
 const cssPropertyToIDLAttribute = (property, lowercaseFirst) => {
   let output = '';
@@ -750,10 +715,21 @@ const cssPropertyToIDLAttribute = (property, lowercaseFirst) => {
   return output;
 };
 
-const buildCSS = (webrefCSS, bcd) => {
-  const propertySet = new Set;
-  collectCSSPropertiesFromBCD(bcd, propertySet);
-  collectCSSPropertiesFromWebref(webrefCSS, propertySet);
+const buildCSS = (webrefCSS, customCSS) => {
+  const propertySet = new Set();
+
+  for (const data of Object.values(webrefCSS)) {
+    for (const prop of Object.keys(data.properties)) {
+      propertySet.add(prop);
+    }
+  }
+
+  for (const prop of Object.keys(customCSS.properties)) {
+    if (propertySet.has(prop)) {
+      throw new Error(`Custom CSS property already known: ${prop}`);
+    }
+    propertySet.add(prop);
+  }
 
   const tests = {};
 
@@ -809,9 +785,9 @@ const copyResources = async () => {
 };
 
 /* istanbul ignore next */
-const build = async (specData, bcd) => {
+const build = async (specData, customCSS) => {
   const IDLTests = buildIDL(specData.webref.idl, specData.custom.idl);
-  const CSSTests = buildCSS(specData.webref.css, bcd);
+  const CSSTests = buildCSS(specData.webref.css, customCSS);
   const tests = Object.assign({}, IDLTests, CSSTests);
 
   await fs.writeJson(path.join(__dirname, 'tests.json'), tests);
@@ -831,15 +807,13 @@ module.exports = {
   buildIDLTests,
   buildIDL,
   validateIDL,
-  collectCSSPropertiesFromBCD,
-  collectCSSPropertiesFromWebref,
   cssPropertyToIDLAttribute,
   buildCSS
 };
 
 /* istanbul ignore if */
 if (require.main === module) {
-  build(specData, bcd).catch((reason) => {
+  build(specData, customCSS).catch((reason) => {
     console.error(reason);
     process.exit(1);
   });
