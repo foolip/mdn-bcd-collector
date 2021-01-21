@@ -81,6 +81,6 @@
     "selenium-webdriver": "3.6.0",
     "sinon": "9.2.3",
     "webidl2": "23.13.0",
-    "webref": "github:foolip/webref#mdn-bcd-updater-fixes-2"
+    "webref": "github:foolip/webref#mdn-bcd-updater-fixes-3"
   }
 }
