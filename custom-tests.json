@@ -235,7 +235,7 @@
       "__base": "var instance = document.implementation;"
     },
     "DOMRectList": {
-      "__base": "<%api.Element:el%> if (!('getClientRects' in instance)) {return false;} var instance = el.getClientRects();"
+      "__base": "<%api.Element:el%> if (!el.getClientRects) {return false;} var instance = el.getClientRects();"
     },
     "DOMTokenList": {
       "__additional": {
