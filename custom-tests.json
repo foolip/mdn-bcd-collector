@@ -111,7 +111,7 @@
       "__base": "try {var instance = new Blob();} catch(e) {var instance = new BlobBuilder();}"
     },
     "CacheStorage": {
-      "__base": "if ('window' in self) {/* Window exposure */ var instance = window.caches} else {/* Worker exposure */ var instance = caches};"
+      "__base": "if (!('caches' in self)) {return false}; var instance = caches;"
     },
     "CanvasPattern": {
       "__resources": ["image-black"],
@@ -803,7 +803,7 @@
       "__base": "<%api.PerformanceMark:instance%>"
     },
     "PerformanceMark": {
-      "__base": "<%api.Performance:performance%> if (!('mark' in performance)) {return false}; performance.mark('mark'); var instance = performance.getEntriesByName('mark')[0];"
+      "__base": "<%api.Performance:performance%> if (!performance.mark) {return false}; performance.mark('mark'); var instance = performance.getEntriesByName('mark')[0];"
     },
     "PerformanceNavigation": {
       "__base": "<%api.Performance:performance%> var instance = performance.navigation;"
@@ -844,7 +844,7 @@
       "__base": "var instance = window.getSelection();"
     },
     "ShadowRoot": {
-      "__base": "var el = document.createElement('div'); if (!('attachShadow' in el)) {return false;} el.attachShadow({mode: 'open'}); var instance = el.shadowRoot;"
+      "__base": "var el = document.createElement('div'); if (!el.attachShadow) {return false;} el.attachShadow({mode: 'open'}); var instance = el.shadowRoot;"
     },
     "StereoPannerNode": {
       "__resources": ["audioContext"],
