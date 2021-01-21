@@ -1194,7 +1194,7 @@
       "__base": "<%api.SVGSVGElement:el%> var instance = el.createSVGPoint();"
     },
     "SVGPointList": {
-      "__base": "<%api.SVGAnimatedPoints:list%> var instance = list.baseVal;"
+      "__base": "<%api.SVGPolygonElement:el%> var instance = el.points;"
     },
     "SVGPolygonElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'polygon');",
