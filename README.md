@@ -26,10 +26,10 @@ npm run start-dev
 npm run deploy
 ```
 
-This step is performed automatically when the `main` or `prod` branches are pushed:
+This step is performed automatically when the `main` branch is updated:
 
-- `main` deploys to https://staging-dot-mdn-bcd-collector.appspot.com/
-- `prod` deploys to https://mdn-bcd-collector.appspot.com/
+- https://staging-dot-mdn-bcd-collector.appspot.com/ is always deployed.
+- https://mdn-bcd-collector.appspot.com/ is deployed when the version in `package.json` is bumped
 
 ## Run tests via Selenium WebDriver
 
