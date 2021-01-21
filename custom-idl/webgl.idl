@@ -1,5 +1,4 @@
 interface WEBGL_compressed_texture_atc {};
-interface WEBGL_compressed_texture_etc {};
 
 partial interface WebGLRenderingContext {
   undefined commit();
