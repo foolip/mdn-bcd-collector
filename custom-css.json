@@ -182,6 +182,9 @@
     "-webkit-box-flex-group": {},
     "-webkit-box-lines": {},
     "-webkit-box-reflect": {},
+    "-webkit-canvas": {
+      "notes": "https://chromium.googlesource.com/chromium/src.git/+/24e58b0d8fab28fa20e69f191d833fe97aaff75d"
+    },
     "-webkit-clip-path": {},
     "-webkit-color-correction": {},
     "-webkit-column-axis": {},

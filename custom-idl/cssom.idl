@@ -84,6 +84,22 @@ partial interface CSSStyleDeclaration {
 
 // Non-standard stuff
 
+// https://github.com/mozilla/gecko-dev/blob/358fbca0398ac651f5ea6030be39b1870ec180a5/dom/webidl/CSS2Properties.webidl.in
+[Exposed=Window]
+interface CSS2Properties : CSSStyleDeclaration {};
+
+partial interface CSSStyleDeclaration {
+  // https://github.com/WebKit/WebKit/blob/2ebcb2f801bc60264b1a154a7970e2581a438db2/Source/WebCore/css/CSSStyleDeclaration.idl#L45
+  DOMString getPropertyShorthand(DOMString property);
+
+  // https://github.com/WebKit/WebKit/blob/2ebcb2f801bc60264b1a154a7970e2581a438db2/Source/WebCore/css/CSSStyleDeclaration.idl#L46
+  boolean isPropertyImplicit(DOMString property);
+};
+
+// https://github.com/mozilla/gecko-dev/blob/358fbca0398ac651f5ea6030be39b1870ec180a5/dom/webidl/CSSMozDocumentRule.webidl
+[Exposed=Window]
+interface CSSMozDocumentRule : CSSConditionRule {};
+
 partial interface Document {
   // https://www.w3.org/Bugs/Public/show_bug.cgi?id=29471
   attribute DOMString? selectedStyleSheetSet;
@@ -109,3 +125,9 @@ partial interface Element {
 };
 
 interface WebKitCSSMatrix : DOMMatrix {};
+
+partial interface Window {
+  // https://github.com/WebKit/WebKit/blob/bc44d2f960d35b47803c79ffbdc9cf57c0a01778/Source/WebCore/page/DOMWindow.idl#L124
+  // https://chromium.googlesource.com/chromium/src.git/+/9b52888ec6e049583e3765eb6ed2f7c58c1d50a0
+  CSSRuleList getMatchedCSSRules(optional Element? element = null, optional DOMString? pseudoElement = null);
+};

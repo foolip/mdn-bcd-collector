@@ -2,6 +2,11 @@ partial interface AnimationEvent {
   undefined initAnimationEvent(DOMString type, boolean bubbles, boolean cancelable, DOMString animationName, float elapsedTime);
 };
 
+partial interface CSSKeyframesRule {
+  // https://github.com/WebKit/WebKit/blob/2ebcb2f801bc60264b1a154a7970e2581a438db2/Source/WebCore/css/CSSKeyframesRule.idl#L35
+  undefined insertRule(CSSOMString rule);
+};
+
 partial interface TransitionEvent {
   readonly attribute DOMString animationName;
   TransitionEvent initTransitionEvent();
