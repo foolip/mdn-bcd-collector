@@ -21,7 +21,7 @@ const {
   logging,
   until
 } = require('selenium-webdriver');
-const bcd = require('@mdn/browser-compat-data');
+const bcdBrowsers = require('@mdn/browser-compat-data').browsers;
 const fs = require('fs-extra');
 const path = require('path');
 const chalk = require('chalk');
@@ -44,7 +44,7 @@ const ignore = {
 };
 
 const prettyName = (browser, version, os) => {
-  return `${bcd.browsers[browser].name} ${version} on ${os}`;
+  return `${bcdBrowsers[browser].name} ${version} on ${os}`;
 };
 
 const log = (task, message) => {
@@ -315,11 +315,11 @@ const runAll = async (limitBrowsers, oses, nonConcurrent) => {
   }
 
   let browsersToTest = {
-    chrome: filterVersions(bcd.browsers.chrome.releases, 15),
-    edge: filterVersions(bcd.browsers.edge.releases, 12),
-    firefox: filterVersions(bcd.browsers.firefox.releases, 4),
-    ie: filterVersions(bcd.browsers.ie.releases, 6),
-    safari: filterVersions(bcd.browsers.safari.releases, 5.1)
+    chrome: filterVersions(bcdBrowsers.chrome.releases, 15),
+    edge: filterVersions(bcdBrowsers.edge.releases, 12),
+    firefox: filterVersions(bcdBrowsers.firefox.releases, 4),
+    ie: filterVersions(bcdBrowsers.ie.releases, 6),
+    safari: filterVersions(bcdBrowsers.safari.releases, 5.1)
   };
 
   if (limitBrowsers) {
@@ -353,7 +353,7 @@ const runAll = async (limitBrowsers, oses, nonConcurrent) => {
     }
 
     tasks.push({
-      title: bcd.browsers[browser].name,
+      title: bcdBrowsers[browser].name,
       task: () => {
         return new Listr(browsertasks, {
           concurrent: nonConcurrent ? false : 5, exitOnError: false
