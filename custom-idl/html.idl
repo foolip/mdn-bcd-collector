@@ -122,6 +122,9 @@ partial interface mixin DocumentAndElementEventHandlers {
 };
 
 partial interface HTMLAnchorElement {
+  // https://github.com/whatwg/html/pull/3870
+  [CEReactions] attribute DOMString hrefTranslate;
+
   attribute DOMString media;
 };
 
