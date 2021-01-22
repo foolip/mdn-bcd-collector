@@ -75,9 +75,6 @@ partial interface Document {
   attribute EventHandler onafterscriptexecute;
   attribute EventHandler onbeforescriptexecute;
 
-  // https://github.com/whatwg/html/issues/667
-  attribute EventHandler onsearch;
-
   // https://github.com/whatwg/html/pull/951
   readonly attribute DOMString origin;
 };
@@ -102,6 +99,9 @@ partial interface mixin GlobalEventHandlers {
 
   // https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/core/dom/global_event_handlers.idl;l=76;drc=7a26ab64ceec9a43266fb544ab09adbe641504e3
   attribute EventHandler onmousewheel;
+
+  // https://github.com/whatwg/html/issues/667
+  attribute EventHandler onsearch;
 
   // https://github.com/mozilla/gecko-dev/blob/ffdb6a4d934b3f5294f18cf0e1df618109ccb36b/dom/webidl/EventHandler.webidl#L87
   attribute EventHandler onshow;
@@ -395,9 +395,6 @@ partial interface Window {
   // https://docs.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/aa741479(v=vs.85)
   // https://bugs.chromium.org/p/chromium/issues/detail?id=438370
   readonly attribute boolean offscreenBuffering;
-
-  // https://github.com/whatwg/html/issues/667
-  attribute EventHandler onsearch;
 
   readonly attribute any dialogArguments;
   undefined getAttention();
