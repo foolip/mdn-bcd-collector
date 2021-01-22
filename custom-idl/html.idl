@@ -93,6 +93,11 @@ partial interface Element {
   attribute EventHandler onwebkitpresentationmodechanged;
 };
 
+partial interface mixin GlobalEventHandlers {
+  // https://github.com/mozilla/gecko-dev/blob/ffdb6a4d934b3f5294f18cf0e1df618109ccb36b/dom/webidl/EventHandler.webidl#L47
+  attribute EventHandler ondragexit;
+};
+
 partial interface HTMLAnchorElement {
   attribute DOMString media;
 };
