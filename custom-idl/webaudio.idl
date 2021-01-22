@@ -77,4 +77,5 @@ partial interface PannerNode {
 partial interface Window {
   attribute object webkitAudioContext;
   attribute object webkitAudioPannerNode;
+  attribute object webkitOfflineAudioContext;
 };
