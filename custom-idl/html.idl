@@ -104,6 +104,14 @@ partial interface mixin GlobalEventHandlers {
   attribute EventHandler onmousewheel;
 };
 
+// DocumentAndElementEventHandlers here is used for things that have been on
+// GlobalEventHandlers but are now on Window, as it is the complementary set.
+// https://trac.webkit.org/changeset/267791/webkit
+partial interface mixin DocumentAndElementEventHandlers {
+  attribute EventHandler onrejectionhandled;
+  attribute EventHandler onunhandledrejection;
+};
+
 partial interface HTMLAnchorElement {
   attribute DOMString media;
 };
