@@ -456,6 +456,11 @@ partial interface HTMLVideoElement {
   attribute boolean webkitWirelessVideoPlaybackDisabled;
 };
 
+partial interface TextTrackCue {
+  // https://github.com/WebKit/WebKit/blob/8c5122c3b04d94856c54fb5e686c014a123143f7/Source/WebCore/html/track/TextTrackCue.idl#L48
+  DocumentFragment getCueAsHTML();
+};
+
 partial interface Navigator {
   // https://developer.mozilla.org/en-US/docs/Web/API/Navigator/mozIsLocallyAvailable
   boolean mozIsLocallyAvailable(DOMString url, boolean ifOffline);
