@@ -196,6 +196,9 @@ partial interface Document {
   readonly attribute long fileSize;
   boolean contains();
 
+  // https://github.com/mozilla/gecko-dev/blob/f7949b6a83a31998267293b4497d1f86b45c18fc/dom/webidl/Element.webidl#L115
+  boolean mozMatchesSelector(DOMString selector);
+
   // https://developer.mozilla.org/en-US/docs/Web/API/Document/mozSetImageElement
   undefined mozSetImageElement(DOMString imageElementId, Element? imageElement);
 
