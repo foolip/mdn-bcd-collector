@@ -589,12 +589,6 @@ const buildIDLTests = (ast) => {
 
     const adjustedIfaceName = getName(iface);
 
-    if (adjustedIfaceName.endsWith('Event') && adjustedIfaceName !== 'Event') {
-      // TODO: event interfaces are not always exposed on their own and will
-      // require the event to be fired.
-      continue;
-    }
-
     const exposureSet = getExposureSet(iface);
     const isGlobal = !!getExtAttr(iface, 'Global');
     const customIfaceTest = getCustomTestAPI(adjustedIfaceName);
