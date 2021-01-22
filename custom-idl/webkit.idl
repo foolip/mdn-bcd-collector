@@ -37,6 +37,11 @@ partial interface HTMLBodyElement {
   attribute EventHandler onwebkitmouseforcewillbegin;
 };
 
+partial interface HTMLElement {
+  // https://github.com/WebKit/WebKit/blob/c397d717fcd82a8daff69dccb1354a5f94ca6f9a/Source/WebCore/html/HTMLElement.idl#L57
+  [CEReactions] attribute DOMString webkitdropzone;
+};
+
 [Exposed=Window]
 interface UserMessageHandler {
   Promise<any> postMessage(any message);
