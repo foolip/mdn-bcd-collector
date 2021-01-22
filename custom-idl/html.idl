@@ -179,6 +179,8 @@ partial interface HTMLCanvasElement {
   File mozGetAsFile(DOMString name, optional DOMString type = "image/png");
   // https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/mozOpaque
   attribute boolean mozOpaque;
+  // https://github.com/mozilla/gecko-dev/blob/7c03e28b3d065fa80839e9659fd50bf340913d5f/dom/webidl/HTMLCanvasElement.webidl#L48
+  attribute any mozPrintCallback;
 };
 
 // https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/core/html/html_content_element.idl
