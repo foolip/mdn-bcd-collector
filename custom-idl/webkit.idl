@@ -1,0 +1,63 @@
+partial interface Element {
+  // https://github.com/WebKit/WebKit/blob/cdb06d0c41ff04eff8f4c65d1c92c8672b4903a6/Source/WebCore/dom/Element.idl#L74
+  attribute EventHandler onbeforeload;
+  attribute EventHandler onfocusin;
+  attribute EventHandler onfocusout;
+  attribute EventHandler ongesturechange;
+  attribute EventHandler ongestureend;
+  attribute EventHandler ongesturestart;
+  attribute EventHandler onwebkitcurrentplaybacktargetiswirelesschanged;
+  attribute EventHandler onwebkitneedkey;
+  attribute EventHandler onwebkitplaybacktargetavailabilitychanged;
+  attribute EventHandler onwebkitpresentationmodechanged;
+};
+
+partial interface mixin GlobalEventHandlers {
+  // https://github.com/WebKit/WebKit/blob/cdb06d0c41ff04eff8f4c65d1c92c8672b4903a6/Source/WebCore/dom/GlobalEventHandlers.idl#L114
+  attribute EventHandler onwebkitmouseforcechanged;
+  attribute EventHandler onwebkitmouseforcedown;
+  attribute EventHandler onwebkitmouseforcewillbegin;
+  attribute EventHandler onwebkitmouseforceup;
+};
+
+partial interface HTMLBodyElement {
+  // https://github.com/WebKit/WebKit/blob/cdb06d0c41ff04eff8f4c65d1c92c8672b4903a6/Source/WebCore/html/HTMLBodyElement.idl#L31
+  attribute EventHandler onblur;
+  attribute EventHandler onerror;
+  attribute EventHandler onfocus;
+  attribute EventHandler onfocusin;
+  attribute EventHandler onfocusout;
+  attribute EventHandler onload;
+  attribute EventHandler onresize;
+  attribute EventHandler onscroll;
+  attribute EventHandler onselectionchange;
+  attribute EventHandler onwebkitmouseforcechanged;
+  attribute EventHandler onwebkitmouseforcedown;
+  attribute EventHandler onwebkitmouseforceup;
+  attribute EventHandler onwebkitmouseforcewillbegin;
+};
+
+partial interface HTMLElement {
+  // https://github.com/WebKit/WebKit/blob/c397d717fcd82a8daff69dccb1354a5f94ca6f9a/Source/WebCore/html/HTMLElement.idl#L57
+  [CEReactions] attribute DOMString webkitdropzone;
+};
+
+partial interface HTMLMediaElement {
+  // should be on HTMLVideoElement
+  VideoPlaybackQuality getVideoPlaybackQuality();
+};
+
+[Exposed=Window]
+interface UserMessageHandler {
+  Promise<any> postMessage(any message);
+};
+
+[Exposed=Window]
+interface UserMessageHandlersNamespace {
+  getter UserMessageHandler (DOMString name);
+};
+
+[Exposed=Window]
+interface WebKitNamespace {
+  readonly attribute UserMessageHandlersNamespace messageHandlers;
+};

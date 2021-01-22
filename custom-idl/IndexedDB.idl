@@ -27,3 +27,7 @@ partial interface IDBVersionChangeEvent {
   readonly attribute IDBDataLossAmount dataLoss;
   readonly attribute DOMString dataLossMessage;
 };
+
+partial interface Window {
+  attribute object webkitIndexedDB;
+};

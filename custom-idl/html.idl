@@ -75,9 +75,6 @@ partial interface Document {
   attribute EventHandler onafterscriptexecute;
   attribute EventHandler onbeforescriptexecute;
 
-  // https://github.com/whatwg/html/issues/667
-  attribute EventHandler onsearch;
-
   // https://github.com/whatwg/html/pull/951
   readonly attribute DOMString origin;
 };
@@ -89,12 +86,63 @@ partial interface Element {
   // https://github.com/whatwg/html/issues/667
   attribute EventHandler onsearch;
 
-  // https://trac.webkit.org/browser/webkit/trunk/Source/WebCore/dom/Element.idl?rev=267813#L132
-  attribute EventHandler onwebkitpresentationmodechanged;
+  // event handler attributes in the wrong place
+  attribute EventHandler oncopy;
+  attribute EventHandler oncut;
+  attribute EventHandler onpaste;
+  attribute EventHandler onwebkitanimationend;
+  attribute EventHandler onwebkitanimationiteration;
+  attribute EventHandler onwebkitanimationstart;
+  attribute EventHandler onwebkittransitionend;
+};
+
+partial interface mixin GlobalEventHandlers {
+  // https://github.com/mozilla/gecko-dev/blob/ffdb6a4d934b3f5294f18cf0e1df618109ccb36b/dom/webidl/EventHandler.webidl#L47
+  attribute EventHandler ondragexit;
+
+  // https://github.com/mozilla/gecko-dev/blob/ffdb6a4d934b3f5294f18cf0e1df618109ccb36b/dom/webidl/EventHandler.webidl#L65
+  attribute EventHandler onloadend;
+
+  // https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/core/dom/global_event_handlers.idl;l=76;drc=7a26ab64ceec9a43266fb544ab09adbe641504e3
+  attribute EventHandler onmousewheel;
+
+  // https://github.com/whatwg/html/issues/667
+  attribute EventHandler onsearch;
+
+  // https://github.com/mozilla/gecko-dev/blob/ffdb6a4d934b3f5294f18cf0e1df618109ccb36b/dom/webidl/EventHandler.webidl#L87
+  attribute EventHandler onshow;
+};
+
+// DocumentAndElementEventHandlers here is used for things that have been on
+// GlobalEventHandlers but are now on Window, as it is the complementary set.
+// https://trac.webkit.org/changeset/267791/webkit
+partial interface mixin DocumentAndElementEventHandlers {
+  attribute EventHandler onrejectionhandled;
+  attribute EventHandler onunhandledrejection;
 };
 
 partial interface HTMLAnchorElement {
+  // https://github.com/whatwg/html/pull/3870
+  [CEReactions] attribute DOMString hrefTranslate;
+
   attribute DOMString media;
+};
+
+// https://github.com/whatwg/html/pull/1399
+// https://html.spec.whatwg.org/commit-snapshots/d0154579f6237358a7a642ae59b894e9116c4fbd/#htmlappletelement
+[Exposed=Window]
+interface HTMLAppletElement : HTMLElement {
+  attribute DOMString align;
+  attribute DOMString alt;
+  attribute DOMString archive;
+  attribute DOMString code;
+  attribute USVString codeBase;
+  attribute DOMString height;
+  attribute unsigned long hspace;
+  attribute DOMString name;
+  attribute USVString _object; // the underscore is not part of the identifier
+  attribute unsigned long vspace;
+  attribute DOMString width;
 };
 
 partial interface HTMLAreaElement {
@@ -120,7 +168,9 @@ interface HTMLBaseFontElement : HTMLElement {
 };
 
 partial interface HTMLButtonElement {
+  // https://github.com/mdn/browser-compat-data/issues/8745
   attribute boolean autofocus;
+
   attribute HTMLMenuElement menu;
 };
 
@@ -131,6 +181,8 @@ partial interface HTMLCanvasElement {
   File mozGetAsFile(DOMString name, optional DOMString type = "image/png");
   // https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/mozOpaque
   attribute boolean mozOpaque;
+  // https://github.com/mozilla/gecko-dev/blob/7c03e28b3d065fa80839e9659fd50bf340913d5f/dom/webidl/HTMLCanvasElement.webidl#L48
+  attribute any mozPrintCallback;
 };
 
 // https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/core/html/html_content_element.idl
@@ -172,6 +224,18 @@ partial interface HTMLFormElement {
   undefined requestAutocomplete();
 };
 
+partial interface HTMLFrameElement {
+  // https://github.com/WebKit/WebKit/blob/cdb06d0c41ff04eff8f4c65d1c92c8672b4903a6/Source/WebCore/html/HTMLFrameElement.idl#L36
+  Document? getSVGDocument();
+
+  // https://github.com/WebKit/WebKit/blob/cdb06d0c41ff04eff8f4c65d1c92c8672b4903a6/Source/WebCore/html/HTMLFrameElement.idl#L38
+  readonly attribute long width;
+  readonly attribute long height;
+
+  // https://github.com/WebKit/WebKit/blob/cdb06d0c41ff04eff8f4c65d1c92c8672b4903a6/Source/WebCore/html/HTMLFrameElement.idl#L42
+  attribute USVString location;
+};
+
 partial interface HTMLFrameSetElement {
   attribute EventHandler onlanguage;
   attribute EventHandler onorientationchange;
@@ -179,6 +243,11 @@ partial interface HTMLFrameSetElement {
 
 partial interface HTMLHeadElement {
   attribute DOMString profile;
+};
+
+partial interface HTMLHtmlElement {
+  // https://github.com/WebKit/WebKit/blob/cdb06d0c41ff04eff8f4c65d1c92c8672b4903a6/Source/WebCore/html/HTMLHtmlElement.idl#L24
+  attribute DOMString manifest;
 };
 
 partial interface HTMLIFrameElement {
@@ -196,7 +265,9 @@ partial interface HTMLInputElement {
   // https://github.com/whatwg/html/issues/667
   attribute boolean incremental;
 
+  // https://github.com/mdn/browser-compat-data/issues/8745
   attribute boolean autofocus;
+
   attribute EventHandler onsearch;
   attribute any weight;
 
@@ -206,6 +277,12 @@ partial interface HTMLInputElement {
   undefined mozSetFileNameArray(sequence<DOMString> fileNames);
   // https://hg.mozilla.org/mozilla-central/file/f22c20641704d783097b1b128d826c8460de7354/dom/webidl/HTMLInputElement.webidl#l163
   undefined mozSetFileArray(sequence<File> files);
+
+  // https://github.com/mozilla/gecko-dev/blob/7c03e28b3d065fa80839e9659fd50bf340913d5f/dom/webidl/HTMLInputElement.webidl#L173
+  boolean mozIsTextField(boolean excludePassword);
+
+  // https://github.com/mozilla/gecko-dev/blob/7c03e28b3d065fa80839e9659fd50bf340913d5f/dom/webidl/HTMLInputElement.webidl#L154
+  readonly attribute long textLength;
 };
 
 [Exposed=Window]
@@ -216,6 +293,11 @@ interface HTMLIsIndexElement : HTMLElement {
 
 [Exposed=Window]
 interface HTMLKeygenElement : HTMLElement {};
+
+partial interface HTMLLinkElement {
+  // moved to HTMLOrSVGElement mixin
+  attribute DOMString nonce;
+};
 
 partial interface HTMLMediaElement {
   attribute MediaController controller;
@@ -249,6 +331,14 @@ partial interface HTMLMediaElement {
   // Prefixed preservesPitch
   attribute boolean mozPreservesPitch;
   attribute boolean webkitPreservesPitch;
+
+  // https://github.com/WebKit/WebKit/blob/c397d717fcd82a8daff69dccb1354a5f94ca6f9a/Source/WebCore/html/HTMLMediaElement.idl#L99
+  readonly attribute boolean webkitHasClosedCaptions;
+  attribute boolean webkitClosedCaptionsVisible;
+
+  // https://github.com/WebKit/WebKit/blob/c397d717fcd82a8daff69dccb1354a5f94ca6f9a/Source/WebCore/html/HTMLMediaElement.idl#L124
+  undefined webkitShowPlaybackTargetPicker();
+  readonly attribute boolean webkitCurrentPlaybackTargetIsWireless;
 };
 
 // https://www.w3.org/TR/html51/interactive-elements.html#htmlmenuelement-htmlmenuelement
@@ -268,10 +358,18 @@ interface HTMLMenuItemElement : HTMLElement {
   attribute boolean default;
 
   attribute DOMString command;
+
+  // https://github.com/mozilla/gecko-dev/blob/7c03e28b3d065fa80839e9659fd50bf340913d5f/dom/webidl/HTMLMenuItemElement.webidl#L35
+  attribute boolean defaultChecked;
 };
 
 partial interface HTMLObjectElement {
   attribute boolean typeMustMatch;
+};
+
+partial interface HTMLPreElement {
+  // https://github.com/WebKit/WebKit/blob/8c5122c3b04d94856c54fb5e686c014a123143f7/Source/WebCore/html/HTMLPreElement.idl#L29
+  attribute boolean wrap;
 };
 
 // https://github.com/whatwg/html/pull/213
@@ -285,14 +383,26 @@ interface PropertyNodeList : NodeList {
   PropertyValueArray getValues();
 };
 
+partial interface HTMLScriptElement {
+  // moved to HTMLOrSVGElement mixin
+  attribute DOMString nonce;
+};
+
 partial interface HTMLSelectElement {
+  // https://github.com/mdn/browser-compat-data/issues/8745
   attribute boolean autofocus;
+
   undefined blur();
   undefined focus();
 };
 
 interface HTMLShadowElement : HTMLElement {
   NodeList getDistributedNodes();
+};
+
+partial interface HTMLSlotElement {
+  // https://github.com/whatwg/html/pull/5483
+  undefined assign(sequence<Node> nodes);
 };
 
 partial interface HTMLSourceElement {
@@ -302,6 +412,9 @@ partial interface HTMLSourceElement {
 partial interface HTMLStyleElement {
   // https://github.com/whatwg/html/issues/5590
   attribute boolean disabled;
+
+  // moved to HTMLOrSVGElement mixin
+  attribute DOMString nonce;
 
   attribute boolean scoped;
 };
@@ -314,6 +427,9 @@ partial interface HTMLTableElement {
 partial interface HTMLTextAreaElement {
   // https://github.com/mdn/browser-compat-data/issues/7519
   attribute DOMString autocapitalize;
+
+  // https://github.com/mdn/browser-compat-data/issues/8745
+  attribute boolean autofocus;
 };
 
 partial interface HTMLVideoElement {
@@ -335,6 +451,14 @@ partial interface HTMLVideoElement {
   boolean webkitSupportsPresentationMode(VideoPresentationMode mode);
   readonly attribute VideoPresentationMode webkitPresentationMode;
   undefined webkitSetPresentationMode(VideoPresentationMode mode);
+
+  // https://github.com/WebKit/WebKit/blob/c397d717fcd82a8daff69dccb1354a5f94ca6f9a/Source/WebCore/html/HTMLVideoElement.idl#L50
+  attribute boolean webkitWirelessVideoPlaybackDisabled;
+};
+
+partial interface TextTrackCue {
+  // https://github.com/WebKit/WebKit/blob/8c5122c3b04d94856c54fb5e686c014a123143f7/Source/WebCore/html/track/TextTrackCue.idl#L48
+  DocumentFragment getCueAsHTML();
 };
 
 partial interface Navigator {
@@ -367,9 +491,6 @@ partial interface Window {
   // https://docs.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/aa741479(v=vs.85)
   // https://bugs.chromium.org/p/chromium/issues/detail?id=438370
   readonly attribute boolean offscreenBuffering;
-
-  // https://github.com/whatwg/html/issues/667
-  attribute EventHandler onsearch;
 
   readonly attribute any dialogArguments;
   undefined getAttention();

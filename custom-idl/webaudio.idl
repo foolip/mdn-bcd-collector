@@ -73,3 +73,9 @@ partial interface PannerNode {
   // https://chromium.googlesource.com/chromium/src/+/9848564877f0057f4dcbc98bce061dfa17a9202c
   undefined setVelocity(float x, float y, float z);
 };
+
+partial interface Window {
+  attribute object webkitAudioContext;
+  attribute object webkitAudioPannerNode;
+  attribute object webkitOfflineAudioContext;
+};

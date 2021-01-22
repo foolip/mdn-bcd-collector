@@ -24,3 +24,7 @@ interface Point {
   attribute float x;
   attribute float y;
 };
+
+partial interface Window {
+  attribute object WebKitAnimationEvent;
+};

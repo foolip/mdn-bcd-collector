@@ -1,13 +1,9 @@
-// https://github.com/w3c/clipboard-apis/issues/25
-
-partial interface Document {
+partial interface mixin DocumentAndElementEventHandlers {
+  // https://github.com/w3c/clipboard-apis/issues/25
   attribute EventHandler onbeforecopy;
   attribute EventHandler onbeforecut;
   attribute EventHandler onbeforepaste;
-};
 
-partial interface Element {
-  attribute EventHandler onbeforecopy;
-  attribute EventHandler onbeforecut;
-  attribute EventHandler onbeforepaste;
+  // https://github.com/WebKit/WebKit/blob/cdb06d0c41ff04eff8f4c65d1c92c8672b4903a6/Source/WebCore/dom/DocumentAndElementEventHandlers.idl#L32
+  attribute EventHandler onbeforeinput;
 };

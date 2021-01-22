@@ -1,0 +1,4 @@
+// https://bugs.chromium.org/p/chromium/issues/detail?id=1108685
+partial interface Element {
+  attribute EventHandler onbeforexrselect;
+};

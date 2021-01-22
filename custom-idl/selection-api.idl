@@ -1,3 +1,8 @@
+partial interface Element {
+  // event handler attribute in the wrong place
+  attribute EventHandler onselectstart;
+};
+
 partial interface Selection {
   readonly attribute Node? baseNode;
   readonly attribute unsigned long baseOffset;
@@ -7,4 +12,10 @@ partial interface Selection {
   undefined modify(optional DOMString alter = "",
               optional DOMString direction = "",
               optional DOMString granularity = "");
+};
+
+partial interface ShadowRoot {
+  // https://github.com/w3c/selection-api/issues/114
+  // https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/core/dom/document_or_shadow_root.idl;l=12;drc=5aded22f34131a7d136f7fff2b6b28b8387ad961
+  Selection? getSelection();
 };

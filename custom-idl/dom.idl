@@ -196,6 +196,9 @@ partial interface Document {
   readonly attribute long fileSize;
   boolean contains();
 
+  // https://github.com/mozilla/gecko-dev/blob/f7949b6a83a31998267293b4497d1f86b45c18fc/dom/webidl/Element.webidl#L115
+  boolean mozMatchesSelector(DOMString selector);
+
   // https://developer.mozilla.org/en-US/docs/Web/API/Document/mozSetImageElement
   undefined mozSetImageElement(DOMString imageElementId, Element? imageElement);
 
@@ -209,6 +212,9 @@ partial interface Document {
 partial interface Element {
   // https://www.w3.org/Bugs/Public/show_bug.cgi?id=14600
   undefined setCapture(optional boolean retargetToElement);
+
+  // https://github.com/mozilla/gecko-dev/blob/f7949b6a83a31998267293b4497d1f86b45c18fc/dom/webidl/Element.webidl#L144
+  undefined releaseCapture();
 };
 
 partial interface Event {
@@ -225,6 +231,11 @@ partial interface Range {
   short compareNode(Node node);
 };
 
+enum SlotAssignmentMode { "manual", "name" };
+
 partial interface ShadowRoot {
   readonly attribute boolean delegatesFocus;
+
+  // https://github.com/whatwg/dom/pull/860
+  readonly attribute SlotAssignmentMode slotAssignment;
 };

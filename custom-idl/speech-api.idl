@@ -1,0 +1,7 @@
+partial interface Window {
+  attribute object webkitSpeechGrammar;
+  attribute object webkitSpeechGrammarList;
+  attribute object webkitSpeechRecognition;
+  attribute object webkitSpeechRecognitionError;
+  attribute object webkitSpeechRecognitionEvent;
+};
