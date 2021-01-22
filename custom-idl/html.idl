@@ -273,6 +273,8 @@ partial interface HTMLInputElement {
   undefined mozSetFileNameArray(sequence<DOMString> fileNames);
   // https://hg.mozilla.org/mozilla-central/file/f22c20641704d783097b1b128d826c8460de7354/dom/webidl/HTMLInputElement.webidl#l163
   undefined mozSetFileArray(sequence<File> files);
+  // https://github.com/mozilla/gecko-dev/blob/7c03e28b3d065fa80839e9659fd50bf340913d5f/dom/webidl/HTMLInputElement.webidl#L173
+  boolean mozIsTextField(boolean excludePassword);
 };
 
 [Exposed=Window]
