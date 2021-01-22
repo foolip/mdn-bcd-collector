@@ -13,3 +13,9 @@ partial interface Selection {
               optional DOMString direction = "",
               optional DOMString granularity = "");
 };
+
+partial interface ShadowRoot {
+  // https://github.com/w3c/selection-api/issues/114
+  // https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/core/dom/document_or_shadow_root.idl;l=12;drc=5aded22f34131a7d136f7fff2b6b28b8387ad961
+  Selection? getSelection();
+};
