@@ -1,0 +1,14 @@
+[Exposed=Window]
+interface UserMessageHandler {
+  Promise<any> postMessage(any message);
+};
+
+[Exposed=Window]
+interface UserMessageHandlersNamespace {
+  getter UserMessageHandler (DOMString name);
+};
+
+[Exposed=Window]
+interface WebKitNamespace {
+  readonly attribute UserMessageHandlersNamespace messageHandlers;
+};
