@@ -243,6 +243,11 @@ partial interface HTMLHeadElement {
   attribute DOMString profile;
 };
 
+partial interface HTMLHtmlElement {
+  // https://github.com/WebKit/WebKit/blob/cdb06d0c41ff04eff8f4c65d1c92c8672b4903a6/Source/WebCore/html/HTMLHtmlElement.idl#L24
+  attribute DOMString manifest;
+};
+
 partial interface HTMLIFrameElement {
   undefined setNfcFocus();
 };
