@@ -105,6 +105,12 @@ partial interface mixin GlobalEventHandlers {
 
   // https://github.com/mozilla/gecko-dev/blob/ffdb6a4d934b3f5294f18cf0e1df618109ccb36b/dom/webidl/EventHandler.webidl#L87
   attribute EventHandler onshow;
+
+  // https://github.com/WebKit/WebKit/blob/cdb06d0c41ff04eff8f4c65d1c92c8672b4903a6/Source/WebCore/dom/GlobalEventHandlers.idl#L114
+  attribute EventHandler onwebkitmouseforcechanged;
+  attribute EventHandler onwebkitmouseforcedown;
+  attribute EventHandler onwebkitmouseforcewillbegin;
+  attribute EventHandler onwebkitmouseforceup;
 };
 
 // DocumentAndElementEventHandlers here is used for things that have been on
