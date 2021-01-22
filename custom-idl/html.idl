@@ -222,6 +222,18 @@ partial interface HTMLFormElement {
   undefined requestAutocomplete();
 };
 
+partial interface HTMLFrameElement {
+  // https://github.com/WebKit/WebKit/blob/cdb06d0c41ff04eff8f4c65d1c92c8672b4903a6/Source/WebCore/html/HTMLFrameElement.idl#L36
+  Document? getSVGDocument();
+
+  // https://github.com/WebKit/WebKit/blob/cdb06d0c41ff04eff8f4c65d1c92c8672b4903a6/Source/WebCore/html/HTMLFrameElement.idl#L38
+  readonly attribute long width;
+  readonly attribute long height;
+
+  // https://github.com/WebKit/WebKit/blob/cdb06d0c41ff04eff8f4c65d1c92c8672b4903a6/Source/WebCore/html/HTMLFrameElement.idl#L42
+  attribute USVString location;
+};
+
 partial interface HTMLFrameSetElement {
   attribute EventHandler onlanguage;
   attribute EventHandler onorientationchange;
