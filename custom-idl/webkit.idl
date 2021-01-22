@@ -42,6 +42,11 @@ partial interface HTMLElement {
   [CEReactions] attribute DOMString webkitdropzone;
 };
 
+partial interface HTMLMediaElement {
+  // should be on HTMLVideoElement
+  VideoPlaybackQuality getVideoPlaybackQuality();
+};
+
 [Exposed=Window]
 interface UserMessageHandler {
   Promise<any> postMessage(any message);
