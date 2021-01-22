@@ -53,6 +53,14 @@ partial interface Document {
 };
 
 // Event handler attributes, added widely to find them wherever they are.
+partial interface Element {
+  attribute EventHandler onmozfullscreenchange;
+  attribute EventHandler onmozfullscreenerror;
+  attribute EventHandler onmsfullscreenchange;
+  attribute EventHandler onmsfullscreenerror;
+  attribute EventHandler onwebkitfullscreenchange;
+  attribute EventHandler onwebkitfullscreenerror;
+};
 partial interface mixin GlobalEventHandlers {
   attribute EventHandler onmozfullscreenchange;
   attribute EventHandler onmozfullscreenerror;
