@@ -1,3 +1,8 @@
+partial interface Element {
+  // event handler attribute in the wrong place
+  attribute EventHandler onselectstart;
+};
+
 partial interface Selection {
   readonly attribute Node? baseNode;
   readonly attribute unsigned long baseOffset;
