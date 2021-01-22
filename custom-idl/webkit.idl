@@ -20,6 +20,23 @@ partial interface mixin GlobalEventHandlers {
   attribute EventHandler onwebkitmouseforceup;
 };
 
+partial interface HTMLBodyElement {
+  // https://github.com/WebKit/WebKit/blob/cdb06d0c41ff04eff8f4c65d1c92c8672b4903a6/Source/WebCore/html/HTMLBodyElement.idl#L31
+  attribute EventHandler onblur;
+  attribute EventHandler onerror;
+  attribute EventHandler onfocus;
+  attribute EventHandler onfocusin;
+  attribute EventHandler onfocusout;
+  attribute EventHandler onload;
+  attribute EventHandler onresize;
+  attribute EventHandler onscroll;
+  attribute EventHandler onselectionchange;
+  attribute EventHandler onwebkitmouseforcechanged;
+  attribute EventHandler onwebkitmouseforcedown;
+  attribute EventHandler onwebkitmouseforceup;
+  attribute EventHandler onwebkitmouseforcewillbegin;
+};
+
 [Exposed=Window]
 interface UserMessageHandler {
   Promise<any> postMessage(any message);
