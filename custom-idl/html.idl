@@ -102,6 +102,9 @@ partial interface mixin GlobalEventHandlers {
 
   // https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/core/dom/global_event_handlers.idl;l=76;drc=7a26ab64ceec9a43266fb544ab09adbe641504e3
   attribute EventHandler onmousewheel;
+
+  // https://github.com/mozilla/gecko-dev/blob/ffdb6a4d934b3f5294f18cf0e1df618109ccb36b/dom/webidl/EventHandler.webidl#L87
+  attribute EventHandler onshow;
 };
 
 // DocumentAndElementEventHandlers here is used for things that have been on
