@@ -28,8 +28,11 @@ partial interface Element {
 partial interface Document {
   readonly attribute boolean mozFullScreen;
   readonly attribute boolean mozFullScreenEnabled;
-  readonly attribute Element? mozFullScreenElement;
   undefined mozCancelFullScreen();
+};
+
+partial interface mixin DocumentOrShadowRoot {
+  readonly attribute Element? mozFullScreenElement;
 };
 
 partial interface Element {
