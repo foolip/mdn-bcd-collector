@@ -128,6 +128,23 @@ partial interface HTMLAnchorElement {
   attribute DOMString media;
 };
 
+// https://github.com/whatwg/html/pull/1399
+// https://html.spec.whatwg.org/commit-snapshots/d0154579f6237358a7a642ae59b894e9116c4fbd/#htmlappletelement
+[Exposed=Window]
+interface HTMLAppletElement : HTMLElement {
+  attribute DOMString align;
+  attribute DOMString alt;
+  attribute DOMString archive;
+  attribute DOMString code;
+  attribute USVString codeBase;
+  attribute DOMString height;
+  attribute unsigned long hspace;
+  attribute DOMString name;
+  attribute USVString _object; // the underscore is not part of the identifier
+  attribute unsigned long vspace;
+  attribute DOMString width;
+};
+
 partial interface HTMLAreaElement {
   attribute DOMString hreflang;
   attribute DOMString media;
