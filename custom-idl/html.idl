@@ -290,6 +290,11 @@ interface HTMLIsIndexElement : HTMLElement {
 [Exposed=Window]
 interface HTMLKeygenElement : HTMLElement {};
 
+partial interface HTMLLinkElement {
+  // moved to HTMLOrSVGElement mixin
+  attribute DOMString nonce;
+};
+
 partial interface HTMLMediaElement {
   attribute MediaController controller;
   readonly attribute DOMTokenList controlsList;
@@ -358,6 +363,11 @@ interface PropertyNodeList : NodeList {
   PropertyValueArray getValues();
 };
 
+partial interface HTMLScriptElement {
+  // moved to HTMLOrSVGElement mixin
+  attribute DOMString nonce;
+};
+
 partial interface HTMLSelectElement {
   attribute boolean autofocus;
   undefined blur();
@@ -380,6 +390,9 @@ partial interface HTMLSourceElement {
 partial interface HTMLStyleElement {
   // https://github.com/whatwg/html/issues/5590
   attribute boolean disabled;
+
+  // moved to HTMLOrSVGElement mixin
+  attribute DOMString nonce;
 
   attribute boolean scoped;
 };
