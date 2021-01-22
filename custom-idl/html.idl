@@ -354,6 +354,9 @@ interface HTMLMenuItemElement : HTMLElement {
   attribute boolean default;
 
   attribute DOMString command;
+
+  // https://github.com/mozilla/gecko-dev/blob/7c03e28b3d065fa80839e9659fd50bf340913d5f/dom/webidl/HTMLMenuItemElement.webidl#L35
+  attribute boolean defaultChecked;
 };
 
 partial interface HTMLObjectElement {
