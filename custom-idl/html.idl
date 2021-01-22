@@ -168,7 +168,9 @@ interface HTMLBaseFontElement : HTMLElement {
 };
 
 partial interface HTMLButtonElement {
+  // https://github.com/mdn/browser-compat-data/issues/8745
   attribute boolean autofocus;
+
   attribute HTMLMenuElement menu;
 };
 
@@ -263,7 +265,9 @@ partial interface HTMLInputElement {
   // https://github.com/whatwg/html/issues/667
   attribute boolean incremental;
 
+  // https://github.com/mdn/browser-compat-data/issues/8745
   attribute boolean autofocus;
+
   attribute EventHandler onsearch;
   attribute any weight;
 
@@ -385,7 +389,9 @@ partial interface HTMLScriptElement {
 };
 
 partial interface HTMLSelectElement {
+  // https://github.com/mdn/browser-compat-data/issues/8745
   attribute boolean autofocus;
+
   undefined blur();
   undefined focus();
 };
@@ -421,6 +427,9 @@ partial interface HTMLTableElement {
 partial interface HTMLTextAreaElement {
   // https://github.com/mdn/browser-compat-data/issues/7519
   attribute DOMString autocapitalize;
+
+  // https://github.com/mdn/browser-compat-data/issues/8745
+  attribute boolean autofocus;
 };
 
 partial interface HTMLVideoElement {
