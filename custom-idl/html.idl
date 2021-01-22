@@ -327,6 +327,14 @@ partial interface HTMLMediaElement {
   // Prefixed preservesPitch
   attribute boolean mozPreservesPitch;
   attribute boolean webkitPreservesPitch;
+
+  // https://github.com/WebKit/WebKit/blob/c397d717fcd82a8daff69dccb1354a5f94ca6f9a/Source/WebCore/html/HTMLMediaElement.idl#L99
+  readonly attribute boolean webkitHasClosedCaptions;
+  attribute boolean webkitClosedCaptionsVisible;
+
+  // https://github.com/WebKit/WebKit/blob/c397d717fcd82a8daff69dccb1354a5f94ca6f9a/Source/WebCore/html/HTMLMediaElement.idl#L124
+  undefined webkitShowPlaybackTargetPicker();
+  readonly attribute boolean webkitCurrentPlaybackTargetIsWireless;
 };
 
 // https://www.w3.org/TR/html51/interactive-elements.html#htmlmenuelement-htmlmenuelement
@@ -426,6 +434,9 @@ partial interface HTMLVideoElement {
   boolean webkitSupportsPresentationMode(VideoPresentationMode mode);
   readonly attribute VideoPresentationMode webkitPresentationMode;
   undefined webkitSetPresentationMode(VideoPresentationMode mode);
+
+  // https://github.com/WebKit/WebKit/blob/c397d717fcd82a8daff69dccb1354a5f94ca6f9a/Source/WebCore/html/HTMLVideoElement.idl#L50
+  attribute boolean webkitWirelessVideoPlaybackDisabled;
 };
 
 partial interface Navigator {
