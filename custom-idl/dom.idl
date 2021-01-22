@@ -231,6 +231,11 @@ partial interface Range {
   short compareNode(Node node);
 };
 
+enum SlotAssignmentMode { "manual", "name" };
+
 partial interface ShadowRoot {
   readonly attribute boolean delegatesFocus;
+
+  // https://github.com/whatwg/dom/pull/860
+  readonly attribute SlotAssignmentMode slotAssignment;
 };
