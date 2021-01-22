@@ -1,0 +1,7 @@
+partial interface Window {
+  attribute object WebKitMediaKeyError;
+  attribute object WebKitMediaKeyMessageEvent;
+  attribute object WebKitMediaKeyNeededEvent;
+  attribute object WebKitMediaKeys;
+  attribute object WebKitMediaKeySession;
+};
