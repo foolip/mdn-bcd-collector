@@ -83,13 +83,17 @@ partial interface Element {
   // https://github.com/mdn/browser-compat-data/issues/6683
   readonly attribute DOMString name;
 
+  // https://github.com/whatwg/html/issues/667
+  attribute EventHandler onsearch;
+
   // event handler attributes in the wrong place
   attribute EventHandler oncopy;
   attribute EventHandler oncut;
   attribute EventHandler onpaste;
-
-  // https://github.com/whatwg/html/issues/667
-  attribute EventHandler onsearch;
+  attribute EventHandler onwebkitanimationend;
+  attribute EventHandler onwebkitanimationiteration;
+  attribute EventHandler onwebkitanimationstart;
+  attribute EventHandler onwebkittransitionend;
 };
 
 partial interface mixin GlobalEventHandlers {
