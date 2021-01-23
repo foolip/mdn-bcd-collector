@@ -50,7 +50,56 @@ interface DOMSettableTokenList : DOMTokenList {
   attribute DOMString value;
 };
 
-interface MediaController {};
+// https://github.com/whatwg/html/pull/1225
+// https://html.spec.whatwg.org/commit-snapshots/927fda0f305452a9c54a25d3ebf9a6ed5ae29fd3/#htmlmediaelement
+// https://html.spec.whatwg.org/commit-snapshots/927fda0f305452a9c54a25d3ebf9a6ed5ae29fd3/#mediacontroller
+
+partial interface HTMLMediaElement {
+  [CEReactions] attribute DOMString mediaGroup;
+  attribute MediaController? controller;
+};
+
+enum MediaControllerPlaybackState { "waiting", "playing", "ended" };
+[Exposed=Window]
+interface MediaController : EventTarget {
+  constructor();
+
+  readonly attribute unsigned short readyState; // uses HTMLMediaElement.readyState's values
+
+  readonly attribute TimeRanges buffered;
+  readonly attribute TimeRanges seekable;
+  readonly attribute unrestricted double duration;
+  attribute double currentTime;
+
+  readonly attribute boolean paused;
+  readonly attribute MediaControllerPlaybackState playbackState;
+  readonly attribute TimeRanges played;
+  undefined pause();
+  undefined unpause();
+  undefined play(); // calls play() on all media elements as well
+
+  attribute double defaultPlaybackRate;
+  attribute double playbackRate;
+
+  attribute double volume;
+  attribute boolean muted;
+
+  attribute EventHandler onemptied;
+  attribute EventHandler onloadedmetadata;
+  attribute EventHandler onloadeddata;
+  attribute EventHandler oncanplay;
+  attribute EventHandler oncanplaythrough;
+  attribute EventHandler onplaying;
+  attribute EventHandler onended;
+  attribute EventHandler onwaiting;
+
+  attribute EventHandler ondurationchange;
+  attribute EventHandler ontimeupdate;
+  attribute EventHandler onplay;
+  attribute EventHandler onpause;
+  attribute EventHandler onratechange;
+  attribute EventHandler onvolumechange;
+};
 
 // https://trac.webkit.org/browser/webkit/trunk/Source/WebCore/html/HTMLVideoElement.idl?rev=267813#L63
 enum VideoPresentationMode { "inline", "fullscreen", "picture-in-picture" };
@@ -333,10 +382,8 @@ partial interface HTMLLinkElement {
 };
 
 partial interface HTMLMediaElement {
-  attribute MediaController controller;
   readonly attribute DOMTokenList controlsList;
   readonly attribute double initialTime;
-  attribute DOMString mediaGroup;
   attribute EventHandler onerror;
   Promise<undefined> seekToNextFrame();
 
