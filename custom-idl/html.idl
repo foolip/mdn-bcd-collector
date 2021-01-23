@@ -178,6 +178,10 @@ partial interface Element {
   attribute EventHandler onwebkittransitionend;
 };
 
+partial interface EventSource {
+  readonly attribute USVString URL;
+};
+
 partial interface mixin GlobalEventHandlers {
   // https://github.com/mozilla/gecko-dev/blob/ffdb6a4d934b3f5294f18cf0e1df618109ccb36b/dom/webidl/EventHandler.webidl#L47
   attribute EventHandler ondragexit;
@@ -536,14 +540,18 @@ partial interface HTMLVideoElement {
   attribute boolean webkitWirelessVideoPlaybackDisabled;
 };
 
-partial interface TextTrackCue {
-  // https://github.com/WebKit/WebKit/blob/8c5122c3b04d94856c54fb5e686c014a123143f7/Source/WebCore/html/track/TextTrackCue.idl#L48
-  DocumentFragment getCueAsHTML();
-};
-
 partial interface Navigator {
   // https://developer.mozilla.org/en-US/docs/Web/API/Navigator/mozIsLocallyAvailable
   boolean mozIsLocallyAvailable(DOMString url, boolean ifOffline);
+};
+
+partial interface Plugin {
+  readonly attribute DOMString version;
+};
+
+partial interface TextTrackCue {
+  // https://github.com/WebKit/WebKit/blob/8c5122c3b04d94856c54fb5e686c014a123143f7/Source/WebCore/html/track/TextTrackCue.idl#L48
+  DocumentFragment getCueAsHTML();
 };
 
 partial interface Window {
@@ -605,6 +613,6 @@ partial interface Window {
   readonly attribute long long mozPaintCount;
 };
 
-partial interface Plugin {
-  readonly attribute DOMString version;
+partial interface WebSocket {
+  readonly attribute USVString URL;
 };
