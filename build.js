@@ -723,6 +723,27 @@ const buildIDLTests = (ast, globals, scopes) => {
       resources: resources
     });
 
+    const legacyWindowAlias = getExtAttr(iface, 'LegacyWindowAlias');
+    if (legacyWindowAlias) {
+      let aliases = legacyWindowAlias.rhs.value;
+      if (Array.isArray(aliases)) {
+        aliases = aliases.map((token) => token.value);
+      } else {
+        aliases = [aliases];
+      }
+      for (const alias of aliases) {
+        tests[`api.${alias}`] = compileTest({
+          raw: {
+            code: {property: alias, owner: 'self'},
+            combinator: '&&'
+          },
+          category: 'api',
+          exposure: ['Window'],
+          resources: resources
+        });
+      }
+    }
+
     const members = flattenMembers(iface);
     const memberTests = buildIDLMemberTests(
       members,
