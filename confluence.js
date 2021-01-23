@@ -1,26 +1,23 @@
 const fs = require('fs');
-const parse = require('csv-parse/lib/sync');
 const tests = require('./tests.json');
 
-const rows = parse(fs.readFileSync('./confluence_24ddcd3e1.csv'), {
-    columns: true
-});
+const lines = fs.readFileSync('../confluence.md/confluence.md', 'utf8')
+                  .split('\n').filter(l => l);
 
-// https://stackoverflow.com/a/17572910
-function isUpperCase(str) {
-    return str === str.toUpperCase();
+function capitalize(str) {
+    return str[0].toUpperCase() + str.substr(1);
 }
 
-for (const row of rows) {
-    const {api, chrome, firefox, safari} = row;
-    const [iface, member] = api.split('#');
-    const confluenceUrl = `https://web-confluence.appspot.com/#!/catalog?q=%22${iface}%23${member}%22`;
-    let bcdPath = `api.${iface}.${member}`;
-    let mdnUrl = `https://developer.mozilla.org/en-US/docs/Web/API/${iface}/${member}`;
-    if (iface === 'Window' && isUpperCase(member[0])) {
-        bcdPath = `api.${member}`;
-        mdnUrl = `https://developer.mozilla.org/en-US/docs/Web/API/${member}`;
+for (const line of lines) {
+    const [iface, member] = line.substr(6).split(' ')[0].split('#');
+    let haveTest = false;
+    if (`api.${iface}.${member}` in tests) {
+        haveTest = true;
+    } else if (`api.${capitalize(iface)}.${member}` in tests) {
+        haveTest = true;
+    } else if (iface === 'Window' && `api.${member}` in tests) {
+        haveTest = true;
     }
-    const check = bcdPath in tests ? 'x' : ' ';
-    console.log(`- [${check}] ${api} ([Confluence](${confluenceUrl}), [MDN](${mdnUrl}))`);
+    const check = line.startsWith('- [x] ') || haveTest ? 'x' : ' ';
+    console.log(`- [${check}] ${line.substr(6)}`);
 }
