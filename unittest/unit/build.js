@@ -1599,6 +1599,17 @@ describe('build', () => {
           resources: {},
           exposure: ['Window']
         },
+        'api.DoubleSet.forEach': {
+          tests: [
+            {
+              code: '"forEach" in DoubleSet.prototype',
+              prefix: ''
+            }
+          ],
+          category: 'api',
+          resources: {},
+          exposure: ['Window']
+        },
         'api.DoubleSet.has': {
           tests: [
             {
