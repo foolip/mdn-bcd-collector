@@ -325,37 +325,38 @@ const flattenMembers = (iface) => {
         break;
       case 'iterable':
         members.push(
+            {name: '@@iterator', type: 'symbol'},
             {name: 'entries', type: 'operation'},
-            {name: 'keys', type: 'operation'},
-            {name: 'values', type: 'operation'},
             {name: 'forEach', type: 'operation'},
-            {name: '@@iterator', type: 'symbol'}
+            {name: 'keys', type: 'operation'},
+            {name: 'values', type: 'operation'}
         );
         break;
       case 'maplike':
         members.push(
-            {name: 'size', type: 'operation'},
-            {name: 'entries', type: 'operation'},
-            {name: 'keys', type: 'operation'},
-            {name: 'values', type: 'operation'},
-            {name: 'get', type: 'operation'},
-            {name: 'has', type: 'operation'},
             {name: 'clear', type: 'operation'},
             {name: 'delete', type: 'operation'},
+            {name: 'entries', type: 'operation'},
+            {name: 'forEach', type: 'operation'},
+            {name: 'get', type: 'operation'},
+            {name: 'has', type: 'operation'},
+            {name: 'keys', type: 'operation'},
             {name: 'set', type: 'operation'},
-            {name: 'forEach', type: 'operation'}
+            {name: 'size', type: 'attribute'},
+            {name: 'values', type: 'operation'}
         );
         break;
       case 'setlike':
         members.push(
-            {name: 'size', type: 'operation'},
-            {name: 'entries', type: 'operation'},
-            {name: 'values', type: 'operation'},
-            {name: 'keys', type: 'operation'},
-            {name: 'has', type: 'operation'},
             {name: 'add', type: 'operation'},
+            {name: 'clear', type: 'operation'},
             {name: 'delete', type: 'operation'},
-            {name: 'clear', type: 'operation'}
+            {name: 'entries', type: 'operation'},
+            {name: 'forEach', type: 'operation'},
+            {name: 'has', type: 'operation'},
+            {name: 'keys', type: 'operation'},
+            {name: 'size', type: 'attribute'},
+            {name: 'values', type: 'operation'}
         );
         break;
       case 'operation':
