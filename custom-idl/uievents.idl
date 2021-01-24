@@ -2,7 +2,7 @@
 partial interface CompositionEvent {
   attribute DOMString locale;
   // https://w3c.github.io/uievents/#idl-interface-CompositionEvent-initializers
-  CompositionEvent initCompositionEvent();
+  undefined initCompositionEvent();
 };
 
 partial interface MouseEvent {
@@ -28,7 +28,22 @@ interface MutationEvent : Event {
   undefined initMutationEvent(DOMString type, boolean bubbles, boolean cancelable, Node? relatedNode, DOMString prevValue, DOMString newValue, DOMString attrName, unsigned short attrChange);
 };
 
+partial interface UIEvent {
+  // https://w3c.github.io/uievents/#idl-interface-UIEvent-initializers
+  undefined initUIEvent();
+
+  undefined cancelBubble();
+  readonly attribute boolean isChar;
+  readonly attribute long layerX;
+  readonly attribute long layerY;
+  readonly attribute long pageX;
+  readonly attribute long pageY;
+};
+
 partial interface WheelEvent {
+  // https://w3c.github.io/uievents/#idl-interface-WheelEvent-initializers
+  undefined initWheelEvent();
+
   readonly attribute long wheelDeltaX;
   readonly attribute long wheelDeltaY;
   readonly attribute long wheelDelta;
