@@ -44,9 +44,20 @@ partial interface WheelEvent {
   // https://w3c.github.io/uievents/#idl-interface-WheelEvent-initializers
   undefined initWheelEvent();
 
-  readonly attribute long wheelDeltaX;
-  readonly attribute long wheelDeltaY;
+  // https://developer.apple.com/documentation/webkitjs/wheelevent/1629934-initwebkitwheelevent
+  undefined initWebKitWheelEvent();
+
+  // https://developer.apple.com/documentation/webkitjs/wheelevent/1630157-webkitdirectioninvertedfromdevic
+  readonly attribute boolean webkitDirectionInvertedFromDevice;
+
+  // https://developer.apple.com/documentation/webkitjs/wheelevent/1633018-wheeldelta
   readonly attribute long wheelDelta;
+
+  // https://developer.apple.com/documentation/webkitjs/wheelevent/1633615-wheeldeltax
+  readonly attribute long wheelDeltaX;
+
+  // https://developer.apple.com/documentation/webkitjs/wheelevent/1631213-wheeldeltay
+  readonly attribute long wheelDeltaY;
 };
 
 [Exposed=Window]
