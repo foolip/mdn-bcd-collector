@@ -130,7 +130,7 @@ partial interface CanvasRenderingContext2D {
 };
 
 partial interface CloseEvent {
-  CloseEvent initCloseEvent();
+  undefined initCloseEvent();
 };
 
 // https://hg.mozilla.org/mozilla-central/file/a451ebba378efcce0967e508a8107ab14dd5edcb/dom/webidl/DataTransfer.webidl#l44

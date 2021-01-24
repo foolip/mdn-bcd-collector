@@ -9,7 +9,7 @@ partial interface CSSKeyframesRule {
 
 partial interface TransitionEvent {
   readonly attribute DOMString animationName;
-  TransitionEvent initTransitionEvent();
+  undefined initTransitionEvent();
 };
 
 // https://drafts.csswg.org/web-animations-2/#the-keyframeeffect-interface
