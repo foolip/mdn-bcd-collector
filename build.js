@@ -334,23 +334,24 @@ const flattenMembers = (iface) => {
         break;
       case 'maplike':
         members.push(
-            {name: 'clear', type: 'operation'},
-            {name: 'delete', type: 'operation'},
             {name: 'entries', type: 'operation'},
             {name: 'forEach', type: 'operation'},
             {name: 'get', type: 'operation'},
             {name: 'has', type: 'operation'},
             {name: 'keys', type: 'operation'},
-            {name: 'set', type: 'operation'},
             {name: 'size', type: 'attribute'},
             {name: 'values', type: 'operation'}
         );
+        if (!member.readonly) {
+          members.push(
+              {name: 'clear', type: 'operation'},
+              {name: 'delete', type: 'operation'},
+              {name: 'set', type: 'operation'}
+          );
+        }
         break;
       case 'setlike':
         members.push(
-            {name: 'add', type: 'operation'},
-            {name: 'clear', type: 'operation'},
-            {name: 'delete', type: 'operation'},
             {name: 'entries', type: 'operation'},
             {name: 'forEach', type: 'operation'},
             {name: 'has', type: 'operation'},
@@ -358,6 +359,13 @@ const flattenMembers = (iface) => {
             {name: 'size', type: 'attribute'},
             {name: 'values', type: 'operation'}
         );
+        if (!member.readonly) {
+          members.push(
+              {name: 'add', type: 'operation'},
+              {name: 'clear', type: 'operation'},
+              {name: 'delete', type: 'operation'}
+          );
+        }
         break;
       case 'operation':
         switch (member.special) {
