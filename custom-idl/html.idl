@@ -207,6 +207,10 @@ partial interface mixin DocumentAndElementEventHandlers {
   attribute EventHandler onunhandledrejection;
 };
 
+partial interface HashChangeEvent {
+  undefined initHashChangeEvent();
+};
+
 partial interface HTMLAnchorElement {
   // https://github.com/whatwg/html/pull/3870
   [CEReactions] attribute DOMString hrefTranslate;
