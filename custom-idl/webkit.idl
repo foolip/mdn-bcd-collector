@@ -47,6 +47,13 @@ partial interface HTMLMediaElement {
   VideoPlaybackQuality getVideoPlaybackQuality();
 };
 
+// https://developer.apple.com/documentation/webkitjs/textevent
+[Exposed=Window]
+interface TextEvent : UIEvent {
+  undefined initTextEvent();
+  readonly attribute DOMString data;
+};
+
 [Exposed=Window]
 interface UserMessageHandler {
   Promise<any> postMessage(any message);
