@@ -47,6 +47,14 @@ partial interface HTMLMediaElement {
   VideoPlaybackQuality getVideoPlaybackQuality();
 };
 
+// https://developer.apple.com/documentation/webkitjs/overflowevent
+[Exposed=Window]
+interface OverflowEvent : Event {
+  readonly attribute boolean horizontalOverflow;
+  readonly attribute unsigned short orient;
+  readonly attribute boolean verticalOverflow;
+};
+
 // https://developer.apple.com/documentation/webkitjs/textevent
 [Exposed=Window]
 interface TextEvent : UIEvent {
