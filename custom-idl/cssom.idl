@@ -128,8 +128,6 @@ partial interface Element {
   readonly attribute MSStyleCSSProperties? runtimeStyle;
 };
 
-interface WebKitCSSMatrix : DOMMatrix {};
-
 partial interface Window {
   // https://github.com/WebKit/WebKit/blob/bc44d2f960d35b47803c79ffbdc9cf57c0a01778/Source/WebCore/page/DOMWindow.idl#L124
   // https://chromium.googlesource.com/chromium/src.git/+/9b52888ec6e049583e3765eb6ed2f7c58c1d50a0

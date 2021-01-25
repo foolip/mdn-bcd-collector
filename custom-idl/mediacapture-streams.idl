@@ -13,6 +13,7 @@ interface LocalMediaStream : MediaStream {
   undefined stop();
 };
 
-partial interface Window {
-  attribute object webkitMediaStream;
+[Exposed=Window]
+interface webkitMediaStream {
+  constructor();
 };

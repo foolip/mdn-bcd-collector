@@ -74,8 +74,16 @@ partial interface PannerNode {
   undefined setVelocity(float x, float y, float z);
 };
 
-partial interface Window {
-  attribute object webkitAudioContext;
-  attribute object webkitAudioPannerNode;
-  attribute object webkitOfflineAudioContext;
+[Exposed=Window]
+interface webkitAudioContext : EventTarget {
+  constructor();
+};
+
+[Exposed=Window]
+interface webkitOfflineAudioContext : webkitAudioContext {
+  constructor(unsigned long numberOfChannels, unsigned long length, float sampleRate);
+};
+
+[Exposed=Window]
+interface webkitAudioPannerNode : AudioNode {
 };

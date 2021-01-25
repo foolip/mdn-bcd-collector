@@ -1,13 +1,28 @@
 partial interface HTMLMediaElement {
   // https://github.com/WebKit/WebKit/blob/c397d717fcd82a8daff69dccb1354a5f94ca6f9a/Source/WebCore/html/HTMLMediaElement.idl#L106
-  readonly attribute object webkitKeys;
-  undefined webkitSetMediaKeys(object? mediaKeys);
+  readonly attribute WebKitMediaKeys? webkitKeys;
+  undefined webkitSetMediaKeys(WebKitMediaKeys? mediaKeys);
 };
 
-partial interface Window {
-  attribute object WebKitMediaKeyError;
-  attribute object WebKitMediaKeyMessageEvent;
-  attribute object WebKitMediaKeyNeededEvent;
-  attribute object WebKitMediaKeys;
-  attribute object WebKitMediaKeySession;
+[Exposed=Window]
+interface WebKitMediaKeyError {
+};
+
+[Exposed=Window]
+interface WebKitMediaKeyMessageEvent : Event {
+  constructor(DOMString type);
+};
+
+[Exposed=Window]
+interface WebKitMediaKeyNeededEvent : Event {
+  constructor(DOMString type);
+};
+
+[Exposed=Window]
+interface WebKitMediaKeys {
+  constructor(DOMString keySystem);
+};
+
+[Exposed=Window]
+interface WebKitMediaKeySession : EventTarget {
 };

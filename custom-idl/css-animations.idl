@@ -25,6 +25,7 @@ interface Point {
   attribute float y;
 };
 
-partial interface Window {
-  attribute object WebKitAnimationEvent;
+[Exposed=Window]
+interface WebKitAnimationEvent : Event {
+  constructor(DOMString type);
 };
