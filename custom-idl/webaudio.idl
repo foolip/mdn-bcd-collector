@@ -1,3 +1,8 @@
+// https://trac.webkit.org/changeset/267065/webkit
+partial interface AudioBuffer {
+  attribute unrestricted float gain;
+};
+
 // https://trac.webkit.org/changeset/150905/webkit
 // https://trac.webkit.org/changeset/205065/webkit
 partial interface AudioBufferSourceNode {
