@@ -7,3 +7,10 @@ partial interface XMLHttpRequest {
   readonly attribute boolean mozAnon;
   readonly attribute boolean mozSystem;
 };
+
+https://developer.apple.com/documentation/webkitjs/xmlhttprequestprogressevent
+[Exposed=Window]
+interface XMLHttpRequestProgressEvent : ProgressEvent {
+  readonly attribute unsigned long long position;
+  readonly attribute unsigned long long totalSize;
+};
