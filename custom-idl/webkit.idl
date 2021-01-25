@@ -76,3 +76,10 @@ interface UserMessageHandlersNamespace {
 interface WebKitNamespace {
   readonly attribute UserMessageHandlersNamespace messageHandlers;
 };
+
+// https://developer.apple.com/documentation/webkitjs/webkitplaybacktargetavailabilityevent
+[Exposed=Window]
+interface WebKitPlaybackTargetAvailabilityEvent : Event {
+  constructor(DOMString type);
+  readonly attribute DOMString availability;
+};
