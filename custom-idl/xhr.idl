@@ -1,3 +1,9 @@
 partial interface ProgressEvent {
   undefined initProgressEvent();
 };
+
+partial interface XMLHttpRequest {
+  // https://github.com/mozilla/gecko-dev/blob/851bbbd9d9a38c2785a24c13b6412751be8d3253/dom/webidl/XMLHttpRequest.webidl#L142
+  readonly attribute boolean mozAnon;
+  readonly attribute boolean mozSystem;
+};
