@@ -12,6 +12,7 @@ partial interface RTCPeerConnection {
   attribute EventHandler onremovestream;
 };
 
-partial interface Window {
-  attribute object webkitRTCPeerConnection;
+[Exposed=Window]
+interface webkitRTCPeerConnection {
+  constructor();
 };

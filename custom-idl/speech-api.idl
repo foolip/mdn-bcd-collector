@@ -1,7 +1,24 @@
-partial interface Window {
-  attribute object webkitSpeechGrammar;
-  attribute object webkitSpeechGrammarList;
-  attribute object webkitSpeechRecognition;
-  attribute object webkitSpeechRecognitionError;
-  attribute object webkitSpeechRecognitionEvent;
+[Exposed=Window]
+interface webkitSpeechGrammar {
+  constructor();
+};
+
+[Exposed=Window]
+interface webkitSpeechGrammarList {
+  constructor();
+};
+
+[Exposed=Window]
+interface webkitSpeechRecognition : EventTarget {
+  constructor();
+};
+
+[Exposed=Window]
+interface webkitSpeechRecognitionError : Event {
+  constructor(DOMString type);
+};
+
+[Exposed=Window]
+interface webkitSpeechRecognitionEvent : Event {
+  constructor(DOMString type);
 };

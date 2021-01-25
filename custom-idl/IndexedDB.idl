@@ -29,5 +29,5 @@ partial interface IDBVersionChangeEvent {
 };
 
 partial interface Window {
-  attribute object webkitIndexedDB;
+  readonly attribute IDBFactory webkitIndexedDB;
 };

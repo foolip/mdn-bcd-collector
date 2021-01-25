@@ -3,16 +3,20 @@ partial interface DOMMatrixReadOnly {
   undefined transform();
 };
 
+[Exposed=Window]
+interface WebKitCSSMatrix {
+  constructor();
+};
+
 // https://github.com/WebKit/webkit/blob/master/Source/WebCore/page/WebKitPoint.idl
-[Exposed=Window] interface WebKitPoint {
+[Exposed=Window]
+interface WebKitPoint {
   constructor(optional unrestricted double x = 0, optional unrestricted double y = 0);
   attribute unrestricted double x;
   attribute unrestricted double y;
 };
 
 partial interface Window {
-  attribute object WebKitCSSMatrix;
-
   // https://www.w3.org/TR/2009/WD-css3-2d-transforms-20090320/#window-interface
   Point convertPointFromPageToNode(Node node, Point point);
   Point convertPointFromNodeToPage(Node node, Point point);
