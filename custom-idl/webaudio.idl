@@ -34,6 +34,10 @@ partial interface AudioParam {
   // https://chromium.googlesource.com/chromium/src/+/4260025dd80eed380e0c1fff0e4be2bdd0ae0e8a
   // https://chromium.googlesource.com/chromium/src/+/f5e8986bdcd359c7ca82d83907c81642dd01f55e
   AudioParam cancelValuesAndHoldAtTime(double startTime);
+
+  // https://trac.webkit.org/changeset/266763/webkit
+  readonly attribute DOMString name;
+  readonly attribute unsigned short units;
 };
 
 partial interface BiquadFilterNode {
