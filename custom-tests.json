@@ -28,6 +28,10 @@
         "type": "instance",
         "src": "return function(css) {var el = document.createElement('style'); el.innerHTML = css; document.head.appendChild(el); el.sheet.disabled = true; return el.sheet;}"
       },
+      "offlineAudioContext": {
+        "type": "instance",
+        "src": "var constructor = (window.OfflineAudioContext || window.webkitOfflineAudioContext); if (!constructor) {return false;} return new constructor(2,44100*40,44100);"
+      },
       "webGL": {
         "type": "instance",
         "src": "var canvas = document.createElement('canvas'); if (!canvas) {return false}; return canvas.getContext('webgl2') || canvas.getContext('webgl') || canvas.getContext('experimental-webgl');"
@@ -746,7 +750,9 @@
       "__base": "var instance = new Notification('');"
     },
     "OfflineAudioContext": {
-      "__base": "var instance = new OfflineAudioContext(2,44100*40,44100);"
+      "__resources": ["offlineAudioContext"],
+      "__base": "var instance = reusableInstances.offlineAudioContext;",
+      "__test": "return 'OfflineAudioContext' in self;"
     },
     "OscillatorNode": {
       "__resources": ["audioContext"],
