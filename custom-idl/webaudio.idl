@@ -13,6 +13,10 @@ partial interface AudioBufferSourceNode {
   attribute EventHandler onended;
   // start() is still in the spec (override with 3 arguments)
   undefined stop(optional double when = 0);
+
+  // https://trac.webkit.org/changeset/265245/webkit
+  readonly attribute AudioParam gain;
+  readonly attribute unsigned short playbackState;
 };
 
 partial interface AudioContext {
