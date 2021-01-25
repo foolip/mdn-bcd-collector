@@ -65,9 +65,9 @@
       "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createBufferSource();"
     },
     "AudioContext": {
-      "__TODO": "Add webkit prefix",
+      "__resources": ["audioContext"],
       "__base": "var instance = reusableInstances.audioContext;",
-      "__test": "!!(new window.AudioContext());"
+      "__test": "return 'AudioContext' in self"
     },
     "AudioDestinationNode": {
       "__resources": ["audioContext"],
