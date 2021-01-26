@@ -122,6 +122,9 @@ partial interface CanvasRenderingContext2D {
   undefined drawWidgetAsOnScreen(Window window);
   undefined drawWindow(Window window, double x, double y, double w, double h, DOMString bgColor, optional byte flags);
 
+  // https://bugzilla.mozilla.org/show_bug.cgi?id=1228850
+  attribute boolean mozImageSmoothingEnabled;
+
   // https://trac.webkit.org/changeset/96626/webkit
   attribute object webkitLineDash;
   attribute float webkitLineDashOffset;
