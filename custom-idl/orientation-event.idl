@@ -1,0 +1,7 @@
+partial interface DeviceMotionEvent {
+  undefined initDeviceMotionEvent();
+};
+
+partial interface DeviceOrientationEvent {
+  undefined initDeviceOrientationEvent();
+};
