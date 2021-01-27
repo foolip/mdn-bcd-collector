@@ -1,0 +1,11 @@
+partial interface DOMException {
+  // https://github.com/mozilla/gecko-dev/blob/b9384b091e901b3283ce24b6610e80699d79fd06/dom/webidl/DOMException.webidl#L45
+  readonly attribute any data;
+
+  // https://github.com/mozilla/gecko-dev/blob/b9384b091e901b3283ce24b6610e80699d79fd06/dom/webidl/DOMException.webidl#L31
+  // Note the capitliazation: filename instead of fileName.
+  readonly attribute DOMString filename;
+
+  // Gecko has other members on DOMException, but they're ones that are
+  // supposed to be on Error, which DOMException should inherit from.
+};
