@@ -122,6 +122,30 @@ partial interface CanvasRenderingContext2D {
   undefined drawWidgetAsOnScreen(Window window);
   undefined drawWindow(Window window, double x, double y, double w, double h, DOMString bgColor, optional byte flags);
 
+  // Non-standard legacy aliases in WebKit/Blink
+  // https://chromium.googlesource.com/chromium/src/+/ce07cefc396fdf4016e731b4e75592586785c6b0
+  // https://trac.webkit.org/changeset/221605/webkit
+  undefined clearShadow();
+  undefined drawImageFromRect(HTMLImageElement image, optional unrestricted float sx, optional unrestricted float sy, optional unrestricted float sw, optional unrestricted float sh, optional unrestricted float dx, optional unrestricted float dy, optional unrestricted float dw, optional unrestricted float dh, optional DOMString compositeOperation);
+  undefined setAlpha(unrestricted float alpha);
+  undefined setCompositeOperation(DOMString compositeOperation);
+  undefined setFillColor(DOMString color, optional unrestricted float alpha);
+  undefined setFillColor(unrestricted float c, unrestricted float m, unrestricted float y, unrestricted float k, unrestricted float a);
+  undefined setFillColor(unrestricted float grayLevel, optional unrestricted float alpha);
+  undefined setFillColor(unrestricted float r, unrestricted float g, unrestricted float b, unrestricted float a);
+  undefined setLineCap(DOMString cap);
+  undefined setLineJoin(DOMString join);
+  undefined setLineWidth(unrestricted float width);
+  undefined setMiterLimit(unrestricted float limit);
+  undefined setStrokeColor(DOMString color, optional unrestricted float alpha);
+  undefined setStrokeColor(unrestricted float c, unrestricted float m, unrestricted float y, unrestricted float k, unrestricted float a);
+  undefined setStrokeColor(unrestricted float grayLevel, optional unrestricted float alpha);
+  undefined setStrokeColor(unrestricted float r, unrestricted float g, unrestricted float b, unrestricted float a);
+  undefined setShadow(unrestricted float width, unrestricted float height, unrestricted float blur, optional DOMString color, optional unrestricted float alpha);
+  undefined setShadow(unrestricted float width, unrestricted float height, unrestricted float blur, unrestricted float c, unrestricted float m, unrestricted float y, unrestricted float k, unrestricted float a);
+  undefined setShadow(unrestricted float width, unrestricted float height, unrestricted float blur, unrestricted float grayLevel, optional unrestricted float alpha);
+  undefined setShadow(unrestricted float width, unrestricted float height, unrestricted float blur, unrestricted float r, unrestricted float g, unrestricted float b, unrestricted float a);
+
   // https://bugzilla.mozilla.org/show_bug.cgi?id=1294360
   attribute object mozCurrentTransform;
   attribute object mozCurrentTransformInverse;
