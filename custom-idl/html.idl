@@ -153,6 +153,9 @@ partial interface CanvasRenderingContext2D {
   // https://bugzilla.mozilla.org/show_bug.cgi?id=1228850
   attribute boolean mozImageSmoothingEnabled;
 
+  // https://bugzilla.mozilla.org/show_bug.cgi?id=1294362
+  attribute DOMString mozTextStyle;
+
   // https://trac.webkit.org/changeset/96626/webkit
   attribute object webkitLineDash;
   attribute float webkitLineDashOffset;
