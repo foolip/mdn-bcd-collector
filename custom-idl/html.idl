@@ -203,6 +203,10 @@ partial interface Document {
   readonly attribute DOMString origin;
 };
 
+partial interface DragEvent {
+  undefined initDragEvent();
+};
+
 partial interface Element {
   // https://github.com/mdn/browser-compat-data/issues/6683
   readonly attribute DOMString name;

@@ -1,8 +1,27 @@
-
 partial interface CompositionEvent {
   attribute DOMString locale;
   // https://w3c.github.io/uievents/#idl-interface-CompositionEvent-initializers
   undefined initCompositionEvent();
+};
+
+// https://www.w3.org/TR/1999/WD-DOM-Level-2-19990923/events.html#Events-KeyEvent
+[Exposed=Window]
+interface KeyEvent : UIEvent {
+  readonly attribute boolean ctrlKey;
+  readonly attribute boolean shiftKey;
+  readonly attribute boolean altKey;
+  readonly attribute boolean metaKey;
+  readonly attribute unsigned long keyCode;
+  readonly attribute unsigned long charCode;
+  undefined initKeyEvent();
+};
+
+partial interface KeyboardEvent {
+  // https://w3c.github.io/uievents/#idl-interface-KeyboardEvent-initializers
+  undefined initKeyboardEvent();
+
+  // https://github.com/mozilla/gecko-dev/blob/b9384b091e901b3283ce24b6610e80699d79fd06/dom/webidl/KeyboardEvent.webidl#L75
+  undefined initKeyEvent();
 };
 
 partial interface MouseEvent {
