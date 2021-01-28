@@ -1,0 +1,9 @@
+// https://github.com/w3c/IntersectionObserver/issues/468
+partial interface IntersectionObserver {
+  readonly attribute long delay;
+  readonly attribute boolean trackVisibility;
+};
+
+partial interface IntersectionObserverEntry {
+  readonly attribute boolean isVisible;
+};
