@@ -590,6 +590,11 @@ partial interface HTMLVideoElement {
   attribute boolean webkitWirelessVideoPlaybackDisabled;
 };
 
+partial interface ImageBitmapRenderingContext {
+  // https://github.com/whatwg/html/pull/1101
+  undefined transferImageBitmap(ImageBitmap? bitmap);
+};
+
 partial interface Navigator {
   // https://developer.mozilla.org/en-US/docs/Web/API/Navigator/mozIsLocallyAvailable
   boolean mozIsLocallyAvailable(DOMString url, boolean ifOffline);
