@@ -1,3 +1,8 @@
+partial interface IDBDatabase {
+  // https://github.com/mozilla/gecko-dev/blob/0dfbe5a699cc6c73cf8c14d1aa10ba10ef3ec8fa/dom/webidl/IDBDatabase.webidl#L43
+  IDBRequest createMutableFile(DOMString name, optional DOMString type);
+};
+
 interface IDBDatabaseException {};
 interface IDBEnvironment {};
 
