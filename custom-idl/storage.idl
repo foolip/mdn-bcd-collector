@@ -1,0 +1,29 @@
+// https://www.w3.org/TR/2012/WD-quota-api-20120703/#storageusagecallback-callback
+callback StorageUsageCallback = undefined (unsigned long long currentUsageInBytes, unsigned long long currentQuotaInBytes);
+
+// https://www.w3.org/TR/2012/WD-quota-api-20120703/#storagequotacallback-callback
+callback StorageQuotaCallback = undefined (unsigned long long grantedQuotaInBytes);
+
+// https://www.w3.org/TR/2012/WD-quota-api-20120703/#storageerrorcallback-callback
+callback StorageErrorCallback = undefined (DOMError error);
+
+// https://www.w3.org/TR/2012/WD-quota-api-20120703/#storagequota-interface
+interface StorageQuota {
+  undefined queryUsageAndQuota(StorageUsageCallback successCallback, optional StorageErrorCallback errorCallback);
+  undefined requestQuota(unsigned long long newQuotaInBytes, optional StorageQuotaCallback successCallback, optional StorageErrorCallback errorCallback);
+};
+
+partial interface Navigator {
+  // https://www.w3.org/TR/2012/WD-quota-api-20120703/#accessing-storagequota
+  readonly attribute StorageQuota persistentStorage;
+  readonly attribute StorageQuota temporaryStorage;
+
+  // https://chromium.googlesource.com/chromium/src/+/0aee4434a4dba42a42abaea9bfbc0cd196a63bc1/third_party/blink/renderer/modules/quota/navigator_storage_quota.idl#26
+  readonly attribute StorageQuota webkitTemporaryStorage;
+  readonly attribute StorageQuota webkitPersistentStorage;
+};
+
+partial interface Window {
+  // https://chromium.googlesource.com/chromium/src/+/0aee4434a4dba42a42abaea9bfbc0cd196a63bc1/third_party/blink/renderer/modules/quota/window_quota.idl#29
+  readonly attribute StorageQuota webkitStorageInfo;
+};

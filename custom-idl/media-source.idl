@@ -1,0 +1,4 @@
+// https://bugzilla.mozilla.org/show_bug.cgi?id=1689222
+partial interface MediaSource {
+  attribute EventHandler onsourceclosed;
+};

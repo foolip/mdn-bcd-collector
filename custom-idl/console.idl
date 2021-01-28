@@ -1,7 +1,28 @@
 
 partial namespace console {
+  // https://github.com/whatwg/console/issues/193
+  object context();
+
+  // https://github.com/whatwg/console/issues/27
   undefined exception(any msg);
+
+  // https://github.com/whatwg/console/issues/194
+  readonly attribute MemoryInfo memory;
+
+  // https://github.com/whatwg/console/issues/144
   undefined profile(optional DOMString profileName);
   undefined profileEnd(optional DOMString profileName);
+
+  // https://github.com/whatwg/console/issues/120
+  undefined _record(); // the underscore is not part of the identifier
+  undefined recordEnd();
+
+  // https://github.com/whatwg/console/issues/160
+  undefined screenshot();
+
+  // https://github.com/whatwg/console/issues/74
+  undefined takeHeapSnapshot();
+
+  // https://github.com/whatwg/console/issues/140
   undefined timeStamp(DOMString label);
 };

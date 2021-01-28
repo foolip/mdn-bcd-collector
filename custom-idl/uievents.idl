@@ -1,8 +1,27 @@
-
 partial interface CompositionEvent {
   attribute DOMString locale;
   // https://w3c.github.io/uievents/#idl-interface-CompositionEvent-initializers
-  CompositionEvent initCompositionEvent();
+  undefined initCompositionEvent();
+};
+
+// https://www.w3.org/TR/1999/WD-DOM-Level-2-19990923/events.html#Events-KeyEvent
+[Exposed=Window]
+interface KeyEvent : UIEvent {
+  readonly attribute boolean ctrlKey;
+  readonly attribute boolean shiftKey;
+  readonly attribute boolean altKey;
+  readonly attribute boolean metaKey;
+  readonly attribute unsigned long keyCode;
+  readonly attribute unsigned long charCode;
+  undefined initKeyEvent();
+};
+
+partial interface KeyboardEvent {
+  // https://w3c.github.io/uievents/#idl-interface-KeyboardEvent-initializers
+  undefined initKeyboardEvent();
+
+  // https://github.com/mozilla/gecko-dev/blob/b9384b091e901b3283ce24b6610e80699d79fd06/dom/webidl/KeyboardEvent.webidl#L75
+  undefined initKeyEvent();
 };
 
 partial interface MouseEvent {
@@ -28,10 +47,36 @@ interface MutationEvent : Event {
   undefined initMutationEvent(DOMString type, boolean bubbles, boolean cancelable, Node? relatedNode, DOMString prevValue, DOMString newValue, DOMString attrName, unsigned short attrChange);
 };
 
+partial interface UIEvent {
+  // https://w3c.github.io/uievents/#idl-interface-UIEvent-initializers
+  undefined initUIEvent();
+
+  undefined cancelBubble();
+  readonly attribute boolean isChar;
+  readonly attribute long layerX;
+  readonly attribute long layerY;
+  readonly attribute long pageX;
+  readonly attribute long pageY;
+};
+
 partial interface WheelEvent {
-  readonly attribute long wheelDeltaX;
-  readonly attribute long wheelDeltaY;
+  // https://w3c.github.io/uievents/#idl-interface-WheelEvent-initializers
+  undefined initWheelEvent();
+
+  // https://developer.apple.com/documentation/webkitjs/wheelevent/1629934-initwebkitwheelevent
+  undefined initWebKitWheelEvent();
+
+  // https://developer.apple.com/documentation/webkitjs/wheelevent/1630157-webkitdirectioninvertedfromdevic
+  readonly attribute boolean webkitDirectionInvertedFromDevice;
+
+  // https://developer.apple.com/documentation/webkitjs/wheelevent/1633018-wheeldelta
   readonly attribute long wheelDelta;
+
+  // https://developer.apple.com/documentation/webkitjs/wheelevent/1633615-wheeldeltax
+  readonly attribute long wheelDeltaX;
+
+  // https://developer.apple.com/documentation/webkitjs/wheelevent/1631213-wheeldeltay
+  readonly attribute long wheelDeltaY;
 };
 
 [Exposed=Window]

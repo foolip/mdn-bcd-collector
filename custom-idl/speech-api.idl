@@ -1,3 +1,21 @@
+partial interface SpeechGrammar {
+  constructor();
+};
+
+partial interface SpeechGrammarList {
+  // https://github.com/WICG/speech-api/issues/26
+  undefined addFromUri(DOMString src, optional float weight = 1.0);
+};
+
+partial interface SpeechRecognition {
+  attribute any serviceURI;
+};
+
+partial interface SpeechRecognitionEvent {
+  readonly attribute USVString emma;
+  readonly attribute DOMString interpretation;
+};
+
 [Exposed=Window]
 interface webkitSpeechGrammar {
   constructor();

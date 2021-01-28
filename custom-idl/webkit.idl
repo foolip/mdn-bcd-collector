@@ -47,6 +47,21 @@ partial interface HTMLMediaElement {
   VideoPlaybackQuality getVideoPlaybackQuality();
 };
 
+// https://developer.apple.com/documentation/webkitjs/overflowevent
+[Exposed=Window]
+interface OverflowEvent : Event {
+  readonly attribute boolean horizontalOverflow;
+  readonly attribute unsigned short orient;
+  readonly attribute boolean verticalOverflow;
+};
+
+// https://developer.apple.com/documentation/webkitjs/textevent
+[Exposed=Window]
+interface TextEvent : UIEvent {
+  undefined initTextEvent();
+  readonly attribute DOMString data;
+};
+
 [Exposed=Window]
 interface UserMessageHandler {
   Promise<any> postMessage(any message);
@@ -60,4 +75,11 @@ interface UserMessageHandlersNamespace {
 [Exposed=Window]
 interface WebKitNamespace {
   readonly attribute UserMessageHandlersNamespace messageHandlers;
+};
+
+// https://developer.apple.com/documentation/webkitjs/webkitplaybacktargetavailabilityevent
+[Exposed=Window]
+interface WebKitPlaybackTargetAvailabilityEvent : Event {
+  constructor(DOMString type);
+  readonly attribute DOMString availability;
 };

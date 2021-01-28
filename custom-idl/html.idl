@@ -1,3 +1,44 @@
+// https://github.com/whatwg/html/pull/6153
+// https://html.spec.whatwg.org/commit-snapshots/27ca698a224a4fcf59b647be80a0c86c3c6abba5/#applicationcache
+[SecureContext, Exposed=Window]
+interface ApplicationCache : EventTarget {
+  // update status
+  const unsigned short UNCACHED = 0;
+  const unsigned short IDLE = 1;
+  const unsigned short CHECKING = 2;
+  const unsigned short DOWNLOADING = 3;
+  const unsigned short UPDATEREADY = 4;
+  const unsigned short OBSOLETE = 5;
+  readonly attribute unsigned short status;
+
+  // updates
+  undefined update();
+  undefined abort();
+  undefined swapCache();
+
+  // events
+  attribute EventHandler onchecking;
+  attribute EventHandler onerror;
+  attribute EventHandler onnoupdate;
+  attribute EventHandler ondownloading;
+  attribute EventHandler onprogress;
+  attribute EventHandler onupdateready;
+  attribute EventHandler oncached;
+  attribute EventHandler onobsolete;
+};
+
+partial interface Window {
+  [SecureContext] readonly attribute ApplicationCache applicationCache;
+};
+
+partial interface AudioTrackList {
+   AudioTrack item(unsigned long index);
+};
+
+partial interface DataTransferItemList {
+   DataTransferItem item(unsigned long index);
+};
+
 // https://github.com/whatwg/html/pull/1942
 dictionary HitRegionOptions {
   Path2D? path = null;
@@ -17,7 +58,56 @@ interface DOMSettableTokenList : DOMTokenList {
   attribute DOMString value;
 };
 
-interface MediaController {};
+// https://github.com/whatwg/html/pull/1225
+// https://html.spec.whatwg.org/commit-snapshots/927fda0f305452a9c54a25d3ebf9a6ed5ae29fd3/#htmlmediaelement
+// https://html.spec.whatwg.org/commit-snapshots/927fda0f305452a9c54a25d3ebf9a6ed5ae29fd3/#mediacontroller
+
+partial interface HTMLMediaElement {
+  [CEReactions] attribute DOMString mediaGroup;
+  attribute MediaController? controller;
+};
+
+enum MediaControllerPlaybackState { "waiting", "playing", "ended" };
+[Exposed=Window]
+interface MediaController : EventTarget {
+  constructor();
+
+  readonly attribute unsigned short readyState; // uses HTMLMediaElement.readyState's values
+
+  readonly attribute TimeRanges buffered;
+  readonly attribute TimeRanges seekable;
+  readonly attribute unrestricted double duration;
+  attribute double currentTime;
+
+  readonly attribute boolean paused;
+  readonly attribute MediaControllerPlaybackState playbackState;
+  readonly attribute TimeRanges played;
+  undefined pause();
+  undefined unpause();
+  undefined play(); // calls play() on all media elements as well
+
+  attribute double defaultPlaybackRate;
+  attribute double playbackRate;
+
+  attribute double volume;
+  attribute boolean muted;
+
+  attribute EventHandler onemptied;
+  attribute EventHandler onloadedmetadata;
+  attribute EventHandler onloadeddata;
+  attribute EventHandler oncanplay;
+  attribute EventHandler oncanplaythrough;
+  attribute EventHandler onplaying;
+  attribute EventHandler onended;
+  attribute EventHandler onwaiting;
+
+  attribute EventHandler ondurationchange;
+  attribute EventHandler ontimeupdate;
+  attribute EventHandler onplay;
+  attribute EventHandler onpause;
+  attribute EventHandler onratechange;
+  attribute EventHandler onvolumechange;
+};
 
 // https://trac.webkit.org/browser/webkit/trunk/Source/WebCore/html/HTMLVideoElement.idl?rev=267813#L63
 enum VideoPresentationMode { "inline", "fullscreen", "picture-in-picture" };
@@ -31,6 +121,40 @@ partial interface CanvasRenderingContext2D {
   attribute DOMMatrix currentTransform;
   undefined drawWidgetAsOnScreen(Window window);
   undefined drawWindow(Window window, double x, double y, double w, double h, DOMString bgColor, optional byte flags);
+
+  // Non-standard legacy aliases in WebKit/Blink
+  // https://chromium.googlesource.com/chromium/src/+/ce07cefc396fdf4016e731b4e75592586785c6b0
+  // https://trac.webkit.org/changeset/221605/webkit
+  undefined clearShadow();
+  undefined drawImageFromRect(HTMLImageElement image, optional unrestricted float sx, optional unrestricted float sy, optional unrestricted float sw, optional unrestricted float sh, optional unrestricted float dx, optional unrestricted float dy, optional unrestricted float dw, optional unrestricted float dh, optional DOMString compositeOperation);
+  undefined setAlpha(unrestricted float alpha);
+  undefined setCompositeOperation(DOMString compositeOperation);
+  undefined setFillColor(DOMString color, optional unrestricted float alpha);
+  undefined setFillColor(unrestricted float c, unrestricted float m, unrestricted float y, unrestricted float k, unrestricted float a);
+  undefined setFillColor(unrestricted float grayLevel, optional unrestricted float alpha);
+  undefined setFillColor(unrestricted float r, unrestricted float g, unrestricted float b, unrestricted float a);
+  undefined setLineCap(DOMString cap);
+  undefined setLineJoin(DOMString join);
+  undefined setLineWidth(unrestricted float width);
+  undefined setMiterLimit(unrestricted float limit);
+  undefined setStrokeColor(DOMString color, optional unrestricted float alpha);
+  undefined setStrokeColor(unrestricted float c, unrestricted float m, unrestricted float y, unrestricted float k, unrestricted float a);
+  undefined setStrokeColor(unrestricted float grayLevel, optional unrestricted float alpha);
+  undefined setStrokeColor(unrestricted float r, unrestricted float g, unrestricted float b, unrestricted float a);
+  undefined setShadow(unrestricted float width, unrestricted float height, unrestricted float blur, optional DOMString color, optional unrestricted float alpha);
+  undefined setShadow(unrestricted float width, unrestricted float height, unrestricted float blur, unrestricted float c, unrestricted float m, unrestricted float y, unrestricted float k, unrestricted float a);
+  undefined setShadow(unrestricted float width, unrestricted float height, unrestricted float blur, unrestricted float grayLevel, optional unrestricted float alpha);
+  undefined setShadow(unrestricted float width, unrestricted float height, unrestricted float blur, unrestricted float r, unrestricted float g, unrestricted float b, unrestricted float a);
+
+  // https://bugzilla.mozilla.org/show_bug.cgi?id=1294360
+  attribute object mozCurrentTransform;
+  attribute object mozCurrentTransformInverse;
+
+  // https://bugzilla.mozilla.org/show_bug.cgi?id=1228850
+  attribute boolean mozImageSmoothingEnabled;
+
+  // https://bugzilla.mozilla.org/show_bug.cgi?id=1294362
+  attribute DOMString mozTextStyle;
 
   // https://trac.webkit.org/changeset/96626/webkit
   attribute object webkitLineDash;
@@ -48,7 +172,7 @@ partial interface CanvasRenderingContext2D {
 };
 
 partial interface CloseEvent {
-  CloseEvent initCloseEvent();
+  undefined initCloseEvent();
 };
 
 // https://hg.mozilla.org/mozilla-central/file/a451ebba378efcce0967e508a8107ab14dd5edcb/dom/webidl/DataTransfer.webidl#l44
@@ -79,6 +203,10 @@ partial interface Document {
   readonly attribute DOMString origin;
 };
 
+partial interface DragEvent {
+  undefined initDragEvent();
+};
+
 partial interface Element {
   // https://github.com/mdn/browser-compat-data/issues/6683
   readonly attribute DOMString name;
@@ -94,6 +222,10 @@ partial interface Element {
   attribute EventHandler onwebkitanimationiteration;
   attribute EventHandler onwebkitanimationstart;
   attribute EventHandler onwebkittransitionend;
+};
+
+partial interface EventSource {
+  readonly attribute USVString URL;
 };
 
 partial interface mixin GlobalEventHandlers {
@@ -119,6 +251,10 @@ partial interface mixin GlobalEventHandlers {
 partial interface mixin DocumentAndElementEventHandlers {
   attribute EventHandler onrejectionhandled;
   attribute EventHandler onunhandledrejection;
+};
+
+partial interface HashChangeEvent {
+  undefined initHashChangeEvent();
 };
 
 partial interface HTMLAnchorElement {
@@ -300,10 +436,8 @@ partial interface HTMLLinkElement {
 };
 
 partial interface HTMLMediaElement {
-  attribute MediaController controller;
   readonly attribute DOMTokenList controlsList;
   readonly attribute double initialTime;
-  attribute DOMString mediaGroup;
   attribute EventHandler onerror;
   Promise<undefined> seekToNextFrame();
 
@@ -456,14 +590,35 @@ partial interface HTMLVideoElement {
   attribute boolean webkitWirelessVideoPlaybackDisabled;
 };
 
-partial interface TextTrackCue {
-  // https://github.com/WebKit/WebKit/blob/8c5122c3b04d94856c54fb5e686c014a123143f7/Source/WebCore/html/track/TextTrackCue.idl#L48
-  DocumentFragment getCueAsHTML();
+partial interface ImageBitmapRenderingContext {
+  // https://github.com/whatwg/html/pull/1101
+  undefined transferImageBitmap(ImageBitmap? bitmap);
 };
 
 partial interface Navigator {
   // https://developer.mozilla.org/en-US/docs/Web/API/Navigator/mozIsLocallyAvailable
   boolean mozIsLocallyAvailable(DOMString url, boolean ifOffline);
+};
+
+partial interface Plugin {
+  readonly attribute DOMString version;
+};
+
+partial interface TextTrackCue {
+  // https://github.com/WebKit/WebKit/blob/8c5122c3b04d94856c54fb5e686c014a123143f7/Source/WebCore/html/track/TextTrackCue.idl#L48
+  DocumentFragment getCueAsHTML();
+};
+
+partial interface TextTrackCueList {
+   TextTrackCue item(unsigned long index);
+};
+
+partial interface TextTrackList {
+   TextTrack item(unsigned long index);
+};
+
+partial interface VideoTrackList {
+   VideoTrack item(unsigned long index);
 };
 
 partial interface Window {
@@ -525,6 +680,6 @@ partial interface Window {
   readonly attribute long long mozPaintCount;
 };
 
-partial interface Plugin {
-  readonly attribute DOMString version;
+partial interface WebSocket {
+  readonly attribute USVString URL;
 };
