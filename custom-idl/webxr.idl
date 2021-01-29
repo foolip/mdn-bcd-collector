@@ -1,0 +1,4 @@
+partial interface XRSystem {
+  // https://www.w3.org/TR/2019/WD-webxr-20190521/#xr-interface
+  Promise<undefined> supportsSession(XRSessionMode mode);
+};
