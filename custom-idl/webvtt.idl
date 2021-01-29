@@ -1,0 +1,26 @@
+// https://dvcs.w3.org/hg/text-tracks/raw-file/default/608toVTT/region.html#extension-of-the-html-texttrack-api
+// https://github.com/WebKit/WebKit/blob/552c0afa0b0ba5c56b3f9a36b35d1ffaa4b5f99d/Source/WebCore/html/track/TextTrack.idl#L53
+partial interface TextTrack {
+  // https://github.com/w3c/webvtt/pull/31
+  attribute VTTRegionList? regions;
+  undefined addRegion(VTTRegion region);
+  undefined removeRegion(VTTRegion region);
+};
+
+partial interface VTTCue {
+  // https://github.com/w3c/webvtt/pull/31
+  attribute DOMString regionId;
+};
+
+partial interface VTTRegion {
+  // https://github.com/WebKit/WebKit/blob/552c0afa0b0ba5c56b3f9a36b35d1ffaa4b5f99d/Source/WebCore/html/track/VTTRegion.idl#L34
+  readonly attribute TextTrack track;
+};
+
+// https://github.com/w3c/webvtt/pull/31
+[Exposed=Window]
+interface VTTRegionList {
+  readonly attribute unsigned long length;
+  getter VTTRegion (unsigned long index);
+  VTTRegion? getRegionById(DOMString id);
+};
