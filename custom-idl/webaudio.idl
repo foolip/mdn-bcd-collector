@@ -94,6 +94,9 @@ partial interface PannerNode {
 [Exposed=Window]
 interface webkitAudioContext : EventTarget {
   constructor();
+
+  // https://github.com/WebKit/WebKit/blob/3a0fbaf18766c2d42757e3926687ed4676d0aacd/Source/WebCore/Modules/webaudio/WebKitAudioContext.idl#L56
+  readonly attribute unsigned long activeSourceCount;
 };
 
 [Exposed=Window]
