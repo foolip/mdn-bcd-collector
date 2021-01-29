@@ -37,6 +37,9 @@ partial interface KeyboardEvent {
 };
 
 partial interface MouseEvent {
+  // https://github.com/mozilla/gecko-dev/blob/06dbf167c94b89fb06f74a2d1b1c5d3ccabceb92/dom/webidl/MouseEvent.webidl#L101
+  undefined initNSMouseEvent();
+
   readonly attribute Node fromElement;
   readonly attribute Node toElement;
   readonly attribute long layerX;
