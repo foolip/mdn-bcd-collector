@@ -5,3 +5,9 @@ partial interface DeviceMotionEvent {
 partial interface DeviceOrientationEvent {
   undefined initDeviceOrientationEvent();
 };
+
+partial interface Window {
+  // https://bugzilla.mozilla.org/show_bug.cgi?id=1689631
+  // https://github.com/mozilla/gecko-dev/blob/ee110bca4d6cc8892bfca099c15ebb0fc8814816/dom/webidl/Window.webidl#L494
+  attribute EventHandler onabsolutedeviceorientation;
+};
