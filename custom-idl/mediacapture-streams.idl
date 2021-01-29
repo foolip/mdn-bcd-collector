@@ -1,3 +1,30 @@
+interface LocalMediaStream : MediaStream {
+  undefined stop();
+};
+
+partial interface MediaStream {
+  readonly attribute boolean ended;
+  readonly attribute DOMString label;
+  attribute EventHandler onactive;
+  attribute EventHandler oninactive;
+  undefined stop();
+};
+
+interface MediaStreamEvent : Event {
+  constructor();
+  readonly attribute MediaStream stream;
+};
+
+partial interface MediaStreamTrack {
+  any getSources();
+
+  // https://github.com/w3c/mediacapture-main/pull/576
+  attribute EventHandler onoverconstrained;
+
+  readonly attribute boolean _readonly;
+  readonly attribute boolean remote;
+};
+
 partial interface Navigator {
   // Gecko has navigator.mozGetUserMedia
   undefined mozGetUserMedia(MediaStreamConstraints constraints,
@@ -9,8 +36,15 @@ partial interface Navigator {
                           NavigatorUserMediaErrorCallback errorCallback);
 };
 
-interface LocalMediaStream : MediaStream {
-  undefined stop();
+// https://github.com/w3c/mediacapture-main/pull/576
+[Exposed=Window]
+interface OverconstrainedErrorEvent : Event {
+  constructor (DOMString type, optional OverconstrainedErrorEventInit eventInitDict = {});
+  readonly attribute OverconstrainedError? error;
+};
+
+dictionary OverconstrainedErrorEventInit : EventInit {
+  OverconstrainedError? error = null;
 };
 
 [Exposed=Window]

@@ -61,6 +61,10 @@ partial interface ConstantSourceNode {
   undefined stop(optional double when = 0);
 };
 
+partial interface MediaStreamTrackAudioSourceNode {
+  readonly attribute any mediaStreamTrack;
+};
+
 partial interface OscillatorNode {
   const unsigned short SINE = 0;
   const unsigned short SQUARE = 1;
