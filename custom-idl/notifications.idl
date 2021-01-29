@@ -1,0 +1,12 @@
+partial interface Notification {
+  // https://github.com/whatwg/notifications/commit/11f25cccb909adc7e8b5569f8e5e20c482234860
+  // https://github.com/mozilla/gecko-dev/blob/06dbf167c94b89fb06f74a2d1b1c5d3ccabceb92/dom/webidl/Notification.webidl#L27
+  // https://bugzilla.mozilla.org/show_bug.cgi?id=1689565
+  static Promise<sequence<Notification>> get(optional GetNotificationOptions filter = {});
+
+  // https://github.com/WebKit/WebKit/blob/226e0bffa2f0c87d04fb84a6c63472f9a2b8c122/Source/WebCore/Modules/notifications/Notification.idl#L70
+  undefined show();
+
+  // https://github.com/WebKit/WebKit/blob/226e0bffa2f0c87d04fb84a6c63472f9a2b8c122/Source/WebCore/Modules/notifications/Notification.idl#L73
+  attribute EventHandler ondisplay;
+};
