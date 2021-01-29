@@ -30,6 +30,7 @@ partial interface RTCPeerConnection {
   RTCDTMFSender createDTMFSender(MediaStreamTrack track);
 
   attribute EventHandler onaddstream;
+  attribute EventHandler onaddtrack;
   attribute EventHandler onremovestream;
   attribute EventHandler onidentityresult;
   attribute EventHandler onidpassertionerror;
@@ -42,6 +43,9 @@ partial interface RTCPeerConnectionIceErrorEvent {
 };
 
 partial interface RTCRtpReceiver {
+  // https://henbos.github.io/webrtc-timing/#rtcrtpreceiver-interface
+  attribute double? playoutDelayHint;
+
   readonly attribute RTCDtlsTransport rtcpTransport;
 };
 
@@ -53,6 +57,23 @@ partial interface RTCRtpTransceiver {
   readonly attribute boolean stopped;
 };
 
+// https://github.com/mozilla/gecko-dev/blob/dd042f25a8da58d565d199dcfebe4f34db64863c/dom/webidl/WebrtcDeprecated.webidl
+[Exposed=Window]
+interface mozRTCIceCandidate : RTCIceCandidate {
+  constructor();
+};
+
+[Exposed=Window]
+interface mozRTCPeerConnection : RTCPeerConnection {
+  constructor();
+};
+
+[Exposed=Window]
+interface mozRTCSessionDescription : RTCSessionDescription {
+  constructor();
+};
+
+// https://chromium.googlesource.com/chromium/src/+/6ad4130faeeead16d8bf620c4387283da143ac09/third_party/blink/renderer/modules/peerconnection/rtc_peer_connection.idl#68
 [Exposed=Window]
 interface webkitRTCPeerConnection {
   constructor();
