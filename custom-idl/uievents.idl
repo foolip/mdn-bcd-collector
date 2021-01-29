@@ -22,6 +22,18 @@ partial interface KeyboardEvent {
 
   // https://github.com/mozilla/gecko-dev/blob/b9384b091e901b3283ce24b6610e80699d79fd06/dom/webidl/KeyboardEvent.webidl#L75
   undefined initKeyEvent();
+
+  // https://www.w3.org/TR/2003/WD-DOM-Level-3-Events-20030331/events.html#Events-KeyboardEvent
+  readonly attribute boolean altGraphKey;
+
+  // https://www.w3.org/TR/2009/WD-DOM-Level-3-Events-20090908/#events-Events-KeyboardEvent-keyIdentifier
+  readonly attribute DOMString keyIdentifier;
+
+  // https://www.w3.org/TR/2003/WD-DOM-Level-3-Events-20030331/events.html#Events-KeyboardEvent
+  readonly attribute unsigned long keyLocation;
+
+  // https://www.w3.org/TR/2014/WD-DOM-Level-3-Events-20140925/#widl-KeyboardEvent-which
+  readonly attribute unsigned long which;
 };
 
 partial interface MouseEvent {
