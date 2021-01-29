@@ -13,6 +13,12 @@ interface mixin LocalFileSystem {
   const unsigned short PERSISTENT = 1;
   undefined requestFileSystem(unsigned short type, unsigned long long size, FileSystemCallback successCallback, optional ErrorCallback errorCallback);
   undefined resolveLocalFileSystemURL(DOMString url, FileSystemEntryCallback successCallback, optional ErrorCallback errorCallback);
+
+  // https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/modules/filesystem/window_file_system.idl;drc=5df9ffaab218ea7230087f40aef46d22fa766c93
+  // https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/modules/filesystem/dedicated_worker_global_scope_file_system.idl;drc=5df9ffaab218ea7230087f40aef46d22fa766c93
+  // https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/modules/filesystem/shared_worker_global_scope_file_system.idl;drc=5df9ffaab218ea7230087f40aef46d22fa766c93
+  undefined webkitRequestFileSystem(unsigned short type, unsigned long long size, FileSystemCallback successCallback, optional ErrorCallback errorCallback);
+  undefined webkitResolveLocalFileSystemURL(DOMString url, FileSystemEntryCallback successCallback, optional ErrorCallback errorCallback);
 };
 Window includes LocalFileSystem;
 WorkerGlobalScope includes LocalFileSystem;
@@ -22,6 +28,11 @@ interface mixin LocalFileSystemSync {
   // const unsigned short PERSISTENT = 1;
   FileSystemSync requestFileSystemSync(unsigned short type, unsigned long long size);
   EntrySync resolveLocalFileSystemSyncURL(DOMString url);
+
+  // https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/modules/filesystem/dedicated_worker_global_scope_file_system.idl;drc=5df9ffaab218ea7230087f40aef46d22fa766c93
+  // https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/modules/filesystem/shared_worker_global_scope_file_system.idl;drc=5df9ffaab218ea7230087f40aef46d22fa766c93
+  FileSystemSync webkitRequestFileSystemSync(unsigned short type, unsigned long long size);
+  EntrySync webkitResolveLocalFileSystemSyncURL(DOMString url);
 };
 WorkerGlobalScope includes LocalFileSystemSync;
 

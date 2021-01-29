@@ -1,0 +1,9 @@
+// https://www.w3.org/TR/webdatabase/#sqltransaction
+[Exposed=Window]
+interface SQLTransaction {
+  undefined executeSql(DOMString sqlStatement, optional sequence<any> arguments = [], optional any callback, optional any errorCallback);
+};
+
+partial interface Window {
+  object openDatabase(DOMString name, DOMString version, DOMString displayName, unsigned long estimatedSize, optional any creationCallback);
+};

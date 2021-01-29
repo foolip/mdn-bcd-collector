@@ -2,3 +2,7 @@
 partial interface MediaSource {
   attribute EventHandler onsourceclosed;
 };
+
+partial interface SourceBufferList {
+  SourceBufferList item(unsigned long index);
+};
