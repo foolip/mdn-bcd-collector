@@ -1,4 +1,5 @@
 const fs = require('fs');
+const bcd = require('@mdn/browser-compat-data');
 const tests = require('./tests.json');
 
 const filename = process.argv[2];
@@ -10,16 +11,18 @@ function capitalize(str) {
 }
 
 const outLines = lines.map(line => {
-    const [iface, member] = line.substr(6).split(' ')[0].split('#');
-    let haveTest = false;
-    if (`api.${iface}.${member}` in tests) {
-        haveTest = true;
-    } else if (`api.${capitalize(iface)}.${member}` in tests) {
-        haveTest = true;
-    } else if (iface === 'Window' && `api.${member}` in tests) {
-        haveTest = true;
+    const [owner, member] = line.substr(6).split(' ')[0].split('#');
+    let checkIt = false;
+    if (`api.${owner}.${member}` in tests) {
+        checkIt = true;
+    } else if (`api.${capitalize(owner)}.${member}` in tests) {
+        checkIt = true;
+    } else if (owner === 'Window' && `api.${member}` in tests) {
+        checkIt = true;
+    } else if (owner in bcd.javascript.builtins && member in bcd.javascript.builtins[owner]) {
+        checkIt = true;
     }
-    const check = line.startsWith('- [x] ') || haveTest ? 'x' : ' ';
+    const check = line.startsWith('- [x] ') || checkIt ? 'x' : ' ';
     return `- [${check}] ${line.substr(6)}`;
 });
 outLines.push('');
