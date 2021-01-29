@@ -601,6 +601,9 @@ partial interface MessageEvent {
 };
 
 partial interface Navigator {
+  // https://github.com/WebKit/WebKit/blob/88278b55563e5ccdc0b3419c6c391c3becc19e40/Source/WebCore/page/Navigator.idl#L30
+  undefined getStorageUpdates();
+
   // https://github.com/whatwg/html/pull/4009
   [SameObject] readonly attribute UserActivation userActivation;
 
