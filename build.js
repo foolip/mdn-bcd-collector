@@ -15,8 +15,8 @@
 'use strict';
 
 const fs = require('fs-extra');
+const idl = require('@webref/idl');
 const path = require('path');
-const WebIDL2 = require('webidl2');
 const prettier = require('prettier');
 
 const customCSS = require('./custom-css.json');
@@ -440,57 +440,7 @@ const getName = (node) => {
   }
 };
 
-const allowDuplicates = (dfn, member) => {
-  switch (dfn.name) {
-    // TODO: sort this out spec-side
-    case 'SVGAElement':
-      return member.name === 'href';
-    // TODO: handle non-conflicting [Exposed] and drop this
-    case 'WebGLRenderingContext':
-    case 'WebGL2RenderingContext':
-      return member.name === 'canvas';
-  }
-  return false;
-};
-
 const validateIDL = (ast) => {
-  const ignoreRules = new Set([
-    'constructor-member',
-    'dict-arg-default',
-    'no-nointerfaceobject',
-    'require-exposed'
-  ]);
-
-  const validations = WebIDL2.validate(ast);
-
-  // Monkey-patching support for https://github.com/w3c/webidl2.js/issues/484
-  for (const dfn of ast) {
-    if (!dfn.members || dfn.members.length == 0) {
-      continue;
-    }
-    const names = new Set();
-    for (const member of dfn.members) {
-      if (!member.name) {
-        continue;
-      }
-      if (member.type === 'operation') {
-        // Overloading across partials/mixins are checked in mergeMembers.
-        continue;
-      }
-      if (allowDuplicates(dfn, member)) {
-        continue;
-      }
-      if (!names.has(member.name)) {
-        names.add(member.name);
-      } else {
-        validations.push({
-          ruleName: 'no-duplicate-member',
-          message: `Validation error: Duplicate member ${member.name} in ${dfn.type} ${dfn.name}`
-        });
-      }
-    }
-  }
-
   // Validate that there are no unknown types. There are types in lots of
   // places in the AST (interface members, arguments, return types) and rather
   // than trying to cover them all, walk the whole AST looking for "idlType".
@@ -554,30 +504,14 @@ const validateIDL = (ast) => {
     'Date', // https://github.com/WICG/deprecation-reporting/pull/7
     'PermissionName', // TODO: https://github.com/w3c/webref/issues/62
     'Region', // https://github.com/w3c/csswg-drafts/issues/5519
+    'void', // TODO: drop when 'replace-void' is no longer ignored
     'WindowProxy' // https://html.spec.whatwg.org/multipage/window-object.html#windowproxy
   ]);
   for (const usedType of usedTypes) {
     if (!knownTypes.has(usedType) && !ignoreTypes.has(usedType)) {
-      validations.push({
-        ruleName: 'unknown-type',
-        message: `Validation error: Unknown type ${usedType}`
-      });
+      throw new Error(`Unknown type ${usedType}`);
     }
   }
-
-  const validationErrors = [];
-  for (const {ruleName, message} of validations) {
-    if (ignoreRules.has(ruleName)) {
-      continue;
-    }
-    validationErrors.push(`${message} [${ruleName}]`);
-  }
-
-  if (validationErrors.length) {
-    throw new Error(`Validation errors:\n\n${validationErrors.join('\n')}`);
-  }
-
-  return true;
 };
 
 const buildIDLTests = (ast) => {
@@ -692,8 +626,8 @@ const buildIDLTests = (ast) => {
   return tests;
 };
 
-const buildIDL = (webrefIDLs, customIDLs) => {
-  const ast = flattenIDL(webrefIDLs, customIDLs);
+const buildIDL = (specIDLs, customIDLs) => {
+  const ast = flattenIDL(specIDLs, customIDLs);
   validateIDL(ast);
   return buildIDLTests(ast);
 };
@@ -789,7 +723,8 @@ const copyResources = async () => {
 
 /* istanbul ignore next */
 const build = async (specData, customCSS) => {
-  const IDLTests = buildIDL(specData.webref.idl, specData.custom.idl);
+  const specIDLs = await idl.parseAll();
+  const IDLTests = buildIDL(specIDLs, specData.custom.idl);
   const CSSTests = buildCSS(specData.webref.css, customCSS);
   const tests = Object.assign({}, IDLTests, CSSTests);
 
