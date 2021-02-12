@@ -818,9 +818,18 @@ describe('build', () => {
   });
 
   it('buildIDL', () => {
-    const specData = require('../../spec-data');
-    assert.typeOf(buildIDL(specData.webref.idl, specData.custom.idl), 'object');
-  }).timeout(5000);
+    const specIDLs = {
+      first: WebIDL2.parse(`interface DOMError {};`),
+      second: WebIDL2.parse(`interface XSLTProcessor {};`)
+    };
+
+    const customIDLs = {
+      second: WebIDL2.parse(`partial interface XSLTProcessor { undefined reset(); };`)
+    };
+
+    const tests = buildIDL(specIDLs, customIDLs);
+    assert.containsAllKeys(tests, ['api.XSLTProcessor.reset']);
+  });
 
   describe('flattenIDL', () => {
     const customIDLs = {
@@ -1881,63 +1890,6 @@ describe('build', () => {
       expect(() => {
         validateIDL(ast);
       }).to.not.throw();
-    });
-
-    it('no members', () => {
-      const ast = WebIDL2.parse(`interface Node {};`);
-      expect(() => {
-        validateIDL(ast);
-      }).to.not.throw();
-    });
-
-    it('overloaded operator', () => {
-      const ast = WebIDL2.parse(`interface Node {
-        boolean contains(Node otherNode);
-        boolean contains(Node otherNode, boolean deepEqual);
-      };`);
-      expect(() => {
-        validateIDL(ast);
-      }).to.not.throw();
-    });
-
-    it('nameless member', () => {
-      const ast = WebIDL2.parse(`interface Node {
-        iterable<Node>;
-      };`);
-      expect(() => {
-        validateIDL(ast);
-      }).to.not.throw();
-    });
-
-    /* Remove when issues are resolved spec-side */
-    it('allowed duplicates', () => {
-      const ast = WebIDL2.parse(`interface SVGAElement {
-        attribute DOMString href;
-        attribute DOMString href;
-      };
-
-      interface WebGLRenderingContext {
-        attribute object canvas;
-        attribute object canvas;
-      };
-
-      interface WebGL2RenderingContext {
-        attribute object canvas;
-        attribute object canvas;
-      };`);
-      expect(() => {
-        validateIDL(ast);
-      }).to.not.throw();
-    });
-
-    it('disallowed duplicates', () => {
-      const ast = WebIDL2.parse(`interface Node {
-        attribute DOMString type;
-        attribute DOMString type;
-      };`);
-      expect(() => {
-        validateIDL(ast);
-      }).to.throw();
     });
 
     it('unknown types', () => {

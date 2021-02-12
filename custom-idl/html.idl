@@ -312,7 +312,7 @@ partial interface HTMLButtonElement {
 
 partial interface HTMLCanvasElement {
   // https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/mozFetchAsStream
-  undefined mozFetchAsStream(undefinedFunction callback, optional DOMString type = "image/png");
+  undefined mozFetchAsStream(VoidFunction callback, optional DOMString type = "image/png");
   // https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/mozGetAsFile
   File mozGetAsFile(DOMString name, optional DOMString type = "image/png");
   // https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/mozOpaque

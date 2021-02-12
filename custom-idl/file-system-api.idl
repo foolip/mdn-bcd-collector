@@ -47,7 +47,7 @@ partial interface FileSystemEntry {
   undefined moveTo(FileSystemDirectoryEntry parent, optional DOMString name, optional FileSystemEntryCallback successCallback, optional ErrorCallback errorCallback);
   undefined copyTo(FileSystemDirectoryEntry parent, optional DOMString name, optional FileSystemEntryCallback successCallback, optional ErrorCallback errorCallback);
   DOMString toURL();
-  undefined remove(undefinedFunction successCallback, optional ErrorCallback errorCallback);
+  undefined remove(VoidFunction successCallback, optional ErrorCallback errorCallback);
 };
 
 partial interface FileSystemFileEntry {
@@ -68,7 +68,7 @@ interface DirectoryEntry {
   DirectoryReader createReader();
   undefined getFile(DOMString path, optional FileSystemFlags options, optional FileSystemEntryCallback successCallback, optional ErrorCallback errorCallback);
   undefined getDirectory(DOMString path, optional FileSystemFlags options, optional FileSystemEntryCallback successCallback, optional ErrorCallback errorCallback);
-  undefined removeRecursively(undefinedFunction successCallback, optional ErrorCallback errorCallback);
+  undefined removeRecursively(VoidFunction successCallback, optional ErrorCallback errorCallback);
 };
 
 [Exposed=Window,Worker]
