@@ -1310,7 +1310,7 @@
       "__test": "return bcd.testObjectName(instance, 'SVGVKernElement');"
     },
     "Text": {
-      "__base": "var el = document.createElement('p'); el.innerText = 'foo bar'; var instance = el.childNodes[0];"
+      "__base": "var el = document.createElement('p'); el.innerHTML = 'text'; var instance = el.childNodes[0];"
     },
     "TextDecoder": {
       "__base": "var instance = new TextDecoder();"
