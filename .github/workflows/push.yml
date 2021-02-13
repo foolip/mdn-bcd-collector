@@ -30,11 +30,11 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - uses: actions/checkout@v2
-    - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+    - uses: google-github-actions/setup-gcloud@master
       with:
-        service_account_email: ${{ secrets.GCP_SA_EMAIL }}
-        service_account_key: ${{ secrets.GCP_SA_KEY }}
         project_id: mdn-bcd-collector
+        service_account_key: ${{ secrets.GCP_SA_KEY }}
+        export_default_credentials: true
     - run: echo "$SECRETS_JSON" | base64 --decode > secrets.json
       env:
         SECRETS_JSON: ${{ secrets.SECRETS_JSON }}
