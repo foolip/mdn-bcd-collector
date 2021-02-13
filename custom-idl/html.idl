@@ -435,6 +435,13 @@ partial interface HTMLLinkElement {
   attribute DOMString nonce;
 };
 
+partial interface HTMLMarqueeElement {
+  // https://github.com/whatwg/html/pull/6343
+  attribute EventHandler onbounce;
+  attribute EventHandler onfinish;
+  attribute EventHandler onstart;
+};
+
 partial interface HTMLMediaElement {
   readonly attribute DOMTokenList controlsList;
   readonly attribute double initialTime;
