@@ -86,9 +86,11 @@
       "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createAnalyser();"
     },
     "AudioParam": {
+      "__resources": ["audioContext"],
       "__base": "<%api.GainNode:gainNode%> var instance = gainNode.gain;"
     },
     "AudioParamMap": {
+      "__resources": ["audioContext"],
       "__base": "<%api.AudioWorkletNode:worklet%> promise.then(function(worklet) {return worklet.parameters});"
     },
     "AudioTrack": {
@@ -849,6 +851,7 @@
       "__base": "var instance = window.screen;"
     },
     "ScriptProcessorNode": {
+      "__resources": ["audioContext"],
       "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createProcessor();"
     },
     "Selection": {
