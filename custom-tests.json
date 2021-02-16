@@ -697,9 +697,6 @@
     "MediaSession": {
       "__base": "var instance = navigator.mediaSession;"
     },
-    "MediaSettingsRange": {
-      "__base": "<%api.ImageCapture:imagecapture%> var promise = imagecapture.then(function(ic) {return ic.track.getSettings()});"
-    },
     "MediaSource": {
       "__base": "var instance = new MediaSource();",
       "isTypeSupported": "return 'isTypeSupported' in MediaSource;"
