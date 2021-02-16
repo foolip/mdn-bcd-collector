@@ -86,10 +86,8 @@
       "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createAnalyser();"
     },
     "AudioParam": {
+      "__resources": ["audioContext"],
       "__base": "<%api.GainNode:gainNode%> var instance = gainNode.gain;"
-    },
-    "AudioParamMap": {
-      "__base": "<%api.AudioWorkletNode:worklet%> promise.then(function(worklet) {return worklet.parameters});"
     },
     "AudioTrack": {
       "__resources": ["audio-blip"],
@@ -849,7 +847,8 @@
       "__base": "var instance = window.screen;"
     },
     "ScriptProcessorNode": {
-      "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createProcessor();"
+      "__resources": ["audioContext"],
+      "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createScriptProcessor();"
     },
     "Selection": {
       "__base": "var instance = window.getSelection();"
