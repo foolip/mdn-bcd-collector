@@ -58,23 +58,6 @@ const cookieSession = (req, res, next) => {
   next();
 };
 
-/* istanbul ignore next */
-const catchError = (err, res, method) => {
-  logger.error(err);
-  res.status(500);
-
-  let errorToDisplay = err;
-  if (process.env.NODE_ENV === 'production') {
-    errorToDisplay = 'Server error';
-  }
-
-  if (method === 'json') {
-    res.json({error: errorToDisplay});
-  } else {
-    res.send(errorToDisplay);
-  }
-};
-
 const createReport = (results, req) => {
   return {__version: appVersion, results, userAgent: req.get('User-Agent')};
 };
@@ -118,7 +101,7 @@ app.post('/api/get', (req, res) => {
   res.redirect(`/tests/${testSelection}${query ? `?${query}`: ''}`);
 });
 
-app.post('/api/results', (req, res) => {
+app.post('/api/results', (req, res, next) => {
   if (!req.is('json')) {
     res.status(400).end();
     return;
@@ -136,18 +119,17 @@ app.post('/api/results', (req, res) => {
 
   storage.put(req.sessionID, forURL, req.body).then(() => {
     res.status(201).json(response);
-  }).catch(/* istanbul ignore next */ (err) => catchError(err, res));
+  }).catch(next);
 });
 
-app.get('/api/results', (req, res) => {
+app.get('/api/results', (req, res, next) => {
   storage.getAll(req.sessionID)
       .then((results) => {
         res.status(200).json(createReport(results, req));
-      })
-      .catch(/* istanbul ignore next */ (err) => catchError(err, res));
+      }).catch(next);
 });
 
-app.post('/api/results/export/github', (req, res) => {
+app.post('/api/results/export/github', (req, res, next) => {
   storage.getAll(req.sessionID)
       .then(async (results) => {
         if (Object.entries(results).length === 0) {
@@ -157,7 +139,6 @@ app.post('/api/results/export/github', (req, res) => {
 
         const report = createReport(results, req);
 
-        /* istanbul ignore next */
         if (req.query.mock) {
           res.send('DISABLED');
           return;
@@ -166,13 +147,12 @@ app.post('/api/results/export/github', (req, res) => {
         /* istanbul ignore next */
         const response = await github.exportAsPR(report);
         /* istanbul ignore next */
-        if (response) {
-          res.send(response.html_url);
-        } else {
-          res.status(500).send('Server error');
+        if (!response || !response.html_url) {
+          throw new Error('No pull request URL in GitHub response');
         }
-      })
-      .catch(/* istanbul ignore next */ (err) => catchError(err, res, 'text'));
+        /* istanbul ignore next */
+        res.send(response.html_url);
+      }).catch(next);
 });
 
 // Test Resources
