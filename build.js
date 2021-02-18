@@ -151,38 +151,26 @@ const getCustomTestCSS = (name) => {
       compileCustomTest(customTests.css.properties[name]);
 };
 
-const compileTestCode = (test, prefix = '', ownerPrefix = '') => {
-  if (typeof(test) === 'string') {
-    return test.replace(/PREFIX(.)/g, (_, p1) => (
-      `${prefix}${prefix ? p1.toUpperCase() : p1}`
-    ));
+const compileTestCode = (test) => {
+  if (typeof test === 'string') {
+    return test;
   }
 
-  const rawproperty = test.property.replace(/(Symbol|constructor)\./, '');
-  const property = prefix ?
-    prefix + rawproperty.charAt(0).toUpperCase() +
-    rawproperty.slice(1) : rawproperty;
-  const ownerAsProperty = prefix ?
-      prefix + test.owner.charAt(0).toUpperCase() +
-      test.owner.slice(1) : test.owner;
-  const owner = ownerPrefix ?
-      ownerPrefix + test.owner.charAt(0).toUpperCase() +
-      test.owner.slice(1) : test.owner;
+  const property = test.property.replace(/(Symbol|constructor)\./, '');
 
   if (test.property.startsWith('constructor')) {
     return `bcd.testConstructor("${property}");`;
   }
   if (test.owner === 'CSS.supports') {
-    const thisPrefix = prefix ? `-${prefix}-` : '';
-    return `CSS.supports("${thisPrefix}${test.property}", "inherit")`;
+    return `CSS.supports("${test.property}", "inherit")`;
   }
   if (test.property.startsWith('Symbol.')) {
-    return `"Symbol" in self && "${test.property.replace('Symbol.', '')}" in Symbol && ${test.property} in ${ownerAsProperty}.prototype`;
+    return `"Symbol" in self && "${test.property.replace('Symbol.', '')}" in Symbol && ${test.property} in ${test.owner}.prototype`;
   }
-  return `"${property}" in ${owner}`;
+  return `"${property}" in ${test.owner}`;
 };
 
-const compileTest = (test, prefixesToTest = ['']) => {
+const compileTest = (test) => {
   if (!('raw' in test) && 'tests' in test) {
     return test;
   }
@@ -195,46 +183,28 @@ const compileTest = (test, prefixesToTest = ['']) => {
   };
 
   if (!Array.isArray(test.raw.code)) {
-    for (const prefix of prefixesToTest) {
-      const code = compileTestCode(test.raw.code, prefix);
-
-      if (!newTest.tests.some((item) => item.code === code)) {
-        newTest.tests.push({
-          code: code,
-          prefix: prefix
-        });
-      }
-    }
+    const code = compileTestCode(test.raw.code);
+    newTest.tests.push({code});
   } else if (test.category == 'css') {
-    for (const prefix of prefixesToTest) {
-      const code = `${compileTestCode(
-          test.raw.code[0], prefix
-      )} ${test.raw.combinator} ${compileTestCode(
-          test.raw.code[1], prefix
-      )}`;
-
-      newTest.tests.push({
-        code: code,
-        prefix: prefix
-      });
-    }
+    const code = `${compileTestCode(
+        test.raw.code[0]
+    )} ${test.raw.combinator} ${compileTestCode(
+        test.raw.code[1]
+    )}`;
+    newTest.tests.push({code});
   } else {
-    for (const prefix1 of prefixesToTest) {
-      const parentCode = compileTestCode(test.raw.code[0], prefix1);
-
-      for (const prefix2 of prefixesToTest) {
-        const childCode = compileTestCode(test.raw.code[1], prefix2, prefix1);
-        const code = `${parentCode} ${test.raw.combinator} ${childCode}`;
-
-        if (!newTest.tests.some((item) => item.code === code)) {
-          newTest.tests.push({
-            code: code,
-            prefix: prefix2
-          });
-        }
-      }
-    }
+    const parentCode = compileTestCode(test.raw.code[0]);
+    const childCode = compileTestCode(test.raw.code[1]);
+    const code = `${parentCode} ${test.raw.combinator} ${childCode}`;
+    newTest.tests.push({code});
   }
+
+  // TODO: Remove prefix and simplify the structure of tests.json. It has
+  // been left in to make a build simplification a no-op for the server.
+  if (newTest.tests.length !== 1) {
+    throw new Error('More than one test generated');
+  }
+  newTest.tests[0].prefix = '';
 
   return newTest;
 };
