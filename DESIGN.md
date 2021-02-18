@@ -229,17 +229,6 @@ the JSON results with a test-defined structure.
 Status `201 Created` if the results were saved. The results are put in
 server-side session storage.
 
-As a convenience, the next test is included in response:
-
-```json
-{
-  "next": "http://mdn-bcd-collector.appspot.com/bcd/api/next/test.html"
-}
-```
-
-This is same as the response of `/api/tests?after=...&limit=1`. If there are no
-more tests or that request errored there is no `next` field.
-
 ### List results
 
 ```http
@@ -271,15 +260,11 @@ None, the results are taken from session storage.
 
 #### Response
 
-```json
-{
-  "url": "https://api.github.com/repos/foolip/mdn-bcd-results/pulls/1",
-  "html_url": "https://github.com/foolip/mdn-bcd-results/pull/1"
-}
-```
+The URL of the created pull request is returned as plain text:
 
-The full response of the [underlying GitHub API](https://developer.github.com/v3/pulls/#create-a-pull-request)
-is returned, but `url` and `html_url` are the most useful fields.
+```
+https://github.com/foolip/mdn-bcd-results/pull/1
+```
 
 Status `400 Bad Request` is returned if no results have been reported to
 `/api/results` in this session.
@@ -293,19 +278,11 @@ the server keeps track of which tests to run, accepts results from each test as
 it run, and combines all of the results at the end. A random session id, stored
 in a cookie, is used to get results back.
 
-To start a run, the browser fetches the full list of tests from `/api/tests`
-and navigates to the first test.
-
-On each page, the harness waits for results and posts them to `/api/results`.
-The next test to run is included in the response from `/api/results`, and when
-there is no next text the browser navigates to a page (`/results/`) where the
-results can be submitted as a pull request to a GitHub repository.
+When the tests have finished running, a link to `/export` will be presented, allowing the results to be exported.
 
 ### WebDriver
 
-When running the tests using WebDriver, the WebDriver client keeps track of
-which tests to run and stores the results. The server in this case can be
-entirely static.
+Running the tests using WebDriver works in much the same way as when running manually, except the results are downloaded via `/api/results` and saved locally.
 
 ## Reports
 
