@@ -199,12 +199,10 @@ const compileTest = (test) => {
     newTest.tests.push({code});
   }
 
-  // TODO: Remove prefix and simplify the structure of tests.json. It has
-  // been left in to make a build simplification a no-op for the server.
+  // TODO: Simplify the structure of tests.json since there's only one test.
   if (newTest.tests.length !== 1) {
     throw new Error('More than one test generated');
   }
-  newTest.tests[0].prefix = '';
 
   return newTest;
 };

@@ -20,13 +20,13 @@ const Tests = require('../../tests');
 
 const testDatabase = {
   'api.AbortController': {
-    tests: [{code: '"AbortController" in self', prefix: ''}],
+    tests: [{code: '"AbortController" in self'}],
     category: 'api',
     resources: {},
     exposure: ['Window', 'Worker', 'ServiceWorker']
   },
   'api.AbortController.signal': {
-    tests: [{code: '"AbortController" in self && "signal" in AbortController.prototype', prefix: ''}],
+    tests: [{code: '"AbortController" in self && "signal" in AbortController.prototype'}],
     category: 'api',
     resources: {
       'audio-blip': {
@@ -37,13 +37,13 @@ const testDatabase = {
     exposure: ['Window', 'Worker']
   },
   'css.properties.font-family': {
-    tests: [{code: '"fontFamily" in document.body.style || CSS.supports("font-family", "inherit")', prefix: ''}],
+    tests: [{code: '"fontFamily" in document.body.style || CSS.supports("font-family", "inherit")'}],
     category: 'css',
     resources: {},
     exposure: ['Window']
   },
   'javascript.builtins.array': {
-    tests: [{code: '[1, 2, 3]', prefix: ''}],
+    tests: [{code: '[1, 2, 3]'}],
     category: 'javascript',
     resources: {},
     exposure: ['JavaScript']
@@ -101,18 +101,18 @@ describe('Tests', () => {
   describe('getTests', () => {
     it('individual endpoint', () => {
       assert.deepEqual(tests.getTests('api.AbortController'), [
-        {ident: 'api.AbortController', tests: [{code: '"AbortController" in self', prefix: ''}], exposure: 'Window', resources: {}},
-        {ident: 'api.AbortController', tests: [{code: '"AbortController" in self', prefix: ''}], exposure: 'Worker', resources: {}},
-        {ident: 'api.AbortController', tests: [{code: '"AbortController" in self', prefix: ''}], exposure: 'ServiceWorker', resources: {}},
-        {ident: 'api.AbortController.signal', tests: [{code: '"AbortController" in self && "signal" in AbortController.prototype', prefix: ''}], exposure: 'Window', resources: {'audio-blip': {type: 'audio', src: '/media/blip.mp3'}}},
-        {ident: 'api.AbortController.signal', tests: [{code: '"AbortController" in self && "signal" in AbortController.prototype', prefix: ''}], exposure: 'Worker', resources: {'audio-blip': {type: 'audio', src: '/media/blip.mp3'}}}
+        {ident: 'api.AbortController', tests: [{code: '"AbortController" in self'}], exposure: 'Window', resources: {}},
+        {ident: 'api.AbortController', tests: [{code: '"AbortController" in self'}], exposure: 'Worker', resources: {}},
+        {ident: 'api.AbortController', tests: [{code: '"AbortController" in self'}], exposure: 'ServiceWorker', resources: {}},
+        {ident: 'api.AbortController.signal', tests: [{code: '"AbortController" in self && "signal" in AbortController.prototype'}], exposure: 'Window', resources: {'audio-blip': {type: 'audio', src: '/media/blip.mp3'}}},
+        {ident: 'api.AbortController.signal', tests: [{code: '"AbortController" in self && "signal" in AbortController.prototype'}], exposure: 'Worker', resources: {'audio-blip': {type: 'audio', src: '/media/blip.mp3'}}}
       ]);
     });
 
     it('limited scope', () => {
       assert.deepEqual(tests.getTests('api.AbortController', 'Window'), [
-        {ident: 'api.AbortController', tests: [{code: '"AbortController" in self', prefix: ''}], exposure: 'Window', resources: {}},
-        {ident: 'api.AbortController.signal', tests: [{code: '"AbortController" in self && "signal" in AbortController.prototype', prefix: ''}], exposure: 'Window', resources: {'audio-blip': {type: 'audio', src: '/media/blip.mp3'}}}
+        {ident: 'api.AbortController', tests: [{code: '"AbortController" in self'}], exposure: 'Window', resources: {}},
+        {ident: 'api.AbortController.signal', tests: [{code: '"AbortController" in self && "signal" in AbortController.prototype'}], exposure: 'Window', resources: {'audio-blip': {type: 'audio', src: '/media/blip.mp3'}}}
       ]);
     });
   });

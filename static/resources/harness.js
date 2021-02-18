@@ -184,7 +184,6 @@
   // {
   //   "name": "api.Attr.localName",
   //   "result": true,
-  //   "prefix": "",
   //   "info": {
   //     "code": "'localName' in Attr.prototype",
   //     "exposure": "Window"
@@ -218,9 +217,6 @@
 
     if (result.result !== false) {
       result.info.code = data.tests[i].code;
-      if (data.tests[i].prefix) {
-        result.info.prefix = data.tests[i].prefix;
-      }
     } else {
       result.info.code = data.tests[0].code;
     }
@@ -624,9 +620,6 @@
         var resultValueEl = document.createElement('span');
         resultValueEl.className = 'result-value result-value-' + resultValue;
         resultValueEl.innerHTML = resultValue;
-        if (result.prefix) {
-          resultValueEl.innerHTML += ' (' + result.prefix + ' prefix)';
-        }
         resultSummaryEl.appendChild(resultValueEl);
         resultEl.appendChild(resultSummaryEl);
 
