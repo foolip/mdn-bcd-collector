@@ -448,72 +448,28 @@ describe('build', () => {
   });
 
   describe('compileTestCode', () => {
-    describe('string', () => {
-      const test = 'PREFIXfoo';
-
-      it('normal', () => {
-        assert.equal(compileTestCode(test), 'foo');
-      });
-
-      it('prefix', () => {
-        assert.equal(compileTestCode(test, 'webkit'), 'webkitFoo');
-      });
+    it('string', () => {
+      assert.equal(compileTestCode('a string'), 'a string');
     });
 
-    describe('constructor', () => {
+    it('constructor', () => {
       const test = {property: 'constructor.AudioContext', owner: 'AudioContext'};
-
-      it('normal', () => {
-        assert.equal(compileTestCode(test), 'bcd.testConstructor("AudioContext");');
-      });
-
-      it('prefix', () => {
-        assert.equal(compileTestCode(test, 'moz'), 'bcd.testConstructor("mozAudioContext");');
-      });
+      assert.equal(compileTestCode(test), 'bcd.testConstructor("AudioContext");');
     });
 
-    describe('CSS.supports', () => {
+    it('CSS.supports', () => {
       const test = {property: 'font-weight', owner: 'CSS.supports'};
-
-      it('normal', () => {
-        assert.equal(compileTestCode(test), 'CSS.supports("font-weight", "inherit")');
-      });
-
-      it('prefix', () => {
-        assert.equal(compileTestCode(test, 'webkit'), 'CSS.supports("-webkit-font-weight", "inherit")');
-      });
+      assert.equal(compileTestCode(test), 'CSS.supports("font-weight", "inherit")');
     });
 
-    describe('Symbol', () => {
+    it('Symbol', () => {
       const test = {property: 'Symbol.iterator', owner: 'DOMMatrixReadOnly'};
-
-      it('normal', () => {
-        assert.equal(compileTestCode(test), '"Symbol" in self && "iterator" in Symbol && Symbol.iterator in DOMMatrixReadOnly.prototype');
-      });
-
-      it('prefix', () => {
-        assert.equal(compileTestCode(test, 'moz'), '"Symbol" in self && "iterator" in Symbol && Symbol.iterator in mozDOMMatrixReadOnly.prototype');
-      });
+      assert.equal(compileTestCode(test), '"Symbol" in self && "iterator" in Symbol && Symbol.iterator in DOMMatrixReadOnly.prototype');
     });
 
-    describe('other', () => {
+    it('namespace', () => {
       const test = {property: 'log', owner: 'console'};
-
-      it('normal', () => {
-        assert.equal(compileTestCode(test), '"log" in console');
-      });
-
-      it('prefix', () => {
-        assert.equal(compileTestCode(test, 'webkit'), '"webkitLog" in console');
-      });
-
-      it('owner prefix', () => {
-        assert.equal(compileTestCode(test, '', 'moz'), '"log" in mozConsole');
-      });
-
-      it('prefix + owner prefix', () => {
-        assert.equal(compileTestCode(test, 'webkit', 'moz'), '"webkitLog" in mozConsole');
-      });
+      assert.equal(compileTestCode(test), '"log" in console');
     });
   });
 
@@ -545,77 +501,8 @@ describe('build', () => {
       });
     });
 
-    it('with prefixes, single piece', () => {
-      const rawTest = {
-        raw: {
-          code: {property: 'Document', owner: 'self'},
-          combinator: '&&'
-        },
-        category: 'api',
-        resources: {},
-        exposure: ['Window']
-      };
-
-      assert.deepEqual(compileTest(rawTest, ['', 'WebKit']), {
-        tests: [
-          {
-            code: '"Document" in self',
-            prefix: ''
-          },
-          {
-            code: '"WebKitDocument" in self',
-            prefix: 'WebKit'
-          }
-        ],
-        category: 'api',
-        resources: {},
-        exposure: ['Window']
-      });
-    });
-
-    describe('with prefixes, double piece', () => {
-      it('first', () => {
-        const rawTest = {
-          raw: {
-            code: [
-              {property: 'Document', owner: 'self'},
-              {property: 'body', owner: `Document.prototype`}
-            ],
-            combinator: '&&'
-          },
-          category: 'api',
-          resources: {},
-          exposure: ['Window']
-        };
-
-        assert.deepEqual(compileTest(rawTest, ['', 'WebKit']), {
-          tests: [
-            {
-              code: '"Document" in self && "body" in Document.prototype',
-              prefix: ''
-            },
-            {
-              code: '"Document" in self && "WebKitBody" in Document.prototype',
-              prefix: 'WebKit'
-            },
-            {
-              code: '"WebKitDocument" in self && "body" in WebKitDocument.prototype',
-              prefix: ''
-            },
-            {
-              code: '"WebKitDocument" in self && "WebKitBody" in WebKitDocument.prototype',
-              prefix: 'WebKit'
-            }
-          ],
-          category: 'api',
-          resources: {},
-          exposure: ['Window']
-        });
-      });
-    });
-
-    it('prefixes for custom tests with no prefix support', () => {
-      describe('one item', () => {
+    describe('custom tests', () => {
+      it('one item', () => {
         const rawTest = {
           raw: {
             code: 'foo',
@@ -626,7 +513,7 @@ describe('build', () => {
           exposure: ['Window']
         };
 
-        assert.deepEqual(compileTest(rawTest, ['', 'WebKit']), {
+        assert.deepEqual(compileTest(rawTest), {
           tests: [
             {
               code: 'foo',
@@ -639,7 +526,7 @@ describe('build', () => {
         });
       });
 
-      describe('two items', () => {
+      it('two items', () => {
         const rawTest = {
           raw: {
             code: ['foo', 'foo'],
@@ -650,7 +537,7 @@ describe('build', () => {
           exposure: ['Window']
         };
 
-        assert.deepEqual(compileTest(rawTest, ['', 'WebKit']), {
+        assert.deepEqual(compileTest(rawTest), {
           tests: [
             {
               code: 'foo && foo',
@@ -771,37 +658,6 @@ describe('build', () => {
           {
             code: '"fontFamily" in document.body.style || CSS.supports("font-family", "inherit")',
             prefix: ''
-          }
-        ],
-        category: 'css',
-        resources: {},
-        exposure: ['Window']
-      });
-    });
-
-    it('CSS with prefix', () => {
-      const rawTest = {
-        raw: {
-          code: [
-            {property: 'fontFamily', owner: 'document.body.style'},
-            {property: 'font-family', owner: 'CSS.supports'}
-          ],
-          combinator: '||'
-        },
-        category: 'css',
-        resources: {},
-        exposure: ['Window']
-      };
-
-      assert.deepEqual(compileTest(rawTest, ['', 'webkit']), {
-        tests: [
-          {
-            code: '"fontFamily" in document.body.style || CSS.supports("font-family", "inherit")',
-            prefix: ''
-          },
-          {
-            code: '"webkitFontFamily" in document.body.style || CSS.supports("-webkit-font-family", "inherit")',
-            prefix: 'webkit'
           }
         ],
         category: 'css',
