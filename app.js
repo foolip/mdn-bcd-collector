@@ -29,7 +29,7 @@ const {parseUA} = require('./ua-parser');
 
 const PORT = process.env.PORT || 8080;
 
-const appversion = process.env.GAE_VERSION === 'production' ? require('./package.json').version : 'Dev';
+const appVersion = process.env.GAE_VERSION === 'production' ? require('./package.json').version : 'Dev';
 
 /* istanbul ignore next */
 const secrets = process.env.NODE_ENV === 'test' ?
@@ -76,7 +76,7 @@ const catchError = (err, res, method) => {
 };
 
 const createReport = (results, req) => {
-  return {__version: appversion, results, userAgent: req.get('User-Agent')};
+  return {__version: appVersion, results, userAgent: req.get('User-Agent')};
 };
 
 const app = express();
@@ -96,7 +96,7 @@ app.use(express.static('static'));
 app.use(express.static('generated'));
 
 app.use((req, res, next) => {
-  app.locals.appversion = appversion;
+  app.locals.appVersion = appVersion;
   app.locals.browser = parseUA(req.get('User-Agent'), bcdBrowsers);
   next();
 });
@@ -230,7 +230,7 @@ app.use((req, res) => {
 
 module.exports = {
   app,
-  version: appversion
+  version: appVersion
 };
 
 /* istanbul ignore if */
