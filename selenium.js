@@ -28,7 +28,7 @@ const chalk = require('chalk');
 const {Listr} = require('listr2');
 const stringify = require('json-stable-stringify');
 
-const github = require('./github')();
+const {getReportMeta} = require('./exporter');
 const secrets = require('./secrets.json');
 
 const resultsDir = path.join(__dirname, '..', 'mdn-bcd-results');
@@ -283,7 +283,7 @@ const run = async (browser, version, os, ctx, task) => {
 
       if (!ctx.testenv) {
         const report = JSON.parse(reportString);
-        const {filename} = github.getReportMeta(report);
+        const {filename} = getReportMeta(report);
         await fs.writeFile(path.join(resultsDir, filename), stringify(report));
       }
     } catch (e) {

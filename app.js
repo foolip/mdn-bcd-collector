@@ -23,6 +23,7 @@ const cookieParser = require('cookie-parser');
 const uniqueString = require('unique-string');
 const expressLayouts = require('express-ejs-layouts');
 
+const exporter = require('./exporter');
 const logger = require('./logger');
 const {parseResults} = require('./results');
 const storage = require('./storage').getStorage();
@@ -36,13 +37,6 @@ const appVersion = process.env.GAE_VERSION === 'production' ? require('./package
 const secrets = process.env.NODE_ENV === 'test' ?
     require('./secrets.sample.json') :
     require('./secrets.json');
-
-/* istanbul ignore next */
-const github = require('./github')(
-  secrets.github.token ?
-  {auth: `token ${secrets.github.token}`} :
-  {}
-);
 
 const Tests = require('./tests');
 const tests = new Tests({
@@ -145,13 +139,13 @@ app.post('/api/results/export/github', (req, res, next) => {
         }
 
         /* istanbul ignore next */
-        const response = await github.exportAsPR(report);
+        const data = await exporter.exportAsPR(report, secrets.github.token);
         /* istanbul ignore next */
-        if (!response || !response.html_url) {
+        if (!data || !data.html_url) {
           throw new Error('No pull request URL in GitHub response');
         }
         /* istanbul ignore next */
-        res.send(response.html_url);
+        res.send(data.html_url);
       }).catch(next);
 });
 

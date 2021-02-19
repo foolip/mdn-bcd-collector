@@ -61,46 +61,32 @@ const RESULT = {
 };
 
 describe('GitHub export', () => {
-  afterEach(() => sinon.restore());
+  const octokit = new Octokit();
+  const exporter = proxyquire('../../exporter', {
+    '@octokit/rest': {
+      /* eslint-disable-next-line prefer-arrow/prefer-arrow-functions */
+      Octokit: function() {
+        return octokit;
+      }
+    }
+  });
 
   describe('happy path', async () => {
-    let octokit;
-    const github = proxyquire('../../github', {
-      '@octokit/rest': {
-        /* eslint-disable-next-line prefer-arrow/prefer-arrow-functions */
-        Octokit: function(options) {
-          assert(octokit === undefined);
-          octokit = new Octokit(options);
-          return octokit;
-        }
-      }
-    })();
-    let mock;
-
-    beforeEach(() => {
-      mock = {
-        octokit: sinon.mock(octokit),
-        git: sinon.mock(octokit.git),
-        repos: sinon.mock(octokit.repos),
-        pulls: sinon.mock(octokit.pulls)
-      };
-    });
-
     // eslint-disable-next-line guard-for-in
     for (const i in REPORTS) {
       it(`Report #${Number(i) + 1}`, async () => {
         const {report, expected} = REPORTS[i];
 
-        mock.octokit.expects('auth').once().resolves({type: 'mocked'});
+        sinon.mock(octokit).expects('auth').once().resolves({type: 'mocked'});
 
-        mock.git.expects('createRef').once().withArgs({
+        sinon.mock(octokit.git).expects('createRef').once().withArgs({
           owner: 'foolip',
           ref: `refs/heads/collector/${expected.slug}`,
           repo: 'mdn-bcd-results',
           sha: '753c6ed8e991e9729353a63d650ff0f5bd902b69'
         });
 
-        mock.repos.expects('createOrUpdateFileContents')
+        sinon.mock(octokit.repos).expects('createOrUpdateFileContents')
             .once().withArgs(sinon.match({
               owner: 'foolip',
               repo: 'mdn-bcd-results',
@@ -110,39 +96,27 @@ describe('GitHub export', () => {
               branch: `collector/${expected.slug}`
             }));
 
-        mock.pulls.expects('create').once().withArgs({
+        sinon.mock(octokit.pulls).expects('create').once().withArgs({
           owner: 'foolip',
           repo: 'mdn-bcd-results',
           title: expected.title,
           head: `collector/${expected.slug}`,
-          body: github.createBody(github.getReportMeta(report)),
+          body: exporter.createBody(exporter.getReportMeta(report)),
           base: 'main'
         }).resolves({data: RESULT});
 
-        const result = await github.exportAsPR(report);
+        const result = await exporter.exportAsPR(report, 'mocked');
         assert.equal(result, RESULT);
       });
     }
 
     afterEach(() => {
-      mock.octokit.restore();
-      mock.git.restore();
-      mock.repos.restore();
-      mock.pulls.restore();
+      sinon.restore();
     });
   });
 
   it('no auth token', async () => {
-    const github = proxyquire('../../github', {
-      '@octokit/rest': {
-        /* eslint-disable-next-line prefer-arrow/prefer-arrow-functions */
-        Octokit: function(options) {
-          return new Octokit(options);
-        }
-      }
-    })();
-
-    const result = await github.exportAsPR(REPORTS[0].report);
-    assert.equal(result, false);
+    const result = await exporter.exportAsPR(REPORTS[0].report);
+    assert.equal(result, null);
   });
 });
