@@ -115,10 +115,8 @@ app.post('/api/results', (req, res, next) => {
     return;
   }
 
-  const response = {};
-
   storage.put(req.sessionID, forURL, req.body).then(() => {
-    res.status(201).json(response);
+    res.status(201).end();
   }).catch(next);
 });
 
