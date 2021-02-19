@@ -66,7 +66,7 @@ describe('/api/results', () => {
         .query({for: testURL})
         .send({x: 1});
     assert.equal(res.status, 201);
-    assert.deepEqual(res.body, {});
+    assert.equal(res.text, '');
   });
 
   it('list results after valid', async () => {
