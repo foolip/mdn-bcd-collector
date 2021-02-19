@@ -56,15 +56,32 @@ describe('/api/results', () => {
   const testURL = `http://localhost:8080/tests/api`;
   const testURL2 = `https://host.test/tests/css`;
 
+  const testResults = [
+    {
+      exposure: 'Worker',
+      name: 'api.Blob',
+      result: false
+    }
+  ];
+
+  const modifiedResults = [
+    {
+      exposure: 'Worker',
+      name: 'api.Blob',
+      result: true
+    }
+  ];
+
   it('GitHub export, no results', async () => {
     const res = await agent.post('/api/results/export/github').send();
     assert.equal(res.status, 412);
   });
 
+
   it('submit valid results', async () => {
     const res = await agent.post('/api/results')
         .query({for: testURL})
-        .send({x: 1});
+        .send(testResults);
     assert.equal(res.status, 201);
     assert.equal(res.text, '');
   });
@@ -74,15 +91,15 @@ describe('/api/results', () => {
     assert.equal(res.status, 200);
     assert.deepEqual(res.body, {
       __version: version,
-      results: {[testURL]: {x: 1}},
+      results: {[testURL]: testResults},
       userAgent: userAgent
     });
   });
 
-  it('submit duplicate results', async () => {
+  it('submit modified results', async () => {
     const res = await agent.post('/api/results')
         .query({for: testURL})
-        .send({x: 2});
+        .send(modifiedResults);
     assert.equal(res.status, 201);
   });
 
@@ -91,7 +108,7 @@ describe('/api/results', () => {
     assert.equal(res.status, 200);
     assert.deepEqual(res.body, {
       __version: version,
-      results: {[testURL]: {x: 2}},
+      results: {[testURL]: modifiedResults},
       userAgent: userAgent
     });
   });
@@ -99,9 +116,9 @@ describe('/api/results', () => {
   it('submit valid results for new URL', async () => {
     const res = await agent.post('/api/results')
         .query({for: testURL2})
-        .send({y: 3});
+        .send(testResults);
     assert.equal(res.status, 201);
-    assert.deepEqual(res.body, {});
+    assert.deepEqual(res.text, '');
   });
 
   it('list results after new valid', async () => {
@@ -109,7 +126,7 @@ describe('/api/results', () => {
     assert.equal(res.status, 200);
     assert.deepEqual(res.body, {
       __version: version,
-      results: {[testURL]: {x: 2}, [testURL2]: {y: 3}},
+      results: {[testURL]: modifiedResults, [testURL2]: testResults},
       userAgent: userAgent
     });
   });
