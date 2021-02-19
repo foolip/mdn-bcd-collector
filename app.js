@@ -24,6 +24,7 @@ const uniqueString = require('unique-string');
 const expressLayouts = require('express-ejs-layouts');
 
 const logger = require('./logger');
+const {parseResults} = require('./results');
 const storage = require('./storage').getStorage();
 const {parseUA} = require('./ua-parser');
 
@@ -103,19 +104,20 @@ app.post('/api/get', (req, res) => {
 
 app.post('/api/results', (req, res, next) => {
   if (!req.is('json')) {
-    res.status(400).end();
+    res.status(400).send('body should be JSON');
     return;
   }
 
-  let forURL;
+  let url;
+  let results;
   try {
-    forURL = new URL(req.query.for).toString();
-  } catch (err) {
-    res.status(400).end();
+    [url, results] = parseResults(req.query.for, req.body);
+  } catch (e) {
+    res.status(400).send(e.message);
     return;
   }
 
-  storage.put(req.sessionID, forURL, req.body).then(() => {
+  storage.put(req.sessionID, url, results).then(() => {
     res.status(201).end();
   }).catch(next);
 });

@@ -218,7 +218,26 @@ POST /api/results
 ```
 
 The `Content-Type` should be `application/json` and the post body should be
-the JSON results with a test-defined structure.
+an array of test results:
+
+```json
+[
+  {
+    "name": "api.Attr",
+    "exposure": "Window",
+    "result": true
+  },
+  {
+    "name": "api.Blob",
+    "exposure": "Worker",
+    "result": null,
+    "message": "[exception message]"
+  }
+]
+```
+
+Status `400 Bad Request` is returned if the results do not match the expected
+format.
 
 #### Parameters
 
