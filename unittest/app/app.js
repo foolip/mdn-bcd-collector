@@ -72,9 +72,9 @@ describe('/api/results', () => {
     }
   ];
 
-  it('GitHub export, no results', async () => {
+  it('GitHub export with no token', async () => {
     const res = await agent.post('/api/results/export/github').send();
-    assert.equal(res.status, 412);
+    assert.equal(res.status, 403);
   });
 
 
@@ -136,11 +136,6 @@ describe('/api/results', () => {
         .query({for: testURL})
         .send('my bad results');
     assert.equal(res.status, 400);
-  });
-
-  it('GitHub export with results', async () => {
-    const res = await agent.post('/api/results/export/github?mock=true').send();
-    assert.equal(res.status, 200);
   });
 });
 
@@ -218,7 +213,8 @@ describe('rendered pages', () => {
   it('/export', async () => {
     const res = await agent.get(`/export`);
     assert.equal(res.status, 200);
-    assert.include(res.text, 'Download results JSON');
+    assert.include(res.text, 'Download');
+    assert.include(res.text, 'Create GitHub PR');
   });
 
   it('404', async () => {

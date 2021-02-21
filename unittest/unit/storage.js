@@ -47,6 +47,10 @@ class FakeBucket {
   }
 
   file(name) {
+    const existing = this._files.get(name);
+    if (existing) {
+      return existing;
+    }
     return new FakeFile(this, name);
   }
 
@@ -120,6 +124,15 @@ describe('storage', () => {
       it('getAll without put', async () => {
         const data = await storage.getAll(SESSION_ID);
         assert.deepStrictEqual(data, {});
+      });
+
+      it('saveFile + readFile', async () => {
+        const filename = 'test.json';
+        const bytes = Buffer.from('{}');
+        await storage.saveFile(filename, bytes);
+        const readBytes = await storage.readFile(filename);
+        assert.instanceOf(readBytes, Buffer);
+        assert.equal(readBytes.toString(), '{}');
       });
     });
   }

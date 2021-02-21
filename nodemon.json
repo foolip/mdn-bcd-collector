@@ -1,6 +1,7 @@
 {
   "verbose": true,
   "ignore": [
+    "download/*",
     "generated/*",
     "static/*",
     "views/*",

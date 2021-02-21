@@ -123,29 +123,31 @@ app.get('/api/results', (req, res, next) => {
       }).catch(next);
 });
 
-app.post('/api/results/export/github', (req, res, next) => {
+app.post('/api/results/export', (req, res, next) => {
   storage.getAll(req.sessionID)
       .then(async (results) => {
-        if (Object.entries(results).length === 0) {
-          res.status(412).end();
-          return;
-        }
-
         const report = createReport(results, req);
+        const {filename, buffer} = exporter.getReportMeta(report);
 
-        if (req.query.mock) {
-          res.send('DISABLED');
-          return;
-        }
+        await storage.saveFile(filename, buffer);
+        res.send({
+          filename,
+          url: `/download/${filename}`
+        });
+      }).catch(next);
+});
 
-        /* istanbul ignore next */
-        const data = await exporter.exportAsPR(report, secrets.github.token);
-        /* istanbul ignore next */
-        if (!data || !data.html_url) {
-          throw new Error('No pull request URL in GitHub response');
-        }
-        /* istanbul ignore next */
-        res.send(data.html_url);
+app.post('/api/results/export/github', (req, res, next) => {
+  const token = secrets.github.token;
+  if (!token) {
+    res.status(403).send('GitHub token for export unavailable');
+    return;
+  }
+  storage.getAll(req.sessionID)
+      .then(async (results) => {
+        const report = createReport(results, req);
+        const {filename, url} = await exporter.exportAsPR(report, token);
+        res.send({filename, url});
       }).catch(next);
 });
 
@@ -165,6 +167,15 @@ app.get('/', (req, res) => {
     selenium: req.query.selenium,
     ignore: req.query.ignore
   });
+});
+
+app.get('/download/:filename', (req, res, next) => {
+  storage.readFile(req.params.filename)
+      .then((data) => {
+        res.setHeader('content-type', 'application/json;charset=UTF-8');
+        res.setHeader('content-disposition', 'attachment');
+        res.send(data);
+      }).catch(next);
 });
 
 app.get('/export', (req, res) => {

@@ -56,10 +56,6 @@ const REPORTS = [
   }
 ];
 
-const RESULT = {
-  html_url: 'https://github.com/foolip/mdn-bcd-results/pull/42'
-};
-
 describe('GitHub export', () => {
   const octokit = new Octokit();
   const exporter = proxyquire('../../exporter', {
@@ -103,10 +99,15 @@ describe('GitHub export', () => {
           head: `collector/${expected.slug}`,
           body: exporter.createBody(exporter.getReportMeta(report)),
           base: 'main'
-        }).resolves({data: RESULT});
+        }).resolves({data: {
+          html_url: 'https://github.com/foolip/mdn-bcd-results/pull/42'
+        }});
 
         const result = await exporter.exportAsPR(report, 'mocked');
-        assert.equal(result, RESULT);
+        assert.deepEqual(result, {
+          filename: `${expected.slug}.json`,
+          url: 'https://github.com/foolip/mdn-bcd-results/pull/42'
+        });
       });
     }
 

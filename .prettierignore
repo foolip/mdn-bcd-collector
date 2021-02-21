@@ -1,5 +1,6 @@
 .nyc_output/
 coverage/
+download/
 generated/
 node_modules/
 tests.json
