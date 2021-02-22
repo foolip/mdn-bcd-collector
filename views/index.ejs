@@ -1,5 +1,5 @@
 <%- contentFor('body') %>
-<h1 id="title"><img src="/favicon/favicon-96x96.png" /> mdn-bcd-collector <span class="version">v<%- appVersion %></span></h1>
+<h1 id="title"><img src="/favicon/favicon-96x96.png"> mdn-bcd-collector <span class="version">v<%- appVersion %></span></h1>
 <p id="subtitle">Web API and CSS property feature detections to assist the <a href="https://github.com/mdn/browser-compat-data">@mdn/browser-compat-data</a> project</p>
 
 <div id="run-tests" class="paper">
@@ -12,9 +12,9 @@
           <option value="<%- test %>"></option>
         <% }); %>
       </datalist>
-      <input id="test-selection" name="testSelection" list="tests" placeholder="All Tests" />
+      <input id="test-selection" name="testSelection" list="tests" placeholder="All Tests">
     </div>
-    <br />
+    <br>
     <div id="limit-exposure-box">
       <label for="limitExposure"><span class="mdi mdi-lock"></span> Limit Exposure:</label>
       <select id="limit-exposure" name="limitExposure">
@@ -26,8 +26,8 @@
       </select>
     </div>
     <% if (selenium) { %>
-      <input id="selenium" name="selenium" type="hidden" value="true" />
-      <input id="ignore" name="ignore" type="hidden" value="<%-ignore%>" />
+      <input id="selenium" name="selenium" type="hidden" value="true">
+      <input id="ignore" name="ignore" type="hidden" value="<%-ignore%>">
     <% } %>
   </form>
 </div>
@@ -36,23 +36,23 @@
   <h2>Supported Browsers</h2>
   <div class="compat-table">
     <div class="compat-table-entry">
-      <img src="/browser-logos/chrome.png" /><p>Chrome 1+</p>
+      <img src="/browser-logos/chrome.png"><p>Chrome 1+</p>
     </div>
     <div class="compat-table-entry">
-      <img src="/browser-logos/edge.png" /><p>Edge 12+</p>
+      <img src="/browser-logos/edge.png"><p>Edge 12+</p>
     </div>
     <div class="compat-table-entry">
-      <img src="/browser-logos/firefox.png" /><p>Firefox 1+</p>
+      <img src="/browser-logos/firefox.png"><p>Firefox 1+</p>
     </div>
     <div class="compat-table-separator"></div>
     <div class="compat-table-entry">
-      <img src="/browser-logos/ie.png" /><p>Internet Explorer 6+</p>
+      <img src="/browser-logos/ie.png"><p>Internet Explorer 6+</p>
     </div>
     <div class="compat-table-entry">
-      <img src="/browser-logos/opera.png" /><p>Opera 9.5+</p>
+      <img src="/browser-logos/opera.png"><p>Opera 9.5+</p>
     </div>
     <div class="compat-table-entry">
-      <img src="/browser-logos/safari.png" /><p>Safari 3+</p>
+      <img src="/browser-logos/safari.png"><p>Safari 3+</p>
     </div>
   </div>
 </div>
