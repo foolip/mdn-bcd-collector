@@ -11,23 +11,23 @@
   for (const [resourceId, resource] of Object.entries(resources)) {
     switch (resource.type) {
       case 'audio':
-      case 'video': 
+      case 'video':
         resourceCount += 1; %>
         <<%-resource.type%> id="resource-<%-resourceId%>">
           <% for (const src of resource.src) { %>
-            <source src="/resources/custom-tests<%-src%>" />
+            <source src="/resources/custom-tests<%-src%>">
           <% } %>
           <% if (resource.subtitles) {
             let i = 0;
             for (const sub of resource.subtitles) { %>
-            <track label="<%-sub.label%>" kind="subtitles" srclang="<%-sub.lang%>" src="/resources/custom-tests<%-sub.src%>" <% if (i == 0) { %>default<% } %> />
+            <track label="<%-sub.label%>" kind="subtitles" srclang="<%-sub.lang%>" src="/resources/custom-tests<%-sub.src%>" <% if (i == 0) { %>default<% } %>>
           <% i += 1;
             }
           } %>
         </<%-resource.type%>>
         <% break;
       case 'image': %>
-        <img id="resource-<%-resourceId%>" src="/resources/custom-tests<%-resource.src%>" />
+        <img id="resource-<%-resourceId%>" src="/resources/custom-tests<%-resource.src%>">
         <% break;
     }
   }; %>

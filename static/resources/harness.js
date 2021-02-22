@@ -74,7 +74,7 @@
 
     if (state.timedout) {
       statusElement.innerHTML = newStatus +
-            '<br />This test seems to be taking a long time; ' +
+            '<br>This test seems to be taking a long time; ' +
             'it may have crashed. Check the console for errors.';
     } else {
       statusElement.innerHTML = newStatus;
@@ -636,7 +636,7 @@
         if (result.info.code) {
           var resultCodeEl = document.createElement('code');
           resultCodeEl.className = 'result-code';
-          resultCodeEl.innerHTML = result.info.code.replace(/ /g, '&nbsp;').replace(/\n/g, '<br />');
+          resultCodeEl.innerHTML = result.info.code.replace(/ /g, '&nbsp;').replace(/\n/g, '<br>');
           resultInfoEl.appendChild(resultCodeEl);
         }
 
