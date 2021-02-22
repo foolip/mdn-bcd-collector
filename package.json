@@ -42,7 +42,7 @@
     "express": "4.17.1",
     "express-ejs-layouts": "2.5.0",
     "json-stable-stringify": "1.0.1",
-    "slugify": "1.4.6",
+    "slugify": "1.4.7",
     "ua-parser-js": "0.7.24",
     "unique-string": "2.0.0",
     "winston": "3.3.3",
