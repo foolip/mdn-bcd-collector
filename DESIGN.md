@@ -287,7 +287,31 @@ GET /api/results
 If no results have been reported to `/api/results` in this session then an
 empty object is returned.
 
+### Export results for download
+
+```http
+POST /api/results/export
+```
+
+#### Parameters
+
+None, the results are taken from session storage.
+
+#### Response
+
+```json
+{
+  "filename": "1.1.4-safari-ios-8.1-ios-8.1-dfc5c93048.json",
+  "url": "https://mdn-bcd-collector.appspot.com/download/1.1.4-safari-ios-8.1-ios-8.1-dfc5c93048.json"
+}
+```
+
+When running locally, the files will be created in the `download/` directory,
+removing the need to actually download them via the browser.
+
 ### Export results to GitHub
+
+Exporting to GitHub requires credentials typically only available in production.
 
 ```http
 POST /api/results/export/github
@@ -299,14 +323,12 @@ None, the results are taken from session storage.
 
 #### Response
 
-The URL of the created pull request is returned as plain text:
-
+```json
+{
+  "filename": "1.1.4-safari-ios-8.1-ios-8.1-dfc5c93048.json",
+  "url": "https://github.com/foolip/mdn-bcd-results/pull/1337"
+}
 ```
-https://github.com/foolip/mdn-bcd-results/pull/1
-```
-
-Status `400 Bad Request` is returned if no results have been reported to
-`/api/results` in this session.
 
 ## Running tests
 

@@ -1,12 +1,14 @@
 <%- contentFor('body') %>
-<p><span id="status">Loading page...</span> <a id="link"></a></p>
-<p>
-  <span class="mdi mdi-download"></span><a href="/api/results">Download results JSON</a><br>
-</p>
+<p id="download" hidden><a download id="download-url"><span class="mdi mdi-download"></span> Download <span id="download-filename"></span></a></p>
+<p><button id="pr-button">Create GitHub PR</button></p>
+<p id="status"></p>
+<p id="pr" hidden>GitHub PR: <a id="pr-url"></a></p>
 <script>
-function exportGitHub() {
+function runExport(endpoint, containerId, urlId, filenameId) {
   var status = document.getElementById('status');
-  var link = document.getElementById('link');
+  var container = document.getElementById(containerId);
+  var link = document.getElementById(urlId);
+  var filename = document.getElementById(filenameId);
 
   var client;
   if ('XMLHttpRequest' in self) {
@@ -20,29 +22,18 @@ function exportGitHub() {
     return;
   }
 
-  client.open('POST', '/api/results/export/github<%- mock ? '?mock=true' : '' %>', true);
+  client.open('POST', endpoint, true);
   client.send('');
-  status.innerHTML = 'Exporting...';
+  status.className = '';
   client.onreadystatechange = function() {
     if (client.readyState == 4) {
       if (client.status >= 200 && client.status <= 299) {
-        if (client.responseText == 'DISABLED') {
-          status.innerHTML = 'Mock mode; export to GitHub disabled';
-          if (status.classList) {
-            status.classList.add('warning-notice');
-          }
-        } else {
-          status.innerHTML = 'Exported to';
-          link.href = link.innerHTML = client.responseText;
-          if (status.classList) {
-            status.classList.add('success-notice');
-          }
+        var response = JSON.parse(client.responseText);
+        link.href = response.url;
+        if (filename) {
+          filename.innerHTML = response.filename;
         }
-      } else if (client.status == 412) {
-        status.innerHTML = 'No results to export';
-        if (status.classList) {
-          status.classList.add('warning-notice');
-        }
+        container.removeAttribute('hidden');
       } else {
         status.innerHTML = 'Failed to export: ' + client.responseText;
         if (status.classList) {
@@ -52,5 +43,10 @@ function exportGitHub() {
     }
   }
 }
-window.onload = exportGitHub;
+window.onload = function() {
+  runExport('/api/results/export', 'download', 'download-url', 'download-filename');
+}
+document.getElementById('pr-button').onclick = function() {
+  runExport('/api/results/export/github', 'pr', 'pr-url', null);
+}
 </script>

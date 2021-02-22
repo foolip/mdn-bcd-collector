@@ -15,6 +15,8 @@
 'use strict';
 
 const assert = require('assert');
+const fs = require('fs').promises;
+const path = require('path');
 
 const {Storage} = require('@google-cloud/storage');
 
@@ -45,6 +47,20 @@ class CloudStorage {
     }));
     return result;
   }
+
+  async saveFile(filename, data) {
+    assert(!filename.includes('..'));
+    const name = `files/${filename}`;
+    const file = this._bucket.file(name);
+    await file.save(data);
+  }
+
+  async readFile(filename) {
+    assert(!filename.includes('..'));
+    const name = `files/${filename}`;
+    const file = this._bucket.file(name);
+    return (await file.download())[0];
+  }
 }
 
 class MemoryStorage {
@@ -70,6 +86,18 @@ class MemoryStorage {
       }
     }
     return result;
+  }
+
+  async saveFile(filename, data) {
+    assert(!filename.includes('..'));
+    const p = path.join(__dirname, 'download', filename);
+    await fs.writeFile(p, data);
+  }
+
+  async readFile(filename) {
+    assert(!filename.includes('..'));
+    const p = path.join(__dirname, 'download', filename);
+    return await fs.readFile(p);
   }
 }
 

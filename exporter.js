@@ -91,7 +91,10 @@ const exportAsPR = async (report, token) => {
     base: 'main'
   });
 
-  return data;
+  return {
+    filename: meta.filename,
+    url: data.html_url
+  };
 };
 
 module.exports = {getReportMeta, createBody, exportAsPR};
