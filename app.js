@@ -150,7 +150,9 @@ app.get('/download/:filename', (req, res, next) => {
       }).catch(next);
 });
 
-app.post('/export', (req, res, next) => {
+// Accept both GET and POST requests. The form uses POST, but selenium.js
+// instead simply navigates to /export.
+app.all('/export', (req, res, next) => {
   const github = !!req.body.github;
   storage.getAll(req.sessionID)
       .then(async (results) => {
