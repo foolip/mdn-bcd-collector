@@ -1,7 +1,7 @@
 {
   "name": "mdn-bcd-collector",
   "description": "Data collection service for @mdn/browser-compat-data",
-  "version": "1.3.3",
+  "version": "2.0.0",
   "private": true,
   "license": "Apache-2.0",
   "repository": {
