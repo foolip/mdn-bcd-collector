@@ -123,34 +123,6 @@ app.get('/api/results', (req, res, next) => {
       }).catch(next);
 });
 
-app.post('/api/results/export', (req, res, next) => {
-  storage.getAll(req.sessionID)
-      .then(async (results) => {
-        const report = createReport(results, req);
-        const {filename, buffer} = exporter.getReportMeta(report);
-
-        await storage.saveFile(filename, buffer);
-        res.send({
-          filename,
-          url: `/download/${filename}`
-        });
-      }).catch(next);
-});
-
-app.post('/api/results/export/github', (req, res, next) => {
-  const token = secrets.github.token;
-  if (!token) {
-    res.status(403).send('GitHub token for export unavailable');
-    return;
-  }
-  storage.getAll(req.sessionID)
-      .then(async (results) => {
-        const report = createReport(results, req);
-        const {filename, url} = await exporter.exportAsPR(report, token);
-        res.send({filename, url});
-      }).catch(next);
-});
-
 // Test Resources
 
 // api.EventSource
@@ -178,11 +150,29 @@ app.get('/download/:filename', (req, res, next) => {
       }).catch(next);
 });
 
-app.get('/export', (req, res) => {
-  res.render('export', {
-    title: 'Export Results',
-    mock: req.query.mock
-  });
+app.post('/export', (req, res, next) => {
+  const github = !!req.body.github;
+  storage.getAll(req.sessionID)
+      .then(async (results) => {
+        const report = createReport(results, req);
+        if (github) {
+          const token = secrets.github.token;
+          const {url} = await exporter.exportAsPR(report, token);
+          res.render('export', {
+            title: 'Exported to GitHub',
+            description: url,
+            url
+          });
+        } else {
+          const {filename, buffer} = exporter.getReportMeta(report);
+          await storage.saveFile(filename, buffer);
+          res.render('export', {
+            title: 'Exported for download',
+            description: filename,
+            url: `/download/${filename}`
+          });
+        }
+      }).catch(next);
 });
 
 app.all('/tests/*', (req, res) => {

@@ -287,49 +287,6 @@ GET /api/results
 If no results have been reported to `/api/results` in this session then an
 empty object is returned.
 
-### Export results for download
-
-```http
-POST /api/results/export
-```
-
-#### Parameters
-
-None, the results are taken from session storage.
-
-#### Response
-
-```json
-{
-  "filename": "1.1.4-safari-ios-8.1-ios-8.1-dfc5c93048.json",
-  "url": "https://mdn-bcd-collector.appspot.com/download/1.1.4-safari-ios-8.1-ios-8.1-dfc5c93048.json"
-}
-```
-
-When running locally, the files will be created in the `download/` directory,
-removing the need to actually download them via the browser.
-
-### Export results to GitHub
-
-Exporting to GitHub requires credentials typically only available in production.
-
-```http
-POST /api/results/export/github
-```
-
-#### Parameters
-
-None, the results are taken from session storage.
-
-#### Response
-
-```json
-{
-  "filename": "1.1.4-safari-ios-8.1-ios-8.1-dfc5c93048.json",
-  "url": "https://github.com/foolip/mdn-bcd-results/pull/1337"
-}
-```
-
 ## Running tests
 
 ### Manually
@@ -339,12 +296,8 @@ the server keeps track of which tests to run, accepts results from each test as
 it run, and combines all of the results at the end. A random session id, stored
 in a cookie, is used to get results back.
 
-When the tests have finished running, a link to `/export` will be presented, allowing the results to be exported.
+When the tests have finished running, buttons for results download and GitHub export be presented.
 
 ### WebDriver
 
-Running the tests using WebDriver works in much the same way as when running manually, except the results are downloaded via `/api/results` and saved locally.
-
-## Reports
-
-A JSON report file is automatically generated and submitted to https://github.com/foolip/mdn-bcd-results as a pull request. A user can also download the JSON report by visiting `/api/results` (of which is linked at the end of the tests).
+Running the tests using WebDriver works in much the same way as when running manually. The results are downloaded and stored in a checkout of `mdn-bcd-results`.

@@ -66,7 +66,7 @@
     return string.indexOf(search) !== -1;
   }
 
-  function updateStatus(newStatus) {
+  function updateStatus(newStatus, className) {
     var statusElement = document.getElementById('status');
     if (!statusElement) {
       return;
@@ -78,6 +78,10 @@
             'it may have crashed. Check the console for errors.';
     } else {
       statusElement.innerHTML = newStatus;
+    }
+
+    if (className) {
+      statusElement.className = className;
     }
 
     consoleLog(statusElement.innerHTML.replace(/<br>/g, '\n'));
@@ -577,7 +581,7 @@
       }
 
       if (!client) {
-        updateStatus('Cannot upload results: XMLHttpRequest is not supported.');
+        updateStatus('Cannot upload results: XMLHttpRequest is not supported.', 'error-notice');
         return;
       }
 
@@ -587,14 +591,16 @@
       client.onreadystatechange = function() {
         if (client.readyState == 4) {
           if (client.status >= 200 && client.status <= 299) {
-            updateStatus('Results uploaded. <a href="/export" id="submit">Export results</a>');
+            var form = document.getElementById('form');
+            form.innerHTML = '<input type=submit name=download value="Export for download"> <input type=submit name=github value="Export to GitHub">';
+            updateStatus('Results uploaded.', 'success-notice');
           } else {
-            updateStatus('Failed to upload results: server error.');
+            updateStatus('Failed to upload results: server error.', 'error-notice');
           }
         }
       };
     } catch (e) {
-      updateStatus('Failed to upload results: client error.');
+      updateStatus('Failed to upload results: client error.', 'error-notice');
       consoleError(e);
     }
 
