@@ -22,13 +22,12 @@ const {
   until
 } = require('selenium-webdriver');
 const bcdBrowsers = require('@mdn/browser-compat-data').browsers;
+const fetch = require('node-fetch');
 const fs = require('fs-extra');
 const path = require('path');
 const chalk = require('chalk');
 const {Listr} = require('listr2');
-const stringify = require('json-stable-stringify');
 
-const {getReportMeta} = require('./exporter');
 const secrets = require('./secrets.json');
 
 const resultsDir = path.join(__dirname, '..', 'mdn-bcd-results');
@@ -257,7 +256,7 @@ const run = async (browser, version, os, ctx, task) => {
     await driver.wait(until.elementLocated(By.id('status')), 5000);
     statusEl = await driver.findElement(By.id('status'));
     try {
-      await driver.wait(until.elementTextContains(statusEl, 'upload'), 45000);
+      await driver.wait(until.elementTextContains(statusEl, 'uploaded'), 45000);
     } catch (e) {
       if (e.name == 'TimeoutError') {
         throw new Error('Timed out waiting for results to upload');
@@ -265,39 +264,17 @@ const run = async (browser, version, os, ctx, task) => {
 
       throw e;
     }
-    if ((await statusEl.getText()).search('Failed') !== -1) {
-      throw new Error('Results failed to upload');
-    }
 
-    try {
-      log(task, 'Attempting to download results...');
-      if (browser === 'chrome' || browser === 'firefox' ||
-        (browser === 'edge' && version >= 79)) {
-        await goToPage(driver, browser, version, `view-source:${host}/api/results`);
-      } else {
-        await goToPage(driver, browser, version, `${host}/api/results`);
-      }
-      const reportBody = await driver.wait(until.elementLocated(By.css('body')), 10000);
-      const reportString = await reportBody.getAttribute('textContent');
-      log(task, 'Saving results...');
+    log(task, 'Exporting results...');
+    await goToPage(driver, browser, version, `${host}/export`);
+    const downloadEl = await driver.findElement(By.id('download'));
+    const downloadUrl = await downloadEl.getAttribute('href');
 
-      if (!ctx.testenv) {
-        const report = JSON.parse(reportString);
-        const {filename} = getReportMeta(report);
-        await fs.writeFile(path.join(resultsDir, filename), stringify(report));
-      }
-    } catch (e) {
-      // If we can't download the results, fallback to GitHub
-      log(task, 'Uploading results to GitHub...');
-      await goToPage(driver, browser, version, `${host}/export${ctx.testenv ? '?mock=true' : ''}`);
-      statusEl = await driver.findElement(By.id('status'));
-      await driver.wait(until.elementTextContains(statusEl, 'to'));
-
-      if ((await statusEl.getText()).search('Failed') !== -1) {
-        throw new Error('Pull request failed to submit');
-      }
-
-      // warn('Exported to GitHub');
+    if (!ctx.testenv) {
+      const filename = path.basename(new URL(downloadUrl).pathname);
+      log(task, `Downloading ${filename} ...`);
+      const report = await (await fetch(downloadUrl)).buffer();
+      await fs.writeFile(path.join(resultsDir, filename), report);
     }
   } finally {
     driver.quit().catch(() => {});
