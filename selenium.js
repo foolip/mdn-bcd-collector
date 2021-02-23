@@ -192,7 +192,7 @@ const awaitPageReady = async (driver) => {
   await driver.wait(() => {
     return driver.executeScript('return document.readyState')
         .then((readyState) => (readyState === 'complete'));
-  }, 15000);
+  }, 30000);
   await driver.executeScript('return document.readyState');
 };
 
@@ -253,7 +253,7 @@ const run = async (browser, version, os, ctx, task) => {
     log(task, 'Running tests...');
     await awaitPage(driver, browser, version, `${host}/tests/${getvars}`);
 
-    await driver.wait(until.elementLocated(By.id('status')), 5000);
+    await driver.wait(until.elementLocated(By.id('status')), 30000);
     statusEl = await driver.findElement(By.id('status'));
     try {
       await driver.wait(until.elementTextContains(statusEl, 'uploaded'), 45000);
