@@ -22,6 +22,7 @@ const {
   until
 } = require('selenium-webdriver');
 const bcdBrowsers = require('@mdn/browser-compat-data').browsers;
+const compareVersions = require('compare-versions');
 const fetch = require('node-fetch');
 const fs = require('fs-extra');
 const path = require('path');
@@ -58,15 +59,13 @@ const filterVersions = (data, earliestVersion) => {
   const versions = [];
 
   for (const [version, versionData] of Object.entries(data)) {
-    if (
-      (versionData.status == 'current' || versionData.status == 'retired') &&
-      version >= earliestVersion
-    ) {
+    if ((versionData.status == 'current' || versionData.status == 'retired') &&
+        compareVersions.compare(version, earliestVersion, '>=')) {
       versions.push(version);
     }
   }
 
-  return versions.sort((a, b) => (b - a));
+  return versions.sort((a, b) => compareVersions(b, a));
 };
 
 const getSafariOS = (version) => {
@@ -130,11 +129,9 @@ const buildDriver = async (browser, version, os) => {
           Browser[browser.toUpperCase()]
       );
 
-      if (
-        service === 'browserstack' &&
-        browser === 'safari' &&
-        version === '6.1'
-      ) {
+      if (service === 'browserstack' &&
+          browser === 'safari' &&
+          version === '6.1') {
         capabilities.set(Capability.VERSION, '6.2');
       } else {
         capabilities.set(Capability.VERSION, version.split('.')[0]);
@@ -171,11 +168,9 @@ const buildDriver = async (browser, version, os) => {
 
         return driver;
       } catch (e) {
-        if (
-          e.message.startsWith('Misconfigured -- Unsupported OS/browser/version/device combo') ||
-          e.message.startsWith('OS/Browser combination invalid') ||
-          e.message.startsWith('Browser/Browser_Version not supported')
-        ) {
+        if (e.message.startsWith('Misconfigured -- Unsupported OS/browser/version/device combo') ||
+            e.message.startsWith('OS/Browser combination invalid') ||
+            e.message.startsWith('Browser/Browser_Version not supported')) {
           // If unsupported config, continue to the next grid configuration
           continue;
         } else {
@@ -292,11 +287,11 @@ const runAll = async (limitBrowsers, oses, nonConcurrent) => {
   }
 
   let browsersToTest = {
-    chrome: filterVersions(bcdBrowsers.chrome.releases, 15),
-    edge: filterVersions(bcdBrowsers.edge.releases, 12),
-    firefox: filterVersions(bcdBrowsers.firefox.releases, 4),
-    ie: filterVersions(bcdBrowsers.ie.releases, 6),
-    safari: filterVersions(bcdBrowsers.safari.releases, 5.1)
+    chrome: filterVersions(bcdBrowsers.chrome.releases, '15'),
+    edge: filterVersions(bcdBrowsers.edge.releases, '12'),
+    firefox: filterVersions(bcdBrowsers.firefox.releases, '4'),
+    ie: filterVersions(bcdBrowsers.ie.releases, '6'),
+    safari: filterVersions(bcdBrowsers.safari.releases, '5.1')
   };
 
   if (limitBrowsers) {
