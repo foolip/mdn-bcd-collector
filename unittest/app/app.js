@@ -72,12 +72,6 @@ describe('/api/results', () => {
     }
   ];
 
-  it('GitHub export with no token', async () => {
-    const res = await agent.post('/api/results/export/github').send();
-    assert.equal(res.status, 403);
-  });
-
-
   it('submit valid results', async () => {
     const res = await agent.post('/api/results')
         .query({for: testURL})
@@ -208,13 +202,6 @@ describe('rendered pages', () => {
     const res = await agent.get(`/`);
     assert.equal(res.status, 200);
     assert.include(res.text, 'mdn-bcd-collector');
-  });
-
-  it('/export', async () => {
-    const res = await agent.get(`/export`);
-    assert.equal(res.status, 200);
-    assert.include(res.text, 'Download');
-    assert.include(res.text, 'Create GitHub PR');
   });
 
   it('404', async () => {

@@ -107,17 +107,14 @@ hr {
 
 .error-notice {
   color: #faa;
-  font-weight: bold;
 }
 
 .warning-notice {
   color: #ffa;
-  font-weight: bold;
 }
 
 .success-notice {
   color: #afa;
-  font-weight: bold;
 }
 
 .mdi:before {
@@ -228,6 +225,10 @@ hr {
 }
 
 /* End: Homepage */
+
+#status {
+  font-weight: bold;
+}
 
 .result {
   margin-bottom: 0.5em;
