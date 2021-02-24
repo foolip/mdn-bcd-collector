@@ -179,13 +179,14 @@ app.all('/export', (req, res, next) => {
 
 app.all('/tests/*', (req, res) => {
   const ident = req.params['0'].replace(/\//g, '.');
-  const foundTests = tests.getTests(ident, req.query.exposure);
+  const ignoreIdents = req.query.ignore ?
+      req.query.ignore.split(',').filter((s) => s) : [];
+  const foundTests = tests.getTests(ident, req.query.exposure, ignoreIdents);
   if (foundTests && foundTests.length) {
     res.render('tests', {
       title: `${ident || 'All Tests'}`,
       tests: foundTests,
-      selenium: req.query.selenium,
-      ignore: (req.query.ignore ? req.query.ignore.split(',') : [])
+      selenium: req.query.selenium
     });
   } else {
     res.status(404).render('testnotfound', {

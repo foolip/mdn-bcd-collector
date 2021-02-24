@@ -115,5 +115,21 @@ describe('Tests', () => {
         {ident: 'api.AbortController.signal', tests: [{code: '"AbortController" in self && "signal" in AbortController.prototype'}], exposure: 'Window', resources: {'audio-blip': {type: 'audio', src: '/media/blip.mp3'}}}
       ]);
     });
+
+    it('filtering out ignored tests', () => {
+      // Filter out a single test.
+      assert.deepEqual(tests.getTests('api', 'Window', ['api.AbortController.signal']), [
+        {ident: 'api.AbortController', tests: [{code: '"AbortController" in self'}], exposure: 'Window', resources: {}}
+      ]);
+
+      // Filter out a tests recursively.
+      assert.deepEqual(tests.getTests('api', 'Window', ['api.AbortController']), []);
+
+      // Matching prefix does not ignore a test.
+      assert.deepEqual(tests.getTests('api', 'Window', ['api.Abort']), [
+        {ident: 'api.AbortController', tests: [{code: '"AbortController" in self'}], exposure: 'Window', resources: {}},
+        {ident: 'api.AbortController.signal', tests: [{code: '"AbortController" in self && "signal" in AbortController.prototype'}], exposure: 'Window', resources: {'audio-blip': {type: 'audio', src: '/media/blip.mp3'}}}
+      ]);
+    });
   });
 });

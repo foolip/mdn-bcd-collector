@@ -42,12 +42,7 @@
     .filter((item) => (item[1].type === 'instance'))) { %>
     bcd.addInstance("<%- instanceId %>", "<%- instance.src %>");
   <% }; %>
-  <% tests.filter((item) => {
-    for (const i of ignore) {
-      if (item.ident.indexOf(i) > -1) return false;
-    }
-    return true;
-  }).forEach(function(test) { %>
+  <% tests.forEach(function(test) { %>
     bcd.addTest("<%- test.ident %>", <%- JSON.stringify(test.tests) %>, "<%- test.exposure %>");
   <% }); %>
   window.onload = function() {
