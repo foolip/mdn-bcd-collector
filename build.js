@@ -34,11 +34,9 @@ const compileCustomTest = (code, format = true) => {
       }
       let importcode = compileCustomTest(customTests.api[name].__base, false);
 
-      importcode = importcode.replace(
-          /var (instance|promise)/g, `var ${instancevar}`
-      ).replace(
-          /promise\.then/g, `${instancevar}.then`
-      );
+      importcode = importcode
+          .replace(/var (instance|promise)/g, `var ${instancevar}`)
+          .replace(/promise\.then/g, `${instancevar}.then`);
       if (instancevar !== 'instance' && instancevar !== 'promise') {
         importcode += ` if (!${instancevar}) {return false;}`;
       }
@@ -79,10 +77,8 @@ const getCustomTestAPI = (name, member, type) => {
         ) : false;
       }
     } else {
-      if (
-        member in customTests.api[name] &&
-        typeof(customTests.api[name][member]) === 'string'
-      ) {
+      if (member in customTests.api[name] &&
+          typeof(customTests.api[name][member]) === 'string') {
         test = testbase + customTests.api[name][member];
       } else {
         if (['constructor', 'static'].includes(type) || ['toString', 'toJSON'].includes(member)) {
@@ -117,9 +113,8 @@ const getCustomSubtestsAPI = (name) => {
   if (name in customTests.api) {
     const testbase = customTests.api[name].__base || '';
     if ('__additional' in customTests.api[name]) {
-      for (
-        const subtest of Object.entries(customTests.api[name].__additional)
-      ) {
+      for (const subtest of
+        Object.entries(customTests.api[name].__additional)) {
         subtests[subtest[0]] = compileCustomTest(`${testbase}${subtest[1]}`);
       }
     }
@@ -297,8 +292,7 @@ const flattenMembers = (iface) => {
             {name: 'entries', type: 'operation'},
             {name: 'forEach', type: 'operation'},
             {name: 'keys', type: 'operation'},
-            {name: 'values', type: 'operation'}
-        );
+            {name: 'values', type: 'operation'});
         break;
       case 'maplike':
         members.push(
@@ -308,14 +302,12 @@ const flattenMembers = (iface) => {
             {name: 'has', type: 'operation'},
             {name: 'keys', type: 'operation'},
             {name: 'size', type: 'attribute'},
-            {name: 'values', type: 'operation'}
-        );
+            {name: 'values', type: 'operation'});
         if (!member.readonly) {
           members.push(
               {name: 'clear', type: 'operation'},
               {name: 'delete', type: 'operation'},
-              {name: 'set', type: 'operation'}
-          );
+              {name: 'set', type: 'operation'});
         }
         break;
       case 'setlike':
@@ -325,14 +317,12 @@ const flattenMembers = (iface) => {
             {name: 'has', type: 'operation'},
             {name: 'keys', type: 'operation'},
             {name: 'size', type: 'attribute'},
-            {name: 'values', type: 'operation'}
-        );
+            {name: 'values', type: 'operation'});
         if (!member.readonly) {
           members.push(
               {name: 'add', type: 'operation'},
               {name: 'clear', type: 'operation'},
-              {name: 'delete', type: 'operation'}
-          );
+              {name: 'delete', type: 'operation'});
         }
         break;
       case 'operation':
@@ -529,8 +519,7 @@ const buildIDLTests = (ast) => {
 
       let expr;
       const customTestMember = getCustomTestAPI(
-          adjustedIfaceName, member.name, isStatic ? 'static' : member.type
-      );
+          adjustedIfaceName, member.name, isStatic ? 'static' : member.type);
 
       if (customTestMember) {
         expr = customTestMember;

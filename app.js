@@ -88,9 +88,11 @@ app.post('/api/get', (req, res) => {
     ignore: req.body.ignore,
     exposure: req.body.limitExposure
   };
-  Object.keys(queryParams).forEach(
-      (key) => !queryParams[key] && delete queryParams[key]
-  );
+  Object.keys(queryParams).forEach((key) => {
+    if (!queryParams[key]) {
+      delete queryParams[key];
+    }
+  });
   const query = querystring.encode(queryParams);
 
   res.redirect(`/tests/${testSelection}${query ? `?${query}`: ''}`);

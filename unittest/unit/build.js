@@ -74,15 +74,13 @@ describe('build', () => {
       it('interface', () => {
         assert.equal(
             getCustomTestAPI('foo'),
-            '(function () {\n  var a = 1;\n  return a;\n})();'
-        );
+            '(function () {\n  var a = 1;\n  return a;\n})();');
       });
 
       it('member', () => {
         assert.equal(
             getCustomTestAPI('foo', 'bar'),
-            '(function () {\n  var a = 1;\n  return \'bar\' in instance;\n})();'
-        );
+            '(function () {\n  var a = 1;\n  return \'bar\' in instance;\n})();');
       });
 
       it('constructor', () => {
@@ -125,15 +123,13 @@ describe('build', () => {
       it('interface', () => {
         assert.equal(
             getCustomTestAPI('foo'),
-            '(function () {\n  var a = 1;\n  return !!instance;\n})();'
-        );
+            '(function () {\n  var a = 1;\n  return !!instance;\n})();');
       });
 
       it('member', () => {
         assert.equal(
             getCustomTestAPI('foo', 'bar'),
-            '(function () {\n  var a = 1;\n  return a + 1;\n})();'
-        );
+            '(function () {\n  var a = 1;\n  return a + 1;\n})();');
       });
     });
 
@@ -155,8 +151,7 @@ describe('build', () => {
       it('member', () => {
         assert.equal(
             getCustomTestAPI('foo', 'bar'),
-            '(function () {\n  return 1 + 1;\n})();'
-        );
+            '(function () {\n  return 1 + 1;\n})();');
       });
     });
 
@@ -182,8 +177,7 @@ describe('build', () => {
       it('member', () => {
         assert.equal(
             getCustomTestAPI('foo', 'bar'),
-            '(function () {\n  return 1 + 1;\n})();'
-        );
+            '(function () {\n  return 1 + 1;\n})();');
       });
     });
 
@@ -203,15 +197,13 @@ describe('build', () => {
       it('interface', () => {
         assert.equal(
             getCustomTestAPI('foo'),
-            '(function () {\n  var a = 1;\n  return a;\n})();'
-        );
+            '(function () {\n  var a = 1;\n  return a;\n})();');
       });
 
       it('member', () => {
         assert.equal(
             getCustomTestAPI('foo', 'bar'),
-            '(function () {\n  var a = 1;\n  return a + 1;\n})();'
-        );
+            '(function () {\n  var a = 1;\n  return a + 1;\n})();');
       });
     });
 
@@ -247,22 +239,19 @@ describe('build', () => {
       it('interface', () => {
         assert.equal(
             getCustomTestAPI('foo'),
-            '(function () {\n  var promise = somePromise();\n  return promise.then(function (instance) {\n    return !!instance;\n  });\n})();'
-        );
+            '(function () {\n  var promise = somePromise();\n  return promise.then(function (instance) {\n    return !!instance;\n  });\n})();');
       });
 
       it('member', () => {
         assert.equal(
             getCustomTestAPI('foo', 'bar'),
-            '(function () {\n  var promise = somePromise();\n  return promise.then(function (instance) {\n    return \'bar\' in instance;\n  });\n})();'
-        );
+            '(function () {\n  var promise = somePromise();\n  return promise.then(function (instance) {\n    return \'bar\' in instance;\n  });\n})();');
       });
 
       it('interface with import', () => {
         assert.equal(
             getCustomTestAPI('foobar'),
-            '(function () {\n  var foopromise = somePromise();\n  if (!foopromise) {\n    return false;\n  }\n  var promise = foopromise.then(function () {});\n  return promise.then(function (instance) {\n    return !!instance;\n  });\n})();'
-        );
+            '(function () {\n  var foopromise = somePromise();\n  if (!foopromise) {\n    return false;\n  }\n  var promise = foopromise.then(function () {});\n  return promise.then(function (instance) {\n    return !!instance;\n  });\n})();');
       });
     });
 
@@ -292,27 +281,23 @@ describe('build', () => {
       it('valid import', () => {
         assert.equal(
             getCustomTestAPI('bar'),
-            '(function () {\n  var a = 1;\n  if (!a) {\n    return false;\n  }\n  var instance = a;\n  return !!instance;\n})();'
-        );
+            '(function () {\n  var a = 1;\n  if (!a) {\n    return false;\n  }\n  var instance = a;\n  return !!instance;\n})();');
 
         assert.equal(
             getCustomTestAPI('baz'),
-            '(function () {\n  var a = 1;\n  if (!a) {\n    return false;\n  }\n  var b = a;\n  if (!b) {\n    return false;\n  }\n  var instance = b;\n  return !!instance;\n})();'
-        );
+            '(function () {\n  var a = 1;\n  if (!a) {\n    return false;\n  }\n  var b = a;\n  if (!b) {\n    return false;\n  }\n  var instance = b;\n  return !!instance;\n})();');
       });
 
       it('valid import: import is instance', () => {
         assert.equal(
             getCustomTestAPI('ban'),
-            '(function () {\n  var instance = 1;\n  return !!instance;\n})();'
-        );
+            '(function () {\n  var instance = 1;\n  return !!instance;\n})();');
       });
 
       it('invalid import', () => {
         assert.equal(
             getCustomTestAPI('bad'),
-            '(function () {\n  throw \'Test is malformed: <%api.foobar:apple%> is an invalid reference\';\n  return !!instance;\n})();'
-        );
+            '(function () {\n  throw \'Test is malformed: <%api.foobar:apple%> is an invalid reference\';\n  return !!instance;\n})();');
         assert.isTrue(console.error.calledOnce);
       });
     });
@@ -338,12 +323,10 @@ describe('build', () => {
       });
 
       assert.deepEqual(
-          getCustomSubtestsAPI('foo', 'bar'),
-          {
+          getCustomSubtestsAPI('foo', 'bar'), {
             multiple: '(function () {\n  return 1 + 1 + 1;\n})();',
             'one.only': '(function () {\n  return 1;\n})();'
-          }
-      );
+          });
     });
   });
 
@@ -366,14 +349,12 @@ describe('build', () => {
       });
 
       assert.deepEqual(
-          getCustomResourcesAPI('foo'),
-          {
+          getCustomResourcesAPI('foo'), {
             'audio-blip': {
               type: 'audio',
               src: ['/media/blip.mp3', '/media/blip.ogg']
             }
-          }
-      );
+          });
     });
 
     it('no resources', () => {
@@ -974,15 +955,14 @@ describe('build', () => {
               GLenum mode,
               GLint first,
               GLsizei count,
-              GLsizei primcount
-            );
+              GLsizei primcount);
+
             void drawElementsInstancedANGLE(
               GLenum mode,
               GLsizei count,
               GLenum type,
               GLintptr offset,
-              GLsizei primcoun
-            );
+              GLsizei primcount);
           };
 
           interface Document {

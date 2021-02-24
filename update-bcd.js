@@ -108,8 +108,7 @@ const getSupportMatrix = (reports) => {
       if (!versionMap) {
         versionMap = new Map;
         for (const browserVersion of
-          Object.keys(browsers[browser.id].releases)
-        ) {
+          Object.keys(browsers[browser.id].releases)) {
           versionMap.set(browserVersion, {result: null, prefix: ''});
         }
         browserMap.set(browser.id, versionMap);
@@ -179,11 +178,9 @@ const inferSupportStatements = (versionMap) => {
       lastKnown.prefix = prefix;
       lastWasNull = false;
     } else if (supported === false) {
-      if (
-        lastStatement &&
-        lastStatement.version_added &&
-        !lastStatement.version_removed
-      ) {
+      if (lastStatement &&
+          lastStatement.version_added &&
+          !lastStatement.version_removed) {
         lastStatement.version_removed = lastWasNull ? `${lastKnown.version}> ≤${version}` : version;
       } else if (!lastStatement) {
         statements.push({version_added: false});
@@ -262,18 +259,14 @@ const update = (bcd, supportMatrix, limitBrowsers) => {
 
       if (typeof(simpleStatement.version_added) === 'string' &&
         typeof(inferredStatement.version_added) === 'string' &&
-        inferredStatement.version_added.includes('≤')
-      ) {
+        inferredStatement.version_added.includes('≤')) {
         const range = inferredStatement.version_added.split('> ≤');
         if (compareVersions.compare(
             simpleStatement.version_added.replace('≤', ''),
-            range[0],
-            '<='
-        ) || compareVersions.compare(
-            simpleStatement.version_added.replace('≤', ''),
-            range[1],
-            '>'
-        )) {
+            range[0], '<=') ||
+            compareVersions.compare(
+                simpleStatement.version_added.replace('≤', ''),
+                range[1], '>')) {
           simpleStatement.version_added = inferredStatement.version_added.replace('0> ', '');
           modified = true;
         }
@@ -333,8 +326,7 @@ const loadJsonFiles = async (paths) => {
 /* istanbul ignore next */
 const main = async (reportPaths, categories, limitBrowsers) => {
   const bcdFiles = await loadJsonFiles(
-      categories.map((cat) => path.join(BCD_DIR, ...cat.split('.')))
-  );
+      categories.map((cat) => path.join(BCD_DIR, ...cat.split('.'))));
 
   const reports = Object.values(await loadJsonFiles(reportPaths));
   const supportMatrix = getSupportMatrix(reports);

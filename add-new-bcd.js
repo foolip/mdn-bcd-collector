@@ -59,18 +59,14 @@ const writeFile = async (ident, obj) => {
     data = await fs.readJSON(filepath);
   }
 
-  await fs.writeJSON(filepath, recursiveAdd(
-      ident.concat(['__compat']), 0, data, obj.__compat
-  ), {spaces: 2, replacer: orderFeatures});
+  await fs.writeJSON(filepath, recursiveAdd(ident.concat(['__compat']), 0, data, obj.__compat), {spaces: 2, replacer: orderFeatures});
 };
 
 const traverseFeatures = async (obj, identifier) => {
   for (const i in obj) {
-    if (
-      !!obj[i] &&
-      typeof obj[i] == 'object' &&
-      i !== '__compat'
-    ) {
+    if (!!obj[i] &&
+        typeof obj[i] == 'object' &&
+        i !== '__compat') {
       const thisIdent = identifier.concat([i]);
       if (obj[i].__compat) {
         for (const support of Object.values(obj[i].__compat.support)) {

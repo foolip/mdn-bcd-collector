@@ -416,8 +416,7 @@ describe('BCD updater', () => {
   describe('findEntry', () => {
     it('equal', () => {
       assert.strictEqual(
-          findEntry(bcd, 'api.AbortController'), bcd.api.AbortController
-      );
+          findEntry(bcd, 'api.AbortController'), bcd.api.AbortController);
     });
 
     it('no path', () => {
@@ -634,9 +633,8 @@ describe('BCD updater', () => {
     for (const [path, browserMap] of supportMatrix.entries()) {
       for (const [browser, versionMap] of browserMap.entries()) {
         it(`${path}: ${browser}`, () => {
-          assert.deepEqual(
-              inferSupportStatements(versionMap), expectedResults[path][browser]
-          );
+          assert.deepEqual(inferSupportStatements(versionMap),
+              expectedResults[path][browser]);
         });
       }
     }

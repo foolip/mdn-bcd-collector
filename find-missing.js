@@ -8,11 +8,9 @@ const traverseFeatures = (obj, identifier) => {
   const features = [];
 
   for (const i in obj) {
-    if (
-      !!obj[i] &&
-      typeof obj[i] == 'object' &&
-      i !== '__compat'
-    ) {
+    if (!!obj[i] &&
+        typeof obj[i] == 'object' &&
+        i !== '__compat') {
       if (obj[i].__compat) {
         features.push(`${identifier}${i}`);
       }
