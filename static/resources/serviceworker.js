@@ -22,8 +22,7 @@ self.addEventListener('install', function(event) {
       .then(function(openCache) {
         return openCache.put(
             new Request(''),
-            new Response('')
-        );
+            new Response(''));
       });
   event.waitUntil(promiseChain);
 });

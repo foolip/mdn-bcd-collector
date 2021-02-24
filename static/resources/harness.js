@@ -121,20 +121,16 @@
       eval('new '+iface+'()');
       result.result = true;
     } catch (err) {
-      if (
-        stringIncludes(err.message, 'Illegal constructor') ||
-        stringIncludes(err.message, 'is not a constructor') ||
-        stringIncludes(err.message, 'Function expected')
-      ) {
+      if (stringIncludes(err.message, 'Illegal constructor') ||
+          stringIncludes(err.message, 'is not a constructor') ||
+          stringIncludes(err.message, 'Function expected')) {
         result.result = false;
-      } else if (
-        stringIncludes(err.message, 'Not enough arguments') ||
-        stringIncludes(err.message, 'argument required') ||
-        stringIncludes(err.message, 'arguments required') ||
-        stringIncludes(err.message, 'Argument not optional') ||
-        stringIncludes(err.message, 'Arguments can\'t be empty') ||
-        stringIncludes(err.message, 'undefined is not an object')
-      ) {
+      } else if (stringIncludes(err.message, 'Not enough arguments') ||
+                 stringIncludes(err.message, 'argument required') ||
+                 stringIncludes(err.message, 'arguments required') ||
+                 stringIncludes(err.message, 'Argument not optional') ||
+                 stringIncludes(err.message, 'Arguments can\'t be empty') ||
+                 stringIncludes(err.message, 'undefined is not an object')) {
         // If it failed to construct and it's not illegal or just needs
         // more arguments, the constructor's good
         result.result = true;
@@ -153,10 +149,8 @@
       return false;
     }
 
-    if (
-      !instance.constructor.name &&
-      Object.prototype.toString.call(instance) === '[object Object]'
-    ) {
+    if (!instance.constructor.name &&
+        Object.prototype.toString.call(instance) === '[object Object]') {
       return {result: null, message: 'Browser does not support object prototype confirmation methods'};
     }
 
@@ -165,10 +159,8 @@
     }
 
     for (var i = 0; i < names.length; i++) {
-      if (
-        instance.constructor.name === names[i] ||
-        Object.prototype.toString.call(instance) === '[object ' + names[i] + ']'
-      ) {
+      if (instance.constructor.name === names[i] ||
+          Object.prototype.toString.call(instance) === '[object ' + names[i] + ']') {
         return true;
       }
     }
@@ -255,13 +247,11 @@
             },
             function(fail) {
               processTestResult(new Error(fail), data, i, callback);
-            }
-        );
+            });
         value['catch'](
             function(err) {
               processTestResult(err, data, i, callback);
-            }
-        );
+            });
       } else {
         processTestResult(value, data, i, callback);
       }
@@ -336,8 +326,7 @@
             result.info = Object.assign(
                 {},
                 result.info,
-                pending.Worker[i].info
-            );
+                pending.Worker[i].info);
           }
 
           results.push(result);
@@ -388,8 +377,7 @@
             result.info = Object.assign(
                 {},
                 result.info,
-                pending.SharedWorker[i].info
-            );
+                pending.SharedWorker[i].info);
           }
 
           results.push(result);
@@ -421,8 +409,7 @@
 
             reg.active.postMessage(
                 JSON.stringify(pending.ServiceWorker),
-                [messageChannel.port2]
-            );
+                [messageChannel.port2]);
           });
         });
       } else {
@@ -441,8 +428,7 @@
 
           if (pending.ServiceWorker[i].info !== undefined) {
             result.info = Object.assign(
-                {}, result.info, pending.ServiceWorker[i].info
-            );
+                {}, result.info, pending.ServiceWorker[i].info);
           }
 
           results.push(result);
@@ -679,8 +665,7 @@
               serviceWorker.removeEventListener('statechange', stateListener);
 
               return reject(
-                  new Error('Installing service worker became redundant')
-              );
+                  new Error('Installing service worker became redundant'));
             }
           }
 
@@ -695,8 +680,7 @@
                 var unregisterPromise = registrations.map(
                     function(registration) {
                       return registration.unregister();
-                    }
-                );
+                    });
                 return Promise.all(unregisterPromise);
               });
         } else {
