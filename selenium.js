@@ -36,10 +36,28 @@ const resultsDir = path.join(__dirname, '..', 'mdn-bcd-results');
 const testenv = process.env.NODE_ENV === 'test';
 const host = `https://${testenv ? 'staging-dot-' : ''}mdn-bcd-collector.appspot.com`;
 
+// Custom tests that use getUserMedia() make Edge 12-18 block.
+const gumTests = [
+  'ImageCapture',
+  'MediaStream',
+  'MediaStreamAudioSourceNode',
+  'MediaStreamTrack',
+  'MediaStreamTrackAudioSourceNode'
+].map((iface) => `api.${iface}`).join(',');
+
 const ignore = {
   chrome: {
     25: 'api.MediaStreamAudioDestinationNode',
     26: 'api.MediaStreamAudioDestinationNode'
+  },
+  edge: {
+    12: gumTests,
+    13: gumTests,
+    14: gumTests,
+    15: gumTests,
+    16: gumTests,
+    17: gumTests,
+    18: gumTests
   }
 };
 
