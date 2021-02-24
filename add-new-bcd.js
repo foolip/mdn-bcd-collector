@@ -99,7 +99,7 @@ const main = async () => {
 
   console.log('Generating missing BCD...');
   await collectMissing(filepath);
-  await updateBcd(['../mdn-bcd-results/'], ['__missing'], []);
+  await updateBcd(['../mdn-bcd-results/'], {category: ['__missing']});
 
   console.log('Injecting BCD...');
   const data = await fs.readJSON(filepath);
@@ -111,4 +111,7 @@ const main = async () => {
   console.log('Done!');
 };
 
-main();
+main().catch((e) => {
+  console.error(e);
+  process.exit(1);
+});

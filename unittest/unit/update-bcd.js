@@ -671,7 +671,7 @@ describe('BCD updater', () => {
     });
 
     it('normal', () => {
-      update(bcdCopy, supportMatrix, []);
+      update(bcdCopy, supportMatrix, {});
       assert.deepEqual(bcdCopy, {
         api: {
           AbortController: {
@@ -776,7 +776,7 @@ describe('BCD updater', () => {
     });
 
     it('limit browsers', () => {
-      update(bcdCopy, supportMatrix, ['chrome']);
+      update(bcdCopy, supportMatrix, {browser: ['chrome']});
       assert.deepEqual(bcdCopy.api.AbortController.__compat.support.safari, {
         version_added: null
       });
