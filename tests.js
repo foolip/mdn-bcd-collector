@@ -56,7 +56,7 @@ class Tests {
     return didYouMean(input, this.listEndpoints());
   }
 
-  getTests(endpoint, testExposure) {
+  getTests(endpoint, testExposure, ignoreIdents = []) {
     if (!(endpoint in this.endpoints)) {
       return [];
     }
@@ -65,6 +65,12 @@ class Tests {
 
     const tests = [];
     for (const ident of idents) {
+      const ignore = ignoreIdents.some((ignoreIdent) => {
+        return ident === ignoreIdent || ident.startsWith(`${ignoreIdent}.`);
+      });
+      if (ignore) {
+        continue;
+      }
       const test = this.tests[ident];
       for (const exposure of test.exposure) {
         if (!testExposure || exposure == testExposure) {
