@@ -304,7 +304,7 @@ Running the tests using WebDriver works in much the same way as when running man
 
 ## Updating BCD
 
-The `update-bcd.js` works as follows:
+The `update-bcd.js` script works as follows:
 - Build a "support matrix" mapping a BCD entry + browser release to a support status (true/false/null)
 - For every BCD entry for which we have data in the support matrix:
   - Infer a BCD-style support statement from the per-version data in the support matrix. Where we have incomplete information, ranged (≤) versions are used.
