@@ -33,6 +33,7 @@ npm run update-bcd ../mdn-bcd-results/ -- --browser=safari --browser=safari_ios
 ### Custom ranged version format
 
 When the results don't have enough data to determine an exact version, ranges which aren't valid in BCD may be added:
+
 - "≤N" for any release, not just the ranged versions allowed by BCD.
 - "M> ≤N" when a feature is *not* in M and *is* in N, but there are releases between the two for which support is unknown.
 
