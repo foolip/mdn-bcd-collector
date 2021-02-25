@@ -1,3 +1,6 @@
+// See https://github.com/foolip/mdn-bcd-collector/blob/main/DESIGN.md#updating-bcd
+// for documentation on the approach taken in this script.
+
 'use strict';
 
 const compareVersions = require('compare-versions');
