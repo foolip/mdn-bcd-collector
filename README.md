@@ -12,7 +12,33 @@ See [DESIGN.md](./DESIGN.md) for details of how this service works.
 npm install
 ```
 
-## Running locally
+## Updating BCD using the results
+
+Given some results and a checkout of BCD at `../browser-compat-data` and collector results in `../mdn-bcd-results`, `npm run update-bcd` can be used to update existing BCD entries.
+
+If you have results from a browser not yet in BCD, first add the release in `../browser-compat-data/browsers/`. This is because the full version (from the `User-Agent` header) is mapped to BCD browser release as part of the processing.
+
+Updating all data:
+
+```sh
+npm run update-bcd ../mdn-bcd-results/
+```
+
+The `--browser` argument can be used to only update data for one or more browsers:
+
+```sh
+npm run update-bcd ../mdn-bcd-results/ -- --browser=safari --browser=safari_ios
+```
+
+### Custom ranged version format
+
+When the results don't have enough data to determine an exact version, ranges which aren't valid in BCD may be added:
+- "≤N" for any release, not just the ranged versions allowed by BCD.
+- "M> ≤N" when a feature is *not* in M and *is* in N, but there are releases between the two for which support is unknown.
+
+In both cases, the uncertainty has to be resolved by hand before submitting the data to BCD.
+
+## Running the server locally
 
 ```sh
 npm run start-dev
@@ -31,7 +57,7 @@ This step is performed automatically when the `main` branch is updated:
 - https://staging-dot-mdn-bcd-collector.appspot.com/ is always deployed.
 - https://mdn-bcd-collector.appspot.com/ is deployed when the version in `package.json` is bumped
 
-## Run tests via Selenium WebDriver
+## Running tests via Selenium WebDriver
 
 To test using the latest deployed version, run:
 
@@ -60,7 +86,7 @@ Code coverage reports can be viewed in a browser by running:
 npm run coverage
 ```
 
-## Cleanup generated files
+## Cleaning up generated files
 
 ```sh
 npm run clean
