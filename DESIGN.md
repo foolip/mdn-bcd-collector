@@ -301,3 +301,15 @@ When the tests have finished running, buttons for results download and GitHub ex
 ### WebDriver
 
 Running the tests using WebDriver works in much the same way as when running manually. The results are downloaded and stored in a checkout of `mdn-bcd-results`.
+
+## Updating BCD
+
+The `update-bcd.js` works as follows:
+- Build a "support matrix" mapping a BCD entry + browser release to a support status (true/false/null)
+- For every BCD entry for which we have data in the support matrix:
+  - Infer a BCD-style support statement from the per-version data in the support matrix. Where we have incomplete information, ranged (≤) versions are used.
+  - If the inferred support statement isn't simple (a single object) give up and do nothing.
+  - If the BCD support statement had only `prefix`/`alternative_name`/`flags` entries, add our inferred statement.
+  - Otherwise, there was an existing simple statement, which we update using the inferred statement.
+
+See [issue #571](https://github.com/foolip/mdn-bcd-collector/issues/571) for various flaws with this design.
