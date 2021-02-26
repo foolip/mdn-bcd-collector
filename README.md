@@ -21,13 +21,13 @@ If you have results from a browser not yet in BCD, first add the release in `../
 Updating all data:
 
 ```sh
-npm run update-bcd ../mdn-bcd-results/
+npm run update-bcd
 ```
 
 The `--browser` argument can be used to only update data for one or more browsers:
 
 ```sh
-npm run update-bcd ../mdn-bcd-results/ -- --browser=safari --browser=safari_ios
+npm run update-bcd -- --browser=safari --browser=safari_ios
 ```
 
 ### Custom ranged version format
