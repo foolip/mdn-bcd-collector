@@ -359,13 +359,14 @@ module.exports = {
 /* istanbul ignore if */
 if (require.main === module) {
   const {argv} = require('yargs').command(
-      '$0 <reports..>',
+      '$0 [reports..]',
       'Update BCD from a specified set of report files',
       (yargs) => {
         yargs
             .positional('reports', {
               describe: 'The report files to update from (also accepts folders)',
-              type: 'string'
+              type: 'array',
+              default: ['../mdn-bcd-results/']
             })
             .option('category', {
               alias: 'c',
