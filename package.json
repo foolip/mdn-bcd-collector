@@ -57,7 +57,7 @@
     "@browser-logos/safari": "2.0.0",
     "@webref/idl": "1.0.5",
     "babel-eslint": "10.1.0",
-    "chai": "4.3.0",
+    "chai": "4.3.1",
     "chai-fs": "2.0.0",
     "chai-http": "4.3.0",
     "chai-subset": "1.6.0",
