@@ -1,0 +1,4 @@
+partial interface Permissions {
+  // https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/modules/permissions/permissions.idl;l=17;drc=83361f47040ea6253ee1b528160a6af03309ab24
+  Promise<sequence<PermissionStatus>> requestAll(sequence<object> permissions);
+};

@@ -2,6 +2,25 @@ partial interface ProgressEvent {
   undefined initProgressEvent();
 };
 
+// https://developer.mozilla.org/en-US/docs/Web/API/XDomainRequest
+[Exposed=Window]
+interface XDomainRequest {
+  constructor();
+
+  attribute unsigned long timeout;
+  readonly attribute DOMString contentType; // not on MDN
+  readonly attribute DOMString responseText;
+
+  undefined open();
+  undefined send();
+  undefined abort();
+
+  attribute EventHandler onprogress;
+  attribute EventHandler ontimeout;
+  attribute EventHandler onerror;
+  attribute EventHandler onload;
+};
+
 partial interface XMLHttpRequest {
   // https://github.com/mozilla/gecko-dev/blob/851bbbd9d9a38c2785a24c13b6412751be8d3253/dom/webidl/XMLHttpRequest.webidl#L142
   readonly attribute boolean mozAnon;
