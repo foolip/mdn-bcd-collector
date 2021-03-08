@@ -118,6 +118,9 @@ partial interface CanvasRenderingContext2D {
   undefined removeHitRegion(DOMString id);
   undefined clearHitRegions();
 
+  // https://github.com/fserb/canvas2D/blob/95dcc7bf2f27b1fe83e12a23678666e00b992b22/spec/conic-gradient.md#proposal
+  CanvasGradient createConicGradient(unrestricted double startAngle, unrestricted double cx, unrestricted double cy);
+
   attribute DOMMatrix currentTransform;
   undefined drawWidgetAsOnScreen(Window window);
   undefined drawWindow(Window window, double x, double y, double w, double h, DOMString bgColor, optional byte flags);
