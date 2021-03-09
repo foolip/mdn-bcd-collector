@@ -1,0 +1,4 @@
+partial interface PaintRenderingContext2D {
+  // https://github.com/w3c/css-houdini-drafts/issues/1022
+  attribute DOMString filter;
+};

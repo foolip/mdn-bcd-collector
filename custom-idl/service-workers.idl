@@ -4,3 +4,30 @@ partial interface FetchEvent {
   Promise<NavigationPreloadManager> navigationPreload();
   readonly attribute DOMString targetClientId;
 };
+
+// https://github.com/w3c/ServiceWorker/pull/1207
+interface InstallEvent : ExtendableEvent {
+  constructor(DOMString type, optional object init);
+
+  // https://bugs.chromium.org/p/chromium/issues/detail?id=470032
+  // https://github.com/w3c/ServiceWorker/issues/661
+  readonly attribute ServiceWorker? activeWorker;
+};
+
+partial interface ServiceWorkerContainer {
+  attribute EventHandler onerror;
+};
+
+partial interface ServiceWorkerGlobalScope {
+  readonly attribute CacheStorage caches;
+};
+
+interface ServiceWorkerMessageEvent {
+  constructor();
+
+  readonly attribute any data;
+  readonly attribute DOMString lastEventId;
+  readonly attribute any origin;
+  readonly attribute MessagePort ports;
+  readonly attribute any source;
+};

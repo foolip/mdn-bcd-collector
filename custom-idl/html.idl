@@ -27,6 +27,10 @@ interface ApplicationCache : EventTarget {
   attribute EventHandler onobsolete;
 };
 
+partial interface SharedWorkerGlobalScope {
+  [SecureContext] readonly attribute ApplicationCache applicationCache;
+};
+
 partial interface Window {
   [SecureContext] readonly attribute ApplicationCache applicationCache;
 };
@@ -710,4 +714,12 @@ partial interface Window {
 
 partial interface WebSocket {
   readonly attribute USVString URL;
+};
+
+partial interface WorkerGlobalScope {
+  // https://developer.mozilla.org/en-US/docs/Web/API/WorkerGlobalScope/dump
+  undefined dump(any... data);
+
+  // https://developer.mozilla.org/en-US/docs/Web/API/WorkerGlobalScope/onclose
+  attribute EventHandler onclose;
 };

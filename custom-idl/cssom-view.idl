@@ -13,9 +13,10 @@ partial interface Element {
 };
 
 partial interface ShadowRoot {
-  // https://github.com/w3c/csswg-drafts/issues/5886
+  // https://github.com/w3c/csswg-drafts/issues/556
   Element? elementFromPoint(double x, double y);
   sequence<Element> elementsFromPoint(double x, double y);
+  CaretPosition? caretPositionFromPoint(double x, double y);
 };
 
 partial interface Screen {
