@@ -14,12 +14,15 @@
 
 'use strict';
 
+const fs = require('fs');
 const path = require('path');
 const querystring = require('querystring');
 const bcdBrowsers = require('@mdn/browser-compat-data').browsers;
 
 const express = require('express');
 const cookieParser = require('cookie-parser');
+const https = require('https');
+const http = require('http');
 const uniqueString = require('unique-string');
 const expressLayouts = require('express-ejs-layouts');
 
@@ -28,8 +31,6 @@ const logger = require('./logger');
 const {parseResults} = require('./results');
 const storage = require('./storage').getStorage();
 const {parseUA} = require('./ua-parser');
-
-const PORT = process.env.PORT || 8080;
 
 const appVersion = process.env.GAE_VERSION === 'production' ? require('./package.json').version : 'Dev';
 
@@ -215,9 +216,41 @@ module.exports = {
 
 /* istanbul ignore if */
 if (require.main === module) {
-  // Start the server
-  app.listen(PORT, () => {
-    logger.info(`App listening on port ${PORT}`);
-    logger.info('Press Ctrl+C to quit.');
-  });
+  const {argv} = require('yargs').command(
+      '$0',
+      'Run the mdn-bcd-collector server',
+      (yargs) => {
+        yargs
+            .option('https-cert', {
+              describe: 'HTTPS cert chains in PEM format',
+              type: 'string'
+            })
+            .option('https-key', {
+              describe: 'HTTPS private keys in PEM format',
+              type: 'string'
+            })
+            .option('https-port', {
+              describe: 'HTTPS port (requires cert and key)',
+              type: 'number',
+              default: 8443
+            })
+            .option('port', {
+              describe: 'HTTP port',
+              type: 'number',
+              default: process.env.PORT ? +process.env.PORT : 8080
+            });
+      }
+  );
+
+  http.createServer(app).listen(argv.port);
+  logger.info(`Listening on port ${argv.port} (HTTP)`);
+  if (argv.httpsCert && argv.httpsKey) {
+    const options = {
+      cert: fs.readFileSync(argv.httpsCert),
+      key: fs.readFileSync(argv.httpsKey)
+    };
+    https.createServer(options, app).listen(argv.httpsPort);
+    logger.info(`Listening on port ${argv.httpsPort} (HTTPS)`);
+  }
+  logger.info('Press Ctrl+C to quit.');
 }
