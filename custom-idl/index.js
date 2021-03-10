@@ -20,24 +20,20 @@ const WebIDL2 = require('webidl2');
 
 // Load text (UTF-8) files from a directory and return an object mapping each
 // name (sans extension) to the parsed result of that text.
-const loadTextFiles = (dir, extension, parse) => {
-  const files = fs.readdirSync(dir);
+const parseIDL = () => {
+  const files = fs.readdirSync(__dirname);
   files.sort();
   const results = {};
   for (const file of files) {
     /* istanbul ignore next */
-    if (path.extname(file) !== extension) {
+    if (path.extname(file) !== '.idl') {
       continue;
     }
     const name = path.parse(file).name;
-    const text = fs.readFileSync(path.join(dir, file), 'utf8');
-    results[name] = parse(text);
+    const text = fs.readFileSync(path.join(__dirname, file), 'utf8');
+    results[name] = WebIDL2.parse(text);
   }
   return results;
 };
 
-module.exports = {
-  custom: {
-    idl: loadTextFiles(path.join(__dirname, 'custom-idl'), '.idl', WebIDL2.parse)
-  }
-};
+module.exports = parseIDL();
