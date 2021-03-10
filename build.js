@@ -22,7 +22,7 @@ const prettier = require('prettier');
 
 const customCSS = require('./custom-css.json');
 const customTests = require('./custom-tests.json');
-const specData = require('./spec-data');
+const customIDL = require('./custom-idl');
 
 const generatedDir = path.join(__dirname, 'generated');
 
@@ -680,10 +680,10 @@ const copyResources = async () => {
 };
 
 /* istanbul ignore next */
-const build = async (specData, customCSS) => {
+const build = async (customIDL, customCSS) => {
   const specCSS = await css.listAll();
   const specIDLs = await idl.parseAll();
-  const IDLTests = buildIDL(specIDLs, specData.custom.idl);
+  const IDLTests = buildIDL(specIDLs, customIDL);
   const CSSTests = buildCSS(specCSS, customCSS);
   const tests = Object.assign({}, IDLTests, CSSTests);
 
@@ -710,7 +710,7 @@ module.exports = {
 
 /* istanbul ignore if */
 if (require.main === module) {
-  build(specData, customCSS).catch((reason) => {
+  build(customIDL, customCSS).catch((reason) => {
     console.error(reason);
     process.exit(1);
   });
