@@ -14,6 +14,7 @@
 
 'use strict';
 
+const css = require('@webref/css');
 const fs = require('fs-extra');
 const idl = require('@webref/idl');
 const path = require('path');
@@ -680,9 +681,10 @@ const copyResources = async () => {
 
 /* istanbul ignore next */
 const build = async (specData, customCSS) => {
+  const specCSS = await css.listAll();
   const specIDLs = await idl.parseAll();
   const IDLTests = buildIDL(specIDLs, specData.custom.idl);
-  const CSSTests = buildCSS(specData.webref.css, customCSS);
+  const CSSTests = buildCSS(specCSS, customCSS);
   const tests = Object.assign({}, IDLTests, CSSTests);
 
   await fs.writeJson(path.join(__dirname, 'tests.json'), tests);
