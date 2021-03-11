@@ -226,12 +226,9 @@ const update = (bcd, supportMatrix, filter) => {
 
       const inferredStatement = inferredStatements[0];
 
-      if (filter.added && inferredStatement.version_added !== filter.added) {
-        continue;
-      }
-
-      if (filter.removed &&
-          inferredStatement.version_removed !== filter.removed) {
+      if (filter.release &&
+          filter.release !== inferredStatement.version_added &&
+          filter.release !== inferredStatement.version_removed) {
         continue;
       }
 
@@ -390,14 +387,9 @@ if (require.main === module) {
               type: 'array',
               choices: Object.keys(browsers),
               default: []
-            }).option('added', {
-              alias: 'a',
-              describe: 'Only update when version_added is set to the given value',
-              type: 'string',
-              default: null
-            }).option('removed', {
+            }).option('release', {
               alias: 'r',
-              describe: 'Only update when version_removed is set to the given value',
+              describe: 'Only update when version_added or version_removed is set to the given value',
               type: 'string',
               default: null
             });
