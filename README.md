@@ -33,7 +33,7 @@ npm run update-bcd -- --browser=safari --browser=safari_ios
 The `--release` arguments can be used to only update data for a specific browser release, e.g., Firefox 84:
 
 ```sh
-npm run update-bcd ../mdn-bcd-results/ -- --browser=firefox --release=84
+npm run update-bcd -- --browser=firefox --release=84
 ```
 
 This will only make changes that set either `version_added` or `version_removed` to "84".
