@@ -204,7 +204,7 @@ const inferSupportStatements = (versionMap) => {
   return statements;
 };
 
-const update = (bcd, supportMatrix, limitBrowsers) => {
+const update = (bcd, supportMatrix, filter) => {
   let modified = false;
 
   for (const [path, browserMap] of supportMatrix.entries()) {
@@ -214,7 +214,8 @@ const update = (bcd, supportMatrix, limitBrowsers) => {
     }
 
     for (const [browser, versionMap] of browserMap.entries()) {
-      if (limitBrowsers.length && !limitBrowsers.includes(browser)) {
+      if (filter.browser && filter.browser.length &&
+          !filter.browser.includes(browser)) {
         continue;
       }
       const inferredStatements = inferSupportStatements(versionMap);
@@ -224,6 +225,12 @@ const update = (bcd, supportMatrix, limitBrowsers) => {
       }
 
       const inferredStatement = inferredStatements[0];
+
+      if (filter.release &&
+          filter.release !== inferredStatement.version_added &&
+          filter.release !== inferredStatement.version_removed) {
+        continue;
+      }
 
       let supportStatement = entry.__compat.support[browser];
       if (!supportStatement) {
@@ -327,9 +334,9 @@ const loadJsonFiles = async (paths) => {
 };
 
 /* istanbul ignore next */
-const main = async (reportPaths, categories, limitBrowsers) => {
+const main = async (reportPaths, filter) => {
   const bcdFiles = await loadJsonFiles(
-      categories.map((cat) => path.join(BCD_DIR, ...cat.split('.'))));
+      filter.category.map((cat) => path.join(BCD_DIR, ...cat.split('.'))));
 
   const reports = Object.values(await loadJsonFiles(reportPaths));
   const supportMatrix = getSupportMatrix(reports);
@@ -337,7 +344,7 @@ const main = async (reportPaths, categories, limitBrowsers) => {
   // Should match https://github.com/mdn/browser-compat-data/blob/f10bf2cc7d1b001a390e70b7854cab9435ffb443/test/linter/test-style.js#L63
   // TODO: https://github.com/mdn/browser-compat-data/issues/3617
   for (const [file, data] of Object.entries(bcdFiles)) {
-    const modified = update(data, supportMatrix, limitBrowsers);
+    const modified = update(data, supportMatrix, filter);
     if (!modified) {
       continue;
     }
@@ -380,11 +387,16 @@ if (require.main === module) {
               type: 'array',
               choices: Object.keys(browsers),
               default: []
+            }).option('release', {
+              alias: 'r',
+              describe: 'Only update when version_added or version_removed is set to the given value',
+              type: 'string',
+              default: null
             });
       }
   );
 
-  main(argv.reports, argv.category, argv.browser).catch((error) => {
+  main(argv.reports, argv).catch((error) => {
     logger.error(error.stack);
     process.exit(1);
   });
