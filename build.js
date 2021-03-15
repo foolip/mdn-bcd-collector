@@ -15,6 +15,7 @@
 'use strict';
 
 const css = require('@webref/css');
+const {definitionSyntax} = require('css-tree');
 const fs = require('fs-extra');
 const idl = require('@webref/idl');
 const path = require('path');
@@ -610,25 +611,41 @@ const cssPropertyToIDLAttribute = (property, lowercaseFirst) => {
   return output;
 };
 
-const buildCSS = (webrefCSS, customCSS) => {
-  const propertySet = new Set();
+const buildCSS = (specCSS, customCSS) => {
+  const properties = new Map();
 
-  for (const data of Object.values(webrefCSS)) {
-    for (const prop of Object.keys(data.properties)) {
-      propertySet.add(prop);
+  for (const data of Object.values(specCSS)) {
+    for (const [name, desc] of Object.entries(data.properties)) {
+      const keywords = new Set();
+      try {
+        const ast = definitionSyntax.parse(desc.value);
+        definitionSyntax.walk(ast, {
+          enter: (node) => {
+            if (node.type === 'Keyword') {
+              keywords.add(node.name);
+            }
+          }
+        });
+      } catch {
+        // do nothing
+      }
+      properties.set(name, keywords);
     }
   }
 
-  for (const prop of Object.keys(customCSS.properties)) {
-    if (propertySet.has(prop)) {
-      throw new Error(`Custom CSS property already known: ${prop}`);
+  for (const name of Object.keys(customCSS.properties)) {
+    if (properties.has(name)) {
+      throw new Error(`Custom CSS property already known: ${name}`);
     }
-    propertySet.add(prop);
+    // TODO: support custom keywords
+    const keywords = new Set();
+    properties.set(name, keywords);
   }
 
   const tests = {};
 
-  for (const name of Array.from(propertySet).sort()) {
+  for (const name of Array.from(properties.keys()).sort()) {
+    // Test for the property itself
     const attrName = cssPropertyToIDLAttribute(name, name.startsWith('-'));
     tests[`css.properties.${name}`] = compileTest({
       raw: {
@@ -641,6 +658,17 @@ const buildCSS = (webrefCSS, customCSS) => {
       category: 'css',
       exposure: ['Window']
     });
+
+    // Tests for keywords
+    for (const keyword of Array.from(properties.get(name)).sort()) {
+      tests[`css.properties.${name}.${keyword}`] = compileTest({
+        raw: {
+          code: `CSS.supports("${name}", "${keyword}")`
+        },
+        category: 'css',
+        exposure: ['Window']
+      });
+    }
   }
 
   return tests;
