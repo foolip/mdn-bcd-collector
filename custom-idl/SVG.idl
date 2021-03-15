@@ -117,7 +117,7 @@ interface SVGGlyphRefElement : SVGElement {
 };
 
 // https://www.w3.org/TR/SVG11/fonts.html#InterfaceSVGHKernElement
-interface SVGHKernlement : SVGElement {};
+interface SVGHKernElement : SVGElement {};
 
 // https://www.w3.org/TR/SVG11/coords.html#InterfaceSVGMatrix
 interface SVGMatrix {
