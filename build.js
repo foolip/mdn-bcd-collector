@@ -279,8 +279,19 @@ const flattenIDL = (specIDLs, customIDLs) => {
 };
 
 const flattenMembers = (iface) => {
-  const members = iface.members.filter((member) => member.name && member.type !== 'const' && member.special !== 'inherit');
-  for (const member of iface.members.filter((member) => !member.name)) {
+  const members = [];
+  for (const member of iface.members) {
+    if (member.special === 'stringifier') {
+      members.push({name: 'toString', type: 'operation'});
+    }
+
+    if (member.name) {
+      if (member.type !== 'const' && member.special !== 'inherit') {
+        members.push(member);
+      }
+      continue;
+    }
+
     switch (member.type) {
       case 'constructor':
         // Test generation doesn't use constructor arguments, so they aren't
@@ -324,13 +335,6 @@ const flattenMembers = (iface) => {
               {name: 'add', type: 'operation'},
               {name: 'clear', type: 'operation'},
               {name: 'delete', type: 'operation'});
-        }
-        break;
-      case 'operation':
-        switch (member.special) {
-          case 'stringifier':
-            members.push({name: 'toString', type: 'operation'});
-            break;
         }
         break;
     }
