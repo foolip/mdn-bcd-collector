@@ -167,10 +167,6 @@ const compileTestCode = (test) => {
 };
 
 const compileTest = (test) => {
-  if (!('raw' in test) && 'tests' in test) {
-    return test;
-  }
-
   const newTest = {
     tests: [],
     exposure: test.exposure,
@@ -180,17 +176,9 @@ const compileTest = (test) => {
   if (!Array.isArray(test.raw.code)) {
     const code = compileTestCode(test.raw.code);
     newTest.tests.push({code});
-  } else if (test.category == 'css') {
-    const code = `${compileTestCode(
-        test.raw.code[0]
-    )} ${test.raw.combinator} ${compileTestCode(
-        test.raw.code[1]
-    )}`;
-    newTest.tests.push({code});
   } else {
-    const parentCode = compileTestCode(test.raw.code[0]);
-    const childCode = compileTestCode(test.raw.code[1]);
-    const code = `${parentCode} ${test.raw.combinator} ${childCode}`;
+    const parts = test.raw.code.map(compileTestCode);
+    const code = parts.join(` ${test.raw.combinator} `);
     newTest.tests.push({code});
   }
 
@@ -500,7 +488,6 @@ const buildIDLTests = (ast) => {
         code: customIfaceTest || {property: iface.name, owner: 'self'},
         combinator: '&&'
       },
-      category: 'api',
       exposure: Array.from(exposureSet),
       resources: resources
     });
@@ -559,7 +546,6 @@ const buildIDLTests = (ast) => {
           code: expr,
           combinator: '&&'
         },
-        category: 'api',
         exposure: Array.from(exposureSet),
         resources: resources
       });
@@ -573,7 +559,6 @@ const buildIDLTests = (ast) => {
           code: subtest[1],
           combinator: '&&'
         },
-        category: 'api',
         exposure: Array.from(exposureSet),
         resources: resources
       });
@@ -637,7 +622,6 @@ const buildCSS = (webrefCSS, customCSS) => {
         ],
         combinator: '||'
       },
-      category: 'css',
       exposure: ['Window']
     });
   }
