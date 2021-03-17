@@ -167,24 +167,19 @@ const compileTestCode = (test) => {
 };
 
 const compileTest = (test) => {
-  const newTest = {
-    tests: [],
-    exposure: test.exposure,
-    resources: test.resources || {}
-  };
-
+  let code;
   if (!Array.isArray(test.raw.code)) {
-    const code = compileTestCode(test.raw.code);
-    newTest.tests.push({code});
+    code = compileTestCode(test.raw.code);
   } else {
     const parts = test.raw.code.map(compileTestCode);
-    const code = parts.join(` ${test.raw.combinator} `);
-    newTest.tests.push({code});
+    code = parts.join(` ${test.raw.combinator} `);
   }
 
-  // TODO: Simplify the structure of tests.json since there's only one test.
-  if (newTest.tests.length !== 1) {
-    throw new Error('More than one test generated');
+  const {exposure, resources} = test;
+  const newTest = {code, exposure};
+
+  if (resources && Object.keys(resources).length) {
+    newTest.resources = resources;
   }
 
   return newTest;
