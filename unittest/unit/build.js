@@ -464,7 +464,6 @@ describe('build', () => {
           ],
           combinator: '&&'
         },
-        category: 'api',
         resources: {},
         exposure: ['Window']
       };
@@ -487,7 +486,6 @@ describe('build', () => {
             code: 'foo',
             combinator: '&&'
           },
-          category: 'api',
           resources: {},
           exposure: ['Window']
         };
@@ -509,7 +507,6 @@ describe('build', () => {
             code: ['foo', 'foo'],
             combinator: '&&'
           },
-          category: 'api',
           resources: {},
           exposure: ['Window']
         };
@@ -526,21 +523,6 @@ describe('build', () => {
       });
     });
 
-    it('ignore already compiled', () => {
-      const test = {
-        tests: [
-          {
-            code: 'true'
-          }
-        ],
-        resources: {},
-        exposure: ['Window'],
-        extra_attribute: true
-      };
-
-      assert.deepEqual(compileTest(test), test);
-    });
-
     it('no-repeated test code', () => {
       const rawTests = [
         {
@@ -548,7 +530,6 @@ describe('build', () => {
             code: 'true',
             combinator: '&&'
           },
-          category: 'api',
           resources: {},
           exposure: ['Window']
         },
@@ -560,7 +541,6 @@ describe('build', () => {
             ],
             combinator: '||'
           },
-          category: 'api',
           resources: {},
           exposure: ['Window']
         },
@@ -572,7 +552,6 @@ describe('build', () => {
             ],
             combinator: '&&'
           },
-          category: 'api',
           resources: {},
           exposure: ['Worker']
         }
@@ -616,7 +595,6 @@ describe('build', () => {
           ],
           combinator: '||'
         },
-        category: 'css',
         resources: {},
         exposure: ['Window']
       };
