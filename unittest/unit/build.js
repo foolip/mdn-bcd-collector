@@ -475,7 +475,6 @@ describe('build', () => {
             code: '"Document" in self && "body" in Document.prototype'
           }
         ],
-        category: 'api',
         resources: {},
         exposure: ['Window']
       });
@@ -499,7 +498,6 @@ describe('build', () => {
               code: 'foo'
             }
           ],
-          category: 'api',
           resources: {},
           exposure: ['Window']
         });
@@ -522,7 +520,6 @@ describe('build', () => {
               code: 'foo && foo'
             }
           ],
-          category: 'api',
           resources: {},
           exposure: ['Window']
         });
@@ -536,9 +533,9 @@ describe('build', () => {
             code: 'true'
           }
         ],
-        category: 'api',
         resources: {},
-        exposure: ['Window']
+        exposure: ['Window'],
+        extra_attribute: true
       };
 
       assert.deepEqual(compileTest(test), test);
@@ -587,7 +584,6 @@ describe('build', () => {
             code: 'true'
           }
         ],
-        category: 'api',
         resources: {},
         exposure: ['Window']
       });
@@ -597,7 +593,6 @@ describe('build', () => {
             code: 'true || true'
           }
         ],
-        category: 'api',
         resources: {},
         exposure: ['Window']
       });
@@ -607,7 +602,6 @@ describe('build', () => {
             code: 'true && true'
           }
         ],
-        category: 'api',
         resources: {},
         exposure: ['Worker']
       });
@@ -633,7 +627,6 @@ describe('build', () => {
             code: '"fontFamily" in document.body.style || CSS.supports("font-family", "inherit")'
           }
         ],
-        category: 'css',
         resources: {},
         exposure: ['Window']
       });
@@ -852,7 +845,6 @@ describe('build', () => {
               code: '"Attr" in self'
             }
           ],
-          category: 'api',
           resources: {},
           exposure: ['Window']
         },
@@ -862,7 +854,6 @@ describe('build', () => {
               code: '"name" in Attr.prototype'
             }
           ],
-          category: 'api',
           resources: {},
           exposure: ['Window']
         }
@@ -881,7 +872,6 @@ describe('build', () => {
               code: '"Node" in self'
             }
           ],
-          category: 'api',
           resources: {},
           exposure: ['Window']
         },
@@ -891,7 +881,6 @@ describe('build', () => {
               code: '"contains" in Node.prototype'
             }
           ],
-          category: 'api',
           resources: {},
           exposure: ['Window']
         }
@@ -911,7 +900,6 @@ describe('build', () => {
               code: '"MediaSource" in self'
             }
           ],
-          category: 'api',
           resources: {},
           exposure: ['Window']
         },
@@ -921,7 +909,6 @@ describe('build', () => {
               code: '"isTypeSupported" in MediaSource'
             }
           ],
-          category: 'api',
           resources: {},
           exposure: ['Window']
         }
@@ -941,7 +928,6 @@ describe('build', () => {
               code: '"Window" in self'
             }
           ],
-          category: 'api',
           resources: {},
           exposure: ['Window']
         }
@@ -994,7 +980,6 @@ describe('build', () => {
               code: '(function () {\n  var canvas = document.createElement(\'canvas\');\n  var gl = canvas.getContext(\'webgl\');\n  var instance = gl.getExtension(\'ANGLE_instanced_arrays\');\n  return !!instance;\n})();'
             }
           ],
-          category: 'api',
           resources: {},
           exposure: ['Window']
         },
@@ -1004,7 +989,6 @@ describe('build', () => {
               code: '(function () {\n  var canvas = document.createElement(\'canvas\');\n  var gl = canvas.getContext(\'webgl\');\n  var instance = gl.getExtension(\'ANGLE_instanced_arrays\');\n  return true && instance && \'drawArraysInstancedANGLE\' in instance;\n})();'
             }
           ],
-          category: 'api',
           resources: {},
           exposure: ['Window']
         },
@@ -1014,7 +998,6 @@ describe('build', () => {
               code: '(function () {\n  var canvas = document.createElement(\'canvas\');\n  var gl = canvas.getContext(\'webgl\');\n  var instance = gl.getExtension(\'ANGLE_instanced_arrays\');\n  return \'drawElementsInstancedANGLE\' in instance;\n})();'
             }
           ],
-          category: 'api',
           resources: {},
           exposure: ['Window']
         },
@@ -1024,7 +1007,6 @@ describe('build', () => {
               code: '"Document" in self'
             }
           ],
-          category: 'api',
           resources: {},
           exposure: ['Window']
         },
@@ -1034,7 +1016,6 @@ describe('build', () => {
               code: '(function () {\n  return document.charset == \'UTF-8\';\n})();'
             }
           ],
-          category: 'api',
           resources: {},
           exposure: ['Window']
         },
@@ -1044,7 +1025,6 @@ describe('build', () => {
               code: '"loaded" in Document.prototype'
             }
           ],
-          category: 'api',
           resources: {},
           exposure: ['Window']
         },
@@ -1054,7 +1034,6 @@ describe('build', () => {
               code: '(function () {\n  return typeof document.loaded === \'boolean\';\n})();'
             }
           ],
-          category: 'api',
           resources: {},
           exposure: ['Window']
         }
@@ -1080,7 +1059,6 @@ describe('build', () => {
               code: '"WindowOrWorkerGlobalScope" in self'
             }
           ],
-          category: 'api',
           resources: {},
           exposure: ['Window']
         },
@@ -1090,7 +1068,6 @@ describe('build', () => {
               code: '"isLoaded" in self'
             }
           ],
-          category: 'api',
           resources: {},
           exposure: ['Window']
         }
@@ -1109,7 +1086,6 @@ describe('build', () => {
               code: '"Number" in self'
             }
           ],
-          category: 'api',
           resources: {},
           exposure: ['Window']
         },
@@ -1119,7 +1095,6 @@ describe('build', () => {
               code: 'bcd.testConstructor("Number");'
             }
           ],
-          category: 'api',
           resources: {},
           exposure: ['Window']
         }
@@ -1136,7 +1111,6 @@ describe('build', () => {
               code: '"Number" in self'
             }
           ],
-          category: 'api',
           resources: {},
           exposure: ['Window']
         },
@@ -1146,7 +1120,6 @@ describe('build', () => {
               code: 'bcd.testConstructor("Number");'
             }
           ],
-          category: 'api',
           resources: {},
           exposure: ['Window']
         }
@@ -1164,7 +1137,6 @@ describe('build', () => {
               code: '"DoubleList" in self'
             }
           ],
-          category: 'api',
           resources: {},
           exposure: ['Window']
         },
@@ -1174,7 +1146,6 @@ describe('build', () => {
               code: '"Symbol" in self && "iterator" in Symbol && Symbol.iterator in DoubleList.prototype'
             }
           ],
-          category: 'api',
           resources: {},
           exposure: ['Window']
         },
@@ -1184,7 +1155,6 @@ describe('build', () => {
               code: '"entries" in DoubleList.prototype'
             }
           ],
-          category: 'api',
           resources: {},
           exposure: ['Window']
         },
@@ -1194,7 +1164,6 @@ describe('build', () => {
               code: '"forEach" in DoubleList.prototype'
             }
           ],
-          category: 'api',
           resources: {},
           exposure: ['Window']
         },
@@ -1204,7 +1173,6 @@ describe('build', () => {
               code: '"keys" in DoubleList.prototype'
             }
           ],
-          category: 'api',
           resources: {},
           exposure: ['Window']
         },
@@ -1214,7 +1182,6 @@ describe('build', () => {
               code: '"values" in DoubleList.prototype'
             }
           ],
-          category: 'api',
           resources: {},
           exposure: ['Window']
         }
@@ -1232,7 +1199,6 @@ describe('build', () => {
               code: '"DoubleMap" in self'
             }
           ],
-          category: 'api',
           resources: {},
           exposure: ['Window']
         },
@@ -1242,7 +1208,6 @@ describe('build', () => {
               code: '"clear" in DoubleMap.prototype'
             }
           ],
-          category: 'api',
           resources: {},
           exposure: ['Window']
         },
@@ -1252,7 +1217,6 @@ describe('build', () => {
               code: '"delete" in DoubleMap.prototype'
             }
           ],
-          category: 'api',
           resources: {},
           exposure: ['Window']
         },
@@ -1262,7 +1226,6 @@ describe('build', () => {
               code: '"entries" in DoubleMap.prototype'
             }
           ],
-          category: 'api',
           resources: {},
           exposure: ['Window']
         },
@@ -1272,7 +1235,6 @@ describe('build', () => {
               code: '"forEach" in DoubleMap.prototype'
             }
           ],
-          category: 'api',
           resources: {},
           exposure: ['Window']
         },
@@ -1282,7 +1244,6 @@ describe('build', () => {
               code: '"get" in DoubleMap.prototype'
             }
           ],
-          category: 'api',
           resources: {},
           exposure: ['Window']
         },
@@ -1292,7 +1253,6 @@ describe('build', () => {
               code: '"has" in DoubleMap.prototype'
             }
           ],
-          category: 'api',
           resources: {},
           exposure: ['Window']
         },
@@ -1302,7 +1262,6 @@ describe('build', () => {
               code: '"keys" in DoubleMap.prototype'
             }
           ],
-          category: 'api',
           resources: {},
           exposure: ['Window']
         },
@@ -1312,7 +1271,6 @@ describe('build', () => {
               code: '"set" in DoubleMap.prototype'
             }
           ],
-          category: 'api',
           resources: {},
           exposure: ['Window']
         },
@@ -1322,7 +1280,6 @@ describe('build', () => {
               code: '"size" in DoubleMap.prototype'
             }
           ],
-          category: 'api',
           resources: {},
           exposure: ['Window']
         },
@@ -1332,7 +1289,6 @@ describe('build', () => {
               code: '"values" in DoubleMap.prototype'
             }
           ],
-          category: 'api',
           resources: {},
           exposure: ['Window']
         }
@@ -1350,7 +1306,6 @@ describe('build', () => {
               code: '"DoubleSet" in self'
             }
           ],
-          category: 'api',
           resources: {},
           exposure: ['Window']
         },
@@ -1360,7 +1315,6 @@ describe('build', () => {
               code: '"add" in DoubleSet.prototype'
             }
           ],
-          category: 'api',
           resources: {},
           exposure: ['Window']
         },
@@ -1370,7 +1324,6 @@ describe('build', () => {
               code: '"clear" in DoubleSet.prototype'
             }
           ],
-          category: 'api',
           resources: {},
           exposure: ['Window']
         },
@@ -1380,7 +1333,6 @@ describe('build', () => {
               code: '"delete" in DoubleSet.prototype'
             }
           ],
-          category: 'api',
           resources: {},
           exposure: ['Window']
         },
@@ -1390,7 +1342,6 @@ describe('build', () => {
               code: '"entries" in DoubleSet.prototype'
             }
           ],
-          category: 'api',
           resources: {},
           exposure: ['Window']
         },
@@ -1400,7 +1351,6 @@ describe('build', () => {
               code: '"forEach" in DoubleSet.prototype'
             }
           ],
-          category: 'api',
           resources: {},
           exposure: ['Window']
         },
@@ -1410,7 +1360,6 @@ describe('build', () => {
               code: '"has" in DoubleSet.prototype'
             }
           ],
-          category: 'api',
           resources: {},
           exposure: ['Window']
         },
@@ -1420,7 +1369,6 @@ describe('build', () => {
               code: '"keys" in DoubleSet.prototype'
             }
           ],
-          category: 'api',
           resources: {},
           exposure: ['Window']
         },
@@ -1430,7 +1378,6 @@ describe('build', () => {
               code: '"size" in DoubleSet.prototype'
             }
           ],
-          category: 'api',
           resources: {},
           exposure: ['Window']
         },
@@ -1440,7 +1387,6 @@ describe('build', () => {
               code: '"values" in DoubleSet.prototype'
             }
           ],
-          category: 'api',
           resources: {},
           exposure: ['Window']
         }
@@ -1459,7 +1405,6 @@ describe('build', () => {
               code: '"GetMe" in self'
             }
           ],
-          category: 'api',
           resources: {},
           exposure: ['Window']
         }
@@ -1480,7 +1425,6 @@ describe('build', () => {
               code: '"CSS" in self'
             }
           ],
-          category: 'api',
           resources: {},
           exposure: ['Window']
         },
@@ -1490,7 +1434,6 @@ describe('build', () => {
               code: '"MessageChannel" in self'
             }
           ],
-          category: 'api',
           resources: {},
           exposure: ['Window', 'Worker']
         },
@@ -1500,7 +1443,6 @@ describe('build', () => {
               code: '"Worker" in self'
             }
           ],
-          category: 'api',
           resources: {},
           exposure: ['Window']
         },
@@ -1510,7 +1452,6 @@ describe('build', () => {
               code: '"WorkerSync" in self'
             }
           ],
-          category: 'api',
           resources: {},
           exposure: ['Worker']
         }
@@ -1532,7 +1473,6 @@ describe('build', () => {
               code: '"AudioNode" in self'
             }
           ],
-          category: 'api',
           resources: {},
           exposure: ['Window']
         },
@@ -1542,7 +1482,6 @@ describe('build', () => {
               code: '"disconnect" in AudioNode.prototype'
             }
           ],
-          category: 'api',
           resources: {},
           exposure: ['Window']
         }
@@ -1561,7 +1500,6 @@ describe('build', () => {
               code: '"CSS" in self'
             }
           ],
-          category: 'api',
           resources: {},
           exposure: ['Window']
         },
@@ -1571,7 +1509,6 @@ describe('build', () => {
               code: '"paintWorklet" in CSS'
             }
           ],
-          category: 'api',
           resources: {},
           exposure: ['Window']
         }
@@ -1590,7 +1527,6 @@ describe('build', () => {
               code: '"CSS" in self'
             }
           ],
-          category: 'api',
           resources: {},
           exposure: ['Window']
         },
@@ -1600,7 +1536,6 @@ describe('build', () => {
               code: '"supports" in CSS'
             }
           ],
-          category: 'api',
           resources: {},
           exposure: ['Window']
         }
@@ -1632,7 +1567,6 @@ describe('build', () => {
               code: '(function () {\n  var css = CSS;\n  return !!css;\n})();'
             }
           ],
-          category: 'api',
           resources: {},
           exposure: ['Window']
         },
@@ -1642,7 +1576,6 @@ describe('build', () => {
               code: '(function () {\n  var css = CSS;\n  return css && \'paintWorklet\' in css;\n})();'
             }
           ],
-          category: 'api',
           resources: {},
           exposure: ['Window']
         }
@@ -1707,7 +1640,6 @@ describe('build', () => {
             code: '"fontFamily" in document.body.style || CSS.supports("font-family", "inherit")'
           }
         ],
-        category: 'css',
         resources: {},
         exposure: ['Window']
       },
@@ -1717,7 +1649,6 @@ describe('build', () => {
             code: '"fontWeight" in document.body.style || CSS.supports("font-weight", "inherit")'
           }
         ],
-        category: 'css',
         resources: {},
         exposure: ['Window']
       },
@@ -1727,7 +1658,6 @@ describe('build', () => {
             code: '"grid" in document.body.style || CSS.supports("grid", "inherit")'
           }
         ],
-        category: 'css',
         resources: {},
         exposure: ['Window']
       },
@@ -1737,7 +1667,6 @@ describe('build', () => {
             code: '"zoom" in document.body.style || CSS.supports("zoom", "inherit")'
           }
         ],
-        category: 'css',
         resources: {},
         exposure: ['Window']
       }

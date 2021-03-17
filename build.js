@@ -173,7 +173,6 @@ const compileTest = (test) => {
 
   const newTest = {
     tests: [],
-    category: test.category,
     exposure: test.exposure,
     resources: test.resources || {}
   };
