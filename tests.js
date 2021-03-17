@@ -76,9 +76,10 @@ class Tests {
         if (!testExposure || exposure == testExposure) {
           tests.push({
             ident: ident,
-            tests: test.tests,
+            // TODO: Simplify this to just a code string.
+            tests: [{code: test.code}],
             exposure: exposure,
-            resources: test.resources
+            resources: test.resources || {}
           });
         }
       }

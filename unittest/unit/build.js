@@ -469,12 +469,7 @@ describe('build', () => {
       };
 
       assert.deepEqual(compileTest(rawTest), {
-        tests: [
-          {
-            code: '"Document" in self && "body" in Document.prototype'
-          }
-        ],
-        resources: {},
+        code: '"Document" in self && "body" in Document.prototype',
         exposure: ['Window']
       });
     });
@@ -491,12 +486,7 @@ describe('build', () => {
         };
 
         assert.deepEqual(compileTest(rawTest), {
-          tests: [
-            {
-              code: 'foo'
-            }
-          ],
-          resources: {},
+          code: 'foo',
           exposure: ['Window']
         });
       });
@@ -512,12 +502,7 @@ describe('build', () => {
         };
 
         assert.deepEqual(compileTest(rawTest), {
-          tests: [
-            {
-              code: 'foo && foo'
-            }
-          ],
-          resources: {},
+          code: 'foo && foo',
           exposure: ['Window']
         });
       });
@@ -558,30 +543,15 @@ describe('build', () => {
       ];
 
       assert.deepEqual(compileTest(rawTests[0]), {
-        tests: [
-          {
-            code: 'true'
-          }
-        ],
-        resources: {},
+        code: 'true',
         exposure: ['Window']
       });
       assert.deepEqual(compileTest(rawTests[1]), {
-        tests: [
-          {
-            code: 'true || true'
-          }
-        ],
-        resources: {},
+        code: 'true || true',
         exposure: ['Window']
       });
       assert.deepEqual(compileTest(rawTests[2]), {
-        tests: [
-          {
-            code: 'true && true'
-          }
-        ],
-        resources: {},
+        code: 'true && true',
         exposure: ['Worker']
       });
     });
@@ -600,12 +570,7 @@ describe('build', () => {
       };
 
       assert.deepEqual(compileTest(rawTest), {
-        tests: [
-          {
-            code: '"fontFamily" in document.body.style || CSS.supports("font-family", "inherit")'
-          }
-        ],
-        resources: {},
+        code: '"fontFamily" in document.body.style || CSS.supports("font-family", "inherit")',
         exposure: ['Window']
       });
     });
@@ -818,21 +783,11 @@ describe('build', () => {
       const ast = WebIDL2.parse(`interface Attr { attribute any name; };`);
       assert.deepEqual(buildIDLTests(ast), {
         'api.Attr': {
-          tests: [
-            {
-              code: '"Attr" in self'
-            }
-          ],
-          resources: {},
+          code: '"Attr" in self',
           exposure: ['Window']
         },
         'api.Attr.name': {
-          tests: [
-            {
-              code: '"name" in Attr.prototype'
-            }
-          ],
-          resources: {},
+          code: '"name" in Attr.prototype',
           exposure: ['Window']
         }
       });
@@ -845,21 +800,11 @@ describe('build', () => {
            };`);
       assert.deepEqual(buildIDLTests(ast), {
         'api.Node': {
-          tests: [
-            {
-              code: '"Node" in self'
-            }
-          ],
-          resources: {},
+          code: '"Node" in self',
           exposure: ['Window']
         },
         'api.Node.contains': {
-          tests: [
-            {
-              code: '"contains" in Node.prototype'
-            }
-          ],
-          resources: {},
+          code: '"contains" in Node.prototype',
           exposure: ['Window']
         }
       });
@@ -873,21 +818,11 @@ describe('build', () => {
 
       assert.deepEqual(buildIDLTests(ast), {
         'api.MediaSource': {
-          tests: [
-            {
-              code: '"MediaSource" in self'
-            }
-          ],
-          resources: {},
+          code: '"MediaSource" in self',
           exposure: ['Window']
         },
         'api.MediaSource.isTypeSupported': {
-          tests: [
-            {
-              code: '"isTypeSupported" in MediaSource'
-            }
-          ],
-          resources: {},
+          code: '"isTypeSupported" in MediaSource',
           exposure: ['Window']
         }
       });
@@ -901,12 +836,7 @@ describe('build', () => {
 
       assert.deepEqual(buildIDLTests(ast), {
         'api.Window': {
-          tests: [
-            {
-              code: '"Window" in self'
-            }
-          ],
-          resources: {},
+          code: '"Window" in self',
           exposure: ['Window']
         }
       });
@@ -953,66 +883,31 @@ describe('build', () => {
 
       assert.deepEqual(buildIDLTests(ast), {
         'api.ANGLE_instanced_arrays': {
-          tests: [
-            {
-              code: '(function () {\n  var canvas = document.createElement(\'canvas\');\n  var gl = canvas.getContext(\'webgl\');\n  var instance = gl.getExtension(\'ANGLE_instanced_arrays\');\n  return !!instance;\n})();'
-            }
-          ],
-          resources: {},
+          code: '(function () {\n  var canvas = document.createElement(\'canvas\');\n  var gl = canvas.getContext(\'webgl\');\n  var instance = gl.getExtension(\'ANGLE_instanced_arrays\');\n  return !!instance;\n})();',
           exposure: ['Window']
         },
         'api.ANGLE_instanced_arrays.drawArraysInstancedANGLE': {
-          tests: [
-            {
-              code: '(function () {\n  var canvas = document.createElement(\'canvas\');\n  var gl = canvas.getContext(\'webgl\');\n  var instance = gl.getExtension(\'ANGLE_instanced_arrays\');\n  return true && instance && \'drawArraysInstancedANGLE\' in instance;\n})();'
-            }
-          ],
-          resources: {},
+          code: '(function () {\n  var canvas = document.createElement(\'canvas\');\n  var gl = canvas.getContext(\'webgl\');\n  var instance = gl.getExtension(\'ANGLE_instanced_arrays\');\n  return true && instance && \'drawArraysInstancedANGLE\' in instance;\n})();',
           exposure: ['Window']
         },
         'api.ANGLE_instanced_arrays.drawElementsInstancedANGLE': {
-          tests: [
-            {
-              code: '(function () {\n  var canvas = document.createElement(\'canvas\');\n  var gl = canvas.getContext(\'webgl\');\n  var instance = gl.getExtension(\'ANGLE_instanced_arrays\');\n  return \'drawElementsInstancedANGLE\' in instance;\n})();'
-            }
-          ],
-          resources: {},
+          code: '(function () {\n  var canvas = document.createElement(\'canvas\');\n  var gl = canvas.getContext(\'webgl\');\n  var instance = gl.getExtension(\'ANGLE_instanced_arrays\');\n  return \'drawElementsInstancedANGLE\' in instance;\n})();',
           exposure: ['Window']
         },
         'api.Document': {
-          tests: [
-            {
-              code: '"Document" in self'
-            }
-          ],
-          resources: {},
+          code: '"Document" in self',
           exposure: ['Window']
         },
         'api.Document.charset': {
-          tests: [
-            {
-              code: '(function () {\n  return document.charset == \'UTF-8\';\n})();'
-            }
-          ],
-          resources: {},
+          code: '(function () {\n  return document.charset == \'UTF-8\';\n})();',
           exposure: ['Window']
         },
         'api.Document.loaded': {
-          tests: [
-            {
-              code: '"loaded" in Document.prototype'
-            }
-          ],
-          resources: {},
+          code: '"loaded" in Document.prototype',
           exposure: ['Window']
         },
         'api.Document.loaded.loaded_is_boolean': {
-          tests: [
-            {
-              code: '(function () {\n  return typeof document.loaded === \'boolean\';\n})();'
-            }
-          ],
-          resources: {},
+          code: '(function () {\n  return typeof document.loaded === \'boolean\';\n})();',
           exposure: ['Window']
         }
       });
@@ -1032,21 +927,11 @@ describe('build', () => {
 
       assert.deepEqual(buildIDLTests(ast), {
         'api.WindowOrWorkerGlobalScope': {
-          tests: [
-            {
-              code: '"WindowOrWorkerGlobalScope" in self'
-            }
-          ],
-          resources: {},
+          code: '"WindowOrWorkerGlobalScope" in self',
           exposure: ['Window']
         },
         'api.WindowOrWorkerGlobalScope.isLoaded': {
-          tests: [
-            {
-              code: '"isLoaded" in self'
-            }
-          ],
-          resources: {},
+          code: '"isLoaded" in self',
           exposure: ['Window']
         }
       });
@@ -1059,21 +944,11 @@ describe('build', () => {
 
       assert.deepEqual(buildIDLTests(ast), {
         'api.Number': {
-          tests: [
-            {
-              code: '"Number" in self'
-            }
-          ],
-          resources: {},
+          code: '"Number" in self',
           exposure: ['Window']
         },
         'api.Number.Number': {
-          tests: [
-            {
-              code: 'bcd.testConstructor("Number");'
-            }
-          ],
-          resources: {},
+          code: 'bcd.testConstructor("Number");',
           exposure: ['Window']
         }
       });
@@ -1084,21 +959,11 @@ describe('build', () => {
         interface Number {};`);
       assert.deepEqual(buildIDLTests(ast), {
         'api.Number': {
-          tests: [
-            {
-              code: '"Number" in self'
-            }
-          ],
-          resources: {},
+          code: '"Number" in self',
           exposure: ['Window']
         },
         'api.Number.Number': {
-          tests: [
-            {
-              code: 'bcd.testConstructor("Number");'
-            }
-          ],
-          resources: {},
+          code: 'bcd.testConstructor("Number");',
           exposure: ['Window']
         }
       });
@@ -1110,57 +975,27 @@ describe('build', () => {
       };`);
       assert.deepEqual(buildIDLTests(ast), {
         'api.DoubleList': {
-          tests: [
-            {
-              code: '"DoubleList" in self'
-            }
-          ],
-          resources: {},
+          code: '"DoubleList" in self',
           exposure: ['Window']
         },
         'api.DoubleList.@@iterator': {
-          tests: [
-            {
-              code: '"Symbol" in self && "iterator" in Symbol && Symbol.iterator in DoubleList.prototype'
-            }
-          ],
-          resources: {},
+          code: '"Symbol" in self && "iterator" in Symbol && Symbol.iterator in DoubleList.prototype',
           exposure: ['Window']
         },
         'api.DoubleList.entries': {
-          tests: [
-            {
-              code: '"entries" in DoubleList.prototype'
-            }
-          ],
-          resources: {},
+          code: '"entries" in DoubleList.prototype',
           exposure: ['Window']
         },
         'api.DoubleList.forEach': {
-          tests: [
-            {
-              code: '"forEach" in DoubleList.prototype'
-            }
-          ],
-          resources: {},
+          code: '"forEach" in DoubleList.prototype',
           exposure: ['Window']
         },
         'api.DoubleList.keys': {
-          tests: [
-            {
-              code: '"keys" in DoubleList.prototype'
-            }
-          ],
-          resources: {},
+          code: '"keys" in DoubleList.prototype',
           exposure: ['Window']
         },
         'api.DoubleList.values': {
-          tests: [
-            {
-              code: '"values" in DoubleList.prototype'
-            }
-          ],
-          resources: {},
+          code: '"values" in DoubleList.prototype',
           exposure: ['Window']
         }
       });
@@ -1172,102 +1007,47 @@ describe('build', () => {
       };`);
       assert.deepEqual(buildIDLTests(ast), {
         'api.DoubleMap': {
-          tests: [
-            {
-              code: '"DoubleMap" in self'
-            }
-          ],
-          resources: {},
+          code: '"DoubleMap" in self',
           exposure: ['Window']
         },
         'api.DoubleMap.clear': {
-          tests: [
-            {
-              code: '"clear" in DoubleMap.prototype'
-            }
-          ],
-          resources: {},
+          code: '"clear" in DoubleMap.prototype',
           exposure: ['Window']
         },
         'api.DoubleMap.delete': {
-          tests: [
-            {
-              code: '"delete" in DoubleMap.prototype'
-            }
-          ],
-          resources: {},
+          code: '"delete" in DoubleMap.prototype',
           exposure: ['Window']
         },
         'api.DoubleMap.entries': {
-          tests: [
-            {
-              code: '"entries" in DoubleMap.prototype'
-            }
-          ],
-          resources: {},
+          code: '"entries" in DoubleMap.prototype',
           exposure: ['Window']
         },
         'api.DoubleMap.forEach': {
-          tests: [
-            {
-              code: '"forEach" in DoubleMap.prototype'
-            }
-          ],
-          resources: {},
+          code: '"forEach" in DoubleMap.prototype',
           exposure: ['Window']
         },
         'api.DoubleMap.get': {
-          tests: [
-            {
-              code: '"get" in DoubleMap.prototype'
-            }
-          ],
-          resources: {},
+          code: '"get" in DoubleMap.prototype',
           exposure: ['Window']
         },
         'api.DoubleMap.has': {
-          tests: [
-            {
-              code: '"has" in DoubleMap.prototype'
-            }
-          ],
-          resources: {},
+          code: '"has" in DoubleMap.prototype',
           exposure: ['Window']
         },
         'api.DoubleMap.keys': {
-          tests: [
-            {
-              code: '"keys" in DoubleMap.prototype'
-            }
-          ],
-          resources: {},
+          code: '"keys" in DoubleMap.prototype',
           exposure: ['Window']
         },
         'api.DoubleMap.set': {
-          tests: [
-            {
-              code: '"set" in DoubleMap.prototype'
-            }
-          ],
-          resources: {},
+          code: '"set" in DoubleMap.prototype',
           exposure: ['Window']
         },
         'api.DoubleMap.size': {
-          tests: [
-            {
-              code: '"size" in DoubleMap.prototype'
-            }
-          ],
-          resources: {},
+          code: '"size" in DoubleMap.prototype',
           exposure: ['Window']
         },
         'api.DoubleMap.values': {
-          tests: [
-            {
-              code: '"values" in DoubleMap.prototype'
-            }
-          ],
-          resources: {},
+          code: '"values" in DoubleMap.prototype',
           exposure: ['Window']
         }
       });
@@ -1279,93 +1059,43 @@ describe('build', () => {
       };`);
       assert.deepEqual(buildIDLTests(ast), {
         'api.DoubleSet': {
-          tests: [
-            {
-              code: '"DoubleSet" in self'
-            }
-          ],
-          resources: {},
+          code: '"DoubleSet" in self',
           exposure: ['Window']
         },
         'api.DoubleSet.add': {
-          tests: [
-            {
-              code: '"add" in DoubleSet.prototype'
-            }
-          ],
-          resources: {},
+          code: '"add" in DoubleSet.prototype',
           exposure: ['Window']
         },
         'api.DoubleSet.clear': {
-          tests: [
-            {
-              code: '"clear" in DoubleSet.prototype'
-            }
-          ],
-          resources: {},
+          code: '"clear" in DoubleSet.prototype',
           exposure: ['Window']
         },
         'api.DoubleSet.delete': {
-          tests: [
-            {
-              code: '"delete" in DoubleSet.prototype'
-            }
-          ],
-          resources: {},
+          code: '"delete" in DoubleSet.prototype',
           exposure: ['Window']
         },
         'api.DoubleSet.entries': {
-          tests: [
-            {
-              code: '"entries" in DoubleSet.prototype'
-            }
-          ],
-          resources: {},
+          code: '"entries" in DoubleSet.prototype',
           exposure: ['Window']
         },
         'api.DoubleSet.forEach': {
-          tests: [
-            {
-              code: '"forEach" in DoubleSet.prototype'
-            }
-          ],
-          resources: {},
+          code: '"forEach" in DoubleSet.prototype',
           exposure: ['Window']
         },
         'api.DoubleSet.has': {
-          tests: [
-            {
-              code: '"has" in DoubleSet.prototype'
-            }
-          ],
-          resources: {},
+          code: '"has" in DoubleSet.prototype',
           exposure: ['Window']
         },
         'api.DoubleSet.keys': {
-          tests: [
-            {
-              code: '"keys" in DoubleSet.prototype'
-            }
-          ],
-          resources: {},
+          code: '"keys" in DoubleSet.prototype',
           exposure: ['Window']
         },
         'api.DoubleSet.size': {
-          tests: [
-            {
-              code: '"size" in DoubleSet.prototype'
-            }
-          ],
-          resources: {},
+          code: '"size" in DoubleSet.prototype',
           exposure: ['Window']
         },
         'api.DoubleSet.values': {
-          tests: [
-            {
-              code: '"values" in DoubleSet.prototype'
-            }
-          ],
-          resources: {},
+          code: '"values" in DoubleSet.prototype',
           exposure: ['Window']
         }
       });
@@ -1378,12 +1108,7 @@ describe('build', () => {
       };`);
       assert.deepEqual(buildIDLTests(ast), {
         'api.GetMe': {
-          tests: [
-            {
-              code: '"GetMe" in self'
-            }
-          ],
-          resources: {},
+          code: '"GetMe" in self',
           exposure: ['Window']
         }
       });
@@ -1398,39 +1123,19 @@ describe('build', () => {
       `);
       assert.deepEqual(buildIDLTests(ast), {
         'api.CSS': {
-          tests: [
-            {
-              code: '"CSS" in self'
-            }
-          ],
-          resources: {},
+          code: '"CSS" in self',
           exposure: ['Window']
         },
         'api.MessageChannel': {
-          tests: [
-            {
-              code: '"MessageChannel" in self'
-            }
-          ],
-          resources: {},
+          code: '"MessageChannel" in self',
           exposure: ['Window', 'Worker']
         },
         'api.Worker': {
-          tests: [
-            {
-              code: '"Worker" in self'
-            }
-          ],
-          resources: {},
+          code: '"Worker" in self',
           exposure: ['Window']
         },
         'api.WorkerSync': {
-          tests: [
-            {
-              code: '"WorkerSync" in self'
-            }
-          ],
-          resources: {},
+          code: '"WorkerSync" in self',
           exposure: ['Worker']
         }
       });
@@ -1446,21 +1151,11 @@ describe('build', () => {
       `);
       assert.deepEqual(buildIDLTests(ast), {
         'api.AudioNode': {
-          tests: [
-            {
-              code: '"AudioNode" in self'
-            }
-          ],
-          resources: {},
+          code: '"AudioNode" in self',
           exposure: ['Window']
         },
         'api.AudioNode.disconnect': {
-          tests: [
-            {
-              code: '"disconnect" in AudioNode.prototype'
-            }
-          ],
-          resources: {},
+          code: '"disconnect" in AudioNode.prototype',
           exposure: ['Window']
         }
       });
@@ -1473,21 +1168,11 @@ describe('build', () => {
            };`);
       assert.deepEqual(buildIDLTests(ast), {
         'api.CSS': {
-          tests: [
-            {
-              code: '"CSS" in self'
-            }
-          ],
-          resources: {},
+          code: '"CSS" in self',
           exposure: ['Window']
         },
         'api.CSS.paintWorklet': {
-          tests: [
-            {
-              code: '"paintWorklet" in CSS'
-            }
-          ],
-          resources: {},
+          code: '"paintWorklet" in CSS',
           exposure: ['Window']
         }
       });
@@ -1500,21 +1185,11 @@ describe('build', () => {
            };`);
       assert.deepEqual(buildIDLTests(ast), {
         'api.CSS': {
-          tests: [
-            {
-              code: '"CSS" in self'
-            }
-          ],
-          resources: {},
+          code: '"CSS" in self',
           exposure: ['Window']
         },
         'api.CSS.supports': {
-          tests: [
-            {
-              code: '"supports" in CSS'
-            }
-          ],
-          resources: {},
+          code: '"supports" in CSS',
           exposure: ['Window']
         }
       });
@@ -1540,21 +1215,11 @@ describe('build', () => {
 
       assert.deepEqual(buildIDLTests(ast), {
         'api.CSS': {
-          tests: [
-            {
-              code: '(function () {\n  var css = CSS;\n  return !!css;\n})();'
-            }
-          ],
-          resources: {},
+          code: '(function () {\n  var css = CSS;\n  return !!css;\n})();',
           exposure: ['Window']
         },
         'api.CSS.paintWorklet': {
-          tests: [
-            {
-              code: '(function () {\n  var css = CSS;\n  return css && \'paintWorklet\' in css;\n})();'
-            }
-          ],
-          resources: {},
+          code: '(function () {\n  var css = CSS;\n  return css && \'paintWorklet\' in css;\n})();',
           exposure: ['Window']
         }
       });
@@ -1613,39 +1278,19 @@ describe('build', () => {
 
     assert.deepEqual(buildCSS(webrefCSS, customCSS), {
       'css.properties.font-family': {
-        tests: [
-          {
-            code: '"fontFamily" in document.body.style || CSS.supports("font-family", "inherit")'
-          }
-        ],
-        resources: {},
+        code: '"fontFamily" in document.body.style || CSS.supports("font-family", "inherit")',
         exposure: ['Window']
       },
       'css.properties.font-weight': {
-        tests: [
-          {
-            code: '"fontWeight" in document.body.style || CSS.supports("font-weight", "inherit")'
-          }
-        ],
-        resources: {},
+        code: '"fontWeight" in document.body.style || CSS.supports("font-weight", "inherit")',
         exposure: ['Window']
       },
       'css.properties.grid': {
-        tests: [
-          {
-            code: '"grid" in document.body.style || CSS.supports("grid", "inherit")'
-          }
-        ],
-        resources: {},
+        code: '"grid" in document.body.style || CSS.supports("grid", "inherit")',
         exposure: ['Window']
       },
       'css.properties.zoom': {
-        tests: [
-          {
-            code: '"zoom" in document.body.style || CSS.supports("zoom", "inherit")'
-          }
-        ],
-        resources: {},
+        code: '"zoom" in document.body.style || CSS.supports("zoom", "inherit")',
         exposure: ['Window']
       }
     });

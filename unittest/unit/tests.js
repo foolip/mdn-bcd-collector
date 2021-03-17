@@ -20,12 +20,11 @@ const Tests = require('../../tests');
 
 const testDatabase = {
   'api.AbortController': {
-    tests: [{code: '"AbortController" in self'}],
-    resources: {},
+    code: '"AbortController" in self',
     exposure: ['Window', 'Worker', 'ServiceWorker']
   },
   'api.AbortController.signal': {
-    tests: [{code: '"AbortController" in self && "signal" in AbortController.prototype'}],
+    code: '"AbortController" in self && "signal" in AbortController.prototype',
     resources: {
       'audio-blip': {
         type: 'audio',
@@ -35,13 +34,11 @@ const testDatabase = {
     exposure: ['Window', 'Worker']
   },
   'css.properties.font-family': {
-    tests: [{code: '"fontFamily" in document.body.style || CSS.supports("font-family", "inherit")'}],
-    resources: {},
+    code: '"fontFamily" in document.body.style || CSS.supports("font-family", "inherit")',
     exposure: ['Window']
   },
   'javascript.builtins.array': {
-    tests: [{code: '[1, 2, 3]'}],
-    resources: {},
+    code: '[1, 2, 3]',
     exposure: ['JavaScript']
   }
 };
