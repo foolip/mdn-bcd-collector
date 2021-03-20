@@ -1,0 +1,6 @@
+partial interface Navigator {
+  // https://github.com/w3c/battery/commit/8be499e44e09965161db9a104da136e054328116
+  readonly attribute BatteryManager battery;
+  readonly attribute BatteryManager mozBattery;
+  readonly attribute BatteryManager webkitBattery;
+};
