@@ -4,7 +4,6 @@
 'use strict';
 
 const compareVersions = require('compare-versions');
-const deepEqual = require('fast-deep-equal');
 const fs = require('fs').promises;
 const klaw = require('klaw');
 const path = require('path');
@@ -222,44 +221,59 @@ const update = (bcd, supportMatrix, filter) => {
         continue;
       }
 
-      let supportStatement = entry.__compat.support[browser];
-      if (!supportStatement) {
-        // TODO: add a support statement
-        continue;
-      }
-      if (!Array.isArray(supportStatement)) {
-        supportStatement = [supportStatement];
+      let allStatements = entry.__compat.support[browser];
+      if (!allStatements) {
+        allStatements = [];
+      } else if (!Array.isArray(allStatements)) {
+        allStatements = [allStatements];
       }
 
-      const simpleStatement = supportStatement.find((statement) => {
-        const ignoreKeys = new Set(['notes', 'partial_implementation']);
-        const keys = Object.keys(statement)
-            .filter((key) => !ignoreKeys.has(key));
-        return keys.length === 1;
+      // Filter to the statements representing the feature being enabled by
+      // default under the default name and no flags.
+      const defaultStatements = allStatements.filter((statement) => {
+        if ('flags' in statement) {
+          return false;
+        }
+        if ('prefix' in statement || 'alternative_name' in statement) {
+          // TODO: map the results for aliases to these statements.
+          return false;
+        }
+        return true;
       });
 
-      if (!simpleStatement) {
-        // No simple statement probably means it's prefixed or under an
-        // alternative name, but in any case implies that the main feature
-        // is not supported. So only update in case new data contradicts that.
-        if (inferredStatements.some((statement) => statement.version_added)) {
-          supportStatement.unshift(...inferredStatements.map((item) => {
-            item.version_added = typeof(item.version_added) === 'string' ? item.version_added.replace('0> ', '') : item.version_added;
-            return item;
-          }));
-          supportStatement = supportStatement.filter((item, pos, self) => {
-            return pos === self.findIndex((el) => deepEqual(el, item));
-          });
-          entry.__compat.support[browser] = supportStatement.length === 1 ?
-            supportStatement[0] : supportStatement;
-          modified = true;
+      if (defaultStatements.length === 0) {
+        // Prepend |inferredStatement| to |allStatements|, since there were no
+        // relevant statements to begin with...
+        if (inferredStatement.version_added === false) {
+          // ... but not if the new statement just claims no support, since
+          // that is implicit in no statement.
+          continue;
         }
+        if (typeof inferredStatement.version_added === 'string') {
+          inferredStatement.version_added = inferredStatement.version_added.replace('0> ', '');
+        }
+        allStatements.unshift(inferredStatement);
+        entry.__compat.support[browser] = allStatements.length === 1 ?
+            allStatements[0] : allStatements;
+        modified = true;
         continue;
       }
 
-      if (typeof(simpleStatement.version_added) === 'string' &&
-        typeof(inferredStatement.version_added) === 'string' &&
-        inferredStatement.version_added.includes('≤')) {
+      if (defaultStatements.length !== 1) {
+        // TODO: handle more complicated scenarios
+        continue;
+      }
+
+      const simpleStatement = defaultStatements[0];
+
+      if (simpleStatement.version_removed) {
+        // TODO: handle updating existing added+removed entries.
+        continue;
+      }
+
+      if (typeof simpleStatement.version_added === 'string' &&
+          typeof inferredStatement.version_added === 'string' &&
+          inferredStatement.version_added.includes('≤')) {
         const range = inferredStatement.version_added.split('> ≤');
         if (compareVersions.compare(
             simpleStatement.version_added.replace('≤', ''),
@@ -276,12 +290,9 @@ const update = (bcd, supportMatrix, filter) => {
         modified = true;
       }
 
-      if (inferredStatement.version_removed) {
-        if (!(typeof(simpleStatement.version_removed) === 'string' &&
-              inferredStatement.version_removed === true)) {
-          simpleStatement.version_removed = inferredStatement.version_removed;
-          modified = true;
-        }
+      if (typeof inferredStatement.version_removed === 'string') {
+        simpleStatement.version_removed = inferredStatement.version_removed;
+        modified = true;
       }
     }
   }
