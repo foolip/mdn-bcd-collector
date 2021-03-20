@@ -1,6 +1,5 @@
 partial interface Navigator {
   attribute any authentication;
-  readonly attribute BatteryManager battery;
   readonly attribute DOMString buildID;
   boolean canShare();
   readonly attribute DOMString doNotTrack;
