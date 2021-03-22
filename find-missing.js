@@ -4,19 +4,48 @@ const BCD_DIR = process.env.BCD_DIR || `../browser-compat-data`;
 const bcd = require(BCD_DIR);
 const tests = require('./tests.json');
 
-const traverseFeatures = (obj, identifier) => {
+const traverseFeatures = (obj, path, includeAliases) => {
   const features = [];
 
-  for (const i in obj) {
-    if (!!obj[i] &&
-        typeof obj[i] == 'object' &&
-        i !== '__compat') {
-      if (obj[i].__compat) {
-        features.push(`${identifier}${i}`);
-      }
-
-      features.push(...traverseFeatures(obj[i], identifier + i + '.'));
+  for (const id of Object.keys(obj)) {
+    if (!obj[id] || typeof obj[id] !== 'object') {
+      continue;
     }
+
+    const compat = obj[id].__compat;
+    if (compat) {
+      features.push(`${path}${id}`);
+
+      if (includeAliases && !id.endsWith('_event')) {
+        const aliases = new Set();
+        for (let statements of Object.values(compat.support)) {
+          if (!Array.isArray(statements)) {
+            statements = [statements];
+          }
+          for (const statement of statements) {
+            if (statement.flags) {
+              continue;
+            }
+            if (statement.alternative_name) {
+              aliases.add(statement.alternative_name);
+            }
+            if (statement.prefix) {
+              let name = id;
+              if (path.startsWith('api.')) {
+                name = name[0].toUpperCase() + name.substr(1);
+              }
+              aliases.add(statement.prefix + name);
+            }
+          }
+        }
+
+        for (const alias of aliases) {
+          features.push(`${path}${alias}`);
+        }
+      }
+    }
+
+    features.push(...traverseFeatures(obj[id], path + id + '.', includeAliases));
   }
 
   return features;
@@ -34,14 +63,14 @@ const findMissing = (entries, allEntries) => {
   return {missingEntries, total: allEntries.length};
 };
 
-const getMissing = (direction = 'collector-from-bcd', category = []) => {
+const getMissing = (direction = 'collector-from-bcd', category = [], includeAliases = false) => {
   const filterCategory = (item) => {
     return !category.length || category.some((cat) => item.startsWith(`${cat}.`));
   };
 
   const bcdEntries = [
-    ...traverseFeatures(bcd.api, 'api.'),
-    ...traverseFeatures(bcd.css.properties, 'css.properties.')
+    ...traverseFeatures(bcd.api, 'api.', includeAliases),
+    ...traverseFeatures(bcd.css.properties, 'css.properties.', includeAliases)
   ].filter(filterCategory);
   const collectorEntries = Object.keys(tests).filter(filterCategory);
 
@@ -63,6 +92,12 @@ const main = () => {
       'Find missing entries between BCD and the collector tests',
       (yargs) => {
         yargs
+            .option('include-aliases', {
+              alias: 'a',
+              describe: 'Include BCD entries using prefix or alternative_name',
+              type: 'boolean',
+              default: false
+            })
             .option('direction', {
               alias: 'd',
               describe: 'Which direction to find missing entries from ("a-from-b" will check what is in a that is missing from b)',
@@ -81,7 +116,8 @@ const main = () => {
       }
   );
 
-  const {missingEntries, total} = getMissing(argv.direction, argv.category);
+  const {missingEntries, total} = getMissing(argv.direction, argv.category,
+      argv.includeAliases);
   console.log(missingEntries.join('\n'));
   console.log(`\n${missingEntries.length}/${total} (${(missingEntries.length/total*100.0).toFixed(2)}%) missing`);
 };
