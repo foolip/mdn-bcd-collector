@@ -163,6 +163,9 @@ partial interface CanvasRenderingContext2D {
   // https://bugzilla.mozilla.org/show_bug.cgi?id=1294362
   attribute DOMString mozTextStyle;
 
+  // Was in Edge 14.
+  attribute boolean msImageSmoothingEnabled;
+
   // https://trac.webkit.org/changeset/96626/webkit
   attribute object webkitLineDash;
   attribute float webkitLineDashOffset;
@@ -326,6 +329,9 @@ partial interface HTMLCanvasElement {
   attribute boolean mozOpaque;
   // https://github.com/mozilla/gecko-dev/blob/7c03e28b3d065fa80839e9659fd50bf340913d5f/dom/webidl/HTMLCanvasElement.webidl#L48
   attribute any mozPrintCallback;
+
+  // Was in Edge 18.
+  Blob msToBlob();
 };
 
 // https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/core/html/html_content_element.idl
