@@ -205,11 +205,17 @@ partial interface Document {
   // https://developer.mozilla.org/en-US/docs/Web/API/Document/mozSyntheticDocument
   readonly attribute boolean mozSyntheticDocument;
 
+  // https://docs.microsoft.com/en-us/previous-versions/ff975201(v=vs.85)
+  boolean msMatchesSelector(DOMString selector);
+
   // https://www.w3.org/Bugs/Public/show_bug.cgi?id=14600
   undefined releaseCapture();
 };
 
 partial interface Element {
+  // https://docs.microsoft.com/en-us/previous-versions/ff975201(v=vs.85)
+  boolean msMatchesSelector(DOMString selector);
+
   // https://www.w3.org/Bugs/Public/show_bug.cgi?id=14600
   undefined setCapture(optional boolean retargetToElement);
 

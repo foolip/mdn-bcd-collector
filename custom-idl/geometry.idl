@@ -3,6 +3,12 @@ partial interface DOMMatrixReadOnly {
   undefined transform();
 };
 
+// https://docs.microsoft.com/en-us/previous-versions/hh772390(v=vs.85)
+[Exposed=Window]
+interface MSCSSMatrix {
+  constructor();
+};
+
 [Exposed=Window]
 interface WebKitCSSMatrix {
   constructor();

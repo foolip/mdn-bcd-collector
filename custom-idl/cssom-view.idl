@@ -1,6 +1,9 @@
 partial interface Document {
   // https://www.w3.org/Bugs/Public/show_bug.cgi?id=27626
   Range caretRangeFromPoint(optional long x = 0, optional long y = 0);
+
+  // https://docs.microsoft.com/en-us/previous-versions/hh772121(v=vs.85)
+  NodeList msElementsFromPoint(double x, double y);
 };
 
 partial interface Element {

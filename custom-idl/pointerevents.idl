@@ -1,0 +1,10 @@
+partial interface Element {
+  // https://docs.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/jj218974(v=vs.85)
+  Element? msGetPointerCapture(long pointerId);
+
+  // https://docs.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/jj191880(v=vs.85)
+  undefined msReleasePointerCapture(long pointerId);
+
+  // https://docs.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/jj191881(v=vs.85)
+  undefined msSetPointerCapture(long pointerId);
+};

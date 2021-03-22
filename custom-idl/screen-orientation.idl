@@ -1,7 +1,13 @@
-// https://github.com/mozilla/gecko-dev/blob/dd042f25a8da58d565d199dcfebe4f34db64863c/dom/webidl/Screen.webidl#L33
 partial interface Screen {
+  // https://github.com/mozilla/gecko-dev/blob/dd042f25a8da58d565d199dcfebe4f34db64863c/dom/webidl/Screen.webidl#L33
   readonly attribute DOMString mozOrientation;
-  attribute EventHandler onmozorientationchange;
   boolean mozLockOrientation((DOMString or sequence<DOMString>) orientation);
   undefined mozUnlockOrientation();
+  attribute EventHandler onmozorientationchange;
+
+  // Was in Edge 18.
+  readonly attribute DOMString msOrientation;
+  boolean msLockOrientation((DOMString or sequence<DOMString>) orientation);
+  undefined msUnlockOrientation();
+  attribute EventHandler onmsorientationchange;
 };
