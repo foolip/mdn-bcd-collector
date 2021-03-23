@@ -89,6 +89,11 @@
       "__resources": ["audioContext"],
       "__base": "<%api.GainNode:gainNode%> var instance = gainNode.gain;"
     },
+    "AudioScheduledSourceNode": {
+      "__resources": ["audioContext"],
+      "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createBufferSource();",
+      "__test": "return 'AudioScheduledSourceNode' in self"
+    },
     "AudioTrack": {
       "__resources": ["audio-blip"],
       "__base": "<%api.AudioTrackList:audioTracks%> var instance = audioTracks[0];"
