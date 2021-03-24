@@ -819,7 +819,7 @@
     },
     "PeriodicWave": {
       "__resources": ["audioContext"],
-      "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createPeriodicWave();"
+      "__base": "if (!reusableInstances.audioContext) {return false;} var real = new Float32Array(2); var imag = new Float32Array(2); var instance = reusableInstances.audioContext.createPeriodicWave(real, imag);"
     },
     "Plugin": {
       "__todo": "XXX Doesn't work if there are no plugins",
