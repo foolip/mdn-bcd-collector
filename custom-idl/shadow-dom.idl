@@ -1,5 +1,8 @@
 partial interface Element {
+  // https://trac.webkit.org/changeset/136092/webkit
   ShadowRoot createShadowRoot();
+  ShadowRoot webkitCreateShadowRoot();
+
   NodeList getDestinationInsertionPoints();
   readonly attribute boolean openOrClosedShadowRoot;
 };
