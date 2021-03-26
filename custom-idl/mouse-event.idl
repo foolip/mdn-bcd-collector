@@ -1,5 +1,4 @@
 partial interface MouseEvent {
-  undefined initMouseEvent();
   readonly attribute DOMString region;
   readonly attribute byte which;
 };
