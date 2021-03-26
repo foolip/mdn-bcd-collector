@@ -403,6 +403,7 @@ const validateIDL = (ast) => {
   const knownTypes = new Set([
     'any', // https://heycam.github.io/webidl/#idl-any
     'ArrayBuffer', // https://heycam.github.io/webidl/#idl-ArrayBuffer
+    'bigint', // https://heycam.github.io/webidl/#idl-bigint
     'boolean', // https://heycam.github.io/webidl/#idl-boolean
     'byte', // https://heycam.github.io/webidl/#idl-byte
     'ByteString', // https://heycam.github.io/webidl/#idl-ByteString
