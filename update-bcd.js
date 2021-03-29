@@ -36,7 +36,7 @@ const getSupportMap = (report) => {
   for (const [url, results] of Object.entries(report.results)) {
     for (const test of results) {
       const tests = testMap.get(test.name) || [];
-      tests.push({url, result: test.result, prefix: test.prefix});
+      tests.push({url, result: test.result});
       testMap.set(test.name, tests);
     }
   }
@@ -48,9 +48,9 @@ const getSupportMap = (report) => {
   // Transform `testMap` to map from test name (BCD path) to flattened support.
   const supportMap = new Map;
   for (const [name, results] of testMap.entries()) {
-    let supported = {result: null, prefix: ''};
+    let supported = {result: null};
     // eslint-disable-next-line no-unused-vars
-    for (const {url, result, prefix} of results) {
+    for (const {url, result} of results) {
       if (result === null) {
         const parentName = name.split('.').slice(0, -1).join('.');
         const parentSupport = supportMap.get(parentName);
@@ -60,7 +60,7 @@ const getSupportMap = (report) => {
         continue;
       }
       if (supported.result === null) {
-        supported = {result: result, prefix: prefix || ''};
+        supported = {result};
         continue;
       }
       if (supported.result !== result) {
@@ -112,7 +112,7 @@ const getSupportMatrix = (reports) => {
         versionMap = new Map;
         for (const browserVersion of
           Object.keys(browsers[browser.id].releases)) {
-          versionMap.set(browserVersion, {result: null, prefix: ''});
+          versionMap.set(browserVersion, {result: null});
         }
         browserMap.set(browser.id, versionMap);
       }
@@ -121,7 +121,7 @@ const getSupportMatrix = (reports) => {
   }
 
   // apply manual overrides
-  for (const [path, browser, version, supported, prefix] of overrides) {
+  for (const [path, browser, version, supported] of overrides) {
     const browserMap = supportMatrix.get(path);
     if (!browserMap) {
       continue;
@@ -132,10 +132,10 @@ const getSupportMatrix = (reports) => {
     }
     if (version === '*') {
       for (const v of versionMap.keys()) {
-        versionMap.set(v, {result: supported, prefix: prefix || ''});
+        versionMap.set(v, {result: supported});
       }
     } else {
-      versionMap.set(version, {result: supported, prefix: prefix || ''});
+      versionMap.set(version, {result: supported});
     }
   }
 
@@ -146,39 +146,30 @@ const inferSupportStatements = (versionMap) => {
   const versions = Array.from(versionMap.keys()).sort(compareVersions);
 
   const statements = [];
-  const lastKnown = {version: '0', support: null, prefix: ''};
+  const lastKnown = {version: '0', support: null};
   let lastWasNull = false;
 
   for (const [_, version] of versions.entries()) {
-    const {result: supported, prefix} = versionMap.get(version);
+    const {result: supported} = versionMap.get(version);
     const lastStatement = statements[statements.length - 1];
 
     if (supported === true) {
       if (!lastStatement) {
         statements.push({
           version_added:
-            (lastWasNull || lastKnown.support === false) ? `${lastKnown.version}> ≤${version}` : version,
-          ...(prefix && {prefix: prefix})
+            (lastWasNull || lastKnown.support === false) ? `${lastKnown.version}> ≤${version}` : version
         });
       } else if (!lastStatement.version_added) {
         lastStatement.version_added = lastWasNull ? `${lastKnown.version}> ≤${version}` : version;
       } else if (lastStatement.version_removed) {
         // added back again
         statements.push({
-          version_added: version,
-          ...(prefix && {prefix: prefix})
-        });
-      } else if ((lastStatement.prefix || '') !== prefix) {
-        // Prefix changed
-        statements.push({
-          version_added: version,
-          ...(prefix && {prefix: prefix})
+          version_added: version
         });
       }
 
       lastKnown.version = version;
       lastKnown.support = true;
-      lastKnown.prefix = prefix;
       lastWasNull = false;
     } else if (supported === false) {
       if (lastStatement &&
@@ -191,7 +182,6 @@ const inferSupportStatements = (versionMap) => {
 
       lastKnown.version = version;
       lastKnown.support = false;
-      lastKnown.prefix = prefix;
       lastWasNull = false;
     } else if (supported === null) {
       lastWasNull = true;
@@ -249,7 +239,7 @@ const update = (bcd, supportMatrix, filter) => {
       });
 
       if (!simpleStatement) {
-        // No simple statement probably means it's prefixed or under and
+        // No simple statement probably means it's prefixed or under an
         // alternative name, but in any case implies that the main feature
         // is not supported. So only update in case new data contradicts that.
         if (inferredStatements.some((statement) => statement.version_added)) {
