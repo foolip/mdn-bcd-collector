@@ -73,12 +73,6 @@ const bcd = {
     NullAPI: {
       __compat: {support: {chrome: {version_added: '80'}}}
     },
-    PrefixedInterface1: {
-      __compat: {support: {chrome: {version_added: '80', prefix: 'WebKit'}}}
-    },
-    PrefixedInterface2: {
-      __compat: {support: {chrome: {version_added: null}}}
-    },
     RemovedInterface: {
       __compat: {support: {chrome: {version_added: null}}}
     }
@@ -166,17 +160,6 @@ const reports = [
           result: null
         },
         {
-          name: 'api.PrefixedInterface1',
-          info: {exposure: 'Window'},
-          result: true
-        },
-        {
-          name: 'api.PrefixedInterface2',
-          info: {exposure: 'Window'},
-          result: true,
-          prefix: 'WebKit'
-        },
-        {
           name: 'api.RemovedInterface',
           info: {exposure: 'Window'},
           result: true
@@ -251,17 +234,6 @@ const reports = [
           result: null
         },
         {
-          name: 'api.PrefixedInterface1',
-          info: {exposure: 'Window'},
-          result: true
-        },
-        {
-          name: 'api.PrefixedInterface2',
-          info: {exposure: 'Window'},
-          result: true,
-          prefix: 'WebKit'
-        },
-        {
           name: 'api.RemovedInterface',
           info: {exposure: 'Window'},
           result: false
@@ -328,16 +300,6 @@ const reports = [
           name: 'api.NullAPI',
           info: {exposure: 'Window'},
           result: null
-        },
-        {
-          name: 'api.PrefixedInterface1',
-          info: {exposure: 'Window'},
-          result: true
-        },
-        {
-          name: 'api.PrefixedInterface2',
-          info: {exposure: 'Window'},
-          result: true
         },
         {
           name: 'api.RemovedInterface',
@@ -431,38 +393,34 @@ describe('BCD updater', () => {
   describe('getSupportMap', () => {
     it('normal', () => {
       assert.deepEqual(getSupportMap(reports[0]), new Map([
-        ['api.AbortController', {result: true, prefix: ''}],
-        ['api.AbortController.abort', {result: null, prefix: ''}],
-        ['api.AbortController.AbortController', {result: false, prefix: ''}],
-        ['api.AudioContext', {result: false, prefix: ''}],
-        ['api.AudioContext.close', {result: false, prefix: ''}],
-        ['api.DeprecatedInterface', {result: true, prefix: ''}],
-        ['api.ExperimentalInterface', {result: true, prefix: ''}],
-        ['api.NullAPI', {result: null, prefix: ''}],
-        ['api.PrefixedInterface1', {result: true, prefix: ''}],
-        ['api.PrefixedInterface2', {result: true, prefix: 'WebKit'}],
-        ['api.RemovedInterface', {result: true, prefix: ''}],
-        ['css.properties.font-family', {result: true, prefix: ''}],
-        ['css.properties.font-face', {result: true, prefix: ''}]
+        ['api.AbortController', {result: true}],
+        ['api.AbortController.abort', {result: null}],
+        ['api.AbortController.AbortController', {result: false}],
+        ['api.AudioContext', {result: false}],
+        ['api.AudioContext.close', {result: false}],
+        ['api.DeprecatedInterface', {result: true}],
+        ['api.ExperimentalInterface', {result: true}],
+        ['api.NullAPI', {result: null}],
+        ['api.RemovedInterface', {result: true}],
+        ['css.properties.font-family', {result: true}],
+        ['css.properties.font-face', {result: true}]
       ]));
     });
 
     it('support in only one exposure', () => {
       assert.deepEqual(getSupportMap(reports[1]), new Map([
-        ['api.AbortController', {result: true, prefix: ''}],
-        ['api.AbortController.abort', {result: true, prefix: ''}],
-        ['api.AbortController.AbortController', {result: false, prefix: ''}],
-        ['api.AudioContext', {result: false, prefix: ''}],
-        ['api.AudioContext.close', {result: false, prefix: ''}],
-        ['api.DeprecatedInterface', {result: true, prefix: ''}],
-        ['api.ExperimentalInterface', {result: true, prefix: ''}],
-        ['api.NewInterfaceNotInBCD', {result: false, prefix: ''}],
-        ['api.NullAPI', {result: null, prefix: ''}],
-        ['api.PrefixedInterface1', {result: true, prefix: ''}],
-        ['api.PrefixedInterface2', {result: true, prefix: 'WebKit'}],
-        ['api.RemovedInterface', {result: false, prefix: ''}],
-        ['css.properties.font-family', {result: true, prefix: ''}],
-        ['css.properties.font-face', {result: true, prefix: ''}]
+        ['api.AbortController', {result: true}],
+        ['api.AbortController.abort', {result: true}],
+        ['api.AbortController.AbortController', {result: false}],
+        ['api.AudioContext', {result: false}],
+        ['api.AudioContext.close', {result: false}],
+        ['api.DeprecatedInterface', {result: true}],
+        ['api.ExperimentalInterface', {result: true}],
+        ['api.NewInterfaceNotInBCD', {result: false}],
+        ['api.NullAPI', {result: null}],
+        ['api.RemovedInterface', {result: false}],
+        ['css.properties.font-family', {result: true}],
+        ['css.properties.font-face', {result: true}]
       ]));
     });
 
@@ -482,94 +440,82 @@ describe('BCD updater', () => {
       assert.deepEqual(getSupportMatrix(reports), new Map([
         ['api.AbortController', new Map([
           ['chrome', new Map([
-            ['82', {result: null, prefix: ''}],
-            ['83', {result: true, prefix: ''}],
-            ['84', {result: true, prefix: ''}],
-            ['85', {result: true, prefix: ''}]
+            ['82', {result: null}],
+            ['83', {result: true}],
+            ['84', {result: true}],
+            ['85', {result: true}]
           ])],
           ['safari', new Map([
-            ['13', {result: null, prefix: ''}],
-            ['13.1', {result: true, prefix: ''}],
-            ['14', {result: null, prefix: ''}]
+            ['13', {result: null}],
+            ['13.1', {result: true}],
+            ['14', {result: null}]
           ])]
         ])],
         ['api.AbortController.abort', new Map([['chrome', new Map([
-          ['82', {result: null, prefix: ''}],
-          ['83', {result: null, prefix: ''}],
-          ['84', {result: true, prefix: ''}],
-          ['85', {result: true, prefix: ''}]
+          ['82', {result: null}],
+          ['83', {result: null}],
+          ['84', {result: true}],
+          ['85', {result: true}]
         ])]])],
         ['api.AbortController.AbortController', new Map([['chrome', new Map([
-          ['82', {result: null, prefix: ''}],
-          ['83', {result: false, prefix: ''}],
-          ['84', {result: false, prefix: ''}],
-          ['85', {result: true, prefix: ''}]
+          ['82', {result: null}],
+          ['83', {result: false}],
+          ['84', {result: false}],
+          ['85', {result: true}]
         ])]])],
         ['api.AudioContext', new Map([['chrome', new Map([
-          ['82', {result: null, prefix: ''}],
-          ['83', {result: false, prefix: ''}],
-          ['84', {result: false, prefix: ''}],
-          ['85', {result: true, prefix: ''}]
+          ['82', {result: null}],
+          ['83', {result: false}],
+          ['84', {result: false}],
+          ['85', {result: true}]
         ])]])],
         ['api.AudioContext.close', new Map([['chrome', new Map([
-          ['82', {result: null, prefix: ''}],
-          ['83', {result: false, prefix: ''}],
-          ['84', {result: false, prefix: ''}],
-          ['85', {result: true, prefix: ''}]
+          ['82', {result: null}],
+          ['83', {result: false}],
+          ['84', {result: false}],
+          ['85', {result: true}]
         ])]])],
         ['api.DeprecatedInterface', new Map([['chrome', new Map([
-          ['82', {result: null, prefix: ''}],
-          ['83', {result: true, prefix: ''}],
-          ['84', {result: true, prefix: ''}],
-          ['85', {result: false, prefix: ''}]
+          ['82', {result: null}],
+          ['83', {result: true}],
+          ['84', {result: true}],
+          ['85', {result: false}]
         ])]])],
         ['api.ExperimentalInterface', new Map([['chrome', new Map([
-          ['82', {result: null, prefix: ''}],
-          ['83', {result: true, prefix: ''}],
-          ['84', {result: true, prefix: ''}],
-          ['85', {result: true, prefix: ''}]
+          ['82', {result: null}],
+          ['83', {result: true}],
+          ['84', {result: true}],
+          ['85', {result: true}]
         ])]])],
         ['api.NewInterfaceNotInBCD', new Map([['chrome', new Map([
-          ['82', {result: null, prefix: ''}],
-          ['83', {result: null, prefix: ''}],
-          ['84', {result: false, prefix: ''}],
-          ['85', {result: true, prefix: ''}]
+          ['82', {result: null}],
+          ['83', {result: null}],
+          ['84', {result: false}],
+          ['85', {result: true}]
         ])]])],
         ['api.NullAPI', new Map([['chrome', new Map([
-          ['82', {result: null, prefix: ''}],
-          ['83', {result: null, prefix: ''}],
-          ['84', {result: null, prefix: ''}],
-          ['85', {result: null, prefix: ''}]
-        ])]])],
-        ['api.PrefixedInterface1', new Map([['chrome', new Map([
-          ['82', {result: null, prefix: ''}],
-          ['83', {result: true, prefix: ''}],
-          ['84', {result: true, prefix: ''}],
-          ['85', {result: true, prefix: ''}]
-        ])]])],
-        ['api.PrefixedInterface2', new Map([['chrome', new Map([
-          ['82', {result: null, prefix: ''}],
-          ['83', {result: true, prefix: 'WebKit'}],
-          ['84', {result: true, prefix: 'WebKit'}],
-          ['85', {result: true, prefix: ''}]
+          ['82', {result: null}],
+          ['83', {result: null}],
+          ['84', {result: null}],
+          ['85', {result: null}]
         ])]])],
         ['api.RemovedInterface', new Map([['chrome', new Map([
-          ['82', {result: null, prefix: ''}],
-          ['83', {result: true, prefix: ''}],
-          ['84', {result: false, prefix: ''}],
-          ['85', {result: true, prefix: ''}]
+          ['82', {result: null}],
+          ['83', {result: true}],
+          ['84', {result: false}],
+          ['85', {result: true}]
         ])]])],
         ['css.properties.font-family', new Map([['chrome', new Map([
-          ['82', {result: null, prefix: ''}],
-          ['83', {result: false, prefix: ''}],
-          ['84', {result: true, prefix: ''}],
-          ['85', {result: true, prefix: ''}]
+          ['82', {result: null}],
+          ['83', {result: false}],
+          ['84', {result: true}],
+          ['85', {result: true}]
         ])]])],
         ['css.properties.font-face', new Map([['chrome', new Map([
-          ['82', {result: null, prefix: ''}],
-          ['83', {result: null, prefix: ''}],
-          ['84', {result: null, prefix: ''}],
-          ['85', {result: null, prefix: ''}]
+          ['82', {result: null}],
+          ['83', {result: null}],
+          ['84', {result: null}],
+          ['85', {result: null}]
         ])]])]
       ]));
 
@@ -612,13 +558,6 @@ describe('BCD updater', () => {
         {version_added: '85'}
       ]},
       'api.NullAPI': {chrome: []},
-      'api.PrefixedInterface1': {chrome: [
-        {version_added: '0> ≤83'}
-      ]},
-      'api.PrefixedInterface2': {chrome: [
-        {prefix: 'WebKit', version_added: '0> ≤83'},
-        {version_added: '85'}
-      ]},
       'api.RemovedInterface': {chrome: [
         {version_added: '0> ≤83', version_removed: '84'},
         {version_added: '85'}
@@ -725,25 +664,6 @@ describe('BCD updater', () => {
           },
           NullAPI: {
             __compat: {support: {chrome: {version_added: '80'}}}
-          },
-          PrefixedInterface1: {
-            // TODO: handle more complicated scenarios
-            // __compat: {support: {chrome: [
-            //   {version_added: '85'},
-            //   {prefix: 'WebKit', version_added: '≤83'}
-            // ]}}
-            __compat: {support: {chrome: [
-              {version_added: '≤83'},
-              {version_added: '80', prefix: 'WebKit'}
-            ]}}
-          },
-          PrefixedInterface2: {
-            // TODO: handle more complicated scenarios
-            // __compat: {support: {chrome: [
-            //   {version_added: '85'},
-            //   {prefix: 'WebKit', version_added: '≤83'}
-            // ]}}
-            __compat: {support: {chrome: {version_added: null}}}
           },
           RemovedInterface: {
             // TODO: handle more complicated scenarios
