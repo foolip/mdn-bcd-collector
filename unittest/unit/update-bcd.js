@@ -634,7 +634,7 @@ describe('BCD updater', () => {
           AudioContext: {
             __compat: {support: {chrome: {version_added: '85'}}},
             close: {
-              __compat: {support: {}}
+              __compat: {support: {chrome: {version_added: '85'}}}
             }
           },
           DeprecatedInterface: {
