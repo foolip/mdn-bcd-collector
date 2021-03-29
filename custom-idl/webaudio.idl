@@ -10,9 +10,6 @@ partial interface AudioBufferSourceNode {
   undefined noteOn(double when);
   undefined noteGrainOn(double when, double grainOffset, double grainDuration);
   undefined noteOff(double when);
-  attribute EventHandler onended;
-  // start() is still in the spec (override with 3 arguments)
-  undefined stop(optional double when = 0);
 
   // https://trac.webkit.org/changeset/265245/webkit
   readonly attribute AudioParam gain;
@@ -55,12 +52,6 @@ partial interface BiquadFilterNode {
   const unsigned short ALLPASS = 7;
 };
 
-partial interface ConstantSourceNode {
-  attribute EventHandler onended;
-  undefined start(optional double when = 0);
-  undefined stop(optional double when = 0);
-};
-
 partial interface MediaStreamTrackAudioSourceNode {
   readonly attribute any mediaStreamTrack;
 };
@@ -74,9 +65,6 @@ partial interface OscillatorNode {
 
   undefined noteOn(double when);
   undefined noteOff(double when);
-  attribute EventHandler onended;
-  undefined start(optional double when = 0);
-  undefined stop(optional double when = 0);
 };
 
 partial interface PannerNode {
