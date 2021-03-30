@@ -26,8 +26,11 @@ const compareVersions = require('compare-versions');
 const fetch = require('node-fetch');
 const fs = require('fs-extra');
 const path = require('path');
+const {promisify} = require('util');
 const chalk = require('chalk');
 const {Listr} = require('listr2');
+const BrowserStack = require('browserstack');
+const SauceLabs = require('saucelabs').default;
 
 const secrets = require('./secrets.json');
 
@@ -294,7 +297,58 @@ const run = async (browser, version, os, ctx, task) => {
   }
 };
 
+const fetchJSON = async (url) => {
+  const r = await fetch(url);
+  if (!r.ok) {
+    throw new Error(r.status);
+  }
+  const data = await r.json();
+  return data;
+};
+
 const runAll = async (limitBrowsers, oses, nonConcurrent) => {
+  const auth = {
+    user: 'foolip',
+    key: 'a89fb5e1-dff4-495b-bbc0-98a60055bb44'
+  };
+  const browsers = await fetchJSON(`https://${auth.user}:${auth.key}@saucelabs.com/rest/v1/info/platforms/webdriver`);
+
+  for (const browser of browsers) {
+    if (browser.api_name != 'safari') {
+      continue;
+    }
+    console.log(`${browser.long_name} ${browser.long_version} on ${browser.os}`);
+  }
+
+  const auth2 = {
+    username: 'philipjgenstedt1',
+    password: 'YbuCcbL8RzNx5sc7Sf8V'
+  };
+  const browsers2 = await fetchJSON(`https://${auth2.username}:${auth2.password}@api.browserstack.com/automate/browsers.json`);
+
+  for (const browser of browsers2) {
+    if (browser.browser != 'safari') {
+      continue;
+    }
+    console.log(`${browser.browser} ${browser.browser_version} on ${browser.os} ${browser.os_version}`);
+  }
+
+  return;
+
+  // https://wiki.saucelabs.com/display/DOCS/Platform+Information+Methods
+  const sauce = new SauceLabs({
+    user: 'foolip',
+    key: 'a89fb5e1-dff4-495b-bbc0-98a60055bb44'
+  });
+
+  const platforms = await sauce.listPlatforms("webdriver");
+  for (const p of platforms) {
+    if (!p.long_version.endsWith('.')) {
+      console.log(p);
+    }
+  }
+  return;
+
   if (!Object.keys(secrets.selenium).length) {
     console.error(chalk`{red.bold A Selenium remote WebDriver URL is not defined in secrets.json.  Please define your Selenium remote(s).}`);
     return false;
