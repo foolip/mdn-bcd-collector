@@ -58,12 +58,14 @@ input {
   margin-left: -2px;
 }
 
-button:hover, select:hover {
+button:hover, select:hover, input[type=submit]:hover {
   cursor: pointer;
   background-color: #4caf50;
 }
 
-button:disabled, button:disabled:hover, select:disabled:hover {
+button:disabled, button:disabled:hover,
+select:disabled, select:disabled:hover,
+input[type=submit]:disabled, input[type=submit]:disabled:hover {
   cursor: not-allowed;
   background-color: #636363;
 }
