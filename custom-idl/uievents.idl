@@ -90,6 +90,9 @@ partial interface UIEvent {
 };
 
 partial interface WheelEvent {
+  // Was in Edge 12
+  undefined initWheelEvent();
+
   // https://developer.apple.com/documentation/webkitjs/wheelevent/1629934-initwebkitwheelevent
   undefined initWebKitWheelEvent();
 
