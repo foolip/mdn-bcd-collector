@@ -554,11 +554,6 @@ interface HTMLShadowElement : HTMLElement {
   NodeList getDistributedNodes();
 };
 
-partial interface HTMLSlotElement {
-  // https://github.com/whatwg/html/pull/5483
-  undefined assign(sequence<Node> nodes);
-};
-
 partial interface HTMLSourceElement {
   attribute any keySystem;
 };
