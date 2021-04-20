@@ -186,16 +186,11 @@ const compileTest = (test) => {
 };
 
 const mergeMembers = (target, source) => {
-  // Check for operation overloads across partials/mixins.
-  const targetOperations = new Set();
-  for (const {type, name} of target.members) {
-    if (type === 'operation' && name) {
-      targetOperations.add(name);
-    }
-  }
-  for (const {type, name} of source.members) {
-    if (type === 'operation' && targetOperations.has(name)) {
-      throw new Error(`Operation overloading across partials/mixins for ${target.name}.${name}`);
+  // Check for duplicate members across partials/mixins.
+  const targetMembers = new Set(target.members.map((m) => m.name));
+  for (const member of source.members) {
+    if (targetMembers.has(member.name)) {
+      throw new Error(`Duplicate definition of ${target.name}.${member.name}`);
     }
   }
   // Now merge members.

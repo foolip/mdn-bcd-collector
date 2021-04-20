@@ -704,7 +704,7 @@ describe('build', () => {
       };
       expect(() => {
         flattenIDL(specIDLs, customIDLs);
-      }).to.throw('Operation overloading across partials/mixins for CSS.supports');
+      }).to.throw('Duplicate definition of CSS.supports');
     });
 
     it('Partial missing main', () => {

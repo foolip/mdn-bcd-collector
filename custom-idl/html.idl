@@ -690,8 +690,6 @@ partial interface Window {
   undefined minimize();
   attribute EventHandler onappinstalled;
   attribute EventHandler onbeforeinstallprompt;
-  attribute EventHandler ongamepadconnected;
-  attribute EventHandler ongamepaddisconnected;
   attribute EventHandler onpaint;
   undefined openDialog();
   attribute object pkcs11;
