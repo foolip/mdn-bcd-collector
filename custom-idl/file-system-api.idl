@@ -38,7 +38,7 @@ WorkerGlobalScope includes LocalFileSystemSync;
 
 [Exposed=Window,Worker]
 interface Metadata {
- readonly attribute Date modificationTime;
+ readonly attribute object modificationTime;
  readonly attribute unsigned long long size;
 };
 

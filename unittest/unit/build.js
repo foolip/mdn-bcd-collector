@@ -845,13 +845,13 @@ describe('build', () => {
     it('interface with custom test', () => {
       const ast = WebIDL2.parse(
           `interface ANGLE_instanced_arrays {
-            void drawArraysInstancedANGLE(
+            undefined drawArraysInstancedANGLE(
               GLenum mode,
               GLint first,
               GLsizei count,
               GLsizei primcount);
 
-            void drawElementsInstancedANGLE(
+            undefined drawElementsInstancedANGLE(
               GLenum mode,
               GLsizei count,
               GLenum type,
@@ -1104,7 +1104,7 @@ describe('build', () => {
     it('interface with getter/setter', () => {
       const ast = WebIDL2.parse(`interface GetMe {
         getter GetMe (unsigned long index);
-        setter void (GetMe data, optional unsigned long index);
+        setter undefined (GetMe data, optional unsigned long index);
       };`);
       assert.deepEqual(buildIDLTests(ast), {
         'api.GetMe': {
@@ -1144,9 +1144,9 @@ describe('build', () => {
     it('operator variations', () => {
       const ast = WebIDL2.parse(`
         interface AudioNode : EventTarget {
-          void disconnect ();
-          void disconnect (unsigned long output);
-          void disconnect (AudioNode destinationNode);
+          undefined disconnect ();
+          undefined disconnect (unsigned long output);
+          undefined disconnect (AudioNode destinationNode);
         };
       `);
       assert.deepEqual(buildIDLTests(ast), {
