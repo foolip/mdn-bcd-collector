@@ -56,7 +56,7 @@
     "@browser-logos/opera": "1.1.11",
     "@browser-logos/safari": "2.0.0",
     "@webref/css": "1.0.0",
-    "@webref/idl": "1.1.0",
+    "@webref/idl": "2.0.0",
     "babel-eslint": "10.1.0",
     "chai": "4.3.4",
     "chai-fs": "2.0.0",
@@ -82,6 +82,6 @@
     "puppeteer-to-istanbul": "1.4.0",
     "selenium-webdriver": "3.6.0",
     "sinon": "10.0.1",
-    "webidl2": "23.13.1"
+    "webidl2": "24.0.1"
   }
 }
