@@ -11,9 +11,9 @@ interface BluetoothAdvertisingData {
 
 partial interface BluetoothDevice {
   readonly attribute BluetoothAdvertisingData adData;
-  Promise<BluetoothGATTRemoteServer> connectGATT();
+  Promise<BluetoothRemoteGATTServer> connectGATT();
   readonly attribute long deviceClass;
-  BluetoothGATTRemoteServer? gattServer();
+  BluetoothRemoteGATTServer? gattServer();
   readonly attribute boolean paired;
   readonly attribute short productVersion;
   readonly attribute short productID;
