@@ -1,3 +1,4 @@
+[Exposed=Window]
 interface LocalMediaStream : MediaStream {
   undefined stop();
 };
@@ -10,6 +11,7 @@ partial interface MediaStream {
   undefined stop();
 };
 
+[Exposed=Window]
 interface MediaStreamEvent : Event {
   constructor();
   readonly attribute MediaStream stream;

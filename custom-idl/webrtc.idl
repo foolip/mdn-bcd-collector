@@ -7,12 +7,14 @@ partial interface RTCDataChannel {
   readonly attribute short stream;
 };
 
+[Exposed=Window]
 interface RTCIdentityErrorEvent : Event {
   readonly attribute DOMString idp;
   readonly attribute DOMString loginUrl;
   readonly attribute DOMString protocol;
 };
 
+[Exposed=Window]
 interface RTCIdentityEvent : Event {
   readonly attribute DOMString assertion;
 };

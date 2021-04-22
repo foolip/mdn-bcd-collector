@@ -1,3 +1,4 @@
+[Exposed=(Window,Worker), SecureContext]
 interface PushRegistration {};
 
 partial interface PushManager {
@@ -7,6 +8,7 @@ partial interface PushManager {
   Promise<PushRegistration> unregister();
 };
 
+[Exposed=(Window,Worker), SecureContext]
 interface PushRegistrationManager {
   Promise<PushRegistration> getRegistration();
   Promise<boolean> hasPermission();

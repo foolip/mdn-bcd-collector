@@ -584,8 +584,8 @@ describe('build', () => {
 
   it('buildIDL', () => {
     const specIDLs = {
-      first: WebIDL2.parse(`interface DOMError {};`),
-      second: WebIDL2.parse(`interface XSLTProcessor {};`)
+      first: WebIDL2.parse(`[Exposed=Window] interface DOMError {};`),
+      second: WebIDL2.parse(`[Exposed=Window] interface XSLTProcessor {};`)
     };
 
     const customIDLs = {
@@ -598,17 +598,20 @@ describe('build', () => {
 
   describe('flattenIDL', () => {
     const customIDLs = {
-      first: WebIDL2.parse(`interface DOMError {};`),
-      second: WebIDL2.parse(`interface XSLTProcessor {};`)
+      first: WebIDL2.parse(`[Exposed=Window] interface DOMError {};`),
+      second: WebIDL2.parse(`[Exposed=Window] interface XSLTProcessor {};`)
     };
 
     it('interface + mixin', () => {
       const specIDLs = {
-        first: WebIDL2.parse(`interface DummyError : Error {
+        first: WebIDL2.parse(
+            `[Exposed=Window]
+             interface DummyError : Error {
                readonly attribute boolean imadumdum;
              };`),
         second: WebIDL2.parse(
-            `interface mixin DummyErrorHelper {
+            `[Exposed=Window]
+             interface mixin DummyErrorHelper {
                DummyError geterror();
              };
 
@@ -636,7 +639,11 @@ describe('build', () => {
 
     it('namespace + partial namespace', () => {
       const specIDLs = {
-        cssom: WebIDL2.parse(`namespace CSS { boolean supports(); };`),
+        cssom: WebIDL2.parse(
+            `[Exposed=Window]
+             namespace CSS {
+               boolean supports();
+             };`),
         paint: WebIDL2.parse(
             `partial namespace CSS {
                readonly attribute any paintWorklet;
@@ -666,7 +673,8 @@ describe('build', () => {
 
     it('mixin missing', () => {
       const specIDLs = {
-        first: WebIDL2.parse(`interface mixin DummyErrorHelper {
+        first: WebIDL2.parse(
+            `interface mixin DummyErrorHelper {
                DummyError geterror();
              };`),
         secnd: WebIDL2.parse(`DummyError includes DummyErrorHelper;`)
@@ -679,7 +687,9 @@ describe('build', () => {
 
     it('interface missing', () => {
       const specIDLs = {
-        first: WebIDL2.parse(`interface DummyError : Error {
+        first: WebIDL2.parse(
+            `[Exposed=Window]
+             interface DummyError : Error {
                readonly attribute boolean imadumdum;
              };`),
         secnd: WebIDL2.parse(`DummyError includes DummyErrorHelper;`)
@@ -692,7 +702,11 @@ describe('build', () => {
 
     it('Operation overloading', () => {
       const specIDLs = {
-        cssom: WebIDL2.parse(`namespace CSS { boolean supports(); };`),
+        cssom: WebIDL2.parse(
+            `[Exposed=Window]
+             namespace CSS {
+               boolean supports();
+             };`),
         paint: WebIDL2.parse(
             `partial namespace CSS {
                readonly attribute any paintWorklet;
@@ -726,7 +740,9 @@ describe('build', () => {
 
     it('no defined exposure set', () => {
       const specIDLs = {
-        first: WebIDL2.parse(`interface Dummy {
+        first: WebIDL2.parse(
+            `[Exposed=Window]
+             interface Dummy {
                readonly attribute boolean imadumdum;
              };`)
       };
@@ -738,7 +754,9 @@ describe('build', () => {
 
     it('single exposure', () => {
       const specIDLs = {
-        first: WebIDL2.parse(`[Exposed=Worker] interface Dummy {
+        first: WebIDL2.parse(
+            `[Exposed=Worker]
+             interface Dummy {
                readonly attribute boolean imadumdum;
              };`)
       };
@@ -750,7 +768,9 @@ describe('build', () => {
 
     it('multiple exposure', () => {
       const specIDLs = {
-        first: WebIDL2.parse(`[Exposed=(Window,Worker)] interface Dummy {
+        first: WebIDL2.parse(
+            `[Exposed=(Window,Worker)]
+             interface Dummy {
                readonly attribute boolean imadumdum;
              };`)
       };
@@ -780,7 +800,11 @@ describe('build', () => {
 
   describe('buildIDLTests', () => {
     it('interface with attribute', () => {
-      const ast = WebIDL2.parse(`interface Attr { attribute any name; };`);
+      const ast = WebIDL2.parse(
+          `[Exposed=Window]
+           interface Attr {
+             attribute any name;
+           };`);
       assert.deepEqual(buildIDLTests(ast), {
         'api.Attr': {
           code: '"Attr" in self',
@@ -795,7 +819,8 @@ describe('build', () => {
 
     it('interface with method', () => {
       const ast = WebIDL2.parse(
-          `interface Node {
+          `[Exposed=Window]
+           interface Node {
              boolean contains(Node? other);
            };`);
       assert.deepEqual(buildIDLTests(ast), {
@@ -812,7 +837,8 @@ describe('build', () => {
 
     it('interface with static method', () => {
       const ast = WebIDL2.parse(
-          `interface MediaSource {
+          `[Exposed=Window]
+           interface MediaSource {
              static boolean isTypeSupported(DOMString type);
            };`);
 
@@ -830,7 +856,8 @@ describe('build', () => {
 
     it('interface with const', () => {
       const ast = WebIDL2.parse(
-          `interface Window {
+          `[Exposed=Window]
+           interface Window {
              const boolean isWindow = true;
            };`);
 
@@ -844,7 +871,8 @@ describe('build', () => {
 
     it('interface with custom test', () => {
       const ast = WebIDL2.parse(
-          `interface ANGLE_instanced_arrays {
+          `[Exposed=Window]
+           interface ANGLE_instanced_arrays {
             undefined drawArraysInstancedANGLE(
               GLenum mode,
               GLint first,
@@ -859,6 +887,7 @@ describe('build', () => {
               GLsizei primcount);
           };
 
+          [Exposed=Window]
           interface Document {
             readonly attribute boolean loaded;
             readonly attribute DOMString? charset;
@@ -914,33 +943,38 @@ describe('build', () => {
     });
 
     it('interface with legacy namespace', () => {
-      const ast = WebIDL2.parse(`[LegacyNamespace] interface Legacy {};`);
+      const ast = WebIDL2.parse(
+          `[Exposed=Window, LegacyNamespace]
+           interface Legacy {};`);
       assert.deepEqual(buildIDLTests(ast), {});
     });
 
     it('global interface', () => {
-      const ast = WebIDL2.parse(`[Global=(Window,Worker)]
-      interface WindowOrWorkerGlobalScope {
-        attribute boolean isLoaded;
-        const boolean active = true;
-      };`);
+      const ast = WebIDL2.parse(
+          `[Exposed=Worker, Global=Worker]
+           interface WorkerGlobalScope {
+             attribute boolean isLoaded;
+             const boolean active = true;
+           };`);
 
       assert.deepEqual(buildIDLTests(ast), {
-        'api.WindowOrWorkerGlobalScope': {
-          code: '"WindowOrWorkerGlobalScope" in self',
-          exposure: ['Window']
+        'api.WorkerGlobalScope': {
+          code: '"WorkerGlobalScope" in self',
+          exposure: ['Worker']
         },
-        'api.WindowOrWorkerGlobalScope.isLoaded': {
+        'api.WorkerGlobalScope.isLoaded': {
           code: '"isLoaded" in self',
-          exposure: ['Window']
+          exposure: ['Worker']
         }
       });
     });
 
     it('interface with constructor operation', () => {
-      const ast = WebIDL2.parse(`interface Number {
-        constructor(optional any value);
-      };`);
+      const ast = WebIDL2.parse(
+          `[Exposed=Window]
+           interface Number {
+             constructor(optional any value);
+           };`);
 
       assert.deepEqual(buildIDLTests(ast), {
         'api.Number': {
@@ -955,8 +989,9 @@ describe('build', () => {
     });
 
     it('interface with constructor in ExtAttr', () => {
-      const ast = WebIDL2.parse(`[Constructor(optional any value)]
-        interface Number {};`);
+      const ast = WebIDL2.parse(
+          `[Exposed=Window, Constructor(optional any value)]
+           interface Number {};`);
       assert.deepEqual(buildIDLTests(ast), {
         'api.Number': {
           code: '"Number" in self',
@@ -970,9 +1005,11 @@ describe('build', () => {
     });
 
     it('iterable interface', () => {
-      const ast = WebIDL2.parse(`interface DoubleList {
-        iterable<double>;
-      };`);
+      const ast = WebIDL2.parse(
+          `[Exposed=Window]
+           interface DoubleList {
+             iterable<double>;
+           };`);
       assert.deepEqual(buildIDLTests(ast), {
         'api.DoubleList': {
           code: '"DoubleList" in self',
@@ -1002,9 +1039,11 @@ describe('build', () => {
     });
 
     it('maplike interface', () => {
-      const ast = WebIDL2.parse(`interface DoubleMap {
-        maplike<DOMString, double>;
-      };`);
+      const ast = WebIDL2.parse(
+          `[Exposed=Window]
+           interface DoubleMap {
+             maplike<DOMString, double>;
+           };`);
       assert.deepEqual(buildIDLTests(ast), {
         'api.DoubleMap': {
           code: '"DoubleMap" in self',
@@ -1054,9 +1093,11 @@ describe('build', () => {
     });
 
     it('setlike interface', () => {
-      const ast = WebIDL2.parse(`interface DoubleSet {
-        setlike<double>;
-      };`);
+      const ast = WebIDL2.parse(
+          `[Exposed=Window]
+           interface DoubleSet {
+             setlike<double>;
+           };`);
       assert.deepEqual(buildIDLTests(ast), {
         'api.DoubleSet': {
           code: '"DoubleSet" in self',
@@ -1102,10 +1143,12 @@ describe('build', () => {
     });
 
     it('interface with getter/setter', () => {
-      const ast = WebIDL2.parse(`interface GetMe {
-        getter GetMe (unsigned long index);
-        setter undefined (GetMe data, optional unsigned long index);
-      };`);
+      const ast = WebIDL2.parse(
+          `[Exposed=Window]
+           interface GetMe {
+             getter GetMe (unsigned long index);
+             setter undefined (GetMe data, optional unsigned long index);
+           };`);
       assert.deepEqual(buildIDLTests(ast), {
         'api.GetMe': {
           code: '"GetMe" in self',
@@ -1115,12 +1158,11 @@ describe('build', () => {
     });
 
     it('varied exposure', () => {
-      const ast = WebIDL2.parse(`
-        [Exposed=Window] interface Worker {};
-        [Exposed=Worker] interface WorkerSync {};
-        [Exposed=(Window,Worker)] interface MessageChannel {};
-        namespace CSS {};
-      `);
+      const ast = WebIDL2.parse(
+          `[Exposed=Window] interface Worker {};
+           [Exposed=Worker] interface WorkerSync {};
+           [Exposed=(Window,Worker)] interface MessageChannel {};
+           [Exposed=Window] namespace CSS {};`);
       assert.deepEqual(buildIDLTests(ast), {
         'api.CSS': {
           code: '"CSS" in self',
@@ -1142,13 +1184,13 @@ describe('build', () => {
     });
 
     it('operator variations', () => {
-      const ast = WebIDL2.parse(`
-        interface AudioNode : EventTarget {
-          undefined disconnect ();
-          undefined disconnect (unsigned long output);
-          undefined disconnect (AudioNode destinationNode);
-        };
-      `);
+      const ast = WebIDL2.parse(
+          `[Exposed=Window]
+           interface AudioNode : EventTarget {
+             undefined disconnect ();
+             undefined disconnect (unsigned long output);
+             undefined disconnect (AudioNode destinationNode);
+           };`);
       assert.deepEqual(buildIDLTests(ast), {
         'api.AudioNode': {
           code: '"AudioNode" in self',
@@ -1163,7 +1205,8 @@ describe('build', () => {
 
     it('namespace with attribute', () => {
       const ast = WebIDL2.parse(
-          `namespace CSS {
+          `[Exposed=Window]
+           namespace CSS {
              readonly attribute any paintWorklet;
            };`);
       assert.deepEqual(buildIDLTests(ast), {
@@ -1180,7 +1223,8 @@ describe('build', () => {
 
     it('namespace with method', () => {
       const ast = WebIDL2.parse(
-          `namespace CSS {
+          `[Exposed=Window]
+           namespace CSS {
              boolean supports(CSSOMString property, CSSOMString value);
            };`);
       assert.deepEqual(buildIDLTests(ast), {
@@ -1197,7 +1241,8 @@ describe('build', () => {
 
     it('namespace with custom test', () => {
       const ast = WebIDL2.parse(
-          `namespace CSS {
+          `[Exposed=Window]
+           namespace CSS {
              readonly attribute any paintWorklet;
            };`);
 
@@ -1228,27 +1273,33 @@ describe('build', () => {
 
   describe('validateIDL', () => {
     it('valid idl', () => {
-      const ast = WebIDL2.parse(`interface Node {
-        boolean contains(Node otherNode);
-      };`);
+      const ast = WebIDL2.parse(
+          `[Exposed=Window]
+           interface Node {
+             boolean contains(Node otherNode);
+           };`);
       expect(() => {
         validateIDL(ast);
       }).to.not.throw();
     });
 
     it('unknown types', () => {
-      const ast = WebIDL2.parse(`interface Dummy {
-        attribute Dumdum imadumdum;
-      };`);
+      const ast = WebIDL2.parse(
+          `[Exposed=Window]
+           interface Dummy {
+             attribute Dumdum imadumdum;
+           };`);
       expect(() => {
         validateIDL(ast);
       }).to.throw();
     });
 
     it('ignored unknown types', () => {
-      const ast = WebIDL2.parse(`interface Dummy {
-        attribute CSSOMString style;
-      };`);
+      const ast = WebIDL2.parse(
+          `[Exposed=Window]
+           interface Dummy {
+             attribute CSSOMString style;
+           };`);
       expect(() => {
         validateIDL(ast);
       }).to.not.throw();

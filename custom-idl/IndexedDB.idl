@@ -3,20 +3,21 @@ partial interface IDBDatabase {
   IDBRequest createMutableFile(DOMString name, optional DOMString type);
 };
 
-interface IDBDatabaseException {};
-interface IDBEnvironment {};
+[Exposed=(Window,Worker)] interface IDBDatabaseException {};
+[Exposed=(Window,Worker)] interface IDBEnvironment {};
 
 partial interface IDBIndex {
   readonly attribute boolean isAutoLocale;
   readonly attribute DOMString locale;
 };
 
-interface IDBLocaleAwareKeyRange {};
+[Exposed=(Window,Worker)] interface IDBLocaleAwareKeyRange {};
 
 partial interface IDBVersionChangeEvent {
   readonly attribute unsigned long long? version;
 };
 
+[Exposed=(Window,Worker)]
 interface IDBVersionChangeRequest {
   IDBVersionChangeRequest setVersion(DOMString version);
 };

@@ -1,1 +1,3 @@
-interface Transferable {};
+[Exposed=(Window,Worker)]
+interface Transferable {
+};

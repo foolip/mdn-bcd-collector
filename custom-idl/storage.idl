@@ -8,6 +8,7 @@ callback StorageQuotaCallback = undefined (unsigned long long grantedQuotaInByte
 callback StorageErrorCallback = undefined (DOMError error);
 
 // https://www.w3.org/TR/2012/WD-quota-api-20120703/#storagequota-interface
+[Exposed=Window]
 interface StorageQuota {
   undefined queryUsageAndQuota(StorageUsageCallback successCallback, optional StorageErrorCallback errorCallback);
   undefined requestQuota(unsigned long long newQuotaInBytes, optional StorageQuotaCallback successCallback, optional StorageErrorCallback errorCallback);

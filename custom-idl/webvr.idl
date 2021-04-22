@@ -1,5 +1,6 @@
 // https://immersive-web.github.io/webvr/spec/1.1
 
+[Exposed=Window]
 interface VRDisplay : EventTarget {
   readonly attribute boolean isConnected;
   readonly attribute boolean isPresenting;
@@ -31,6 +32,7 @@ dictionary VRLayerInit {
   sequence<float> rightBounds = [ ];
 };
 
+[Exposed=Window]
 interface VRDisplayCapabilities {
   readonly attribute boolean hasPosition;
   readonly attribute boolean hasOrientation;
@@ -44,6 +46,7 @@ enum VREye {
   "right"
 };
 
+[Exposed=Window]
 interface VRFieldOfView {
   readonly attribute double upDegrees;
   readonly attribute double rightDegrees;
@@ -51,6 +54,7 @@ interface VRFieldOfView {
   readonly attribute double leftDegrees;
 };
 
+[Exposed=Window]
 interface VRPose {
   readonly attribute Float32Array? position;
   readonly attribute Float32Array? linearVelocity;
@@ -61,8 +65,10 @@ interface VRPose {
   readonly attribute Float32Array? angularAcceleration;
 };
 
-[Constructor]
+[Exposed=Window]
 interface VRFrameData {
+  constructor();
+
   readonly attribute DOMHighResTimeStamp timestamp;
 
   readonly attribute Float32Array leftProjectionMatrix;
@@ -74,6 +80,7 @@ interface VRFrameData {
   readonly attribute VRPose pose;
 };
 
+[Exposed=Window]
 interface VREyeParameters {
   readonly attribute Float32Array offset;
 
@@ -83,6 +90,7 @@ interface VREyeParameters {
   readonly attribute unsigned long renderHeight;
 };
 
+[Exposed=Window]
 interface VRStageParameters {
   readonly attribute Float32Array sittingToStandingTransform;
 
@@ -103,8 +111,9 @@ enum VRDisplayEventReason {
   "unmounted"
 };
 
-[Constructor(DOMString type, VRDisplayEventInit eventInitDict)]
+[Exposed=Window]
 interface VRDisplayEvent : Event {
+  constructor(DOMString type, VRDisplayEventInit eventInitDict);
   readonly attribute VRDisplay display;
   readonly attribute VRDisplayEventReason? reason;
 };
@@ -132,11 +141,13 @@ partial interface Gamepad {
 
 // Custom-written
 
+[Exposed=Window]
 interface HMDVRDevice {
   VREyeParameters getEyeParameters(DOMString whichEye);
   undefined setFieldOfView(VRFieldOfView leftFOV, VRFieldOfView rightFOV, double zNear, double zFar);
 };
 
+[Exposed=Window]
 interface PositionSensorVRDevice {
   any getImmediateState();
   any getState();

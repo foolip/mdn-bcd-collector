@@ -19,6 +19,7 @@ const fs = require('fs-extra');
 const idl = require('@webref/idl');
 const path = require('path');
 const prettier = require('prettier');
+const WebIDL2 = require('webidl2');
 
 const customCSS = require('./custom-css.json');
 const customTests = require('./custom-tests.json');
@@ -337,8 +338,7 @@ const getExposureSet = (node) => {
   // step 6-8
   const attr = getExtAttr(node, 'Exposed');
   if (!attr) {
-    // TODO: remove this once all interfaces have [Exposed].
-    return new Set(['Window']);
+    throw new Error(`Exposed extended attribute not found on ${node.type} ${node.name}`);
   }
   const globals = new Set();
   switch (attr.rhs.type) {
@@ -377,6 +377,21 @@ const getName = (node) => {
 };
 
 const validateIDL = (ast) => {
+  const validations = WebIDL2.validate(ast).filter((v) => {
+    // TODO: https://github.com/w3c/webref/pull/196
+    if (v.ruleName === 'dict-arg-default') {
+      return false;
+    }
+    // Ignore the [LegacyNoInterfaceObject] rule.
+    return v.ruleName !== 'no-nointerfaceobject';
+  });
+  if (validations.length) {
+    const message = validations.map((v) => {
+      return `${v.message} [${v.ruleName}]`;
+    }).join('\n\n');
+    throw new Error(`Web IDL validation failed:\n${message}`);
+  }
+
   // Validate that there are no unknown types. There are types in lots of
   // places in the AST (interface members, arguments, return types) and rather
   // than trying to cover them all, walk the whole AST looking for "idlType".
