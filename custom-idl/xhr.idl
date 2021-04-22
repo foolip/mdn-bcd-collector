@@ -21,6 +21,20 @@ interface XDomainRequest {
   attribute EventHandler onload;
 };
 
+// TODO: did this variant of the above ever exist?
+[Exposed=Window]
+interface XDomain {
+  undefined abort();
+  attribute EventHandler onerror;
+  attribute EventHandler onload;
+  attribute EventHandler onprogress;
+  attribute EventHandler ontimeout;
+  undefined open();
+  readonly attribute DOMString responseText;
+  undefined send();
+  readonly attribute long timeout;
+};
+
 partial interface XMLHttpRequest {
   // https://github.com/mozilla/gecko-dev/blob/851bbbd9d9a38c2785a24c13b6412751be8d3253/dom/webidl/XMLHttpRequest.webidl#L142
   readonly attribute boolean mozAnon;
