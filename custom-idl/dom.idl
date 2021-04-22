@@ -237,7 +237,7 @@ partial interface Range {
   short compareNode(Node node);
 };
 
-partial interface ShadowRoot {
-  // https://github.com/whatwg/dom/issues/931
-  readonly attribute boolean delegatesFocus;
+partial interface XMLDocument {
+  attribute boolean async;
+  undefined load();
 };
