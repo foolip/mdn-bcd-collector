@@ -6,6 +6,7 @@ partial interface SourceBuffer {
   attribute any trackDefaults;
 };
 
+[Exposed=Window]
 interface TrackDefault {
   constructor();
 
@@ -16,6 +17,7 @@ interface TrackDefault {
   readonly attribute any type;
 };
 
+[Exposed=Window]
 interface TrackDefaultList {
   constructor();
   readonly attribute long length;

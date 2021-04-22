@@ -38,7 +38,7 @@ dictionary GamepadEffectParameters {
 };
 
 partial interface GamepadHapticActuator {
-  Promise<undefined> playEffect(GamepadHapticEffectType type, optional GamepadEffectParameters params);
+  Promise<undefined> playEffect(GamepadHapticEffectType type, optional GamepadEffectParameters params = {});
   Promise<undefined> reset();
 };
 

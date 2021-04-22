@@ -58,6 +58,7 @@ dictionary HitRegionOptions {
 };
 
 // https://www.w3.org/html/wg/spec/common-dom-interfaces.html#domsettabletokenlist-0
+[Exposed=Window]
 interface DOMSettableTokenList : DOMTokenList {
   attribute DOMString value;
 };
@@ -118,7 +119,7 @@ enum VideoPresentationMode { "inline", "fullscreen", "picture-in-picture" };
 
 partial interface CanvasRenderingContext2D {
   // https://github.com/whatwg/html/pull/1942
-  undefined addHitRegion(optional HitRegionOptions options);
+  undefined addHitRegion(optional HitRegionOptions options = {});
   undefined removeHitRegion(DOMString id);
   undefined clearHitRegions();
 
@@ -502,6 +503,7 @@ partial interface HTMLMenuElement {
 };
 
 // https://www.w3.org/TR/html51/interactive-elements.html#htmlmenuitemelement-htmlmenuitemelement
+[Exposed=Window]
 interface HTMLMenuItemElement : HTMLElement {
   attribute DOMString type;
   attribute DOMString label;
@@ -527,12 +529,14 @@ partial interface HTMLPreElement {
 };
 
 // https://github.com/whatwg/html/pull/213
+[Exposed=Window]
 interface HTMLPropertiesCollection : HTMLCollection {
   // inherits length and item()
   getter PropertyNodeList? namedItem(DOMString name); // shadows inherited namedItem()
   [SameObject] readonly attribute FrozenArray<DOMString> names;
 };
 typedef sequence<any> PropertyValueArray;
+[Exposed=Window]
 interface PropertyNodeList : NodeList {
   PropertyValueArray getValues();
 };
@@ -550,6 +554,7 @@ partial interface HTMLSelectElement {
   undefined focus();
 };
 
+[Exposed=Window]
 interface HTMLShadowElement : HTMLElement {
   NodeList getDistributedNodes();
 };
@@ -613,6 +618,16 @@ partial interface ImageBitmapRenderingContext {
 partial interface MessageEvent {
   // https://github.com/whatwg/html/pull/4009
   readonly attribute UserActivation? userActivation;
+};
+
+partial interface MouseEvent {
+  // https://github.com/whatwg/html/pull/1942
+  readonly attribute DOMString? region;
+};
+
+partial dictionary MouseEventInit {
+  // https://github.com/whatwg/html/pull/1942
+  DOMString? region = null;
 };
 
 partial interface Navigator {

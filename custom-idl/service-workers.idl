@@ -6,6 +6,7 @@ partial interface FetchEvent {
 };
 
 // https://github.com/w3c/ServiceWorker/pull/1207
+[Exposed=ServiceWorker]
 interface InstallEvent : ExtendableEvent {
   constructor(DOMString type, optional object init);
 
@@ -22,6 +23,9 @@ partial interface ServiceWorkerGlobalScope {
   readonly attribute CacheStorage caches;
 };
 
+// https://chromium.googlesource.com/chromium/src/+/faa6203e513b171743c9d9fd7121501e681186af
+// https://chromium.googlesource.com/chromium/src/+/2369b7f3dec2f78a760ed52bf64badb2240a1968
+[Exposed=(Window,Worker)]
 interface ServiceWorkerMessageEvent {
   constructor();
 

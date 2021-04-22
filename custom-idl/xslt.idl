@@ -1,3 +1,4 @@
+[Exposed=Window]
 interface XDomain {
   undefined abort();
   attribute EventHandler onerror;

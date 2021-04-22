@@ -66,8 +66,8 @@ interface FileSystemSync {
 [Exposed=Window,Worker]
 interface DirectoryEntry {
   DirectoryReader createReader();
-  undefined getFile(DOMString path, optional FileSystemFlags options, optional FileSystemEntryCallback successCallback, optional ErrorCallback errorCallback);
-  undefined getDirectory(DOMString path, optional FileSystemFlags options, optional FileSystemEntryCallback successCallback, optional ErrorCallback errorCallback);
+  undefined getFile(DOMString path, optional FileSystemFlags options = {}, optional FileSystemEntryCallback successCallback, optional ErrorCallback errorCallback);
+  undefined getDirectory(DOMString path, optional FileSystemFlags options = {}, optional FileSystemEntryCallback successCallback, optional ErrorCallback errorCallback);
   undefined removeRecursively(VoidFunction successCallback, optional ErrorCallback errorCallback);
 };
 

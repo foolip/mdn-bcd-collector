@@ -1,10 +1,13 @@
-interface WEBGL_compressed_texture_atc {};
+[Exposed=(Window,Worker), LegacyNoInterfaceObject]
+interface WEBGL_compressed_texture_atc {
+};
 
 partial interface WebGLRenderingContext {
   undefined commit();
 };
 
 // https://www.khronos.org/registry/webgl/specs/latest/2.0-compute/#webgl2-compute-context
+[Exposed=(Window,Worker)]
 interface WebGL2ComputeRenderingContextBase {
   const GLenum COMPUTE_SHADER = 0x91B9;
   const GLenum MAX_COMPUTE_UNIFORM_BLOCKS = 0x91BB;
@@ -249,4 +252,6 @@ interface WebGL2ComputeRenderingContextBase {
   undefined vertexBindingDivisor(GLuint bindingindex, GLuint divisor);
 };
 
-interface WebGL2ComputeRenderingContext : WebGL2ComputeRenderingContextBase {};
+[Exposed=(Window,Worker)]
+interface WebGL2ComputeRenderingContext : WebGL2ComputeRenderingContextBase {
+};

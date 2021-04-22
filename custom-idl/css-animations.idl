@@ -20,6 +20,7 @@ partial interface KeyframeEffect {
 };
 
 // http://w3.org/TR/2009/WD-css3-2d-transforms-20090320/#point-interface
+[Exposed=Window]
 interface Point {
   attribute float x;
   attribute float y;

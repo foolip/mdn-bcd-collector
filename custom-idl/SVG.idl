@@ -11,18 +11,19 @@ partial interface SVGImageElement {
   readonly attribute boolean decoding;
 };
 
+[Exposed=Window]
 interface SVGPoint {
   undefined matrixTransform();
   attribute long x;
   attribute long y;
 };
 
-interface SVGMeshElement : SVGGeometryElement {};
-interface SVGSolidcolorElement : SVGElement {};
-interface SVGStylable {};
-interface SVGTransformable {};
-interface SVGUnknownElement {};
-interface SVGZoomAndPan {};
+[Exposed=Window] interface SVGMeshElement : SVGGeometryElement {};
+[Exposed=Window] interface SVGSolidcolorElement : SVGElement {};
+[Exposed=Window] interface SVGStylable {};
+[Exposed=Window] interface SVGTransformable {};
+[Exposed=Window] interface SVGUnknownElement {};
+[Exposed=Window] interface SVGZoomAndPan {};
 
 typedef object SVGViewSpec;
 typedef object SVGPathSegClosePath;
@@ -46,21 +47,29 @@ typedef object SVGPathSegCurvetoQuadraticSmoothAbs;
 typedef object SVGPathSegCurvetoQuadraticSmoothRel;
 
 // https://www.w3.org/TR/SVG11/text.html#InterfaceSVGAltGlyphDefElement
-interface SVGAltGlyphDefElement : SVGElement {};
+[Exposed=Window]
+interface SVGAltGlyphDefElement : SVGElement {
+};
 
 // https://www.w3.org/TR/SVG11/text.html#InterfaceSVGAltGlyphElement
+[Exposed=Window]
 interface SVGAltGlyphElement : SVGTextPositioningElement {
   attribute DOMString glyphRef;
   attribute DOMString format;
 };
 
 // https://www.w3.org/TR/SVG11/text.html#InterfaceSVGAltGlyphItemElement
-interface SVGAltGlyphItemElement : SVGElement {};
+[Exposed=Window]
+interface SVGAltGlyphItemElement : SVGElement {
+};
 
 // https://www.w3.org/TR/SVG11/animate.html#InterfaceSVGAnimateColorElement
-interface SVGAnimateColorElement : SVGAnimationElement {};
+[Exposed=Window]
+interface SVGAnimateColorElement : SVGAnimationElement {
+};
 
 // https://www.w3.org/TR/SVG11/color.html#InterfaceSVGColorProfileElement
+[Exposed=Window]
 interface SVGColorProfileElement : SVGElement {
   attribute DOMString local;
   attribute DOMString name;
@@ -76,30 +85,45 @@ interface SVGCursorElement : SVGElement {
 SVGCursorElement includes SVGURIReference;
 
 // https://www.w3.org/TR/SVG11/types.html#InterfaceSVGExternalResourcesRequired
+[Exposed=Window]
 interface SVGExternalResourcesRequired {
   readonly attribute SVGAnimatedBoolean externalResourcesRequired;
 };
 
 // https://www.w3.org/TR/SVG11/fonts.html#InterfaceSVGFontElement
-interface SVGFontElement : SVGElement {};
+[Exposed=Window]
+interface SVGFontElement : SVGElement {
+};
 
 // https://www.w3.org/TR/SVG11/fonts.html#InterfaceSVGFontFaceElement
-interface SVGFontFaceElement : SVGElement {};
+[Exposed=Window]
+interface SVGFontFaceElement : SVGElement {
+};
 
 // https://www.w3.org/TR/SVG11/fonts.html#InterfaceSVGFontFaceFormatElement
-interface SVGFontFaceFormatElement : SVGElement {};
+[Exposed=Window]
+interface SVGFontFaceFormatElement : SVGElement {
+};
 
 // https://www.w3.org/TR/SVG11/fonts.html#InterfaceSVGFontFaceNameElement
-interface SVGFontFaceNameElement : SVGElement {};
+[Exposed=Window]
+interface SVGFontFaceNameElement : SVGElement {
+};
 
 // https://www.w3.org/TR/SVG11/fonts.html#InterfaceSVGFontFaceSrcElement
-interface SVGFontFaceSrcElement : SVGElement {};
+[Exposed=Window]
+interface SVGFontFaceSrcElement : SVGElement {
+};
 
 // https://www.w3.org/TR/SVG11/fonts.html#InterfaceSVGFontFaceUriElement
-interface SVGFontFaceUriElement : SVGElement {};
+[Exposed=Window]
+interface SVGFontFaceUriElement : SVGElement {
+};
 
 // https://www.w3.org/TR/SVG11/fonts.html#InterfaceSVGGlyphElement
-interface SVGGlyphElement : SVGElement {};
+[Exposed=Window]
+interface SVGGlyphElement : SVGElement {
+};
 
 partial interface SVGGraphicsElement {
   // https://github.com/mdn/browser-compat-data/issues/8745
@@ -107,6 +131,7 @@ partial interface SVGGraphicsElement {
 };
 
 // https://www.w3.org/TR/SVG11/text.html#InterfaceSVGGlyphRefElement
+[Exposed=Window]
 interface SVGGlyphRefElement : SVGElement {
   attribute DOMString glyphRef;
   attribute DOMString format;
@@ -117,9 +142,12 @@ interface SVGGlyphRefElement : SVGElement {
 };
 
 // https://www.w3.org/TR/SVG11/fonts.html#InterfaceSVGHKernElement
-interface SVGHKernElement : SVGElement {};
+[Exposed=Window]
+interface SVGHKernElement : SVGElement {
+};
 
 // https://www.w3.org/TR/SVG11/coords.html#InterfaceSVGMatrix
+[Exposed=Window]
 interface SVGMatrix {
   attribute float a;
   attribute float b;
@@ -142,7 +170,9 @@ interface SVGMatrix {
 };
 
 // https://www.w3.org/TR/SVG11/fonts.html#InterfaceSVGMissingGlyphElement
-interface SVGMissingGlyphElement : SVGElement {};
+[Exposed=Window]
+interface SVGMissingGlyphElement : SVGElement {
+};
 
 // https://www.w3.org/TR/SVG11/paths.html#InterfaceSVGPathElement
 partial interface SVGPathElement {
@@ -169,6 +199,7 @@ partial interface SVGPathElement {
 };
 
 // https://www.w3.org/TR/SVG11/types.html#InterfaceSVGRect
+[Exposed=Window]
 interface SVGRect {
   attribute float x;
   attribute float y;
@@ -177,6 +208,7 @@ interface SVGRect {
 };
 
 // https://www.w3.org/TR/SVG11/types.html#InterfaceSVGRenderingIntent
+[Exposed=Window]
 interface SVGRenderingIntent {
   // Rendering Intent Types
   const unsigned short RENDERING_INTENT_UNKNOWN = 0;
@@ -201,9 +233,12 @@ partial interface SVGSVGElement {
 };
 
 // https://www.w3.org/TR/SVG11/text.html#InterfaceSVGTRefElement
-interface SVGTRefElement : SVGTextPositioningElement {};
+[Exposed=Window]
+interface SVGTRefElement : SVGTextPositioningElement {
+};
 
 // https://www.w3.org/TR/SVG11/types.html#InterfaceSVGTests
+[Exposed=Window]
 interface SVGTests {
   readonly attribute SVGStringList requiredFeatures;
   readonly attribute SVGStringList requiredExtensions;
@@ -213,12 +248,15 @@ interface SVGTests {
 };
 
 // https://www.w3.org/TR/SVG11/types.html#InterfaceSVGURIReference
+[Exposed=Window]
 interface SVGURIReference {
   readonly attribute SVGAnimatedString href;
 };
 
 // https://www.w3.org/TR/SVG11/fonts.html#InterfaceSVGVKernElement
-interface SVGVKernElement : SVGElement {};
+[Exposed=Window]
+interface SVGVKernElement : SVGElement {
+};
 
 partial interface SVGViewElement {
   // https://www.w3.org/TR/SVG11/linking.html#InterfaceSVGViewElement

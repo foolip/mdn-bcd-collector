@@ -2,6 +2,7 @@ partial interface URL {
   stringifier DOMString();
 };
 
+[Exposed=(Window,Worker)]
 interface URLUtilsReadOnly {
   readonly attribute DOMString hash;
   readonly attribute DOMString host;
@@ -12,6 +13,6 @@ interface URLUtilsReadOnly {
   readonly attribute DOMString port;
   readonly attribute DOMString protocol;
   readonly attribute DOMString search;
-  
+
   stringifier DOMString();
 };
