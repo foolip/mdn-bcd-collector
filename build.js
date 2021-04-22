@@ -315,10 +315,6 @@ const flattenMembers = (iface) => {
   }
 
   // Add members from ExtAttrs
-  if (getExtAttr(iface, 'Constructor')) {
-    // Test generation doesn't use constructor arguments, so they aren't copied
-    members.push({name: iface.name, type: 'constructor'});
-  }
   if (getExtAttr(iface, 'LegacyFactoryFunction')) {
     members.push({
       name: getExtAttr(iface, 'LegacyFactoryFunction').rhs.value,

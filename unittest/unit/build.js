@@ -988,22 +988,6 @@ describe('build', () => {
       });
     });
 
-    it('interface with constructor in ExtAttr', () => {
-      const ast = WebIDL2.parse(
-          `[Exposed=Window, Constructor(optional any value)]
-           interface Number {};`);
-      assert.deepEqual(buildIDLTests(ast), {
-        'api.Number': {
-          code: '"Number" in self',
-          exposure: ['Window']
-        },
-        'api.Number.Number': {
-          code: 'bcd.testConstructor("Number");',
-          exposure: ['Window']
-        }
-      });
-    });
-
     it('iterable interface', () => {
       const ast = WebIDL2.parse(
           `[Exposed=Window]
