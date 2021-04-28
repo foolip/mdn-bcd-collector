@@ -32,6 +32,10 @@
         "type": "instance",
         "src": "var constructor = (window.OfflineAudioContext || window.webkitOfflineAudioContext); if (!constructor) {return false;} return new constructor(2,44100*40,44100);"
       },
+      "speechRecognition": {
+        "type": "instance",
+        "src": "var constructor = (window.SpeechRecognition || window.webkitSpeechRecognition); if (!constructor) {return false;} return new constructor();"
+      },
       "webGL": {
         "type": "instance",
         "src": "var canvas = document.createElement('canvas'); if (!canvas) {return false}; return canvas.getContext('webgl2') || canvas.getContext('webgl') || canvas.getContext('experimental-webgl');"
@@ -857,6 +861,11 @@
     },
     "ShadowRoot": {
       "__base": "var el = document.createElement('div'); if (!el.attachShadow) {return false;} el.attachShadow({mode: 'open'}); var instance = el.shadowRoot;"
+    },
+    "SpeechRecognition": {
+      "__resources": ["speechRecognition"],
+      "__base": "var instance = reusableInstances.speechRecognition;",
+      "__test": "return 'SpeechRecognition' in self"
     },
     "StereoPannerNode": {
       "__resources": ["audioContext"],
