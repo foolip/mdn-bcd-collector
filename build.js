@@ -483,8 +483,7 @@ const buildIDLTests = (ast) => {
 
     tests[`api.${adjustedIfaceName}`] = compileTest({
       raw: {
-        code: customIfaceTest || {property: iface.name, owner: 'self'},
-        combinator: '&&'
+        code: customIfaceTest || {property: iface.name, owner: 'self'}
       },
       exposure: Array.from(exposureSet),
       resources: resources
@@ -541,8 +540,7 @@ const buildIDLTests = (ast) => {
 
       tests[`api.${adjustedIfaceName}.${member.name}`] = compileTest({
         raw: {
-          code: expr,
-          combinator: '&&'
+          code: expr
         },
         exposure: Array.from(exposureSet),
         resources: resources
@@ -554,8 +552,7 @@ const buildIDLTests = (ast) => {
     for (const subtest of Object.entries(subtests)) {
       tests[`api.${adjustedIfaceName}.${subtest[0]}`] = compileTest({
         raw: {
-          code: subtest[1],
-          combinator: '&&'
+          code: subtest[1]
         },
         exposure: Array.from(exposureSet),
         resources: resources
