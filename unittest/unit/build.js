@@ -438,11 +438,6 @@ describe('build', () => {
       assert.equal(compileTestCode(test), 'bcd.testConstructor("AudioContext");');
     });
 
-    it('CSS.supports', () => {
-      const test = {property: 'font-weight', owner: 'CSS.supports'};
-      assert.equal(compileTestCode(test), 'CSS.supports("font-weight", "inherit")');
-    });
-
     it('Symbol', () => {
       const test = {property: 'Symbol.iterator', owner: 'DOMMatrixReadOnly'};
       assert.equal(compileTestCode(test), '"Symbol" in self && "iterator" in Symbol && Symbol.iterator in DOMMatrixReadOnly.prototype');
@@ -561,7 +556,7 @@ describe('build', () => {
         raw: {
           code: [
             {property: 'fontFamily', owner: 'document.body.style'},
-            {property: 'font-family', owner: 'CSS.supports'}
+            {property: 'font-family', owner: 'document.body.style'}
           ],
           combinator: '||'
         },
@@ -570,7 +565,7 @@ describe('build', () => {
       };
 
       assert.deepEqual(compileTest(rawTest), {
-        code: '"fontFamily" in document.body.style || CSS.supports("font-family", "inherit")',
+        code: '"fontFamily" in document.body.style || "font-family" in document.body.style',
         exposure: ['Window']
       });
     });
@@ -1313,19 +1308,19 @@ describe('build', () => {
 
     assert.deepEqual(buildCSS(webrefCSS, customCSS), {
       'css.properties.font-family': {
-        code: '"fontFamily" in document.body.style || CSS.supports("font-family", "inherit")',
+        code: '"fontFamily" in document.body.style || "font-family" in document.body.style',
         exposure: ['Window']
       },
       'css.properties.font-weight': {
-        code: '"fontWeight" in document.body.style || CSS.supports("font-weight", "inherit")',
+        code: '"fontWeight" in document.body.style || "font-weight" in document.body.style',
         exposure: ['Window']
       },
       'css.properties.grid': {
-        code: '"grid" in document.body.style || CSS.supports("grid", "inherit")',
+        code: '"grid" in document.body.style',
         exposure: ['Window']
       },
       'css.properties.zoom': {
-        code: '"zoom" in document.body.style || CSS.supports("zoom", "inherit")',
+        code: '"zoom" in document.body.style',
         exposure: ['Window']
       }
     });

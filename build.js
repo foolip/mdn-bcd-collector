@@ -158,9 +158,6 @@ const compileTestCode = (test) => {
   if (test.property.startsWith('constructor')) {
     return `bcd.testConstructor("${property}");`;
   }
-  if (test.owner === 'CSS.supports') {
-    return `CSS.supports("${test.property}", "inherit")`;
-  }
   if (test.property.startsWith('Symbol.')) {
     return `"Symbol" in self && "${test.property.replace('Symbol.', '')}" in Symbol && ${test.property} in ${test.owner}.prototype`;
   }
@@ -608,15 +605,22 @@ const buildCSS = (webrefCSS, customCSS) => {
   const tests = {};
 
   for (const name of Array.from(propertySet).sort()) {
+    const customTest = getCustomTestCSS(name);
+    if (customTest) {
+      tests[`css.properties.${name}`] = compileTest({
+        raw: {code: customTest},
+        exposure: ['Window']
+      });
+      continue;
+    }
+
     const attrName = cssPropertyToIDLAttribute(name, name.startsWith('-'));
+    const code = [{property: attrName, owner: 'document.body.style'}];
+    if (name !== attrName) {
+      code.push({property: name, owner: 'document.body.style'});
+    }
     tests[`css.properties.${name}`] = compileTest({
-      raw: {
-        code: getCustomTestCSS(name) || [
-          {property: attrName, owner: 'document.body.style'},
-          {property: name, owner: 'CSS.supports'}
-        ],
-        combinator: '||'
-      },
+      raw: {code, combinator: '||'},
       exposure: ['Window']
     });
   }
