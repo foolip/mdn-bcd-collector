@@ -1,9 +1,5 @@
 {
   "properties": {
-    "-apple-color-filter": {},
-    "-apple-pay-button-style": {},
-    "-apple-pay-button-type": {},
-    "-apple-trailing-word": {},
     "-epub-caption-side": {},
     "-epub-text-combine": {},
     "-epub-text-emphasis": {},
@@ -13,7 +9,6 @@
     "-epub-text-transform": {},
     "-epub-word-break": {},
     "-epub-writing-mode": {},
-    "-internal-text-autosizing-status": {},
     "-moz-animation": {},
     "-moz-animation-delay": {},
     "-moz-animation-direction": {},
