@@ -34,7 +34,7 @@ const testDatabase = {
     exposure: ['Window', 'Worker']
   },
   'css.properties.font-family': {
-    code: '"fontFamily" in document.body.style || CSS.supports("font-family", "inherit")',
+    code: '"fontFamily" in document.body.style || "font-family" in document.body.style',
     exposure: ['Window']
   },
   'javascript.builtins.array': {
