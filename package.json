@@ -67,7 +67,7 @@
     "eslint": "7.25.0",
     "eslint-config-google": "0.14.0",
     "eslint-plugin-prefer-arrow": "1.2.3",
-    "fs-extra": "9.1.0",
+    "fs-extra": "10.0.0",
     "json3": "3.3.3",
     "klaw": "3.0.0",
     "listr2": "3.8.2",
