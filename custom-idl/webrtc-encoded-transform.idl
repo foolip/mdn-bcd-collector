@@ -1,0 +1,7 @@
+// https://github.com/w3c/webrtc-encoded-transform/pull/64
+partial interface RTCRtpSender {
+  RTCInsertableStreams createEncodedStreams();
+};
+partial interface RTCRtpReceiver {
+  RTCInsertableStreams createEncodedStreams();
+};
