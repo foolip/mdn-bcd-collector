@@ -82,6 +82,6 @@
     "puppeteer-to-istanbul": "1.4.0",
     "selenium-webdriver": "3.6.0",
     "sinon": "10.0.1",
-    "webidl2": "24.0.1"
+    "webidl2": "24.1.0"
   }
 }
