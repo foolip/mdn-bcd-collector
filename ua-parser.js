@@ -36,6 +36,7 @@ const parseUA = (userAgent, browsers) => {
     case 'samsung_browser':
       data.browser.id = 'samsunginternet';
       break;
+    case 'android_browser':
     case 'chrome_webview':
       data.browser.id = 'webview';
       break;
@@ -48,7 +49,7 @@ const parseUA = (userAgent, browsers) => {
   }
 
   // https://github.com/mdn/browser-compat-data/blob/master/docs/data-guidelines.md#safari-for-ios-versioning
-  data.fullVersion = data.browser.id === 'safari_ios' ? ua.os.version : ua.browser.version;
+  data.fullVersion = (data.browser.id === 'safari_ios' || ua.browser.name === 'Android Browser') ? ua.os.version : ua.browser.version;
   data.version = getMajorMinorVersion(data.fullVersion);
 
   if (!(data.browser.id in browsers)) {
