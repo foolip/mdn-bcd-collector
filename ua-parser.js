@@ -47,7 +47,7 @@ const parseUA = (userAgent, browsers) => {
     data.browser.name += ' Android';
   }
 
-  // https://github.com/mdn/browser-compat-data/blob/master/docs/data-guidelines.md#safari-for-ios-versioning
+  // https://github.com/mdn/browser-compat-data/blob/main/docs/data-guidelines.md#safari-for-ios-versioning
   data.fullVersion = data.browser.id === 'safari_ios' ? ua.os.version : ua.browser.version;
   data.version = getMajorMinorVersion(data.fullVersion);
 
