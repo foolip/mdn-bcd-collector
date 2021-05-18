@@ -32,3 +32,111 @@ partial interface PaymentRequest {
 partial interface HTMLIFrameElement {
   attribute boolean allowPaymentRequest;
 };
+
+// https://github.com/w3c/payment-request/pull/955
+partial interface PaymentRequest {
+  // Original constructor was:
+  // constructor(sequence<PaymentMethodData> methodData, PaymentDetailsInit details, optional PaymentOptions options = {});
+
+  readonly attribute PaymentAddress? shippingAddress;
+  readonly attribute DOMString? shippingOption;
+  readonly attribute PaymentShippingType? shippingType;
+
+  attribute EventHandler onshippingaddresschange;
+  attribute EventHandler onshippingoptionchange;
+};
+
+partial dictionary PaymentDetailsBase {
+  sequence<PaymentShippingOption> shippingOptions;
+};
+
+partial dictionary PaymentDetailsUpdate {
+  DOMString error;
+  AddressErrors shippingAddressErrors;
+  PayerErrors payerErrors;
+};
+
+enum PaymentShippingType {
+  "shipping",
+  "delivery",
+  "pickup"
+};
+
+dictionary PaymentOptions {
+  boolean requestPayerName = false;
+  boolean requestBillingAddress = false;
+  boolean requestPayerEmail = false;
+  boolean requestPayerPhone = false;
+  boolean requestShipping = false;
+  PaymentShippingType shippingType = "shipping";
+};
+
+// Also in a webref patch:
+// [SecureContext, Exposed=(Window)]
+// interface PaymentAddress {
+//   [Default] object toJSON();
+//   readonly attribute DOMString city;
+//   readonly attribute DOMString country;
+//   readonly attribute DOMString dependentLocality;
+//   readonly attribute DOMString organization;
+//   readonly attribute DOMString phone;
+//   readonly attribute DOMString postalCode;
+//   readonly attribute DOMString recipient;
+//   readonly attribute DOMString region;
+//   readonly attribute DOMString sortingCode;
+//   readonly attribute FrozenArray<DOMString> addressLine;
+// };
+
+dictionary AddressInit {
+  DOMString country = "";
+  sequence<DOMString> addressLine = [];
+  DOMString region = "";
+  DOMString city = "";
+  DOMString dependentLocality = "";
+  DOMString postalCode = "";
+  DOMString sortingCode = "";
+  DOMString organization = "";
+  DOMString recipient = "";
+  DOMString phone = "";
+};
+
+// Also in a webref patch:
+// dictionary AddressErrors {
+//   DOMString addressLine;
+//   DOMString city;
+//   DOMString country;
+//   DOMString dependentLocality;
+//   DOMString organization;
+//   DOMString phone;
+//   DOMString postalCode;
+//   DOMString recipient;
+//   DOMString region;
+//   DOMString sortingCode;
+// };
+
+dictionary PaymentShippingOption {
+  required DOMString id;
+  required DOMString label;
+  required PaymentCurrencyAmount amount;
+  boolean selected = false;
+};
+
+partial interface PaymentResponse {
+  readonly attribute PaymentAddress? shippingAddress;
+  readonly attribute DOMString? shippingOption;
+  readonly attribute DOMString? payerName;
+  readonly attribute DOMString? payerEmail;
+  readonly attribute DOMString? payerPhone;
+  attribute EventHandler onpayerdetailchange;
+};
+
+partial dictionary PaymentValidationErrors {
+  PayerErrors payer;
+  AddressErrors shippingAddress;
+};
+
+dictionary PayerErrors {
+  DOMString email;
+  DOMString name;
+  DOMString phone;
+};
