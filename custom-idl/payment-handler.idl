@@ -13,3 +13,42 @@ partial interface ServiceWorkerGlobalScope {
 partial interface CanMakePaymentEvent {
   readonly attribute FrozenArray<PaymentDetailsModifier> modifiers;
 };
+
+// https://github.com/w3c/payment-handler/pull/389
+// https://bugs.chromium.org/p/chromium/issues/detail?id=1207601
+partial interface PaymentManager {
+  Promise<undefined> enableDelegations(sequence<PaymentDelegation> delegations);
+};
+
+enum PaymentDelegation {
+  "shippingAddress",
+  "payerName",
+  "payerPhone",
+  "payerEmail"
+};
+
+partial dictionary PaymentRequestDetailsUpdate {
+  sequence<PaymentShippingOption> shippingOptions;
+  AddressErrors shippingAddressErrors;
+};
+
+partial interface PaymentRequestEvent {
+  readonly attribute boolean requestBillingAddress;
+  readonly attribute object? paymentOptions;
+  readonly attribute FrozenArray<PaymentShippingOption>? shippingOptions;
+  Promise<PaymentRequestDetailsUpdate?> changeShippingAddress(optional AddressInit shippingAddress = {});
+  Promise<PaymentRequestDetailsUpdate?> changeShippingOption(DOMString shippingOption);
+};
+
+partial dictionary PaymentRequestEventInit {
+  PaymentOptions paymentOptions;
+  sequence<PaymentShippingOption> shippingOptions;
+};
+
+partial dictionary PaymentHandlerResponse {
+  DOMString? payerName;
+  DOMString? payerEmail;
+  DOMString? payerPhone;
+  AddressInit shippingAddress;
+  DOMString? shippingOption;
+};
