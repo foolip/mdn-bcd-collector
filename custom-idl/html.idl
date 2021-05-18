@@ -362,9 +362,6 @@ partial interface HTMLElement {
   attribute boolean inert;
   attribute boolean noModule;
   attribute EventHandler onModule;
-
-  // https://github.com/whatwg/html/issues/668
-  attribute DOMString outerText;
 };
 
 partial interface HTMLFormElement {
