@@ -14,7 +14,7 @@ interface WebKitCSSMatrix {
   constructor();
 };
 
-// https://github.com/WebKit/webkit/blob/master/Source/WebCore/page/WebKitPoint.idl
+// https://github.com/WebKit/webkit/blob/9940f5c6cd901c3cce4efb372ebd94d808218d80/Source/WebCore/page/WebKitPoint.idl#L26
 [Exposed=Window]
 interface WebKitPoint {
   constructor(optional unrestricted double x = 0, optional unrestricted double y = 0);
@@ -27,7 +27,7 @@ partial interface Window {
   Point convertPointFromPageToNode(Node node, Point point);
   Point convertPointFromNodeToPage(Node node, Point point);
 
-  // https://github.com/WebKit/webkit/blob/master/Source/WebCore/page/DOMWindow.idl
+  // https://github.com/WebKit/webkit/blob/c9d973b2825dad3756c9c7861002f21b37ef6a8e/Source/WebCore/page/DOMWindow.idl#L128
   WebKitPoint webkitConvertPointFromPageToNode(Node node, WebKitPoint point);
   WebKitPoint webkitConvertPointFromNodeToPage(Node node, WebKitPoint point);
 };
