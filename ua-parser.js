@@ -51,7 +51,7 @@ const parseUA = (userAgent, browsers) => {
   data.fullVersion = ua.browser.version;
   
   if (data.browser.id === 'safari_ios') {
-    // https://github.com/mdn/browser-compat-data/blob/master/docs/data-guidelines.md#safari-for-ios-versioning
+    // https://github.com/mdn/browser-compat-data/blob/main/docs/data-guidelines.md#safari-for-ios-versioning
     data.fullVersion = ua.os.version;
   } else if (ua.browser.name === 'Android Browser') {
     data.fullVersion = compareVersions.compare(ua.os.version, '5.0', '<')
