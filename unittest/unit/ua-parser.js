@@ -27,7 +27,7 @@ const browsers = {
   safari: {name: 'Safari', releases: {13: {}, 13.1: {}, 14: {}}},
   safari_ios: {name: 'iOS Safari', releases: {13: {}, 13.3: {}, 13.4: {}, 14: {}}},
   samsunginternet_android: {name: 'Samsung Internet', releases: {'10.0': {}, 10.2: {}, '11.0': {}, 11.2: {}, '12.0': {}, 12.1: {}}},
-  webview_android: {name: 'WebView Android', releases: {86: {}}}
+  webview_android: {name: 'WebView Android', releases: {1.1: {}, 4.4: {}, '4.4.3': {}, 37: {}, 86: {}}}
 };
 
 describe('getMajorMinorVersion', () => {
@@ -117,7 +117,19 @@ describe('parseUA', () => {
     assert.deepEqual(parseUA('Mozilla/5.0 (Linux; Android 11; Pixel 2) AppleWebKit/537.36 (KHTML, like Gecko) SamsungBrowser/12.1 Chrome/79.0.3945.136 Mobile Safari/537.36', browsers), {browser: {id: 'samsunginternet_android', name: 'Samsung Internet'}, version: '12.1', fullVersion: '12.1', os: {name: 'Android', version: '11'}, inBcd: true});
   });
 
-  it('WebView Android', () => {
+  it('WebView Android (Android Browser, 1.1)', () => {
+    assert.deepEqual(parseUA('Mozilla/5.0 (Linux; U; Android 1.1; en-us; generic) AppleWebKit/525.10+ (KHTML, like Gecko) Version/3.0.4 Mobile Safari/523.12.2', browsers), {browser: {id: 'webview_android', name: 'WebView Android'}, version: '1.1', fullVersion: '1.1', os: {name: 'Android', version: '1.1'}, inBcd: true});
+  });
+
+  it('WebView Android (Android Browser, 4.4.2, Chrome 30)', () => {
+    assert.deepEqual(parseUA('Mozilla/5.0 (Linux; Android 4.4.2; Android SDK built for x86 Build/KK) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/30.0.0.0 Mobile Safari/537.36', browsers), {browser: {id: 'webview_android', name: 'WebView Android'}, version: '4.4', fullVersion: '4.4.2', os: {name: 'Android', version: '4.4.2'}, inBcd: true});
+  });
+
+  it('WebView Android (Android Browser, 5.0.2, Chrome 39)', () => {
+    assert.deepEqual(parseUA('Mozilla/5.0 (Linux; Android 5.0.2; Android SDK built for x86_64 Build/LSY66K) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/37.0.0.0 Mobile Safari/537.36', browsers), {browser: {id: 'webview_android', name: 'WebView Android'}, version: '37', fullVersion: '37.0.0.0', os: {name: 'Android', version: '5.0.2'}, inBcd: true});
+  });
+
+  it('WebView Android (11, Chrome 86)', () => {
     assert.deepEqual(parseUA('Mozilla/5.0 (Linux; Android 11; Pixel 2 Build/RP1A.200720.009; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/86.0.4240.198 Mobile Safari/537.36 WEBVIEW TEST/1.2.1.80 (Phone; anonymous)', browsers), {browser: {id: 'webview_android', name: 'WebView Android'}, version: '86', fullVersion: '86.0.4240.198', os: {name: 'Android', version: '11'}, inBcd: true});
   });
 
