@@ -49,18 +49,16 @@ const parseUA = (userAgent, browsers) => {
   }
 
   data.fullVersion = ua.browser.version;
-  // https://github.com/mdn/browser-compat-data/blob/master/docs/data-guidelines.md#safari-for-ios-versioning
+  
   if (data.browser.id === 'safari_ios') {
+    // https://github.com/mdn/browser-compat-data/blob/master/docs/data-guidelines.md#safari-for-ios-versioning
     data.fullVersion = ua.os.version;
+  } else if (ua.browser.name === 'Android Browser') {
+    data.fullVersion = compareVersions.compare(ua.os.version, '5.0', '<')
+      ? ua.os.version
+      : ua.engine.version;
   }
 
-  if (ua.browser.name === 'Android Browser') {
-    if (compareVersions.compare(ua.os.version, '5.0', '<')) {
-      data.fullVersion = ua.os.version;
-    } else {
-      data.fullVersion = ua.engine.version;
-    }
-  }
   data.version = getMajorMinorVersion(data.fullVersion);
 
   if (!(data.browser.id in browsers)) {
