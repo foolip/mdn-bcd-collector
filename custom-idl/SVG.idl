@@ -23,9 +23,26 @@ interface SVGPoint {
 [Exposed=Window] interface SVGStylable {};
 [Exposed=Window] interface SVGTransformable {};
 [Exposed=Window] interface SVGUnknownElement {};
-[Exposed=Window] interface SVGZoomAndPan {};
+[Exposed=Window] interface SVGViewSpec {};
 
-typedef object SVGViewSpec;
+// SVGZoomAndPan has been both an interface and a mixin in implementations.
+// Cover all bases:
+[Exposed=Window]
+interface SVGZoomAndPan {
+  const unsigned short SVG_ZOOMANDPAN_UNKNOWN = 0;
+  const unsigned short SVG_ZOOMANDPAN_DISABLE = 1;
+  const unsigned short SVG_ZOOMANDPAN_MAGNIFY = 2;
+};
+interface mixin ZoomAndPan {
+  const unsigned short SVG_ZOOMANDPAN_UNKNOWN = 0;
+  const unsigned short SVG_ZOOMANDPAN_DISABLE = 1;
+  const unsigned short SVG_ZOOMANDPAN_MAGNIFY = 2;
+  attribute unsigned short zoomAndPan;
+};
+SVGSVGElement includes ZoomAndPan;
+SVGViewElement includes ZoomAndPan;
+SVGViewSpec includes ZoomAndPan;
+
 typedef object SVGPathSegClosePath;
 typedef object SVGPathSegMovetoAbs;
 typedef object SVGPathSegMovetoRel;
