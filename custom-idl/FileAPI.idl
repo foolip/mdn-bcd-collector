@@ -1,3 +1,8 @@
+partial interface Blob {
+  // https://trac.webkit.org/changeset/129082/webkit
+  Blob webkitSlice(optional long long start, optional long long end, optional DOMString contentType);
+};
+
 partial interface File {
   readonly attribute object lastModifiedDate;
   readonly attribute DOMString type;
