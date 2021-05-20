@@ -1357,7 +1357,7 @@
       "__base": "var instance = document.createTreeWalker(document);"
     },
     "URL": {
-      "__base": "if ('URL' in self) {var instance = new URL('https://mdn-bcd-collector.appspot.com')} else {var instance = new webkitURL('https://mdn-bcd-collector.appspot.com')}",
+      "__base": "if ('URL' in self) {var instance = new URL(location.href)} else {var instance = new webkitURL(location.href)}",
       "__test": "return 'URL' in self;"
     },
     "ValidityState": {
@@ -1452,7 +1452,7 @@
       "__base": "<%api.EXT_disjoint_timer_query:ext%> var instance = ext.createQueryEXT();"
     },
     "WebSocket": {
-      "__base": "var instance = new WebSocket('wss://mdn-bcd-collector.appspot.com');"
+      "__base": "var instance = new WebSocket('wss://' + location.hostname);"
     },
     "Window": {
       "__base": "var instance = window;"
