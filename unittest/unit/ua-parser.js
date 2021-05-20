@@ -125,7 +125,7 @@ describe('parseUA', () => {
     assert.deepEqual(parseUA('Mozilla/5.0 (Linux; Android 4.4.2; Android SDK built for x86 Build/KK) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/30.0.0.0 Mobile Safari/537.36', browsers), {browser: {id: 'webview_android', name: 'WebView Android'}, version: '4.4', fullVersion: '4.4.2', os: {name: 'Android', version: '4.4.2'}, inBcd: true});
   });
 
-  it('WebView Android (Android Browser, 5.0.2, Chrome 39)', () => {
+  it('WebView Android (Android Browser, 5.0.2, Chrome 37)', () => {
     assert.deepEqual(parseUA('Mozilla/5.0 (Linux; Android 5.0.2; Android SDK built for x86_64 Build/LSY66K) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/37.0.0.0 Mobile Safari/537.36', browsers), {browser: {id: 'webview_android', name: 'WebView Android'}, version: '37', fullVersion: '37.0.0.0', os: {name: 'Android', version: '5.0.2'}, inBcd: true});
   });
 
