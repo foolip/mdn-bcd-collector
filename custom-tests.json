@@ -332,7 +332,7 @@
       "__base": "var instance = window.external;"
     },
     "FontFace": {
-      "__base": "var instance = new FontFace('Roboto', 'https://fonts.googleapis.com/css2?family=Roboto&display=swap');"
+      "__base": "var instance = new FontFace('Material Design Icons', 'url(/fonts/materialdesignicons-webfont.woff)');"
     },
     "GainNode": {
       "__resources": ["audioContext"],
