@@ -970,7 +970,7 @@
     },
     "SVGComponentTransferFunctionElement": {
       "__base": "<%api.SVGFEFuncAElement:instance%>",
-      "__test": "return bcd.testObjectName(instance, 'SVGFEFuncAlement');"
+      "__test": "return bcd.testObjectName(instance, 'SVGFEFuncAElement');"
     },
     "SVGCursorElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'cursor');",
