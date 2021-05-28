@@ -108,3 +108,18 @@ npm run coverage
 ```sh
 npm run clean
 ```
+
+## Release process
+
+These are the manual steps to release and deploy a new version on http://mdn-bcd-collector.appspot.com/:
+
+- Check out the previously tagged commit
+- Run `npm install; npm run build`
+- Run `mv tests.json tests.json.orig`
+- Run `git checkout -b release-x.y.z origin/main`
+- Run `npm install; npm run build`
+- List added tests: `comm -13 <(jq -r 'keys[]' tests.json.orig) <(jq -r 'keys[]' tests.json)`
+- List removed tests: `comm -23 <(jq -r 'keys[]' tests.json.orig) <(jq -r 'keys[]' tests.json)`
+- Bump the version in `package.json` and run `npm install` to update `package-lock.json`
+- Commit the result with a commit message similar to the last release and create a pull request
+- Once the pull request is merged, tag the result as `vx.y.z` and push the tag
