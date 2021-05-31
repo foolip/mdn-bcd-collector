@@ -989,7 +989,7 @@
       "__test": "return bcd.testObjectName(instance, 'SVGDiscardElement');"
     },
     "SVGElement": {
-      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'unknown');"
+      "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'title');"
     },
     "SVGEllipseElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'ellipse');",
