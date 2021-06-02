@@ -735,16 +735,16 @@
       "__base": "<%api.MessageChannel:channel%> var instance = channel.port1;"
     },
     "MimeType": {
-      "__base": "var instance = window.navigator.mimeTypes[0];"
+      "__base": "var instance = navigator.mimeTypes[0];"
     },
     "MimeTypeArray": {
-      "__base": "var instance = window.navigator.mimeTypes;"
+      "__base": "var instance = navigator.mimeTypes;"
     },
     "NamedNodeMap": {
       "__base": "var instance = document.body.attributes;"
     },
     "Navigator": {
-      "__base": "var instance = window.navigator;"
+      "__base": "var instance = navigator;"
     },
     "Node": {
       "__base": "var instance = document;"
@@ -1462,6 +1462,9 @@
     },
     "WorkerGlobalScope": {
       "__base": "var instance = self;"
+    },
+    "WorkerNavigator": {
+      "__base": "var instance = navigator;"
     },
     "XPathExpression": {
       "__base": "var xpe = new XPathEvaluator(); var instance = xpe.createExpression('//div');"
