@@ -1451,6 +1451,10 @@
       "__resources": ["webGL"],
       "__base": "<%api.EXT_disjoint_timer_query:ext%> var instance = ext.createQueryEXT();"
     },
+    "WebGLVertexArrayObjectOES": {
+      "__resources": ["webGL1"],
+      "__base": "<%api.OES_vertex_array_object:ext%> var instance = ext.createVertexArrayOES();"
+    },
     "WebSocket": {
       "__base": "var instance = new WebSocket('wss://' + location.hostname);"
     },
