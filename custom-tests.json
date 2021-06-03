@@ -32,6 +32,10 @@
         "type": "instance",
         "src": "var constructor = (window.OfflineAudioContext || window.webkitOfflineAudioContext); if (!constructor) {return false;} return new constructor(2,44100*40,44100);"
       },
+      "sharedWorker": {
+        "type": "instance",
+        "src": "return new SharedWorker('/resources/empty.js');"
+      },
       "speechRecognition": {
         "type": "instance",
         "src": "var constructor = (window.SpeechRecognition || window.webkitSpeechRecognition); if (!constructor) {return false;} return new constructor();"
@@ -47,6 +51,10 @@
       "webGL2": {
         "type": "instance",
         "src": "var canvas = document.createElement('canvas'); if (!canvas) {return false}; return canvas.getContext('webgl2');"
+      },
+      "worker": {
+        "type": "instance",
+        "src": "return new Worker('/resources/empty.js');"
       }
     },
     "Attr": {
@@ -862,6 +870,10 @@
     "ShadowRoot": {
       "__base": "var el = document.createElement('div'); if (!el.attachShadow) {return false;} el.attachShadow({mode: 'open'}); var instance = el.shadowRoot;"
     },
+    "SharedWorker": {
+      "__resources": ["sharedWorker"],
+      "__base": "var instance = reusableInstances.sharedWorker;"
+    },
     "SpeechRecognition": {
       "__resources": ["speechRecognition"],
       "__base": "var instance = reusableInstances.speechRecognition;",
@@ -1459,6 +1471,10 @@
     },
     "WindowOrWorkerGlobalScope": {
       "__base": "var instance = self;"
+    },
+    "Worker": {
+      "__resources": ["worker"],
+      "__base": "var instance = reusableInstances.worker;"
     },
     "WorkerGlobalScope": {
       "__base": "var instance = self;"
