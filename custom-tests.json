@@ -679,7 +679,7 @@
       "__base": "var instance = createImageBitmap(document.getElementById('resource-image-black'));"
     },
     "ImageCapture": {
-      "__base": "<%api.MediaStreamTrack:track%> var promise = track.then(function(t) {return new ImageCapture(t);});"
+      "__base": "<%api.MediaDevices:mediaDevices%> var track = mediaDevices.getUserMedia({video: true}); track.then(function() {}); var promise = track.then(function(t) {return new ImageCapture(t);});"
     },
     "ImageData": {
       "__base": "<%api.CanvasRenderingContext2D:ctx%> var instance = ctx.createImageData(16, 16);"
@@ -719,7 +719,7 @@
       "isTypeSupported": "return 'isTypeSupported' in MediaSource;"
     },
     "MediaStream": {
-      "__base": "<%api.MediaDevices:mediaDevices%> var promise = mediaDevices.getUserMedia({audio: true, video: true}); promise.then(function() {});"
+      "__base": "<%api.MediaDevices:mediaDevices%> var promise = mediaDevices.getUserMedia({audio: true}); promise.then(function() {});"
     },
     "MediaStreamAudioDestinationNode": {
       "__resources": ["audioContext"],
@@ -730,7 +730,7 @@
       "__base": "<%api.MediaStream:mediaStream%> if (!reusableInstances.audioContext) {return false;} var promise = mediaStream.then(function(ms) {return reusableInstances.audioContext.createMediaStreamSource(ms)});"
     },
     "MediaStreamTrack": {
-      "__base": "<%api.MediaStream:mediaStream%> var promise = mediaStream.then(function(ms) {return ms.getVideoTracks()[0]});"
+      "__base": "<%api.MediaStream:mediaStream%> var promise = mediaStream.then(function(ms) {return ms.getAudioTracks()[0]});"
     },
     "MediaStreamTrackAudioSourceNode": {
       "__resources": ["audioContext"],
