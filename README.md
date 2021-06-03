@@ -120,6 +120,7 @@ These are the manual steps to release and deploy a new version on http://mdn-bcd
 - Run `npm install; npm run build`
 - List added tests: `comm -13 <(jq -r 'keys[]' tests.json.orig) <(jq -r 'keys[]' tests.json)`
 - List removed tests: `comm -23 <(jq -r 'keys[]' tests.json.orig) <(jq -r 'keys[]' tests.json)`
+- Look for test changes: `diff -u <(python3 -m json.tool tests.json.orig) <(python3 -m json.tool tests.json)`
 - Bump the version in `package.json` and run `npm install` to update `package-lock.json`
 - Commit the result with a commit message similar to the last release and create a pull request
 - Once the pull request is merged, tag the result as `vx.y.z` and push the tag
