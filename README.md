@@ -111,7 +111,7 @@ npm run clean
 
 ## Release process
 
-These are the manual steps to release and deploy a new version on http://mdn-bcd-collector.appspot.com/:
+These are the manual steps to release and deploy a new version on https://mdn-bcd-collector.appspot.com/:
 
 - Check out the previously tagged commit
 - Run `npm install; npm run build`
