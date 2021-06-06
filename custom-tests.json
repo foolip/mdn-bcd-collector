@@ -245,7 +245,7 @@
       "__base": "var instance = new DOMError('DOMError');"
     },
     "DOMException": {
-      "__base": "var instance = new DOMException('DOMException');"
+      "__base": "var instance = null; try { document.createElement('1'); } catch (e) { instance = e; }"
     },
     "DOMImplementation": {
       "__base": "var instance = document.implementation;"
