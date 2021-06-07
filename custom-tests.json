@@ -681,7 +681,7 @@
       "__base": "if (!reusableInstances.webGL) {return false}; var instance = reusableInstances.webGL.getExtension('KHR_parallel_shader_compile');"
     },
     "Location": {
-      "__base": "var instance = window.location;"
+      "__base": "var instance = location;"
     },
     "MediaCapabilities": {
       "__base": "var instance = navigator.mediaCapabilities;"
@@ -1466,6 +1466,9 @@
     },
     "WorkerGlobalScope": {
       "__base": "var instance = self;"
+    },
+    "WorkerLocation": {
+      "__base": "var instance = location;"
     },
     "WorkerNavigator": {
       "__base": "var instance = navigator;"
