@@ -838,7 +838,7 @@
       "__base": "var instance = navigator.plugins;"
     },
     "ProcessingInstruction": {
-      "__base": "var instance = document.createProcessingInstruction('xml-stylesheet', 'type=\"text/xsl\" href=\"transform.xsl\"');"
+      "__base": "var doc = new DOMParser().parseFromString('<foo />', 'application/xml'); var instance = doc.createProcessingInstruction('xml-stylesheet', 'href=\"mycss.css\" type=\"text/css\"');"
     },
     "Range": {
       "__base": "var instance = document.createRange();"
