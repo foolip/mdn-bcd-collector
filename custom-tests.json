@@ -882,7 +882,7 @@
       "__base": "var instance = document.styleSheets;"
     },
     "SubtleCrypto": {
-      "__base": "<%api.Crypto:crypto%> var instance = crypto.subtle;"
+      "__base": "if (!('crypto' in self)) {return false}; var instance = crypto.subtle;"
     },
     "SVGAElement": {
       "__base": "var instance = document.createElementNS('http://www.w3.org/2000/svg', 'a');",
