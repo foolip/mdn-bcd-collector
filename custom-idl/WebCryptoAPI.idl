@@ -1,0 +1,4 @@
+// https://trac.webkit.org/changeset/220941/webkit#file73
+partial interface Crypto {
+  readonly attribute SubtleCrypto webkitSubtle;
+};
