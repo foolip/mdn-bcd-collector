@@ -1379,6 +1379,9 @@
       "__resources": ["audioContext"],
       "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createWaveShaper();"
     },
+    "WebGLRenderingContext": {
+      "__base": "var canvas = document.createElement('canvas'); if (!canvas) {return false}; return canvas.getContext('webgl2') || canvas.getContext('webgl') || canvas.getContext('experimental-webgl');"
+    },
     "WEBGL_blend_equation_advanced_coherent": {
       "__resources": ["webGL"],
       "__base": "if (!reusableInstances.webGL) {return false}; var instance = reusableInstances.webGL.getExtension('WEBGL_blend_equation_advanced_coherent');"
