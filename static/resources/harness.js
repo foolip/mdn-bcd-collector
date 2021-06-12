@@ -578,7 +578,8 @@
         if (client.readyState == 4) {
           if (client.status >= 200 && client.status <= 299) {
             var form = document.getElementById('form');
-            form.innerHTML = '<input type=submit name=download value="Export for download"> <input type=submit name=github value="Export to GitHub">';
+            form.children[0].disabled = false;
+            form.children[1].disabled = false;
             updateStatus('Results uploaded.', 'success-notice');
           } else {
             updateStatus('Failed to upload results: server error.', 'error-notice');

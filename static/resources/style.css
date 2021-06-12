@@ -68,6 +68,7 @@ select:disabled, select:disabled:hover,
 input[type=submit]:disabled, input[type=submit]:disabled:hover {
   cursor: not-allowed;
   background-color: #636363;
+  color: #ccc;
 }
 
 input::placeholder {
