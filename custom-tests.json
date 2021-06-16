@@ -1473,6 +1473,9 @@
     "WorkerNavigator": {
       "__base": "var instance = navigator;"
     },
+    "XMLHttpRequest": {
+      "__base": "var instance = new XMLHttpRequest();"
+    },
     "XPathExpression": {
       "__base": "var xpe = new XPathEvaluator(); var instance = xpe.createExpression('//div');"
     },
