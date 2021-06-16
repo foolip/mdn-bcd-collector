@@ -242,7 +242,7 @@
       "__base": "var instance = document.doctype;"
     },
     "DOMError": {
-      "__base": "var instance = new DOMError('DOMError');"
+      "__base": "var instance = new DOMError('name');"
     },
     "DOMException": {
       "__base": "var instance = null; try { document.createElement('1'); } catch (e) { instance = e; }"
@@ -267,7 +267,7 @@
       "__base": "if (document.createElementNS) {var instance = document.createElementNS('', 'p');} else {var instance = document.createElement('p');}"
     },
     "Event": {
-      "__base": "try {var instance = new Event('Event');} catch(e) {var instance = Event.createEvent('Event');}"
+      "__base": "try {var instance = new Event('type');} catch(e) {var instance = document.createEvent('Event');}"
     },
     "EventSource": {
       "__base": "var instance = new EventSource('/eventstream');"
