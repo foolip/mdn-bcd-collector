@@ -812,19 +812,19 @@
       "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createPanner();"
     },
     "Performance": {
-      "__base": "var instance = window.performance;"
+      "__base": "if (!('performance' in self)) {return false}; var instance = performance;"
     },
     "PerformanceEntry": {
       "__base": "<%api.PerformanceMark:instance%>"
     },
     "PerformanceMark": {
-      "__base": "<%api.Performance:performance%> if (!performance.mark) {return false}; performance.mark('mark'); var instance = performance.getEntriesByName('mark')[0];"
+      "__base": "if (!('performance' in self)) {return false}; if (!performance.mark) {return false}; performance.mark('mark'); var instance = performance.getEntriesByName('mark')[0];"
     },
     "PerformanceNavigation": {
-      "__base": "<%api.Performance:performance%> var instance = performance.navigation;"
+      "__base": "if (!('performance' in self)) {return false}; var instance = performance.navigation;"
     },
     "PerformanceTiming": {
-      "__base": "<%api.Performance:performance%> var instance = performance.timing;"
+      "__base": "if (!('performance' in self)) {return false}; var instance = performance.timing;"
     },
     "PeriodicWave": {
       "__resources": ["audioContext"],
