@@ -1,7 +1,6 @@
 partial interface SourceBuffer {
   Promise<undefined> appendBufferAsync();
   undefined appendStream();
-  undefined changeType();
   undefined removeAsync();
   attribute any trackDefaults;
 };
