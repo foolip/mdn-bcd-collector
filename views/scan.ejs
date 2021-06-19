@@ -1,0 +1,51 @@
+<%- contentFor('body') %>
+<h1>Scan my Browser</h1>
+<p>Missing:</p>
+<ol></ol>
+<script>
+(function () {
+  var builtins = <%- JSON.stringify(builtins) %>;
+  var names = Object.getOwnPropertyNames(this);
+  var missing = [];
+  for (var i = 0; i < names.length; i++) {
+    var name = names[i];
+    var builtin = builtins[name];
+    if (builtin) {
+      var value = this[name];
+      if (value === this) {
+          // ignore values that are the global object, like window, self, etc.
+          continue;
+      }
+      var members = [];
+      try {
+        for (const name of Object.getOwnPropertyNames(value)) {
+          if (name === 'arguments' || name === 'caller' || name === 'length' || name === 'name' || name === 'prototype') {
+            continue;
+          }
+          members.push(name);
+        }
+      } catch (e) {}
+      try {
+        for (const name of Object.getOwnPropertyNames(value.prototype)) {
+          members.push(name);
+        }
+      } catch (e) {}
+      for (const member of members) {
+        if (!builtin[member]) {
+          missing.push(name + '.' + member);
+        }
+      }
+    } else {
+      missing.push(name);
+    }
+  }
+  missing.sort();
+  var list = document.getElementsByTagName('ol')[0];
+  for (const path of missing) {
+    var item = document.createElement('li');
+    item.textContent = path;
+    list.appendChild(item);
+  }
+})();
+</script>
+<a href="/">Back to Home</a>

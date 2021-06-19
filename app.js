@@ -144,6 +144,35 @@ app.get('/', (req, res) => {
   });
 });
 
+app.get('/scan', (req, res) => {
+  const builtins = {};
+  for (const path of tests.listEndpoints('/tests')) {
+    const parts = path.split('.');
+    if (parts[0] === 'api') {
+      parts.shift();
+      if (parts[0] === 'Window' && parts.length > 1) {
+        parts.shift();
+      }
+    } else {
+      // TODO: JS builtins
+      continue;
+    }
+    if (parts.length === 0) {
+      continue;
+    }
+    let builtin = builtins[parts[0]];
+    if (!builtin) {
+      builtin = builtins[parts[0]] = {};
+    }
+    if (parts[1]) {
+      builtin[parts[1]] = 1;
+    }
+  }
+  res.render('scan', {
+    builtins
+  });
+});
+
 app.get('/download/:filename', (req, res, next) => {
   storage.readFile(req.params.filename)
       .then((data) => {
