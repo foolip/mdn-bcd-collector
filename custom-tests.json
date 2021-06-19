@@ -849,6 +849,9 @@
     "Response": {
       "__base": "var instance = new Response('');"
     },
+    "RTCPeerConnection": {
+      "__base": "var constructor = (window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection); if (!constructor) {return false;} var instance = new constructor();"
+    },
     "Screen": {
       "__base": "var instance = window.screen;"
     },
