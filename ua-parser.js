@@ -68,6 +68,33 @@ const parseUA = (userAgent, browsers) => {
   data.browser.name = browsers[data.browser.id].name;
   data.inBcd = false;
 
+  if (data.browser.id === 'safari') {
+    // Handle Safari backport versions
+    if (
+      compareVersions.compare(data.version, '4.1', '>=') &&
+      compareVersions.compare(data.version, '5', '<')
+    ) {
+      // Safari 4.1 is a backported version of Safari 5
+      // https://github.com/mdn/browser-compat-data/issues/4679
+
+      data.inBcd = true;
+      data.version = '5';
+      return data;
+    }
+
+    if (
+      compareVersions.compare(data.version, '6.1', '>=') &&
+      compareVersions.compare(data.version, '7', '<')
+    ) {
+      // Safari 6.1/6.2 are backported versions of Safari 7
+      // https://github.com/mdn/browser-compat-data/issues/9423
+
+      data.inBcd = true;
+      data.version = '7';
+      return data;
+    }
+  };
+
   const versions = Object.keys(browsers[data.browser.id].releases);
   versions.sort(compareVersions);
 
