@@ -93,7 +93,7 @@ const parseUA = (userAgent, browsers) => {
       data.version = '7';
       return data;
     }
-  };
+  }
 
   const versions = Object.keys(browsers[data.browser.id].releases);
   versions.sort(compareVersions);
