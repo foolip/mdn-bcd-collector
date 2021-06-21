@@ -1458,6 +1458,9 @@
     "WebSocket": {
       "__base": "var instance = new WebSocket('wss://' + location.hostname);"
     },
+    "WheelEvent": {
+      "__base": "try {var instance = new WheelEvent('wheel');} catch(e) {var instance = document.createEvent('WheelEvent');}"
+    },
     "Window": {
       "__base": "var instance = window;"
     },
