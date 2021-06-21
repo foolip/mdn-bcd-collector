@@ -740,6 +740,9 @@
     "MimeTypeArray": {
       "__base": "var instance = navigator.mimeTypes;"
     },
+    "MouseEvent": {
+      "__base": "try {var instance = new MouseEvent('click');} catch(e) {var instance = document.createEvent('MouseEvent');}"
+    },
     "NamedNodeMap": {
       "__base": "var instance = document.body.attributes;"
     },
