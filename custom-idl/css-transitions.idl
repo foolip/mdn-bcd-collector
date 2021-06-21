@@ -1,4 +1,9 @@
+// https://github.com/WebKit/WebKit/blob/9940f5c6cd901c3cce4efb372ebd94d808218d80/Source/WebCore/dom/WebKitTransitionEvent.idl
 [Exposed=Window]
 interface WebKitTransitionEvent : Event {
   constructor(DOMString type);
+
+  readonly attribute DOMString propertyName;
+  readonly attribute double elapsedTime;
+  readonly attribute DOMString pseudoElement;
 };

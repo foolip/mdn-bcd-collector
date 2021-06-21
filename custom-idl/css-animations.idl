@@ -19,7 +19,12 @@ interface Point {
   attribute float y;
 };
 
+// https://github.com/WebKit/WebKit/blob/9940f5c6cd901c3cce4efb372ebd94d808218d80/Source/WebCore/dom/WebKitAnimationEvent.idl
 [Exposed=Window]
 interface WebKitAnimationEvent : Event {
   constructor(DOMString type);
+
+  readonly attribute DOMString animationName;
+  readonly attribute double elapsedTime;
+  readonly attribute DOMString pseudoElement;
 };
