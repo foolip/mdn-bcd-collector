@@ -1,0 +1,14 @@
+// https://chromium.googlesource.com/chromium/src/+/7242f0c5af65922df5dfc7a47ebcfe0218feaeca
+
+partial interface Element {
+  undefined webkitRequestPointerLock();
+};
+
+partial interface Document {
+  undefined webkitExitPointerLock();
+
+  readonly attribute Element? webkitPointerLockElement;
+
+  attribute EventHandler onwebkitpointerlockchange;
+  attribute EventHandler onwebkitpointerlockerror;
+};
