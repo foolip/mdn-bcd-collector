@@ -24,6 +24,18 @@ Updating all data:
 npm run update-bcd
 ```
 
+Updating a specific entry, e.g., the `appendChild()` method on `Node`:
+
+```sh
+npm run update-bcd -- --path=api.Node.appendChild
+```
+
+Updating paths matched with wildcards, e.g., everything related to WebRTC:
+
+```sh
+npm run update-bcd -- --path=api.RTC*
+```
+
 The `--browser` argument can be used to only update data for one or more browsers:
 
 ```sh

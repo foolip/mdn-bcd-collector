@@ -6,6 +6,7 @@
 const compareVersions = require('compare-versions');
 const fs = require('fs').promises;
 const klaw = require('klaw');
+const {Minimatch} = require('minimatch');
 const path = require('path');
 
 const logger = require('./logger');
@@ -197,6 +198,10 @@ const update = (bcd, supportMatrix, filter) => {
   let modified = false;
 
   for (const [path, browserMap] of supportMatrix.entries()) {
+    if (filter.path && !filter.path.match(path)) {
+      continue;
+    }
+
     const entry = findEntry(bcd, path);
     if (!entry || !entry.__compat) {
       continue;
@@ -336,6 +341,11 @@ const loadJsonFiles = async (paths) => {
 
 /* istanbul ignore next */
 const main = async (reportPaths, filter) => {
+  // Replace filter.path with a minimatch object.
+  if (filter.path) {
+    filter.path = new Minimatch(filter.path);
+  }
+
   const bcdFiles = await loadJsonFiles(
       filter.category.map((cat) => path.join(BCD_DIR, ...cat.split('.'))));
 
@@ -382,6 +392,11 @@ if (require.main === module) {
               type: 'array',
               choices: ['api', 'css.properties'],
               default: ['api', 'css.properties']
+            }).option('path', {
+              alias: 'p',
+              describe: 'The BCD path to update (interpreted as a minimatch pattern)',
+              type: 'string',
+              default: null
             }).option('browser', {
               alias: 'b',
               describe: 'The browser to update',
