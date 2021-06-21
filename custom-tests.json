@@ -426,7 +426,7 @@
       "__base": "var instance = document;"
     },
     "HTMLElement": {
-      "__base": "var instance = document.createElement('element');"
+      "__base": "var instance = document.createElement('b');"
     },
     "HTMLEmbedElement": {
       "__base": "var instance = document.createElement('embed');",
