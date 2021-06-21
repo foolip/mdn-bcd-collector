@@ -50,7 +50,7 @@
       }
     },
     "Attr": {
-      "__base": "var el = document.createElement('p'); el.setAttribute('data-foo', 'bar'); var instance = el.getAttributeNode('data-foo');"
+      "__base": "var el = document.createElement('b'); el.setAttribute('data-foo', 'bar'); var instance = el.getAttributeNode('data-foo');"
     },
     "ANGLE_instanced_arrays": {
       "__resources": ["webGL1"],
@@ -124,7 +124,7 @@
       "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createBiquadFilter();"
     },
     "Blob": {
-      "__base": "try {var instance = new Blob();} catch(e) {var instance = new BlobBuilder();}"
+      "__base": "var instance; try {instance = new Blob();} catch(e) {instance = new BlobBuilder();}"
     },
     "CacheStorage": {
       "__base": "if (!('caches' in self)) {return false}; var instance = caches;"
@@ -210,7 +210,7 @@
       "__base": "<%api.CSSStyleSheet:stylesheet%> var instance = stylesheet.cssRules;"
     },
     "CSSStyleDeclaration": {
-      "__base": "var el = document.createElement('p'); var instance = el.style;"
+      "__base": "var el = document.createElement('b'); var instance = el.style;"
     },
     "CSSStyleRule": {
       "__resources": ["createStyleSheet"],
@@ -245,7 +245,7 @@
       "__base": "var instance = new DOMError('name');"
     },
     "DOMException": {
-      "__base": "var instance = null; try { document.createElement('1'); } catch (e) { instance = e; }"
+      "__base": "var instance; try { document.createElement('1'); } catch (e) { instance = e; }"
     },
     "DOMImplementation": {
       "__base": "var instance = document.implementation;"
@@ -264,10 +264,10 @@
       "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createDynamicsCompressor();"
     },
     "Element": {
-      "__base": "if (document.createElementNS) {var instance = document.createElementNS('', 'p');} else {var instance = document.createElement('p');}"
+      "__base": "var instance; try {instance = document.createElementNS('', 'el');} catch(e) {instance = document.createElement('b');}"
     },
     "Event": {
-      "__base": "try {var instance = new Event('type');} catch(e) {var instance = document.createEvent('Event');}"
+      "__base": "var instance; try {instance = new Event('type');} catch(e) {instance = document.createEvent('Event');}"
     },
     "EventSource": {
       "__base": "var instance = new EventSource('/eventstream');"
@@ -741,7 +741,7 @@
       "__base": "var instance = navigator.mimeTypes;"
     },
     "MouseEvent": {
-      "__base": "try {var instance = new MouseEvent('click');} catch(e) {var instance = document.createEvent('MouseEvent');}"
+      "__base": "var instance; try {instance = new MouseEvent('click');} catch(e) {instance = document.createEvent('MouseEvent');}"
     },
     "NamedNodeMap": {
       "__base": "var instance = document.body.attributes;"
@@ -1331,7 +1331,7 @@
       "__test": "return bcd.testObjectName(instance, 'SVGVKernElement');"
     },
     "Text": {
-      "__base": "var el = document.createElement('p'); el.innerHTML = 'text'; var instance = el.childNodes[0];"
+      "__base": "var el = document.createElement('b'); el.innerHTML = 'text'; var instance = el.childNodes[0];"
     },
     "TextDecoder": {
       "__base": "var instance = new TextDecoder();"
@@ -1363,7 +1363,7 @@
       "__base": "var instance = document.createTreeWalker(document);"
     },
     "URL": {
-      "__base": "if ('URL' in self) {var instance = new URL(location.href)} else {var instance = new webkitURL(location.href)}",
+      "__base": "var instance; try {instance = new URL(location.href)} catch(e) {instance = new webkitURL(location.href)}",
       "__test": "return 'URL' in self;"
     },
     "ValidityState": {
@@ -1465,7 +1465,7 @@
       "__base": "var instance = new WebSocket('wss://' + location.hostname);"
     },
     "WheelEvent": {
-      "__base": "try {var instance = new WheelEvent('wheel');} catch(e) {var instance = document.createEvent('WheelEvent');}"
+      "__base": "var instance; try {instance = new WheelEvent('wheel');} catch(e) {instance = document.createEvent('WheelEvent');}"
     },
     "Window": {
       "__base": "var instance = window;"
