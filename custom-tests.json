@@ -61,6 +61,9 @@
       "__resources": ["audioContext"],
       "__base": "if (!reusableInstances.audioContext) {return false;} var instance = reusableInstances.audioContext.createAnalyser();"
     },
+    "AnimationEvent": {
+      "__base": "var instance; try {instance = new AnimationEvent('animationend');} catch(e) {instance = document.createEvent('AnimationEvent');}"
+    },
     "ApplicationCache": {
       "__base": "var instance = window.applicationCache;"
     },
@@ -1359,6 +1362,9 @@
       "__resources": ["video-blank"],
       "__base": "var el = document.getElementById('resource-video-blank'); var instance = el.buffered;"
     },
+    "TransitionEvent": {
+      "__base": "var instance; try {instance = new TransitionEvent('transitionend');} catch(e) {instance = document.createEvent('TransitionEvent');}"
+    },
     "TreeWalker": {
       "__base": "var instance = document.createTreeWalker(document);"
     },
@@ -1460,6 +1466,12 @@
     "WebGLVertexArrayObjectOES": {
       "__resources": ["webGL1"],
       "__base": "<%api.OES_vertex_array_object:ext%> var instance = ext.createVertexArrayOES();"
+    },
+    "WebKitAnimationEvent": {
+      "__base": "var instance; try {instance = new WebKitAnimationEvent('webkitAnimationEnd');} catch(e) {instance = document.createEvent('WebKitAnimationEvent');}"
+    },
+    "WebKitTransitionEvent": {
+      "__base": "var instance; try {instance = new WebKitTransitionEvent('webkitTransitionEnd');} catch(e) {instance = document.createEvent('WebKitTransitionEvent');}"
     },
     "WebSocket": {
       "__base": "var instance = new WebSocket('wss://' + location.hostname);"
