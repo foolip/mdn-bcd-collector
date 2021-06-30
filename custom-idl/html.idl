@@ -668,9 +668,6 @@ partial interface Window {
   undefined webkitCancelRequestAnimationFrame(long id);
   undefined webkitCancelAnimationFrame(long id);
 
-  // https://github.com/whatwg/html/issues/2379
-  readonly attribute Navigator clientInformation;
-
   // https://docs.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/aa741363(v=vs.85)
   // https://bugs.chromium.org/p/chromium/issues/detail?id=692835
   attribute DOMString defaultStatus;
