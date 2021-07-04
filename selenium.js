@@ -83,7 +83,7 @@ const filterVersions = (data, earliestVersion) => {
     }
   }
 
-  return versions.sort((a, b) => compareVersions(b, a));
+  return versions;// .sort((a, b) => compareVersions(b, a));
 };
 
 const getSafariOS = (version) => {
@@ -192,10 +192,10 @@ const buildDriver = async (browser, version, os) => {
             'permissions.default.geo': 1,
             'permissions.default.desktop-notification': 1
           }
-        })
+        });
       }
 
-      // Get console errors from browser 
+      // Get console errors from browser
       const loggingPrefs = new logging.Preferences();
       loggingPrefs.setLevel(logging.Type.BROWSER, logging.Level.SEVERE);
       capabilities.setLoggingPrefs(loggingPrefs);
