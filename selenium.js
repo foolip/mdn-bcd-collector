@@ -147,6 +147,10 @@ const buildDriver = async (browser, version, os) => {
           Browser[browser.toUpperCase()]
       );
 
+      capabilities.set(
+          'name', `mdn-bcd-collector: ${prettyName(browser, version, os)}`
+      );
+
       capabilities.set(Capability.VERSION, version.split('.')[0]);
 
       if (service === 'saucelabs') {
@@ -168,10 +172,6 @@ const buildDriver = async (browser, version, os) => {
       if (service === 'browserstack') {
         capabilities.set('browserstack.console', 'errors');
       }
-
-      capabilities.set(
-          'name', `mdn-bcd-collector: ${prettyName(browser, version, os)}`
-      );
 
       try {
         const driverBuilder = new Builder().usingServer(seleniumUrl)
