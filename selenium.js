@@ -162,8 +162,6 @@ const getSeleniumUrl = (service, credentials) => {
 
 const buildDriver = async (browser, version, os) => {
   for (const [service, seleniumCredentials] of Object.entries(secrets.selenium)) {
-    const seleniumUrl = getSeleniumUrl(service, seleniumCredentials);
-
     if (service === 'browserstack') {
       if (browser === 'edge' && ['12', '13', '14'].includes(version)) {
         // BrowserStack remaps Edge 12-14 as Edge 15
@@ -264,6 +262,8 @@ const buildDriver = async (browser, version, os) => {
       }
 
       try {
+        const seleniumUrl = getSeleniumUrl(service, seleniumCredentials);
+
         // Build Selenium driver
         const driverBuilder = new Builder().usingServer(seleniumUrl)
             .withCapabilities(capabilities);
@@ -273,7 +273,8 @@ const buildDriver = async (browser, version, os) => {
       } catch (e) {
         if (e.message.startsWith('Misconfigured -- Unsupported OS/browser/version/device combo') ||
             e.message.startsWith('OS/Browser combination invalid') ||
-            e.message.startsWith('Browser/Browser_Version not supported')) {
+            e.message.startsWith('Browser/Browser_Version not supported') ||
+            e.message.startsWith("Couldn't compile Selenium URL")) {
           // If unsupported config, continue to the next grid configuration
           continue;
         } else {
