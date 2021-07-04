@@ -16,7 +16,7 @@
 
 const parseShortString = (value, desc) => {
   if (typeof value !== 'string') {
-    throw new Error(`${desc} should be string; got ${typeof value}`);
+    throw new Error(`${desc} should be a string; got ${typeof value}`);
   }
   if (value.length > 1000) {
     throw new Error(`${desc} should be a short string; string is too long`);
