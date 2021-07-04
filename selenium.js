@@ -172,7 +172,7 @@ const buildDriver = async (browser, version, os) => {
       }
 
       // Allow mic, camera, geolocation and notifications permissions
-      if (['chrome', 'edge'].includes(browser)) {
+      if (browser === 'chrome' || (browser === 'edge' && version >= 79)) {
         capabilities.set('goog:chromeOptions', {
           args: [
             '--use-fake-device-for-media-stream',
