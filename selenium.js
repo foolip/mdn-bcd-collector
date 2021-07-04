@@ -288,9 +288,10 @@ const run = async (browser, version, os, ctx, task) => {
     await goToPage(driver, browser, version, `${host}/${getvars}`);
     await click(driver, browser, 'start');
 
-    log(task, 'Running tests...');
+    log(task, 'Loading test page...');
     await awaitPage(driver, browser, version, `${host}/tests/${getvars}`);
 
+    log(task, 'Running tests...');
     await driver.wait(until.elementLocated(By.id('status')), 30000);
     statusEl = await driver.findElement(By.id('status'));
     try {
