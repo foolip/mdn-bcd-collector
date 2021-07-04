@@ -183,6 +183,18 @@ const buildDriver = async (browser, version, os) => {
             'profile.managed_default_content_settings.notifications': 1
           }
         });
+      } else if (browser === 'firefox') {
+        capabilities.set('moz:firefoxOptions', {
+          args: [
+            'use-fake-ui-for-media-stream'
+          ],
+          prefs: {
+            'permissions.default.microphone': 1,
+            'permissions.default.camera': 1,
+            'permissions.default.geo': 1,
+            'permissions.default.desktop-notification': 1
+          }
+        })
       }
 
       // Get console errors from browser 
