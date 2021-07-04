@@ -166,9 +166,21 @@ const buildDriver = async (browser, version, os) => {
         }
       }
 
-      const prefs = new logging.Preferences();
-      prefs.setLevel(logging.Type.BROWSER, logging.Level.SEVERE);
-      capabilities.setLoggingPrefs(prefs);
+      // Allow mic, camera, geolocation and notifications permissions
+      capabilities.set('goog:chromeOptions', {
+        'args': [
+          "--use-fake-device-for-media-stream",
+          "--use-fake-ui-for-media-stream"
+        ],
+        "prefs": {
+          "profile.managed_default_content_settings.geolocation": 1,
+          "profile.managed_default_content_settings.notifications": 1,
+        }
+      });
+
+      const loggingPrefs = new logging.Preferences();
+      loggingPrefs.setLevel(logging.Type.BROWSER, logging.Level.SEVERE);
+      capabilities.setLoggingPrefs(loggingPrefs);
       if (service === 'browserstack') {
         capabilities.set('browserstack.console', 'errors');
       }
