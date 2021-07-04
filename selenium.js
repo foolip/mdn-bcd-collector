@@ -43,12 +43,12 @@ const gumTests = [
   'MediaStreamAudioSourceNode',
   'MediaStreamTrack',
   'MediaStreamTrackAudioSourceNode'
-].map((iface) => `api.${iface}`).join(',');
+].map((iface) => `api.${iface}`);
 
 const ignore = {
   chrome: {
-    25: 'api.MediaStreamAudioDestinationNode',
-    26: 'api.MediaStreamAudioDestinationNode'
+    25: ['api.MediaStreamAudioDestinationNode'],
+    26: ['api.MediaStreamAudioDestinationNode']
   },
   edge: {
     12: gumTests,
@@ -256,7 +256,7 @@ const run = async (browser, version, os, ctx, task) => {
   let statusEl;
 
   const ignorelist = ignore[browser] && ignore[browser][version];
-  const getvars = `?selenium=true${ignorelist ? `&ignore=${ignorelist}` : ''}`;
+  const getvars = `?selenium=true${ignorelist ? `&ignore=${ignorelist.join(',')}` : ''}`;
 
   try {
     log(task, 'Loading homepage...');
