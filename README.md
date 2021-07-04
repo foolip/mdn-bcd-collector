@@ -88,13 +88,47 @@ This step is performed automatically when the `main` branch is updated:
 
 ## Running tests via Selenium WebDriver
 
+A script has been provided which will collect all of the results for nearly all of the browsers, using the Selenium WebDriver to control your CTs, and download them to your computer (which can then be submitted as a PR).  To run this script, you'll need a few prerequisites:
+
+- A clone of [mdn-bcd-results](https://github.com/foolip/mdn-bcd-results) adjacent to this folder's repository (or at least a folder at `../mdn-bcd-results`)
+- At least one Selenium remote (ex. BrowserStack, SauceLabs, etc.)
+
+### Define Selenium Hosts
+
+In `secrets.json`, you'll need to add your Selenium remote(s).  In the `selenium` object, define your remote(s) by setting the key as the service name (ex. "browserstack", "saucelabs", "lambdatest", "custom", etc.) and the value as either an object containing the username and key for known remotes, or simply a string of the remote URL.  Your `secrets.json` should look something like this:
+
+```json
+{
+  "github": {...},
+  "selenium": {
+    "browserstack": {
+      "username": "example",
+      "key": "some-API-key-goes-here"
+    },
+    "saucelabs": {
+      "username": "example",
+      "key": "some-API-key-goes-here",
+      "region": "us-west-1"
+    },
+    "custom": "https://my.example.page.org/selenium/wd"
+  }
+}
+```
+
+Currently, the Selenium hosts known to the script are:
+
+- BrowserStack - requires `username` and `key`
+- SauceLabs - requires `username`, `key`, and `region`
+
+You may use other Selenium hosts, but please be aware that they have not been tested and you may experience unexpected results.
+
+### Run the script
+
 To test using the latest deployed version, run:
 
 ```sh
 npm run selenium
 ```
-
-In `secrets.json`, configure your Selenium remote(s) by the service name as the key, and the URL as the value (ex. `"browserstack": "https://USERNAME:KEY@hub-cloud.browserstack.com/wd/hub"`). Please check with your CT on how to configure your WebDriver URL.
 
 You can also limit the browsers to test by defining browsers as arguments:
 
