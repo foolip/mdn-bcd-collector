@@ -36,6 +36,11 @@ const resultsDir = path.join(__dirname, '..', 'mdn-bcd-results');
 const testenv = process.env.NODE_ENV === 'test';
 const host = `https://${testenv ? 'staging-dot-' : ''}mdn-bcd-collector.appspot.com`;
 
+const seleniumUrls = {
+  browserstack: 'https://${username}:${key}@hub-cloud.browserstack.com/wd/hub',
+  saucelabs: 'https://${username}:${key}@ondemand.${region}.saucelabs.com:443/wd/hub'
+};
+
 // Custom tests that use getUserMedia() make Edge 12-18 block.
 const gumTests = [
   'ImageCapture',
@@ -88,6 +93,23 @@ const filterVersions = (data, earliestVersion, reverse) => {
   ));
 };
 
+const getBrowsersToTest = (limitBrowsers, reverse) => {
+  const browsersToTest = {
+    chrome: filterVersions(bcdBrowsers.chrome.releases, '15', reverse),
+    edge: filterVersions(bcdBrowsers.edge.releases, '12', reverse),
+    firefox: filterVersions(bcdBrowsers.firefox.releases, '4', reverse),
+    ie: filterVersions(bcdBrowsers.ie.releases, '6', reverse),
+    safari: filterVersions(bcdBrowsers.safari.releases, '5.1', reverse)
+  };
+
+  if (limitBrowsers) {
+    return Object.fromEntries(Object.entries(browsersToTest)
+        .filter(([k]) => (limitBrowsers.includes(k))));
+  }
+
+  return browsersToTest;
+};
+
 const getSafariOS = (version) => {
   // Sauce Labs differentiates 10.0 vs. 10.1 in the OS version. This
   // function sets the appropriate OS version accordingly.
@@ -106,8 +128,69 @@ const getSafariOS = (version) => {
   }
 };
 
+const getOsesToTest = (service, os) => {
+  let osesToTest = [];
+
+  switch (os) {
+    case 'Windows':
+      osesToTest = [
+        ['Windows', '10'],
+        ['Windows', '8.1'],
+        ['Windows', '8'],
+        ['Windows', '7'],
+        ['Windows', 'XP']
+      ];
+      break;
+    case 'macOS':
+      osesToTest = service === 'saucelabs' ?
+                   [['macOS', '10.14']] :
+                   [['OS X', 'Big Sur'], ['OS X', 'Mojave'], ['OS X', 'El Capitan']];
+      break;
+    default:
+      throw new Error(`Unknown/unsupported OS: ${os}`);
+  }
+
+  return osesToTest;
+};
+
+const getSeleniumUrl = (service, credentials) => {
+  // If credentials object is just a string, treat it as the URL
+  if (typeof credentials === 'string') {
+    return credentials;
+  }
+
+  if (!(service in seleniumUrls)) {
+    if ('url' in credentials) {
+      seleniumUrls[service] = credentials.url;
+    } else {
+      throw new Error(`Couldn't compile Selenium URL for ${service}: service is unknown and URL not specified`);
+    }
+  }
+
+  const re = /\${([^}]+)?}/g;
+  const missingVars = [];
+
+  // Replace variables in pre-defined Selenium URLs
+  const seleniumUrl = seleniumUrls[service].replace(
+      re, ($1, $2) => {
+        if ($2 in credentials) {
+          return credentials[$2];
+        }
+        missingVars.push($2);
+        return $1;
+      }
+  );
+
+  // Check for any unfilled variables
+  if (missingVars.length) {
+    throw new Error(`Couldn't compile Selenium URL for ${service}: missing required variables: ${missingVars.join(', ')}`);
+  }
+
+  return seleniumUrl;
+};
+
 const buildDriver = async (browser, version, os) => {
-  for (const [service, seleniumUrl] of Object.entries(secrets.selenium)) {
+  for (const [service, credentials] of Object.entries(secrets.selenium)) {
     if (service === 'browserstack') {
       if (browser === 'edge' && ['12', '13', '14'].includes(version)) {
         // BrowserStack remaps Edge 12-14 as Edge 15
@@ -124,29 +207,8 @@ const buildDriver = async (browser, version, os) => {
       }
     }
 
-    let osesToTest = [];
-
-    switch (os) {
-      case 'Windows':
-        osesToTest = [
-          ['Windows', '10'],
-          ['Windows', '8.1'],
-          ['Windows', '8'],
-          ['Windows', '7'],
-          ['Windows', 'XP']
-        ];
-        break;
-      case 'macOS':
-        osesToTest = service === 'saucelabs' ?
-                     [['macOS', '10.14']] :
-                     [['OS X', 'Big Sur'], ['OS X', 'Mojave'], ['OS X', 'El Capitan']];
-        break;
-      default:
-        throw new Error(`Unknown/unsupported OS: ${os}`);
-    }
-
     // eslint-disable-next-line guard-for-in
-    for (const [osName, osVersion] of osesToTest) {
+    for (const [osName, osVersion] of getOsesToTest(service, os)) {
       const capabilities = new Capabilities();
       capabilities.set(
           Capability.BROWSER_NAME,
@@ -208,6 +270,8 @@ const buildDriver = async (browser, version, os) => {
       }
 
       try {
+        const seleniumUrl = getSeleniumUrl(service, credentials);
+
         // Build Selenium driver
         const driverBuilder = new Builder().usingServer(seleniumUrl)
             .withCapabilities(capabilities);
@@ -217,7 +281,8 @@ const buildDriver = async (browser, version, os) => {
       } catch (e) {
         if (e.message.startsWith('Misconfigured -- Unsupported OS/browser/version/device combo') ||
             e.message.startsWith('OS/Browser combination invalid') ||
-            e.message.startsWith('Browser/Browser_Version not supported')) {
+            e.message.startsWith('Browser/Browser_Version not supported') ||
+            e.message.startsWith('Couldn\'t compile Selenium URL')) {
           // If unsupported config, continue to the next grid configuration
           continue;
         } else {
@@ -228,14 +293,6 @@ const buildDriver = async (browser, version, os) => {
   }
 
   return undefined;
-};
-
-const awaitPageReady = async (driver) => {
-  await driver.wait(() => {
-    return driver.executeScript('return document.readyState')
-        .then((readyState) => (readyState === 'complete'));
-  }, 30000);
-  await driver.executeScript('return document.readyState');
 };
 
 const changeProtocol = (browser, version, page) => {
@@ -258,6 +315,14 @@ const changeProtocol = (browser, version, page) => {
   }
 
   return page;
+};
+
+const awaitPageReady = async (driver) => {
+  await driver.wait(() => {
+    return driver.executeScript('return document.readyState')
+        .then((readyState) => (readyState === 'complete'));
+  }, 30000);
+  await driver.executeScript('return document.readyState');
 };
 
 const awaitPage = async (driver, browser, version, page) => {
@@ -344,19 +409,7 @@ const runAll = async (limitBrowsers, oses, nonConcurrent, reverse) => {
     console.warn(chalk`{yellow.bold Test mode: results are not saved.}`);
   }
 
-  let browsersToTest = {
-    chrome: filterVersions(bcdBrowsers.chrome.releases, '15', reverse),
-    edge: filterVersions(bcdBrowsers.edge.releases, '12', reverse),
-    firefox: filterVersions(bcdBrowsers.firefox.releases, '4', reverse),
-    ie: filterVersions(bcdBrowsers.ie.releases, '6', reverse),
-    safari: filterVersions(bcdBrowsers.safari.releases, '5.1', reverse)
-  };
-
-  if (limitBrowsers) {
-    browsersToTest = Object.fromEntries(Object.entries(browsersToTest)
-        .filter(([k]) => (limitBrowsers.includes(k))));
-  }
-
+  const browsersToTest = getBrowsersToTest(limitBrowsers, reverse);
   const tasks = [];
 
   // eslint-disable-next-line guard-for-in
