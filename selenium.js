@@ -281,7 +281,7 @@ const run = async (browser, version, os, ctx, task) => {
 
   const driver = await buildDriver(browser, version, os);
   if (!driver) {
-    throw new Error(task.title + '-' + 'Browser/OS config unsupported');
+    throw new Error(task.title + ' - ' + 'Browser/OS config unsupported');
   }
 
   let statusEl;
@@ -304,7 +304,7 @@ const run = async (browser, version, os, ctx, task) => {
       await driver.wait(until.elementTextContains(statusEl, 'uploaded'), 60000);
     } catch (e) {
       if (e.name == 'TimeoutError') {
-        throw new Error(task.title + '-' + 'Timed out waiting for results to upload');
+        throw new Error(task.title + ' - ' + 'Timed out waiting for results to upload');
       }
 
       throw e;
