@@ -168,13 +168,13 @@ const buildDriver = async (browser, version, os) => {
 
       // Allow mic, camera, geolocation and notifications permissions
       capabilities.set('goog:chromeOptions', {
-        'args': [
-          "--use-fake-device-for-media-stream",
-          "--use-fake-ui-for-media-stream"
+        args: [
+          '--use-fake-device-for-media-stream',
+          '--use-fake-ui-for-media-stream'
         ],
-        "prefs": {
-          "profile.managed_default_content_settings.geolocation": 1,
-          "profile.managed_default_content_settings.notifications": 1,
+        prefs: {
+          'profile.managed_default_content_settings.geolocation': 1,
+          'profile.managed_default_content_settings.notifications': 1
         }
       });
 
