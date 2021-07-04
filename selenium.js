@@ -185,9 +185,6 @@ const buildDriver = async (browser, version, os) => {
         });
       } else if (browser === 'firefox') {
         capabilities.set('moz:firefoxOptions', {
-          args: [
-            'use-fake-ui-for-media-stream'
-          ],
           prefs: {
             'permissions.default.microphone': 1,
             'permissions.default.camera': 1,
