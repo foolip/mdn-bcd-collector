@@ -83,7 +83,9 @@ const filterVersions = (data, earliestVersion, reverse) => {
     }
   }
 
-  return versions.sort((a, b) => compareVersions(...(reverse ? [a, b] : [b, a])));
+  return versions.sort((a, b) => compareVersions(
+      ...(reverse ? [a, b] : [b, a])
+  ));
 };
 
 const getSafariOS = (version) => {
@@ -439,7 +441,9 @@ if (require.main === module) {
       }
   );
 
-  if (runAll(argv.browser, argv.os, argv.nonConcurrent, argv.reverse) === false) {
+  if (runAll(
+      argv.browser, argv.os, argv.nonConcurrent, argv.reverse
+  ) === false) {
     process.exit(1);
   }
 }
