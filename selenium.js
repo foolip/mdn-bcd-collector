@@ -128,6 +128,31 @@ const getSafariOS = (version) => {
   }
 };
 
+const getOsesToTest = (os) => {
+  let osesToTest = [];
+
+  switch (os) {
+    case 'Windows':
+      osesToTest = [
+        ['Windows', '10'],
+        ['Windows', '8.1'],
+        ['Windows', '8'],
+        ['Windows', '7'],
+        ['Windows', 'XP']
+      ];
+      break;
+    case 'macOS':
+      osesToTest = service === 'saucelabs' ?
+                   [['macOS', '10.14']] :
+                   [['OS X', 'Big Sur'], ['OS X', 'Mojave'], ['OS X', 'El Capitan']];
+      break;
+    default:
+      throw new Error(`Unknown/unsupported OS: ${os}`);
+  }
+
+  return osesToTest;
+}
+
 const getSeleniumUrl = (service, credentials) => {
   // If credentials object is just a string, treat it as the URL
   if (typeof credentials === 'string') return credentials;
@@ -178,29 +203,8 @@ const buildDriver = async (browser, version, os) => {
       }
     }
 
-    let osesToTest = [];
-
-    switch (os) {
-      case 'Windows':
-        osesToTest = [
-          ['Windows', '10'],
-          ['Windows', '8.1'],
-          ['Windows', '8'],
-          ['Windows', '7'],
-          ['Windows', 'XP']
-        ];
-        break;
-      case 'macOS':
-        osesToTest = service === 'saucelabs' ?
-                     [['macOS', '10.14']] :
-                     [['OS X', 'Big Sur'], ['OS X', 'Mojave'], ['OS X', 'El Capitan']];
-        break;
-      default:
-        throw new Error(`Unknown/unsupported OS: ${os}`);
-    }
-
     // eslint-disable-next-line guard-for-in
-    for (const [osName, osVersion] of osesToTest) {
+    for (const [osName, osVersion] of getOsesToTest(os)) {
       const capabilities = new Capabilities();
       capabilities.set(
           Capability.BROWSER_NAME,
