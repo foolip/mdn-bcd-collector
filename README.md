@@ -88,14 +88,14 @@ This step is performed automatically when the `main` branch is updated:
 
 ## Running tests via Selenium WebDriver
 
-A script has been provided which will collect all of the results for nearly all of the browsers, using the Selenium WebDriver to control your CTs, and download them to your computer (which can then be submitted as a PR).  To run this script, you'll need a few prerequisites:
+A script has been provided which will collect all of the results for nearly all of the browsers, using the Selenium WebDriver to control your CTs, and download them to your computer (which can then be submitted as a PR). To run this script, you'll need a few prerequisites:
 
 - A clone of [mdn-bcd-results](https://github.com/foolip/mdn-bcd-results) adjacent to this folder's repository (or at least a folder at `../mdn-bcd-results`)
 - At least one Selenium remote (ex. BrowserStack, SauceLabs, etc.)
 
 ### Define Selenium Hosts
 
-In `secrets.json`, you'll need to add your Selenium remote(s).  In the `selenium` object, define your remote(s) by setting the key as the service name (ex. "browserstack", "saucelabs", "lambdatest", "custom", etc.) and the value as either an object containing the username and key for known remotes, or simply a string of the remote URL.  Your `secrets.json` should look something like this:
+In `secrets.json`, you'll need to add your Selenium remote(s). In the `selenium` object, define your remote(s) by setting the key as the service name (ex. "browserstack", "saucelabs", "lambdatest", "custom", etc.) and the value as either an object containing the username and key for known remotes, or simply a string of the remote URL. Your `secrets.json` should look something like this:
 
 ```json
 {

@@ -37,9 +37,9 @@ const testenv = process.env.NODE_ENV === 'test';
 const host = `https://${testenv ? 'staging-dot-' : ''}mdn-bcd-collector.appspot.com`;
 
 const seleniumUrls = {
-  'browserstack': 'https://${username}:${key}@hub-cloud.browserstack.com/wd/hub',
-  'saucelabs': 'https://${username}:${key}@ondemand.${region}.saucelabs.com:443/wd/hub'
-}
+  browserstack: 'https://${username}:${key}@hub-cloud.browserstack.com/wd/hub',
+  saucelabs: 'https://${username}:${key}@ondemand.${region}.saucelabs.com:443/wd/hub'
+};
 
 // Custom tests that use getUserMedia() make Edge 12-18 block.
 const gumTests = [
@@ -94,7 +94,7 @@ const filterVersions = (data, earliestVersion, reverse) => {
 };
 
 const getBrowsersToTest = (limitBrowsers, reverse) => {
-  let browsersToTest = {
+  const browsersToTest = {
     chrome: filterVersions(bcdBrowsers.chrome.releases, '15', reverse),
     edge: filterVersions(bcdBrowsers.edge.releases, '12', reverse),
     firefox: filterVersions(bcdBrowsers.firefox.releases, '4', reverse),
@@ -105,10 +105,10 @@ const getBrowsersToTest = (limitBrowsers, reverse) => {
   if (limitBrowsers) {
     return Object.fromEntries(Object.entries(browsersToTest)
         .filter(([k]) => (limitBrowsers.includes(k))));
-  };
+  }
 
   return browsersToTest;
-}
+};
 
 const getSafariOS = (version) => {
   // Sauce Labs differentiates 10.0 vs. 10.1 in the OS version. This
@@ -128,7 +128,7 @@ const getSafariOS = (version) => {
   }
 };
 
-const getOsesToTest = (os) => {
+const getOsesToTest = (service, os) => {
   let osesToTest = [];
 
   switch (os) {
@@ -151,42 +151,46 @@ const getOsesToTest = (os) => {
   }
 
   return osesToTest;
-}
+};
 
 const getSeleniumUrl = (service, credentials) => {
   // If credentials object is just a string, treat it as the URL
-  if (typeof credentials === 'string') return credentials;
+  if (typeof credentials === 'string') {
+    return credentials;
+  }
 
   if (!(service in seleniumUrls)) {
     if ('url' in credentials) {
-      seleniumUrls[service] = url;
+      seleniumUrls[service] = credentials.url;
     } else {
       throw new Error(`Couldn't compile Selenium URL for ${service}: service is unknown and URL not specified`);
     }
   }
 
   const re = /\${([^}]+)?}/g;
-  let missingVars = [];
+  const missingVars = [];
 
   // Replace variables in pre-defined Selenium URLs
   const seleniumUrl = seleniumUrls[service].replace(
-    re, ($1, $2) => {
-      if ($2 in credentials) return credentials[$2];
-      missingVars.push($2);
-      return $1;
-    }
+      re, ($1, $2) => {
+        if ($2 in credentials) {
+          return credentials[$2];
+        }
+        missingVars.push($2);
+        return $1;
+      }
   );
 
   // Check for any unfilled variables
   if (missingVars.length) {
-    throw new Error(`Couldn't compile Selenium URL for ${service}: missing required variables: ${missingVars.join(', ')}`)
+    throw new Error(`Couldn't compile Selenium URL for ${service}: missing required variables: ${missingVars.join(', ')}`);
   }
 
   return seleniumUrl;
 };
 
 const buildDriver = async (browser, version, os) => {
-  for (const [service, seleniumCredentials] of Object.entries(secrets.selenium)) {
+  for (const [service, credentials] of Object.entries(secrets.selenium)) {
     if (service === 'browserstack') {
       if (browser === 'edge' && ['12', '13', '14'].includes(version)) {
         // BrowserStack remaps Edge 12-14 as Edge 15
@@ -204,7 +208,7 @@ const buildDriver = async (browser, version, os) => {
     }
 
     // eslint-disable-next-line guard-for-in
-    for (const [osName, osVersion] of getOsesToTest(os)) {
+    for (const [osName, osVersion] of getOsesToTest(service, os)) {
       const capabilities = new Capabilities();
       capabilities.set(
           Capability.BROWSER_NAME,
@@ -266,7 +270,7 @@ const buildDriver = async (browser, version, os) => {
       }
 
       try {
-        const seleniumUrl = getSeleniumUrl(service, seleniumCredentials);
+        const seleniumUrl = getSeleniumUrl(service, credentials);
 
         // Build Selenium driver
         const driverBuilder = new Builder().usingServer(seleniumUrl)
@@ -278,7 +282,7 @@ const buildDriver = async (browser, version, os) => {
         if (e.message.startsWith('Misconfigured -- Unsupported OS/browser/version/device combo') ||
             e.message.startsWith('OS/Browser combination invalid') ||
             e.message.startsWith('Browser/Browser_Version not supported') ||
-            e.message.startsWith("Couldn't compile Selenium URL")) {
+            e.message.startsWith('Couldn\'t compile Selenium URL')) {
           // If unsupported config, continue to the next grid configuration
           continue;
         } else {
