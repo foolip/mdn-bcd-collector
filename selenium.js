@@ -153,6 +153,7 @@ const buildDriver = async (browser, version, os) => {
 
       capabilities.set(Capability.VERSION, version.split('.')[0]);
 
+      // Remap target OS for Safari x.0 vs. x.1 on SauceLabs
       if (service === 'saucelabs') {
         if (browser === 'safari') {
           capabilities.set('platform', getSafariOS(version));
@@ -178,6 +179,7 @@ const buildDriver = async (browser, version, os) => {
         }
       });
 
+      // Get console errors from browser 
       const loggingPrefs = new logging.Preferences();
       loggingPrefs.setLevel(logging.Type.BROWSER, logging.Level.SEVERE);
       capabilities.setLoggingPrefs(loggingPrefs);
@@ -186,6 +188,7 @@ const buildDriver = async (browser, version, os) => {
       }
 
       try {
+        // Build Selenium driver
         const driverBuilder = new Builder().usingServer(seleniumUrl)
             .withCapabilities(capabilities);
         const driver = await driverBuilder.build();
