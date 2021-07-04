@@ -73,7 +73,7 @@ const log = (task, message) => {
   // task.output = new Date(Date.now()).toLocaleTimeString(undefined, {hour12: false}) + ': ' + message;
 };
 
-const filterVersions = (data, earliestVersion) => {
+const filterVersions = (data, earliestVersion, reverse) => {
   const versions = [];
 
   for (const [version, versionData] of Object.entries(data)) {
@@ -83,7 +83,7 @@ const filterVersions = (data, earliestVersion) => {
     }
   }
 
-  return versions.sort((a, b) => compareVersions(b, a));
+  return versions.sort((a, b) => compareVersions(...(reverse ? [a, b] : [b, a])));
 };
 
 const getSafariOS = (version) => {
@@ -332,7 +332,7 @@ const run = async (browser, version, os, ctx, task) => {
   }
 };
 
-const runAll = async (limitBrowsers, oses, nonConcurrent) => {
+const runAll = async (limitBrowsers, oses, nonConcurrent, reverse) => {
   if (!Object.keys(secrets.selenium).length) {
     console.error(chalk`{red.bold A Selenium remote WebDriver URL is not defined in secrets.json.  Please define your Selenium remote(s).}`);
     return false;
@@ -343,11 +343,11 @@ const runAll = async (limitBrowsers, oses, nonConcurrent) => {
   }
 
   let browsersToTest = {
-    chrome: filterVersions(bcdBrowsers.chrome.releases, '15'),
-    edge: filterVersions(bcdBrowsers.edge.releases, '12'),
-    firefox: filterVersions(bcdBrowsers.firefox.releases, '4'),
-    ie: filterVersions(bcdBrowsers.ie.releases, '6'),
-    safari: filterVersions(bcdBrowsers.safari.releases, '5.1')
+    chrome: filterVersions(bcdBrowsers.chrome.releases, '15', reverse),
+    edge: filterVersions(bcdBrowsers.edge.releases, '12', reverse),
+    firefox: filterVersions(bcdBrowsers.firefox.releases, '4', reverse),
+    ie: filterVersions(bcdBrowsers.ie.releases, '6', reverse),
+    safari: filterVersions(bcdBrowsers.safari.releases, '5.1', reverse)
   };
 
   if (limitBrowsers) {
@@ -429,11 +429,17 @@ if (require.main === module) {
               alias: 's',
               type: 'boolean',
               nargs: 0
+            })
+            .option('reverse', {
+              describe: 'Run browser versions oldest-to-newest',
+              alias: 'r',
+              type: 'boolean',
+              nargs: 0
             });
       }
   );
 
-  if (runAll(argv.browser, argv.os, argv.nonConcurrent) === false) {
+  if (runAll(argv.browser, argv.os, argv.nonConcurrent, argv.reverse) === false) {
     process.exit(1);
   }
 }
