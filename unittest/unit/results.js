@@ -108,7 +108,7 @@ describe('results', () => {
             result: true
           }
         ]);
-      }, Error, 'results[0].name should be a short string');
+      }, Error, 'results[0].name should be a string; got number');
     });
 
     it('invalid result', () => {
@@ -120,7 +120,7 @@ describe('results', () => {
             result: 42
           }
         ]);
-      }, Error, 'results[0].result should be true/false/null');
+      }, Error, 'results[0].result (api.Attr.name) should be true/false/null; got 42');
     });
 
     it('invalid exposure', () => {
@@ -132,7 +132,7 @@ describe('results', () => {
             result: true
           }
         ]);
-      }, Error, 'results[0].exposure should be a short string');
+      }, Error, 'results[0].exposure (api.Attr.name) should be a string; got number');
     });
   });
 });
