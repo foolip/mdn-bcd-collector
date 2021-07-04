@@ -36,6 +36,11 @@ const resultsDir = path.join(__dirname, '..', 'mdn-bcd-results');
 const testenv = process.env.NODE_ENV === 'test';
 const host = `https://${testenv ? 'staging-dot-' : ''}mdn-bcd-collector.appspot.com`;
 
+const seleniumUrls = {
+  'browserstack': 'https://${username}:${key}@hub-cloud.browserstack.com/wd/hub',
+  'saucelabs': 'https://${username}:${key}@ondemand.${region}.saucelabs.com:443/wd/hub'
+}
+
 // Custom tests that use getUserMedia() make Edge 12-18 block.
 const gumTests = [
   'ImageCapture',
@@ -123,8 +128,34 @@ const getSafariOS = (version) => {
   }
 };
 
+const getSeleniumUrl = (service, credentials) => {
+  // If credentials object is just a string, treat it as the URL
+  if (typeof credentials === 'string') return credentials;
+
+  const re = /\${([^}]+)?}/g;
+  let missingVars = [];
+
+  // Replace variables in pre-defined Selenium URLs
+  const seleniumUrl = seleniumUrls[service].replace(
+    re, ($1, $2) => {
+      if ($2 in credentials) return credentials[$2];
+      missingVars.push($2);
+      return $1;
+    }
+  );
+
+  // Check for any unfilled variables
+  if (missingVars.length) {
+    throw new Error(`Couldn't compile Selenium URL for ${service}, missing required variables: ${missingVars.join(', ')}`)
+  }
+
+  return seleniumUrl;
+};
+
 const buildDriver = async (browser, version, os) => {
-  for (const [service, seleniumUrl] of Object.entries(secrets.selenium)) {
+  for (const [service, seleniumCredentials] of Object.entries(secrets.selenium)) {
+    const seleniumUrl = getSeleniumUrl(service, seleniumCredentials);
+
     if (service === 'browserstack') {
       if (browser === 'edge' && ['12', '13', '14'].includes(version)) {
         // BrowserStack remaps Edge 12-14 as Edge 15
