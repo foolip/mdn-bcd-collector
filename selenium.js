@@ -147,13 +147,7 @@ const buildDriver = async (browser, version, os) => {
           Browser[browser.toUpperCase()]
       );
 
-      if (service === 'browserstack' &&
-          browser === 'safari' &&
-          version === '6.1') {
-        capabilities.set(Capability.VERSION, '6.2');
-      } else {
-        capabilities.set(Capability.VERSION, version.split('.')[0]);
-      }
+      capabilities.set(Capability.VERSION, version.split('.')[0]);
 
       if (service === 'saucelabs') {
         if (browser === 'safari') {
