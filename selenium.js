@@ -88,6 +88,23 @@ const filterVersions = (data, earliestVersion, reverse) => {
   ));
 };
 
+const getBrowsersToTest = (limitBrowsers, reverse) => {
+  let browsersToTest = {
+    chrome: filterVersions(bcdBrowsers.chrome.releases, '15', reverse),
+    edge: filterVersions(bcdBrowsers.edge.releases, '12', reverse),
+    firefox: filterVersions(bcdBrowsers.firefox.releases, '4', reverse),
+    ie: filterVersions(bcdBrowsers.ie.releases, '6', reverse),
+    safari: filterVersions(bcdBrowsers.safari.releases, '5.1', reverse)
+  };
+
+  if (limitBrowsers) {
+    return Object.fromEntries(Object.entries(browsersToTest)
+        .filter(([k]) => (limitBrowsers.includes(k))));
+  };
+
+  return browsersToTest;
+}
+
 const getSafariOS = (version) => {
   // Sauce Labs differentiates 10.0 vs. 10.1 in the OS version. This
   // function sets the appropriate OS version accordingly.
@@ -344,19 +361,7 @@ const runAll = async (limitBrowsers, oses, nonConcurrent, reverse) => {
     console.warn(chalk`{yellow.bold Test mode: results are not saved.}`);
   }
 
-  let browsersToTest = {
-    chrome: filterVersions(bcdBrowsers.chrome.releases, '15', reverse),
-    edge: filterVersions(bcdBrowsers.edge.releases, '12', reverse),
-    firefox: filterVersions(bcdBrowsers.firefox.releases, '4', reverse),
-    ie: filterVersions(bcdBrowsers.ie.releases, '6', reverse),
-    safari: filterVersions(bcdBrowsers.safari.releases, '5.1', reverse)
-  };
-
-  if (limitBrowsers) {
-    browsersToTest = Object.fromEntries(Object.entries(browsersToTest)
-        .filter(([k]) => (limitBrowsers.includes(k))));
-  }
-
+  const browsersToTest = getBrowsersToTest(limitBrowsers, reverse);
   const tasks = [];
 
   // eslint-disable-next-line guard-for-in
