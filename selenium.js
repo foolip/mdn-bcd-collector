@@ -247,14 +247,6 @@ const buildDriver = async (browser, version, os) => {
   return undefined;
 };
 
-const awaitPageReady = async (driver) => {
-  await driver.wait(() => {
-    return driver.executeScript('return document.readyState')
-        .then((readyState) => (readyState === 'complete'));
-  }, 30000);
-  await driver.executeScript('return document.readyState');
-};
-
 const changeProtocol = (browser, version, page) => {
   let useHttp = false;
   switch (browser) {
@@ -275,6 +267,14 @@ const changeProtocol = (browser, version, page) => {
   }
 
   return page;
+};
+
+const awaitPageReady = async (driver) => {
+  await driver.wait(() => {
+    return driver.executeScript('return document.readyState')
+        .then((readyState) => (readyState === 'complete'));
+  }, 30000);
+  await driver.executeScript('return document.readyState');
 };
 
 const awaitPage = async (driver, browser, version, page) => {
