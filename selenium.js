@@ -43,12 +43,12 @@ const gumTests = [
   'MediaStreamAudioSourceNode',
   'MediaStreamTrack',
   'MediaStreamTrackAudioSourceNode'
-].map((iface) => `api.${iface}`).join(',');
+].map((iface) => `api.${iface}`);
 
 const ignore = {
   chrome: {
-    25: 'api.MediaStreamAudioDestinationNode',
-    26: 'api.MediaStreamAudioDestinationNode'
+    25: ['api.MediaStreamAudioDestinationNode'],
+    26: ['api.MediaStreamAudioDestinationNode']
   },
   edge: {
     12: gumTests,
@@ -73,7 +73,7 @@ const log = (task, message) => {
   // task.output = new Date(Date.now()).toLocaleTimeString(undefined, {hour12: false}) + ': ' + message;
 };
 
-const filterVersions = (data, earliestVersion) => {
+const filterVersions = (data, earliestVersion, reverse) => {
   const versions = [];
 
   for (const [version, versionData] of Object.entries(data)) {
@@ -83,7 +83,9 @@ const filterVersions = (data, earliestVersion) => {
     }
   }
 
-  return versions.sort((a, b) => compareVersions(b, a));
+  return versions.sort((a, b) => compareVersions(
+      ...(reverse ? [a, b] : [b, a])
+  ));
 };
 
 const getSafariOS = (version) => {
@@ -112,7 +114,11 @@ const buildDriver = async (browser, version, os) => {
         continue;
       }
 
-      if (browser === 'safari' && ['10', '11', '12', '13', '14'].includes(version)) {
+      if (
+        browser === 'safari' &&
+        version >= 10 &&
+        Math.round(version) == version
+      ) {
         // BrowserStack doesn't support the Safari x.0 versions
         continue;
       }
@@ -147,14 +153,13 @@ const buildDriver = async (browser, version, os) => {
           Browser[browser.toUpperCase()]
       );
 
-      if (service === 'browserstack' &&
-          browser === 'safari' &&
-          version === '6.1') {
-        capabilities.set(Capability.VERSION, '6.2');
-      } else {
-        capabilities.set(Capability.VERSION, version.split('.')[0]);
-      }
+      capabilities.set(
+          'name', `mdn-bcd-collector: ${prettyName(browser, version, os)}`
+      );
 
+      capabilities.set(Capability.VERSION, version.split('.')[0]);
+
+      // Remap target OS for Safari x.0 vs. x.1 on SauceLabs
       if (service === 'saucelabs') {
         if (browser === 'safari') {
           capabilities.set('platform', getSafariOS(version));
@@ -168,18 +173,42 @@ const buildDriver = async (browser, version, os) => {
         }
       }
 
-      const prefs = new logging.Preferences();
-      prefs.setLevel(logging.Type.BROWSER, logging.Level.SEVERE);
-      capabilities.setLoggingPrefs(prefs);
+      // Allow mic, camera, geolocation and notifications permissions
+      if (browser === 'chrome' || (browser === 'edge' && version >= 79)) {
+        capabilities.set('goog:chromeOptions', {
+          args: [
+            '--use-fake-device-for-media-stream',
+            '--use-fake-ui-for-media-stream'
+          ],
+          prefs: {
+            'profile.managed_default_content_settings.geolocation': 1,
+            'profile.managed_default_content_settings.notifications': 1
+          }
+        });
+      } else if (browser === 'firefox') {
+        // XXX macOS Big Sur requires microphone permission via the OS...
+        // BrowserStack bug?
+        capabilities.set('moz:firefoxOptions', {
+          prefs: {
+            'media.navigator.permission.disabled': 1,
+            'permissions.default.microphone': 1,
+            'permissions.default.camera': 1,
+            'permissions.default.geo': 1,
+            'permissions.default.desktop-notification': 1
+          }
+        });
+      }
+
+      // Get console errors from browser
+      const loggingPrefs = new logging.Preferences();
+      loggingPrefs.setLevel(logging.Type.BROWSER, logging.Level.SEVERE);
+      capabilities.setLoggingPrefs(loggingPrefs);
       if (service === 'browserstack') {
         capabilities.set('browserstack.console', 'errors');
       }
 
-      capabilities.set(
-          'name', `mdn-bcd-collector: ${prettyName(browser, version, os)}`
-      );
-
       try {
+        // Build Selenium driver
         const driverBuilder = new Builder().usingServer(seleniumUrl)
             .withCapabilities(capabilities);
         const driver = await driverBuilder.build();
@@ -220,6 +249,10 @@ const changeProtocol = (browser, version, page) => {
       break;
   }
 
+  if (browser === 'edge' && version <= 18) {
+    page = page.replace(/,/g, '%2C');
+  }
+
   if (useHttp) {
     return page.replace('https://', 'http://');
   }
@@ -250,32 +283,39 @@ const run = async (browser, version, os, ctx, task) => {
 
   const driver = await buildDriver(browser, version, os);
   if (!driver) {
-    throw new Error('Browser/OS config unsupported');
+    throw new Error(task.title + ' - ' + 'Browser/OS config unsupported');
   }
 
   let statusEl;
 
   const ignorelist = ignore[browser] && ignore[browser][version];
-  const getvars = `?selenium=true${ignorelist ? `&ignore=${ignorelist}` : ''}`;
+  const getvars = `?selenium=true${ignorelist ? `&ignore=${ignorelist.join(',')}` : ''}`;
 
   try {
     log(task, 'Loading homepage...');
     await goToPage(driver, browser, version, `${host}/${getvars}`);
     await click(driver, browser, 'start');
 
-    log(task, 'Running tests...');
+    log(task, 'Loading test page...');
     await awaitPage(driver, browser, version, `${host}/tests/${getvars}`);
 
+    log(task, 'Running tests...');
     await driver.wait(until.elementLocated(By.id('status')), 30000);
     statusEl = await driver.findElement(By.id('status'));
     try {
-      await driver.wait(until.elementTextContains(statusEl, 'uploaded'), 45000);
+      await driver.wait(until.elementTextContains(statusEl, 'upload'), 60000);
     } catch (e) {
       if (e.name == 'TimeoutError') {
-        throw new Error('Timed out waiting for results to upload');
+        throw new Error(task.title + ' - ' + 'Timed out waiting for results to upload');
       }
 
       throw e;
+    }
+
+    const statusText = await statusEl.getText();
+
+    if (statusText.includes('Failed')) {
+      throw new Error(task.title + ' - ' + statusText);
     }
 
     log(task, 'Exporting results...');
@@ -294,7 +334,7 @@ const run = async (browser, version, os, ctx, task) => {
   }
 };
 
-const runAll = async (limitBrowsers, oses, nonConcurrent) => {
+const runAll = async (limitBrowsers, oses, nonConcurrent, reverse) => {
   if (!Object.keys(secrets.selenium).length) {
     console.error(chalk`{red.bold A Selenium remote WebDriver URL is not defined in secrets.json.  Please define your Selenium remote(s).}`);
     return false;
@@ -305,11 +345,11 @@ const runAll = async (limitBrowsers, oses, nonConcurrent) => {
   }
 
   let browsersToTest = {
-    chrome: filterVersions(bcdBrowsers.chrome.releases, '15'),
-    edge: filterVersions(bcdBrowsers.edge.releases, '12'),
-    firefox: filterVersions(bcdBrowsers.firefox.releases, '4'),
-    ie: filterVersions(bcdBrowsers.ie.releases, '6'),
-    safari: filterVersions(bcdBrowsers.safari.releases, '5.1')
+    chrome: filterVersions(bcdBrowsers.chrome.releases, '15', reverse),
+    edge: filterVersions(bcdBrowsers.edge.releases, '12', reverse),
+    firefox: filterVersions(bcdBrowsers.firefox.releases, '4', reverse),
+    ie: filterVersions(bcdBrowsers.ie.releases, '6', reverse),
+    safari: filterVersions(bcdBrowsers.safari.releases, '5.1', reverse)
   };
 
   if (limitBrowsers) {
@@ -391,11 +431,19 @@ if (require.main === module) {
               alias: 's',
               type: 'boolean',
               nargs: 0
+            })
+            .option('reverse', {
+              describe: 'Run browser versions oldest-to-newest',
+              alias: 'r',
+              type: 'boolean',
+              nargs: 0
             });
       }
   );
 
-  if (runAll(argv.browser, argv.os, argv.nonConcurrent) === false) {
+  if (runAll(
+      argv.browser, argv.os, argv.nonConcurrent, argv.reverse
+  ) === false) {
     process.exit(1);
   }
 }

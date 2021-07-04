@@ -583,6 +583,7 @@
             updateStatus('Results uploaded.', 'success-notice');
           } else {
             updateStatus('Failed to upload results: server error.', 'error-notice');
+            console.log('Server response: ' + client.response);
           }
         }
       };
