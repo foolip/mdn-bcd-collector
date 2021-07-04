@@ -132,6 +132,14 @@ const getSeleniumUrl = (service, credentials) => {
   // If credentials object is just a string, treat it as the URL
   if (typeof credentials === 'string') return credentials;
 
+  if (!(service in seleniumUrls)) {
+    if ('url' in credentials) {
+      seleniumUrls[service] = url;
+    } else {
+      throw new Error(`Couldn't compile Selenium URL for ${service}: service is unknown and URL not specified`);
+    }
+  }
+
   const re = /\${([^}]+)?}/g;
   let missingVars = [];
 
@@ -146,7 +154,7 @@ const getSeleniumUrl = (service, credentials) => {
 
   // Check for any unfilled variables
   if (missingVars.length) {
-    throw new Error(`Couldn't compile Selenium URL for ${service}, missing required variables: ${missingVars.join(', ')}`)
+    throw new Error(`Couldn't compile Selenium URL for ${service}: missing required variables: ${missingVars.join(', ')}`)
   }
 
   return seleniumUrl;
