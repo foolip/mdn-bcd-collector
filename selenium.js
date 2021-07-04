@@ -245,6 +245,10 @@ const changeProtocol = (browser, version, page) => {
       break;
   }
 
+  if (browser === 'edge' && version <= 18) {
+    page = page.replace(/,/g, '%2C');
+  }
+
   if (useHttp) {
     return page.replace('https://', 'http://');
   }
