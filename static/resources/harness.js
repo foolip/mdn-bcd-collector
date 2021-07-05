@@ -194,7 +194,10 @@
       result.result = null;
       result.message = 'threw ' + stringify(value);
     } else if (value && typeof value === 'object') {
-      if ('name' in value && stringIncludes(value.name, 'NS_ERROR')) {
+      if ('name' in value && (
+        stringIncludes(value.name, 'NS_ERROR') ||
+        stringIncludes(value.name, 'NotSupported'))
+      ) {
         result.result = null;
         result.message = 'threw ' + stringify(value.message);
       } else if ('result' in value) {
