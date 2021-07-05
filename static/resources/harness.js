@@ -580,9 +580,8 @@
       client.onreadystatechange = function() {
         if (client.readyState == 4) {
           if (client.status >= 200 && client.status <= 299) {
-            var form = document.getElementById('form');
-            form.children[0].disabled = false;
-            form.children[1].disabled = false;
+            document.getElementById('export-download').disabled = false;
+            document.getElementById('export-github').disabled = false;
             updateStatus('Results uploaded.', 'success-notice');
           } else {
             updateStatus('Failed to upload results: server error.', 'error-notice');

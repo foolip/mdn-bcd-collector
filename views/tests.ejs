@@ -1,8 +1,8 @@
 <%- contentFor('body') %>
 <p id="status">Running tests...</p>
 <form id="form" action=/export method=post>
-  <input type=submit name=download value="Export for download" disabled>
-  <input type=submit name=github value="Export to GitHub" disabled>
+  <input id="export-download" type=submit name=download value="Export for download" disabled>
+  <input id="export-github" type=submit name=github value="Export to GitHub" disabled>
 </form>
 <div id="results"></div>
 
