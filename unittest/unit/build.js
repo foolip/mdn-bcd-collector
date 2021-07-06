@@ -230,7 +230,7 @@ describe('build', () => {
               __base: 'var promise = somePromise();'
             },
             foobar: {
-              __base: '<%api.foo:foopromise%> var promise = foopromise.then(function() {});'
+              __base: '<%api.foo:foo%> var promise = foo.then(function() {});'
             }
           }
         }
@@ -251,7 +251,7 @@ describe('build', () => {
       it('interface with import', () => {
         assert.equal(
             getCustomTestAPI('foobar'),
-            '(function () {\n  var foopromise = somePromise();\n  if (!foopromise) {\n    return false;\n  }\n  var promise = foopromise.then(function () {});\n  return promise.then(function (instance) {\n    return !!instance;\n  });\n})();');
+            '(function () {\n  var foo = somePromise();\n  if (!foo) {\n    return false;\n  }\n  var promise = foo.then(function () {});\n  return promise.then(function (instance) {\n    return !!instance;\n  });\n})();');
       });
     });
 
