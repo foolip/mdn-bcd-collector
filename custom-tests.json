@@ -119,7 +119,10 @@
     "BaseAudioContext": {
       "__resources": ["audioContext"],
       "__base": "var instance = reusableInstances.audioContext;",
-      "__test": "return 'BaseAudioContext' in self"
+      "__test": "return 'BaseAudioContext' in self",
+      "__additional": {
+        "decodeAudioData.promise_syntax": "<%api.BaseAudioContext:ctx%> return ctx.decodeAudioData.length === 1;"
+      }
     },
     "BatteryManager": {
       "__TODO": "This promise seems to remain pending when running all tests",
