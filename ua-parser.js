@@ -31,7 +31,7 @@ const parseUA = (userAgent, browsers) => {
 
   switch (data.browser.id) {
     case 'mobile_safari':
-      data.browser.id = 'safari_ios';
+      data.browser.id = 'safari';
       break;
     case 'samsung_browser':
       data.browser.id = 'samsunginternet';
@@ -46,19 +46,22 @@ const parseUA = (userAgent, browsers) => {
   if (os === 'android') {
     data.browser.id += '_android';
     data.browser.name += ' Android';
-  }
 
-  data.fullVersion = ua.browser.version;
+    if (ua.browser.name === 'Android Browser') {
+      // For early WebView Android, use the OS version
+      data.fullVersion = compareVersions.compare(ua.os.version, '5.0', '<') ?
+        ua.os.version :
+        ua.engine.version;
+    }
+  } else if (os === 'ios') {
+    data.browser.id += '_ios';
+    data.browser.name += ' iOS';
 
-  if (data.browser.id === 'safari_ios') {
     // https://github.com/mdn/browser-compat-data/blob/main/docs/data-guidelines.md#safari-for-ios-versioning
     data.fullVersion = ua.os.version;
-  } else if (ua.browser.name === 'Android Browser') {
-    data.fullVersion = compareVersions.compare(ua.os.version, '5.0', '<') ?
-      ua.os.version :
-      ua.engine.version;
   }
 
+  data.fullVersion = data.fullVersion || ua.browser.version;
   data.version = getMajorMinorVersion(data.fullVersion);
 
   if (!(data.browser.id in browsers)) {
