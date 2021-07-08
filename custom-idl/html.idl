@@ -242,7 +242,6 @@ partial interface HTMLElement {
   attribute DOMString itemId;
   [PutForwards=value] readonly attribute DOMTokenList itemRef;
   [PutForwards=value] readonly attribute DOMTokenList itemProp;
-  readonly attribute HTMLPropertiesCollection properties;
   attribute any itemValue; // acts as DOMString on setting
 
   attribute HTMLMenuElement? contextMenu;

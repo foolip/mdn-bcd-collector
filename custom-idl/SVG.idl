@@ -38,7 +38,6 @@ interface mixin ZoomAndPan {
 };
 SVGSVGElement includes ZoomAndPan;
 SVGViewElement includes ZoomAndPan;
-SVGViewSpec includes ZoomAndPan;
 
 typedef object SVGPathSegClosePath;
 typedef object SVGPathSegMovetoAbs;
@@ -211,8 +210,6 @@ partial interface SVGSVGElement {
   readonly attribute float pixelUnitToMillimeterY;
   readonly attribute float screenPixelToMillimeterX;
   readonly attribute float screenPixelToMillimeterY;
-  readonly attribute boolean useCurrentView;
-  readonly attribute SVGViewSpec currentView;
 };
 
 // https://www.w3.org/TR/SVG11/text.html#InterfaceSVGTRefElement
