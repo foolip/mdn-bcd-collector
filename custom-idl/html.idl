@@ -57,63 +57,6 @@ dictionary HitRegionOptions {
   DOMString? role = null;
 };
 
-// https://www.w3.org/html/wg/spec/common-dom-interfaces.html#domsettabletokenlist-0
-[Exposed=Window]
-interface DOMSettableTokenList : DOMTokenList {
-  attribute DOMString value;
-};
-
-// https://github.com/whatwg/html/pull/1225
-// https://html.spec.whatwg.org/commit-snapshots/927fda0f305452a9c54a25d3ebf9a6ed5ae29fd3/#htmlmediaelement
-// https://html.spec.whatwg.org/commit-snapshots/927fda0f305452a9c54a25d3ebf9a6ed5ae29fd3/#mediacontroller
-
-partial interface HTMLMediaElement {
-  [CEReactions] attribute DOMString mediaGroup;
-  attribute MediaController? controller;
-};
-
-enum MediaControllerPlaybackState { "waiting", "playing", "ended" };
-[Exposed=Window]
-interface MediaController : EventTarget {
-  constructor();
-
-  readonly attribute unsigned short readyState; // uses HTMLMediaElement.readyState's values
-
-  readonly attribute TimeRanges buffered;
-  readonly attribute TimeRanges seekable;
-  readonly attribute unrestricted double duration;
-  attribute double currentTime;
-
-  readonly attribute boolean paused;
-  readonly attribute MediaControllerPlaybackState playbackState;
-  readonly attribute TimeRanges played;
-  undefined pause();
-  undefined unpause();
-  undefined play(); // calls play() on all media elements as well
-
-  attribute double defaultPlaybackRate;
-  attribute double playbackRate;
-
-  attribute double volume;
-  attribute boolean muted;
-
-  attribute EventHandler onemptied;
-  attribute EventHandler onloadedmetadata;
-  attribute EventHandler onloadeddata;
-  attribute EventHandler oncanplay;
-  attribute EventHandler oncanplaythrough;
-  attribute EventHandler onplaying;
-  attribute EventHandler onended;
-  attribute EventHandler onwaiting;
-
-  attribute EventHandler ondurationchange;
-  attribute EventHandler ontimeupdate;
-  attribute EventHandler onplay;
-  attribute EventHandler onpause;
-  attribute EventHandler onratechange;
-  attribute EventHandler onvolumechange;
-};
-
 // https://trac.webkit.org/browser/webkit/trunk/Source/WebCore/html/HTMLVideoElement.idl?rev=267813#L63
 enum VideoPresentationMode { "inline", "fullscreen", "picture-in-picture" };
 
@@ -272,23 +215,6 @@ partial interface HTMLAnchorElement {
   attribute DOMString media;
 };
 
-// https://github.com/whatwg/html/pull/1399
-// https://html.spec.whatwg.org/commit-snapshots/d0154579f6237358a7a642ae59b894e9116c4fbd/#htmlappletelement
-[Exposed=Window]
-interface HTMLAppletElement : HTMLElement {
-  attribute DOMString align;
-  attribute DOMString alt;
-  attribute DOMString archive;
-  attribute DOMString code;
-  attribute USVString codeBase;
-  attribute DOMString height;
-  attribute unsigned long hspace;
-  attribute DOMString name;
-  attribute USVString _object; // the underscore is not part of the identifier
-  attribute unsigned long vspace;
-  attribute DOMString width;
-};
-
 partial interface HTMLAreaElement {
   attribute DOMString hreflang;
   attribute DOMString media;
@@ -354,7 +280,6 @@ partial interface HTMLElement {
   attribute any itemValue; // acts as DOMString on setting
 
   attribute HTMLMenuElement? contextMenu;
-  attribute DOMSettableTokenList dropzone;
   undefined forceSpellCheck();
   attribute boolean inert;
   attribute boolean noModule;
@@ -427,12 +352,6 @@ partial interface HTMLInputElement {
 
   // https://github.com/mozilla/gecko-dev/blob/7c03e28b3d065fa80839e9659fd50bf340913d5f/dom/webidl/HTMLInputElement.webidl#L154
   readonly attribute long textLength;
-};
-
-[Exposed=Window]
-interface HTMLIsIndexElement : HTMLElement {
-  readonly attribute HTMLFormElement form;
-  attribute DOMString prompt;
 };
 
 [Exposed=Window]
@@ -520,19 +439,6 @@ partial interface HTMLObjectElement {
 partial interface HTMLPreElement {
   // https://github.com/WebKit/WebKit/blob/8c5122c3b04d94856c54fb5e686c014a123143f7/Source/WebCore/html/HTMLPreElement.idl#L29
   attribute boolean wrap;
-};
-
-// https://github.com/whatwg/html/pull/213
-[Exposed=Window]
-interface HTMLPropertiesCollection : HTMLCollection {
-  // inherits length and item()
-  getter PropertyNodeList? namedItem(DOMString name); // shadows inherited namedItem()
-  [SameObject] readonly attribute FrozenArray<DOMString> names;
-};
-typedef sequence<any> PropertyValueArray;
-[Exposed=Window]
-interface PropertyNodeList : NodeList {
-  PropertyValueArray getValues();
 };
 
 partial interface HTMLScriptElement {

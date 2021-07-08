@@ -1,7 +1,0 @@
-// https://github.com/mozilla/gecko-dev/blob/9399e5832979755cd340383f4ca4069dd5fc7774/dom/webidl/CanvasCaptureMediaStream.webidl
-// Like https://w3c.github.io/mediacapture-fromelement/#the-canvascapturemediastreamtrack but without "Track"
-[Exposed=Window]
-interface CanvasCaptureMediaStream : MediaStream {
-  readonly attribute HTMLCanvasElement canvas;
-  undefined requestFrame();
-};

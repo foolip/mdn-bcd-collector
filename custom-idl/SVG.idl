@@ -20,10 +20,7 @@ interface SVGPoint {
 
 [Exposed=Window] interface SVGMeshElement : SVGGeometryElement {};
 [Exposed=Window] interface SVGSolidcolorElement : SVGElement {};
-[Exposed=Window] interface SVGStylable {};
-[Exposed=Window] interface SVGTransformable {};
 [Exposed=Window] interface SVGUnknownElement {};
-[Exposed=Window] interface SVGViewSpec {};
 
 // SVGZoomAndPan has been both an interface and a mixin in implementations.
 // Cover all bases:
@@ -221,22 +218,6 @@ partial interface SVGSVGElement {
 // https://www.w3.org/TR/SVG11/text.html#InterfaceSVGTRefElement
 [Exposed=Window]
 interface SVGTRefElement : SVGTextPositioningElement {
-};
-
-// https://www.w3.org/TR/SVG11/types.html#InterfaceSVGTests
-[Exposed=Window]
-interface SVGTests {
-  readonly attribute SVGStringList requiredFeatures;
-  readonly attribute SVGStringList requiredExtensions;
-  readonly attribute SVGStringList systemLanguage;
-
-  boolean hasExtension(DOMString extension);
-};
-
-// https://www.w3.org/TR/SVG11/types.html#InterfaceSVGURIReference
-[Exposed=Window]
-interface SVGURIReference {
-  readonly attribute SVGAnimatedString href;
 };
 
 // https://www.w3.org/TR/SVG11/fonts.html#InterfaceSVGVKernElement

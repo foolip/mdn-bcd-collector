@@ -17,11 +17,6 @@ partial interface IDBVersionChangeEvent {
   readonly attribute unsigned long long? version;
 };
 
-[Exposed=(Window,Worker)]
-interface IDBVersionChangeRequest {
-  IDBVersionChangeRequest setVersion(DOMString version);
-};
-
 // https://bugs.chromium.org/p/chromium/issues/detail?id=711586
 
 enum IDBDataLossAmount {
