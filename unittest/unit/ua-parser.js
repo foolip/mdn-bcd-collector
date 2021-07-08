@@ -133,6 +133,10 @@ describe('parseUA', () => {
     assert.deepEqual(parseUA('Mozilla/5.0 (Linux; Android 11; Pixel 2 Build/RP1A.200720.009; wv) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/86.0.4240.198 Mobile Safari/537.36 WEBVIEW TEST/1.2.1.80 (Phone; anonymous)', browsers), {browser: {id: 'webview_android', name: 'WebView Android'}, version: '86', fullVersion: '86.0.4240.198', os: {name: 'Android', version: '11'}, inBcd: true});
   });
 
+  it('Chrome on iOS (not in BCD)', () => {
+    assert.deepEqual(parseUA('Mozilla/5.0 (iPad; CPU OS 14_6 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) CriOS/91.0.4472.80 Mobile/15E148 Safari/604.1', browsers), {browser: {id: 'chrome_ios', name: 'Chrome iOS'}, version: '14.6', fullVersion: '14.6', os: {name: 'iOS', version: '14.6'}, inBcd: undefined});
+  });
+
   it('Yandex Browser (not in BCD)', () => {
     assert.deepEqual(parseUA('Mozilla/5.0 (Windows NT 6.3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 YaBrowser/17.6.1.749 Yowser/2.5 Safari/537.36', browsers), {browser: {id: 'yandex', name: 'Yandex'}, version: '17.6', fullVersion: '17.6.1.749', os: {name: 'Windows', version: '8.1'}, inBcd: undefined});
   });
