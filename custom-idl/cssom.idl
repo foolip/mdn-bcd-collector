@@ -88,14 +88,6 @@ partial interface Document {
 
 // Non-standard stuff
 
-partial interface CSSStyleDeclaration {
-  // https://github.com/WebKit/WebKit/blob/2ebcb2f801bc60264b1a154a7970e2581a438db2/Source/WebCore/css/CSSStyleDeclaration.idl#L45
-  DOMString getPropertyShorthand(DOMString property);
-
-  // https://github.com/WebKit/WebKit/blob/2ebcb2f801bc60264b1a154a7970e2581a438db2/Source/WebCore/css/CSSStyleDeclaration.idl#L46
-  boolean isPropertyImplicit(DOMString property);
-};
-
 partial interface Document {
   // https://www.w3.org/Bugs/Public/show_bug.cgi?id=29471
   attribute DOMString? selectedStyleSheetSet;
@@ -112,13 +104,6 @@ partial interface Document {
 
 [Exposed=Window] interface MSCurrentStyleCSSProperties {};
 [Exposed=Window] interface MSStyleCSSProperties {};
-
-partial interface Element {
-  // https://docs.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/aa703980(v=vs.85)
-  readonly attribute MSCurrentStyleCSSProperties? currentStyle;
-  // https://docs.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/aa703996(v=vs.85)
-  readonly attribute MSStyleCSSProperties? runtimeStyle;
-};
 
 partial interface Window {
   // https://github.com/WebKit/WebKit/blob/bc44d2f960d35b47803c79ffbdc9cf57c0a01778/Source/WebCore/page/DOMWindow.idl#L124

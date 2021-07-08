@@ -32,7 +32,6 @@ partial interface RTCPeerConnection {
   RTCDTMFSender createDTMFSender(MediaStreamTrack track);
 
   attribute EventHandler onaddstream;
-  attribute EventHandler onaddtrack;
   attribute EventHandler onremovestream;
   attribute EventHandler onidentityresult;
   attribute EventHandler onidpassertionerror;

@@ -14,16 +14,6 @@ interface DeviceProximityEvent : Event {
   readonly attribute double max;
 };
 
-dictionary UserProximityEventInit : EventInit {
-  boolean near;
-};
-
-[Exposed=Window]
-interface UserProximityEvent : Event {
-  constructor(DOMString type, optional UserProximityEventInit eventInitDict = {});
-  readonly attribute boolean near;
-};
-
 partial interface Window {
   attribute EventHandler ondeviceproximity;
   attribute EventHandler onuserproximity;

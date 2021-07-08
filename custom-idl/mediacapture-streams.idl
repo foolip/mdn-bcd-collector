@@ -18,7 +18,6 @@ partial interface MediaStreamTrack {
   // https://github.com/w3c/mediacapture-main/pull/576
   attribute EventHandler onoverconstrained;
 
-  readonly attribute boolean _readonly;
   readonly attribute boolean remote;
 };
 

@@ -15,9 +15,6 @@ interface KeyEvent : UIEvent {
 };
 
 partial interface KeyboardEvent {
-  // https://github.com/mozilla/gecko-dev/blob/b9384b091e901b3283ce24b6610e80699d79fd06/dom/webidl/KeyboardEvent.webidl#L75
-  undefined initKeyEvent();
-
   // https://www.w3.org/TR/2003/WD-DOM-Level-3-Events-20030331/events.html#Events-KeyboardEvent
   readonly attribute boolean altGraphKey;
 
@@ -32,8 +29,6 @@ partial interface KeyboardEvent {
 };
 
 partial interface MouseEvent {
-  // https://github.com/mozilla/gecko-dev/blob/06dbf167c94b89fb06f74a2d1b1c5d3ccabceb92/dom/webidl/MouseEvent.webidl#L101
-  undefined initNSMouseEvent();
 
   // https://chromium.googlesource.com/chromium/src/+/6ad4130faeeead16d8bf620c4387283da143ac09/third_party/blink/renderer/core/events/mouse_event.idl#73
   // https://github.com/WebKit/WebKit/blob/226e0bffa2f0c87d04fb84a6c63472f9a2b8c122/Source/WebCore/dom/MouseEvent.idl#L59
@@ -77,10 +72,6 @@ partial interface UIEvent {
   // https://github.com/WebKit/WebKit/blob/226e0bffa2f0c87d04fb84a6c63472f9a2b8c122/Source/WebCore/dom/UIEvent.idl#L32
   readonly attribute long pageX;
   readonly attribute long pageY;
-
-  // https://github.com/mozilla/gecko-dev/blob/06dbf167c94b89fb06f74a2d1b1c5d3ccabceb92/dom/webidl/UIEvent.webidl#L36
-  readonly attribute Node? rangeParent;
-  readonly attribute long rangeOffset;
 
   // TODO: source?
   undefined cancelBubble();

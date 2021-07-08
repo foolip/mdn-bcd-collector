@@ -1,10 +1,7 @@
 partial interface Node {
   readonly attribute object baseURIObject;
   boolean hasAttributes();
-  readonly attribute DOMString localName;
-  readonly attribute DOMString? namespaceURI;
   attribute object nodePrincipal;
-  attribute DOMString prefix;
   readonly attribute Node rootNode;
 };
 

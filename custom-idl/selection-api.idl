@@ -12,10 +12,6 @@ partial interface Selection {
   readonly attribute Node? extentNode;
   readonly attribute unsigned long extentOffset;
 
-  // https://bugzilla.mozilla.org/show_bug.cgi?id=1623290
-  // https://github.com/mozilla/gecko-dev/blob/dd042f25a8da58d565d199dcfebe4f34db64863c/dom/webidl/Selection.webidl#L95
-  attribute short? caretBidiLevel;
-
   // https://github.com/w3c/selection-api/issues/37
   // https://chromium.googlesource.com/chromium/src/+/6ad4130faeeead16d8bf620c4387283da143ac09/third_party/blink/renderer/core/editing/selection.idl#70
   // https://github.com/WebKit/WebKit/blob/552c0afa0b0ba5c56b3f9a36b35d1ffaa4b5f99d/Source/WebCore/page/DOMSelection.idl#L72

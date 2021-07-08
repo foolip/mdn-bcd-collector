@@ -39,10 +39,6 @@ partial interface AudioTrackList {
    AudioTrack item(unsigned long index);
 };
 
-partial interface DataTransferItemList {
-   DataTransferItem item(unsigned long index);
-};
-
 // https://github.com/whatwg/html/pull/1942
 dictionary HitRegionOptions {
   Path2D? path = null;
@@ -69,30 +65,6 @@ partial interface CanvasRenderingContext2D {
   attribute DOMMatrix currentTransform;
   undefined drawWidgetAsOnScreen(Window window);
   undefined drawWindow(Window window, double x, double y, double w, double h, DOMString bgColor, optional byte flags);
-
-  // Non-standard legacy aliases in WebKit/Blink
-  // https://chromium.googlesource.com/chromium/src/+/ce07cefc396fdf4016e731b4e75592586785c6b0
-  // https://trac.webkit.org/changeset/221605/webkit
-  undefined clearShadow();
-  undefined drawImageFromRect(HTMLImageElement image, optional unrestricted float sx, optional unrestricted float sy, optional unrestricted float sw, optional unrestricted float sh, optional unrestricted float dx, optional unrestricted float dy, optional unrestricted float dw, optional unrestricted float dh, optional DOMString compositeOperation);
-  undefined setAlpha(unrestricted float alpha);
-  undefined setCompositeOperation(DOMString compositeOperation);
-  undefined setFillColor(DOMString color, optional unrestricted float alpha);
-  undefined setFillColor(unrestricted float c, unrestricted float m, unrestricted float y, unrestricted float k, unrestricted float a);
-  undefined setFillColor(unrestricted float grayLevel, optional unrestricted float alpha);
-  undefined setFillColor(unrestricted float r, unrestricted float g, unrestricted float b, unrestricted float a);
-  undefined setLineCap(DOMString cap);
-  undefined setLineJoin(DOMString join);
-  undefined setLineWidth(unrestricted float width);
-  undefined setMiterLimit(unrestricted float limit);
-  undefined setStrokeColor(DOMString color, optional unrestricted float alpha);
-  undefined setStrokeColor(unrestricted float c, unrestricted float m, unrestricted float y, unrestricted float k, unrestricted float a);
-  undefined setStrokeColor(unrestricted float grayLevel, optional unrestricted float alpha);
-  undefined setStrokeColor(unrestricted float r, unrestricted float g, unrestricted float b, unrestricted float a);
-  undefined setShadow(unrestricted float width, unrestricted float height, unrestricted float blur, optional DOMString color, optional unrestricted float alpha);
-  undefined setShadow(unrestricted float width, unrestricted float height, unrestricted float blur, unrestricted float c, unrestricted float m, unrestricted float y, unrestricted float k, unrestricted float a);
-  undefined setShadow(unrestricted float width, unrestricted float height, unrestricted float blur, unrestricted float grayLevel, optional unrestricted float alpha);
-  undefined setShadow(unrestricted float width, unrestricted float height, unrestricted float blur, unrestricted float r, unrestricted float g, unrestricted float b, unrestricted float a);
 
   // https://bugzilla.mozilla.org/show_bug.cgi?id=1294360
   attribute object mozCurrentTransform;
@@ -140,12 +112,6 @@ partial interface DataTransfer {
 };
 
 partial interface Document {
-  // https://chromium.googlesource.com/chromium/src.git/+/24e58b0d8fab28fa20e69f191d833fe97aaff75d
-  any getCSSCanvasContext(DOMString contextId, DOMString name, long width, long height);
-
-  // https://github.com/whatwg/html/pull/213
-  NodeList getItems(optional DOMString typeNames = "");
-
   // https://github.com/whatwg/html/pull/1103
   attribute EventHandler onafterscriptexecute;
   attribute EventHandler onbeforescriptexecute;
@@ -289,20 +255,6 @@ partial interface HTMLElement {
 partial interface HTMLFormElement {
   // https://github.com/mdn/browser-compat-data/issues/7519
   attribute DOMString autocapitalize;
-
-  undefined requestAutocomplete();
-};
-
-partial interface HTMLFrameElement {
-  // https://github.com/WebKit/WebKit/blob/cdb06d0c41ff04eff8f4c65d1c92c8672b4903a6/Source/WebCore/html/HTMLFrameElement.idl#L36
-  Document? getSVGDocument();
-
-  // https://github.com/WebKit/WebKit/blob/cdb06d0c41ff04eff8f4c65d1c92c8672b4903a6/Source/WebCore/html/HTMLFrameElement.idl#L38
-  readonly attribute long width;
-  readonly attribute long height;
-
-  // https://github.com/WebKit/WebKit/blob/cdb06d0c41ff04eff8f4c65d1c92c8672b4903a6/Source/WebCore/html/HTMLFrameElement.idl#L42
-  attribute USVString location;
 };
 
 partial interface HTMLFrameSetElement {
@@ -312,11 +264,6 @@ partial interface HTMLFrameSetElement {
 
 partial interface HTMLHeadElement {
   attribute DOMString profile;
-};
-
-partial interface HTMLHtmlElement {
-  // https://github.com/WebKit/WebKit/blob/cdb06d0c41ff04eff8f4c65d1c92c8672b4903a6/Source/WebCore/html/HTMLHtmlElement.idl#L24
-  attribute DOMString manifest;
 };
 
 partial interface HTMLIFrameElement {
@@ -349,9 +296,6 @@ partial interface HTMLInputElement {
 
   // https://github.com/mozilla/gecko-dev/blob/7c03e28b3d065fa80839e9659fd50bf340913d5f/dom/webidl/HTMLInputElement.webidl#L173
   boolean mozIsTextField(boolean excludePassword);
-
-  // https://github.com/mozilla/gecko-dev/blob/7c03e28b3d065fa80839e9659fd50bf340913d5f/dom/webidl/HTMLInputElement.webidl#L154
-  readonly attribute long textLength;
 };
 
 [Exposed=Window]
@@ -371,7 +315,6 @@ partial interface HTMLMarqueeElement {
 
 partial interface HTMLMediaElement {
   readonly attribute DOMTokenList controlsList;
-  readonly attribute double initialTime;
   attribute EventHandler onerror;
   Promise<undefined> seekToNextFrame();
 
@@ -427,18 +370,6 @@ interface HTMLMenuItemElement : HTMLElement {
   attribute boolean default;
 
   attribute DOMString command;
-
-  // https://github.com/mozilla/gecko-dev/blob/7c03e28b3d065fa80839e9659fd50bf340913d5f/dom/webidl/HTMLMenuItemElement.webidl#L35
-  attribute boolean defaultChecked;
-};
-
-partial interface HTMLObjectElement {
-  attribute boolean typeMustMatch;
-};
-
-partial interface HTMLPreElement {
-  // https://github.com/WebKit/WebKit/blob/8c5122c3b04d94856c54fb5e686c014a123143f7/Source/WebCore/html/HTMLPreElement.idl#L29
-  attribute boolean wrap;
 };
 
 partial interface HTMLScriptElement {
@@ -531,9 +462,6 @@ partial dictionary MouseEventInit {
 };
 
 partial interface Navigator {
-  // https://github.com/WebKit/WebKit/blob/88278b55563e5ccdc0b3419c6c391c3becc19e40/Source/WebCore/page/Navigator.idl#L30
-  undefined getStorageUpdates();
-
   // https://github.com/whatwg/html/pull/4009
   [SameObject] readonly attribute UserActivation userActivation;
 

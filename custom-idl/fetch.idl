@@ -1,7 +1,3 @@
 partial interface Headers {
     undefined getAll();
 };
-
-partial interface Request {
-  readonly attribute any context;
-};

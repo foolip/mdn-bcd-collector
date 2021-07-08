@@ -11,13 +11,6 @@ partial interface Window {
   undefined routeEvent();
 };
 
-// https://www.w3.org/TR/1999/WD-DOM-Level-2-19990719/idl-definitions.html
-
-partial interface Event {
-  undefined preventBubble();
-  undefined preventCapture();
-};
-
 // https://www.w3.org/TR/DOM-Level-2-Traversal-Range/idl-definitions.html
 partial interface NodeIterator {
   readonly attribute boolean expandEntityReferences;
@@ -30,11 +23,6 @@ partial interface TreeWalker {
 
 typedef any DOMUserData;
 typedef object DOMObject;
-
-partial interface Attr {
-  readonly attribute TypeInfo schemaTypeInfo;
-  readonly attribute boolean isId;
-};
 
 partial interface Document {
   readonly attribute DOMString xmlEncoding;
@@ -70,10 +58,6 @@ interface DOMError {
 [Exposed=Window]
 callback interface DOMErrorHandler {
   boolean handleError(DOMError error);
-};
-
-partial interface DOMImplementation {
-  DOMObject getFeature(DOMString feature, DOMString version);
 };
 
 [Exposed=Window]
@@ -177,8 +161,6 @@ partial interface Event {
   readonly attribute EventTarget? explicitOriginalTarget;
   // https://developer.mozilla.org/en-US/docs/Web/API/Event/originalTarget
   readonly attribute EventTarget? originalTarget;
-  // https://bugzilla.mozilla.org/show_bug.cgi?id=691151
-  boolean getPreventDefault();
 };
 
 partial interface Range {

@@ -1,6 +1,0 @@
-partial interface GeolocationCoordinates {
-  // https://trac.webkit.org/changeset/223211/webkit/
-  // https://github.com/w3c/geolocation-api/issues/15
-  // https://github.com/WebKit/WebKit/blob/a807a4f6d013ac51005bb5c3153bc670fee47065/Source/WebCore/Modules/geolocation/GeolocationCoordinates.idl#L42
-  readonly attribute unrestricted double? floorLevel;
-};
