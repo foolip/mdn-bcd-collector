@@ -1500,6 +1500,12 @@
     "WorkerNavigator": {
       "__base": "var instance = navigator;"
     },
+    "WritableStreamDefaultController": {
+      "__base": "var promise = new Promise(function(resolve, reject) {new WritableStream({start(controller) {resolve(controller)}})});"
+    },
+    "WritableStreamDefaultWriter": {
+      "__base": "var instance = new WritableStream({}).getWriter();"
+    },
     "XMLHttpRequest": {
       "__base": "var instance = new XMLHttpRequest();"
     },
