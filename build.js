@@ -408,6 +408,8 @@ const validateIDL = (ast) => {
     'any', // https://heycam.github.io/webidl/#idl-any
     'ArrayBuffer', // https://heycam.github.io/webidl/#idl-ArrayBuffer
     'bigint', // https://heycam.github.io/webidl/#idl-bigint
+    'BigInt64Array', // https://heycam.github.io/webidl/#idl-BigInt64Array
+    'BigUint64Array', // https://heycam.github.io/webidl/#idl-BigUint64Array
     'boolean', // https://heycam.github.io/webidl/#idl-boolean
     'byte', // https://heycam.github.io/webidl/#idl-byte
     'ByteString', // https://heycam.github.io/webidl/#idl-ByteString
