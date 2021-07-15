@@ -68,6 +68,14 @@ typedef object SVGPathSegCurvetoQuadraticSmoothRel;
 interface SVGAltGlyphDefElement : SVGElement {
 };
 
+// https://www.w3.org/TR/SVG11/text.html#InterfaceSVGAltGlyphElement
+[Exposed=Window]
+interface SVGAltGlyphElement : SVGTextPositioningElement {
+  attribute DOMString glyphRef;
+  attribute DOMString format;
+};
+SVGAltGlyphElement includes SVGURIReference;
+
 // https://www.w3.org/TR/SVG11/text.html#InterfaceSVGAltGlyphItemElement
 [Exposed=Window]
 interface SVGAltGlyphItemElement : SVGElement {
@@ -86,10 +94,24 @@ interface SVGColorProfileElement : SVGElement {
   attribute unsigned short renderingIntent;
 };
 
+// https://www.w3.org/TR/2016/CR-SVG2-20160915/interact.html#InterfaceSVGCursorElement
+[Exposed=Window]
+interface SVGCursorElement : SVGElement {
+  [SameObject] readonly attribute SVGAnimatedLength x;
+  [SameObject] readonly attribute SVGAnimatedLength y;
+};
+SVGCursorElement includes SVGTests;
+SVGCursorElement includes SVGURIReference;
+
 // https://www.w3.org/TR/SVG11/types.html#InterfaceSVGExternalResourcesRequired
 [Exposed=Window]
 interface SVGExternalResourcesRequired {
   readonly attribute SVGAnimatedBoolean externalResourcesRequired;
+};
+
+// https://www.w3.org/TR/SVG11/fonts.html#InterfaceSVGFontElement
+[Exposed=Window]
+interface SVGFontElement : SVGElement {
 };
 
 // https://www.w3.org/TR/SVG11/fonts.html#InterfaceSVGFontFaceElement
@@ -126,6 +148,18 @@ partial interface SVGGraphicsElement {
   // https://github.com/mdn/browser-compat-data/issues/8745
   attribute boolean autofocus;
 };
+
+// https://www.w3.org/TR/SVG11/text.html#InterfaceSVGGlyphRefElement
+[Exposed=Window]
+interface SVGGlyphRefElement : SVGElement {
+  attribute DOMString glyphRef;
+  attribute DOMString format;
+  attribute float x;
+  attribute float y;
+  attribute float dx;
+  attribute float dy;
+};
+SVGGlyphRefElement includes SVGURIReference;
 
 // https://www.w3.org/TR/SVG11/fonts.html#InterfaceSVGHKernElement
 [Exposed=Window]
