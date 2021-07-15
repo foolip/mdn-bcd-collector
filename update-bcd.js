@@ -390,8 +390,8 @@ if (require.main === module) {
               alias: 'c',
               describe: 'The BCD categories to update',
               type: 'array',
-              choices: ['api', 'css.properties'],
-              default: ['api', 'css.properties']
+              choices: ['api', 'css.properties', 'javascript.builtins'],
+              default: ['api', 'css.properties', 'javascript.builtins']
             }).option('path', {
               alias: 'p',
               describe: 'The BCD path to update (interpreted as a minimatch pattern)',

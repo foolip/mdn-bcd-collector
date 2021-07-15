@@ -70,7 +70,8 @@ const getMissing = (direction = 'collector-from-bcd', category = [], includeAlia
 
   const bcdEntries = [
     ...traverseFeatures(bcd.api, 'api.', includeAliases),
-    ...traverseFeatures(bcd.css.properties, 'css.properties.', includeAliases)
+    ...traverseFeatures(bcd.css.properties, 'css.properties.', includeAliases),
+    ...traverseFeatures(bcd.javascript.builtins, 'javascript.builtins.', includeAliases)
   ].filter(filterCategory);
   const collectorEntries = Object.keys(tests).filter(filterCategory);
 
@@ -110,8 +111,8 @@ const main = () => {
               alias: 'c',
               describe: 'The BCD categories to filter',
               type: 'array',
-              choices: ['api', 'css.properties'],
-              default: ['api', 'css.properties']
+              choices: ['api', 'css.properties', 'javascript.builtins'],
+              default: ['api', 'css.properties', 'javascript.builtins']
             });
       }
   );

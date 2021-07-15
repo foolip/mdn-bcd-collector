@@ -24,6 +24,7 @@ const WebIDL2 = require('webidl2');
 const customCSS = require('./custom-css.json');
 const customTests = require('./custom-tests.json');
 const customIDL = require('./custom-idl');
+const customJS = require('./custom-js.json');
 
 const generatedDir = path.join(__dirname, 'generated');
 
@@ -631,6 +632,41 @@ const buildCSS = (webrefCSS, customCSS) => {
   return tests;
 };
 
+const buildJS = (customJS) => {
+  const tests = {};
+
+  for (const path of Object.keys(customJS.builtins)) {
+    const parts = path.split('.');
+
+    // The "prototype" part is not part of the BCD paths.
+    const bcdPath = parts.filter((p) => p != 'prototype').join('.');
+
+    if (parts[parts.length - 1] === parts[parts.length - 2]) {
+      // TODO: generate a test for this constructor
+      continue;
+    }
+
+    // Get the last part as the property and everything else as the expression
+    // we should test for existence in, or "self" if there's just one part.
+    const property = parts.pop();
+
+    if (property.startsWith('@@')) {
+      // TODO: generate a test for this symbol
+      continue;
+    }
+
+    const owner = parts.length ? parts.join('.') : 'self';
+    const code = `${owner}.hasOwnProperty(${JSON.stringify(property)})`;
+
+    tests[`javascript.builtins.${bcdPath}`] = compileTest({
+      raw: {code},
+      exposure: ['Window']
+    });
+  }
+
+  return tests;
+};
+
 /* istanbul ignore next */
 const copyResources = async () => {
   const resources = [
@@ -670,7 +706,8 @@ const build = async (customIDL, customCSS) => {
   const specIDLs = await idl.parseAll();
   const IDLTests = buildIDL(specIDLs, customIDL);
   const CSSTests = buildCSS(specCSS, customCSS);
-  const tests = Object.assign({}, IDLTests, CSSTests);
+  const JSTests = buildJS(customJS);
+  const tests = Object.assign({}, IDLTests, CSSTests, JSTests);
 
   await fs.writeJson(path.join(__dirname, 'tests.json'), tests);
   await copyResources();
