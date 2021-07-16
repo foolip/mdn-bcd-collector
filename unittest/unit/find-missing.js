@@ -23,7 +23,8 @@ const tests = {
   'api.AbortController': {},
   'api.AbortController.signal': {},
   'css.properties.font-family': {},
-  'javascript.builtins.array': {}
+  'javascript.builtins.Array': {},
+  'javascript.builtins.Error': {}
 };
 const bcd = {
   api: {
@@ -52,6 +53,16 @@ const bcd = {
         __compat: {}
       }
     }
+  },
+  javascript: {
+    builtins: {
+      Array: {
+        __compat: {}
+      },
+      Date: {
+        __compat: {}
+      }
+    }
   }
 };
 
@@ -69,7 +80,9 @@ describe('find-missing', () => {
       'api.DummyAPI',
       'api.DummyAPI.dummy',
       'css.properties.font-family',
-      'css.properties.font-face'
+      'css.properties.font-face',
+      'javascript.builtins.Array',
+      'javascript.builtins.Date'
     ]);
   });
 
@@ -79,35 +92,41 @@ describe('find-missing', () => {
     });
 
     it('collector <- bcd', () => {
-      assert.deepEqual(getMissing(), {missingEntries: [
-        'api.AbortController.dummy',
-        'api.DummyAPI',
-        'api.DummyAPI.dummy',
-        'css.properties.font-face'
-      ], total: 7});
+      assert.deepEqual(getMissing(), {
+        missingEntries: [
+          'api.AbortController.dummy',
+          'api.DummyAPI',
+          'api.DummyAPI.dummy',
+          'css.properties.font-face',
+          'javascript.builtins.Date'
+        ], total: 9});
     });
 
     it('bcd <- collector', () => {
-      assert.deepEqual(getMissing('bcd-from-collector'), {missingEntries: [
-        'javascript.builtins.array'
-      ], total: 4});
+      assert.deepEqual(getMissing('bcd-from-collector'), {
+        missingEntries: [
+          'javascript.builtins.Error'
+        ], total: 5});
     });
 
     it('filter category', () => {
-      assert.deepEqual(getMissing('collector-from-bcd', ['api']), {missingEntries: [
-        'api.AbortController.dummy',
-        'api.DummyAPI',
-        'api.DummyAPI.dummy'
-      ], total: 5});
+      assert.deepEqual(getMissing('collector-from-bcd', ['api']), {
+        missingEntries: [
+          'api.AbortController.dummy',
+          'api.DummyAPI',
+          'api.DummyAPI.dummy'
+        ], total: 5});
     });
 
     it('unknown direction', () => {
-      assert.deepEqual(getMissing('foo-from-bar'), {missingEntries: [
-        'api.AbortController.dummy',
-        'api.DummyAPI',
-        'api.DummyAPI.dummy',
-        'css.properties.font-face'
-      ], total: 7});
+      assert.deepEqual(getMissing('foo-from-bar'), {
+        missingEntries: [
+          'api.AbortController.dummy',
+          'api.DummyAPI',
+          'api.DummyAPI.dummy',
+          'css.properties.font-face',
+          'javascript.builtins.Date'
+        ], total: 9});
 
       assert.isTrue(console.log.calledWith('Direction \'foo-from-bar\' is unknown; defaulting to collector <- bcd'));
     });
