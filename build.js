@@ -635,20 +635,18 @@ const buildCSS = (webrefCSS, customCSS) => {
 const buildJS = (customJS) => {
   const tests = {};
 
-  for (const path of Object.keys(customJS.builtins)) {
+  for (const [path, extras] of Object.entries(customJS.builtins)) {
     const parts = path.split('.');
 
-    // The "prototype" part is not part of the BCD paths.
-    const bcdPath = parts.filter((p) => p != 'prototype').join('.');
-
-    if (parts[parts.length - 1] === parts[parts.length - 2]) {
-      // TODO: generate a test for this constructor
-      continue;
-    }
+    const bcdPath = [
+      'javascript', 'builtins',
+      // The "prototype" part is not part of the BCD paths.
+      ...parts.filter((p) => p != 'prototype')
+    ].join('.');
 
     // Get the last part as the property and everything else as the expression
     // we should test for existence in, or "self" if there's just one part.
-    let property = parts.pop();
+    let property = parts[parts.length - 1];
 
     if (property.startsWith('@@')) {
       property = `Symbol.${property.substr(2)}`;
@@ -656,13 +654,30 @@ const buildJS = (customJS) => {
       property = JSON.stringify(property);
     }
 
-    const owner = parts.length ? parts.join('.') : 'self';
+    const owner = parts.length > 1 ? parts.slice(0, parts.length - 1).join('.') : 'self';
     const code = `${owner}.hasOwnProperty(${property})`;
 
-    tests[`javascript.builtins.${bcdPath}`] = compileTest({
+    tests[bcdPath] = compileTest({
       raw: {code},
       exposure: ['Window']
     });
+
+    // Constructors
+    if ('ctor_args' in extras) {
+      const ctorPath = [
+        'javascript', 'builtins',
+        ...parts,
+        // Repeat the last part of the path
+        parts[parts.length - 1]
+      ].join('.');
+      const expr = `${path}(${extras.ctor_args})`;
+      const maybeNew = extras.ctor_new !== false ? 'new' : '';
+      const code = compileCustomTest(`${maybeNew} ${expr}; return true;`);
+      tests[ctorPath] = compileTest({
+        raw: {code},
+        exposure: ['Window']
+      });
+    }
   }
 
   return tests;
