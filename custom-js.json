@@ -1,9 +1,11 @@
 {
   "builtins": {
-    "AggregateError": {},
-    "AggregateError.AggregateError": {},
-    "Array": {},
-    "Array.Array": {},
+    "AggregateError": {
+      "ctor_args": "[new Error('message')]"
+    },
+    "Array": {
+      "ctor_args": "2"
+    },
     "Array.prototype.at": {},
     "Array.prototype.concat": {},
     "Array.prototype.copyWithin": {},
@@ -44,8 +46,9 @@
     "Array.prototype.@@iterator": {},
     "Array.@@species": {},
     "Array.prototype.@@unscopables": {},
-    "ArrayBuffer": {},
-    "ArrayBuffer.ArrayBuffer": {},
+    "ArrayBuffer": {
+      "ctor_args": "2"
+    },
     "ArrayBuffer.prototype.byteLength": {},
     "ArrayBuffer.isView": {},
     "ArrayBuffer.prototype.slice": {},
@@ -63,24 +66,30 @@
     "Atomics.sub": {},
     "Atomics.wait": {},
     "Atomics.xor": {},
-    "BigInt": {},
-    "BigInt.BigInt": {},
+    "BigInt": {
+      "ctor_args": "1",
+      "ctor_new": false
+    },
     "BigInt.asIntN": {},
     "BigInt.asUintN": {},
     "BigInt.prototype.toLocaleString": {},
     "BigInt.prototype.toString": {},
     "BigInt.prototype.valueOf": {},
-    "BigInt64Array": {},
-    "BigInt64Array.BigInt64Array": {},
-    "BigUint64Array": {},
-    "BigUint64Array.BigUint64Array": {},
-    "Boolean": {},
-    "Boolean.Boolean": {},
+    "BigInt64Array": {
+      "ctor_args": "2"
+    },
+    "BigUint64Array": {
+      "ctor_args": "2"
+    },
+    "Boolean": {
+      "ctor_args": "true"
+    },
     "Boolean.prototype.toSource": {},
     "Boolean.prototype.toString": {},
     "Boolean.prototype.valueOf": {},
-    "DataView": {},
-    "DataView.DataView": {},
+    "DataView": {
+      "ctor_args": "new ArrayBuffer(2)"
+    },
     "DataView.prototype.buffer": {},
     "DataView.prototype.byteLength": {},
     "DataView.prototype.byteOffset": {},
@@ -104,8 +113,9 @@
     "DataView.prototype.setUint16": {},
     "DataView.prototype.setUint32": {},
     "DataView.prototype.setUint8": {},
-    "Date": {},
-    "Date.Date": {},
+    "Date": {
+      "ctor_args": ""
+    },
     "Date.prototype.getDate": {},
     "Date.prototype.getDay": {},
     "Date.prototype.getFullYear": {},
@@ -156,8 +166,9 @@
     "Date.prototype.toUTCString": {},
     "Date.prototype.valueOf": {},
     "Date.prototype.@@toPrimitive": {},
-    "Error": {},
-    "Error.Error": {},
+    "Error": {
+      "ctor_args": "'message'"
+    },
     "Error.prototype.cause": {},
     "Error.prototype.columnNumber": {},
     "Error.prototype.fileName": {},
@@ -166,18 +177,23 @@
     "Error.prototype.name": {},
     "Error.prototype.toSource": {},
     "Error.prototype.toString": {},
-    "EvalError": {},
-    "EvalError.EvalError": {},
-    "FinalizationRegistry": {},
-    "FinalizationRegistry.FinalizationRegistry": {},
+    "EvalError": {
+      "ctor_args": "'message'"
+    },
+    "FinalizationRegistry": {
+      "ctor_args": "function(heldValue){}"
+    },
     "FinalizationRegistry.prototype.register": {},
     "FinalizationRegistry.prototype.unregister": {},
-    "Float32Array": {},
-    "Float32Array.Float32Array": {},
-    "Float64Array": {},
-    "Float64Array.Float64Array": {},
-    "Function": {},
-    "Function.Function": {},
+    "Float32Array": {
+      "ctor_args": "2"
+    },
+    "Float64Array": {
+      "ctor_args": "2"
+    },
+    "Function": {
+      "ctor_args": "'return true'"
+    },
     "Function.prototype.apply": {},
     "Function.prototype.arguments": {},
     "Function.prototype.bind": {},
@@ -188,19 +204,24 @@
     "Function.prototype.name": {},
     "Function.prototype.toSource": {},
     "Function.prototype.toString": {},
-    "Int16Array": {},
-    "Int16Array.Int16Array": {},
-    "Int32Array": {},
-    "Int32Array.Int32Array": {},
-    "Int8Array": {},
-    "Int8Array.Int8Array": {},
-    "InternalError": {},
-    "InternalError.InternalError": {},
+    "Int16Array": {
+      "ctor_args": "2"
+    },
+    "Int32Array": {
+      "ctor_args": "2"
+    },
+    "Int8Array": {
+      "ctor_args": "2"
+    },
+    "InternalError": {
+      "ctor_args": "'message'"
+    },
     "JSON": {},
     "JSON.parse": {},
     "JSON.stringify": {},
-    "Map": {},
-    "Map.Map": {},
+    "Map": {
+      "ctor_args": ""
+    },
     "Map.prototype.clear": {},
     "Map.prototype.delete": {},
     "Map.prototype.entries": {},
@@ -257,7 +278,9 @@
     "Math.tan": {},
     "Math.tanh": {},
     "Math.trunc": {},
-    "Number": {},
+    "Number": {
+      "ctor_args": "1"
+    },
     "Number.EPSILON": {},
     "Number.MAX_SAFE_INTEGER": {},
     "Number.MAX_VALUE": {},
@@ -265,7 +288,6 @@
     "Number.MIN_VALUE": {},
     "Number.NaN": {},
     "Number.NEGATIVE_INFINITY": {},
-    "Number.Number": {},
     "Number.POSITIVE_INFINITY": {},
     "Number.isFinite": {},
     "Number.isInteger": {},
@@ -280,8 +302,9 @@
     "Number.prototype.toSource": {},
     "Number.prototype.toString": {},
     "Number.prototype.valueOf": {},
-    "Object": {},
-    "Object.Object": {},
+    "Object": {
+      "ctor_args": ""
+    },
     "Object.assign": {},
     "Object.prototype.constructor": {},
     "Object.create": {},
@@ -311,8 +334,9 @@
     "Object.prototype.toString": {},
     "Object.prototype.valueOf": {},
     "Object.values": {},
-    "Promise": {},
-    "Promise.Promise": {},
+    "Promise": {
+      "ctor_args": "function(resolve,reject){}"
+    },
     "Promise.all": {},
     "Promise.allSettled": {},
     "Promise.any": {},
@@ -322,13 +346,16 @@
     "Promise.reject": {},
     "Promise.resolve": {},
     "Promise.prototype.then": {},
-    "Proxy": {},
-    "Proxy.Proxy": {},
+    "Proxy": {
+      "ctor_args": "{},{}"
+    },
     "Proxy.revocable": {},
-    "RangeError": {},
-    "RangeError.RangeError": {},
-    "ReferenceError": {},
-    "ReferenceError.ReferenceError": {},
+    "RangeError": {
+      "ctor_args": "'message'"
+    },
+    "ReferenceError": {
+      "ctor_args": "'message'"
+    },
     "Reflect": {},
     "Reflect.apply": {},
     "Reflect.construct": {},
@@ -343,8 +370,9 @@
     "Reflect.preventExtensions": {},
     "Reflect.set": {},
     "Reflect.setPrototypeOf": {},
-    "RegExp": {},
-    "RegExp.RegExp": {},
+    "RegExp": {
+      "ctor_args": "'.'"
+    },
     "RegExp.prototype.compile": {},
     "RegExp.prototype.dotAll": {},
     "RegExp.prototype.exec": {},
@@ -366,8 +394,9 @@
     "RegExp.prototype.@@search": {},
     "RegExp.@@species": {},
     "RegExp.prototype.@@split": {},
-    "Set": {},
-    "Set.Set": {},
+    "Set": {
+      "ctor_args": ""
+    },
     "Set.prototype.add": {},
     "Set.prototype.clear": {},
     "Set.prototype.delete": {},
@@ -378,12 +407,14 @@
     "Set.prototype.values": {},
     "Set.prototype.@@iterator": {},
     "Set.@@species": {},
-    "SharedArrayBuffer": {},
-    "SharedArrayBuffer.SharedArrayBuffer": {},
+    "SharedArrayBuffer": {
+      "ctor_args": "2"
+    },
     "SharedArrayBuffer.prototype.byteLength": {},
     "SharedArrayBuffer.prototype.slice": {},
-    "String": {},
-    "String.String": {},
+    "String": {
+      "ctor_args": "0"
+    },
     "String.prototype.anchor": {},
     "String.prototype.at": {},
     "String.prototype.big": {},
@@ -436,8 +467,10 @@
     "String.prototype.trimStart": {},
     "String.prototype.valueOf": {},
     "String.prototype.@@iterator": {},
-    "Symbol": {},
-    "Symbol.Symbol": {},
+    "Symbol": {
+      "ctor_args": "'description'",
+      "ctor_new": false
+    },
     "Symbol.asyncIterator": {},
     "Symbol.prototype.description": {},
     "Symbol.for": {},
@@ -458,32 +491,42 @@
     "Symbol.unscopables": {},
     "Symbol.prototype.valueOf": {},
     "Symbol.prototype.@@toPrimitive": {},
-    "SyntaxError": {},
-    "SyntaxError.SyntaxError": {},
-    "TypeError": {},
-    "TypeError.TypeError": {},
-    "URIError": {},
-    "URIError.URIError": {},
-    "Uint16Array": {},
-    "Uint16Array.Uint16Array": {},
-    "Uint32Array": {},
-    "Uint32Array.Uint32Array": {},
-    "Uint8Array": {},
-    "Uint8Array.Uint8Array": {},
-    "Uint8ClampedArray": {},
-    "Uint8ClampedArray.Uint8ClampedArray": {},
-    "WeakMap": {},
-    "WeakMap.WeakMap": {},
+    "SyntaxError": {
+      "ctor_args": "'message'"
+    },
+    "TypeError": {
+      "ctor_args": "'message'"
+    },
+    "URIError": {
+      "ctor_args": "'message'"
+    },
+    "Uint16Array": {
+      "ctor_args": "2"
+    },
+    "Uint32Array": {
+      "ctor_args": "2"
+    },
+    "Uint8Array": {
+      "ctor_args": "2"
+    },
+    "Uint8ClampedArray": {
+      "ctor_args": "2"
+    },
+    "WeakMap": {
+      "ctor_args": ""
+    },
     "WeakMap.prototype.clear": {},
     "WeakMap.prototype.delete": {},
     "WeakMap.prototype.get": {},
     "WeakMap.prototype.has": {},
     "WeakMap.prototype.set": {},
-    "WeakRef": {},
-    "WeakRef.WeakRef": {},
+    "WeakRef": {
+      "ctor_args": "{}"
+    },
     "WeakRef.prototype.deref": {},
-    "WeakSet": {},
-    "WeakSet.WeakSet": {},
+    "WeakSet": {
+      "ctor_args": ""
+    },
     "WeakSet.prototype.add": {},
     "WeakSet.prototype.delete": {},
     "WeakSet.prototype.has": {},
@@ -501,34 +544,39 @@
     "unescape": {},
     "uneval": {},
     "Intl": {},
-    "Intl.Collator": {},
-    "Intl.Collator.Collator": {},
+    "Intl.Collator": {
+      "ctor_args": "'sv'"
+    },
     "Intl.Collator.prototype.compare": {},
     "Intl.Collator.prototype.resolvedOptions": {},
     "Intl.Collator.supportedLocalesOf": {},
-    "Intl.DateTimeFormat": {},
-    "Intl.DateTimeFormat.DateTimeFormat": {},
+    "Intl.DateTimeFormat": {
+      "ctor_args": "'sv'"
+    },
     "Intl.DateTimeFormat.prototype.format": {},
     "Intl.DateTimeFormat.prototype.formatRange": {},
     "Intl.DateTimeFormat.prototype.formatRangeToParts": {},
     "Intl.DateTimeFormat.prototype.formatToParts": {},
     "Intl.DateTimeFormat.prototype.resolvedOptions": {},
     "Intl.DateTimeFormat.supportedLocalesOf": {},
-    "Intl.DisplayNames": {},
-    "Intl.DisplayNames.DisplayNames": {},
+    "Intl.DisplayNames": {
+      "ctor_args": "'sv',{type:'language'}"
+    },
     "Intl.DisplayNames.prototype.of": {},
     "Intl.DisplayNames.prototype.resolvedOptions": {},
     "Intl.DisplayNames.supportedLocalesOf": {},
     "Intl.getCanonicalLocales": {},
     "Intl.@@toStringTag": {},
-    "Intl.ListFormat": {},
-    "Intl.ListFormat.ListFormat": {},
+    "Intl.ListFormat": {
+      "ctor_args": "'sv'"
+    },
     "Intl.ListFormat.prototype.format": {},
     "Intl.ListFormat.prototype.formatToParts": {},
     "Intl.ListFormat.prototype.resolvedOptions": {},
     "Intl.ListFormat.supportedLocalesOf": {},
-    "Intl.Locale": {},
-    "Intl.Locale.Locale": {},
+    "Intl.Locale": {
+      "ctor_args": "'sv'"
+    },
     "Intl.Locale.prototype.baseName": {},
     "Intl.Locale.prototype.calendar": {},
     "Intl.Locale.prototype.caseFirst": {},
@@ -542,48 +590,55 @@
     "Intl.Locale.prototype.region": {},
     "Intl.Locale.prototype.script": {},
     "Intl.Locale.prototype.toString": {},
-    "Intl.NumberFormat": {},
-    "Intl.NumberFormat.NumberFormat": {},
+    "Intl.NumberFormat": {
+      "ctor_args": "'sv'"
+    },
     "Intl.NumberFormat.prototype.format": {},
     "Intl.NumberFormat.prototype.formatToParts": {},
     "Intl.NumberFormat.prototype.resolvedOptions": {},
     "Intl.NumberFormat.supportedLocalesOf": {},
-    "Intl.PluralRules": {},
-    "Intl.PluralRules.PluralRules": {},
+    "Intl.PluralRules": {
+      "ctor_args": "'sv'"
+    },
     "Intl.PluralRules.prototype.resolvedOptions": {},
     "Intl.PluralRules.prototype.select": {},
     "Intl.PluralRules.supportedLocalesOf": {},
-    "Intl.RelativeTimeFormat": {},
-    "Intl.RelativeTimeFormat.RelativeTimeFormat": {},
+    "Intl.RelativeTimeFormat": {
+      "ctor_args": "'sv'"
+    },
     "Intl.RelativeTimeFormat.prototype.format": {},
     "Intl.RelativeTimeFormat.prototype.formatToParts": {},
     "Intl.RelativeTimeFormat.prototype.resolvedOptions": {},
     "Intl.RelativeTimeFormat.supportedLocalesOf": {},
     "WebAssembly": {},
-    "WebAssembly.CompileError": {},
-    "WebAssembly.CompileError.CompileError": {},
-    "WebAssembly.Global": {},
-    "WebAssembly.Global.Global": {},
+    "WebAssembly.CompileError": {
+      "ctor_args": "'message'"
+    },
+    "WebAssembly.Global": {
+      "ctor_args": "{value:'i32'}"
+    },
     "WebAssembly.Global.prototype.value": {},
     "WebAssembly.Global.prototype.valueOf": {},
     "WebAssembly.Instance": {},
-    "WebAssembly.Instance.Instance": {},
     "WebAssembly.Instance.prototype.exports": {},
-    "WebAssembly.LinkError": {},
-    "WebAssembly.LinkError.LinkError": {},
-    "WebAssembly.Memory": {},
-    "WebAssembly.Memory.Memory": {},
+    "WebAssembly.LinkError": {
+      "ctor_args": "'message'"
+    },
+    "WebAssembly.Memory": {
+      "ctor_args": "{initial:1}"
+    },
     "WebAssembly.Memory.prototype.buffer": {},
     "WebAssembly.Memory.prototype.grow": {},
     "WebAssembly.Module": {},
-    "WebAssembly.Module.Module": {},
     "WebAssembly.Module.customSections": {},
     "WebAssembly.Module.exports": {},
     "WebAssembly.Module.imports": {},
-    "WebAssembly.RuntimeError": {},
-    "WebAssembly.RuntimeError.RuntimeError": {},
-    "WebAssembly.Table": {},
-    "WebAssembly.Table.Table": {},
+    "WebAssembly.RuntimeError": {
+      "ctor_args": "'message'"
+    },
+    "WebAssembly.Table": {
+      "ctor_args": "{initial:1,element:'anyfunc'}"
+    },
     "WebAssembly.Table.prototype.get": {},
     "WebAssembly.Table.prototype.grow": {},
     "WebAssembly.Table.prototype.length": {},
