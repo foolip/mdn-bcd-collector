@@ -4,11 +4,109 @@ const BCD_DIR = process.env.BCD_DIR || `../browser-compat-data`;
 const bcd = require(BCD_DIR);
 const tests = require('./tests.json');
 
+const ignoreList = new Set([
+  // callback interfaces
+  'EventListener',
+  'NodeFilter',
+
+  // callback functions
+  'XRFrameRequestCallback',
+
+  // dictionaries
+  'AudioContextOptions',
+  'AudioNodeOptions',
+  'BasicCardRequest',
+  'BasicCardResponse',
+  'CryptoKeyPair',
+  'DOMPointInit',
+  'DoubleRange',
+  'EffectTiming',
+  'FileSystemFlags',
+  'FullscreenOptions',
+  'MediaCapabilitiesInfo',
+  'MediaKeySystemConfiguration',
+  'MediaSessionActionDetails',
+  'MediaSettingsRange',
+  'MediaStreamAudioSourceOptions',
+  'MediaStreamConstraints',
+  'MediaStreamTrackAudioSourceOptions',
+  'MediaTrackConstraints',
+  'MediaTrackSettings',
+  'MediaTrackSupportedConstraints',
+  'MutationObserverInit',
+  'PayerErrors',
+  'PaymentCurrencyAmount',
+  'PaymentDetailsBase',
+  'PaymentDetailsInit',
+  'PaymentDetailsUpdate',
+  'PaymentItem',
+  'PhotoCapabilities',
+  'PositionOptions',
+  'PublicKeyCredentialCreationOptions',
+  'PublicKeyCredentialRequestOptions',
+  'RTCAnswerOptions',
+  'RTCConfiguration',
+  'RTCIceCandidateInit',
+  'RTCIceCandidatePairStats',
+  'RTCIceCandidateStats',
+  'RTCIceServer',
+  'RTCOfferAnswerOptions',
+  'RTCOfferOptions',
+  'RTCRemoteOutboundRtpStreamStats',
+  'RTCRtpContributingSource',
+  'RTCRtpEncodingParameters',
+  'RTCRtpSendParameters',
+  'RTCRtpStreamStats',
+  'RTCRtpSynchronizationSource',
+  'RTCRtpTransceiverInit',
+  'RTCTrackEventInit',
+  'ScrollToOptions',
+  'StorageEstimate',
+  'ULongRange',
+  'VRLayerInit',
+  'XRPermissionDescriptor',
+  'XRWebGLLayerInit',
+
+  // enums
+  'MediaSessionAction',
+  'RTCIceCandidateType',
+  'RTCIceComponent',
+  'RTCIceCredentialType',
+  'RTCRtpTransceiverDirection',
+  'RequestDestination',
+  'XREnvironmentBlendMode',
+  'XREye',
+  'XRSessionMode',
+
+  // mixins
+  'Body',
+  'GlobalEventHandlers',
+  'LinkStyle',
+  'NavigatorConcurrentHardware',
+  'NavigatorID',
+  'NavigatorLanguage',
+  'NavigatorOnLine',
+  'NavigatorPlugins',
+  'NavigatorStorage',
+  'WindowEventHandlers',
+  'WindowOrWorkerGlobalScope',
+
+  // typedefs
+  'ConstrainBoolean',
+  'ConstrainDOMString',
+  'ConstrainDouble',
+  'ConstrainULong'
+]);
+
 const traverseFeatures = (obj, path, includeAliases) => {
   const features = [];
 
   for (const id of Object.keys(obj)) {
     if (!obj[id] || typeof obj[id] !== 'object') {
+      continue;
+    }
+
+    if (ignoreList.has(id)) {
       continue;
     }
 
@@ -48,7 +146,9 @@ const traverseFeatures = (obj, path, includeAliases) => {
     features.push(...traverseFeatures(obj[id], path + id + '.', includeAliases));
   }
 
-  return features;
+  return features.filter((i) => {
+    return !i.includes('_') && i.split('.').length < 4;
+  });
 };
 
 const findMissing = (entries, allEntries) => {
