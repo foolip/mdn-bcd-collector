@@ -170,9 +170,6 @@
       "ctor_args": "'message'"
     },
     "Error.prototype.cause": {},
-    "Error.prototype.columnNumber": {},
-    "Error.prototype.fileName": {},
-    "Error.prototype.lineNumber": {},
     "Error.prototype.message": {},
     "Error.prototype.name": {},
     "Error.prototype.toSource": {},
