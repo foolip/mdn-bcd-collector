@@ -648,15 +648,16 @@ const buildJS = (customJS) => {
 
     // Get the last part as the property and everything else as the expression
     // we should test for existence in, or "self" if there's just one part.
-    const property = parts.pop();
+    let property = parts.pop();
 
     if (property.startsWith('@@')) {
-      // TODO: generate a test for this symbol
-      continue;
+      property = `Symbol.${property.substr(2)}`;
+    } else {
+      property = JSON.stringify(property);
     }
 
     const owner = parts.length ? parts.join('.') : 'self';
-    const code = `${owner}.hasOwnProperty(${JSON.stringify(property)})`;
+    const code = `${owner}.hasOwnProperty(${property})`;
 
     tests[`javascript.builtins.${bcdPath}`] = compileTest({
       raw: {code},
