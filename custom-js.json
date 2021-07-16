@@ -196,7 +196,6 @@
     "Function.prototype.bind": {},
     "Function.prototype.call": {},
     "Function.prototype.caller": {},
-    "Function.prototype.displayName": {},
     "Function.prototype.length": {},
     "Function.prototype.name": {},
     "Function.prototype.toSource": {},
