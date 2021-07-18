@@ -1,8 +1,3 @@
-[Exposed=Window]
-interface LocalMediaStream : MediaStream {
-  undefined stop();
-};
-
 partial interface MediaStream {
   readonly attribute boolean ended;
   readonly attribute DOMString label;
@@ -23,7 +18,6 @@ partial interface MediaStreamTrack {
   // https://github.com/w3c/mediacapture-main/pull/576
   attribute EventHandler onoverconstrained;
 
-  readonly attribute boolean _readonly;
   readonly attribute boolean remote;
 };
 

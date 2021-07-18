@@ -3,7 +3,6 @@ partial interface Element {
   ShadowRoot createShadowRoot();
   ShadowRoot webkitCreateShadowRoot();
 
-  NodeList getDestinationInsertionPoints();
   readonly attribute boolean openOrClosedShadowRoot;
 };
 

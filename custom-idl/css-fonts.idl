@@ -1,4 +1,0 @@
-// https://github.com/mozilla/gecko-dev/blob/358fbca0398ac651f5ea6030be39b1870ec180a5/dom/webidl/CSSFontFeatureValuesRule.webidl#L26
-partial interface CSSFontFeatureValuesRule {
-  attribute CSSOMString valueText;
-};
