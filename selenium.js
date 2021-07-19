@@ -41,7 +41,7 @@ const seleniumUrls = {
   saucelabs: 'https://${username}:${key}@ondemand.${region}.saucelabs.com:443/wd/hub'
 };
 
-// Custom tests that use getUserMedia() make Edge 12-18 block.
+// Custom tests that use getUserMedia() make Edge 12-18 and Firefox 34-53 block.
 const gumTests = [
   'ImageCapture',
   'MediaStream',
@@ -63,6 +63,27 @@ const ignore = {
     16: gumTests,
     17: gumTests,
     18: gumTests
+  },
+  firefox: {
+    34: gumTests,
+    35: gumTests,
+    36: gumTests,
+    37: gumTests,
+    38: gumTests,
+    39: gumTests,
+    40: gumTests,
+    41: gumTests,
+    42: gumTests,
+    43: gumTests,
+    44: gumTests,
+    45: gumTests,
+    46: gumTests,
+    47: gumTests,
+    48: gumTests,
+    49: gumTests,
+    50: gumTests,
+    51: gumTests,
+    52: gumTests
   }
 };
 
