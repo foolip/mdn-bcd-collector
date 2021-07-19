@@ -163,6 +163,9 @@ const compileTestCode = (test) => {
   if (test.property.startsWith('Symbol.')) {
     return `"Symbol" in self && "${test.property.replace('Symbol.', '')}" in Symbol && ${test.property} in ${test.owner}.prototype`;
   }
+  if (test.inherit) {
+    return `Object.prototype.hasOwnProperty.call(${test.owner}, "${property}")`;
+  }
   return `"${property}" in ${test.owner}`;
 };
 
@@ -256,7 +259,7 @@ const flattenIDL = (specIDLs, customIDLs) => {
 };
 
 const flattenMembers = (iface) => {
-  const members = iface.members.filter((member) => member.name && member.type !== 'const' && member.special !== 'inherit');
+  const members = iface.members.filter((member) => member.name && member.type !== 'const');
   for (const member of iface.members.filter((member) => !member.name)) {
     switch (member.type) {
       case 'constructor':
@@ -518,7 +521,7 @@ const buildIDLTests = (ast) => {
             } else if (isStatic) {
               expr = {property: member.name, owner: iface.name};
             } else {
-              expr = {property: member.name, owner: `${iface.name}.prototype`};
+              expr = {property: member.name, owner: `${iface.name}.prototype`, inherit: member.special === 'inherit'};
             }
             break;
           case 'const':
