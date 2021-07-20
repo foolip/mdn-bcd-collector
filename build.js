@@ -361,19 +361,6 @@ const getExposureSet = (node) => {
   return globals;
 };
 
-const getName = (node) => {
-  if (!('name' in node)) {
-    return undefined;
-  }
-
-  switch (node.name) {
-    case 'console':
-      return 'Console';
-    default:
-      return node.name;
-  }
-};
-
 const validateIDL = (ast) => {
   const validations = WebIDL2.validate(ast).filter((v) => {
     // TODO: https://github.com/w3c/webref/pull/196
@@ -478,14 +465,12 @@ const buildIDLTests = (ast) => {
       continue;
     }
 
-    const adjustedIfaceName = getName(iface);
-
     const exposureSet = getExposureSet(iface);
     const isGlobal = !!getExtAttr(iface, 'Global');
-    const customIfaceTest = getCustomTestAPI(adjustedIfaceName);
-    const resources = getCustomResourcesAPI(adjustedIfaceName);
+    const customIfaceTest = getCustomTestAPI(iface.name);
+    const resources = getCustomResourcesAPI(iface.name);
 
-    tests[`api.${adjustedIfaceName}`] = compileTest({
+    tests[`api.${iface.name}`] = compileTest({
       raw: {
         code: customIfaceTest || {property: iface.name, owner: 'self'}
       },
@@ -507,7 +492,7 @@ const buildIDLTests = (ast) => {
 
       let expr;
       const customTestMember = getCustomTestAPI(
-          adjustedIfaceName, member.name, isStatic ? 'static' : member.type);
+          iface.name, member.name, isStatic ? 'static' : member.type);
 
       if (customTestMember) {
         expr = customTestMember;
@@ -542,7 +527,7 @@ const buildIDLTests = (ast) => {
         }
       }
 
-      tests[`api.${adjustedIfaceName}.${member.name}`] = compileTest({
+      tests[`api.${iface.name}.${member.name}`] = compileTest({
         raw: {
           code: expr
         },
@@ -552,9 +537,9 @@ const buildIDLTests = (ast) => {
       handledMemberNames.add(member.name);
     }
 
-    const subtests = getCustomSubtestsAPI(adjustedIfaceName);
+    const subtests = getCustomSubtestsAPI(iface.name);
     for (const subtest of Object.entries(subtests)) {
-      tests[`api.${adjustedIfaceName}.${subtest[0]}`] = compileTest({
+      tests[`api.${iface.name}.${subtest[0]}`] = compileTest({
         raw: {
           code: subtest[1]
         },
@@ -741,7 +726,6 @@ module.exports = {
   compileTest,
   flattenIDL,
   getExposureSet,
-  getName,
   buildIDLTests,
   buildIDL,
   validateIDL,
