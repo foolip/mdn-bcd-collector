@@ -169,7 +169,7 @@
     },
     "CSSConditionRule": {
       "__resources": ["createStyleSheet"],
-      "__base": "<%api.CSSMediaRule:interface%>"
+      "__base": "<%api.CSSMediaRule:instance%>"
     },
     "CSSCounterStyleRule": {
       "__resources": ["createStyleSheet"],
@@ -185,7 +185,7 @@
     },
     "CSSGroupingRule": {
       "__resources": ["createStyleSheet"],
-      "__base": "<%api.CSSMediaRule:interface%>"
+      "__base": "<%api.CSSMediaRule:instance%>"
     },
     "CSSImportRule": {
       "__resources": ["createStyleSheet"],
