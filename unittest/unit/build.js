@@ -27,7 +27,6 @@ const sinon = require('sinon');
 const {
   flattenIDL,
   getExposureSet,
-  getName,
   compileTestCode,
   compileTest,
   validateIDL,
@@ -773,23 +772,6 @@ describe('build', () => {
       const interfaces = ast.filter((dfn) => dfn.type === 'interface');
       const exposureSet = getExposureSet(interfaces[0]);
       assert.hasAllKeys(exposureSet, ['Window', 'Worker']);
-    });
-  });
-
-  describe('getName', () => {
-    it('main', () => {
-      const node = {name: 'foobar'};
-      assert.equal(getName(node), 'foobar');
-    });
-
-    it('no name', () => {
-      const node = {};
-      assert.equal(getName(node), undefined);
-    });
-
-    it('console', () => {
-      const node = {name: 'console'};
-      assert.equal(getName(node), 'Console');
     });
   });
 
