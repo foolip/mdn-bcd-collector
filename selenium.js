@@ -269,8 +269,6 @@ const buildDriver = async (browser, version, os) => {
           }
         });
       } else if (browser === 'firefox') {
-        // XXX macOS Big Sur requires microphone permission via the OS...
-        // BrowserStack bug?
         capabilities.set('moz:firefoxOptions', {
           prefs: {
             'media.navigator.permission.disabled': 1,
