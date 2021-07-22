@@ -3,6 +3,7 @@
 
 'use strict';
 
+const assert = require('assert');
 const compareVersions = require('compare-versions');
 const fs = require('fs').promises;
 const klaw = require('klaw');
@@ -28,6 +29,26 @@ const findEntry = (bcd, ident) => {
   return entry;
 };
 
+const combineResults = (results) => {
+  let supported = null;
+  for (const result of results) {
+    if (result === true) {
+      // If any result is true, the flattened support should be true. There
+      // can be contradictory results with multiple exposure scopes, but here
+      // we treat support in any scope as support of the feature.
+      return true;
+    } else if (result === false) {
+      // This may yet be overruled by a later result (above).
+      supported = false;
+    } else if (result === null) {
+      // Leave supported as it is.
+    } else {
+      throw new Error(`result not true/false/null; got ${result}`);
+    }
+  }
+  return supported;
+};
+
 // Get support map from BCD path to test result (null/true/false) for a single
 // report.
 const getSupportMap = (report) => {
@@ -50,24 +71,7 @@ const getSupportMap = (report) => {
   // Transform `testMap` to map from test name (BCD path) to flattened support.
   const supportMap = new Map;
   for (const [name, results] of testMap.entries()) {
-    let supported = null;
-
-    for (const result of results) {
-      if (result === true) {
-        // If any result is true, the flattened support should be true. There
-        // can be contradictory results with multiple exposure scopes, but here
-        // we treat support in any scope as support of the feature.
-        supported = true;
-        break;
-      } else if (result === false) {
-        // This may yet be overruled by a later result (above).
-        supported = false;
-      } else if (result === null) {
-        // Leave supported as it is.
-      } else {
-        throw new Error(`result not true/false/null; got ${result}`);
-      }
-    }
+    let supported = combineResults(results);
 
     if (supported === null) {
       // If the parent feature support is false, copy that.
@@ -122,7 +126,13 @@ const getSupportMatrix = (reports) => {
         }
         browserMap.set(browser.id, versionMap);
       }
-      versionMap.set(version, supported);
+      assert(versionMap.has(version), `${browser.id} ${version} missing`);
+
+      // In case of multiple reports for a single version it's possible we
+      // already have (non-null) support information. Combine results to deal
+      // with this possibility.
+      const combined = combineResults([supported, versionMap.get(version)]);
+      versionMap.set(version, combined);
     }
   }
 
