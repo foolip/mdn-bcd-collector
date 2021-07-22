@@ -393,34 +393,34 @@ describe('BCD updater', () => {
   describe('getSupportMap', () => {
     it('normal', () => {
       assert.deepEqual(getSupportMap(reports[0]), new Map([
-        ['api.AbortController', {result: true}],
-        ['api.AbortController.abort', {result: null}],
-        ['api.AbortController.AbortController', {result: false}],
-        ['api.AudioContext', {result: false}],
-        ['api.AudioContext.close', {result: false}],
-        ['api.DeprecatedInterface', {result: true}],
-        ['api.ExperimentalInterface', {result: true}],
-        ['api.NullAPI', {result: null}],
-        ['api.RemovedInterface', {result: true}],
-        ['css.properties.font-family', {result: true}],
-        ['css.properties.font-face', {result: true}]
+        ['api.AbortController', true],
+        ['api.AbortController.abort', null],
+        ['api.AbortController.AbortController', false],
+        ['api.AudioContext', false],
+        ['api.AudioContext.close', false],
+        ['api.DeprecatedInterface', true],
+        ['api.ExperimentalInterface', true],
+        ['api.NullAPI', null],
+        ['api.RemovedInterface', true],
+        ['css.properties.font-family', true],
+        ['css.properties.font-face', true]
       ]));
     });
 
     it('support in only one exposure', () => {
       assert.deepEqual(getSupportMap(reports[1]), new Map([
-        ['api.AbortController', {result: true}],
-        ['api.AbortController.abort', {result: true}],
-        ['api.AbortController.AbortController', {result: false}],
-        ['api.AudioContext', {result: false}],
-        ['api.AudioContext.close', {result: false}],
-        ['api.DeprecatedInterface', {result: true}],
-        ['api.ExperimentalInterface', {result: true}],
-        ['api.NewInterfaceNotInBCD', {result: false}],
-        ['api.NullAPI', {result: null}],
-        ['api.RemovedInterface', {result: false}],
-        ['css.properties.font-family', {result: true}],
-        ['css.properties.font-face', {result: true}]
+        ['api.AbortController', true],
+        ['api.AbortController.abort', true],
+        ['api.AbortController.AbortController', false],
+        ['api.AudioContext', false],
+        ['api.AudioContext.close', false],
+        ['api.DeprecatedInterface', true],
+        ['api.ExperimentalInterface', true],
+        ['api.NewInterfaceNotInBCD', false],
+        ['api.NullAPI', null],
+        ['api.RemovedInterface', false],
+        ['css.properties.font-family', true],
+        ['css.properties.font-face', true]
       ]));
     });
 
@@ -440,82 +440,82 @@ describe('BCD updater', () => {
       assert.deepEqual(getSupportMatrix(reports), new Map([
         ['api.AbortController', new Map([
           ['chrome', new Map([
-            ['82', {result: null}],
-            ['83', {result: true}],
-            ['84', {result: true}],
-            ['85', {result: true}]
+            ['82', null],
+            ['83', true],
+            ['84', true],
+            ['85', true]
           ])],
           ['safari', new Map([
-            ['13', {result: null}],
-            ['13.1', {result: true}],
-            ['14', {result: null}]
+            ['13', null],
+            ['13.1', true],
+            ['14', null]
           ])]
         ])],
         ['api.AbortController.abort', new Map([['chrome', new Map([
-          ['82', {result: null}],
-          ['83', {result: null}],
-          ['84', {result: true}],
-          ['85', {result: true}]
+          ['82', null],
+          ['83', null],
+          ['84', true],
+          ['85', true]
         ])]])],
         ['api.AbortController.AbortController', new Map([['chrome', new Map([
-          ['82', {result: null}],
-          ['83', {result: false}],
-          ['84', {result: false}],
-          ['85', {result: true}]
+          ['82', null],
+          ['83', false],
+          ['84', false],
+          ['85', true]
         ])]])],
         ['api.AudioContext', new Map([['chrome', new Map([
-          ['82', {result: null}],
-          ['83', {result: false}],
-          ['84', {result: false}],
-          ['85', {result: true}]
+          ['82', null],
+          ['83', false],
+          ['84', false],
+          ['85', true]
         ])]])],
         ['api.AudioContext.close', new Map([['chrome', new Map([
-          ['82', {result: null}],
-          ['83', {result: false}],
-          ['84', {result: false}],
-          ['85', {result: true}]
+          ['82', null],
+          ['83', false],
+          ['84', false],
+          ['85', true]
         ])]])],
         ['api.DeprecatedInterface', new Map([['chrome', new Map([
-          ['82', {result: null}],
-          ['83', {result: true}],
-          ['84', {result: true}],
-          ['85', {result: false}]
+          ['82', null],
+          ['83', true],
+          ['84', true],
+          ['85', false]
         ])]])],
         ['api.ExperimentalInterface', new Map([['chrome', new Map([
-          ['82', {result: null}],
-          ['83', {result: true}],
-          ['84', {result: true}],
-          ['85', {result: true}]
+          ['82', null],
+          ['83', true],
+          ['84', true],
+          ['85', true]
         ])]])],
         ['api.NewInterfaceNotInBCD', new Map([['chrome', new Map([
-          ['82', {result: null}],
-          ['83', {result: null}],
-          ['84', {result: false}],
-          ['85', {result: true}]
+          ['82', null],
+          ['83', null],
+          ['84', false],
+          ['85', true]
         ])]])],
         ['api.NullAPI', new Map([['chrome', new Map([
-          ['82', {result: null}],
-          ['83', {result: null}],
-          ['84', {result: null}],
-          ['85', {result: null}]
+          ['82', null],
+          ['83', null],
+          ['84', null],
+          ['85', null]
         ])]])],
         ['api.RemovedInterface', new Map([['chrome', new Map([
-          ['82', {result: null}],
-          ['83', {result: true}],
-          ['84', {result: false}],
-          ['85', {result: true}]
+          ['82', null],
+          ['83', true],
+          ['84', false],
+          ['85', true]
         ])]])],
         ['css.properties.font-family', new Map([['chrome', new Map([
-          ['82', {result: null}],
-          ['83', {result: false}],
-          ['84', {result: true}],
-          ['85', {result: true}]
+          ['82', null],
+          ['83', false],
+          ['84', true],
+          ['85', true]
         ])]])],
         ['css.properties.font-face', new Map([['chrome', new Map([
-          ['82', {result: null}],
-          ['83', {result: null}],
-          ['84', {result: null}],
-          ['85', {result: null}]
+          ['82', null],
+          ['83', null],
+          ['84', null],
+          ['85', null]
         ])]])]
       ]));
 

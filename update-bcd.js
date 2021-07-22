@@ -28,7 +28,7 @@ const findEntry = (bcd, ident) => {
   return entry;
 };
 
-// Get support map from BCD path to test result(null/true/false) for a single
+// Get support map from BCD path to test result (null/true/false) for a single
 // report.
 const getSupportMap = (report) => {
   // Transform `report` to map from test name (BCD path) to array of results.
@@ -48,29 +48,31 @@ const getSupportMap = (report) => {
   // Transform `testMap` to map from test name (BCD path) to flattened support.
   const supportMap = new Map;
   for (const [name, results] of testMap.entries()) {
-    let supported = {result: null};
+    let supported = null;
     // eslint-disable-next-line no-unused-vars
-    for (const {url, result} of results) {
-      if (result === null) {
-        const parentName = name.split('.').slice(0, -1).join('.');
-        const parentSupport = supportMap.get(parentName);
-        if (parentSupport && parentSupport.result === false) {
-          supported.result = false;
-        }
-        continue;
-      }
-      if (supported.result === null) {
-        supported = {result};
-        continue;
-      }
-      if (supported.result !== result) {
-        // This will happen for [SecureContext] APIs and APIs under multiple
-        // exposure scopes.
-        // logger.warn(`Contradictory results for ${name}: ${JSON.stringify(
-        //     results, null, '  '
-        // )}`);
-        supported.result = true;
+    for (const {result} of results) {
+      if (result === true) {
+        // If any result is true, the flattened support should be true. There
+        // can be contradictory results with multiple exposure scopes, but here
+        // we treat support in any scope as support of the feature.
+        supported = true;
         break;
+      } else if (result === false) {
+        // This may yet be overruled by a later result (above).
+        supported = false;
+      } else if (result === null) {
+        // Leave supported as it is.
+      } else {
+        throw new Error(`result not true/false/null; got ${result}`);
+      }
+    }
+
+    if (supported === null) {
+      // If the parent feature support is false, copy that.
+      const parentName = name.split('.').slice(0, -1).join('.');
+      const parentSupport = supportMap.get(parentName);
+      if (parentSupport === false) {
+        supported = false;
       }
     }
 
@@ -112,7 +114,7 @@ const getSupportMatrix = (reports) => {
         versionMap = new Map;
         for (const browserVersion of
           Object.keys(browsers[browser.id].releases)) {
-          versionMap.set(browserVersion, {result: null});
+          versionMap.set(browserVersion, null);
         }
         browserMap.set(browser.id, versionMap);
       }
@@ -132,10 +134,10 @@ const getSupportMatrix = (reports) => {
     }
     if (version === '*') {
       for (const v of versionMap.keys()) {
-        versionMap.set(v, {result: supported});
+        versionMap.set(v, supported);
       }
     } else {
-      versionMap.set(version, {result: supported});
+      versionMap.set(version, supported);
     }
   }
 
@@ -150,7 +152,7 @@ const inferSupportStatements = (versionMap) => {
   let lastWasNull = false;
 
   for (const [_, version] of versions.entries()) {
-    const {result: supported} = versionMap.get(version);
+    const supported = versionMap.get(version);
     const lastStatement = statements[statements.length - 1];
 
     if (supported === true) {
