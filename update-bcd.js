@@ -33,10 +33,12 @@ const findEntry = (bcd, ident) => {
 const getSupportMap = (report) => {
   // Transform `report` to map from test name (BCD path) to array of results.
   const testMap = new Map;
-  for (const [url, results] of Object.entries(report.results)) {
-    for (const test of results) {
+  for (const tests of Object.values(report.results)) {
+    for (const test of tests) {
+      // TODO: If test.exposure.endsWith('Worker'), then map this to a
+      // worker_support feature.
       const tests = testMap.get(test.name) || [];
-      tests.push({url, result: test.result});
+      tests.push(test.result);
       testMap.set(test.name, tests);
     }
   }
@@ -49,8 +51,8 @@ const getSupportMap = (report) => {
   const supportMap = new Map;
   for (const [name, results] of testMap.entries()) {
     let supported = null;
-    // eslint-disable-next-line no-unused-vars
-    for (const {result} of results) {
+
+    for (const result of results) {
       if (result === true) {
         // If any result is true, the flattened support should be true. There
         // can be contradictory results with multiple exposure scopes, but here
@@ -69,6 +71,8 @@ const getSupportMap = (report) => {
 
     if (supported === null) {
       // If the parent feature support is false, copy that.
+      // TODO: This  assumes that the parent feature came first when iterating
+      // the report, which isn't guaranteed. Move this to a second phase.
       const parentName = name.split('.').slice(0, -1).join('.');
       const parentSupport = supportMap.get(parentName);
       if (parentSupport === false) {
