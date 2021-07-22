@@ -274,7 +274,7 @@ const buildDriver = async (browser, version, os) => {
         capabilities.set('moz:firefoxOptions', {
           prefs: {
             'media.navigator.permission.disabled': 1,
-            'media.navigator.streams.fake': 1,
+            'media.navigator.streams.fake': true,
             'permissions.default.microphone': 1,
             'permissions.default.camera': 1,
             'permissions.default.geo': 1,
