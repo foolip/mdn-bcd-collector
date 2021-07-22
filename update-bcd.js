@@ -60,7 +60,7 @@ const getSupportMap = (report) => {
       } else if (result === false) {
         // This may yet be overruled by a later result (above).
         supported = false;
-      } else if (result == null) {
+      } else if (result === null) {
         // Leave supported as it is.
       } else {
         throw new Error(`result not true/false/null; got ${result}`);
