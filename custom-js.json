@@ -315,6 +315,7 @@
     "Object.getOwnPropertyNames": {},
     "Object.getOwnPropertySymbols": {},
     "Object.getPrototypeOf": {},
+    "Object.hasOwn": {},
     "Object.prototype.hasOwnProperty": {},
     "Object.is": {},
     "Object.isExtensible": {},
