@@ -1524,7 +1524,7 @@
       "__base": "var instance = new XMLHttpRequest();"
     },
     "XPathExpression": {
-      "__base": "var xpe = new XPathEvaluator(); var instance = xpe.createExpression('//div');"
+      "__base": "var xpe = new XPathEvaluator(); var instance = xpe.createExpression('//div', xpe.createNSResolver(document));"
     },
     "XPathResult": {
       "__base": "<%api.XPathExpression:exp%> var instance = exp.evaluate(document);"
