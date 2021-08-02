@@ -28,6 +28,10 @@ const customJS = require('./custom-js.json');
 
 const generatedDir = path.join(__dirname, 'generated');
 
+const formatCode = (code) => {
+  return prettier.format(code, {singleQuote: true, parser: 'babel'}).trim();
+};
+
 const compileCustomTest = (code, format = true) => {
   // Import code from other tests
   code = code.replace(/<%(\w+)\.(\w+)(?:\.(\w+))?:(\w+)%> ?/g, (match, category, name, member, instancevar) => {
@@ -57,7 +61,7 @@ const compileCustomTest = (code, format = true) => {
 
     // Format
     try {
-      code = prettier.format(code, {singleQuote: true, parser: 'babel'}).trim();
+      code = formatCode(code);
     } catch (e) {
       return `throw 'Test is malformed: ${e}'`;
     }
@@ -134,7 +138,8 @@ const getCustomResourcesAPI = (name) => {
   if (name in customTests.api && '__resources' in customTests.api[name]) {
     for (const key of customTests.api[name].__resources) {
       if (Object.keys(customTests.api.__resources).includes(key)) {
-        resources[key] = customTests.api.__resources[key];
+        const r = customTests.api.__resources[key];
+        resources[key] = r.type == 'instance' ? {...r, src: formatCode(r.src)} : customTests.api.__resources[key];
       } else {
         throw new Error(`Resource ${key} is not defined but referenced in api.${name}`);
       }
