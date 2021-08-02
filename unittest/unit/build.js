@@ -105,7 +105,8 @@ describe('build', () => {
 
     it('custom test with invalid syntax', () => {
       assert.include(getCustomTestAPI('invalid'), 'throw \'Test is malformed:');
-      assert.isTrue(console.error.calledOnce);
+      assert.include(getCustomTestAPI('invalid', 'ghost'), 'throw \'Test is malformed:');
+      assert.isTrue(console.error.calledTwice);
     });
 
     describe('promise-based custom tests', () => {
@@ -178,6 +179,15 @@ describe('build', () => {
             }
           }
       );
+
+      assert.deepEqual(
+          getCustomResourcesAPI('WebGLRenderingContext'), {
+            'webGL': {
+              type: 'instance',
+              src: "var canvas = document.createElement('canvas');\nif (!canvas) {\n  return false;\n}\nreturn (\n  canvas.getContext('webgl2') ||\n  canvas.getContext('webgl') ||\n  canvas.getContext('experimental-webgl')\n);"
+            }
+          }
+      );
     });
 
     it('no resources', () => {
@@ -225,6 +235,11 @@ describe('build', () => {
       const test = {property: 'log', owner: 'console'};
       assert.equal(compileTestCode(test), '"log" in console');
     });
+
+    it('constructor', () => {
+      const test = {property: 'm11', owner: 'DOMMatrix.prototype', inherit: true};
+      assert.equal(compileTestCode(test), 'Object.prototype.hasOwnProperty.call(DOMMatrix.prototype, "m11")');
+    });
   });
 
   describe('compileTest', () => {
@@ -237,13 +252,24 @@ describe('build', () => {
           ],
           combinator: '&&'
         },
-        resources: {},
+        resources: {
+          'audio-blip': {
+            type: 'audio',
+            src: ['/media/blip.mp3', '/media/blip.ogg']
+          }
+        },
         exposure: ['Window']
       };
 
       assert.deepEqual(compileTest(rawTest), {
         code: '"Document" in self && "body" in Document.prototype',
-        exposure: ['Window']
+        exposure: ['Window'],
+        resources: {
+          'audio-blip': {
+            type: 'audio',
+            src: ['/media/blip.mp3', '/media/blip.ogg']
+          }
+        },
       });
     });
 
@@ -514,15 +540,16 @@ describe('build', () => {
     it('no defined exposure set', () => {
       const specIDLs = {
         first: WebIDL2.parse(
-            `[Exposed=Window]
-             interface Dummy {
+            `interface Dummy {
                readonly attribute boolean imadumdum;
              };`)
       };
       const ast = flattenIDL(specIDLs, customIDLs);
       const interfaces = ast.filter((dfn) => dfn.type === 'interface');
-      const exposureSet = getExposureSet(interfaces[0]);
-      assert.hasAllKeys(exposureSet, ['Window']);
+      assert.throws(() => {
+        getExposureSet(interfaces[0]);
+      }, Error,
+      'Exposed extended attribute not found on interface Dummy');
     });
 
     it('single exposure', () => {
@@ -551,6 +578,20 @@ describe('build', () => {
       const interfaces = ast.filter((dfn) => dfn.type === 'interface');
       const exposureSet = getExposureSet(interfaces[0]);
       assert.hasAllKeys(exposureSet, ['Window', 'Worker']);
+    });
+
+    it('exposed to DedicatedWorker', () => {
+      const specIDLs = {
+        first: WebIDL2.parse(
+            `[Exposed=DedicatedWorker]
+             interface Dummy {
+               readonly attribute boolean imadumdum;
+             };`)
+      };
+      const ast = flattenIDL(specIDLs, customIDLs);
+      const interfaces = ast.filter((dfn) => dfn.type === 'interface');
+      const exposureSet = getExposureSet(interfaces[0]);
+      assert.hasAllKeys(exposureSet, ['Worker']);
     });
   });
 
@@ -906,6 +947,25 @@ describe('build', () => {
       });
     });
 
+    it('interface with stringifier', () => {
+      const ast = WebIDL2.parse(
+          `[Exposed=Window]
+           interface Number {
+             stringifier DOMString();
+           };`);
+
+      assert.deepEqual(buildIDLTests(ast), {
+        'api.Number': {
+          code: '"Number" in self',
+          exposure: ['Window']
+        },
+        'api.Number.toString': {
+          code: '"toString" in Number.prototype',
+          exposure: ['Window']
+        }
+      });
+    });
+
     it('operator variations', () => {
       const ast = WebIDL2.parse(
           `[Exposed=Window]
@@ -976,6 +1036,26 @@ describe('build', () => {
         },
         'api.Scope.specialWorklet': {
           code: '(function () {\n  var scope = Scope;\n  return scope && \'specialWorklet\' in scope;\n})();',
+          exposure: ['Window']
+        }
+      });
+    });
+
+    it('interface with legacy factory function', () => {
+      const ast = WebIDL2.parse(
+          `[
+             Exposed=Window,
+             LegacyFactoryFunction=Image(DOMString src)
+           ]
+           interface HTMLImageElement {};`);
+
+      assert.deepEqual(buildIDLTests(ast), {
+        'api.HTMLImageElement': {
+          code: '"HTMLImageElement" in self',
+          exposure: ['Window']
+        },
+        'api.HTMLImageElement.Image': {
+          code: 'bcd.testConstructor("Image");',
           exposure: ['Window']
         }
       });
