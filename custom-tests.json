@@ -779,7 +779,7 @@
       "__base": "var instance = document.createNodeIterator(document);"
     },
     "Notification": {
-      "__base": "var instance = new Notification('');"
+      "__base": "if (!('Notification' in self)) {return false;} var instance = new Notification('');"
     },
     "OfflineAudioContext": {
       "__resources": ["offlineAudioContext"],
