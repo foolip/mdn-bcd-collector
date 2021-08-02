@@ -20,9 +20,10 @@ const idl = require('@webref/idl');
 const path = require('path');
 const prettier = require('prettier');
 const WebIDL2 = require('webidl2');
+const YAML = require('yaml');
 
 const customCSS = require('./custom-css.json');
-const customTests = require('./custom-tests.json');
+const customTests = YAML.parse(fs.readFileSync('./custom-tests.yaml', 'utf8'));
 const customIDL = require('./custom-idl');
 const customJS = require('./custom-js.json');
 
