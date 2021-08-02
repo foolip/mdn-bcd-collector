@@ -20,13 +20,21 @@ const idl = require('@webref/idl');
 const path = require('path');
 const prettier = require('prettier');
 const WebIDL2 = require('webidl2');
+const YAML = require('yaml');
 
+/* istanbul ignore next */
+const customTests = YAML.parse(
+    fs.readFileSync(process.env.NODE_ENV === 'test' ? './unittest/unit/custom-tests.test.yaml' : './custom-tests.yaml', 'utf8')
+);
 const customCSS = require('./custom-css.json');
-const customTests = require('./custom-tests.json');
 const customIDL = require('./custom-idl');
 const customJS = require('./custom-js.json');
 
 const generatedDir = path.join(__dirname, 'generated');
+
+const formatCode = (code) => {
+  return prettier.format(code, {singleQuote: true, parser: 'babel'}).trim();
+};
 
 const compileCustomTest = (code, format = true) => {
   // Import code from other tests
@@ -57,7 +65,7 @@ const compileCustomTest = (code, format = true) => {
 
     // Format
     try {
-      code = prettier.format(code, {singleQuote: true, parser: 'babel'}).trim();
+      code = formatCode(code);
     } catch (e) {
       return `throw 'Test is malformed: ${e}'`;
     }
@@ -134,7 +142,8 @@ const getCustomResourcesAPI = (name) => {
   if (name in customTests.api && '__resources' in customTests.api[name]) {
     for (const key of customTests.api[name].__resources) {
       if (Object.keys(customTests.api.__resources).includes(key)) {
-        resources[key] = customTests.api.__resources[key];
+        const r = customTests.api.__resources[key];
+        resources[key] = r.type == 'instance' ? {...r, src: formatCode(r.src)} : customTests.api.__resources[key];
       } else {
         throw new Error(`Resource ${key} is not defined but referenced in api.${name}`);
       }

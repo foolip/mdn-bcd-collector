@@ -1,0 +1,76 @@
+api:
+  __resources:
+    audio-blip:
+      type: audio
+      src:
+        - /media/blip.mp3
+        - /media/blip.ogg
+    webGL:
+      type: instance
+      src: >-
+        var canvas = document.createElement('canvas');
+        if (!canvas) {
+          return false;
+        };
+        return canvas.getContext('webgl2') || canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+  foo:
+    __base: var instance = 1;
+    __test: return instance + 4;
+    bar: return 1 + 1;
+    __additional:
+      multiple: return 1 + 1 + 1;
+      one.only: return 1;
+  import1:
+    __base: >-
+      <%api.foo:a%>
+      var instance = a;
+  import2:
+    __base: >-
+      <%api.import1:b%>
+      var instance = b;
+  straightimport:
+    __base: <%api.foo:instance%>
+  badimport:
+    __base: <%api.foobar:apple%>
+  fig:
+    __test: return 2;
+  apple:
+    __base: var a = 1;
+    bar: return a + 3;
+  invalid:
+    __base: var a = await func);
+  promise:
+    __base: var promise = somePromise();
+  newpromise:
+    __base: >-
+      <%api.promise:p%>
+      var promise = p.then(function() {});
+  audiocontext:
+    __resources:
+      - audio-blip
+  badresource:
+    __resources:
+      - bad-resource
+  WebGLRenderingContext:
+    __resources:
+      - webGL
+    __base: return reusableInstances.webGL;
+  ANGLE_instanced_arrays:
+    __base: >-
+      var canvas = document.createElement('canvas');
+      var gl = canvas.getContext('webgl');
+      var instance = gl.getExtension('ANGLE_instanced_arrays');
+    __test: return !!instance;
+    drawArraysInstancedANGLE: return true && instance && 'drawArraysInstancedANGLE' in instance;
+  Scope:
+    __base: var scope = Scope;
+    __test: return !!scope;
+    specialWorklet: return scope && 'specialWorklet' in scope;
+  Document:
+    charset: return document.charset == "UTF-8";
+    __additional:
+      loaded.loaded_is_boolean: return typeof document.loaded === "boolean";
+css:
+  properties:
+    foo: return 1;
+    bar: <%css.properties.foo:a%>

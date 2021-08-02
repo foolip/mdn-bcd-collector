@@ -20,7 +20,7 @@
     "gcp-build": "npm run build",
     "deploy": "gcloud app deploy",
     "start": "node app.js",
-    "start-dev": "npm i && nodemon -e js,json,idl --exec \"npm run build && npm start\"",
+    "start-dev": "npm i && nodemon -e js,json,idl,yaml --exec \"npm run build && npm start\"",
     "unittest": "node scripts.js unittest",
     "coverage": "nyc report -r lcov && open-cli coverage/lcov-report/index.html",
     "test": "npm run lint && npm run unittest",
@@ -83,6 +83,7 @@
     "puppeteer-to-istanbul": "1.4.0",
     "selenium-webdriver": "3.6.0",
     "sinon": "11.1.2",
-    "webidl2": "24.1.2"
+    "webidl2": "24.1.2",
+    "yaml": "^2.0.0-7"
   }
 }
