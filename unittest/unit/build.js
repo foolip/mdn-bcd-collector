@@ -36,7 +36,7 @@ const {
   getCustomResourcesAPI,
   cssPropertyToIDLAttribute,
   buildCSS,
-  getCustomTestCSS,
+  getCustomTestCSS
 } = require('../../build');
 
 describe('build', () => {
@@ -171,12 +171,12 @@ describe('build', () => {
   describe('getCustomResourcesAPI', () => {
     it('get resources', () => {
       assert.deepEqual(
-        getCustomResourcesAPI('audiocontext'), {
-          'audio-blip': {
-            type: 'audio',
-            src: ['/media/blip.mp3', '/media/blip.ogg']
+          getCustomResourcesAPI('audiocontext'), {
+            'audio-blip': {
+              type: 'audio',
+              src: ['/media/blip.mp3', '/media/blip.ogg']
+            }
           }
-        }
       );
     });
 
