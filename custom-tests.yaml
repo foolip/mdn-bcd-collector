@@ -60,8 +60,7 @@ api:
         if (!canvas) {
           return false;
         };
-        return canvas.getContext('webgl2') || canvas.getContext('webgl')
-        || canvas.getContext('experimental-webgl');
+        return canvas.getContext('webgl2') || canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
     webGL1:
       type: instance
       src: >-
@@ -69,8 +68,7 @@ api:
         if (!canvas) {
           return false;
         };
-        return canvas.getContext('webgl') ||
-        canvas.getContext('experimental-webgl');
+        return canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
     webGL2:
       type: instance
       src: >-
