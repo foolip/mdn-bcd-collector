@@ -182,9 +182,9 @@ describe('build', () => {
 
       assert.deepEqual(
           getCustomResourcesAPI('WebGLRenderingContext'), {
-            'webGL': {
+            webGL: {
               type: 'instance',
-              src: "var canvas = document.createElement('canvas');\nif (!canvas) {\n  return false;\n}\nreturn (\n  canvas.getContext('webgl2') ||\n  canvas.getContext('webgl') ||\n  canvas.getContext('experimental-webgl')\n);"
+              src: 'var canvas = document.createElement(\'canvas\');\nif (!canvas) {\n  return false;\n}\nreturn (\n  canvas.getContext(\'webgl2\') ||\n  canvas.getContext(\'webgl\') ||\n  canvas.getContext(\'experimental-webgl\')\n);'
             }
           }
       );
@@ -269,7 +269,7 @@ describe('build', () => {
             type: 'audio',
             src: ['/media/blip.mp3', '/media/blip.ogg']
           }
-        },
+        }
       });
     });
 
