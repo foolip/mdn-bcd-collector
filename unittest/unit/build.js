@@ -21,7 +21,6 @@ const assert = chai.assert;
 const expect = chai.expect;
 
 const WebIDL2 = require('webidl2');
-const proxyquire = require('proxyquire').noCallThru();
 const sinon = require('sinon');
 
 const {
@@ -32,11 +31,13 @@ const {
   validateIDL,
   buildIDLTests,
   buildIDL,
+  getCustomTestAPI,
+  getCustomSubtestsAPI,
+  getCustomResourcesAPI,
   cssPropertyToIDLAttribute,
-  buildCSS
-} = proxyquire('../../build', {
-  './custom-tests.json': {api: {__resources: {}}, css: {}}
-});
+  buildCSS,
+  getCustomTestCSS,
+} = require('../../build');
 
 describe('build', () => {
   describe('getCustomTestAPI', () => {
@@ -45,41 +46,32 @@ describe('build', () => {
     });
 
     describe('no custom tests', () => {
-      const {getCustomTestAPI} = proxyquire('../../build', {
-        './custom-tests.json': {api: {__resources: {}}, css: {}}
-      });
-
       it('interface', () => {
-        assert.equal(getCustomTestAPI('foo'), false);
+        assert.equal(getCustomTestAPI('nonexistent'), false);
       });
 
       it('member', () => {
-        assert.equal(getCustomTestAPI('foo', 'bar'), false);
+        assert.equal(getCustomTestAPI('nonexistent', 'ghost'), false);
       });
     });
 
-    describe('custom test for interface only', () => {
-      const {getCustomTestAPI} = proxyquire('../../build', {
-        './custom-tests.json': {
-          api: {
-            foo: {
-              __base: 'var a = 1;',
-              __test: 'return a;'
-            }
-          }
-        }
-      });
-
+    describe('custom test for interface and member', () => {
       it('interface', () => {
         assert.equal(
             getCustomTestAPI('foo'),
-            '(function () {\n  var a = 1;\n  return a;\n})();');
+            '(function () {\n  var instance = 1;\n  return instance + 4;\n})();');
       });
 
-      it('member', () => {
+      it('member (custom)', () => {
         assert.equal(
             getCustomTestAPI('foo', 'bar'),
-            '(function () {\n  var a = 1;\n  return \'bar\' in instance;\n})();');
+            '(function () {\n  var instance = 1;\n  return 1 + 1;\n})();');
+      });
+
+      it('member (default)', () => {
+        assert.equal(
+            getCustomTestAPI('foo', 'baz'),
+            '(function () {\n  var instance = 1;\n  return \'baz\' in instance;\n})();');
       });
 
       it('constructor', () => {
@@ -88,214 +80,74 @@ describe('build', () => {
     });
 
     describe('custom test for interface only, no base', () => {
-      const {getCustomTestAPI} = proxyquire('../../build', {
-        './custom-tests.json': {
-          api: {
-            foo: {
-              __test: 'return 1;'
-            }
-          }
-        }
-      });
-
       it('interface', () => {
-        assert.equal(getCustomTestAPI('foo'), '(function () {\n  return 1;\n})();');
+        assert.equal(getCustomTestAPI('fig'), '(function () {\n  return 2;\n})();');
       });
 
       it('member', () => {
-        assert.equal(getCustomTestAPI('foo', 'bar'), false);
+        assert.equal(getCustomTestAPI('fig', 'ghost'), false);
       });
     });
 
     describe('custom test for member only', () => {
-      const {getCustomTestAPI} = proxyquire('../../build', {
-        './custom-tests.json': {
-          api: {
-            foo: {
-              __base: 'var a = 1;',
-              bar: 'return a + 1;'
-            }
-          }
-        }
-      });
-
       it('interface', () => {
         assert.equal(
-            getCustomTestAPI('foo'),
+            getCustomTestAPI('apple'),
             '(function () {\n  var a = 1;\n  return !!instance;\n})();');
       });
 
       it('member', () => {
         assert.equal(
-            getCustomTestAPI('foo', 'bar'),
-            '(function () {\n  var a = 1;\n  return a + 1;\n})();');
-      });
-    });
-
-    describe('custom test for member only, no __base', () => {
-      const {getCustomTestAPI} = proxyquire('../../build', {
-        './custom-tests.json': {
-          api: {
-            foo: {
-              bar: 'return 1 + 1;'
-            }
-          }
-        }
-      });
-
-      it('interface', () => {
-        assert.equal(getCustomTestAPI('foo'), false);
-      });
-
-      it('member', () => {
-        assert.equal(
-            getCustomTestAPI('foo', 'bar'),
-            '(function () {\n  return 1 + 1;\n})();');
-      });
-    });
-
-    describe('custom test for member with subtests', () => {
-      const {getCustomTestAPI} = proxyquire('../../build', {
-        './custom-tests.json': {
-          api: {
-            foo: {
-              bar: 'return 1 + 1;',
-              __additional: {
-                multiple: 'return 1 + 1 + 1;',
-                one: 'return 1;'
-              }
-            }
-          }
-        }
-      });
-
-      it('interface', () => {
-        assert.equal(getCustomTestAPI('foo'), false);
-      });
-
-      it('member', () => {
-        assert.equal(
-            getCustomTestAPI('foo', 'bar'),
-            '(function () {\n  return 1 + 1;\n})();');
-      });
-    });
-
-    describe('custom test for interface and member', () => {
-      const {getCustomTestAPI} = proxyquire('../../build', {
-        './custom-tests.json': {
-          api: {
-            foo: {
-              __base: 'var a = 1;',
-              __test: 'return a;',
-              bar: 'return a + 1;'
-            }
-          }
-        }
-      });
-
-      it('interface', () => {
-        assert.equal(
-            getCustomTestAPI('foo'),
-            '(function () {\n  var a = 1;\n  return a;\n})();');
-      });
-
-      it('member', () => {
-        assert.equal(
-            getCustomTestAPI('foo', 'bar'),
-            '(function () {\n  var a = 1;\n  return a + 1;\n})();');
+            getCustomTestAPI('apple', 'bar'),
+            '(function () {\n  var a = 1;\n  return a + 3;\n})();');
       });
     });
 
     it('custom test with invalid syntax', () => {
-      const {getCustomTestAPI} = proxyquire('../../build', {
-        './custom-tests.json': {
-          api: {
-            foo: {
-              __base: 'var a = await func);'
-            }
-          }
-        }
-      });
-
-      assert.include(getCustomTestAPI('foo'), 'throw \'Test is malformed:');
+      assert.include(getCustomTestAPI('invalid'), 'throw \'Test is malformed:');
       assert.isTrue(console.error.calledOnce);
     });
 
     describe('promise-based custom tests', () => {
-      const {getCustomTestAPI} = proxyquire('../../build', {
-        './custom-tests.json': {
-          api: {
-            foo: {
-              __base: 'var promise = somePromise();'
-            },
-            foobar: {
-              __base: '<%api.foo:foo%> var promise = foo.then(function() {});'
-            }
-          }
-        }
-      });
-
       it('interface', () => {
         assert.equal(
-            getCustomTestAPI('foo'),
+            getCustomTestAPI('promise'),
             '(function () {\n  var promise = somePromise();\n  return promise.then(function (instance) {\n    return !!instance;\n  });\n})();');
       });
 
       it('member', () => {
         assert.equal(
-            getCustomTestAPI('foo', 'bar'),
+            getCustomTestAPI('promise', 'bar'),
             '(function () {\n  var promise = somePromise();\n  return promise.then(function (instance) {\n    return \'bar\' in instance;\n  });\n})();');
       });
 
       it('interface with import', () => {
         assert.equal(
-            getCustomTestAPI('foobar'),
-            '(function () {\n  var foo = somePromise();\n  if (!foo) {\n    return false;\n  }\n  var promise = foo.then(function () {});\n  return promise.then(function (instance) {\n    return !!instance;\n  });\n})();');
+            getCustomTestAPI('newpromise'),
+            '(function () {\n  var p = somePromise();\n  if (!p) {\n    return false;\n  }\n  var promise = p.then(function () {});\n  return promise.then(function (instance) {\n    return !!instance;\n  });\n})();');
       });
     });
 
     describe('import other test', () => {
-      const {getCustomTestAPI} = proxyquire('../../build', {
-        './custom-tests.json': {
-          api: {
-            foo: {
-              __base: 'var instance = 1;'
-            },
-            bar: {
-              __base: '<%api.foo:a%> var instance = a;'
-            },
-            baz: {
-              __base: '<%api.bar:b%> var instance = b;'
-            },
-            ban: {
-              __base: '<%api.foo:instance%>'
-            },
-            bad: {
-              __base: '<%api.foobar:apple%>'
-            }
-          }
-        }
-      });
-
       it('valid import', () => {
         assert.equal(
-            getCustomTestAPI('bar'),
+            getCustomTestAPI('import1'),
             '(function () {\n  var a = 1;\n  if (!a) {\n    return false;\n  }\n  var instance = a;\n  return !!instance;\n})();');
 
         assert.equal(
-            getCustomTestAPI('baz'),
+            getCustomTestAPI('import2'),
             '(function () {\n  var a = 1;\n  if (!a) {\n    return false;\n  }\n  var b = a;\n  if (!b) {\n    return false;\n  }\n  var instance = b;\n  return !!instance;\n})();');
       });
 
       it('valid import: import is instance', () => {
         assert.equal(
-            getCustomTestAPI('ban'),
+            getCustomTestAPI('straightimport'),
             '(function () {\n  var instance = 1;\n  return !!instance;\n})();');
       });
 
       it('invalid import', () => {
         assert.equal(
-            getCustomTestAPI('bad'),
+            getCustomTestAPI('badimport'),
             '(function () {\n  throw \'Test is malformed: <%api.foobar:apple%> is an invalid reference\';\n  return !!instance;\n})();');
         assert.isTrue(console.error.calledOnce);
       });
@@ -308,121 +160,48 @@ describe('build', () => {
 
   describe('getCustomSubtestsAPI', () => {
     it('get subtests', () => {
-      const {getCustomSubtestsAPI} = proxyquire('../../build', {
-        './custom-tests.json': {
-          api: {
-            foo: {
-              __additional: {
-                multiple: 'return 1 + 1 + 1;',
-                'one.only': 'return 1;'
-              }
-            }
-          }
-        }
-      });
-
       assert.deepEqual(
           getCustomSubtestsAPI('foo', 'bar'), {
-            multiple: '(function () {\n  return 1 + 1 + 1;\n})();',
-            'one.only': '(function () {\n  return 1;\n})();'
+            multiple: '(function () {\n  var instance = 1;\n  return 1 + 1 + 1;\n})();',
+            'one.only': '(function () {\n  var instance = 1;\n  return 1;\n})();'
           });
     });
   });
 
   describe('getCustomResourcesAPI', () => {
     it('get resources', () => {
-      const {getCustomResourcesAPI} = proxyquire('../../build', {
-        './custom-tests.json': {
-          api: {
-            __resources: {
-              'audio-blip': {
-                type: 'audio',
-                src: ['/media/blip.mp3', '/media/blip.ogg']
-              }
-            },
-            foo: {
-              __resources: ['audio-blip']
-            }
+      assert.deepEqual(
+        getCustomResourcesAPI('audiocontext'), {
+          'audio-blip': {
+            type: 'audio',
+            src: ['/media/blip.mp3', '/media/blip.ogg']
           }
         }
-      });
-
-      assert.deepEqual(
-          getCustomResourcesAPI('foo'), {
-            'audio-blip': {
-              type: 'audio',
-              src: ['/media/blip.mp3', '/media/blip.ogg']
-            }
-          });
+      );
     });
 
     it('no resources', () => {
-      const {getCustomResourcesAPI} = proxyquire('../../build', {
-        './custom-tests.json': {
-          api: {
-            __resources: {},
-            foo: {}
-          }
-        }
-      });
-
       assert.deepEqual(getCustomResourcesAPI('foo'), {});
     });
 
     it('try to get invalid resource', () => {
-      const {getCustomResourcesAPI} = proxyquire('../../build', {
-        './custom-tests.json': {
-          api: {
-            __resources: {},
-            foo: {
-              __resources: ['audio-blip']
-            }
-          }
-        }
-      });
-
       assert.throws(() => {
-        getCustomResourcesAPI('foo');
+        getCustomResourcesAPI('badresource');
       }, Error,
-      'Resource audio-blip is not defined but referenced in api.foo');
+      'Resource bad-resource is not defined but referenced in api.badresource');
     });
   });
 
   describe('getCustomTestCSS', () => {
     it('no custom tests', () => {
-      const {getCustomTestCSS} = proxyquire('../../build', {
-        './custom-tests.json': {api: {}, css: {}}
-      });
-
-      assert.equal(getCustomTestCSS('foo'), false);
+      assert.equal(getCustomTestCSS('ghost'), false);
     });
 
     it('custom test for property', () => {
-      const {getCustomTestCSS} = proxyquire('../../build', {
-        './custom-tests.json': {
-          css: {
-            properties: {
-              foo: 'return 1;'
-            }
-          }
-        }
-      });
-
       assert.equal(getCustomTestCSS('foo'), '(function () {\n  return 1;\n})();');
     });
 
     it('import (not implemented)', () => {
-      const {getCustomTestCSS} = proxyquire('../../build', {
-        './custom-tests.json': {
-          css: {
-            properties: {
-              foo: 'return 1;',
-              bar: '<%css.properties.foo:a%>'
-            }
-          }
-        }
-      });
-
       assert.equal(getCustomTestCSS('bar'), '(function () {\n  throw \'Test is malformed: import <%css.properties.foo:a%>, category css is not importable\';\n})();');
     });
   });
@@ -869,23 +648,6 @@ describe('build', () => {
             readonly attribute boolean loaded;
             readonly attribute DOMString? charset;
           };`);
-      const {buildIDLTests} = proxyquire('../../build', {
-        './custom-tests.json': {
-          api: {
-            ANGLE_instanced_arrays: {
-              __base: 'var canvas = document.createElement(\'canvas\'); var gl = canvas.getContext(\'webgl\'); var instance = gl.getExtension(\'ANGLE_instanced_arrays\');',
-              __test: 'return !!instance;',
-              drawArraysInstancedANGLE: 'return true && instance && \'drawArraysInstancedANGLE\' in instance;'
-            },
-            Document: {
-              charset: 'return document.charset == "UTF-8";',
-              __additional: {
-                'loaded.loaded_is_boolean': 'return typeof document.loaded === "boolean";'
-              }
-            }
-          }
-        }
-      });
 
       assert.deepEqual(buildIDLTests(ast), {
         'api.ANGLE_instanced_arrays': {
@@ -1123,10 +885,10 @@ describe('build', () => {
           `[Exposed=Window] interface Worker {};
            [Exposed=Worker] interface WorkerSync {};
            [Exposed=(Window,Worker)] interface MessageChannel {};
-           [Exposed=Window] namespace CSS {};`);
+           [Exposed=Window] namespace console {};`);
       assert.deepEqual(buildIDLTests(ast), {
-        'api.CSS': {
-          code: '"CSS" in self',
+        'api.console': {
+          code: '"console" in self',
           exposure: ['Window']
         },
         'api.MessageChannel': {
@@ -1203,29 +965,17 @@ describe('build', () => {
     it('namespace with custom test', () => {
       const ast = WebIDL2.parse(
           `[Exposed=Window]
-           namespace CSS {
-             readonly attribute any paintWorklet;
+           namespace Scope {
+             readonly attribute any specialWorklet;
            };`);
 
-      const {buildIDLTests} = proxyquire('../../build', {
-        './custom-tests.json': {
-          api: {
-            CSS: {
-              __base: 'var css = CSS;',
-              __test: 'return !!css;',
-              paintWorklet: 'return css && \'paintWorklet\' in css;'
-            }
-          }
-        }
-      });
-
       assert.deepEqual(buildIDLTests(ast), {
-        'api.CSS': {
-          code: '(function () {\n  var css = CSS;\n  return !!css;\n})();',
+        'api.Scope': {
+          code: '(function () {\n  var scope = Scope;\n  return !!scope;\n})();',
           exposure: ['Window']
         },
-        'api.CSS.paintWorklet': {
-          code: '(function () {\n  var css = CSS;\n  return css && \'paintWorklet\' in css;\n})();',
+        'api.Scope.specialWorklet': {
+          code: '(function () {\n  var scope = Scope;\n  return scope && \'specialWorklet\' in scope;\n})();',
           exposure: ['Window']
         }
       });
