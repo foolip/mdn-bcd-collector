@@ -24,7 +24,7 @@ const YAML = require('yaml');
 
 const customCSS = require('./custom-css.json');
 const customTests = YAML.parse(
-  fs.readFileSync(process.env.NODE_ENV === 'test' ? './unittest/unit/custom-tests.test.yaml' : './custom-tests.yaml', 'utf8')
+    fs.readFileSync(process.env.NODE_ENV === 'test' ? './unittest/unit/custom-tests.test.yaml' : './custom-tests.yaml', 'utf8')
 );
 const customIDL = require('./custom-idl');
 const customJS = require('./custom-js.json');
