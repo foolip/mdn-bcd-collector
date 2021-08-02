@@ -1665,7 +1665,7 @@ api:
       if (!canvas) {
         return false;
       };
-      return canvas.getContext('webgl2') || canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+      var instance = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
   WEBGL_blend_equation_advanced_coherent:
     __resources:
       - webGL
