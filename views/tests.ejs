@@ -4,7 +4,9 @@
   <input id="export-download" type=submit name=download value="Export for download" disabled>
   <input id="export-github" type=submit name=github value="Export to GitHub" disabled>
 </form>
-<div id="results"></div>
+<div id="results">
+  <hr />
+</div>
 
 <% let resources = {}; %>
 <% tests.forEach(function(test) {
@@ -43,7 +45,7 @@
 <script>
   <% for (const [instanceId, instance] of Object.entries(resources)
     .filter((item) => (item[1].type === 'instance'))) { %>
-    bcd.addInstance("<%- instanceId %>", "<%- instance.src %>");
+    bcd.addInstance("<%- instanceId %>", <%- JSON.stringify(instance.src) %>);
   <% }; %>
   <% tests.forEach(function(test) { %>
     bcd.addTest("<%- test.ident %>", <%- JSON.stringify(test.tests) %>, "<%- test.exposure %>");

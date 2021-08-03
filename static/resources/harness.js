@@ -33,7 +33,9 @@
     timedout: false,
     completed: false
   };
-  var reusableInstances = {};
+  var reusableInstances = {
+    __sources: {}
+  };
 
   /* istanbul ignore next */
   function consoleLog(message) {
@@ -93,8 +95,11 @@
   }
 
   function addInstance(name, code) {
+    var newCode = '(function () {\n  ' + code.replace(/\n/g, '\n  ') + '\n})()';
+    reusableInstances.__sources[name] = newCode;
+
     try {
-      reusableInstances[name] = eval('(function () {' + code + '})()');
+      reusableInstances[name] = eval(newCode);
     } catch (e) {
       reusableInstances[name] = false;
       consoleError(e);
@@ -556,6 +561,56 @@
     }
   }
 
+  function renderReportEl(result, resultsEl) {
+    var resultEl = document.createElement('details');
+    resultEl.className = 'result';
+
+    var resultSummaryEl = document.createElement('summary');
+    resultSummaryEl.innerHTML = result.name;
+    if (result.name.indexOf('css.') != 0) {
+      resultSummaryEl.innerHTML += ' (' + result.info.exposure + ' exposure)';
+    }
+    resultSummaryEl.innerHTML += ':&nbsp;';
+
+    var resultValue = stringify(result.result);
+    var resultValueEl = document.createElement('span');
+    resultValueEl.className = 'result-value result-value-' + resultValue;
+    resultValueEl.innerHTML = resultValue;
+    resultSummaryEl.appendChild(resultValueEl);
+    resultEl.appendChild(resultSummaryEl);
+
+    var resultInfoEl = document.createElement('div');
+    resultInfoEl.className = 'result-info';
+
+    if (result.message) {
+      var resultMessageEl = document.createElement('p');
+      resultMessageEl.className = 'result-message';
+      resultMessageEl.innerHTML = result.message;
+      resultInfoEl.appendChild(resultMessageEl);
+    }
+
+    if (result.info.code) {
+      var resultCodeEl = document.createElement('code');
+      var code = result.info.code;
+
+      // Display the code that creates the reusable instance in results
+      var reusedInstances = result.info.code.match(/reusableInstances\.([^;]*)/g);
+      if (reusedInstances) {
+        for (var i = 0; i < reusedInstances.length; i++) {
+          var reusedInstance = reusedInstances[i].replace('reusableInstances.', '');
+          code = reusedInstances[i] + ' = ' + reusableInstances.__sources[reusedInstance] + '\n\n' + code;
+        }
+      }
+
+      resultCodeEl.className = 'result-code';
+      resultCodeEl.innerHTML = code.replace(/ /g, '&nbsp;').replace(/\n/g, '<br>');
+      resultInfoEl.appendChild(resultCodeEl);
+    }
+
+    resultEl.appendChild(resultInfoEl);
+    resultsEl.appendChild(resultEl);
+  }
+
   function report(results, hideResults) {
     updateStatus('Tests complete. Posting results to server...');
 
@@ -597,47 +652,8 @@
     var resultsEl = document.getElementById('results');
 
     if (resultsEl && !hideResults) {
-      resultsEl.appendChild(document.createElement('hr'));
-
       for (var i=0; i<results.length; i++) {
-        var result = results[i];
-
-        var resultEl = document.createElement('details');
-        resultEl.className = 'result';
-
-        var resultSummaryEl = document.createElement('summary');
-        resultSummaryEl.innerHTML = result.name;
-        if (result.name.indexOf('css.') != 0) {
-          resultSummaryEl.innerHTML += ' (' + result.info.exposure + ' exposure)';
-        }
-        resultSummaryEl.innerHTML += ':&nbsp;';
-
-        var resultValue = stringify(result.result);
-        var resultValueEl = document.createElement('span');
-        resultValueEl.className = 'result-value result-value-' + resultValue;
-        resultValueEl.innerHTML = resultValue;
-        resultSummaryEl.appendChild(resultValueEl);
-        resultEl.appendChild(resultSummaryEl);
-
-        var resultInfoEl = document.createElement('div');
-        resultInfoEl.className = 'result-info';
-
-        if (result.message) {
-          var resultMessageEl = document.createElement('p');
-          resultMessageEl.className = 'result-message';
-          resultMessageEl.innerHTML = result.message;
-          resultInfoEl.appendChild(resultMessageEl);
-        }
-
-        if (result.info.code) {
-          var resultCodeEl = document.createElement('code');
-          resultCodeEl.className = 'result-code';
-          resultCodeEl.innerHTML = result.info.code.replace(/ /g, '&nbsp;').replace(/\n/g, '<br>');
-          resultInfoEl.appendChild(resultCodeEl);
-        }
-
-        resultEl.appendChild(resultInfoEl);
-        resultsEl.appendChild(resultEl);
+        renderReportEl(results[i], resultsEl);
       }
     }
   }

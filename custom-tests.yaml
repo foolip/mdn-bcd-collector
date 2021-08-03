@@ -159,6 +159,14 @@ api:
     __resources:
       - audioContext
     __base: <%api.GainNode:gainNode%> var instance = gainNode.gain;
+  AudioProcessingEvent:
+    __base: >-
+      var instance;
+      try {
+        instance = new AudioProcessingEvent('');
+      } catch(e) {
+        instance = document.createEvent('AudioProcessingEvent');
+      }
   AudioScheduledSourceNode:
     __resources:
       - audioContext
@@ -208,6 +216,8 @@ api:
         return ctx.decodeAudioData.length === 1;
   # BatteryManager: # This promise seems to remain pending when running all tests
   #   __base: var promise = navigator.getBattery();
+  BeforeUnloadEvent:
+    __base: var instance = document.createEvent('BeforeUnloadEvent');
   BiquadFilterNode:
     __resources:
       - audioContext
@@ -267,6 +277,22 @@ api:
       var instance = reusableInstances.audioContext.createChannelSplitter();
   CharacterData:
     __base: <%api.Text:instance%>
+  CloseEvent:
+    __base: >-
+      var instance;
+      try {
+        instance = new CloseEvent('');
+      } catch(e) {
+        instance = document.createEvent('CloseEvent');
+      }
+  CompositionEvent:
+    __base: >-
+      var instance;
+      try {
+        instance = new CompositionEvent('');
+      } catch(e) {
+        instance = document.createEvent('CompositionEvent');
+      }
   ConstantSourceNode:
     __resources:
       - audioContext
@@ -391,6 +417,14 @@ api:
     __base: >-
       var stylesheet = reusableInstances.createStyleSheet('@viewport {width: 100vw;}');
       var instance = stylesheet.cssRules.item(0);
+  CustomEvent:
+    __base: >-
+      var instance;
+      try {
+        instance = new CustomEvent('custom');
+      } catch(e) {
+        instance = document.createEvent('CustomEvent');
+      }
   DelayNode:
     __resources:
       - audioContext
@@ -399,6 +433,22 @@ api:
         return false;
       }
       var instance = reusableInstances.audioContext.createDelay();
+  DeviceMotionEvent:
+    __base: >-
+      var instance;
+      try {
+        instance = new DeviceMotionEvent('');
+      } catch(e) {
+        instance = document.createEvent('DeviceMotionEvent');
+      }
+  DeviceOrientationEvent:
+    __base: >-
+      var instance;
+      try {
+        instance = new DeviceOrientationEvent('');
+      } catch(e) {
+        instance = document.createEvent('DeviceOrientationEvent');
+      }
   Document:
     __base: var instance = document;
     __additional:
@@ -451,6 +501,14 @@ api:
         elm.className = ' foo bar foo ';
         elm.classList.remove('bar');
         return elm.className === 'foo';
+  DragEvent:
+    __base: >-
+      var instance;
+      try {
+        instance = new DragEvent('');
+      } catch(e) {
+        instance = document.createEvent('DragEvent');
+      }
   DynamicsCompressorNode:
     __resources:
       - audioContext
@@ -466,6 +524,14 @@ api:
         instance = document.createElementNS('', 'el');
       } catch(e) {
         instance = document.createElement('b');
+      }
+  ErrorEvent:
+    __base: >-
+      var instance;
+      try {
+        instance = new ErrorEvent('');
+      } catch(e) {
+        instance = document.createEvent('ErrorEvent');
       }
   Event:
     __base: >-
@@ -589,10 +655,24 @@ api:
         return false;
       };
       var instance = reusableInstances.webGL2.getExtension('EXT_texture_norm16');
+  ExtendableEvent:
+    __base: var instance = new ExtendableEvent('');
   External:
     __base: var instance = window.external;
+  FetchEvent:
+    __base: var instance = new FetchEvent('');
+  FocusEvent:
+    __base: >-
+      var instance;
+      try {
+        instance = new FocusEvent('');
+      } catch(e) {
+        instance = document.createEvent('FocusEvent');
+      }
   FontFace:
     __base: var instance = new FontFace('Material Design Icons', 'url(/fonts/materialdesignicons-webfont.woff)');
+  FontFaceSetLoadEvent:
+    __base: var instance = new FontFaceSetLoadEvent('');
   GainNode:
     __resources:
       - audioContext
@@ -601,6 +681,16 @@ api:
         return false;
       }
       var instance = reusableInstances.audioContext.createGain();
+  GamepadEvent:
+    __base: var instance = new GamepadEvent('');
+  HashChangeEvent:
+    __base: >-
+      var instance;
+      try {
+        instance = new HashChangeEvent('');
+      } catch(e) {
+        instance = document.createEvent('HashChangeEvent');
+      }
   History:
     __base: var instance = history;
   HTMLAllCollection:
@@ -843,6 +933,14 @@ api:
   HTMLVideoElement:
     __base: var instance = document.createElement('video');
     __test: return bcd.testObjectName(instance, 'HTMLVideoElement');
+  IDBVersionChangeEvent:
+    __base: >-
+      var instance;
+      try {
+        instance = new IDBVersionChangeEvent('');
+      } catch(e) {
+        instance = document.createEvent('IDBVersionChangeEvent');
+      }
   IIRFilterNode:
     __resources:
       - audioContext
@@ -867,6 +965,16 @@ api:
     __base: >-
       <%api.CanvasRenderingContext2D:ctx%>
       var instance = ctx.createImageData(16, 16);
+  InstallEvent:
+    __base: var instance = new InstallEvent('');
+  KeyboardEvent:
+    __base: >-
+      var instance;
+      try {
+        instance = new KeyboardEvent('');
+      } catch(e) {
+        instance = document.createEvent('KeyboardEvent');
+      }
   KHR_parallel_shader_compile:
     __resources:
       - webGL
@@ -898,6 +1006,10 @@ api:
         return false;
       }
       var instance = reusableInstances.audioContext.createMediaElementSource(document.getElementById('resource-audio-blip'));
+  MediaEncryptedEvent:
+    __base: var instance = new MediaEncryptedEvent('');
+  MediaKeyMessageEvent:
+    __base: "var instance = new MediaKeyMessageEvent('license-request', {message: new ArrayBuffer(), messageType: 'license-request'});"
   MediaList:
     __resources:
       - createStyleSheet
@@ -906,6 +1018,8 @@ api:
       var instance = stylesheet.media;
   MediaQuery:
     __base: "var instance = window.matchMedia('screen and max-width: 800px;');"
+  MediaQueryListEvent:
+    __base: var instance = new MediaQueryListEvent('');
   MediaSession:
     __base: var instance = navigator.mediaSession;
   MediaSource:
@@ -952,6 +1066,16 @@ api:
       var promise = mediaStream.then(function(ms) {
         return reusableInstances.audioContext.createMediaStreamTrackSource(ms)
       });
+  MerchantValidationEvent:
+    __base: var instance = new MerchantValidationEvent('');
+  MessageEvent:
+    __base: >-
+      var instance;
+      try {
+        instance = new MessageEvent('');
+      } catch(e) {
+        instance = document.createEvent('MessageEvent');
+      }
   MessageChannel:
     __base: >-
       if (!('MessageChannel' in self)) {
@@ -992,6 +1116,14 @@ api:
         return false;
       }
       var instance = new Notification('');
+  NotificationEvent:
+    __base: var instance = new NotificationEvent('');
+  OfflineAudioCompletionEvent:
+    __resources:
+      - audioContext
+    __base: >-
+      <%api.AudioBuffer:buffer%>
+      var instance = new OfflineAudioCompletionEvent('', {renderedBuffer: buffer});
   OfflineAudioContext:
     __resources:
       - offlineAudioContext
@@ -1085,6 +1217,14 @@ api:
         return false;
       };
       var instance = reusableInstances.webGL2.getExtension('OVR_multiview2');
+  PageTransitionEvent:
+    __base: >-
+      var instance;
+      try {
+        instance = new PageTransitionEvent('');
+      } catch(e) {
+        instance = document.createEvent('PageTransitionEvent');
+      }
   PannerNode:
     __resources:
       - audioContext
@@ -1139,16 +1279,36 @@ api:
       var instance = plugins[0];
   PluginArray:
     __base: var instance = navigator.plugins;
+  PopStateEvent:
+    __base: >-
+      var instance;
+      try {
+        instance = new PopStateEvent('');
+      } catch(e) {
+        instance = document.createEvent('PopStateEvent');
+      }
   ProcessingInstruction:
     __base: >-
       var doc = new DOMParser().parseFromString('<foo />', 'application/xml');
       var instance = doc.createProcessingInstruction('xml-stylesheet', 'href="mycss.css" type="text/css"');
+  PushEvent:
+    __base: var instance = new PushEvent('');
   Range:
     __base: var instance = document.createRange();
   Request:
     __base: var instance = new Request('');
   Response:
     __base: var instance = new Response('');
+  RTCDataChannel:
+    __base: >-
+      <%api.RTCPeerConnection:connection%>
+      var instance = connection.createDataChannel('channel');
+  RTCDataChannelEvent:
+    __base: >-
+      <%api.RTCDataChannel:channel%>
+      var instance = new RTCDataChannelEvent('', {channel: channel});
+  RTCDTMFToneChangeEvent:
+    __base: "new RTCDTMFToneChangeEvent('', {tone: ''});"
   RTCPeerConnection:
     __base: >-
       var constructor = (window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection);
@@ -1166,6 +1326,8 @@ api:
         return false;
       }
       var instance = reusableInstances.audioContext.createScriptProcessor();
+  SecurityPolicyViolationEvent:
+    __base: var instance = new SecurityPolicyViolationEvent('');
   Selection:
     __base: var instance = window.getSelection();
   ShadowRoot:
@@ -1181,6 +1343,38 @@ api:
       - speechRecognition
     __base: var instance = reusableInstances.speechRecognition;
     __test: return 'SpeechRecognition' in self
+  SpeechRecognitionErrorEvent:
+    __base: >-
+      var instance;
+      try {
+        instance = new SpeechRecognitionErrorEvent('');
+      } catch(e) {
+        instance = document.createEvent('SpeechRecognitionErrorEvent');
+      }
+  SpeechRecognitionEvent:
+    __base: >-
+      var instance;
+      try {
+        instance = new SpeechRecognitionEvent('');
+      } catch(e) {
+        instance = document.createEvent('SpeechRecognitionEvent');
+      }
+  SpeechSynthesisErrorEvent:
+    __base: >-
+      var instance;
+      try {
+        instance = new SpeechSynthesisErrorEvent('');
+      } catch(e) {
+        instance = document.createEvent('SpeechSynthesisErrorEvent');
+      }
+  SpeechSynthesisEvent:
+    __base: >-
+      var instance;
+      try {
+        instance = new SpeechSynthesisEvent('');
+      } catch(e) {
+        instance = document.createEvent('SpeechSynthesisEvent');
+      }
   StereoPannerNode:
     __resources:
       - audioContext
@@ -1189,6 +1383,14 @@ api:
         return false;
       }
       var instance = reusableInstances.audioContext.createStereoPanner();
+  StorageEvent:
+    __base: >-
+      var instance;
+      try {
+        instance = new StorageEvent('');
+      } catch(e) {
+        instance = document.createEvent('StorageEvent');
+      }
   StyleMedia:
     __base: var instance = window.styleMedia;
   StyleSheet:
@@ -1613,6 +1815,16 @@ api:
     __base: >-
       var el = document.getElementById('resource-video-blank');
       var instance = el.buffered;
+  TouchEvent:
+    __base: var instance = new TouchEvent('');
+  TrackEvent:
+    __base: >-
+      var instance;
+      try {
+        instance = new TrackEvent('');
+      } catch(e) {
+        instance = document.createEvent('TrackEvent');
+      }
   TransitionEvent:
     __base: >-
       var instance;
@@ -1622,6 +1834,14 @@ api:
       }
   TreeWalker:
     __base: var instance = document.createTreeWalker(document);
+  UIEvent:
+    __base: >-
+      var instance;
+      try {
+        instance = new UIEvent('');
+      } catch(e) {
+        instance = document.createEvent('UIEvent');
+      }
   URL:
     __base: >-
       var instance;
@@ -1659,13 +1879,22 @@ api:
         return false;
       }
       var instance = reusableInstances.audioContext.createWaveShaper();
-  WebGLRenderingContext:
+  WebGLContextEvent:
     __base: >-
-      var canvas = document.createElement('canvas');
-      if (!canvas) {
-        return false;
-      };
-      return canvas.getContext('webgl2') || canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+      var instance;
+      try {
+        instance = new WebGLContextEvent('');
+      } catch(e) {
+        instance = document.createEvent('WebGLContextEvent');
+      }
+  WebGLRenderingContext:
+    __resources:
+      - webGL1
+    __base: var instance = reusableInstances.webGL1;
+  WebGL2RenderingContext:
+    __resources:
+      - webGL2
+    __base: var instance = reusableInstances.webGL2;
   WEBGL_blend_equation_advanced_coherent:
     __resources:
       - webGL
@@ -1883,6 +2112,7 @@ api:
     __base: >-
       <%api.XPathExpression:exp%>
       var instance = exp.evaluate(document);
+
 css:
   properties:
     custom-property: >-
