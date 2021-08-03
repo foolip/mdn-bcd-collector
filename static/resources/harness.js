@@ -33,7 +33,9 @@
     timedout: false,
     completed: false
   };
-  var reusableInstances = {};
+  var reusableInstances = {
+    __sources: {}
+  };
 
   /* istanbul ignore next */
   function consoleLog(message) {
@@ -93,8 +95,11 @@
   }
 
   function addInstance(name, code) {
+    var newCode = '(function () {\n  ' + code.replace(/\n/g, '\n  ') + '\n})()';
+    reusableInstances.__sources[name] = newCode;
+
     try {
-      reusableInstances[name] = eval('(function () {' + code + '})()');
+      reusableInstances[name] = eval(newCode);
     } catch (e) {
       reusableInstances[name] = false;
       consoleError(e);
@@ -586,8 +591,19 @@
 
     if (result.info.code) {
       var resultCodeEl = document.createElement('code');
+      var code = result.info.code;
+
+      // Display the code that creates the reusable instance in results
+      var reusedInstances = result.info.code.match(/reusableInstances\.([^;]*)/g);
+      if (reusedInstances) {
+        for (var i = 0; i < reusedInstances.length; i++) {
+          var reusedInstance = reusedInstances[i].replace('reusableInstances.', '');
+          code = reusedInstances[i] + ' = ' + reusableInstances.__sources[reusedInstance] + '\n\n' + code;
+        }
+      }
+
       resultCodeEl.className = 'result-code';
-      resultCodeEl.innerHTML = result.info.code.replace(/ /g, '&nbsp;').replace(/\n/g, '<br>');
+      resultCodeEl.innerHTML = code.replace(/ /g, '&nbsp;').replace(/\n/g, '<br>');
       resultInfoEl.appendChild(resultCodeEl);
     }
 
