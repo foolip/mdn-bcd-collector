@@ -214,8 +214,10 @@ api:
       decodeAudioData.promise_syntax: >-
         <%api.BaseAudioContext:ctx%>
         return ctx.decodeAudioData.length === 1;
-  # BatteryManager: # This promise seems to remain pending when running all tests
-  #   __base: var promise = navigator.getBattery();
+  BatteryManager:
+    __base: >-
+      var promise = navigator.getBattery();
+      promise.then(function() {});
   BeforeUnloadEvent:
     __base: var instance = document.createEvent('BeforeUnloadEvent');
   BiquadFilterNode:
