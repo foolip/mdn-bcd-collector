@@ -556,6 +556,45 @@
     }
   }
 
+  function renderReportEl(result, resultsEl) {
+    var resultEl = document.createElement('details');
+    resultEl.className = 'result';
+
+    var resultSummaryEl = document.createElement('summary');
+    resultSummaryEl.innerHTML = result.name;
+    if (result.name.indexOf('css.') != 0) {
+      resultSummaryEl.innerHTML += ' (' + result.info.exposure + ' exposure)';
+    }
+    resultSummaryEl.innerHTML += ':&nbsp;';
+
+    var resultValue = stringify(result.result);
+    var resultValueEl = document.createElement('span');
+    resultValueEl.className = 'result-value result-value-' + resultValue;
+    resultValueEl.innerHTML = resultValue;
+    resultSummaryEl.appendChild(resultValueEl);
+    resultEl.appendChild(resultSummaryEl);
+
+    var resultInfoEl = document.createElement('div');
+    resultInfoEl.className = 'result-info';
+
+    if (result.message) {
+      var resultMessageEl = document.createElement('p');
+      resultMessageEl.className = 'result-message';
+      resultMessageEl.innerHTML = result.message;
+      resultInfoEl.appendChild(resultMessageEl);
+    }
+
+    if (result.info.code) {
+      var resultCodeEl = document.createElement('code');
+      resultCodeEl.className = 'result-code';
+      resultCodeEl.innerHTML = result.info.code.replace(/ /g, '&nbsp;').replace(/\n/g, '<br>');
+      resultInfoEl.appendChild(resultCodeEl);
+    }
+
+    resultEl.appendChild(resultInfoEl);
+    resultsEl.appendChild(resultEl);
+  }
+
   function report(results, hideResults) {
     updateStatus('Tests complete. Posting results to server...');
 
@@ -597,47 +636,8 @@
     var resultsEl = document.getElementById('results');
 
     if (resultsEl && !hideResults) {
-      resultsEl.appendChild(document.createElement('hr'));
-
       for (var i=0; i<results.length; i++) {
-        var result = results[i];
-
-        var resultEl = document.createElement('details');
-        resultEl.className = 'result';
-
-        var resultSummaryEl = document.createElement('summary');
-        resultSummaryEl.innerHTML = result.name;
-        if (result.name.indexOf('css.') != 0) {
-          resultSummaryEl.innerHTML += ' (' + result.info.exposure + ' exposure)';
-        }
-        resultSummaryEl.innerHTML += ':&nbsp;';
-
-        var resultValue = stringify(result.result);
-        var resultValueEl = document.createElement('span');
-        resultValueEl.className = 'result-value result-value-' + resultValue;
-        resultValueEl.innerHTML = resultValue;
-        resultSummaryEl.appendChild(resultValueEl);
-        resultEl.appendChild(resultSummaryEl);
-
-        var resultInfoEl = document.createElement('div');
-        resultInfoEl.className = 'result-info';
-
-        if (result.message) {
-          var resultMessageEl = document.createElement('p');
-          resultMessageEl.className = 'result-message';
-          resultMessageEl.innerHTML = result.message;
-          resultInfoEl.appendChild(resultMessageEl);
-        }
-
-        if (result.info.code) {
-          var resultCodeEl = document.createElement('code');
-          resultCodeEl.className = 'result-code';
-          resultCodeEl.innerHTML = result.info.code.replace(/ /g, '&nbsp;').replace(/\n/g, '<br>');
-          resultInfoEl.appendChild(resultCodeEl);
-        }
-
-        resultEl.appendChild(resultInfoEl);
-        resultsEl.appendChild(resultEl);
+        renderReportEl(results[i], resultsEl);
       }
     }
   }
