@@ -1660,19 +1660,13 @@ api:
       }
       var instance = reusableInstances.audioContext.createWaveShaper();
   WebGLRenderingContext:
-    __base: >-
-      var canvas = document.createElement('canvas');
-      if (!canvas) {
-        return false;
-      };
-      var instance = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+    __resources:
+      - webGL1
+    __base: var instance = reusableInstances.webGL1;
   WebGL2RenderingContext:
-    __base: >-
-      var canvas = document.createElement('canvas');
-      if (!canvas) {
-        return false;
-      };
-      var instance = canvas.getContext('webgl2');
+    __resources:
+      - webGL2
+    __base: var instance = reusableInstances.webGL2;
   WEBGL_blend_equation_advanced_coherent:
     __resources:
       - webGL
