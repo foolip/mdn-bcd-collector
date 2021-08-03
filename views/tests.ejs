@@ -43,7 +43,7 @@
 <script>
   <% for (const [instanceId, instance] of Object.entries(resources)
     .filter((item) => (item[1].type === 'instance'))) { %>
-    bcd.addInstance("<%- instanceId %>", "<%- instance.src %>");
+    bcd.addInstance("<%- instanceId %>", <%- JSON.stringify(instance.src) %>);
   <% }; %>
   <% tests.forEach(function(test) { %>
     bcd.addTest("<%- test.ident %>", <%- JSON.stringify(test.tests) %>, "<%- test.exposure %>");
