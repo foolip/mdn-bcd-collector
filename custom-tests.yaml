@@ -1666,6 +1666,13 @@ api:
         return false;
       };
       var instance = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
+  WebGL2RenderingContext:
+    __base: >-
+      var canvas = document.createElement('canvas');
+      if (!canvas) {
+        return false;
+      };
+      var instance = canvas.getContext('webgl2');
   WEBGL_blend_equation_advanced_coherent:
     __resources:
       - webGL
