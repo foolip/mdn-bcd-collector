@@ -248,7 +248,8 @@
 
     function success(v) {
       processTestResult(v, data, i, oncomplete);
-    };
+    }
+
     function fail(e) {
       var v;
       if (e instanceof Error) {
@@ -257,7 +258,7 @@
         v = new Error(e);
       }
       processTestResult(v, data, i, oncomplete);
-    };
+    }
 
     try {
       var value = eval(test.code);
