@@ -216,6 +216,9 @@ api:
         return ctx.decodeAudioData.length === 1;
   BatteryManager:
     __base: >-
+      if (!('getBattery' in navigator)) {
+        return false;
+      };
       var promise = navigator.getBattery();
       promise.then(function() {});
   BeforeUnloadEvent:
