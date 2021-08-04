@@ -942,6 +942,23 @@ api:
   HTMLVideoElement:
     __base: var instance = document.createElement('video');
     __test: return bcd.testObjectName(instance, 'HTMLVideoElement');
+  IDBDatabase:
+    __base: >-
+      <%api.IDBOpenDBRequest:req%>
+      var promise = new Promise(function(resolve, reject) {
+        req.onsuccess = function() {
+          resolve(req.result);
+        }
+        req.onerror = function(event) {
+          reject(event.message);
+        }
+      });
+  IDBFactory:
+    __base: var instance = self.indexedDB || self.mozIndexedDB || self.webkitIndexedDB || self.msIndexedDB;
+  IDBOpenDBRequest:
+    __base: >-
+      <%api.IDBFactory:idb%>
+      var instance = idb.open("collector");
   IDBVersionChangeEvent:
     __base: >-
       var instance;
