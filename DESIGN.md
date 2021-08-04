@@ -40,7 +40,7 @@ Each member can have a custom test by defining a property as the member name. Li
 
 Note: If an interface with a `__base` has a constructor test, but a custom test isn't defined for the constructor, the code will default to normal generation.
 
-Sometimes, tests require promises and callbacks. To define a custom test as a promise, simply create a `promise` variable in place of `instance`, and the system will automatically create a promise instead.
+Sometimes, tests require promises and callbacks. To define a custom test as a promise, simply create a `promise` variable in place of `instance`, and the system will automatically create a promise instead. To define a custom test with callbacks, do not define `var instance` and instead call `callback(<instance_variable>)`, and the system will define the appropriate variables and functions.
 
 Certain tests may require resources, like audio or video. To allow the resources to load before running the tests, rather than create and add an element with JavaScript, we can define resources to be loaded through the `__resources` object.
 
