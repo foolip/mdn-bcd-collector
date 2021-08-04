@@ -959,6 +959,8 @@ api:
     __base: >-
       <%api.IDBFactory:idb%>
       var instance = idb.open("collector");
+  IDBRequest:
+    __base: <%api.IDBOpenDBRequest:instance%>
   IDBVersionChangeEvent:
     __base: >-
       var instance;
