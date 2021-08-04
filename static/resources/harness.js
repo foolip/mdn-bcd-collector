@@ -242,29 +242,33 @@
     }
   }
 
-  function runTest(data, i, callback) {
+  function runTest(data, i, oncomplete) {
     var test = data.tests[i];
+
+    function success(v) {
+      processTestResult(v, data, i, oncomplete);
+    };
+    function fail(e) {
+      var v;
+      if (e instanceof Error) {
+        v = e;
+      } else {
+        v = new Error(e);
+      }
+      processTestResult(v, data, i, oncomplete);
+    };
 
     try {
       var value = eval(test.code);
 
       if (typeof value === 'object' && value !== null && typeof value.then === 'function') {
-        value.then(
-            function(value) {
-              processTestResult(value, data, i, callback);
-            },
-            function(fail) {
-              processTestResult(new Error(fail), data, i, callback);
-            });
-        value['catch'](
-            function(err) {
-              processTestResult(err, data, i, callback);
-            });
-      } else {
-        processTestResult(value, data, i, callback);
+        value.then(success, fail);
+        value['catch'](fail);
+      } else if (value !== 'callback') {
+        success(value);
       }
     } catch (err) {
-      processTestResult(err, data, i, callback);
+      fail(err);
     }
   }
 

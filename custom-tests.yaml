@@ -945,14 +945,12 @@ api:
   IDBDatabase:
     __base: >-
       <%api.IDBOpenDBRequest:req%>
-      var promise = new Promise(function(resolve, reject) {
-        req.onsuccess = function() {
-          resolve(req.result);
-        }
-        req.onerror = function(event) {
-          reject(event.message);
-        }
-      });
+      req.onsuccess = function() {
+        callback(req.result);
+      };
+      req.onerror = function(event) {
+        fail(event.message);
+      };
   IDBFactory:
     __base: var instance = self.indexedDB || self.mozIndexedDB || self.webkitIndexedDB || self.msIndexedDB;
   IDBOpenDBRequest:
