@@ -44,13 +44,14 @@ const compileCustomTest = (code, format = true) => {
         return `throw 'Test is malformed: ${match} is an invalid reference';`;
       }
       let importcode = compileCustomTest(customTests.api[name].__base, false);
+      const callback = importcode.includes('callback');
 
       importcode = importcode
           .replace(/var (instance|promise)/g, `var ${instancevar}`)
           .replace(/callback\(/g, `${instancevar}(`)
           .replace(/promise\.then/g, `${instancevar}.then`)
           .replace(/(instance|promise) = /g, `${instancevar} = `);
-      if (instancevar !== 'instance' && instancevar !== 'promise') {
+      if (!(['instance', 'promise'].includes(instancevar) || callback)) {
         importcode += ` if (!${instancevar}) {return false;}`;
       }
       return importcode;
