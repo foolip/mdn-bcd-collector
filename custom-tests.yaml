@@ -279,6 +279,8 @@ api:
       var instance = reusableInstances.audioContext.createChannelSplitter();
   CharacterData:
     __base: <%api.Text:instance%>
+  Clients:
+    __base: var instance = clients;
   CloseEvent:
     __base: >-
       var instance;
@@ -663,6 +665,8 @@ api:
     __base: var instance = window.external;
   FetchEvent:
     __base: var instance = new FetchEvent('');
+  FileReader:
+    __base: var instance = new FileReader();
   FocusEvent:
     __base: >-
       var instance;
