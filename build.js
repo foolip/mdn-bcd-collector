@@ -688,7 +688,6 @@ const buildJS = (customJS) => {
 const copyResources = async () => {
   const resources = [
     ['json3/lib/json3.min.js', 'resources'],
-    ['promise-polyfill/dist/polyfill.min.js', 'resources', 'promise.min.js'],
     ['chai/chai.js', 'unittest'],
     ['mocha/mocha.css', 'unittest'],
     ['mocha/mocha.js', 'unittest'],
