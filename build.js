@@ -44,12 +44,14 @@ const compileCustomTest = (code, format = true) => {
         return `throw 'Test is malformed: ${match} is an invalid reference';`;
       }
       let importcode = compileCustomTest(customTests.api[name].__base, false);
+      const callback = importcode.includes('callback');
 
       importcode = importcode
           .replace(/var (instance|promise)/g, `var ${instancevar}`)
+          .replace(/callback\(/g, `${instancevar}(`)
           .replace(/promise\.then/g, `${instancevar}.then`)
           .replace(/(instance|promise) = /g, `${instancevar} = `);
-      if (instancevar !== 'instance' && instancevar !== 'promise') {
+      if (!(['instance', 'promise'].includes(instancevar) || callback)) {
         importcode += ` if (!${instancevar}) {return false;}`;
       }
       return importcode;
@@ -80,12 +82,15 @@ const getCustomTestAPI = (name, member, type) => {
   if (name in customTests.api) {
     const testbase = customTests.api[name].__base || '';
     const promise = testbase.includes('var promise');
+    const callback = testbase.includes('callback(');
+
     if (member === undefined) {
       if ('__test' in customTests.api[name]) {
         test = testbase + customTests.api[name].__test;
       } else {
+        const returnValue = '!!instance';
         test = testbase ? testbase + (
-          promise ? 'return promise.then(function(instance) {return !!instance});' : 'return !!instance;'
+          promise ? `return promise.then(function(instance) {return ${returnValue}});` : callback ? `function callback(instance) {success(${returnValue})}; return 'callback';` : `return ${returnValue};`
         ) : false;
       }
     } else {
@@ -98,8 +103,9 @@ const getCustomTestAPI = (name, member, type) => {
           // auto-generated custom tests
           test = false;
         } else {
+          const returnValue = `'${member}' in instance`;
           test = testbase ? testbase + (
-            promise ? `return promise.then(function(instance) {return '${member}' in instance});` : `return '${member}' in instance;`
+            promise ? `return promise.then(function(instance) {return ${returnValue}});` : callback ? `function callback(instance) {success(${returnValue})}; return 'callback';` : `return ${returnValue};`
           ) : false;
         }
       }

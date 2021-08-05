@@ -60,10 +60,11 @@
 <div id="known-caveats" class="paper">
   <p>Known caveats:</p>
   <ul>
-    <li>Detection for features under prefixes are not yet supported</li>
+    <li>Detection for features under prefixes are not fully supported</li>
     <li>Detection for features under alternative names are not yet supported</li>
     <li>In older browsers, some attributes aren't initialized in the API prototypes, resulting in false negatives (see <a href="https://github.com/foolip/mdn-bcd-collector/issues/406">#406</a>)</li>
     <li>Some APIs are accessed through other APIs and aren't exposed on their own; custom tests have not been written for them all</li>
+    <li>The test page uses a JSON polyfill for core functionality; tests for <code>javascript.builtins.JSON</code> should not be trusted</li>
   </ul>
 
   <p class="error-notice">If you find any errors in feature detection, please <a href="https://github.com/foolip/mdn-bcd-collector/issues/new"><span class="mdi mdi-alert-circle-outline"></span> file an issue</a> in the GitHub repository.</p>
