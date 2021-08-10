@@ -1299,10 +1299,12 @@ api:
       var real = new Float32Array(2);
       var imag = new Float32Array(2);
       var instance = reusableInstances.audioContext.createPeriodicWave(real, imag);
-  Plugin: # XXX Doesn't work if there are no plugins
+  Plugin:
     __base: >-
-      <%api.PluginArray:plugins%>
-      var instance = plugins[0];
+      if (!navigator.plugins.length) {
+        throw new Error('navigator.plugins is empty');
+      }
+      var instance = navigator.plugins[0];
   PluginArray:
     __base: var instance = navigator.plugins;
   PopStateEvent:
