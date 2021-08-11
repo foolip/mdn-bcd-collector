@@ -163,7 +163,7 @@ api:
     __base: >-
       var instance;
       try {
-        instance = new AudioProcessingEvent('');
+        instance = new AudioProcessingEvent('audioprocess');
       } catch(e) {
         instance = document.createEvent('AudioProcessingEvent');
       }
@@ -288,7 +288,7 @@ api:
     __base: >-
       var instance;
       try {
-        instance = new CloseEvent('');
+        instance = new CloseEvent('close');
       } catch(e) {
         instance = document.createEvent('CloseEvent');
       }
@@ -296,7 +296,7 @@ api:
     __base: >-
       var instance;
       try {
-        instance = new CompositionEvent('');
+        instance = new CompositionEvent('compositionstart');
       } catch(e) {
         instance = document.createEvent('CompositionEvent');
       }
@@ -444,7 +444,7 @@ api:
     __base: >-
       var instance;
       try {
-        instance = new DeviceMotionEvent('');
+        instance = new DeviceMotionEvent('devicemotion');
       } catch(e) {
         instance = document.createEvent('DeviceMotionEvent');
       }
@@ -452,7 +452,7 @@ api:
     __base: >-
       var instance;
       try {
-        instance = new DeviceOrientationEvent('');
+        instance = new DeviceOrientationEvent('deviceorientation');
       } catch(e) {
         instance = document.createEvent('DeviceOrientationEvent');
       }
@@ -512,7 +512,7 @@ api:
     __base: >-
       var instance;
       try {
-        instance = new DragEvent('');
+        instance = new DragEvent('drag');
       } catch(e) {
         instance = document.createEvent('DragEvent');
       }
@@ -536,7 +536,7 @@ api:
     __base: >-
       var instance;
       try {
-        instance = new ErrorEvent('');
+        instance = new ErrorEvent('error');
       } catch(e) {
         instance = document.createEvent('ErrorEvent');
       }
@@ -663,25 +663,25 @@ api:
       };
       var instance = reusableInstances.webGL2.getExtension('EXT_texture_norm16');
   ExtendableEvent:
-    __base: var instance = new ExtendableEvent('');
+    __base: var instance = new ExtendableEvent('extendable');
   External:
     __base: var instance = window.external;
   FetchEvent:
-    __base: var instance = new FetchEvent('');
+    __base: var instance = new FetchEvent('fetch');
   FileReader:
     __base: var instance = new FileReader();
   FocusEvent:
     __base: >-
       var instance;
       try {
-        instance = new FocusEvent('');
+        instance = new FocusEvent('focus');
       } catch(e) {
         instance = document.createEvent('FocusEvent');
       }
   FontFace:
     __base: var instance = new FontFace('Material Design Icons', 'url(/fonts/materialdesignicons-webfont.woff)');
   FontFaceSetLoadEvent:
-    __base: var instance = new FontFaceSetLoadEvent('');
+    __base: var instance = new FontFaceSetLoadEvent('loading');
   GainNode:
     __resources:
       - audioContext
@@ -691,12 +691,12 @@ api:
       }
       var instance = reusableInstances.audioContext.createGain();
   GamepadEvent:
-    __base: var instance = new GamepadEvent('');
+    __base: var instance = new GamepadEvent('gamepadconnected');
   HashChangeEvent:
     __base: >-
       var instance;
       try {
-        instance = new HashChangeEvent('');
+        instance = new HashChangeEvent('hashchange');
       } catch(e) {
         instance = document.createEvent('HashChangeEvent');
       }
@@ -963,7 +963,7 @@ api:
     __base: >-
       var instance;
       try {
-        instance = new IDBVersionChangeEvent('');
+        instance = new IDBVersionChangeEvent('upgradeneeded');
       } catch(e) {
         instance = document.createEvent('IDBVersionChangeEvent');
       }
@@ -992,12 +992,12 @@ api:
       <%api.CanvasRenderingContext2D:ctx%>
       var instance = ctx.createImageData(16, 16);
   InstallEvent:
-    __base: var instance = new InstallEvent('');
+    __base: var instance = new InstallEvent('install');
   KeyboardEvent:
     __base: >-
       var instance;
       try {
-        instance = new KeyboardEvent('');
+        instance = new KeyboardEvent('keypress');
       } catch(e) {
         instance = document.createEvent('KeyboardEvent');
       }
@@ -1033,7 +1033,7 @@ api:
       }
       var instance = reusableInstances.audioContext.createMediaElementSource(document.getElementById('resource-audio-blip'));
   MediaEncryptedEvent:
-    __base: var instance = new MediaEncryptedEvent('');
+    __base: var instance = new MediaEncryptedEvent('encrypted');
   MediaKeyMessageEvent:
     __base: "var instance = new MediaKeyMessageEvent('license-request', {message: new ArrayBuffer(), messageType: 'license-request'});"
   MediaList:
@@ -1045,7 +1045,7 @@ api:
   MediaQuery:
     __base: "var instance = window.matchMedia('screen and max-width: 800px;');"
   MediaQueryListEvent:
-    __base: var instance = new MediaQueryListEvent('');
+    __base: var instance = new MediaQueryListEvent('change');
   MediaSession:
     __base: var instance = navigator.mediaSession;
   MediaSource:
@@ -1093,12 +1093,12 @@ api:
         return reusableInstances.audioContext.createMediaStreamTrackSource(ms)
       });
   MerchantValidationEvent:
-    __base: var instance = new MerchantValidationEvent('');
+    __base: var instance = new MerchantValidationEvent('merchantvalidation');
   MessageEvent:
     __base: >-
       var instance;
       try {
-        instance = new MessageEvent('');
+        instance = new MessageEvent('message');
       } catch(e) {
         instance = document.createEvent('MessageEvent');
       }
@@ -1143,7 +1143,7 @@ api:
       }
       var instance = new Notification('');
   NotificationEvent:
-    __base: var instance = new NotificationEvent('');
+    __base: var instance = new NotificationEvent('notificationclick');
   OfflineAudioCompletionEvent:
     __resources:
       - audioContext
@@ -1247,7 +1247,7 @@ api:
     __base: >-
       var instance;
       try {
-        instance = new PageTransitionEvent('');
+        instance = new PageTransitionEvent('pageshow');
       } catch(e) {
         instance = document.createEvent('PageTransitionEvent');
       }
@@ -1309,7 +1309,7 @@ api:
     __base: >-
       var instance;
       try {
-        instance = new PopStateEvent('');
+        instance = new PopStateEvent('popstate');
       } catch(e) {
         instance = document.createEvent('PopStateEvent');
       }
@@ -1318,7 +1318,7 @@ api:
       var doc = new DOMParser().parseFromString('<foo />', 'application/xml');
       var instance = doc.createProcessingInstruction('xml-stylesheet', 'href="mycss.css" type="text/css"');
   PushEvent:
-    __base: var instance = new PushEvent('');
+    __base: var instance = new PushEvent('push');
   Range:
     __base: var instance = document.createRange();
   Request:
@@ -1353,7 +1353,7 @@ api:
       }
       var instance = reusableInstances.audioContext.createScriptProcessor();
   SecurityPolicyViolationEvent:
-    __base: var instance = new SecurityPolicyViolationEvent('');
+    __base: var instance = new SecurityPolicyViolationEvent('securitypolicyviolation');
   Selection:
     __base: var instance = window.getSelection();
   ShadowRoot:
@@ -1373,7 +1373,7 @@ api:
     __base: >-
       var instance;
       try {
-        instance = new SpeechRecognitionErrorEvent('');
+        instance = new SpeechRecognitionErrorEvent('error');
       } catch(e) {
         instance = document.createEvent('SpeechRecognitionErrorEvent');
       }
@@ -1381,7 +1381,7 @@ api:
     __base: >-
       var instance;
       try {
-        instance = new SpeechRecognitionEvent('');
+        instance = new SpeechRecognitionEvent('result');
       } catch(e) {
         instance = document.createEvent('SpeechRecognitionEvent');
       }
@@ -1389,7 +1389,7 @@ api:
     __base: >-
       var instance;
       try {
-        instance = new SpeechSynthesisErrorEvent('');
+        instance = new SpeechSynthesisErrorEvent('error');
       } catch(e) {
         instance = document.createEvent('SpeechSynthesisErrorEvent');
       }
@@ -1397,7 +1397,7 @@ api:
     __base: >-
       var instance;
       try {
-        instance = new SpeechSynthesisEvent('');
+        instance = new SpeechSynthesisEvent('start');
       } catch(e) {
         instance = document.createEvent('SpeechSynthesisEvent');
       }
@@ -1413,7 +1413,7 @@ api:
     __base: >-
       var instance;
       try {
-        instance = new StorageEvent('');
+        instance = new StorageEvent('storage');
       } catch(e) {
         instance = document.createEvent('StorageEvent');
       }
@@ -1842,12 +1842,12 @@ api:
       var el = document.getElementById('resource-video-blank');
       var instance = el.buffered;
   TouchEvent:
-    __base: var instance = new TouchEvent('');
+    __base: var instance = new TouchEvent('touchstart');
   TrackEvent:
     __base: >-
       var instance;
       try {
-        instance = new TrackEvent('');
+        instance = new TrackEvent('addtrack');
       } catch(e) {
         instance = document.createEvent('TrackEvent');
       }
@@ -1909,7 +1909,7 @@ api:
     __base: >-
       var instance;
       try {
-        instance = new WebGLContextEvent('');
+        instance = new WebGLContextEvent('webglcontextlost');
       } catch(e) {
         instance = document.createEvent('WebGLContextEvent');
       }
