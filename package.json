@@ -55,7 +55,7 @@
     "@browser-logos/internet-explorer_9-11": "1.1.15",
     "@browser-logos/opera": "1.1.11",
     "@browser-logos/safari": "2.0.0",
-    "@webref/css": "2.0.6",
+    "@webref/css": "2.0.7",
     "@webref/idl": "2.2.10",
     "babel-eslint": "10.1.0",
     "chai": "4.3.4",
