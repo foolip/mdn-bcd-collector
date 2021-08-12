@@ -2130,6 +2130,12 @@ api:
       var instance = new WritableStream({}).getWriter();
   XMLHttpRequest:
     __base: var instance = new XMLHttpRequest();
+  XMLHttpRequestEventTarget:
+    __base: <%api.XMLHttpRequest:instance%>
+  XMLHttpRequestUpload:
+    __base: >-
+      <%api.XMLHttpRequest:xhr%>
+      var instance = xhr.upload;
   XPathExpression:
     __base: >-
       var xpe = new XPathEvaluator();
