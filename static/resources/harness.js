@@ -308,7 +308,7 @@
           consoleLog("Remaining: " + remaining);
         } else if (
           (remaining.length >= 50 && remaining.length % 50 == 0) ||
-          (remaining.length >= 200 && remaining.length % 100 == 0)
+          (remaining.length >= 200 && remaining.length % 500 == 0)
         ) {
           consoleLog("Remaining: " + (tests.length - completedTests) + " tests");
         }
