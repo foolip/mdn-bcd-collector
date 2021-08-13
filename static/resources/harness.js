@@ -305,12 +305,12 @@
           consoleWarn("Warning! " + result.name + " ran twice!");
         }
         if (remaining.length < 20) {
-          consoleLog("Remaining: " + remaining);
+          consoleLog("Remaining (" + result.info.exposure + "): " + remaining);
         } else if (
           (remaining.length >= 50 && remaining.length % 50 == 0) ||
           (remaining.length >= 200 && remaining.length % 500 == 0)
         ) {
-          consoleLog("Remaining: " + (tests.length - completedTests) + " tests");
+          consoleLog("Remaining (" + result.info.exposure + "): " + (tests.length - completedTests) + " tests");
         }
       }
 
