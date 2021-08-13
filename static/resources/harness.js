@@ -36,11 +36,19 @@
   var reusableInstances = {
     __sources: {}
   };
+  var debugmode = false;
 
   /* istanbul ignore next */
   function consoleLog(message) {
     if ('console' in self) {
       console.log(message);
+    }
+  }
+
+  /* istanbul ignore next */
+  function consoleWarn(message) {
+    if ('console' in self) {
+      console.warn(message);
     }
   }
 
@@ -278,9 +286,33 @@
     var results = [];
     var completedTests = 0;
 
+    if (debugmode) {
+      var remaining = [];
+      for (var i = 0; i < tests.length; i++) {
+        remaining.push(tests[i].name);
+      }
+    }
+
     var oncomplete = function(result) {
       results.push(result);
       completedTests += 1;
+
+      if (debugmode) {
+        var index = remaining.indexOf(result.name);
+        if (index !== -1) {
+          remaining.splice(index, 1);
+        } else {
+          consoleWarn("Warning! " + result.name + " ran twice!");
+        }
+        if (remaining.length < 20) {
+          consoleLog("Remaining: " + remaining);
+        } else if (
+          (remaining.length >= 50 && remaining.length % 50 == 0) ||
+          (remaining.length >= 200 && remaining.length % 100 == 0)
+        ) {
+          consoleLog("Remaining: " + (tests.length - completedTests) + " tests");
+        }
+      }
 
       if (completedTests >= tests.length) {
         callback(results);
