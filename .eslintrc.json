@@ -8,15 +8,7 @@
   "rules": {
     "comma-dangle": ["error", "never"],
     "curly": ["error", "all"],
-    "max-len": [
-      "error",
-      {
-        "ignoreRegExpLiterals": true,
-        "ignoreStrings": true,
-        "ignoreTemplateLiterals": true,
-        "ignoreUrls": true
-      }
-    ],
+    "max-len": "off",
     "no-else-return": "error",
     "no-unused-vars": ["error", {"varsIgnorePattern": "^_$"}],
     "prefer-arrow/prefer-arrow-functions": "error",
