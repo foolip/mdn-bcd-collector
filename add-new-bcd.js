@@ -7,7 +7,11 @@ const {getMissing} = require('./find-missing');
 const {main: updateBcd} = require('./update-bcd');
 
 const BCD_DIR = process.env.BCD_DIR || `../browser-compat-data`;
-const compareFeatures = require(path.join(BCD_DIR, 'scripts', 'compare-features'));
+const compareFeatures = require(path.join(
+    BCD_DIR,
+    'scripts',
+    'compare-features'
+));
 
 const template = {
   __compat: {
@@ -32,9 +36,10 @@ const template = {
 const recursiveAdd = (ident, i, data, obj) => {
   const part = ident[i];
 
-  data[part] = i + 1 < ident.length ?
-              recursiveAdd(ident, i + 1, part in data ? data[part] : {}, obj) :
-              Object.assign({}, obj);
+  data[part] =
+    i + 1 < ident.length ?
+      recursiveAdd(ident, i + 1, part in data ? data[part] : {}, obj) :
+      Object.assign({}, obj);
 
   return data;
 };
@@ -52,25 +57,29 @@ const orderFeatures = (key, value) => {
 };
 
 const writeFile = async (ident, obj) => {
-  const filepath = path.resolve(path.join(BCD_DIR, ident[0], `${ident[1]}.json`));
+  const filepath = path.resolve(
+      path.join(BCD_DIR, ident[0], `${ident[1]}.json`)
+  );
 
   let data = {api: {}};
   if (await fs.pathExists(filepath)) {
     data = await fs.readJSON(filepath);
   }
 
-  await fs.writeJSON(filepath, recursiveAdd(ident.concat(['__compat']), 0, data, obj.__compat), {spaces: 2, replacer: orderFeatures});
+  await fs.writeJSON(
+      filepath,
+      recursiveAdd(ident.concat(['__compat']), 0, data, obj.__compat),
+      {spaces: 2, replacer: orderFeatures}
+  );
 };
 
 const traverseFeatures = async (obj, identifier) => {
   for (const i in obj) {
-    if (!!obj[i] &&
-        typeof obj[i] == 'object' &&
-        i !== '__compat') {
+    if (!!obj[i] && typeof obj[i] == 'object' && i !== '__compat') {
       const thisIdent = identifier.concat([i]);
       if (obj[i].__compat) {
         for (const support of Object.values(obj[i].__compat.support)) {
-          if (!([false, null].includes(support.version_added))) {
+          if (![false, null].includes(support.version_added)) {
             await writeFile(thisIdent, obj[i]);
             break;
           }
@@ -85,7 +94,8 @@ const traverseFeatures = async (obj, identifier) => {
 const collectMissing = async (filepath) => {
   const missing = {api: {}};
 
-  for (const entry of getMissing('bcd-from-collector', ['api']).missingEntries) {
+  for (const entry of getMissing('bcd-from-collector', ['api'])
+      .missingEntries) {
     recursiveAdd(entry.split('.'), 0, missing, template);
   }
 
@@ -95,7 +105,9 @@ const collectMissing = async (filepath) => {
 };
 
 const main = async () => {
-  const filepath = path.resolve(path.join(BCD_DIR, '__missing', '__missing.json'));
+  const filepath = path.resolve(
+      path.join(BCD_DIR, '__missing', '__missing.json')
+  );
 
   console.log('Generating missing BCD...');
   await collectMissing(filepath);

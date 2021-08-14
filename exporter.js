@@ -40,20 +40,38 @@ const getReportMeta = (report) => {
   const desc = `${browser} / ${os}`;
   const title = `Results from ${desc} / Collector v${version}`;
 
-  const slug = `${version.toLowerCase()}-${ua.browser.id.replace(/_/g, '-')}-${ua.fullVersion}-${slugify(os, {lower: true})}-${digest}`;
+  const slug = `${version.toLowerCase()}-${ua.browser.id.replace(/_/g, '-')}-${
+    ua.fullVersion
+  }-${slugify(os, {lower: true})}-${digest}`;
   const filename = `${slug}.json`;
   const branch = `collector/${slug}`;
 
   return {
-    json, buffer, digest, uaString, ua, browser,
-    os, desc, title, slug, filename, branch
+    json,
+    buffer,
+    digest,
+    uaString,
+    ua,
+    browser,
+    os,
+    desc,
+    title,
+    slug,
+    filename,
+    branch
   };
 };
 
 const createBody = (meta) => {
-  return `User Agent: ${meta.uaString}\nBrowser: ${meta.browser} (on ${meta.os}) ${meta.ua.inBcd ? '' : ' - **Not in BCD**'}` +
-          `\nHash Digest: ${meta.digest}\n` +
-          (meta.version == 'Dev' ? '\n**WARNING:** this PR was created from a development/staging version!' : '');
+  return (
+    `User Agent: ${meta.uaString}\nBrowser: ${meta.browser} (on ${meta.os}) ${
+      meta.ua.inBcd ? '' : ' - **Not in BCD**'
+    }` +
+    `\nHash Digest: ${meta.digest}\n` +
+    (meta.version == 'Dev' ?
+      '\n**WARNING:** this PR was created from a development/staging version!' :
+      '')
+  );
 };
 
 const exportAsPR = async (report, token) => {

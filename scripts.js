@@ -45,12 +45,11 @@ if (require.main === module) {
       '$0 <command>',
       'Run an action',
       (yargs) => {
-        yargs
-            .positional('command', {
-              describe: 'What command to run',
-              type: 'string',
-              choices: ['unittest', 'prepare']
-            });
+        yargs.positional('command', {
+          describe: 'What command to run',
+          type: 'string',
+          choices: ['unittest', 'prepare']
+        });
       }
   );
 

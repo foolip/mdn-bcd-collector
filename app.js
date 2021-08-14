@@ -32,10 +32,14 @@ const {parseResults} = require('./results');
 const storage = require('./storage').getStorage();
 const {parseUA} = require('./ua-parser');
 
-const appVersion = process.env.GAE_VERSION === 'production' ? require('./package.json').version : 'Dev';
+const appVersion =
+  process.env.GAE_VERSION === 'production' ?
+    require('./package.json').version :
+    'Dev';
 
 /* istanbul ignore next */
-const secrets = process.env.NODE_ENV === 'test' ?
+const secrets =
+  process.env.NODE_ENV === 'test' ?
     require('./secrets.sample.json') :
     require('./secrets.json');
 
@@ -96,7 +100,7 @@ app.post('/api/get', (req, res) => {
   });
   const query = querystring.encode(queryParams);
 
-  res.redirect(`/tests/${testSelection}${query ? `?${query}`: ''}`);
+  res.redirect(`/tests/${testSelection}${query ? `?${query}` : ''}`);
 });
 
 app.post('/api/results', (req, res, next) => {
@@ -114,16 +118,21 @@ app.post('/api/results', (req, res, next) => {
     return;
   }
 
-  storage.put(req.sessionID, url, results).then(() => {
-    res.status(201).end();
-  }).catch(next);
+  storage
+      .put(req.sessionID, url, results)
+      .then(() => {
+        res.status(201).end();
+      })
+      .catch(next);
 });
 
 app.get('/api/results', (req, res, next) => {
-  storage.getAll(req.sessionID)
+  storage
+      .getAll(req.sessionID)
       .then((results) => {
         res.status(200).json(createReport(results, req));
-      }).catch(next);
+      })
+      .catch(next);
 });
 
 // Test Resources
@@ -131,7 +140,9 @@ app.get('/api/results', (req, res, next) => {
 // api.EventSource
 app.get('/eventstream', (req, res) => {
   res.header('Content-Type', 'text/event-stream');
-  res.send('event: ping\ndata: Hello world!\ndata: {"foo": "bar"}\ndata: Goodbye world!');
+  res.send(
+      'event: ping\ndata: Hello world!\ndata: {"foo": "bar"}\ndata: Goodbye world!'
+  );
 });
 
 // Views
@@ -145,19 +156,22 @@ app.get('/', (req, res) => {
 });
 
 app.get('/download/:filename', (req, res, next) => {
-  storage.readFile(req.params.filename)
+  storage
+      .readFile(req.params.filename)
       .then((data) => {
         res.setHeader('content-type', 'application/json;charset=UTF-8');
         res.setHeader('content-disposition', 'attachment');
         res.send(data);
-      }).catch(next);
+      })
+      .catch(next);
 });
 
 // Accept both GET and POST requests. The form uses POST, but selenium.js
 // instead simply navigates to /export.
 app.all('/export', (req, res, next) => {
   const github = !!req.body.github;
-  storage.getAll(req.sessionID)
+  storage
+      .getAll(req.sessionID)
       .then(async (results) => {
         const report = createReport(results, req);
         if (github) {
@@ -177,13 +191,15 @@ app.all('/export', (req, res, next) => {
             url: `/download/${filename}`
           });
         }
-      }).catch(next);
+      })
+      .catch(next);
 });
 
 app.all('/tests/*', (req, res) => {
   const ident = req.params['0'].replace(/\//g, '.');
   const ignoreIdents = req.query.ignore ?
-      req.query.ignore.split(',').filter((s) => s) : [];
+    req.query.ignore.split(',').filter((s) => s) :
+    [];
   const foundTests = tests.getTests(ident, req.query.exposure, ignoreIdents);
   if (foundTests && foundTests.length) {
     res.render('tests', {

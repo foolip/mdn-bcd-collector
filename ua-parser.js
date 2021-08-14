@@ -82,8 +82,10 @@ const parseUA = (userAgent, browsers) => {
   for (let i = 0; i < versions.length - 1; i++) {
     const current = versions[i];
     const next = versions[i + 1];
-    if (compareVersions.compare(data.version, current, '>=') &&
-        compareVersions.compare(data.version, next, '<')) {
+    if (
+      compareVersions.compare(data.version, current, '>=') &&
+      compareVersions.compare(data.version, next, '<')
+    ) {
       data.inBcd = true;
       data.version = current;
       break;
@@ -94,9 +96,12 @@ const parseUA = (userAgent, browsers) => {
   // we have to check that the major versions match. Given |version| "10.3"
   // and |versions| entries "10.0" and "10.2", return "10.2". Given |version|
   // "11.0", skip.
-  if (data.inBcd == false && data.version.split('.')[0] === versions[versions.length-1].split('.')[0]) {
+  if (
+    data.inBcd == false &&
+    data.version.split('.')[0] === versions[versions.length - 1].split('.')[0]
+  ) {
     data.inBcd = true;
-    data.version = versions[versions.length-1];
+    data.version = versions[versions.length - 1];
   }
 
   return data;
