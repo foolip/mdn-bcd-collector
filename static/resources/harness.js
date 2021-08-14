@@ -288,8 +288,8 @@
 
     if (debugmode) {
       var remaining = [];
-      for (var i = 0; i < tests.length; i++) {
-        remaining.push(tests[i].name);
+      for (var t = 0; t < tests.length; t++) {
+        remaining.push(tests[t].name);
       }
     }
 
@@ -302,15 +302,15 @@
         if (index !== -1) {
           remaining.splice(index, 1);
         } else {
-          consoleWarn("Warning! " + result.name + " ran twice!");
+          consoleWarn('Warning! ' + result.name + ' ran twice!');
         }
         if (remaining.length < 20) {
-          consoleLog("Remaining (" + result.info.exposure + "): " + remaining);
+          consoleLog('Remaining (' + result.info.exposure + '): ' + remaining);
         } else if (
           (remaining.length >= 50 && remaining.length % 50 == 0) ||
           (remaining.length >= 200 && remaining.length % 500 == 0)
         ) {
-          consoleLog("Remaining (" + result.info.exposure + "): " + (tests.length - completedTests) + " tests");
+          consoleLog('Remaining (' + result.info.exposure + '): ' + (tests.length - completedTests) + ' tests');
         }
       }
 
