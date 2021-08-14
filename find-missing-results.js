@@ -31,9 +31,9 @@ const generateReportMap = (allResults) => {
       continue;
     }
 
-    const releases = Object.entries(browserData.releases).filter(
-        (r) => ['retired', 'current'].includes(r[1].status)
-    ).map((r) => r[0]);
+    const releases = Object.entries(browserData.releases)
+        .filter((r) => ['retired', 'current'].includes(r[1].status))
+        .map((r) => r[0]);
     result[browserKey] = releases.sort(compareVersions);
 
     if (!allResults) {
@@ -42,18 +42,24 @@ const generateReportMap = (allResults) => {
         result[browserKey] = result[browserKey].filter((v) => v >= '6');
       } else if (browserKey == 'safari') {
         // Ignore super old Safari releases, and Safari 6.1
-        result[browserKey] = result[browserKey].filter((v) => v >= '4' && v != '6.1');
+        result[browserKey] = result[browserKey].filter(
+            (v) => v >= '4' && v != '6.1'
+        );
       } else if (browserKey == 'opera') {
         // Ignore all Opera versions besides 12.1, 15, and the latest stable
-        result[browserKey] = result[browserKey].filter((v) =>
-          v == '12.1' ||
-          v == '15' ||
-          v == result[browserKey][result[browserKey].length - 1]
+        result[browserKey] = result[browserKey].filter(
+            (v) =>
+              v == '12.1' ||
+            v == '15' ||
+            v == result[browserKey][result[browserKey].length - 1]
         );
-      } else if (browserKey.includes('_android') || browserKey.includes('_ios')) {
+      } else if (
+        browserKey.includes('_android') ||
+        browserKey.includes('_ios')
+      ) {
         // Ignore all mobile browser releases besides the most current
-        result[browserKey] = result[browserKey].filter((v) =>
-          v == result[browserKey][result[browserKey].length - 1]
+        result[browserKey] = result[browserKey].filter(
+            (v) => v == result[browserKey][result[browserKey].length - 1]
         );
       }
     }
@@ -95,7 +101,9 @@ const findMissingResults = async (reportPaths, allResults, version) => {
 
 const main = async (argv) => {
   const missingResults = await findMissingResults(
-      argv.reportPaths, argv.all, argv.version
+      argv.reports,
+      argv.all,
+      argv.collectorVersion
   );
 
   for (const [browser, releases] of Object.entries(missingResults)) {
@@ -116,7 +124,8 @@ if (require.main === module) {
               type: 'array',
               default: ['../mdn-bcd-results/']
             })
-            .option('version', {
+            .option('collector-version', {
+              alias: 'c',
               describe: 'Limit the collector version (set to "all" to disable)',
               type: 'string',
               default: 'current'
