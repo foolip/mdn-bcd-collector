@@ -18,7 +18,7 @@
       }
     ],
     "no-else-return": "error",
-    "no-unused-vars": ["error", { "varsIgnorePattern": "^_$" }],
+    "no-unused-vars": ["error", {"varsIgnorePattern": "^_$"}],
     "prefer-arrow/prefer-arrow-functions": "error",
     "quote-props": ["error", "as-needed"],
     "require-jsdoc": "off"
