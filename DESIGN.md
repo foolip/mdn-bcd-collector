@@ -137,9 +137,9 @@ The following JSON...
 
 ```javascript
 bcd.addTest(
-  "css.properties.custom-property",
+  'css.properties.custom-property',
   "(function() {return CSS.supports('color', 'var(--foo)') || CSS.supports('color', 'env(--foo)');})()",
-  "CSS"
+  'CSS'
 );
 ```
 
@@ -170,14 +170,14 @@ The following JSON...
 
 ```javascript
 bcd.addTest(
-  "api.AudioContext",
-  "(function() {var instance = new (window.AudioContext || window.webkitAudioContext)();})()",
-  "Window"
+  'api.AudioContext',
+  '(function() {var instance = new (window.AudioContext || window.webkitAudioContext)();})()',
+  'Window'
 );
 bcd.addTest(
-  "api.AudioDestinationNode",
-  "(function() {var instance = new (window.AudioContext || window.webkitAudioContext)(); if (!audioCtx) {return false}; var instance = audioCtx.destination;})()",
-  "Window"
+  'api.AudioDestinationNode',
+  '(function() {var instance = new (window.AudioContext || window.webkitAudioContext)(); if (!audioCtx) {return false}; var instance = audioCtx.destination;})()',
+  'Window'
 );
 ```
 
