@@ -14,11 +14,13 @@
 
 'use strict';
 
-const {browsers} = require('@mdn/browser-compat-data');
 const compareVersions = require('compare-versions');
 
 const {parseUA} = require('./ua-parser');
 const {loadJsonFiles} = require('./update-bcd');
+
+const BCD_DIR = process.env.BCD_DIR || `../browser-compat-data`;
+const {browsers} = require(BCD_DIR);
 
 const generateReportMap = (allResults) => {
   const result = {};
