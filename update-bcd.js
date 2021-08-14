@@ -387,6 +387,7 @@ module.exports = {
   getSupportMatrix,
   inferSupportStatements,
   update,
+  loadJsonFiles,
   main
 };
 

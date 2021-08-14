@@ -27,6 +27,7 @@
     "selenium": "node selenium.js",
     "update-bcd": "node update-bcd.js",
     "find-missing-features": "node find-missing-features.js",
+    "find-missing-results": "node find-missing-results.js",
     "add-new-bcd": "node add-new-bcd.js"
   },
   "dependencies": {
