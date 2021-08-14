@@ -25,7 +25,13 @@ self.addEventListener('install', function (event) {
 });
 
 self.addEventListener('message', function (event) {
-  bcd.runTests(JSON.parse(event.data), function (results) {
+  var data = JSON.parse(event.data);
+
+  for (var i in data.instances) {
+    bcd.addInstance(i, data.instances[i]);
+  }
+
+  bcd.runTests(data.tests, function (results) {
     event.ports[0].postMessage(JSON.stringify(results));
   });
 });

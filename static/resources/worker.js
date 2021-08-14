@@ -18,7 +18,13 @@ self.importScripts('json3.min.js');
 self.importScripts('harness.js');
 
 self.onmessage = function (event) {
-  bcd.runTests(JSON.parse(event.data), function (results) {
+  var data = JSON.parse(event.data);
+
+  for (var i in data.instances) {
+    bcd.addInstance(i, data.instances[i]);
+  }
+
+  bcd.runTests(data.tests, function (results) {
     self.postMessage(JSON.stringify(results));
   });
 };

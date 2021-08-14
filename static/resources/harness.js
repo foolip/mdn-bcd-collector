@@ -383,7 +383,12 @@
           callback(JSON.parse(event.data));
         };
 
-        myWorker.postMessage(JSON.stringify(pending.Worker));
+        myWorker.postMessage(
+          JSON.stringify({
+            instances: reusableInstances.__sources,
+            tests: pending.Worker
+          })
+        );
       } else {
         updateStatus(
           'No worker support, skipping Worker/DedicatedWorker tests'
@@ -437,7 +442,12 @@
           callback(JSON.parse(event.data));
         };
 
-        myWorker.port.postMessage(JSON.stringify(pending.SharedWorker));
+        myWorker.port.postMessage(
+          JSON.stringify({
+            instances: reusableInstances.__sources,
+            tests: pending.Worker
+          })
+        );
       } else {
         updateStatus('No shared worker support, skipping SharedWorker tests');
 
@@ -491,9 +501,13 @@
                 callback(JSON.parse(event.data));
               };
 
-              reg.active.postMessage(JSON.stringify(pending.ServiceWorker), [
-                messageChannel.port2
-              ]);
+              reg.active.postMessage(
+                JSON.stringify({
+                  instances: reusableInstances.__sources,
+                  tests: pending.Worker
+                }),
+                [messageChannel.port2]
+              );
             });
         });
       } else {

@@ -20,7 +20,13 @@ self.importScripts('harness.js');
 self.onconnect = function (connectEvent) {
   var port = connectEvent.ports[0];
   port.onmessage = function (event) {
-    bcd.runTests(JSON.parse(event.data), function (results) {
+    var data = JSON.parse(event.data);
+
+    for (var i in data.instances) {
+      bcd.addInstance(i, data.instances[i]);
+    }
+
+    bcd.runTests(data.tests, function (results) {
       port.postMessage(JSON.stringify(results));
     });
   };
