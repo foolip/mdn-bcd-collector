@@ -35,6 +35,19 @@ api:
           el.sheet.disabled = true;
           return el.sheet;
         }
+    cryptoKey:
+      type: instance
+      src: >-
+        if (!('crypto' in self)) {
+          return false;
+        };
+        var subtlecrypto = crypto.subtle || crypto.webkitSubtle;
+        return subtlecrypto.generateKey({
+          name: 'RSA-OAEP',
+          modulusLength: 4096,
+          publicExponent: new Uint8Array([1, 0, 1]),
+          hash: 'SHA-256'
+        }, true, ['encrypt', 'decrypt']);
     offlineAudioContext:
       type: instance
       src: >-
@@ -214,13 +227,14 @@ api:
       decodeAudioData.promise_syntax: >-
         <%api.BaseAudioContext:ctx%>
         return ctx.decodeAudioData.length === 1;
-  BatteryManager:
-    __base: >-
-      if (!('getBattery' in navigator)) {
-        return false;
-      };
-      var promise = navigator.getBattery();
-      promise.then(function() {});
+  # XXX Freezes in many versions of Chrome and Firefox
+  # BatteryManager:
+  #   __base: >-
+  #     if (!('getBattery' in navigator)) {
+  #       return false;
+  #     };
+  #     var promise = navigator.getBattery();
+  #     promise.then(function() {});
   BeforeUnloadEvent:
     __base: var instance = document.createEvent('BeforeUnloadEvent');
   BiquadFilterNode:
@@ -323,14 +337,10 @@ api:
       };
       var instance = crypto;
   CryptoKey:
+    __resources:
+      - cryptoKey
     __base: >-
-      <%api.SubtleCrypto:subtlecrypto%>
-      var promise = subtlecrypto.generateKey({
-        name: 'RSA-OAEP',
-        modulusLength: 4096,
-        publicExponent: new Uint8Array([1, 0, 1]),
-        hash: 'SHA-256'
-      }, true, ['encrypt', 'decrypt']);
+      var promise = reusableInstances.cryptoKey;
   CSSConditionRule:
     __resources:
       - createStyleSheet
