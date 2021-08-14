@@ -17,10 +17,10 @@
 self.importScripts('json3.min.js');
 self.importScripts('harness.js');
 
-self.onconnect = function(connectEvent) {
+self.onconnect = function (connectEvent) {
   var port = connectEvent.ports[0];
-  port.onmessage = function(event) {
-    bcd.runTests(JSON.parse(event.data), function(results) {
+  port.onmessage = function (event) {
+    bcd.runTests(JSON.parse(event.data), function (results) {
       port.postMessage(JSON.stringify(results));
     });
   };

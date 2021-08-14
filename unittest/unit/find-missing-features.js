@@ -66,10 +66,13 @@ const bcd = {
   }
 };
 
-const {traverseFeatures, getMissing} = proxyquire('../../find-missing-features', {
-  './tests.json': tests,
-  '../browser-compat-data': bcd
-});
+const {traverseFeatures, getMissing} = proxyquire(
+  '../../find-missing-features',
+  {
+    './tests.json': tests,
+    '../browser-compat-data': bcd
+  }
+);
 
 describe('find-missing', () => {
   it('traverseFeatures', () => {
@@ -99,14 +102,16 @@ describe('find-missing', () => {
           'api.DummyAPI.dummy',
           'css.properties.font-face',
           'javascript.builtins.Date'
-        ], total: 9});
+        ],
+        total: 9
+      });
     });
 
     it('bcd <- collector', () => {
       assert.deepEqual(getMissing('bcd-from-collector'), {
-        missingEntries: [
-          'javascript.builtins.Error'
-        ], total: 5});
+        missingEntries: ['javascript.builtins.Error'],
+        total: 5
+      });
     });
 
     it('filter category', () => {
@@ -115,7 +120,9 @@ describe('find-missing', () => {
           'api.AbortController.dummy',
           'api.DummyAPI',
           'api.DummyAPI.dummy'
-        ], total: 5});
+        ],
+        total: 5
+      });
     });
 
     it('unknown direction', () => {
@@ -126,9 +133,15 @@ describe('find-missing', () => {
           'api.DummyAPI.dummy',
           'css.properties.font-face',
           'javascript.builtins.Date'
-        ], total: 9});
+        ],
+        total: 9
+      });
 
-      assert.isTrue(console.log.calledWith('Direction \'foo-from-bar\' is unknown; defaulting to collector <- bcd'));
+      assert.isTrue(
+        console.log.calledWith(
+          "Direction 'foo-from-bar' is unknown; defaulting to collector <- bcd"
+        )
+      );
     });
 
     afterEach(() => {

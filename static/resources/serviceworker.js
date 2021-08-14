@@ -17,18 +17,15 @@
 self.importScripts('json3.min.js');
 self.importScripts('harness.js');
 
-self.addEventListener('install', function(event) {
-  var promiseChain = caches.open('test-cache')
-      .then(function(openCache) {
-        return openCache.put(
-            new Request(''),
-            new Response(''));
-      });
+self.addEventListener('install', function (event) {
+  var promiseChain = caches.open('test-cache').then(function (openCache) {
+    return openCache.put(new Request(''), new Response(''));
+  });
   event.waitUntil(promiseChain);
 });
 
-self.addEventListener('message', function(event) {
-  bcd.runTests(JSON.parse(event.data), function(results) {
+self.addEventListener('message', function (event) {
+  bcd.runTests(JSON.parse(event.data), function (results) {
     event.ports[0].postMessage(JSON.stringify(results));
   });
 });

@@ -25,7 +25,8 @@ const REPORTS = [
     report: {
       __version: '1.2.3',
       results: {},
-      userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.0 Safari/605.1.15'
+      userAgent:
+        'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.0 Safari/605.1.15'
     },
     expected: {
       slug: '1.2.3-safari-12.0-mac-os-10.14-cadc34e83f',
@@ -36,7 +37,8 @@ const REPORTS = [
     report: {
       __version: 'Dev',
       results: {},
-      userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 11_0_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36'
+      userAgent:
+        'Mozilla/5.0 (Macintosh; Intel Mac OS X 11_0_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36'
     },
     expected: {
       slug: 'dev-chrome-86.0.4240.198-mac-os-11.0.0-31072b9b56',
@@ -47,7 +49,8 @@ const REPORTS = [
     report: {
       __version: 'Dev',
       results: {},
-      userAgent: 'Mozilla/5.0 (Linux; Android 11; Pixel 2) AppleWebKit/537.36 (KHTML, like Gecko) SamsungBrowser/12.1 Chrome/79.0.3945.136 Mobile Safari/537.36'
+      userAgent:
+        'Mozilla/5.0 (Linux; Android 11; Pixel 2) AppleWebKit/537.36 (KHTML, like Gecko) SamsungBrowser/12.1 Chrome/79.0.3945.136 Mobile Safari/537.36'
     },
     expected: {
       slug: 'dev-samsunginternet-android-12.1-android-11-d425ab14a8',
@@ -61,7 +64,7 @@ describe('GitHub export', () => {
   const exporter = proxyquire('../../exporter', {
     '@octokit/rest': {
       /* eslint-disable-next-line prefer-arrow/prefer-arrow-functions */
-      Octokit: function() {
+      Octokit: function () {
         return octokit;
       }
     }
@@ -75,33 +78,49 @@ describe('GitHub export', () => {
 
         sinon.mock(octokit).expects('auth').once().resolves({type: 'mocked'});
 
-        sinon.mock(octokit.git).expects('createRef').once().withArgs({
-          owner: 'foolip',
-          ref: `refs/heads/collector/${expected.slug}`,
-          repo: 'mdn-bcd-results',
-          sha: '753c6ed8e991e9729353a63d650ff0f5bd902b69'
-        });
+        sinon
+          .mock(octokit.git)
+          .expects('createRef')
+          .once()
+          .withArgs({
+            owner: 'foolip',
+            ref: `refs/heads/collector/${expected.slug}`,
+            repo: 'mdn-bcd-results',
+            sha: '753c6ed8e991e9729353a63d650ff0f5bd902b69'
+          });
 
-        sinon.mock(octokit.repos).expects('createOrUpdateFileContents')
-            .once().withArgs(sinon.match({
+        sinon
+          .mock(octokit.repos)
+          .expects('createOrUpdateFileContents')
+          .once()
+          .withArgs(
+            sinon.match({
               owner: 'foolip',
               repo: 'mdn-bcd-results',
               path: `${expected.slug}.json`,
               message: expected.title,
               content: sinon.match.string,
               branch: `collector/${expected.slug}`
-            }));
+            })
+          );
 
-        sinon.mock(octokit.pulls).expects('create').once().withArgs({
-          owner: 'foolip',
-          repo: 'mdn-bcd-results',
-          title: expected.title,
-          head: `collector/${expected.slug}`,
-          body: exporter.createBody(exporter.getReportMeta(report)),
-          base: 'main'
-        }).resolves({data: {
-          html_url: 'https://github.com/foolip/mdn-bcd-results/pull/42'
-        }});
+        sinon
+          .mock(octokit.pulls)
+          .expects('create')
+          .once()
+          .withArgs({
+            owner: 'foolip',
+            repo: 'mdn-bcd-results',
+            title: expected.title,
+            head: `collector/${expected.slug}`,
+            body: exporter.createBody(exporter.getReportMeta(report)),
+            base: 'main'
+          })
+          .resolves({
+            data: {
+              html_url: 'https://github.com/foolip/mdn-bcd-results/pull/42'
+            }
+          });
 
         const result = await exporter.exportAsPR(report, 'mocked');
         assert.deepEqual(result, {

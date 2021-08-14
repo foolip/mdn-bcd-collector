@@ -81,58 +81,81 @@ describe('results', () => {
     });
 
     it('invalid URL', () => {
-      assert.throws(() => {
-        parseResults('not a URL', []);
-      }, Error, 'invalid URL');
+      assert.throws(
+        () => {
+          parseResults('not a URL', []);
+        },
+        Error,
+        'invalid URL'
+      );
     });
 
     it('invalid results', () => {
-      assert.throws(() => {
-        parseResults('http://localhost', null);
-      }, Error, 'results should be an array');
+      assert.throws(
+        () => {
+          parseResults('http://localhost', null);
+        },
+        Error,
+        'results should be an array'
+      );
     });
 
     it('invalid results entry', () => {
-      assert.throws(() => {
-        parseResults('http://localhost', [null]);
-      }, Error, 'results[0] should be an object');
+      assert.throws(
+        () => {
+          parseResults('http://localhost', [null]);
+        },
+        Error,
+        'results[0] should be an object'
+      );
     });
 
-
     it('invalid name', () => {
-      assert.throws(() => {
-        parseResults('http://localhost', [
-          {
-            exposure: 'Window',
-            name: 42,
-            result: true
-          }
-        ]);
-      }, Error, 'results[0].name should be a string; got number');
+      assert.throws(
+        () => {
+          parseResults('http://localhost', [
+            {
+              exposure: 'Window',
+              name: 42,
+              result: true
+            }
+          ]);
+        },
+        Error,
+        'results[0].name should be a string; got number'
+      );
     });
 
     it('invalid result', () => {
-      assert.throws(() => {
-        parseResults('http://localhost', [
-          {
-            exposure: 'Window',
-            name: 'api.Attr.name',
-            result: 42
-          }
-        ]);
-      }, Error, 'results[0].result (api.Attr.name) should be true/false/null; got 42');
+      assert.throws(
+        () => {
+          parseResults('http://localhost', [
+            {
+              exposure: 'Window',
+              name: 'api.Attr.name',
+              result: 42
+            }
+          ]);
+        },
+        Error,
+        'results[0].result (api.Attr.name) should be true/false/null; got 42'
+      );
     });
 
     it('invalid exposure', () => {
-      assert.throws(() => {
-        parseResults('http://localhost', [
-          {
-            exposure: 42,
-            name: 'api.Attr.name',
-            result: true
-          }
-        ]);
-      }, Error, 'results[0].exposure (api.Attr.name) should be a string; got number');
+      assert.throws(
+        () => {
+          parseResults('http://localhost', [
+            {
+              exposure: 42,
+              name: 'api.Attr.name',
+              result: true
+            }
+          ]);
+        },
+        Error,
+        'results[0].exposure (api.Attr.name) should be a string; got number'
+      );
     });
   });
 });

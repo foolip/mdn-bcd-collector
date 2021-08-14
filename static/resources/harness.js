@@ -21,7 +21,7 @@
 // This harness should work on as old browsers as possible and shouldn't depend
 // on any modern JavaScript features.
 
-(function(global) {
+(function (global) {
   var pending = {};
   var resources = {
     required: 0,
@@ -83,9 +83,10 @@
     }
 
     if (state.timedout) {
-      statusElement.innerHTML = newStatus +
-            '<br>This test seems to be taking a long time; ' +
-            'it may have crashed. Check the console for errors.';
+      statusElement.innerHTML =
+        newStatus +
+        '<br>This test seems to be taking a long time; ' +
+        'it may have crashed. Check the console for errors.';
     } else {
       statusElement.innerHTML = newStatus;
     }
@@ -131,20 +132,24 @@
     var result = {};
 
     try {
-      eval('new '+iface+'()');
+      eval('new ' + iface + '()');
       result.result = true;
     } catch (err) {
-      if (stringIncludes(err.message, 'Illegal constructor') ||
-          stringIncludes(err.message, 'is not a constructor') ||
-          stringIncludes(err.message, 'Function expected') ||
-          stringIncludes(err.message, 'is not defined')) {
+      if (
+        stringIncludes(err.message, 'Illegal constructor') ||
+        stringIncludes(err.message, 'is not a constructor') ||
+        stringIncludes(err.message, 'Function expected') ||
+        stringIncludes(err.message, 'is not defined')
+      ) {
         result.result = false;
-      } else if (stringIncludes(err.message, 'Not enough arguments') ||
-                 stringIncludes(err.message, 'argument required') ||
-                 stringIncludes(err.message, 'arguments required') ||
-                 stringIncludes(err.message, 'Argument not optional') ||
-                 stringIncludes(err.message, 'Arguments can\'t be empty') ||
-                 stringIncludes(err.message, 'undefined is not an object')) {
+      } else if (
+        stringIncludes(err.message, 'Not enough arguments') ||
+        stringIncludes(err.message, 'argument required') ||
+        stringIncludes(err.message, 'arguments required') ||
+        stringIncludes(err.message, 'Argument not optional') ||
+        stringIncludes(err.message, "Arguments can't be empty") ||
+        stringIncludes(err.message, 'undefined is not an object')
+      ) {
         // If it failed to construct and it's not illegal or just needs
         // more arguments, the constructor's good
         result.result = true;
@@ -163,23 +168,37 @@
       return false;
     }
 
-    if (!instance.constructor.name &&
-        Object.prototype.toString.call(instance) === '[object Object]') {
-      return {result: null, message: 'Browser does not support object prototype confirmation methods'};
+    if (
+      !instance.constructor.name &&
+      Object.prototype.toString.call(instance) === '[object Object]'
+    ) {
+      return {
+        result: null,
+        message:
+          'Browser does not support object prototype confirmation methods'
+      };
     }
 
-    if (typeof(names) === 'string') {
+    if (typeof names === 'string') {
       names = [names];
     }
 
     for (var i = 0; i < names.length; i++) {
-      if (instance.constructor.name === names[i] ||
-          Object.prototype.toString.call(instance) === '[object ' + names[i] + ']') {
+      if (
+        instance.constructor.name === names[i] ||
+        Object.prototype.toString.call(instance) === '[object ' + names[i] + ']'
+      ) {
         return true;
       }
     }
 
-    return {result: false, message: 'Instance prototype does not match accepted names (' + names.join(', ') + ')'};
+    return {
+      result: false,
+      message:
+        'Instance prototype does not match accepted names (' +
+        names.join(', ') +
+        ')'
+    };
   }
 
   // Once a test is evaluated and run, it calls this function with the result.
@@ -208,9 +227,10 @@
       result.result = null;
       result.message = 'threw ' + stringify(value);
     } else if (value && typeof value === 'object') {
-      if ('name' in value && (
-        stringIncludes(value.name, 'NS_ERROR') ||
-        stringIncludes(value.name, 'NotSupported'))
+      if (
+        'name' in value &&
+        (stringIncludes(value.name, 'NS_ERROR') ||
+          stringIncludes(value.name, 'NotSupported'))
       ) {
         result.result = null;
         result.message = 'threw ' + stringify(value.message);
@@ -271,7 +291,11 @@
     try {
       var value = eval(test.code);
 
-      if (typeof value === 'object' && value !== null && typeof value.then === 'function') {
+      if (
+        typeof value === 'object' &&
+        value !== null &&
+        typeof value.then === 'function'
+      ) {
         value.then(success, fail);
         value['catch'](fail);
       } else if (value !== 'callback') {
@@ -293,7 +317,7 @@
       }
     }
 
-    var oncomplete = function(result) {
+    var oncomplete = function (result) {
       results.push(result);
       completedTests += 1;
 
@@ -310,7 +334,13 @@
           (remaining.length >= 50 && remaining.length % 50 == 0) ||
           (remaining.length >= 200 && remaining.length % 500 == 0)
         ) {
-          consoleLog('Remaining (' + result.info.exposure + '): ' + (tests.length - completedTests) + ' tests');
+          consoleLog(
+            'Remaining (' +
+              result.info.exposure +
+              '): ' +
+              (tests.length - completedTests) +
+              ' tests'
+          );
         }
       }
 
@@ -349,13 +379,15 @@
       }
 
       if (myWorker) {
-        myWorker.onmessage = function(event) {
+        myWorker.onmessage = function (event) {
           callback(JSON.parse(event.data));
         };
 
         myWorker.postMessage(JSON.stringify(pending.Worker));
       } else {
-        updateStatus('No worker support, skipping Worker/DedicatedWorker tests');
+        updateStatus(
+          'No worker support, skipping Worker/DedicatedWorker tests'
+        );
 
         var results = [];
         for (var i = 0; i < pending.Worker.length; i++) {
@@ -370,9 +402,10 @@
 
           if (pending.Worker[i].info !== undefined) {
             result.info = Object.assign(
-                {},
-                result.info,
-                pending.Worker[i].info);
+              {},
+              result.info,
+              pending.Worker[i].info
+            );
           }
 
           results.push(result);
@@ -400,7 +433,7 @@
       }
 
       if (myWorker) {
-        myWorker.port.onmessage = function(event) {
+        myWorker.port.onmessage = function (event) {
           callback(JSON.parse(event.data));
         };
 
@@ -421,9 +454,10 @@
 
           if (pending.SharedWorker[i].info !== undefined) {
             result.info = Object.assign(
-                {},
-                result.info,
-                pending.SharedWorker[i].info);
+              {},
+              result.info,
+              pending.SharedWorker[i].info
+            );
           }
 
           results.push(result);
@@ -441,22 +475,26 @@
 
     if (pending.ServiceWorker) {
       if ('serviceWorker' in navigator) {
-        window.__workerCleanup().then(function() {
-          navigator.serviceWorker.register('/resources/serviceworker.js', {
-            scope: '/resources/'
-          }).then(function(reg) {
-            return window.__waitForSWState(reg, 'activated');
-          }).then(navigator.serviceWorker.ready).then(function(reg) {
-            var messageChannel = new MessageChannel();
+        window.__workerCleanup().then(function () {
+          navigator.serviceWorker
+            .register('/resources/serviceworker.js', {
+              scope: '/resources/'
+            })
+            .then(function (reg) {
+              return window.__waitForSWState(reg, 'activated');
+            })
+            .then(navigator.serviceWorker.ready)
+            .then(function (reg) {
+              var messageChannel = new MessageChannel();
 
-            messageChannel.port1.onmessage = function(event) {
-              callback(JSON.parse(event.data));
-            };
+              messageChannel.port1.onmessage = function (event) {
+                callback(JSON.parse(event.data));
+              };
 
-            reg.active.postMessage(
-                JSON.stringify(pending.ServiceWorker),
-                [messageChannel.port2]);
-          });
+              reg.active.postMessage(JSON.stringify(pending.ServiceWorker), [
+                messageChannel.port2
+              ]);
+            });
         });
       } else {
         updateStatus('No service worker support, skipping ServiceWorker tests');
@@ -474,7 +512,10 @@
 
           if (pending.ServiceWorker[i].info !== undefined) {
             result.info = Object.assign(
-                {}, result.info, pending.ServiceWorker[i].info);
+              {},
+              result.info,
+              pending.ServiceWorker[i].info
+            );
           }
 
           results.push(result);
@@ -496,40 +537,48 @@
       completed: false
     };
 
-    var startTests = function() {
+    var startTests = function () {
       state.started = true;
 
-      var timeout = setTimeout(function() {
+      var timeout = setTimeout(function () {
         state.timedout = true;
       }, 20000);
 
-      runWindow(function(results) {
+      runWindow(function (results) {
         if (state.completed || state.currentExposure !== 'Window') {
-          consoleError('Warning: Tests for Window exposure were completed multiple times!');
+          consoleError(
+            'Warning: Tests for Window exposure were completed multiple times!'
+          );
           return;
         }
 
         allresults = allresults.concat(results);
 
-        runWorker(function(results) {
+        runWorker(function (results) {
           if (state.completed || state.currentExposure !== 'Worker') {
-            consoleError('Warning: Tests for Worker exposure were completed multiple times!');
+            consoleError(
+              'Warning: Tests for Worker exposure were completed multiple times!'
+            );
             return;
           }
 
           allresults = allresults.concat(results);
 
-          runSharedWorker(function(results) {
+          runSharedWorker(function (results) {
             if (state.completed || state.currentExposure !== 'SharedWorker') {
-              consoleError('Warning: Tests for SharedWorker exposure were completed multiple times!');
+              consoleError(
+                'Warning: Tests for SharedWorker exposure were completed multiple times!'
+              );
               return;
             }
 
             allresults = allresults.concat(results);
 
-            runServiceWorker(function(results) {
+            runServiceWorker(function (results) {
               if (state.completed) {
-                consoleError('Warning: Tests for ServiceWorker exposure were completed multiple times!');
+                consoleError(
+                  'Warning: Tests for ServiceWorker exposure were completed multiple times!'
+                );
                 return;
               }
 
@@ -558,13 +607,15 @@
     if (resourceCount) {
       resources.required = resourceCount;
 
-      var resourceTimeout = setTimeout(function() {
+      var resourceTimeout = setTimeout(function () {
         // If the resources don't load, just start the tests anyways
-        consoleLog('Timed out waiting for resources to load, starting tests anyways');
+        consoleLog(
+          'Timed out waiting for resources to load, starting tests anyways'
+        );
         startTests();
       }, 5000);
 
-      var resourceLoaded = function() {
+      var resourceLoaded = function () {
         if (state.started) {
           // No need to restart the tests
           return;
@@ -580,7 +631,9 @@
       // Load resources
       try {
         var i;
-        var resourceMedia = document.querySelectorAll('#resources audio, #resources video');
+        var resourceMedia = document.querySelectorAll(
+          '#resources audio, #resources video'
+        );
         for (i = 0; i < resourceMedia.length; i++) {
           resourceMedia[i].load();
           resourceMedia[i].onloadeddata = resourceLoaded;
@@ -632,16 +685,28 @@
       var code = result.info.code;
 
       // Display the code that creates the reusable instance in results
-      var reusedInstances = result.info.code.match(/reusableInstances\.([^;]*)/g);
+      var reusedInstances = result.info.code.match(
+        /reusableInstances\.([^;]*)/g
+      );
       if (reusedInstances) {
         for (var i = 0; i < reusedInstances.length; i++) {
-          var reusedInstance = reusedInstances[i].replace('reusableInstances.', '');
-          code = reusedInstances[i] + ' = ' + reusableInstances.__sources[reusedInstance] + '\n\n' + code;
+          var reusedInstance = reusedInstances[i].replace(
+            'reusableInstances.',
+            ''
+          );
+          code =
+            reusedInstances[i] +
+            ' = ' +
+            reusableInstances.__sources[reusedInstance] +
+            '\n\n' +
+            code;
         }
       }
 
       resultCodeEl.className = 'result-code';
-      resultCodeEl.innerHTML = code.replace(/ /g, '&nbsp;').replace(/\n/g, '<br>');
+      resultCodeEl.innerHTML = code
+        .replace(/ /g, '&nbsp;')
+        .replace(/\n/g, '<br>');
       resultInfoEl.appendChild(resultCodeEl);
     }
 
@@ -663,21 +728,30 @@
       }
 
       if (!client) {
-        updateStatus('Cannot upload results: XMLHttpRequest is not supported.', 'error-notice');
+        updateStatus(
+          'Cannot upload results: XMLHttpRequest is not supported.',
+          'error-notice'
+        );
         return;
       }
 
-      client.open('POST', '/api/results?for='+encodeURIComponent(location.href));
+      client.open(
+        'POST',
+        '/api/results?for=' + encodeURIComponent(location.href)
+      );
       client.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
       client.send(body);
-      client.onreadystatechange = function() {
+      client.onreadystatechange = function () {
         if (client.readyState == 4) {
           if (client.status >= 200 && client.status <= 299) {
             document.getElementById('export-download').disabled = false;
             document.getElementById('export-github').disabled = false;
             updateStatus('Results uploaded.', 'success-notice');
           } else {
-            updateStatus('Failed to upload results: server error.', 'error-notice');
+            updateStatus(
+              'Failed to upload results: server error.',
+              'error-notice'
+            );
             console.log('Server response: ' + client.response);
           }
         }
@@ -690,7 +764,7 @@
     var resultsEl = document.getElementById('results');
 
     if (resultsEl && !hideResults) {
-      for (var i=0; i<results.length; i++) {
+      for (var i = 0; i < results.length; i++) {
         renderReportEl(results[i], resultsEl);
       }
     }
@@ -699,18 +773,22 @@
   // Service Worker helpers
   if ('serviceWorker' in navigator) {
     if ('window' in self) {
-      window.__waitForSWState = function(registration, desiredState) {
-        return new Promise(function(resolve, reject) {
+      window.__waitForSWState = function (registration, desiredState) {
+        return new Promise(function (resolve, reject) {
           var serviceWorker = registration.installing;
 
           if (!serviceWorker) {
             // If the service worker isn't installing, it was probably
             // interrupted during a test.
-            window.__workerCleanup().then(function() {
+            window.__workerCleanup().then(function () {
               window.location.reload();
             });
 
-            return reject(new Error('Service worker not installing, cleaning and retrying...'));
+            return reject(
+              new Error(
+                'Service worker not installing, cleaning and retrying...'
+              )
+            );
           }
 
           function stateListener(evt) {
@@ -723,7 +801,8 @@
               serviceWorker.removeEventListener('statechange', stateListener);
 
               return reject(
-                  new Error('Installing service worker became redundant'));
+                new Error('Installing service worker became redundant')
+              );
             }
           }
 
@@ -731,23 +810,26 @@
         });
       };
 
-      window.__workerCleanup = function() {
+      window.__workerCleanup = function () {
         if ('getRegistrations' in navigator.serviceWorker) {
-          return navigator.serviceWorker.getRegistrations()
-              .then(function(registrations) {
-                var unregisterPromise = registrations.map(
-                    function(registration) {
-                      return registration.unregister();
-                    });
-                return Promise.all(unregisterPromise);
+          return navigator.serviceWorker
+            .getRegistrations()
+            .then(function (registrations) {
+              var unregisterPromise = registrations.map(function (
+                registration
+              ) {
+                return registration.unregister();
               });
+              return Promise.all(unregisterPromise);
+            });
         } else {
-          return navigator.serviceWorker.getRegistration('/resources/')
-              .then(function(registration) {
-                if (registration) {
-                  return registration.unregister();
-                }
-              });
+          return navigator.serviceWorker
+            .getRegistration('/resources/')
+            .then(function (registration) {
+              if (registration) {
+                return registration.unregister();
+              }
+            });
         }
       };
     }
