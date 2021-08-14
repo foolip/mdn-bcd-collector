@@ -31,15 +31,15 @@ const userAgent = `node-superagent/${
 
 describe('/api/results', () => {
   it('missing `Content-Type` header', async () => {
-    const res = await agent.post('/api/results')
-        .set('Content-Type', 'text/plain')
-        .send('string');
+    const res = await agent
+      .post('/api/results')
+      .set('Content-Type', 'text/plain')
+      .send('string');
     assert.equal(res.status, 400);
   });
 
   it('missing `for` param', async () => {
-    const res = await agent.post('/api/results')
-        .send({});
+    const res = await agent.post('/api/results').send({});
     assert.equal(res.status, 400);
   });
 
@@ -73,9 +73,10 @@ describe('/api/results', () => {
   ];
 
   it('submit valid results', async () => {
-    const res = await agent.post('/api/results')
-        .query({for: testURL})
-        .send(testResults);
+    const res = await agent
+      .post('/api/results')
+      .query({for: testURL})
+      .send(testResults);
     assert.equal(res.status, 201);
     assert.equal(res.text, '');
   });
@@ -91,9 +92,10 @@ describe('/api/results', () => {
   });
 
   it('submit modified results', async () => {
-    const res = await agent.post('/api/results')
-        .query({for: testURL})
-        .send(modifiedResults);
+    const res = await agent
+      .post('/api/results')
+      .query({for: testURL})
+      .send(modifiedResults);
     assert.equal(res.status, 201);
   });
 
@@ -108,9 +110,10 @@ describe('/api/results', () => {
   });
 
   it('submit valid results for new URL', async () => {
-    const res = await agent.post('/api/results')
-        .query({for: testURL2})
-        .send(testResults);
+    const res = await agent
+      .post('/api/results')
+      .query({for: testURL2})
+      .send(testResults);
     assert.equal(res.status, 201);
     assert.deepEqual(res.text, '');
   });
@@ -126,66 +129,91 @@ describe('/api/results', () => {
   });
 
   it('submit invalid results', async () => {
-    const res = await agent.post('/api/results')
-        .query({for: testURL})
-        .send('my bad results');
+    const res = await agent
+      .post('/api/results')
+      .query({for: testURL})
+      .send('my bad results');
     assert.equal(res.status, 400);
   });
 });
 
 describe('/api/get', () => {
   it('get all tests, no post vars', async () => {
-    const res = await agent.post('/api/get')
-        .send({});
+    const res = await agent.post('/api/get').send({});
     expect(res).to.redirectTo(/\/tests\/$/);
   });
 
   it('get all tests, with post vars', async () => {
-    const res = await agent.post('/api/get')
-        .send({testSelection: '', limitExposure: ''});
+    const res = await agent
+      .post('/api/get')
+      .send({testSelection: '', limitExposure: ''});
     expect(res).to.redirectTo(/\/tests\/$/);
   });
 
   it('get all tests, limit exposure', async () => {
-    const res = await agent.post('/api/get')
-        .send({testSelection: '', limitExposure: 'Window'});
+    const res = await agent
+      .post('/api/get')
+      .send({testSelection: '', limitExposure: 'Window'});
     expect(res).to.redirectTo(/\/tests\/\?exposure=Window$/);
   });
 
   it('get "api"', async () => {
-    const res = await agent.post('/api/get')
-        .send({testSelection: 'api', limitExposure: ''});
+    const res = await agent
+      .post('/api/get')
+      .send({testSelection: 'api', limitExposure: ''});
     expect(res).to.redirectTo(/\/tests\/api$/);
   });
 
   it('get "api", limit exposure', async () => {
-    const res = await agent.post('/api/get')
-        .send({testSelection: 'api', limitExposure: 'Window'});
+    const res = await agent
+      .post('/api/get')
+      .send({testSelection: 'api', limitExposure: 'Window'});
     expect(res).to.redirectTo(/\/tests\/api\?exposure=Window$/);
   });
 
   it('get specific test', async () => {
-    const res = await agent.post('/api/get')
-        .send({testSelection: 'api.AbortController.signal', limitExposure: ''});
+    const res = await agent
+      .post('/api/get')
+      .send({testSelection: 'api.AbortController.signal', limitExposure: ''});
     expect(res).to.redirectTo(/\/tests\/api\/AbortController\/signal$/);
   });
 
   it('get specific test, limit exposure', async () => {
-    const res = await agent.post('/api/get')
-        .send({testSelection: 'api.AbortController.signal', limitExposure: 'Window'});
-    expect(res).to.redirectTo(/\/tests\/api\/AbortController\/signal\?exposure=Window$/);
+    const res = await agent
+      .post('/api/get')
+      .send({
+        testSelection: 'api.AbortController.signal',
+        limitExposure: 'Window'
+      });
+    expect(res).to.redirectTo(
+      /\/tests\/api\/AbortController\/signal\?exposure=Window$/
+    );
   });
 
   it('get specific test, hide results', async () => {
-    const res = await agent.post('/api/get')
-        .send({testSelection: 'api.AbortController.signal', limitExposure: '', selenium: true});
-    expect(res).to.redirectTo(/\/tests\/api\/AbortController\/signal\?selenium=true$/);
+    const res = await agent
+      .post('/api/get')
+      .send({
+        testSelection: 'api.AbortController.signal',
+        limitExposure: '',
+        selenium: true
+      });
+    expect(res).to.redirectTo(
+      /\/tests\/api\/AbortController\/signal\?selenium=true$/
+    );
   });
 
   it('get specific test, limit exposure and hide results', async () => {
-    const res = await agent.post('/api/get')
-        .send({testSelection: 'api.AbortController.signal', limitExposure: 'Window', selenium: true});
-    expect(res).to.redirectTo(/\/tests\/api\/AbortController\/signal\?selenium=true&exposure=Window$/);
+    const res = await agent
+      .post('/api/get')
+      .send({
+        testSelection: 'api.AbortController.signal',
+        limitExposure: 'Window',
+        selenium: true
+      });
+    expect(res).to.redirectTo(
+      /\/tests\/api\/AbortController\/signal\?selenium=true&exposure=Window$/
+    );
   });
 });
 
@@ -193,7 +221,10 @@ describe('test assets', () => {
   it('/eventstream', async () => {
     const res = await agent.get(`/eventstream`);
     assert.equal(res.status, 200);
-    assert.equal(res.headers['content-type'], 'text/event-stream; charset=utf-8');
+    assert.equal(
+      res.headers['content-type'],
+      'text/event-stream; charset=utf-8'
+    );
   });
 });
 

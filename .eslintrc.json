@@ -9,11 +9,14 @@
     "comma-dangle": ["error", "never"],
     "curly": ["error", "all"],
     "max-len": "off",
+    "indent": "off",
     "no-else-return": "error",
     "no-unused-vars": ["error", {"varsIgnorePattern": "^_$"}],
     "prefer-arrow/prefer-arrow-functions": "error",
+    "quotes": "off",
     "quote-props": ["error", "as-needed"],
-    "require-jsdoc": "off"
+    "require-jsdoc": "off",
+    "space-before-function-paren": "off"
   },
   "env": {
     "es6": true,

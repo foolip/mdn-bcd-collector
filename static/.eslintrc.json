@@ -7,19 +7,14 @@
     "comma-dangle": ["error", "never"],
     "curly": ["error", "all"],
     "guard-for-in": "off",
-    "max-len": [
-      "error",
-      {
-        "ignoreRegExpLiterals": true,
-        "ignoreStrings": true,
-        "ignoreTemplateLiterals": true,
-        "ignoreUrls": true
-      }
-    ],
+    "indent": "off",
+    "max-len": "off",
     "no-invalid-this": "off",
     "no-var": "off",
     "prefer-arrow/prefer-arrow-functions": "off",
-    "require-jsdoc": "off"
+    "quotes": "off",
+    "require-jsdoc": "off",
+    "space-before-function-paren": "off"
   },
   "root": true
 }

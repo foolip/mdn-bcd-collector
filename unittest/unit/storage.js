@@ -43,7 +43,7 @@ class FakeFile {
 
 class FakeBucket {
   constructor() {
-    this._files = new Map;
+    this._files = new Map();
   }
 
   file(name) {
@@ -73,9 +73,9 @@ describe('storage', () => {
       beforeEach(() => {
         if (StorageClass === CloudStorage) {
           storage = new CloudStorage('fake-project', 'fake-bucket');
-          storage._bucket = new FakeBucket;
+          storage._bucket = new FakeBucket();
         } else {
-          storage = new StorageClass;
+          storage = new StorageClass();
         }
       });
 

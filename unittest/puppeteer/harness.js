@@ -42,9 +42,12 @@ describe('harness.js', () => {
   after(() => server.close());
 
   for (const product of products) {
-    it(product, async function() {
-      if (product === 'firefox' && process.platform === 'win32' &&
-        require('../../package.json').devDependencies.puppeteer === '5.4.1') {
+    it(product, async function () {
+      if (
+        product === 'firefox' &&
+        process.platform === 'win32' &&
+        require('../../package.json').devDependencies.puppeteer === '5.4.1'
+      ) {
         // Browser.close() Firefox support is broken on Windows and causes hang
         // https://github.com/puppeteer/puppeteer/issues/5673
         /* eslint-disable no-invalid-this */
@@ -80,14 +83,20 @@ describe('harness.js', () => {
 
         // Slight adjustment of coverage files to point to original files
         const coveragePath = path.join(
-            __dirname, '..', '..', '.nyc_output', 'out.json');
+          __dirname,
+          '..',
+          '..',
+          '.nyc_output',
+          'out.json'
+        );
         fs.readFile(coveragePath, 'utf8', (err, data) => {
           if (err) {
             return console.log(err);
           }
           const result = data.replace(
-              /\.nyc_output\/resources/g,
-              'static/resources');
+            /\.nyc_output\/resources/g,
+            'static/resources'
+          );
 
           fs.writeFile(coveragePath, result, 'utf8', (err) => {
             if (err) {
@@ -98,6 +107,8 @@ describe('harness.js', () => {
       }
 
       assert.equal(report.stats.failures, 0);
-    }).slow(10000).timeout(30000);
+    })
+      .slow(10000)
+      .timeout(30000);
   }
 });

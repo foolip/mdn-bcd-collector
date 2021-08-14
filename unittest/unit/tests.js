@@ -94,34 +94,106 @@ describe('Tests', () => {
   describe('getTests', () => {
     it('individual endpoint', () => {
       assert.deepEqual(tests.getTests('api.AbortController'), [
-        {ident: 'api.AbortController', tests: [{code: '"AbortController" in self'}], exposure: 'Window', resources: {}},
-        {ident: 'api.AbortController', tests: [{code: '"AbortController" in self'}], exposure: 'Worker', resources: {}},
-        {ident: 'api.AbortController', tests: [{code: '"AbortController" in self'}], exposure: 'ServiceWorker', resources: {}},
-        {ident: 'api.AbortController.signal', tests: [{code: '"AbortController" in self && "signal" in AbortController.prototype'}], exposure: 'Window', resources: {'audio-blip': {type: 'audio', src: '/media/blip.mp3'}}},
-        {ident: 'api.AbortController.signal', tests: [{code: '"AbortController" in self && "signal" in AbortController.prototype'}], exposure: 'Worker', resources: {'audio-blip': {type: 'audio', src: '/media/blip.mp3'}}}
+        {
+          ident: 'api.AbortController',
+          tests: [{code: '"AbortController" in self'}],
+          exposure: 'Window',
+          resources: {}
+        },
+        {
+          ident: 'api.AbortController',
+          tests: [{code: '"AbortController" in self'}],
+          exposure: 'Worker',
+          resources: {}
+        },
+        {
+          ident: 'api.AbortController',
+          tests: [{code: '"AbortController" in self'}],
+          exposure: 'ServiceWorker',
+          resources: {}
+        },
+        {
+          ident: 'api.AbortController.signal',
+          tests: [
+            {
+              code: '"AbortController" in self && "signal" in AbortController.prototype'
+            }
+          ],
+          exposure: 'Window',
+          resources: {'audio-blip': {type: 'audio', src: '/media/blip.mp3'}}
+        },
+        {
+          ident: 'api.AbortController.signal',
+          tests: [
+            {
+              code: '"AbortController" in self && "signal" in AbortController.prototype'
+            }
+          ],
+          exposure: 'Worker',
+          resources: {'audio-blip': {type: 'audio', src: '/media/blip.mp3'}}
+        }
       ]);
     });
 
     it('limited scope', () => {
       assert.deepEqual(tests.getTests('api.AbortController', 'Window'), [
-        {ident: 'api.AbortController', tests: [{code: '"AbortController" in self'}], exposure: 'Window', resources: {}},
-        {ident: 'api.AbortController.signal', tests: [{code: '"AbortController" in self && "signal" in AbortController.prototype'}], exposure: 'Window', resources: {'audio-blip': {type: 'audio', src: '/media/blip.mp3'}}}
+        {
+          ident: 'api.AbortController',
+          tests: [{code: '"AbortController" in self'}],
+          exposure: 'Window',
+          resources: {}
+        },
+        {
+          ident: 'api.AbortController.signal',
+          tests: [
+            {
+              code: '"AbortController" in self && "signal" in AbortController.prototype'
+            }
+          ],
+          exposure: 'Window',
+          resources: {'audio-blip': {type: 'audio', src: '/media/blip.mp3'}}
+        }
       ]);
     });
 
     it('filtering out ignored tests', () => {
       // Filter out a single test.
-      assert.deepEqual(tests.getTests('api', 'Window', ['api.AbortController.signal']), [
-        {ident: 'api.AbortController', tests: [{code: '"AbortController" in self'}], exposure: 'Window', resources: {}}
-      ]);
+      assert.deepEqual(
+        tests.getTests('api', 'Window', ['api.AbortController.signal']),
+        [
+          {
+            ident: 'api.AbortController',
+            tests: [{code: '"AbortController" in self'}],
+            exposure: 'Window',
+            resources: {}
+          }
+        ]
+      );
 
       // Filter out a tests recursively.
-      assert.deepEqual(tests.getTests('api', 'Window', ['api.AbortController']), []);
+      assert.deepEqual(
+        tests.getTests('api', 'Window', ['api.AbortController']),
+        []
+      );
 
       // Matching prefix does not ignore a test.
       assert.deepEqual(tests.getTests('api', 'Window', ['api.Abort']), [
-        {ident: 'api.AbortController', tests: [{code: '"AbortController" in self'}], exposure: 'Window', resources: {}},
-        {ident: 'api.AbortController.signal', tests: [{code: '"AbortController" in self && "signal" in AbortController.prototype'}], exposure: 'Window', resources: {'audio-blip': {type: 'audio', src: '/media/blip.mp3'}}}
+        {
+          ident: 'api.AbortController',
+          tests: [{code: '"AbortController" in self'}],
+          exposure: 'Window',
+          resources: {}
+        },
+        {
+          ident: 'api.AbortController.signal',
+          tests: [
+            {
+              code: '"AbortController" in self && "signal" in AbortController.prototype'
+            }
+          ],
+          exposure: 'Window',
+          resources: {'audio-blip': {type: 'audio', src: '/media/blip.mp3'}}
+        }
       ]);
     });
   });

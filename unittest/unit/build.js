@@ -58,20 +58,23 @@ describe('build', () => {
     describe('custom test for interface and member', () => {
       it('interface', () => {
         assert.equal(
-            getCustomTestAPI('foo'),
-            '(function () {\n  var instance = 1;\n  return instance + 4;\n})();');
+          getCustomTestAPI('foo'),
+          '(function () {\n  var instance = 1;\n  return instance + 4;\n})();'
+        );
       });
 
       it('member (custom)', () => {
         assert.equal(
-            getCustomTestAPI('foo', 'bar'),
-            '(function () {\n  var instance = 1;\n  return 1 + 1;\n})();');
+          getCustomTestAPI('foo', 'bar'),
+          '(function () {\n  var instance = 1;\n  return 1 + 1;\n})();'
+        );
       });
 
       it('member (default)', () => {
         assert.equal(
-            getCustomTestAPI('foo', 'baz'),
-            '(function () {\n  var instance = 1;\n  return \'baz\' in instance;\n})();');
+          getCustomTestAPI('foo', 'baz'),
+          "(function () {\n  var instance = 1;\n  return 'baz' in instance;\n})();"
+        );
       });
 
       it('constructor', () => {
@@ -81,7 +84,10 @@ describe('build', () => {
 
     describe('custom test for interface only, no base', () => {
       it('interface', () => {
-        assert.equal(getCustomTestAPI('fig'), '(function () {\n  return 2;\n})();');
+        assert.equal(
+          getCustomTestAPI('fig'),
+          '(function () {\n  return 2;\n})();'
+        );
       });
 
       it('member', () => {
@@ -92,64 +98,76 @@ describe('build', () => {
     describe('custom test for member only', () => {
       it('interface', () => {
         assert.equal(
-            getCustomTestAPI('apple'),
-            '(function () {\n  var a = 1;\n  return !!instance;\n})();');
+          getCustomTestAPI('apple'),
+          '(function () {\n  var a = 1;\n  return !!instance;\n})();'
+        );
       });
 
       it('member', () => {
         assert.equal(
-            getCustomTestAPI('apple', 'bar'),
-            '(function () {\n  var a = 1;\n  return a + 3;\n})();');
+          getCustomTestAPI('apple', 'bar'),
+          '(function () {\n  var a = 1;\n  return a + 3;\n})();'
+        );
       });
     });
 
     it('custom test with invalid syntax', () => {
-      assert.include(getCustomTestAPI('invalid'), 'throw \'Test is malformed:');
-      assert.include(getCustomTestAPI('invalid', 'ghost'), 'throw \'Test is malformed:');
+      assert.include(getCustomTestAPI('invalid'), "throw 'Test is malformed:");
+      assert.include(
+        getCustomTestAPI('invalid', 'ghost'),
+        "throw 'Test is malformed:"
+      );
       assert.isTrue(console.error.calledTwice);
     });
 
     describe('promise-based custom tests', () => {
       it('interface', () => {
         assert.equal(
-            getCustomTestAPI('promise'),
-            '(function () {\n  var promise = somePromise();\n  return promise.then(function (instance) {\n    return !!instance;\n  });\n})();');
+          getCustomTestAPI('promise'),
+          '(function () {\n  var promise = somePromise();\n  return promise.then(function (instance) {\n    return !!instance;\n  });\n})();'
+        );
       });
 
       it('member', () => {
         assert.equal(
-            getCustomTestAPI('promise', 'bar'),
-            '(function () {\n  var promise = somePromise();\n  return promise.then(function (instance) {\n    return \'bar\' in instance;\n  });\n})();');
+          getCustomTestAPI('promise', 'bar'),
+          "(function () {\n  var promise = somePromise();\n  return promise.then(function (instance) {\n    return 'bar' in instance;\n  });\n})();"
+        );
       });
 
       it('interface with import', () => {
         assert.equal(
-            getCustomTestAPI('newpromise'),
-            '(function () {\n  var p = somePromise();\n  if (!p) {\n    return false;\n  }\n  var promise = p.then(function () {});\n  return promise.then(function (instance) {\n    return !!instance;\n  });\n})();');
+          getCustomTestAPI('newpromise'),
+          '(function () {\n  var p = somePromise();\n  if (!p) {\n    return false;\n  }\n  var promise = p.then(function () {});\n  return promise.then(function (instance) {\n    return !!instance;\n  });\n})();'
+        );
       });
     });
 
     describe('import other test', () => {
       it('valid import', () => {
         assert.equal(
-            getCustomTestAPI('import1'),
-            '(function () {\n  var a = 1;\n  if (!a) {\n    return false;\n  }\n  var instance = a;\n  return !!instance;\n})();');
+          getCustomTestAPI('import1'),
+          '(function () {\n  var a = 1;\n  if (!a) {\n    return false;\n  }\n  var instance = a;\n  return !!instance;\n})();'
+        );
 
         assert.equal(
-            getCustomTestAPI('import2'),
-            '(function () {\n  var a = 1;\n  if (!a) {\n    return false;\n  }\n  var b = a;\n  if (!b) {\n    return false;\n  }\n  var instance = b;\n  return !!instance;\n})();');
+          getCustomTestAPI('import2'),
+          '(function () {\n  var a = 1;\n  if (!a) {\n    return false;\n  }\n  var b = a;\n  if (!b) {\n    return false;\n  }\n  var instance = b;\n  return !!instance;\n})();'
+        );
       });
 
       it('valid import: import is instance', () => {
         assert.equal(
-            getCustomTestAPI('straightimport'),
-            '(function () {\n  var instance = 1;\n  return !!instance;\n})();');
+          getCustomTestAPI('straightimport'),
+          '(function () {\n  var instance = 1;\n  return !!instance;\n})();'
+        );
       });
 
       it('invalid import', () => {
         assert.equal(
-            getCustomTestAPI('badimport'),
-            '(function () {\n  throw \'Test is malformed: <%api.foobar:apple%> is an invalid reference\';\n  return !!instance;\n})();');
+          getCustomTestAPI('badimport'),
+          "(function () {\n  throw 'Test is malformed: <%api.foobar:apple%> is an invalid reference';\n  return !!instance;\n})();"
+        );
         assert.isTrue(console.error.calledOnce);
       });
     });
@@ -161,33 +179,29 @@ describe('build', () => {
 
   describe('getCustomSubtestsAPI', () => {
     it('get subtests', () => {
-      assert.deepEqual(
-          getCustomSubtestsAPI('foo', 'bar'), {
-            multiple: '(function () {\n  var instance = 1;\n  return 1 + 1 + 1;\n})();',
-            'one.only': '(function () {\n  var instance = 1;\n  return 1;\n})();'
-          });
+      assert.deepEqual(getCustomSubtestsAPI('foo', 'bar'), {
+        multiple:
+          '(function () {\n  var instance = 1;\n  return 1 + 1 + 1;\n})();',
+        'one.only': '(function () {\n  var instance = 1;\n  return 1;\n})();'
+      });
     });
   });
 
   describe('getCustomResourcesAPI', () => {
     it('get resources', () => {
-      assert.deepEqual(
-          getCustomResourcesAPI('audiocontext'), {
-            'audio-blip': {
-              type: 'audio',
-              src: ['/media/blip.mp3', '/media/blip.ogg']
-            }
-          }
-      );
+      assert.deepEqual(getCustomResourcesAPI('audiocontext'), {
+        'audio-blip': {
+          type: 'audio',
+          src: ['/media/blip.mp3', '/media/blip.ogg']
+        }
+      });
 
-      assert.deepEqual(
-          getCustomResourcesAPI('WebGLRenderingContext'), {
-            webGL: {
-              type: 'instance',
-              src: 'var canvas = document.createElement(\'canvas\');\nif (!canvas) {\n  return false;\n}\nreturn (\n  canvas.getContext(\'webgl2\') ||\n  canvas.getContext(\'webgl\') ||\n  canvas.getContext(\'experimental-webgl\')\n);'
-            }
-          }
-      );
+      assert.deepEqual(getCustomResourcesAPI('WebGLRenderingContext'), {
+        webGL: {
+          type: 'instance',
+          src: "var canvas = document.createElement('canvas');\nif (!canvas) {\n  return false;\n}\nreturn (\n  canvas.getContext('webgl2') ||\n  canvas.getContext('webgl') ||\n  canvas.getContext('experimental-webgl')\n);"
+        }
+      });
     });
 
     it('no resources', () => {
@@ -195,10 +209,13 @@ describe('build', () => {
     });
 
     it('try to get invalid resource', () => {
-      assert.throws(() => {
-        getCustomResourcesAPI('badresource');
-      }, Error,
-      'Resource bad-resource is not defined but referenced in api.badresource');
+      assert.throws(
+        () => {
+          getCustomResourcesAPI('badresource');
+        },
+        Error,
+        'Resource bad-resource is not defined but referenced in api.badresource'
+      );
     });
   });
 
@@ -208,11 +225,17 @@ describe('build', () => {
     });
 
     it('custom test for property', () => {
-      assert.equal(getCustomTestCSS('foo'), '(function () {\n  return 1;\n})();');
+      assert.equal(
+        getCustomTestCSS('foo'),
+        '(function () {\n  return 1;\n})();'
+      );
     });
 
     it('import (not implemented)', () => {
-      assert.equal(getCustomTestCSS('bar'), '(function () {\n  throw \'Test is malformed: import <%css.properties.foo:a%>, category css is not importable\';\n})();');
+      assert.equal(
+        getCustomTestCSS('bar'),
+        "(function () {\n  throw 'Test is malformed: import <%css.properties.foo:a%>, category css is not importable';\n})();"
+      );
     });
   });
 
@@ -222,13 +245,22 @@ describe('build', () => {
     });
 
     it('constructor', () => {
-      const test = {property: 'constructor.AudioContext', owner: 'AudioContext'};
-      assert.equal(compileTestCode(test), 'bcd.testConstructor("AudioContext");');
+      const test = {
+        property: 'constructor.AudioContext',
+        owner: 'AudioContext'
+      };
+      assert.equal(
+        compileTestCode(test),
+        'bcd.testConstructor("AudioContext");'
+      );
     });
 
     it('Symbol', () => {
       const test = {property: 'Symbol.iterator', owner: 'DOMMatrixReadOnly'};
-      assert.equal(compileTestCode(test), '"Symbol" in self && "iterator" in Symbol && Symbol.iterator in DOMMatrixReadOnly.prototype');
+      assert.equal(
+        compileTestCode(test),
+        '"Symbol" in self && "iterator" in Symbol && Symbol.iterator in DOMMatrixReadOnly.prototype'
+      );
     });
 
     it('namespace', () => {
@@ -237,8 +269,15 @@ describe('build', () => {
     });
 
     it('constructor', () => {
-      const test = {property: 'm11', owner: 'DOMMatrix.prototype', inherit: true};
-      assert.equal(compileTestCode(test), 'Object.prototype.hasOwnProperty.call(DOMMatrix.prototype, "m11")');
+      const test = {
+        property: 'm11',
+        owner: 'DOMMatrix.prototype',
+        inherit: true
+      };
+      assert.equal(
+        compileTestCode(test),
+        'Object.prototype.hasOwnProperty.call(DOMMatrix.prototype, "m11")'
+      );
     });
   });
 
@@ -319,10 +358,7 @@ describe('build', () => {
         },
         {
           raw: {
-            code: [
-              'true',
-              'true'
-            ],
+            code: ['true', 'true'],
             combinator: '||'
           },
           resources: {},
@@ -330,10 +366,7 @@ describe('build', () => {
         },
         {
           raw: {
-            code: [
-              'true',
-              'true'
-            ],
+            code: ['true', 'true'],
             combinator: '&&'
           },
           resources: {},
@@ -377,8 +410,10 @@ describe('build', () => {
 
   it('cssPropertyToIDLAttribute', () => {
     assert.equal(cssPropertyToIDLAttribute('line-height'), 'lineHeight');
-    assert.equal(cssPropertyToIDLAttribute('-webkit-line-clamp', true),
-        'webkitLineClamp');
+    assert.equal(
+      cssPropertyToIDLAttribute('-webkit-line-clamp', true),
+      'webkitLineClamp'
+    );
   });
 
   it('buildIDL', () => {
@@ -388,7 +423,9 @@ describe('build', () => {
     };
 
     const customIDLs = {
-      second: WebIDL2.parse(`partial interface XSLTProcessor { undefined reset(); };`)
+      second: WebIDL2.parse(
+        `partial interface XSLTProcessor { undefined reset(); };`
+      )
     };
 
     const tests = buildIDL(specIDLs, customIDLs);
@@ -404,17 +441,19 @@ describe('build', () => {
     it('interface + mixin', () => {
       const specIDLs = {
         first: WebIDL2.parse(
-            `[Exposed=Window]
+          `[Exposed=Window]
              interface DummyError : Error {
                readonly attribute boolean imadumdum;
-             };`),
+             };`
+        ),
         second: WebIDL2.parse(
-            `[Exposed=Window]
+          `[Exposed=Window]
              interface mixin DummyErrorHelper {
                DummyError geterror();
              };
 
-             DummyError includes DummyErrorHelper;`)
+             DummyError includes DummyErrorHelper;`
+        )
       };
       const ast = flattenIDL(specIDLs, customIDLs);
 
@@ -439,14 +478,16 @@ describe('build', () => {
     it('namespace + partial namespace', () => {
       const specIDLs = {
         cssom: WebIDL2.parse(
-            `[Exposed=Window]
+          `[Exposed=Window]
              namespace CSS {
                boolean supports();
-             };`),
+             };`
+        ),
         paint: WebIDL2.parse(
-            `partial namespace CSS {
+          `partial namespace CSS {
                readonly attribute any paintWorklet;
-             };`)
+             };`
+        )
       };
       const ast = flattenIDL(specIDLs, customIDLs);
 
@@ -473,47 +514,56 @@ describe('build', () => {
     it('mixin missing', () => {
       const specIDLs = {
         first: WebIDL2.parse(
-            `interface mixin DummyErrorHelper {
+          `interface mixin DummyErrorHelper {
                DummyError geterror();
-             };`),
+             };`
+        ),
         secnd: WebIDL2.parse(`DummyError includes DummyErrorHelper;`)
       };
 
       expect(() => {
         flattenIDL(specIDLs, customIDLs);
-      }).to.throw('Target DummyError not found for interface mixin DummyErrorHelper');
+      }).to.throw(
+        'Target DummyError not found for interface mixin DummyErrorHelper'
+      );
     });
 
     it('interface missing', () => {
       const specIDLs = {
         first: WebIDL2.parse(
-            `[Exposed=Window]
+          `[Exposed=Window]
              interface DummyError : Error {
                readonly attribute boolean imadumdum;
-             };`),
+             };`
+        ),
         secnd: WebIDL2.parse(`DummyError includes DummyErrorHelper;`)
       };
 
       expect(() => {
         flattenIDL(specIDLs, customIDLs);
-      }).to.throw('Interface mixin DummyErrorHelper not found for target DummyError');
+      }).to.throw(
+        'Interface mixin DummyErrorHelper not found for target DummyError'
+      );
     });
 
     it('Operation overloading', () => {
       const specIDLs = {
         cssom: WebIDL2.parse(
-            `[Exposed=Window]
+          `[Exposed=Window]
              namespace CSS {
                boolean supports();
-             };`),
+             };`
+        ),
         paint: WebIDL2.parse(
-            `partial namespace CSS {
+          `partial namespace CSS {
                readonly attribute any paintWorklet;
-             };`),
+             };`
+        ),
         paint2: WebIDL2.parse(
-            `partial namespace CSS {
+          `partial namespace CSS {
                boolean supports();
-             };`)
+             };`
+        )
       };
       expect(() => {
         flattenIDL(specIDLs, customIDLs);
@@ -523,9 +573,10 @@ describe('build', () => {
     it('Partial missing main', () => {
       const specIDLs = {
         paint: WebIDL2.parse(
-            `partial namespace CSS {
+          `partial namespace CSS {
                readonly attribute any paintWorklet;
-             };`)
+             };`
+        )
       };
       expect(() => {
         flattenIDL(specIDLs, customIDLs);
@@ -540,25 +591,30 @@ describe('build', () => {
     it('no defined exposure set', () => {
       const specIDLs = {
         first: WebIDL2.parse(
-            `interface Dummy {
+          `interface Dummy {
                readonly attribute boolean imadumdum;
-             };`)
+             };`
+        )
       };
       const ast = flattenIDL(specIDLs, customIDLs);
       const interfaces = ast.filter((dfn) => dfn.type === 'interface');
-      assert.throws(() => {
-        getExposureSet(interfaces[0]);
-      }, Error,
-      'Exposed extended attribute not found on interface Dummy');
+      assert.throws(
+        () => {
+          getExposureSet(interfaces[0]);
+        },
+        Error,
+        'Exposed extended attribute not found on interface Dummy'
+      );
     });
 
     it('single exposure', () => {
       const specIDLs = {
         first: WebIDL2.parse(
-            `[Exposed=Worker]
+          `[Exposed=Worker]
              interface Dummy {
                readonly attribute boolean imadumdum;
-             };`)
+             };`
+        )
       };
       const ast = flattenIDL(specIDLs, customIDLs);
       const interfaces = ast.filter((dfn) => dfn.type === 'interface');
@@ -569,10 +625,11 @@ describe('build', () => {
     it('multiple exposure', () => {
       const specIDLs = {
         first: WebIDL2.parse(
-            `[Exposed=(Window,Worker)]
+          `[Exposed=(Window,Worker)]
              interface Dummy {
                readonly attribute boolean imadumdum;
-             };`)
+             };`
+        )
       };
       const ast = flattenIDL(specIDLs, customIDLs);
       const interfaces = ast.filter((dfn) => dfn.type === 'interface');
@@ -583,10 +640,11 @@ describe('build', () => {
     it('exposed to DedicatedWorker', () => {
       const specIDLs = {
         first: WebIDL2.parse(
-            `[Exposed=DedicatedWorker]
+          `[Exposed=DedicatedWorker]
              interface Dummy {
                readonly attribute boolean imadumdum;
-             };`)
+             };`
+        )
       };
       const ast = flattenIDL(specIDLs, customIDLs);
       const interfaces = ast.filter((dfn) => dfn.type === 'interface');
@@ -598,10 +656,11 @@ describe('build', () => {
   describe('buildIDLTests', () => {
     it('interface with attribute', () => {
       const ast = WebIDL2.parse(
-          `[Exposed=Window]
+        `[Exposed=Window]
            interface Attr {
              attribute any name;
-           };`);
+           };`
+      );
       assert.deepEqual(buildIDLTests(ast), {
         'api.Attr': {
           code: '"Attr" in self',
@@ -616,10 +675,11 @@ describe('build', () => {
 
     it('interface with method', () => {
       const ast = WebIDL2.parse(
-          `[Exposed=Window]
+        `[Exposed=Window]
            interface Node {
              boolean contains(Node? other);
-           };`);
+           };`
+      );
       assert.deepEqual(buildIDLTests(ast), {
         'api.Node': {
           code: '"Node" in self',
@@ -634,10 +694,11 @@ describe('build', () => {
 
     it('interface with static method', () => {
       const ast = WebIDL2.parse(
-          `[Exposed=Window]
+        `[Exposed=Window]
            interface MediaSource {
              static boolean isTypeSupported(DOMString type);
-           };`);
+           };`
+      );
 
       assert.deepEqual(buildIDLTests(ast), {
         'api.MediaSource': {
@@ -653,10 +714,11 @@ describe('build', () => {
 
     it('interface with const', () => {
       const ast = WebIDL2.parse(
-          `[Exposed=Window]
+        `[Exposed=Window]
            interface Window {
              const boolean isWindow = true;
-           };`);
+           };`
+      );
 
       assert.deepEqual(buildIDLTests(ast), {
         'api.Window': {
@@ -668,7 +730,7 @@ describe('build', () => {
 
     it('interface with custom test', () => {
       const ast = WebIDL2.parse(
-          `[Exposed=Window]
+        `[Exposed=Window]
            interface ANGLE_instanced_arrays {
             undefined drawArraysInstancedANGLE(
               GLenum mode,
@@ -688,19 +750,20 @@ describe('build', () => {
           interface Document {
             readonly attribute boolean loaded;
             readonly attribute DOMString? charset;
-          };`);
+          };`
+      );
 
       assert.deepEqual(buildIDLTests(ast), {
         'api.ANGLE_instanced_arrays': {
-          code: '(function () {\n  var canvas = document.createElement(\'canvas\');\n  var gl = canvas.getContext(\'webgl\');\n  var instance = gl.getExtension(\'ANGLE_instanced_arrays\');\n  return !!instance;\n})();',
+          code: "(function () {\n  var canvas = document.createElement('canvas');\n  var gl = canvas.getContext('webgl');\n  var instance = gl.getExtension('ANGLE_instanced_arrays');\n  return !!instance;\n})();",
           exposure: ['Window']
         },
         'api.ANGLE_instanced_arrays.drawArraysInstancedANGLE': {
-          code: '(function () {\n  var canvas = document.createElement(\'canvas\');\n  var gl = canvas.getContext(\'webgl\');\n  var instance = gl.getExtension(\'ANGLE_instanced_arrays\');\n  return true && instance && \'drawArraysInstancedANGLE\' in instance;\n})();',
+          code: "(function () {\n  var canvas = document.createElement('canvas');\n  var gl = canvas.getContext('webgl');\n  var instance = gl.getExtension('ANGLE_instanced_arrays');\n  return true && instance && 'drawArraysInstancedANGLE' in instance;\n})();",
           exposure: ['Window']
         },
         'api.ANGLE_instanced_arrays.drawElementsInstancedANGLE': {
-          code: '(function () {\n  var canvas = document.createElement(\'canvas\');\n  var gl = canvas.getContext(\'webgl\');\n  var instance = gl.getExtension(\'ANGLE_instanced_arrays\');\n  return \'drawElementsInstancedANGLE\' in instance;\n})();',
+          code: "(function () {\n  var canvas = document.createElement('canvas');\n  var gl = canvas.getContext('webgl');\n  var instance = gl.getExtension('ANGLE_instanced_arrays');\n  return 'drawElementsInstancedANGLE' in instance;\n})();",
           exposure: ['Window']
         },
         'api.Document': {
@@ -708,7 +771,7 @@ describe('build', () => {
           exposure: ['Window']
         },
         'api.Document.charset': {
-          code: '(function () {\n  return document.charset == \'UTF-8\';\n})();',
+          code: "(function () {\n  return document.charset == 'UTF-8';\n})();",
           exposure: ['Window']
         },
         'api.Document.loaded': {
@@ -716,7 +779,7 @@ describe('build', () => {
           exposure: ['Window']
         },
         'api.Document.loaded.loaded_is_boolean': {
-          code: '(function () {\n  return typeof document.loaded === \'boolean\';\n})();',
+          code: "(function () {\n  return typeof document.loaded === 'boolean';\n})();",
           exposure: ['Window']
         }
       });
@@ -724,18 +787,20 @@ describe('build', () => {
 
     it('interface with legacy namespace', () => {
       const ast = WebIDL2.parse(
-          `[Exposed=Window, LegacyNamespace]
-           interface Legacy {};`);
+        `[Exposed=Window, LegacyNamespace]
+           interface Legacy {};`
+      );
       assert.deepEqual(buildIDLTests(ast), {});
     });
 
     it('global interface', () => {
       const ast = WebIDL2.parse(
-          `[Exposed=Worker, Global=Worker]
+        `[Exposed=Worker, Global=Worker]
            interface WorkerGlobalScope {
              attribute boolean isLoaded;
              const boolean active = true;
-           };`);
+           };`
+      );
 
       assert.deepEqual(buildIDLTests(ast), {
         'api.WorkerGlobalScope': {
@@ -751,10 +816,11 @@ describe('build', () => {
 
     it('interface with constructor operation', () => {
       const ast = WebIDL2.parse(
-          `[Exposed=Window]
+        `[Exposed=Window]
            interface Number {
              constructor(optional any value);
-           };`);
+           };`
+      );
 
       assert.deepEqual(buildIDLTests(ast), {
         'api.Number': {
@@ -770,10 +836,11 @@ describe('build', () => {
 
     it('iterable interface', () => {
       const ast = WebIDL2.parse(
-          `[Exposed=Window]
+        `[Exposed=Window]
            interface DoubleList {
              iterable<double>;
-           };`);
+           };`
+      );
       assert.deepEqual(buildIDLTests(ast), {
         'api.DoubleList': {
           code: '"DoubleList" in self',
@@ -804,10 +871,11 @@ describe('build', () => {
 
     it('maplike interface', () => {
       const ast = WebIDL2.parse(
-          `[Exposed=Window]
+        `[Exposed=Window]
            interface DoubleMap {
              maplike<DOMString, double>;
-           };`);
+           };`
+      );
       assert.deepEqual(buildIDLTests(ast), {
         'api.DoubleMap': {
           code: '"DoubleMap" in self',
@@ -858,10 +926,11 @@ describe('build', () => {
 
     it('setlike interface', () => {
       const ast = WebIDL2.parse(
-          `[Exposed=Window]
+        `[Exposed=Window]
            interface DoubleSet {
              setlike<double>;
-           };`);
+           };`
+      );
       assert.deepEqual(buildIDLTests(ast), {
         'api.DoubleSet': {
           code: '"DoubleSet" in self',
@@ -908,11 +977,12 @@ describe('build', () => {
 
     it('interface with getter/setter', () => {
       const ast = WebIDL2.parse(
-          `[Exposed=Window]
+        `[Exposed=Window]
            interface GetMe {
              getter GetMe (unsigned long index);
              setter undefined (GetMe data, optional unsigned long index);
-           };`);
+           };`
+      );
       assert.deepEqual(buildIDLTests(ast), {
         'api.GetMe': {
           code: '"GetMe" in self',
@@ -923,10 +993,11 @@ describe('build', () => {
 
     it('varied exposure', () => {
       const ast = WebIDL2.parse(
-          `[Exposed=Window] interface Worker {};
+        `[Exposed=Window] interface Worker {};
            [Exposed=Worker] interface WorkerSync {};
            [Exposed=(Window,Worker)] interface MessageChannel {};
-           [Exposed=Window] namespace console {};`);
+           [Exposed=Window] namespace console {};`
+      );
       assert.deepEqual(buildIDLTests(ast), {
         'api.console': {
           code: '"console" in self',
@@ -949,10 +1020,11 @@ describe('build', () => {
 
     it('interface with stringifier', () => {
       const ast = WebIDL2.parse(
-          `[Exposed=Window]
+        `[Exposed=Window]
            interface Number {
              stringifier DOMString();
-           };`);
+           };`
+      );
 
       assert.deepEqual(buildIDLTests(ast), {
         'api.Number': {
@@ -968,12 +1040,13 @@ describe('build', () => {
 
     it('operator variations', () => {
       const ast = WebIDL2.parse(
-          `[Exposed=Window]
+        `[Exposed=Window]
            interface AudioNode : EventTarget {
              undefined disconnect ();
              undefined disconnect (unsigned long output);
              undefined disconnect (AudioNode destinationNode);
-           };`);
+           };`
+      );
       assert.deepEqual(buildIDLTests(ast), {
         'api.AudioNode': {
           code: '"AudioNode" in self',
@@ -988,10 +1061,11 @@ describe('build', () => {
 
     it('namespace with attribute', () => {
       const ast = WebIDL2.parse(
-          `[Exposed=Window]
+        `[Exposed=Window]
            namespace CSS {
              readonly attribute any paintWorklet;
-           };`);
+           };`
+      );
       assert.deepEqual(buildIDLTests(ast), {
         'api.CSS': {
           code: '"CSS" in self',
@@ -1006,10 +1080,11 @@ describe('build', () => {
 
     it('namespace with method', () => {
       const ast = WebIDL2.parse(
-          `[Exposed=Window]
+        `[Exposed=Window]
            namespace CSS {
              boolean supports(CSSOMString property, CSSOMString value);
-           };`);
+           };`
+      );
       assert.deepEqual(buildIDLTests(ast), {
         'api.CSS': {
           code: '"CSS" in self',
@@ -1024,10 +1099,11 @@ describe('build', () => {
 
     it('namespace with custom test', () => {
       const ast = WebIDL2.parse(
-          `[Exposed=Window]
+        `[Exposed=Window]
            namespace Scope {
              readonly attribute any specialWorklet;
-           };`);
+           };`
+      );
 
       assert.deepEqual(buildIDLTests(ast), {
         'api.Scope': {
@@ -1035,7 +1111,7 @@ describe('build', () => {
           exposure: ['Window']
         },
         'api.Scope.specialWorklet': {
-          code: '(function () {\n  var scope = Scope;\n  return scope && \'specialWorklet\' in scope;\n})();',
+          code: "(function () {\n  var scope = Scope;\n  return scope && 'specialWorklet' in scope;\n})();",
           exposure: ['Window']
         }
       });
@@ -1043,11 +1119,12 @@ describe('build', () => {
 
     it('interface with legacy factory function', () => {
       const ast = WebIDL2.parse(
-          `[
+        `[
              Exposed=Window,
              LegacyFactoryFunction=Image(DOMString src)
            ]
-           interface HTMLImageElement {};`);
+           interface HTMLImageElement {};`
+      );
 
       assert.deepEqual(buildIDLTests(ast), {
         'api.HTMLImageElement': {
@@ -1065,10 +1142,11 @@ describe('build', () => {
   describe('validateIDL', () => {
     it('valid idl', () => {
       const ast = WebIDL2.parse(
-          `[Exposed=Window]
+        `[Exposed=Window]
            interface Node {
              boolean contains(Node otherNode);
-           };`);
+           };`
+      );
       expect(() => {
         validateIDL(ast);
       }).to.not.throw();
@@ -1076,10 +1154,11 @@ describe('build', () => {
 
     it('unknown types', () => {
       const ast = WebIDL2.parse(
-          `[Exposed=Window]
+        `[Exposed=Window]
            interface Dummy {
              attribute Dumdum imadumdum;
-           };`);
+           };`
+      );
       expect(() => {
         validateIDL(ast);
       }).to.throw();
@@ -1087,10 +1166,11 @@ describe('build', () => {
 
     it('ignored unknown types', () => {
       const ast = WebIDL2.parse(
-          `[Exposed=Window]
+        `[Exposed=Window]
            interface Dummy {
              attribute CSSOMString style;
-           };`);
+           };`
+      );
       expect(() => {
         validateIDL(ast);
       }).to.not.throw();
