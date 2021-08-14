@@ -227,8 +227,8 @@ api:
       decodeAudioData.promise_syntax: >-
         <%api.BaseAudioContext:ctx%>
         return ctx.decodeAudioData.length === 1;
+  # XXX Freezes in many versions of Chrome and Firefox
   # BatteryManager:
-        # XXX Freezes in many versions of Chrome and Firefox
   #   __base: >-
   #     if (!('getBattery' in navigator)) {
   #       return false;
