@@ -45,7 +45,9 @@ const traverseFeatures = (obj, path, includeAliases) => {
       }
     }
 
-    features.push(...traverseFeatures(obj[id], path + id + '.', includeAliases));
+    features.push(
+        ...traverseFeatures(obj[id], path + id + '.', includeAliases)
+    );
   }
 
   return features;
@@ -63,15 +65,25 @@ const findMissing = (entries, allEntries) => {
   return {missingEntries, total: allEntries.length};
 };
 
-const getMissing = (direction = 'collector-from-bcd', category = [], includeAliases = false) => {
+const getMissing = (
+    direction = 'collector-from-bcd',
+    category = [],
+    includeAliases = false
+) => {
   const filterCategory = (item) => {
-    return !category.length || category.some((cat) => item.startsWith(`${cat}.`));
+    return (
+      !category.length || category.some((cat) => item.startsWith(`${cat}.`))
+    );
   };
 
   const bcdEntries = [
     ...traverseFeatures(bcd.api, 'api.', includeAliases),
     ...traverseFeatures(bcd.css.properties, 'css.properties.', includeAliases),
-    ...traverseFeatures(bcd.javascript.builtins, 'javascript.builtins.', includeAliases)
+    ...traverseFeatures(
+        bcd.javascript.builtins,
+        'javascript.builtins.',
+        includeAliases
+    )
   ].filter(filterCategory);
   const collectorEntries = Object.keys(tests).filter(filterCategory);
 
@@ -79,8 +91,10 @@ const getMissing = (direction = 'collector-from-bcd', category = [], includeAlia
     case 'bcd-from-collector':
       return findMissing(bcdEntries, collectorEntries);
     default:
-      console.log(`Direction '${direction}' is unknown; defaulting to collector <- bcd`);
-      // eslint-disable-next-line no-fallthrough
+      console.log(
+          `Direction '${direction}' is unknown; defaulting to collector <- bcd`
+      );
+    // eslint-disable-next-line no-fallthrough
     case 'collector-from-bcd':
       return findMissing(collectorEntries, bcdEntries);
   }
@@ -101,7 +115,8 @@ const main = () => {
             })
             .option('direction', {
               alias: 'd',
-              describe: 'Which direction to find missing entries from ("a-from-b" will check what is in a that is missing from b)',
+              describe:
+            'Which direction to find missing entries from ("a-from-b" will check what is in a that is missing from b)',
               choices: ['bcd-from-collector', 'collector-from-bcd'],
               nargs: 1,
               type: 'string',
@@ -117,10 +132,18 @@ const main = () => {
       }
   );
 
-  const {missingEntries, total} = getMissing(argv.direction, argv.category,
-      argv.includeAliases);
+  const {missingEntries, total} = getMissing(
+      argv.direction,
+      argv.category,
+      argv.includeAliases
+  );
   console.log(missingEntries.join('\n'));
-  console.log(`\n${missingEntries.length}/${total} (${(missingEntries.length/total*100.0).toFixed(2)}%) missing`);
+  console.log(
+      `\n${missingEntries.length}/${total} (${(
+        (missingEntries.length / total) *
+      100.0
+      ).toFixed(2)}%) missing`
+  );
 };
 
 module.exports = {

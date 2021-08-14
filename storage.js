@@ -39,12 +39,14 @@ class CloudStorage {
     const prefix = `${sessionId}/`;
     const files = (await this._bucket.getFiles({prefix}))[0];
     const result = {};
-    await Promise.all(files.map(async (file) => {
-      assert(file.name.startsWith(prefix));
-      const key = decodeURIComponent(file.name.substr(prefix.length));
-      const data = (await file.download())[0];
-      result[key] = JSON.parse(data);
-    }));
+    await Promise.all(
+        files.map(async (file) => {
+          assert(file.name.startsWith(prefix));
+          const key = decodeURIComponent(file.name.substr(prefix.length));
+          const data = (await file.download())[0];
+          result[key] = JSON.parse(data);
+        })
+    );
     return result;
   }
 
@@ -65,13 +67,13 @@ class CloudStorage {
 
 class MemoryStorage {
   constructor() {
-    this._data = new Map;
+    this._data = new Map();
   }
 
   async put(sessionId, key, value) {
     let sessionData = this._data.get(sessionId);
     if (!sessionData) {
-      sessionData = new Map;
+      sessionData = new Map();
       this._data.set(sessionId, sessionData);
     }
     sessionData.set(key, value);
@@ -107,14 +109,15 @@ const getStorage = () => {
   if (project) {
     // Use GCLOUD_STORAGE_BUCKET or GCLOUD_STORAGE_BUCKET_STAGING from app.yaml,
     // depending on the version we're running.
-    const bucketName = process.env.GAE_VERSION == 'production' ?
-                       process.env.GCLOUD_STORAGE_BUCKET :
-                       process.env.GCLOUD_STORAGE_BUCKET_STAGING;
+    const bucketName =
+      process.env.GAE_VERSION == 'production' ?
+        process.env.GCLOUD_STORAGE_BUCKET :
+        process.env.GCLOUD_STORAGE_BUCKET_STAGING;
     return new CloudStorage(project, bucketName);
   }
 
   // Use MemoryStorage storage for local deployment and testing.
-  return new MemoryStorage;
+  return new MemoryStorage();
 };
 
 module.exports = {CloudStorage, MemoryStorage, getStorage};

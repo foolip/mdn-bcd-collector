@@ -53,7 +53,7 @@ const combineResults = (results) => {
 // report.
 const getSupportMap = (report) => {
   // Transform `report` to map from test name (BCD path) to array of results.
-  const testMap = new Map;
+  const testMap = new Map();
   for (const tests of Object.values(report.results)) {
     for (const test of tests) {
       // TODO: If test.exposure.endsWith('Worker'), then map this to a
@@ -69,7 +69,7 @@ const getSupportMap = (report) => {
   }
 
   // Transform `testMap` to map from test name (BCD path) to flattened support.
-  const supportMap = new Map;
+  const supportMap = new Map();
   for (const [name, results] of testMap.entries()) {
     let supported = combineResults(results);
 
@@ -92,15 +92,19 @@ const getSupportMap = (report) => {
 // Load all reports and build a map from BCD path to browser + version
 // and test result (null/true/false) for that version.
 const getSupportMatrix = (reports) => {
-  const supportMatrix = new Map;
+  const supportMatrix = new Map();
 
   for (const report of reports) {
     const {browser, version, inBcd} = parseUA(report.userAgent, browsers);
     if (!inBcd) {
       if (inBcd === false) {
-        logger.warn(`Ignoring unknown ${browser.name} version ${version} (${report.userAgent})`);
+        logger.warn(
+            `Ignoring unknown ${browser.name} version ${version} (${report.userAgent})`
+        );
       } else if (browser.name) {
-        logger.warn(`Ignoring unknown browser ${browser.name} ${version} (${report.userAgent})`);
+        logger.warn(
+            `Ignoring unknown browser ${browser.name} ${version} (${report.userAgent})`
+        );
       } else {
         logger.warn(`Unable to parse browser from UA ${report.userAgent}`);
       }
@@ -114,14 +118,15 @@ const getSupportMatrix = (reports) => {
     for (const [name, supported] of supportMap.entries()) {
       let browserMap = supportMatrix.get(name);
       if (!browserMap) {
-        browserMap = new Map;
+        browserMap = new Map();
         supportMatrix.set(name, browserMap);
       }
       let versionMap = browserMap.get(browser.id);
       if (!versionMap) {
-        versionMap = new Map;
-        for (const browserVersion of
-          Object.keys(browsers[browser.id].releases)) {
+        versionMap = new Map();
+        for (const browserVersion of Object.keys(
+            browsers[browser.id].releases
+        )) {
           versionMap.set(browserVersion, null);
         }
         browserMap.set(browser.id, versionMap);
@@ -173,10 +178,14 @@ const inferSupportStatements = (versionMap) => {
       if (!lastStatement) {
         statements.push({
           version_added:
-            (lastWasNull || lastKnown.support === false) ? `${lastKnown.version}> ≤${version}` : version
+            lastWasNull || lastKnown.support === false ?
+              `${lastKnown.version}> ≤${version}` :
+              version
         });
       } else if (!lastStatement.version_added) {
-        lastStatement.version_added = lastWasNull ? `${lastKnown.version}> ≤${version}` : version;
+        lastStatement.version_added = lastWasNull ?
+          `${lastKnown.version}> ≤${version}` :
+          version;
       } else if (lastStatement.version_removed) {
         // added back again
         statements.push({
@@ -188,10 +197,14 @@ const inferSupportStatements = (versionMap) => {
       lastKnown.support = true;
       lastWasNull = false;
     } else if (supported === false) {
-      if (lastStatement &&
-          lastStatement.version_added &&
-          !lastStatement.version_removed) {
-        lastStatement.version_removed = lastWasNull ? `${lastKnown.version}> ≤${version}` : version;
+      if (
+        lastStatement &&
+        lastStatement.version_added &&
+        !lastStatement.version_removed
+      ) {
+        lastStatement.version_removed = lastWasNull ?
+          `${lastKnown.version}> ≤${version}` :
+          version;
       } else if (!lastStatement) {
         statements.push({version_added: false});
       }
@@ -224,8 +237,11 @@ const update = (bcd, supportMatrix, filter) => {
     }
 
     for (const [browser, versionMap] of browserMap.entries()) {
-      if (filter.browser && filter.browser.length &&
-          !filter.browser.includes(browser)) {
+      if (
+        filter.browser &&
+        filter.browser.length &&
+        !filter.browser.includes(browser)
+      ) {
         continue;
       }
       const inferredStatements = inferSupportStatements(versionMap);
@@ -236,9 +252,11 @@ const update = (bcd, supportMatrix, filter) => {
 
       const inferredStatement = inferredStatements[0];
 
-      if (filter.release &&
-          filter.release !== inferredStatement.version_added &&
-          filter.release !== inferredStatement.version_removed) {
+      if (
+        filter.release &&
+        filter.release !== inferredStatement.version_added &&
+        filter.release !== inferredStatement.version_removed
+      ) {
         continue;
       }
 
@@ -271,11 +289,12 @@ const update = (bcd, supportMatrix, filter) => {
           continue;
         }
         if (typeof inferredStatement.version_added === 'string') {
-          inferredStatement.version_added = inferredStatement.version_added.replace('0> ', '');
+          inferredStatement.version_added =
+            inferredStatement.version_added.replace('0> ', '');
         }
         allStatements.unshift(inferredStatement);
-        entry.__compat.support[browser] = allStatements.length === 1 ?
-            allStatements[0] : allStatements;
+        entry.__compat.support[browser] =
+          allStatements.length === 1 ? allStatements[0] : allStatements;
         modified = true;
         continue;
       }
@@ -292,22 +311,38 @@ const update = (bcd, supportMatrix, filter) => {
         continue;
       }
 
-      if (typeof simpleStatement.version_added === 'string' &&
-          typeof inferredStatement.version_added === 'string' &&
-          inferredStatement.version_added.includes('≤')) {
+      if (
+        typeof simpleStatement.version_added === 'string' &&
+        typeof inferredStatement.version_added === 'string' &&
+        inferredStatement.version_added.includes('≤')
+      ) {
         const range = inferredStatement.version_added.split('> ≤');
-        if (compareVersions.compare(
-            simpleStatement.version_added.replace('≤', ''),
-            range[0], '<=') ||
-            compareVersions.compare(
-                simpleStatement.version_added.replace('≤', ''),
-                range[1], '>')) {
-          simpleStatement.version_added = inferredStatement.version_added.replace('0> ', '');
+        if (
+          compareVersions.compare(
+              simpleStatement.version_added.replace('≤', ''),
+              range[0],
+              '<='
+          ) ||
+          compareVersions.compare(
+              simpleStatement.version_added.replace('≤', ''),
+              range[1],
+              '>'
+          )
+        ) {
+          simpleStatement.version_added =
+            inferredStatement.version_added.replace('0> ', '');
           modified = true;
         }
-      } else if (!(typeof(simpleStatement.version_added) === 'string' &&
-            inferredStatement.version_added === true)) {
-        simpleStatement.version_added = typeof(inferredStatement.version_added) === 'string' ? inferredStatement.version_added.replace('0> ', '') : inferredStatement.version_added;
+      } else if (
+        !(
+          typeof simpleStatement.version_added === 'string' &&
+          inferredStatement.version_added === true
+        )
+      ) {
+        simpleStatement.version_added =
+          typeof inferredStatement.version_added === 'string' ?
+            inferredStatement.version_added.replace('0> ', '') :
+            inferredStatement.version_added;
         modified = true;
       }
 
@@ -350,7 +385,8 @@ const loadJsonFiles = async (paths) => {
       jsonFiles.map(async (file) => {
         const data = JSON.parse(await fs.readFile(file));
         return [file, data];
-      }));
+      })
+  );
 
   return Object.fromEntries(entries);
 };
@@ -363,7 +399,8 @@ const main = async (reportPaths, filter) => {
   }
 
   const bcdFiles = await loadJsonFiles(
-      filter.category.map((cat) => path.join(BCD_DIR, ...cat.split('.'))));
+      filter.category.map((cat) => path.join(BCD_DIR, ...cat.split('.')))
+  );
 
   const reports = Object.values(await loadJsonFiles(reportPaths));
   const supportMatrix = getSupportMatrix(reports);
@@ -409,20 +446,25 @@ if (require.main === module) {
               type: 'array',
               choices: ['api', 'css.properties', 'javascript.builtins'],
               default: ['api', 'css.properties', 'javascript.builtins']
-            }).option('path', {
+            })
+            .option('path', {
               alias: 'p',
-              describe: 'The BCD path to update (interpreted as a minimatch pattern)',
+              describe:
+            'The BCD path to update (interpreted as a minimatch pattern)',
               type: 'string',
               default: null
-            }).option('browser', {
+            })
+            .option('browser', {
               alias: 'b',
               describe: 'The browser to update',
               type: 'array',
               choices: Object.keys(browsers),
               default: []
-            }).option('release', {
+            })
+            .option('release', {
               alias: 'r',
-              describe: 'Only update when version_added or version_removed is set to the given value',
+              describe:
+            'Only update when version_added or version_removed is set to the given value',
               type: 'string',
               default: null
             });

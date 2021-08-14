@@ -24,7 +24,12 @@ const YAML = require('yaml');
 
 /* istanbul ignore next */
 const customTests = YAML.parse(
-    fs.readFileSync(process.env.NODE_ENV === 'test' ? './unittest/unit/custom-tests.test.yaml' : './custom-tests.yaml', 'utf8')
+    fs.readFileSync(
+    process.env.NODE_ENV === 'test' ?
+      './unittest/unit/custom-tests.test.yaml' :
+      './custom-tests.yaml',
+    'utf8'
+    )
 );
 const customCSS = require('./custom-css.json');
 const customIDL = require('./custom-idl');
@@ -38,28 +43,31 @@ const formatCode = (code) => {
 
 const compileCustomTest = (code, format = true) => {
   // Import code from other tests
-  code = code.replace(/<%(\w+)\.(\w+)(?:\.(\w+))?:(\w+)%> ?/g, (match, category, name, member, instancevar) => {
-    if (category === 'api') {
-      if (!(name in customTests.api && '__base' in customTests.api[name])) {
-        return `throw 'Test is malformed: ${match} is an invalid reference';`;
-      }
-      let importcode = compileCustomTest(customTests.api[name].__base, false);
-      const callback = importcode.includes('callback');
+  code = code.replace(
+      /<%(\w+)\.(\w+)(?:\.(\w+))?:(\w+)%> ?/g,
+      (match, category, name, member, instancevar) => {
+        if (category === 'api') {
+          if (!(name in customTests.api && '__base' in customTests.api[name])) {
+            return `throw 'Test is malformed: ${match} is an invalid reference';`;
+          }
+          let importcode = compileCustomTest(customTests.api[name].__base, false);
+          const callback = importcode.includes('callback');
 
-      importcode = importcode
-          .replace(/var (instance|promise)/g, `var ${instancevar}`)
-          .replace(/callback\(/g, `${instancevar}(`)
-          .replace(/promise\.then/g, `${instancevar}.then`)
-          .replace(/(instance|promise) = /g, `${instancevar} = `);
-      if (!(['instance', 'promise'].includes(instancevar) || callback)) {
-        importcode += ` if (!${instancevar}) {return false;}`;
-      }
-      return importcode;
-    }
+          importcode = importcode
+              .replace(/var (instance|promise)/g, `var ${instancevar}`)
+              .replace(/callback\(/g, `${instancevar}(`)
+              .replace(/promise\.then/g, `${instancevar}.then`)
+              .replace(/(instance|promise) = /g, `${instancevar} = `);
+          if (!(['instance', 'promise'].includes(instancevar) || callback)) {
+            importcode += ` if (!${instancevar}) {return false;}`;
+          }
+          return importcode;
+        }
 
-    // TODO: add CSS category
-    return `throw 'Test is malformed: import ${match}, category ${category} is not importable';`;
-  });
+        // TODO: add CSS category
+        return `throw 'Test is malformed: import ${match}, category ${category} is not importable';`;
+      }
+  );
 
   if (format) {
     // Wrap in a function
@@ -89,24 +97,39 @@ const getCustomTestAPI = (name, member, type) => {
         test = testbase + customTests.api[name].__test;
       } else {
         const returnValue = '!!instance';
-        test = testbase ? testbase + (
-          promise ? `return promise.then(function(instance) {return ${returnValue}});` : callback ? `function callback(instance) {success(${returnValue})}; return 'callback';` : `return ${returnValue};`
-        ) : false;
+        test = testbase ?
+          testbase +
+            (promise ?
+              `return promise.then(function(instance) {return ${returnValue}});` :
+              callback ?
+              `function callback(instance) {success(${returnValue})}; return 'callback';` :
+              `return ${returnValue};`) :
+          false;
       }
     } else {
-      if (member in customTests.api[name] &&
-          typeof(customTests.api[name][member]) === 'string') {
+      if (
+        member in customTests.api[name] &&
+        typeof customTests.api[name][member] === 'string'
+      ) {
         test = testbase + customTests.api[name][member];
       } else {
-        if (['constructor', 'static'].includes(type) || ['toString', 'toJSON'].includes(member)) {
+        if (
+          ['constructor', 'static'].includes(type) ||
+          ['toString', 'toJSON'].includes(member)
+        ) {
           // Constructors, constants, and static attributes should not have
           // auto-generated custom tests
           test = false;
         } else {
           const returnValue = `'${member}' in instance`;
-          test = testbase ? testbase + (
-            promise ? `return promise.then(function(instance) {return ${returnValue}});` : callback ? `function callback(instance) {success(${returnValue})}; return 'callback';` : `return ${returnValue};`
-          ) : false;
+          test = testbase ?
+            testbase +
+              (promise ?
+                `return promise.then(function(instance) {return ${returnValue}});` :
+                callback ?
+                `function callback(instance) {success(${returnValue})}; return 'callback';` :
+                `return ${returnValue};`) :
+            false;
         }
       }
     }
@@ -119,7 +142,9 @@ const getCustomTestAPI = (name, member, type) => {
   test = compileCustomTest(test);
 
   if (test.includes('Test is malformed')) {
-    console.error(`api.${name}${member ? `.${member}` : ''}: ${test.replace('throw ', '')}`);
+    console.error(
+        `api.${name}${member ? `.${member}` : ''}: ${test.replace('throw ', '')}`
+    );
   }
 
   return test;
@@ -131,8 +156,9 @@ const getCustomSubtestsAPI = (name) => {
   if (name in customTests.api) {
     const testbase = customTests.api[name].__base || '';
     if ('__additional' in customTests.api[name]) {
-      for (const subtest of
-        Object.entries(customTests.api[name].__additional)) {
+      for (const subtest of Object.entries(
+          customTests.api[name].__additional
+      )) {
         subtests[subtest[0]] = compileCustomTest(`${testbase}${subtest[1]}`);
       }
     }
@@ -149,9 +175,14 @@ const getCustomResourcesAPI = (name) => {
     for (const key of customTests.api[name].__resources) {
       if (Object.keys(customTests.api.__resources).includes(key)) {
         const r = customTests.api.__resources[key];
-        resources[key] = r.type == 'instance' ? {...r, src: formatCode(r.src)} : customTests.api.__resources[key];
+        resources[key] =
+          r.type == 'instance' ?
+            {...r, src: formatCode(r.src)} :
+            customTests.api.__resources[key];
       } else {
-        throw new Error(`Resource ${key} is not defined but referenced in api.${name}`);
+        throw new Error(
+            `Resource ${key} is not defined but referenced in api.${name}`
+        );
       }
     }
   }
@@ -160,9 +191,11 @@ const getCustomResourcesAPI = (name) => {
 };
 
 const getCustomTestCSS = (name) => {
-  return 'properties' in customTests.css &&
-      name in customTests.css.properties &&
-      compileCustomTest(customTests.css.properties[name]);
+  return (
+    'properties' in customTests.css &&
+    name in customTests.css.properties &&
+    compileCustomTest(customTests.css.properties[name])
+  );
 };
 
 const compileTestCode = (test) => {
@@ -176,7 +209,10 @@ const compileTestCode = (test) => {
     return `bcd.testConstructor("${property}");`;
   }
   if (test.property.startsWith('Symbol.')) {
-    return `"Symbol" in self && "${test.property.replace('Symbol.', '')}" in Symbol && ${test.property} in ${test.owner}.prototype`;
+    return `"Symbol" in self && "${test.property.replace(
+        'Symbol.',
+        ''
+    )}" in Symbol && ${test.property} in ${test.owner}.prototype`;
   }
   if (test.inherit) {
     return `Object.prototype.hasOwnProperty.call(${test.owner}, "${property}")`;
@@ -232,11 +268,13 @@ const flattenIDL = (specIDLs, customIDLs) => {
       return true;
     }
 
-    const target = ast.find((it) => !it.partial &&
-                                    it.type === dfn.type &&
-                                    it.name === dfn.name);
+    const target = ast.find(
+        (it) => !it.partial && it.type === dfn.type && it.name === dfn.name
+    );
     if (!target) {
-      throw new Error(`Original definition not found for partial ${dfn.type} ${dfn.name}`);
+      throw new Error(
+          `Original definition not found for partial ${dfn.type} ${dfn.name}`
+      );
     }
 
     // merge members to target interface/dictionary/etc. and drop partial
@@ -248,17 +286,24 @@ const flattenIDL = (specIDLs, customIDLs) => {
   // mix in the mixins
   for (const dfn of ast) {
     if (dfn.type === 'includes') {
-      const mixin = ast.find((it) => !it.partial &&
-                                     it.type === 'interface mixin' &&
-                                     it.name === dfn.includes);
+      const mixin = ast.find(
+          (it) =>
+            !it.partial &&
+          it.type === 'interface mixin' &&
+          it.name === dfn.includes
+      );
       if (!mixin) {
-        throw new Error(`Interface mixin ${dfn.includes} not found for target ${dfn.target}`);
+        throw new Error(
+            `Interface mixin ${dfn.includes} not found for target ${dfn.target}`
+        );
       }
-      const target = ast.find((it) => !it.partial &&
-                                      it.type === 'interface' &&
-                                      it.name === dfn.target);
+      const target = ast.find(
+          (it) => !it.partial && it.type === 'interface' && it.name === dfn.target
+      );
       if (!target) {
-        throw new Error(`Target ${dfn.target} not found for interface mixin ${dfn.includes}`);
+        throw new Error(
+            `Target ${dfn.target} not found for interface mixin ${dfn.includes}`
+        );
       }
 
       // merge members to target interface
@@ -267,14 +312,17 @@ const flattenIDL = (specIDLs, customIDLs) => {
   }
 
   // drop includes and mixins
-  ast = ast.filter((dfn) => dfn.type !== 'includes' &&
-                            dfn.type !== 'interface mixin');
+  ast = ast.filter(
+      (dfn) => dfn.type !== 'includes' && dfn.type !== 'interface mixin'
+  );
 
   return ast;
 };
 
 const flattenMembers = (iface) => {
-  const members = iface.members.filter((member) => member.name && member.type !== 'const');
+  const members = iface.members.filter(
+      (member) => member.name && member.type !== 'const'
+  );
   for (const member of iface.members.filter((member) => !member.name)) {
     switch (member.type) {
       case 'constructor':
@@ -288,7 +336,8 @@ const flattenMembers = (iface) => {
             {name: 'entries', type: 'operation'},
             {name: 'forEach', type: 'operation'},
             {name: 'keys', type: 'operation'},
-            {name: 'values', type: 'operation'});
+            {name: 'values', type: 'operation'}
+        );
         break;
       case 'maplike':
         members.push(
@@ -298,12 +347,14 @@ const flattenMembers = (iface) => {
             {name: 'has', type: 'operation'},
             {name: 'keys', type: 'operation'},
             {name: 'size', type: 'attribute'},
-            {name: 'values', type: 'operation'});
+            {name: 'values', type: 'operation'}
+        );
         if (!member.readonly) {
           members.push(
               {name: 'clear', type: 'operation'},
               {name: 'delete', type: 'operation'},
-              {name: 'set', type: 'operation'});
+              {name: 'set', type: 'operation'}
+          );
         }
         break;
       case 'setlike':
@@ -313,12 +364,14 @@ const flattenMembers = (iface) => {
             {name: 'has', type: 'operation'},
             {name: 'keys', type: 'operation'},
             {name: 'size', type: 'attribute'},
-            {name: 'values', type: 'operation'});
+            {name: 'values', type: 'operation'}
+        );
         if (!member.readonly) {
           members.push(
               {name: 'add', type: 'operation'},
               {name: 'clear', type: 'operation'},
-              {name: 'delete', type: 'operation'});
+              {name: 'delete', type: 'operation'}
+          );
         }
         break;
       case 'operation':
@@ -351,7 +404,9 @@ const getExposureSet = (node) => {
   // step 6-8
   const attr = getExtAttr(node, 'Exposed');
   if (!attr) {
-    throw new Error(`Exposed extended attribute not found on ${node.type} ${node.name}`);
+    throw new Error(
+        `Exposed extended attribute not found on ${node.type} ${node.name}`
+    );
   }
   const globals = new Set();
   switch (attr.rhs.type) {
@@ -386,9 +441,11 @@ const validateIDL = (ast) => {
     return v.ruleName !== 'no-nointerfaceobject';
   });
   if (validations.length) {
-    const message = validations.map((v) => {
-      return `${v.message} [${v.ruleName}]`;
-    }).join('\n\n');
+    const message = validations
+        .map((v) => {
+          return `${v.message} [${v.ruleName}]`;
+        })
+        .join('\n\n');
     throw new Error(`Web IDL validation failed:\n${message}`);
   }
 
@@ -503,11 +560,15 @@ const buildIDLTests = (ast) => {
         continue;
       }
 
-      const isStatic = member.special === 'static' || iface.type === 'namespace';
+      const isStatic =
+        member.special === 'static' || iface.type === 'namespace';
 
       let expr;
       const customTestMember = getCustomTestAPI(
-          iface.name, member.name, isStatic ? 'static' : member.type);
+          iface.name,
+          member.name,
+        isStatic ? 'static' : member.type
+      );
 
       if (customTestMember) {
         expr = customTestMember;
@@ -521,7 +582,11 @@ const buildIDLTests = (ast) => {
             } else if (isStatic) {
               expr = {property: member.name, owner: iface.name};
             } else {
-              expr = {property: member.name, owner: `${iface.name}.prototype`, inherit: member.special === 'inherit'};
+              expr = {
+                property: member.name,
+                owner: `${iface.name}.prototype`,
+                inherit: member.special === 'inherit'
+              };
             }
             break;
           case 'const':
@@ -642,7 +707,8 @@ const buildJS = (customJS) => {
     const parts = path.split('.');
 
     const bcdPath = [
-      'javascript', 'builtins',
+      'javascript',
+      'builtins',
       // The "prototype" part is not part of the BCD paths.
       ...parts.filter((p) => p != 'prototype')
     ].join('.');
@@ -657,7 +723,8 @@ const buildJS = (customJS) => {
       property = JSON.stringify(property);
     }
 
-    const owner = parts.length > 1 ? parts.slice(0, parts.length - 1).join('.') : 'self';
+    const owner =
+      parts.length > 1 ? parts.slice(0, parts.length - 1).join('.') : 'self';
     const code = `${owner}.hasOwnProperty(${property})`;
 
     tests[bcdPath] = compileTest({
@@ -668,7 +735,8 @@ const buildJS = (customJS) => {
     // Constructors
     if ('ctor_args' in extras) {
       const ctorPath = [
-        'javascript', 'builtins',
+        'javascript',
+        'builtins',
         ...parts,
         // Repeat the last part of the path
         parts[parts.length - 1]
@@ -697,8 +765,16 @@ const copyResources = async () => {
     ['sinon/pkg/sinon.js', 'unittest'],
     ['@browser-logos/chrome/chrome_64x64.png', 'browser-logos', 'chrome.png'],
     ['@browser-logos/edge/edge_64x64.png', 'browser-logos', 'edge.png'],
-    ['@browser-logos/firefox/firefox_64x64.png', 'browser-logos', 'firefox.png'],
-    ['@browser-logos/internet-explorer_9-11/internet-explorer_9-11_64x64.png', 'browser-logos', 'ie.png'],
+    [
+      '@browser-logos/firefox/firefox_64x64.png',
+      'browser-logos',
+      'firefox.png'
+    ],
+    [
+      '@browser-logos/internet-explorer_9-11/internet-explorer_9-11_64x64.png',
+      'browser-logos',
+      'ie.png'
+    ],
     ['@browser-logos/opera/opera_64x64.png', 'browser-logos', 'opera.png'],
     ['@browser-logos/safari/safari_64x64.png', 'browser-logos', 'safari.png'],
     ['@mdi/font/css/materialdesignicons.min.css', 'resources'],
