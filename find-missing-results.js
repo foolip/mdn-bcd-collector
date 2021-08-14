@@ -26,26 +26,34 @@ const generateReportMap = (allResults) => {
   const result = {};
 
   for (const [browserKey, browserData] of Object.entries(browsers)) {
-    if (!allResults && browserKey == 'nodejs') continue;
+    if (!allResults && browserKey == 'nodejs') {
+      continue;
+    }
 
     const releases = Object.entries(browserData.releases).filter(
-      r => ['retired', 'current'].includes(r[1].status)
-    ).map(r => r[0]);
+        (r) => ['retired', 'current'].includes(r[1].status)
+    ).map((r) => r[0]);
     result[browserKey] = releases.sort(compareVersions);
 
     if (!allResults) {
-      // Ignore super old browser releases
       if (browserKey == 'ie') {
-        result[browserKey] = result[browserKey].filter(v => v >= '6');
+        // Ignore super old IE releases
+        result[browserKey] = result[browserKey].filter((v) => v >= '6');
       } else if (browserKey == 'safari') {
-        result[browserKey] = result[browserKey].filter(v => v >= '4' && v != '6.1');
+        // Ignore super old Safari releases, and Safari 6.1
+        result[browserKey] = result[browserKey].filter((v) => v >= '4' && v != '6.1');
       } else if (browserKey == 'opera') {
         // Ignore all Opera versions besides 12.1, 15, and the latest stable
-        result[browserKey] = result[browserKey].filter(v => 
+        result[browserKey] = result[browserKey].filter((v) =>
           v == '12.1' ||
           v == '15' ||
           v == result[browserKey][result[browserKey].length - 1]
-          );
+        );
+      } else if (browserKey.includes('_android') || browserKey.includes('_ios')) {
+        // Ignore all mobile browser releases besides the most current
+        result[browserKey] = result[browserKey].filter((v) =>
+          v == result[browserKey][result[browserKey].length - 1]
+        );
       }
     }
   }
@@ -57,7 +65,7 @@ const findMissingResults = async (reportPaths, allResults) => {
   const reportMap = generateReportMap(allResults);
 
   const data = await loadJsonFiles(reportPaths);
-  const uaStrings = Object.values(data).map(v => v.userAgent);
+  const uaStrings = Object.values(data).map((v) => v.userAgent);
 
   for (const uaString of uaStrings) {
     const ua = parseUA(uaString, browsers);
@@ -66,12 +74,9 @@ const findMissingResults = async (reportPaths, allResults) => {
 
     if (browserKey in reportMap) {
       if (reportMap[browserKey].includes(browserVersion)) {
-        if (!allResults && (browserKey.includes('_android') || browserKey.includes('_ios'))) {
-          // We only really care about getting only the latest iOS/Android browser results
-          reportMap[browserKey] = [];
-        } else {
-          reportMap[browserKey] = reportMap[browserKey].filter(v => v !== browserVersion);
-        }
+        reportMap[browserKey] = reportMap[browserKey].filter(
+            (v) => v !== browserVersion
+        );
       }
     }
   }
@@ -87,7 +92,7 @@ const main = async (reportPaths, allResults) => {
       console.log(`${browsers[browser].name}: ${releases.join(', ')}`);
     }
   }
-}
+};
 
 if (require.main === module) {
   const {argv} = require('yargs').command(
@@ -105,12 +110,12 @@ if (require.main === module) {
               alias: 'a',
               type: 'boolean',
               nargs: 0
-            });;
+            });
       }
   );
 
   main(argv.reports, argv.all).catch((error) => {
-    logger.error(error.stack);
+    console.error(error.stack);
     process.exit(1);
   });
 }
