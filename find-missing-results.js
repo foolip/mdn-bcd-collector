@@ -63,17 +63,21 @@ const generateReportMap = (allResults) => {
 };
 
 const findMissingResults = async (reportPaths, allResults, version) => {
-  if (version == 'current') version = appVersion;
+  if (version == 'current') {
+    version = appVersion;
+  }
 
   const reportMap = generateReportMap(allResults);
   const data = await loadJsonFiles(reportPaths);
 
   for (const report of Object.values(data)) {
     if (version != 'all') {
-      if (report.__version != version) continue;
+      if (report.__version != version) {
+        continue;
+      }
     }
 
-    const ua = parseUA(v.userAgent, browsers);
+    const ua = parseUA(report.userAgent, browsers);
     const browserKey = ua.browser.id;
     const browserVersion = ua.version;
 
@@ -90,7 +94,9 @@ const findMissingResults = async (reportPaths, allResults, version) => {
 };
 
 const main = async (argv) => {
-  const missingResults = await findMissingResults(argv.reportPaths, argv.all, argv.version);
+  const missingResults = await findMissingResults(
+      argv.reportPaths, argv.all, argv.version
+  );
 
   for (const [browser, releases] of Object.entries(missingResults)) {
     if (releases.length) {
