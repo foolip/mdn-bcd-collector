@@ -18,6 +18,7 @@ const compareVersions = require('compare-versions');
 
 const {parseUA} = require('./ua-parser');
 const {loadJsonFiles} = require('./update-bcd');
+const {version: appVersion} = require('./package.json');
 
 const BCD_DIR = process.env.BCD_DIR || `../browser-compat-data`;
 const {browsers} = require(BCD_DIR);
@@ -61,14 +62,18 @@ const generateReportMap = (allResults) => {
   return result;
 };
 
-const findMissingResults = async (reportPaths, allResults) => {
+const findMissingResults = async (reportPaths, allResults, version) => {
+  if (version == 'current') version = appVersion;
+
   const reportMap = generateReportMap(allResults);
-
   const data = await loadJsonFiles(reportPaths);
-  const uaStrings = Object.values(data).map((v) => v.userAgent);
 
-  for (const uaString of uaStrings) {
-    const ua = parseUA(uaString, browsers);
+  for (const report of Object.values(data)) {
+    if (version != 'all') {
+      if (report.__version != version) continue;
+    }
+
+    const ua = parseUA(v.userAgent, browsers);
     const browserKey = ua.browser.id;
     const browserVersion = ua.version;
 
@@ -84,8 +89,8 @@ const findMissingResults = async (reportPaths, allResults) => {
   return reportMap;
 };
 
-const main = async (reportPaths, allResults) => {
-  const missingResults = await findMissingResults(reportPaths, allResults);
+const main = async (argv) => {
+  const missingResults = await findMissingResults(argv.reportPaths, argv.all, argv.version);
 
   for (const [browser, releases] of Object.entries(missingResults)) {
     if (releases.length) {
@@ -105,6 +110,11 @@ if (require.main === module) {
               type: 'array',
               default: ['../mdn-bcd-results/']
             })
+            .option('version', {
+              describe: 'Limit the collector version (set to "all" to disable)',
+              type: 'string',
+              default: 'current'
+            })
             .option('all', {
               describe: 'Include all results, including ignored ',
               alias: 'a',
@@ -114,7 +124,7 @@ if (require.main === module) {
       }
   );
 
-  main(argv.reports, argv.all).catch((error) => {
+  main(argv).catch((error) => {
     console.error(error.stack);
     process.exit(1);
   });
