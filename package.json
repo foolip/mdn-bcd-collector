@@ -26,7 +26,7 @@
     "test": "npm run lint && npm run unittest",
     "selenium": "node selenium.js",
     "update-bcd": "node update-bcd.js",
-    "find-missing": "node find-missing.js",
+    "find-missing-features": "node find-missing-features.js",
     "add-new-bcd": "node add-new-bcd.js"
   },
   "dependencies": {
