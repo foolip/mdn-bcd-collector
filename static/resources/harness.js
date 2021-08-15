@@ -269,6 +269,14 @@
         runTest(data, i + 1, callback);
       }
     }
+
+    if (debugmode) {
+      if (![true, false, null].includes(result.result)) {
+        consoleLog(
+          data.name + ' returned ' + result.result + ', not true/false/null!.'
+        );
+      }
+    }
   }
 
   function runTest(data, i, oncomplete) {
