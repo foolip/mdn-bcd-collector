@@ -273,7 +273,7 @@
     }
 
     if (debugmode) {
-      if (![true, false, null].includes(result.result)) {
+      if (typeof result.result !== 'boolean' && result.result !== null) {
         consoleLog(
           data.name + ' returned ' + result.result + ', not true/false/null!.'
         );
