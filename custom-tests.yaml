@@ -42,6 +42,9 @@ api:
           return false;
         };
         var subtlecrypto = crypto.subtle || crypto.webkitSubtle;
+        if (!subtlecrypto) {
+          return false;
+        };
         return subtlecrypto.generateKey({
           name: 'RSA-OAEP',
           modulusLength: 4096,
