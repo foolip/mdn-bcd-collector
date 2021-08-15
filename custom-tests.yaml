@@ -483,7 +483,9 @@ api:
         var orig = d.documentURI;
         try {
           d.documentURI = 'http://example.org/';
-          return d.documentURI === orig;
+          var result = d.documentURI === orig;
+          d.documentURI = orig; // Reset just in case
+          return result;
         } catch(e) {
           return e instanceof TypeError;
         }
