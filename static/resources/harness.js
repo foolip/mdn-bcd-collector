@@ -751,7 +751,9 @@
 
       client.open(
         'POST',
-        '/api/results?for=' + encodeURIComponent(location.href)
+        location.origin +
+          '/api/results?for=' +
+          encodeURIComponent(location.href)
       );
       client.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
       client.send(body);
