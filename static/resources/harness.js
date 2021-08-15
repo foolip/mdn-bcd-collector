@@ -36,6 +36,8 @@
   var reusableInstances = {
     __sources: {}
   };
+
+  // Set to true for debugging output, and 'full' to include completion logging
   var debugmode = false;
 
   /* istanbul ignore next */
@@ -85,8 +87,8 @@
     if (state.timedout) {
       statusElement.innerHTML =
         newStatus +
-        '<br>This test seems to be taking a long time; ' +
-        'it may have crashed. Check the console for errors.';
+        '<br>The tests seem to be taking a long time; ' +
+        'they may have crashed. Check the console for errors.';
     } else {
       statusElement.innerHTML = newStatus;
     }
@@ -330,6 +332,15 @@
       completedTests += 1;
 
       if (debugmode) {
+        if (debugmode === 'full') {
+          updateStatus(
+            'Completed ' +
+              result.name +
+              ' (' +
+              result.info.exposure +
+              ' exposure)'
+          );
+        }
         var index = remaining.indexOf(result.name);
         if (index !== -1) {
           remaining.splice(index, 1);
