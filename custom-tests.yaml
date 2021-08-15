@@ -38,7 +38,7 @@ api:
     cryptoKey:
       type: instance
       src: >-
-        if (!('crypto' in self)) {
+        if (!('crypto' in self) || !crypto) {
           return false;
         };
         var subtlecrypto = crypto.subtle || crypto.webkitSubtle;
