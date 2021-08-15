@@ -333,7 +333,7 @@
 
       if (debugmode) {
         if (debugmode === 'full') {
-          updateStatus(
+          consoleLog(
             'Completed ' +
               result.name +
               ' (' +
