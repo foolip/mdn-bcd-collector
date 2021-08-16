@@ -1500,7 +1500,7 @@ api:
       if (!constructor) {
         return false;
       }
-      var instance = new constructor();
+      var instance = new constructor({iceServers: []});
   Screen:
     __base: var instance = window.screen;
   ScriptProcessorNode:
