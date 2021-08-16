@@ -768,13 +768,12 @@
         return;
       }
 
-      client.open(
-        'POST',
-        location.protocol +
-          location.host +
-          '/api/results?for=' +
-          encodeURIComponent(location.href)
-      );
+      var resultsURL =
+        (location.origin || location.protocol + '//' + location.host) +
+        '/api/results?for=' +
+        encodeURIComponent(location.href);
+
+      client.open('POST', resultsURL);
       client.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
       client.send(body);
       client.onreadystatechange = function () {
