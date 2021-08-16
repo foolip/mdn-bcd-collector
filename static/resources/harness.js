@@ -134,7 +134,11 @@
     var result = {};
 
     try {
-      eval('new ' + iface + '()');
+      if (typeof iface == 'string') {
+        eval('new ' + iface + '()');
+      } else {
+        new iface();
+      }
       result.result = true;
     } catch (err) {
       if (
