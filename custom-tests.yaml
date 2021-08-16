@@ -125,7 +125,7 @@ api:
         try {
           instance = document.createEvent('AnimationEvent');
         } catch(e) {
-          if (e.name === 'NotSupportedError') {
+          if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
             return false;
           }
           throw e;
@@ -191,7 +191,7 @@ api:
         try {
           instance = document.createEvent('AudioProcessingEvent');
         } catch(e) {
-          if (e.name === 'NotSupportedError') {
+          if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
             return false;
           }
           throw e;
@@ -257,7 +257,7 @@ api:
       try {
         var instance = document.createEvent('BeforeUnloadEvent');
       } catch(e) {
-        if (e.name === 'NotSupportedError') {
+        if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
           return false;
         }
         throw e;
@@ -332,7 +332,7 @@ api:
         try {
           instance = document.createEvent('CloseEvent');
         } catch(e) {
-          if (e.name === 'NotSupportedError') {
+          if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
             return false;
           }
           throw e;
@@ -347,7 +347,7 @@ api:
         try {
           instance = document.createEvent('CompositionEvent');
         } catch(e) {
-          if (e.name === 'NotSupportedError') {
+          if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
             return false;
           }
           throw e;
@@ -482,7 +482,7 @@ api:
         try {
           instance = document.createEvent('CustomEvent');
         } catch(e) {
-          if (e.name === 'NotSupportedError') {
+          if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
             return false;
           }
           throw e;
@@ -505,7 +505,7 @@ api:
         try {
           instance = document.createEvent('DeviceMotionEvent');
         } catch(e) {
-          if (e.name === 'NotSupportedError') {
+          if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
             return false;
           }
           throw e;
@@ -520,7 +520,7 @@ api:
         try {
           instance = document.createEvent('DeviceOrientationEvent');
         } catch(e) {
-          if (e.name === 'NotSupportedError') {
+          if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
             return false;
           }
           throw e;
@@ -589,7 +589,7 @@ api:
         try {
           instance = document.createEvent('DragEvent');
         } catch(e) {
-          if (e.name === 'NotSupportedError') {
+          if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
             return false;
           }
           throw e;
@@ -620,7 +620,7 @@ api:
         try {
           instance = document.createEvent('ErrorEvent');
         } catch(e) {
-          if (e.name === 'NotSupportedError') {
+          if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
             return false;
           }
           throw e;
@@ -635,7 +635,7 @@ api:
         try {
           instance = document.createEvent('Event');
         } catch(e) {
-          if (e.name === 'NotSupportedError') {
+          if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
             return false;
           }
           throw e;
@@ -772,7 +772,7 @@ api:
         try {
           instance = document.createEvent('FocusEvent');
         } catch(e) {
-          if (e.name === 'NotSupportedError') {
+          if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
             return false;
           }
           throw e;
@@ -801,7 +801,7 @@ api:
         try {
           instance = document.createEvent('HashChangeEvent');
         } catch(e) {
-          if (e.name === 'NotSupportedError') {
+          if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
             return false;
           }
           throw e;
@@ -1075,7 +1075,7 @@ api:
         try {
           instance = document.createEvent('IDBVersionChangeEvent');
         } catch(e) {
-          if (e.name === 'NotSupportedError') {
+          if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
             return false;
           }
           throw e;
@@ -1116,7 +1116,7 @@ api:
         try {
           instance = document.createEvent('KeyboardEvent');
         } catch(e) {
-          if (e.name === 'NotSupportedError') {
+          if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
             return false;
           }
           throw e;
@@ -1224,7 +1224,7 @@ api:
         try {
           instance = document.createEvent('MessageEvent');
         } catch(e) {
-          if (e.name === 'NotSupportedError') {
+          if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
             return false;
           }
           throw e;
@@ -1253,7 +1253,7 @@ api:
         try {
           instance = document.createEvent('MouseEvent');
         } catch(e) {
-          if (e.name === 'NotSupportedError') {
+          if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
             return false;
           }
           throw e;
@@ -1264,7 +1264,7 @@ api:
       try {
         var instance = document.createEvent('MutationEvent');
       } catch(e) {
-        if (e.name === 'NotSupportedError') {
+        if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
           return false;
         }
         throw e;
@@ -1395,7 +1395,7 @@ api:
         try {
           instance = document.createEvent('PageTransitionEvent');
         } catch(e) {
-          if (e.name === 'NotSupportedError') {
+          if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
             return false;
           }
           throw e;
@@ -1466,7 +1466,7 @@ api:
         try {
           instance = document.createEvent('PopStateEvent');
         } catch(e) {
-          if (e.name === 'NotSupportedError') {
+          if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
             return false;
           }
           throw e;
@@ -1537,7 +1537,7 @@ api:
         try {
           instance = document.createEvent('SpeechRecognitionErrorEvent');
         } catch(e) {
-          if (e.name === 'NotSupportedError') {
+          if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
             return false;
           }
           throw e;
@@ -1552,7 +1552,7 @@ api:
         try {
           instance = document.createEvent('SpeechRecognitionEvent');
         } catch(e) {
-          if (e.name === 'NotSupportedError') {
+          if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
             return false;
           }
           throw e;
@@ -1567,7 +1567,7 @@ api:
         try {
           instance = document.createEvent('SpeechSynthesisErrorEvent');
         } catch(e) {
-          if (e.name === 'NotSupportedError') {
+          if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
             return false;
           }
           throw e;
@@ -1582,7 +1582,7 @@ api:
         try {
           instance = document.createEvent('SpeechSynthesisEvent');
         } catch(e) {
-          if (e.name === 'NotSupportedError') {
+          if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
             return false;
           }
           throw e;
@@ -1605,7 +1605,7 @@ api:
         try {
           instance = document.createEvent('StorageEvent');
         } catch(e) {
-          if (e.name === 'NotSupportedError') {
+          if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
             return false;
           }
           throw e;
@@ -2046,7 +2046,7 @@ api:
         try {
           instance = document.createEvent('TrackEvent');
         } catch(e) {
-          if (e.name === 'NotSupportedError') {
+          if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
             return false;
           }
           throw e;
@@ -2060,7 +2060,7 @@ api:
         try {
           instance = document.createEvent('TransitionEvent');
         } catch(e) {
-          if (e.name === 'NotSupportedError') {
+          if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
             return false;
           }
           throw e;
@@ -2077,7 +2077,7 @@ api:
         try {
           instance = document.createEvent('UIEvent');
         } catch(e) {
-          if (e.name === 'NotSupportedError') {
+          if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
             return false;
           }
           throw e;
@@ -2129,7 +2129,7 @@ api:
         try {
           instance = document.createEvent('WebGLContextEvent');
         } catch(e) {
-          if (e.name === 'NotSupportedError') {
+          if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
             return false;
           }
           throw e;
@@ -2300,7 +2300,7 @@ api:
         try {
           instance = document.createEvent('WebKitAnimationEvent');
         } catch(e) {
-          if (e.name === 'NotSupportedError') {
+          if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
             return false;
           }
           throw e;
@@ -2315,7 +2315,7 @@ api:
         try {
           instance = document.createEvent('WebKitTransitionEvent');
         } catch(e) {
-          if (e.name === 'NotSupportedError') {
+          if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
             return false;
           }
           throw e;
@@ -2337,7 +2337,7 @@ api:
         try {
           instance = document.createEvent('WheelEvent');
         } catch(e) {
-          if (e.name === 'NotSupportedError') {
+          if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
             return false;
           }
           throw e;
