@@ -47,7 +47,7 @@
     "ua-parser-js": "0.7.28",
     "unique-string": "2.0.0",
     "winston": "3.3.3",
-    "yargs": "17.1.0"
+    "yargs": "17.1.1"
   },
   "devDependencies": {
     "@browser-logos/chrome": "1.0.18",
