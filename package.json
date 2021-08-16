@@ -35,7 +35,7 @@
     "@google-cloud/storage": "5.13.0",
     "@mdi/font": "5.9.55",
     "@mdn/browser-compat-data": "3.3.14",
-    "@octokit/rest": "18.9.0",
+    "@octokit/rest": "18.9.1",
     "compare-versions": "3.6.0",
     "cookie-parser": "1.4.5",
     "didyoumean": "1.2.2",
