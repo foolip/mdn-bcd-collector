@@ -141,7 +141,8 @@
         stringIncludes(err.message, 'Illegal constructor') ||
         stringIncludes(err.message, 'is not a constructor') ||
         stringIncludes(err.message, 'Function expected') ||
-        stringIncludes(err.message, 'is not defined')
+        stringIncludes(err.message, 'is not defined') ||
+        stringIncludes(err.message, 'NOT_SUPPORTED_ERR')
       ) {
         result.result = false;
       } else if (
