@@ -771,7 +771,7 @@
       client.open(
         'POST',
         location.protocol +
-          location.hostname +
+          location.host +
           '/api/results?for=' +
           encodeURIComponent(location.href)
       );
