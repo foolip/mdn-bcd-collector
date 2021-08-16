@@ -137,6 +137,7 @@
       if (typeof iface == 'string') {
         eval('new ' + iface + '()');
       } else {
+        // eslint-disable-next-line new-cap
         new iface();
       }
       result.result = true;
