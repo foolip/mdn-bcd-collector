@@ -770,7 +770,8 @@
 
       client.open(
         'POST',
-        location.origin +
+        location.protocol +
+          location.host +
           '/api/results?for=' +
           encodeURIComponent(location.href)
       );
