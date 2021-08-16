@@ -1512,7 +1512,11 @@ api:
       }
       var instance = reusableInstances.audioContext.createScriptProcessor();
   SecurityPolicyViolationEvent:
-    __base: var instance = new SecurityPolicyViolationEvent('securitypolicyviolation');
+    __base: >-
+      if (!('SecurityPolicyViolationEvent' in self)) {
+        return false;
+      }
+      var instance = new SecurityPolicyViolationEvent('securitypolicyviolation');
   Selection:
     __base: var instance = window.getSelection();
   ShadowRoot:
