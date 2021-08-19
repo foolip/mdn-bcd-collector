@@ -27,4 +27,8 @@ interface WebKitAnimationEvent : Event {
   readonly attribute DOMString animationName;
   readonly attribute double elapsedTime;
   readonly attribute DOMString pseudoElement;
+
+  // https://developer.apple.com/documentation/webkitjs/webkitanimationevent/1807040-initwebkitanimationevent
+  // https://trac.webkit.org/changeset/103751/webkit
+  undefined initWebKitAnimationEvent();
 };

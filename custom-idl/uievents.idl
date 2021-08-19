@@ -92,6 +92,9 @@ partial interface WheelEvent {
   undefined initWheelEvent();
 
   // https://developer.apple.com/documentation/webkitjs/wheelevent/1629934-initwebkitwheelevent
+  // Note that the interface was never called WebKitWheelEvent, there was just
+  // this initWebKitWheelEvent variant added here:
+  // https://trac.webkit.org/changeset/55436/webkit
   undefined initWebKitWheelEvent();
 
   // https://developer.apple.com/documentation/webkitjs/wheelevent/1630157-webkitdirectioninvertedfromdevic

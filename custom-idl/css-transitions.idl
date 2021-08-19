@@ -6,4 +6,8 @@ interface WebKitTransitionEvent : Event {
   readonly attribute DOMString propertyName;
   readonly attribute double elapsedTime;
   readonly attribute DOMString pseudoElement;
+
+  // https://developer.apple.com/documentation/webkitjs/webkittransitionevent/1806991-initwebkittransitionevent
+  // https://trac.webkit.org/changeset/103746/webkit
+  undefined initWebKitTransitionEvent();
 };
