@@ -42,7 +42,7 @@ code {
 }
 
 button, select, input {
-  background-color: #3d8a3f;
+  background-color: #3D853F;
   border: none;
   color: white;
   text-align: center;
@@ -60,7 +60,7 @@ input {
 
 button:hover, select:hover, input[type=submit]:hover {
   cursor: pointer;
-  background-color: #4caf50;
+  background-color: #0F8A13;
 }
 
 button:disabled, button:disabled:hover,
@@ -72,7 +72,7 @@ input[type=submit]:disabled, input[type=submit]:disabled:hover {
 }
 
 input::placeholder {
-  color: #ccc;
+  color: #FEFEFE;
 }
 
 footer {
