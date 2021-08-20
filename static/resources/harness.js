@@ -134,12 +134,7 @@
     var result = {};
 
     try {
-      if (typeof iface == 'string') {
-        eval('new ' + iface + '()');
-      } else {
-        // eslint-disable-next-line new-cap
-        new iface();
-      }
+      eval('new ' + iface + '()');
       result.result = true;
     } catch (err) {
       if (
