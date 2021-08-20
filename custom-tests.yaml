@@ -1416,7 +1416,12 @@ api:
       };
       var instance = performance;
   PerformanceEntry:
-    __base: <%api.PerformanceMark:instance%>
+    __base: >-
+      <%api.Performance:prf%>
+      if (!('getEntries' in prf)) {
+        return false;
+      }
+      var instance = prf.getEntries()[0];
   PerformanceMark:
     __base: >-
       if (!('performance' in self)) {
