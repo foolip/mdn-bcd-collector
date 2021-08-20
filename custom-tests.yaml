@@ -122,14 +122,7 @@ api:
       try {
         instance = new AnimationEvent('animationend');
       } catch(e) {
-        try {
-          instance = document.createEvent('AnimationEvent');
-        } catch(e) {
-          if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
-            return false;
-          }
-          throw e;
-        }
+        instance = document.createEvent('AnimationEvent');
       }
   ApplicationCache:
     __base: var instance = window.applicationCache;
@@ -188,14 +181,7 @@ api:
       try {
         instance = new AudioProcessingEvent('audioprocess');
       } catch(e) {
-        try {
-          instance = document.createEvent('AudioProcessingEvent');
-        } catch(e) {
-          if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
-            return false;
-          }
-          throw e;
-        }
+        instance = document.createEvent('AudioProcessingEvent');
       }
   AudioScheduledSourceNode:
     __resources:
@@ -253,15 +239,7 @@ api:
   #     var promise = navigator.getBattery();
   #     promise.then(function() {});
   BeforeUnloadEvent:
-    __base: >-
-      try {
-        var instance = document.createEvent('BeforeUnloadEvent');
-      } catch(e) {
-        if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
-          return false;
-        }
-        throw e;
-      }
+    __base: var instance = document.createEvent('BeforeUnloadEvent');
   BiquadFilterNode:
     __resources:
       - audioContext
@@ -329,14 +307,7 @@ api:
       try {
         instance = new CloseEvent('close');
       } catch(e) {
-        try {
-          instance = document.createEvent('CloseEvent');
-        } catch(e) {
-          if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
-            return false;
-          }
-          throw e;
-        }
+        instance = document.createEvent('CloseEvent');
       }
   CompositionEvent:
     __base: >-
@@ -344,14 +315,7 @@ api:
       try {
         instance = new CompositionEvent('compositionstart');
       } catch(e) {
-        try {
-          instance = document.createEvent('CompositionEvent');
-        } catch(e) {
-          if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
-            return false;
-          }
-          throw e;
-        }
+        instance = document.createEvent('CompositionEvent');
       }
   ConstantSourceNode:
     __resources:
@@ -479,14 +443,7 @@ api:
       try {
         instance = new CustomEvent('custom');
       } catch(e) {
-        try {
-          instance = document.createEvent('CustomEvent');
-        } catch(e) {
-          if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
-            return false;
-          }
-          throw e;
-        }
+        instance = document.createEvent('CustomEvent');
       }
   DelayNode:
     __resources:
@@ -502,14 +459,7 @@ api:
       try {
         instance = new DeviceMotionEvent('devicemotion');
       } catch(e) {
-        try {
-          instance = document.createEvent('DeviceMotionEvent');
-        } catch(e) {
-          if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
-            return false;
-          }
-          throw e;
-        }
+        instance = document.createEvent('DeviceMotionEvent');
       }
   DeviceOrientationEvent:
     __base: >-
@@ -517,14 +467,7 @@ api:
       try {
         instance = new DeviceOrientationEvent('deviceorientation');
       } catch(e) {
-        try {
-          instance = document.createEvent('DeviceOrientationEvent');
-        } catch(e) {
-          if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
-            return false;
-          }
-          throw e;
-        }
+        instance = document.createEvent('DeviceOrientationEvent');
       }
   Document:
     __base: var instance = document;
@@ -586,14 +529,7 @@ api:
       try {
         instance = new DragEvent('drag');
       } catch(e) {
-        try {
-          instance = document.createEvent('DragEvent');
-        } catch(e) {
-          if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
-            return false;
-          }
-          throw e;
-        }
+        instance = document.createEvent('DragEvent');
       }
   DynamicsCompressorNode:
     __resources:
@@ -617,14 +553,7 @@ api:
       try {
         instance = new ErrorEvent('error');
       } catch(e) {
-        try {
-          instance = document.createEvent('ErrorEvent');
-        } catch(e) {
-          if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
-            return false;
-          }
-          throw e;
-        }
+        instance = document.createEvent('ErrorEvent');
       }
   Event:
     __base: >-
@@ -632,14 +561,7 @@ api:
       try {
         instance = new Event('type');
       } catch(e) {
-        try {
-          instance = document.createEvent('Event');
-        } catch(e) {
-          if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
-            return false;
-          }
-          throw e;
-        }
+        instance = document.createEvent('Event');
       }
   EventSource:
     __base: var instance = new EventSource('/eventstream');
@@ -769,14 +691,7 @@ api:
       try {
         instance = new FocusEvent('focus');
       } catch(e) {
-        try {
-          instance = document.createEvent('FocusEvent');
-        } catch(e) {
-          if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
-            return false;
-          }
-          throw e;
-        }
+        instance = document.createEvent('FocusEvent');
       }
   FontFace:
     __base: var instance = new FontFace('Material Design Icons', 'url(/fonts/materialdesignicons-webfont.woff)');
@@ -798,14 +713,7 @@ api:
       try {
         instance = new HashChangeEvent('hashchange');
       } catch(e) {
-        try {
-          instance = document.createEvent('HashChangeEvent');
-        } catch(e) {
-          if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
-            return false;
-          }
-          throw e;
-        }
+        instance = document.createEvent('HashChangeEvent');
       }
   History:
     __base: var instance = history;
@@ -1072,14 +980,7 @@ api:
       try {
         instance = new IDBVersionChangeEvent('upgradeneeded');
       } catch(e) {
-        try {
-          instance = document.createEvent('IDBVersionChangeEvent');
-        } catch(e) {
-          if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
-            return false;
-          }
-          throw e;
-        }
+        instance = document.createEvent('IDBVersionChangeEvent');
       }
   IIRFilterNode:
     __resources:
@@ -1113,14 +1014,7 @@ api:
       try {
         instance = new KeyboardEvent('keypress');
       } catch(e) {
-        try {
-          instance = document.createEvent('KeyboardEvent');
-        } catch(e) {
-          if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
-            return false;
-          }
-          throw e;
-        }
+        instance = document.createEvent('KeyboardEvent');
       }
   KHR_parallel_shader_compile:
     __resources:
@@ -1221,14 +1115,7 @@ api:
       try {
         instance = new MessageEvent('message');
       } catch(e) {
-        try {
-          instance = document.createEvent('MessageEvent');
-        } catch(e) {
-          if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
-            return false;
-          }
-          throw e;
-        }
+        instance = document.createEvent('MessageEvent');
       }
   MessageChannel:
     __base: >-
@@ -1250,25 +1137,10 @@ api:
       try {
         instance = new MouseEvent('click');
       } catch(e) {
-        try {
-          instance = document.createEvent('MouseEvent');
-        } catch(e) {
-          if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
-            return false;
-          }
-          throw e;
-        }
+        instance = document.createEvent('MouseEvent');
       }
   MutationEvent:
-    __base: >-
-      try {
-        var instance = document.createEvent('MutationEvent');
-      } catch(e) {
-        if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
-          return false;
-        }
-        throw e;
-      }
+    __base: var instance = document.createEvent('MutationEvent');
   NamedNodeMap:
     __base: var instance = document.body.attributes;
   Navigator:
@@ -1392,14 +1264,7 @@ api:
       try {
         instance = new PageTransitionEvent('pageshow');
       } catch(e) {
-        try {
-          instance = document.createEvent('PageTransitionEvent');
-        } catch(e) {
-          if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
-            return false;
-          }
-          throw e;
-        }
+        instance = document.createEvent('PageTransitionEvent');
       }
   PannerNode:
     __resources:
@@ -1468,14 +1333,7 @@ api:
       try {
         instance = new PopStateEvent('popstate');
       } catch(e) {
-        try {
-          instance = document.createEvent('PopStateEvent');
-        } catch(e) {
-          if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
-            return false;
-          }
-          throw e;
-        }
+        instance = document.createEvent('PopStateEvent');
       }
   ProcessingInstruction:
     __base: >-
@@ -1521,11 +1379,7 @@ api:
       }
       var instance = reusableInstances.audioContext.createScriptProcessor();
   SecurityPolicyViolationEvent:
-    __base: >-
-      if (!('SecurityPolicyViolationEvent' in self)) {
-        return false;
-      }
-      var instance = new SecurityPolicyViolationEvent('securitypolicyviolation');
+    __base: var instance = new SecurityPolicyViolationEvent('securitypolicyviolation');
   Selection:
     __base: var instance = window.getSelection();
   ShadowRoot:
@@ -1547,14 +1401,7 @@ api:
       try {
         instance = new SpeechRecognitionErrorEvent('error');
       } catch(e) {
-        try {
-          instance = document.createEvent('SpeechRecognitionErrorEvent');
-        } catch(e) {
-          if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
-            return false;
-          }
-          throw e;
-        }
+        instance = document.createEvent('SpeechRecognitionErrorEvent');
       }
   SpeechRecognitionEvent:
     __base: >-
@@ -1562,14 +1409,7 @@ api:
       try {
         instance = new SpeechRecognitionEvent('result');
       } catch(e) {
-        try {
-          instance = document.createEvent('SpeechRecognitionEvent');
-        } catch(e) {
-          if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
-            return false;
-          }
-          throw e;
-        }
+        instance = document.createEvent('SpeechRecognitionEvent');
       }
   SpeechSynthesisErrorEvent:
     __base: >-
@@ -1577,14 +1417,7 @@ api:
       try {
         instance = new SpeechSynthesisErrorEvent('error');
       } catch(e) {
-        try {
-          instance = document.createEvent('SpeechSynthesisErrorEvent');
-        } catch(e) {
-          if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
-            return false;
-          }
-          throw e;
-        }
+        instance = document.createEvent('SpeechSynthesisErrorEvent');
       }
   SpeechSynthesisEvent:
     __base: >-
@@ -1592,14 +1425,7 @@ api:
       try {
         instance = new SpeechSynthesisEvent('start');
       } catch(e) {
-        try {
-          instance = document.createEvent('SpeechSynthesisEvent');
-        } catch(e) {
-          if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
-            return false;
-          }
-          throw e;
-        }
+        instance = document.createEvent('SpeechSynthesisEvent');
       }
   StereoPannerNode:
     __resources:
@@ -1615,14 +1441,7 @@ api:
       try {
         instance = new StorageEvent('storage');
       } catch(e) {
-        try {
-          instance = document.createEvent('StorageEvent');
-        } catch(e) {
-          if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
-            return false;
-          }
-          throw e;
-        }
+        instance = document.createEvent('StorageEvent');
       }
   StyleMedia:
     __base: var instance = window.styleMedia;
@@ -2056,28 +1875,14 @@ api:
       try {
         instance = new TrackEvent('addtrack');
       } catch(e) {
-        try {
-          instance = document.createEvent('TrackEvent');
-        } catch(e) {
-          if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
-            return false;
-          }
-          throw e;
-        }
+        instance = document.createEvent('TrackEvent');
       }
   TransitionEvent:
     __base: >-
       var instance;
         try {instance = new TransitionEvent('transitionend');
       } catch(e) {
-        try {
-          instance = document.createEvent('TransitionEvent');
-        } catch(e) {
-          if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
-            return false;
-          }
-          throw e;
-        }
+        instance = document.createEvent('TransitionEvent');
       }
   TreeWalker:
     __base: var instance = document.createTreeWalker(document);
@@ -2087,14 +1892,7 @@ api:
       try {
         instance = new UIEvent('');
       } catch(e) {
-        try {
-          instance = document.createEvent('UIEvent');
-        } catch(e) {
-          if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
-            return false;
-          }
-          throw e;
-        }
+        instance = document.createEvent('UIEvent');
       }
   URL:
     __base: >-
@@ -2139,14 +1937,7 @@ api:
       try {
         instance = new WebGLContextEvent('webglcontextlost');
       } catch(e) {
-        try {
-          instance = document.createEvent('WebGLContextEvent');
-        } catch(e) {
-          if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
-            return false;
-          }
-          throw e;
-        }
+        instance = document.createEvent('WebGLContextEvent');
       }
   WebGLRenderingContext:
     __resources:
@@ -2310,14 +2101,7 @@ api:
       try {
         instance = new WebKitAnimationEvent('webkitAnimationEnd');
       } catch(e) {
-        try {
-          instance = document.createEvent('WebKitAnimationEvent');
-        } catch(e) {
-          if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
-            return false;
-          }
-          throw e;
-        }
+        instance = document.createEvent('WebKitAnimationEvent');
       }
   WebKitTransitionEvent:
     __base: >-
@@ -2325,14 +2109,7 @@ api:
       try {
         instance = new WebKitTransitionEvent('webkitTransitionEnd');
       } catch(e) {
-        try {
-          instance = document.createEvent('WebKitTransitionEvent');
-        } catch(e) {
-          if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
-            return false;
-          }
-          throw e;
-        }
+        instance = document.createEvent('WebKitTransitionEvent');
       }
   WebSocket:
     __base: >-
@@ -2347,14 +2124,7 @@ api:
       try {
         instance = new WheelEvent('wheel');
       } catch(e) {
-        try {
-          instance = document.createEvent('WheelEvent');
-        } catch(e) {
-          if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
-            return false;
-          }
-          throw e;
-        }
+        instance = document.createEvent('WheelEvent');
       }
   Window:
     __base: var instance = window;
