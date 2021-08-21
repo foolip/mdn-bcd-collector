@@ -3,7 +3,7 @@
 const fs = require('fs-extra');
 const path = require('path');
 
-const {getMissing} = require('./find-missing');
+const {getMissing} = require('./find-missing-features');
 const {main: updateBcd} = require('./update-bcd');
 
 const BCD_DIR = process.env.BCD_DIR || `../browser-compat-data`;
