@@ -1504,16 +1504,14 @@ api:
       var constructor = (window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection);
       if (!constructor) {
         return false;
-      }
+      };
 
-      // Earlier versions of Firefox expose mozRTCPeerConnection 
-      // but it is not a valid constructor. Check to see if the constructor
-      // is valid first.
+      /* Earlier versions of Firefox expose mozRTCPeerConnection but it is not a valid constructor. Check to see if the constructor is valid first. */
       var cnstResult = bcd.testConstructor(constructor);
       if (cnstResult.result !== true) {
         return cnstResult;
-      }
-
+      };
+      
       var instance = new constructor({iceServers: []});
   Screen:
     __base: var instance = window.screen;
