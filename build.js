@@ -38,7 +38,9 @@ const customJS = require('./custom-js.json');
 const generatedDir = path.join(__dirname, 'generated');
 
 const formatCode = (code) => {
-  return prettier.format(code, {singleQuote: true, parser: 'babel'}).trim();
+  return prettier
+    .format(code.replace(/\*\//g, '*/\n'), {singleQuote: true, parser: 'babel'})
+    .trim();
 };
 
 const compileCustomTest = (code, format = true) => {
