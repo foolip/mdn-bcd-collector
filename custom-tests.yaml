@@ -1511,7 +1511,7 @@ api:
       if (cnstResult.result !== true) {
         return cnstResult;
       };
-      
+
       var instance = new constructor({iceServers: []});
   Screen:
     __base: var instance = window.screen;
