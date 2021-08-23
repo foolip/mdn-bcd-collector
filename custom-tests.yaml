@@ -1688,6 +1688,10 @@ api:
     __base: >-
       <%api.SVGViewElement:el%>
       var instance = el.viewBox;
+  SVGAnimatedString:
+    __base: >-
+      <%api.SVGElement:el%>
+      var instance = el.className;
   SVGAnimatedTransformList:
     __base: >-
       <%api.SVGGraphicsElement:el%>
