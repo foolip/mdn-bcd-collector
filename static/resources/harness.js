@@ -147,6 +147,7 @@
         stringIncludes(err.message, 'is not a constructor') ||
         stringIncludes(err.message, 'Function expected') ||
         stringIncludes(err.message, 'is not defined') ||
+        stringIncludes(err.message, "Can't find variable") ||
         stringIncludes(err.message, 'NOT_SUPPORTED_ERR')
       ) {
         result.result = false;
