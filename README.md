@@ -61,17 +61,21 @@ In both cases, the uncertainty has to be resolved by hand before submitting the 
 
 ## Reviewing BCD changes
 
-When reviewing [BCD pull requests](https://github.com/mdn/browser-compat-data/pulls) that were created using mdn-bcd-collector, it helps to have a high-level understanding of how it works and what kinds of errors to look for.
+When reviewing [BCD pull requests](https://github.com/mdn/browser-compat-data/pulls) created using mdn-bcd-collector, it helps to have a high-level understanding of how it works and what kinds of errors are common.
 
-Basically, feature tests are run on multiple versions of the same browser and support ranges are inferred. For example, if a test returns false in Chrome 1-50 and returns true in Chrome 51 and later, `{ "version_added": 51 }` will be inferred.
+Basically, feature tests are run on multiple versions of the same browser and support ranges are inferred. A test could be as simple as `'fetch' in window`. If that test returns false in Chrome 1-41 and returns true in Chrome 42 and later, `{ "version_added": 42 }` will be inferred.
 
-Certain kinds of errors are worth looking out for:
+These errors are worth looking out for:
 
 - False negatives, where a test fails to detect support. This results in either an incorrect `false` or support actually going back further than inferred. Common causes are:
+
   - Missing [interface objects](https://heycam.github.io/webidl/#interface-object). For example, `crypto.subtle` was shipped long before the `SubtleCrypto` interface was [exposed](https://webkit.org/b/165629) in some browsers. Missing interface objects was common in the past but is quite *uncommon* for APIs introduced after ~2020.
   - [Attributes](https://heycam.github.io/webidl/#es-attributes) weren't on the prototypes in some older browsers, for example [before Chrome 43](https://github.com/mdn/browser-compat-data/issues/7843).
+
   To guard against this, follow the link to the test and expand the code. A simple `'propertyName' in InterfaceName` test can yield false negatives, so an *instance* of the type should be created and tested.
+
 - Consistency with other parts of the same feature. Does it seem plausible that the feature was introduced earlier or later than other parts? Examples of consistency to look for:
+
   - Support for `navigator.gpu` implies support for the `GPU` interface, because `navigator.gpu` is an instance of that interface.
   - Support for `audioContext.createPanner()` implies support for `PannerNode`, because that is the return type.
   - Support for `AnalyserNode` implies support for `AudioNode`, because `AnalyserNode` inherits from `AudioNode`.
