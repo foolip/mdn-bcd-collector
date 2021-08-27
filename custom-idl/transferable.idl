@@ -1,3 +1,0 @@
-[Exposed=(Window,Worker)]
-interface Transferable {
-};

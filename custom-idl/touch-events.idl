@@ -2,3 +2,12 @@ partial interface mixin GlobalEventHandlers {
   // https://github.com/WebKit/WebKit/blob/cdb06d0c41ff04eff8f4c65d1c92c8672b4903a6/Source/WebCore/dom/GlobalEventHandlers.idl#L113
   attribute EventHandler ontouchforcechange;
 };
+
+partial interface Document {
+  Touch createTouch();
+  TouchList createTouchList();
+};
+
+partial interface TouchList {
+  Touch identifiedTouch();
+};

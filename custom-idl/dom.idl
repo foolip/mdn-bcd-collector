@@ -221,6 +221,13 @@ partial interface Element {
 
   // https://github.com/mozilla/gecko-dev/blob/f7949b6a83a31998267293b4497d1f86b45c18fc/dom/webidl/Element.webidl#L144
   undefined releaseCapture();
+
+  // https://trac.webkit.org/changeset/136092/webkit
+  ShadowRoot createShadowRoot();
+  ShadowRoot webkitCreateShadowRoot();
+
+  NodeList getDestinationInsertionPoints();
+  readonly attribute boolean openOrClosedShadowRoot;
 };
 
 partial interface Event {
@@ -230,11 +237,47 @@ partial interface Event {
   readonly attribute EventTarget? originalTarget;
   // https://bugzilla.mozilla.org/show_bug.cgi?id=691151
   boolean getPreventDefault();
+
+  readonly attribute object path;
+};
+
+partial interface Node {
+  readonly attribute object baseURIObject;
+  boolean hasAttributes();
+  readonly attribute DOMString localName;
+  readonly attribute DOMString? namespaceURI;
+  attribute object nodePrincipal;
+  attribute DOMString prefix;
+  readonly attribute Node rootNode;
+};
+
+partial interface ProcessingInstruction {
+  readonly attribute any data;
 };
 
 partial interface Range {
   undefined expand(optional DOMString unit = "");
   short compareNode(Node node);
+
+  readonly attribute boolean collapsed;
+  readonly attribute Node endContainer;
+  readonly attribute long endOffset;
+  readonly attribute Node startContainer;
+  readonly attribute long startOffset;
+};
+
+partial interface StaticRange {
+  readonly attribute boolean collapsed;
+  readonly attribute Node startContainer;
+  readonly attribute unsigned long startOffset;
+  readonly attribute Node endContainer;
+  readonly attribute unsigned long endOffset;
+
+  Range toRange();
+};
+
+partial interface Text {
+  NodeList getDestinationInsertionPoints();
 };
 
 partial interface XMLDocument {
