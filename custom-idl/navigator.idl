@@ -1,6 +1,0 @@
-partial interface Navigator {
-  attribute any authentication;
-  readonly attribute DOMString buildID;
-  readonly attribute DOMString doNotTrack;
-  undefined registerContentHandler();
-};
