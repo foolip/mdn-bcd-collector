@@ -1197,29 +1197,63 @@ api:
     __resources:
       - audioContext
     __base: >-
-      <%api.MediaStream:mediaStream%>
+      <%api.MediaStream:streamPromise%>
       if (!reusableInstances.audioContext) {
         return false;
       }
-      var promise = mediaStream.then(function(ms) {
-        return reusableInstances.audioContext.createMediaStreamSource(ms)
+      var promise = streamPromise.then(function(stream) {
+        return reusableInstances.audioContext.createMediaStreamSource(stream)
+      });
+  MediaStreamEvent:
+    __base: >-
+      <%api.MediaStream:streamPromise%>
+      var promise = streamPromise.then(function(stream) {
+        try {
+          return new MediaStreamEvent('addstream', { stream: stream });
+        } catch(e) {
+          try {
+            return document.createEvent('MediaStreamEvent');
+          } catch(e) {
+            if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
+              return false;
+            }
+            throw e;
+          }
+        }
       });
   MediaStreamTrack:
     __base: >-
-      <%api.MediaStream:mediaStream%>
-      var promise = mediaStream.then(function(ms) {
-        return ms.getAudioTracks()[0]
+      <%api.MediaStream:streamPromise%>
+      var promise = streamPromise.then(function(stream) {
+        return stream.getAudioTracks()[0]
+      });
+  MediaStreamTrackEvent:
+    __base: >-
+      <%api.MediaStreamTrack:trackPromise%>
+      var promise = trackPromise.then(function(track) {
+        try {
+          return new MediaStreamTrackEvent('addtrack', { track: track });
+        } catch(e) {
+          try {
+            return document.createEvent('MediaStreamTrackEvent');
+          } catch(e) {
+            if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
+              return false;
+            }
+            throw e;
+          }
+        }
       });
   MediaStreamTrackAudioSourceNode:
     __resources:
       - audioContext
     __base: >-
-      <%api.MediaStream:mediaStream%>
+      <%api.MediaStream:streamPromise%>
       if (!reusableInstances.audioContext) {
         return false;
       }
-      var promise = mediaStream.then(function(ms) {
-        return reusableInstances.audioContext.createMediaStreamTrackSource(ms)
+      var promise = streamPromise.then(function(stream) {
+        return reusableInstances.audioContext.createMediaStreamTrackSource(stream)
       });
   MerchantValidationEvent:
     __base: var instance = new MerchantValidationEvent('merchantvalidation');
