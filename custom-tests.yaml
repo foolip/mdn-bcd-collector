@@ -569,24 +569,27 @@ api:
       }
       var instance = el.getClientRects();
   DOMTokenList:
+    __base: >-
+      var elm = document.createElement('b');
+      var instance = elm.classList;
     __additional:
       trim_whitespace: >-
-        var elm = document.createElement('b');
+        if (!instance) { return false; }
         elm.className = ' foo bar foo ';
-        elm.classList.remove('bar');
+        instance.remove('bar');
         return elm.className === 'foo foo' || elm.className === 'foo';
       remove_duplicates: >-
-        var elm = document.createElement('b');
+        if (!instance) { return false; }
         elm.className = ' foo bar foo ';
-        elm.classList.remove('bar');
+        instance.remove('bar');
         return elm.className === 'foo';
       toggle.force_parameter: >-
-        var elm = document.createElement('b');
+        if (!instance) { return false; }
         elm.className = 'foo bar';
-        if (!('classList' in elm && 'toggle' in elm.classList)) {
-          return {result: false, message: 'elm.classList.toggle is not defined'};
+        if (!('toggle' in instance)) {
+          return {result: false, message: 'Element.classList.toggle is not defined'};
         }
-        elm.classList.toggle('foo', true);
+        instance.toggle('foo', true);
         return elm.className === 'foo bar';
   DragEvent:
     __base: >-
