@@ -1114,8 +1114,13 @@ api:
       });
   ImageData:
     __base: >-
-      <%api.CanvasRenderingContext2D:ctx%>
-      var instance = ctx.createImageData(16, 16);
+      var instance;
+      if ('ImageData' in self) {
+        instance = new ImageData(5, 5);
+      } else if ('document' in self) {
+        <%api.CanvasRenderingContext2D:ctx%>
+        instance = ctx.createImageData(16, 16);
+      }
   InstallEvent:
     __base: var instance = new InstallEvent('install');
   KeyboardEvent:
