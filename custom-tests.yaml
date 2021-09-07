@@ -2385,7 +2385,7 @@ api:
       }
   Window:
     __base: var instance = window;
-    crypto: return 'crypto' in instance && !!instance.crypto;
+    crypto: return !!self.crypto;
   WindowOrWorkerGlobalScope:
     __base: var instance = self;
   WorkerGlobalScope:
