@@ -1529,10 +1529,6 @@ api:
       }
 
       var instance = new constructor({iceServers: []});
-  RTCRtpReceiver:
-    __base: >-
-      <%api.RTCPeerConnection:connection%>
-      var instance = connection.getReceivers();
   Screen:
     __base: var instance = window.screen;
   ScriptProcessorNode:
