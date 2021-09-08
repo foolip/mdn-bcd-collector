@@ -1517,6 +1517,7 @@ api:
     __base: "new RTCDTMFToneChangeEvent('', {tone: ''});"
   RTCPeerConnection:
     __base: >-
+      /* Firefox briefly defines RTCPeerConnection in older versions, but it is not a valid constructor until later versions. */
       var constructor = (window.mozRTCPeerConnection || window.RTCPeerConnection || window.webkitRTCPeerConnection);
       if (!constructor) {
         return false;
