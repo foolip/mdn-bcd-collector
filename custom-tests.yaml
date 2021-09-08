@@ -535,17 +535,6 @@ api:
       createElementNS.options: >-
         <%api.Document:d%>
         return !!d.createElement('span', {});
-      documentURI.readonly: >-
-        <%api.Document:d%>
-        var orig = d.documentURI;
-        try {
-          d.documentURI = 'http://example.org/';
-          var result = d.documentURI === orig;
-          d.documentURI = orig; // Reset just in case
-          return result;
-        } catch(e) {
-          return e instanceof TypeError;
-        }
   DocumentFragment:
     __base: var instance = document.createDocumentFragment();
   DocumentType:
