@@ -1517,16 +1517,10 @@ api:
     __base: "new RTCDTMFToneChangeEvent('', {tone: ''});"
   RTCPeerConnection:
     __base: >-
-      var constructor = (window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection);
+      var constructor = (window.mozRTCPeerConnection || window.RTCPeerConnection || window.webkitRTCPeerConnection);
       if (!constructor) {
         return false;
       };
-
-      /* Earlier versions of Firefox expose mozRTCPeerConnection but it is not a valid constructor. Check to see if the constructor is valid first. */
-      var cnstResult = bcd.testConstructor(constructor);
-      if (cnstResult.result !== true) {
-        return cnstResult;
-      }
 
       var instance = new constructor({iceServers: []});
   Screen:
