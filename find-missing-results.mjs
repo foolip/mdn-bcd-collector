@@ -14,14 +14,17 @@
 
 'use strict';
 
-const compareVersions = require('compare-versions');
-
-const {parseUA} = require('./ua-parser');
-const {loadJsonFiles} = require('./update-bcd');
-const {version: appVersion} = require('./package.json');
+import compareVersions from "compare-versions";
+import yargs from "yargs";
+import { parseUA } from "./ua-parser.js";
+import { loadJsonFiles } from "./update-bcd.js";
 
 const BCD_DIR = process.env.BCD_DIR || `../browser-compat-data`;
-const {browsers} = require(BCD_DIR);
+const {
+  default: compareFeatures
+} = await import(`${BCD_DIR}/index.js`);
+
+const appVersion = JSON.parse(await fs.readFile('./package.json')).version;
 
 const generateReportMap = (allResults) => {
   const result = {};
@@ -113,8 +116,9 @@ const main = async (argv) => {
   }
 };
 
-if (require.main === module) {
-  const {argv} = require('yargs').command(
+/* istanbul ignore if */
+if (import.meta.url === `file://${process.argv[1]}`) {
+  const {argv} = yargs().command(
       '$0 [reports..]',
       'Determine gaps in results',
       (yargs) => {
@@ -139,10 +143,7 @@ if (require.main === module) {
       }
   );
 
-  main(argv).catch((error) => {
-    console.error(error.stack);
-    process.exit(1);
-  });
+  main(argv);
 }
 
-module.exports = {findMissingResults};
+export {findMissingResults};
