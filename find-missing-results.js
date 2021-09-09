@@ -20,7 +20,7 @@ import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 
 import { parseUA } from "./ua-parser.js";
-import { loadJsonFiles } from "./update-bcd.mjs";
+import { loadJsonFiles } from "./update-bcd.js";
 
 const BCD_DIR = process.env.BCD_DIR || `../browser-compat-data`;
 const {

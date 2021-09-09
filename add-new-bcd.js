@@ -3,13 +3,13 @@
 import fs from "fs-extra";
 import path from "path";
 
-import { getMissing } from "./find-missing-features.mjs";
-import { main as updateBcd } from "./update-bcd.mjs";
+import { getMissing } from "./find-missing-features.js";
+import { main as updateBcd } from "./update-bcd.js";
 
 const BCD_DIR = process.env.BCD_DIR || `../browser-compat-data`;
 const {
   default: compareFeatures
-} = await import(`${BCD_DIR}/scripts.compare-features.js`);
+} = await import(`${BCD_DIR}/scripts/compare-features.js`);
 
 const template = {
   __compat: {

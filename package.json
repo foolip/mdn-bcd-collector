@@ -4,6 +4,7 @@
   "version": "3.2.12",
   "private": true,
   "license": "Apache-2.0",
+  "type": "module",
   "repository": {
     "type": "git",
     "url": "https://github.com/foolip/mdn-bcd-collector.git"
@@ -12,23 +13,23 @@
     "node": ">=14"
   },
   "scripts": {
-    "prepare": "node scripts.mjs prepare",
+    "prepare": "node scripts.js prepare",
     "lint": "eslint . && prettier -c \"**/*.json\" \"**/*.md\" \"**/*.yaml\" --color && ejslint views/*",
     "lint-fix": "eslint --fix . && prettier --write \"**/*.json\" \"**/*.md\" \"**/*.yaml\"",
     "clean": "rm -rf .nyc_output coverage generated tests.json",
-    "build": "node build.mjs",
+    "build": "node build.js",
     "gcp-build": "npm run build",
     "deploy": "gcloud app deploy",
-    "start": "node app.mjs",
+    "start": "node app.js",
     "start-dev": "npm i && nodemon -e js,json,idl,yaml --exec \"npm run build && npm start\"",
-    "unittest": "node scripts.mjs unittest",
+    "unittest": "node scripts.js unittest",
     "coverage": "nyc report -r lcov && open-cli coverage/lcov-report/index.html",
     "test": "npm run lint && npm run unittest",
-    "selenium": "node selenium.mjs",
-    "update-bcd": "node update-bcd.mjs",
-    "find-missing-features": "node find-missing-features.mjs",
-    "find-missing-results": "node find-missing-results.mjs",
-    "add-new-bcd": "node add-new-bcd.mjs"
+    "selenium": "node selenium.js",
+    "update-bcd": "node update-bcd.js",
+    "find-missing-features": "node find-missing-features.js",
+    "find-missing-results": "node find-missing-results.js",
+    "add-new-bcd": "node add-new-bcd.js"
   },
   "dependencies": {
     "@google-cloud/logging-winston": "4.1.1",
