@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-const {
+import {
   Browser,
   Builder,
   By,
@@ -20,18 +20,21 @@ const {
   Capability,
   logging,
   until
-} = require('selenium-webdriver');
-const bcdBrowsers = require('@mdn/browser-compat-data').browsers;
-const compareVersions = require('compare-versions');
-const fetch = require('node-fetch');
-const fs = require('fs-extra');
-const path = require('path');
-const chalk = require('chalk');
-const {Listr} = require('listr2');
+} from 'selenium-webdriver';
+import bcd from '@mdn/browser-compat-data';
+const bcdBrowsers = bcd.browsers;
+import compareVersions from 'compare-versions';
+import fetch from 'node-fetch';
+import fs from 'fs-extra';
+import path from 'path';
+import chalk from 'chalk';
+import listr2 from 'listr2';
+const {Listr} = listr2;
+import yargs from 'yargs';
 
-const secrets = require('./secrets.json');
+const secrets = JSON.parse(await fs.readFile('./secrets.json'));
 
-const resultsDir = path.join(__dirname, '..', 'mdn-bcd-results');
+const resultsDir = new URL('../mdn-bcd-results', import.meta.url);
 
 const testenv = process.env.NODE_ENV === 'test';
 const host = `https://${
@@ -130,7 +133,7 @@ const getBrowsersToTest = (limitBrowsers, reverse) => {
 
   if (limitBrowsers) {
     return Object.fromEntries(
-        Object.entries(browsersToTest).filter(([k]) => limitBrowsers.includes(k))
+      Object.entries(browsersToTest).filter(([k]) => limitBrowsers.includes(k))
     );
   }
 
@@ -170,13 +173,13 @@ const getOsesToTest = (service, os) => {
       break;
     case 'macOS':
       osesToTest =
-        service === 'saucelabs' ?
-          [['macOS', '10.14']] :
-          [
-            ['OS X', 'Big Sur'],
-            ['OS X', 'Mojave'],
-            ['OS X', 'El Capitan']
-          ];
+        service === 'saucelabs'
+          ? [['macOS', '10.14']]
+          : [
+              ['OS X', 'Big Sur'],
+              ['OS X', 'Mojave'],
+              ['OS X', 'El Capitan']
+            ];
       break;
     default:
       throw new Error(`Unknown/unsupported OS: ${os}`);
@@ -196,7 +199,7 @@ const getSeleniumUrl = (service, credentials) => {
       seleniumUrls[service] = credentials.url;
     } else {
       throw new Error(
-          `Couldn't compile Selenium URL for ${service}: service is unknown and URL not specified`
+        `Couldn't compile Selenium URL for ${service}: service is unknown and URL not specified`
       );
     }
   }
@@ -216,9 +219,9 @@ const getSeleniumUrl = (service, credentials) => {
   // Check for any unfilled variables
   if (missingVars.length) {
     throw new Error(
-        `Couldn't compile Selenium URL for ${service}: missing required variables: ${missingVars.join(
-            ', '
-        )}`
+      `Couldn't compile Selenium URL for ${service}: missing required variables: ${missingVars.join(
+        ', '
+      )}`
     );
   }
 
@@ -249,8 +252,8 @@ const buildDriver = async (browser, version, os) => {
       capabilities.set(Capability.BROWSER_NAME, Browser[browser.toUpperCase()]);
 
       capabilities.set(
-          'name',
-          `mdn-bcd-collector: ${prettyName(browser, version, os)}`
+        'name',
+        `mdn-bcd-collector: ${prettyName(browser, version, os)}`
       );
 
       capabilities.set(Capability.VERSION, version.split('.')[0]);
@@ -307,19 +310,19 @@ const buildDriver = async (browser, version, os) => {
 
         // Build Selenium driver
         const driverBuilder = new Builder()
-            .usingServer(seleniumUrl)
-            .withCapabilities(capabilities);
+          .usingServer(seleniumUrl)
+          .withCapabilities(capabilities);
         const driver = await driverBuilder.build();
 
         return driver;
       } catch (e) {
         if (
           e.message.startsWith(
-              'Misconfigured -- Unsupported OS/browser/version/device combo'
+            'Misconfigured -- Unsupported OS/browser/version/device combo'
           ) ||
           e.message.startsWith('OS/Browser combination invalid') ||
           e.message.startsWith('Browser/Browser_Version not supported') ||
-          e.message.startsWith('Couldn\'t compile Selenium URL')
+          e.message.startsWith("Couldn't compile Selenium URL")
         ) {
           // If unsupported config, continue to the next grid configuration
           continue;
@@ -358,8 +361,8 @@ const changeProtocol = (browser, version, page) => {
 const awaitPageReady = async (driver) => {
   await driver.wait(() => {
     return driver
-        .executeScript('return document.readyState')
-        .then((readyState) => readyState === 'complete');
+      .executeScript('return document.readyState')
+      .then((readyState) => readyState === 'complete');
   }, 30000);
   await driver.executeScript('return document.readyState');
 };
@@ -377,7 +380,7 @@ const goToPage = async (driver, browser, version, page) => {
 const click = async (driver, browser, elementId) => {
   if (browser === 'safari') {
     await driver.executeScript(
-        `document.getElementById('${elementId}').click()`
+      `document.getElementById('${elementId}').click()`
     );
   } else {
     await driver.findElement(By.id(elementId)).click();
@@ -415,7 +418,7 @@ const run = async (browser, version, os, ctx, task) => {
     } catch (e) {
       if (e.name == 'TimeoutError') {
         throw new Error(
-            task.title + ' - ' + 'Timed out waiting for results to upload'
+          task.title + ' - ' + 'Timed out waiting for results to upload'
         );
       }
 
@@ -447,7 +450,7 @@ const run = async (browser, version, os, ctx, task) => {
 const runAll = async (limitBrowsers, oses, nonConcurrent, reverse) => {
   if (!Object.keys(secrets.selenium).length) {
     console.error(
-        chalk`{red.bold A Selenium remote WebDriver URL is not defined in secrets.json.  Please define your Selenium remote(s).}`
+      chalk`{red.bold A Selenium remote WebDriver URL is not defined in secrets.json.  Please define your Selenium remote(s).}`
     );
     return false;
   }
@@ -517,40 +520,41 @@ const runAll = async (limitBrowsers, oses, nonConcurrent, reverse) => {
 };
 
 /* istanbul ignore if */
-if (require.main === module) {
-  const {argv} = require('yargs').command(
-      '$0 [browser..]',
-      'Run Selenium on several browser versions',
-      (yargs) => {
-        yargs
-            .positional('browser', {
-              describe: 'Limit the browser(s) to test',
-              type: 'string',
-              choices: ['chrome', 'edge', 'firefox', 'ie', 'safari']
-            })
-            .option('os', {
-              describe: 'Specify OS to test',
-              type: 'array',
-              choices: ['Windows', 'macOS'],
-              default: ['Windows', 'macOS']
-            })
-            .option('non-concurrent', {
-              describe: 'Run browsers sequentially (one at a time)',
-              alias: 's',
-              type: 'boolean',
-              nargs: 0
-            })
-            .option('reverse', {
-              describe: 'Run browser versions oldest-to-newest',
-              alias: 'r',
-              type: 'boolean',
-              nargs: 0
-            });
-      }
+if (import.meta.url === `file://${process.argv[1]}`) {
+  const {argv} = yargs().command(
+    '$0 [browser..]',
+    'Run Selenium on several browser versions',
+    (yargs) => {
+      yargs
+        .positional('browser', {
+          describe: 'Limit the browser(s) to test',
+          type: 'string',
+          choices: ['chrome', 'edge', 'firefox', 'ie', 'safari']
+        })
+        .option('os', {
+          describe: 'Specify OS to test',
+          type: 'array',
+          choices: ['Windows', 'macOS'],
+          default: ['Windows', 'macOS']
+        })
+        .option('non-concurrent', {
+          describe: 'Run browsers sequentially (one at a time)',
+          alias: 's',
+          type: 'boolean',
+          nargs: 0
+        })
+        .option('reverse', {
+          describe: 'Run browser versions oldest-to-newest',
+          alias: 'r',
+          type: 'boolean',
+          nargs: 0
+        });
+    }
   );
 
   if (
-    runAll(argv.browser, argv.os, argv.nonConcurrent, argv.reverse) === false
+    (await runAll(argv.browser, argv.os, argv.nonConcurrent, argv.reverse)) ===
+    false
   ) {
     process.exit(1);
   }
