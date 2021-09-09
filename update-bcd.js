@@ -11,7 +11,7 @@ import minimatch from 'minimatch';
 const {Minimatch} = minimatch;
 import path from 'path';
 import yargs from 'yargs';
-import { hideBin } from 'yargs/helpers';
+import {hideBin} from 'yargs/helpers';
 
 import logger from './logger.js';
 import {parseUA} from './ua-parser.js';
@@ -193,14 +193,14 @@ const inferSupportStatements = (versionMap) => {
       if (!lastStatement) {
         statements.push({
           version_added:
-            lastWasNull || lastKnown.support === false
-              ? `${lastKnown.version}> ≤${version}`
-              : version
+            lastWasNull || lastKnown.support === false ?
+              `${lastKnown.version}> ≤${version}` :
+              version
         });
       } else if (!lastStatement.version_added) {
-        lastStatement.version_added = lastWasNull
-          ? `${lastKnown.version}> ≤${version}`
-          : version;
+        lastStatement.version_added = lastWasNull ?
+          `${lastKnown.version}> ≤${version}` :
+          version;
       } else if (lastStatement.version_removed) {
         // added back again
         statements.push({
@@ -217,9 +217,9 @@ const inferSupportStatements = (versionMap) => {
         lastStatement.version_added &&
         !lastStatement.version_removed
       ) {
-        lastStatement.version_removed = lastWasNull
-          ? `${lastKnown.version}> ≤${version}`
-          : version;
+        lastStatement.version_removed = lastWasNull ?
+          `${lastKnown.version}> ≤${version}` :
+          version;
       } else if (!lastStatement) {
         statements.push({version_added: false});
       }
@@ -355,9 +355,9 @@ const update = (bcd, supportMatrix, filter) => {
         )
       ) {
         simpleStatement.version_added =
-          typeof inferredStatement.version_added === 'string'
-            ? inferredStatement.version_added.replace('0> ', '')
-            : inferredStatement.version_added;
+          typeof inferredStatement.version_added === 'string' ?
+            inferredStatement.version_added.replace('0> ', '') :
+            inferredStatement.version_added;
         modified = true;
       }
 

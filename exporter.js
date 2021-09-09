@@ -18,13 +18,13 @@
 // web service into JSON files that can be used by update-bcd.js.
 
 import crypto from "crypto";
-import { Octokit } from "@octokit/rest";
+import {Octokit} from "@octokit/rest";
 import slugify from "slugify";
 import stringify from "json-stable-stringify";
 import bcd from "@mdn/browser-compat-data";
 const bcdBrowsers = bcd.browsers;
 
-import { parseUA } from "./ua-parser.js";
+import {parseUA} from "./ua-parser.js";
 
 const getReportMeta = (report) => {
   const json = stringify(report);

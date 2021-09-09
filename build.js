@@ -19,8 +19,8 @@ import fs from "fs-extra";
 import idl from "@webref/idl";
 import path from "path";
 import prettier from "prettier";
-import { fileURLToPath } from "url";
-import { validate } from "webidl2";
+import {fileURLToPath} from "url";
+import {validate} from "webidl2";
 import * as YAML from "yaml";
 
 import customIDL from "./custom-idl/index.js";

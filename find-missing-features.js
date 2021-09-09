@@ -2,7 +2,7 @@
 
 import fs from "fs-extra";
 import yargs from "yargs";
-import { hideBin } from "yargs/helpers";
+import {hideBin} from "yargs/helpers";
 
 const BCD_DIR = process.env.BCD_DIR || `../browser-compat-data`;
 const {

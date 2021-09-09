@@ -31,7 +31,7 @@ import chalk from 'chalk';
 import listr2 from 'listr2';
 const {Listr} = listr2;
 import yargs from 'yargs';
-import { hideBin } from 'yargs/helpers';
+import {hideBin} from 'yargs/helpers';
 
 const secrets = JSON.parse(await fs.readFile('./secrets.json'));
 
@@ -174,9 +174,9 @@ const getOsesToTest = (service, os) => {
       break;
     case 'macOS':
       osesToTest =
-        service === 'saucelabs'
-          ? [['macOS', '10.14']]
-          : [
+        service === 'saucelabs' ?
+          [['macOS', '10.14']] :
+          [
               ['OS X', 'Big Sur'],
               ['OS X', 'Mojave'],
               ['OS X', 'El Capitan']
