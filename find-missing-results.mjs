@@ -15,16 +15,18 @@
 'use strict';
 
 import compareVersions from "compare-versions";
+import fs from "fs-extra";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 
 import { parseUA } from "./ua-parser.js";
-import { loadJsonFiles } from "./update-bcd.js";
+import { loadJsonFiles } from "./update-bcd.mjs";
 
 const BCD_DIR = process.env.BCD_DIR || `../browser-compat-data`;
 const {
-  default: compareFeatures
+  default: bcd
 } = await import(`${BCD_DIR}/index.js`);
+const {browsers} = bcd;
 
 const appVersion = JSON.parse(await fs.readFile('./package.json')).version;
 

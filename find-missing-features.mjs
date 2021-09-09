@@ -1,11 +1,12 @@
 'use strict';
 
+import fs from "fs-extra";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";
 
 const BCD_DIR = process.env.BCD_DIR || `../browser-compat-data`;
 const {
-  default: compareFeatures
+  default: bcd
 } = await import(`${BCD_DIR}/index.js`);
 
 const tests = JSON.parse(await fs.readFile('./tests.json'));

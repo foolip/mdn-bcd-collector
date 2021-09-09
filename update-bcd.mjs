@@ -10,10 +10,11 @@ import klaw from 'klaw';
 import minimatch from 'minimatch';
 const {Minimatch} = minimatch;
 import path from 'path';
-import logger from './logger.js';
-import {parseUA} from './ua-parser.js';
 import yargs from 'yargs';
 import { hideBin } from 'yargs/helpers';
+
+import logger from './logger.js';
+import {parseUA} from './ua-parser.js';
 
 const overrides = JSON.parse(await fs.readFile('./overrides.json')).filter(
   Array.isArray

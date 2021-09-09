@@ -2,8 +2,9 @@
 
 import fs from "fs-extra";
 import path from "path";
-import { getMissing } from "./find-missing-features.js";
-import { main as updateBcd } from "./update-bcd.js";
+
+import { getMissing } from "./find-missing-features.mjs";
+import { main as updateBcd } from "./update-bcd.mjs";
 
 const BCD_DIR = process.env.BCD_DIR || `../browser-compat-data`;
 const {
