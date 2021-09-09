@@ -117,4 +117,4 @@ const exportAsPR = async (report, token) => {
   };
 };
 
-export default {getReportMeta, createBody, exportAsPR};
+export {getReportMeta, createBody, exportAsPR};

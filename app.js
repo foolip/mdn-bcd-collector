@@ -270,7 +270,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   logger.info('Press Ctrl+C to quit.');
 }
 
-export default {
+export {
   app,
-  version: appVersion
+  version as appVersion
 }

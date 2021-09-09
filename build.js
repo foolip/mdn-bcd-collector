@@ -20,7 +20,7 @@ import idl from "@webref/idl";
 import path from "path";
 import prettier from "prettier";
 import { fileURLToPath } from "url";
-import * as WebIDL2 from "webidl2";
+import { validate } from "webidl2";
 import * as YAML from "yaml";
 
 import customIDL from "./custom-idl/index.js";
@@ -437,7 +437,7 @@ const getExposureSet = (node) => {
 };
 
 const validateIDL = (ast) => {
-  const validations = WebIDL2.validate(ast).filter((v) => {
+  const validations = validate(ast).filter((v) => {
     // TODO: https://github.com/w3c/webref/pull/196
     if (v.ruleName === 'dict-arg-default') {
       return false;
@@ -818,7 +818,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   build(customIDL, customCSS);
 }
 
-export default {
+export {
   getCustomTestAPI,
   getCustomSubtestsAPI,
   getCustomResourcesAPI,

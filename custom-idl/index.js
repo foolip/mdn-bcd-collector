@@ -14,14 +14,15 @@
 
 'use strict';
 
-import fs from "fs";
+import fs from "fs-extra";
 import path from "path";
-import WebIDL2 from "webidl2";
+import { fileURLToPath } from "url";
+import { parse } from "webidl2";
 
 // Load text (UTF-8) files from a directory and return an object mapping each
 // name (sans extension) to the parsed result of that text.
-const parseIDL = () => {
-  const files = fs.readdirSync(__dirname);
+const parseIDL = async () => {
+  const files = await fs.readdir(fileURLToPath(new URL('.', import.meta.url)));
   files.sort();
   const results = {};
   for (const file of files) {
@@ -30,8 +31,8 @@ const parseIDL = () => {
       continue;
     }
     const name = path.parse(file).name;
-    const text = fs.readFileSync(path.join(__dirname, file), 'utf8');
-    results[name] = WebIDL2.parse(text);
+    const text = await fs.readFile(fileURLToPath(new URL(`./${file}`, import.meta.url)), 'utf8');
+    results[name] = parse(text);
   }
   return results;
 };

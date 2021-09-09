@@ -74,4 +74,4 @@ const parseResults = (url, results) => {
   return [url, results];
 };
 
-export default {parseResults};
+export default parseResults;

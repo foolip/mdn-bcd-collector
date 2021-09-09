@@ -158,7 +158,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   main();
 }
 
-export default {
+export {
   traverseFeatures,
   findMissing,
   getMissing

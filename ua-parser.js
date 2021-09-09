@@ -107,7 +107,7 @@ const parseUA = (userAgent, browsers) => {
   return data;
 };
 
-export default {
+export {
   getMajorMinorVersion,
   parseUA
 };
