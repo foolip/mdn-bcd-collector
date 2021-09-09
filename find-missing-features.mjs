@@ -1,8 +1,13 @@
 'use strict';
 
+import yargs from "yargs";
+
 const BCD_DIR = process.env.BCD_DIR || `../browser-compat-data`;
-const bcd = require(BCD_DIR);
-const tests = require('./tests.json');
+const {
+  default: compareFeatures
+} = await import(`${BCD_DIR}/index.js`);
+
+const tests = JSON.parse(await fs.readFile('./tests.json'));
 
 const traverseFeatures = (obj, path, includeAliases) => {
   const features = [];
@@ -102,7 +107,7 @@ const getMissing = (
 
 /* istanbul ignore next */
 const main = () => {
-  const {argv} = require('yargs').command(
+  const {argv} = yargs().command(
       '$0 [--direction]',
       'Find missing entries between BCD and the collector tests',
       (yargs) => {
@@ -146,13 +151,13 @@ const main = () => {
   );
 };
 
-module.exports = {
+/* istanbul ignore if */
+if (import.meta.url === `file://${process.argv[1]}`) {
+  main();
+}
+
+export {
   traverseFeatures,
   findMissing,
   getMissing
 };
-
-/* istanbul ignore if */
-if (require.main === module) {
-  main();
-}
