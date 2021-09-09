@@ -27,9 +27,9 @@ import expressLayouts from "express-ejs-layouts";
 import yargs from "yargs";
 import {hideBin} from "yargs/helpers";
 
-import exporter from "./exporter.js";
+import * as exporter from "./exporter.js";
 import logger from "./logger.js";
-import {parseResults} from "./results.js";
+import parseResults from "./results.js";
 import {getStorage} from "./storage.js";
 import {parseUA} from "./ua-parser.js";
 import Tests from "./tests.js";
