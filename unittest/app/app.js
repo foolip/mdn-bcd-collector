@@ -19,12 +19,17 @@ import chaiHttp from "chai-http";
 chai.use(chaiHttp);
 
 import fs from "fs-extra";
+import {fileURLToPath} from "url";
 
 import {app, version} from "../../app.js";
 const agent = chai.request.agent(app);
 
-const tests = Object.entries(JSON.parse(await fs.readFile('../../tests.json')));
-const packageLock = JSON.parse(await fs.readFile('../../package-lock.json'));
+const tests = Object.entries(JSON.parse(await fs.readFile(
+  fileURLToPath(new URL('../../tests.json', import.meta.url))
+)));
+const packageLock = JSON.parse(await fs.readFile(
+  fileURLToPath(new URL('../../package-lock.json', import.meta.url))
+));
 
 const userAgent = `node-superagent/${packageLock.dependencies.superagent.version}`;
 

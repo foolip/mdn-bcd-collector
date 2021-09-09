@@ -22,7 +22,9 @@ import {fileURLToPath} from "url";
 
 import {app} from "../../app.js";
 
-const pkg = JSON.parse(await fs.readFile('../../package.json'));
+const pkg = JSON.parse(await fs.readFile(
+  fileURLToPath(new URL('../../package.json', import.meta.url))
+));
 
 // Firefox is temporarily disabled due to issues on CI
 const products = ['chrome']; // ['chrome', 'firefox'];
