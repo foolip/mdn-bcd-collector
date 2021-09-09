@@ -14,11 +14,11 @@
 
 'use strict';
 
-const assert = require('assert');
-const fs = require('fs').promises;
-const path = require('path');
-
-const {Storage} = require('@google-cloud/storage');
+import assert from "assert";
+import fs from "fs-extra";
+import path from "path";
+import { fileURLToPath } from "url";
+import {Storage} from "@google-cloud/storage";
 
 class CloudStorage {
   constructor(projectId, bucketName) {
@@ -92,13 +92,13 @@ class MemoryStorage {
 
   async saveFile(filename, data) {
     assert(!filename.includes('..'));
-    const p = path.join(__dirname, 'download', filename);
+    const p = fileURLToPath(new URL(`./download/${filename}`, import.meta.url));
     await fs.writeFile(p, data);
   }
 
   async readFile(filename) {
     assert(!filename.includes('..'));
-    const p = path.join(__dirname, 'download', filename);
+    const p = fileURLToPath(new URL(`./download/${filename}`, import.meta.url));
     return await fs.readFile(p);
   }
 }
@@ -120,4 +120,4 @@ const getStorage = () => {
   return new MemoryStorage();
 };
 
-module.exports = {CloudStorage, MemoryStorage, getStorage};
+export {CloudStorage, MemoryStorage, getStorage};

@@ -17,12 +17,14 @@
 // This module is responsible for getting results/reports out of the collector
 // web service into JSON files that can be used by update-bcd.js.
 
-const crypto = require('crypto');
-const {Octokit} = require('@octokit/rest');
-const slugify = require('slugify');
-const stringify = require('json-stable-stringify');
-const {parseUA} = require('./ua-parser');
-const bcdBrowsers = require('@mdn/browser-compat-data').browsers;
+import crypto from "crypto";
+import { Octokit } from "@octokit/rest";
+import slugify from "slugify";
+import stringify from "json-stable-stringify";
+import bcd from "@mdn/browser-compat-data";
+const bcdBrowsers = bcd.browsers;
+
+import { parseUA } from "./ua-parser.js";
 
 const getReportMeta = (report) => {
   const json = stringify(report);
@@ -115,4 +117,4 @@ const exportAsPR = async (report, token) => {
   };
 };
 
-module.exports = {getReportMeta, createBody, exportAsPR};
+export default {getReportMeta, createBody, exportAsPR};

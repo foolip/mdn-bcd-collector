@@ -1,7 +1,7 @@
 'use strict';
 
-const compareVersions = require('compare-versions');
-const uaParser = require('ua-parser-js');
+import compareVersions from "compare-versions";
+import uaParser from "ua-parser-js";
 
 const getMajorMinorVersion = (version) => {
   const [major, minor] = version.split('.');
@@ -107,7 +107,7 @@ const parseUA = (userAgent, browsers) => {
   return data;
 };
 
-module.exports = {
+export default {
   getMajorMinorVersion,
   parseUA
 };

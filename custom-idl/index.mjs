@@ -14,9 +14,9 @@
 
 'use strict';
 
-const fs = require('fs');
-const path = require('path');
-const WebIDL2 = require('webidl2');
+import fs from "fs";
+import path from "path";
+import WebIDL2 from "webidl2";
 
 // Load text (UTF-8) files from a directory and return an object mapping each
 // name (sans extension) to the parsed result of that text.
@@ -36,4 +36,4 @@ const parseIDL = () => {
   return results;
 };
 
-module.exports = parseIDL();
+export default parseIDL();

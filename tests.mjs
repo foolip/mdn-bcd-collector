@@ -14,7 +14,7 @@
 
 'use strict';
 
-const didYouMean = require('didyoumean');
+import didYouMean from "didyoumean";
 
 class Tests {
   constructor(options) {
@@ -89,4 +89,4 @@ class Tests {
   }
 }
 
-module.exports = Tests;
+export default Tests;
