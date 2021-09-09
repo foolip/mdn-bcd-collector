@@ -31,10 +31,18 @@ describe('find-missing', async () => {
   it('traverseFeatures', () => {
     assert.deepEqual(traverseFeatures(bcd, ''), [
       'api.AbortController',
+      'api.AbortController.AbortController',
+      'api.AbortController.abort',
       'api.AbortController.dummy',
       'api.AbortController.signal',
+      'api.AudioContext',
+      'api.AudioContext.close',
+      'api.DeprecatedInterface',
       'api.DummyAPI',
       'api.DummyAPI.dummy',
+      'api.ExperimentalInterface',
+      'api.NullAPI',
+      'api.RemovedInterface',
       'css.properties.font-family',
       'css.properties.font-face',
       'javascript.builtins.Array',
