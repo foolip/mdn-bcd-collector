@@ -14,14 +14,13 @@
 
 'use strict';
 
-process.env.BCD_DIR = './bcd_test';
-
 import { assert } from 'chai';
 
 import sinon from 'sinon';
 
 import logger from '../../logger.js';
-import * from '../../update-bcd.js';
+
+import mockBcd from './bcd.test.js';
 
 const reports = [
   {
@@ -291,6 +290,17 @@ const reports = [
 ];
 
 describe('BCD updater', () => {
+  const {
+    findEntry,
+    getSupportMap,
+    getSupportMatrix,
+    inferSupportStatements,
+    update
+  } = esmock('../../update-bcd.js', {
+    '../../../browser-compat-data/index.js': {
+      default: () => mockBcd
+  });
+
   describe('findEntry', () => {
     it('equal', () => {
       assert.strictEqual(

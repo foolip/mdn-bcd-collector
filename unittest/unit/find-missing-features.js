@@ -14,15 +14,18 @@
 
 'use strict';
 
-process.env.BCD_DIR = './bcd_test';
-
 import { assert } from 'chai';
 
 import sinon from 'sinon';
 
-import {traverseFeatures, getMissing} from '../../find-missing-features.js';
+import mockBcd from './bcd.test.js';
 
 describe('find-missing', () => {
+  const {traverseFeatures, getMissing} = esmock('../../find-missing-features.js', {
+    '../../../browser-compat-data/index.js': {
+      default: () => mockBcd
+  });
+
   it('traverseFeatures', () => {
     assert.deepEqual(traverseFeatures(bcd, ''), [
       'api.AbortController',
