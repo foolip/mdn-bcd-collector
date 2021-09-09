@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/* global esmock */
-
 'use strict';
 
 import {assert} from 'chai';
 
+import esmock from 'esmock';
 import sinon from 'sinon';
 
 import logger from '../../logger.js';
@@ -298,7 +297,7 @@ describe('BCD updater', () => {
     getSupportMatrix,
     inferSupportStatements,
     update
-  } = esmock('../../update-bcd.js', {
+  } = await esmock('../../update-bcd.js', {
     '../../../browser-compat-data/index.js': {
       default: () => bcd
     }

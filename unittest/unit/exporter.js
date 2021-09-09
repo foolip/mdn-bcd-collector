@@ -12,12 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/* global esmock */
-
 'use strict';
 
 import {assert} from 'chai';
 
+import esmock from 'esmock';
 import sinon from 'sinon';
 import {Octokit} from '@octokit/rest';
 
@@ -62,7 +61,7 @@ const REPORTS = [
 
 describe('GitHub export', () => {
   const octokit = new Octokit();
-  const exporter = esmock('../../exporter.js', {
+  const exporter = await esmock('../../exporter.js', {
     '@octokit/rest': {
       Octokit: () => octokit
     }
