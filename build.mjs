@@ -818,7 +818,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   build(customIDL, customCSS);
 }
 
-export {
+export default {
   getCustomTestAPI,
   getCustomSubtestsAPI,
   getCustomResourcesAPI,
