@@ -14,11 +14,11 @@
 
 'use strict';
 
-import chai, { assert, expect } from "chai";
+import chai, {assert, expect} from "chai";
 import chaiHttp from "chai-http";
 chai.use(chaiHttp);
 
-import { app, version } from "../../app.js";
+import {app, version} from "../../app.js";
 const agent = chai.request.agent(app);
 
 const tests = Object.entries(JSON.parse(await fs.readFile('../../tests.json')));

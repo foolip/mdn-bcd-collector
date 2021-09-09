@@ -14,14 +14,28 @@
 
 'use strict';
 
-import chai, { assert, expect } from "chai";
+import chai, {assert, expect} from "chai";
 import chaiSubset from "chai-subset";
 chai.use(chaiSubset);
 
 import WebIDL2 from "webidl2";
 import sinon from "sinon";
 
-import * from '../../build';
+import {
+  flattenIDL,
+  getExposureSet,
+  compileTestCode,
+  compileTest,
+  validateIDL,
+  buildIDLTests,
+  buildIDL,
+  getCustomTestAPI,
+  getCustomSubtestsAPI,
+  getCustomResourcesAPI,
+  cssPropertyToIDLAttribute,
+  buildCSS,
+  getCustomTestCSS
+} from '../../build';
 
 describe('build', () => {
   describe('getCustomTestAPI', () => {

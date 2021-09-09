@@ -14,7 +14,7 @@
 
 'use strict';
 
-import { assert } from "chai";
+import {assert} from "chai";
 
 import Tests from "../../tests.js";
 

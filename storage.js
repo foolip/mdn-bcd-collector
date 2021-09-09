@@ -17,7 +17,7 @@
 import assert from "assert";
 import fs from "fs-extra";
 import path from "path";
-import { fileURLToPath } from "url";
+import {fileURLToPath} from "url";
 import {Storage} from "@google-cloud/storage";
 
 class CloudStorage {

@@ -26,13 +26,13 @@ import http from "http";
 import uniqueString from "unique-string";
 import expressLayouts from "express-ejs-layouts";
 import yargs from "yargs";
-import { hideBin } from "yargs/helpers";
+import {hideBin} from "yargs/helpers";
 
 import exporter from "./exporter.js";
 import logger from "./logger.js";
-import { parseResults } from "./results.js";
-import { getStorage } from "./storage.js";
-import { parseUA } from "./ua-parser.js";
+import {parseResults} from "./results.js";
+import {getStorage} from "./storage.js";
+import {parseUA} from "./ua-parser.js";
 import Tests from "./tests.js";
 
 const storage = getStorage();
@@ -273,4 +273,4 @@ if (import.meta.url === `file://${process.argv[1]}`) {
 export {
   app,
   appVersion as version
-}
+};

@@ -14,7 +14,7 @@
 
 'use strict';
 
-import { assert } from 'chai';
+import {assert} from 'chai';
 
 import sinon from 'sinon';
 
@@ -299,6 +299,7 @@ describe('BCD updater', () => {
   } = esmock('../../update-bcd.js', {
     '../../../browser-compat-data/index.js': {
       default: () => mockBcd
+    }
   });
 
   describe('findEntry', () => {

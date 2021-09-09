@@ -15,7 +15,7 @@
 'use strict';
 
 import winston from "winston";
-import { LoggingWinston } from "@google-cloud/logging-winston";
+import {LoggingWinston} from "@google-cloud/logging-winston";
 
 
 const getTransport = () => {

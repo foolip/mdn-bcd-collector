@@ -14,7 +14,7 @@
 
 'use strict';
 
-import { assert } from 'chai';
+import {assert} from 'chai';
 
 import sinon from 'sinon';
 
@@ -24,6 +24,7 @@ describe('find-missing', () => {
   const {traverseFeatures, getMissing} = esmock('../../find-missing-features.js', {
     '../../../browser-compat-data/index.js': {
       default: () => mockBcd
+    }
   });
 
   it('traverseFeatures', () => {

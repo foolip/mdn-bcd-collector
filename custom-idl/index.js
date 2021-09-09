@@ -16,8 +16,8 @@
 
 import fs from "fs-extra";
 import path from "path";
-import { fileURLToPath } from "url";
-import { parse } from "webidl2";
+import {fileURLToPath} from "url";
+import {parse} from "webidl2";
 
 // Load text (UTF-8) files from a directory and return an object mapping each
 // name (sans extension) to the parsed result of that text.
