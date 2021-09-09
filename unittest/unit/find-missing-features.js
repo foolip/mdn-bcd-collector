@@ -14,65 +14,13 @@
 
 'use strict';
 
-const assert = require('chai').assert;
+process.env.BCD_DIR = './bcd_test';
 
-const proxyquire = require('proxyquire').noCallThru();
-const sinon = require('sinon');
+import { assert } from 'chai';
 
-const tests = {
-  'api.AbortController': {},
-  'api.AbortController.signal': {},
-  'css.properties.font-family': {},
-  'javascript.builtins.Array': {},
-  'javascript.builtins.Error': {}
-};
-const bcd = {
-  api: {
-    AbortController: {
-      __compat: {},
-      dummy: {
-        __compat: {}
-      },
-      signal: {
-        __compat: {}
-      }
-    },
-    DummyAPI: {
-      __compat: {},
-      dummy: {
-        __compat: {}
-      }
-    }
-  },
-  css: {
-    properties: {
-      'font-family': {
-        __compat: {}
-      },
-      'font-face': {
-        __compat: {}
-      }
-    }
-  },
-  javascript: {
-    builtins: {
-      Array: {
-        __compat: {}
-      },
-      Date: {
-        __compat: {}
-      }
-    }
-  }
-};
+import sinon from 'sinon';
 
-const {traverseFeatures, getMissing} = proxyquire(
-  '../../find-missing-features',
-  {
-    './tests.json': tests,
-    '../browser-compat-data': bcd
-  }
-);
+import {traverseFeatures, getMissing} from '../../find-missing-features.js';
 
 describe('find-missing', () => {
   it('traverseFeatures', () => {

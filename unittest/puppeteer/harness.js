@@ -14,15 +14,16 @@
 
 'use strict';
 
-const assert = require('chai').assert;
+import {assert} from "chai";
+import fs from "fs";
+import path from "path";
+import puppeteer from "puppeteer";
+import pti from "puppeteer-to-istanbul";
+import { fileURLToPath } from "url";
 
-const fs = require('fs');
-const path = require('path');
+import { app } from "../../app.js";
 
-const puppeteer = require('puppeteer');
-const pti = require('puppeteer-to-istanbul');
-
-const {app} = require('../../app');
+const package = JSON.parse(await fs.readFile('../../package.json'));
 
 // Firefox is temporarily disabled due to issues on CI
 const products = ['chrome']; // ['chrome', 'firefox'];
@@ -42,11 +43,11 @@ describe('harness.js', () => {
   after(() => server.close());
 
   for (const product of products) {
-    it(product, async function () {
+    it(product, async () => {
       if (
         product === 'firefox' &&
         process.platform === 'win32' &&
-        require('../../package.json').devDependencies.puppeteer === '5.4.1'
+        package.devDependencies.puppeteer === '5.4.1'
       ) {
         // Browser.close() Firefox support is broken on Windows and causes hang
         // https://github.com/puppeteer/puppeteer/issues/5673
@@ -82,13 +83,7 @@ describe('harness.js', () => {
         });
 
         // Slight adjustment of coverage files to point to original files
-        const coveragePath = path.join(
-          __dirname,
-          '..',
-          '..',
-          '.nyc_output',
-          'out.json'
-        );
+        const coveragePath = fileURLToPath(new URL('../../.nyc_output/out.json', import.meta.url));
         fs.readFile(coveragePath, 'utf8', (err, data) => {
           if (err) {
             return console.log(err);

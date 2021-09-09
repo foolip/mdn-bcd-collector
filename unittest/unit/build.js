@@ -14,30 +14,14 @@
 
 'use strict';
 
-const chai = require('chai');
-const chaiSubset = require('chai-subset');
+import chai, { assert, expect } from "chai";
+import chaiSubset from "chai-subset";
 chai.use(chaiSubset);
-const assert = chai.assert;
-const expect = chai.expect;
 
-const WebIDL2 = require('webidl2');
-const sinon = require('sinon');
+import WebIDL2 from "webidl2";
+import sinon from "sinon";
 
-const {
-  flattenIDL,
-  getExposureSet,
-  compileTestCode,
-  compileTest,
-  validateIDL,
-  buildIDLTests,
-  buildIDL,
-  getCustomTestAPI,
-  getCustomSubtestsAPI,
-  getCustomResourcesAPI,
-  cssPropertyToIDLAttribute,
-  buildCSS,
-  getCustomTestCSS
-} = require('../../build');
+import * from '../../build';
 
 describe('build', () => {
   describe('getCustomTestAPI', () => {

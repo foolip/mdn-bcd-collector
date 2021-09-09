@@ -14,20 +14,17 @@
 
 'use strict';
 
-const chai = require('chai');
-const chaiHttp = require('chai-http');
+import chai, { assert, expect } from "chai";
+import chaiHttp from "chai-http";
 chai.use(chaiHttp);
-const assert = chai.assert;
-const expect = chai.expect;
 
-const {app, version} = require('../../app');
+import { app, version } from "../../app.js";
 const agent = chai.request.agent(app);
 
-const tests = Object.entries(require('../../tests.json'));
+const tests = Object.entries(JSON.parse(await fs.readFile('../../tests.json')));
+const packageLock = JSON.parse(await fs.readFile('../../package-lock.json'));
 
-const userAgent = `node-superagent/${
-  require('../../package-lock.json').dependencies.superagent.version
-}`;
+const userAgent = `node-superagent/${packageLock.dependencies.superagent.version}`;
 
 describe('/api/results', () => {
   it('missing `Content-Type` header', async () => {

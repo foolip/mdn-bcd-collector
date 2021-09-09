@@ -14,123 +14,14 @@
 
 'use strict';
 
-const {assert} = require('chai');
+process.env.BCD_DIR = './bcd_test';
 
-const proxyquire = require('proxyquire').noCallThru();
-const sinon = require('sinon');
+import { assert } from 'chai';
 
-const logger = require('../../logger');
+import sinon from 'sinon';
 
-const bcd = {
-  api: {
-    AbortController: {
-      __compat: {
-        support: {
-          chrome: {version_added: '80'},
-          safari: {version_added: null}
-        }
-      },
-      AbortController: {
-        __compat: {support: {chrome: {version_added: null}}}
-      },
-      abort: {
-        __compat: {support: {chrome: {version_added: '85'}}}
-      },
-      dummy: {
-        __compat: {support: {chrome: {version_added: null}}}
-      },
-      signal: {
-        __compat: {support: {chrome: {version_added: null}}}
-      }
-    },
-    AudioContext: {
-      __compat: {support: {chrome: {version_added: null}}},
-      close: {
-        __compat: {support: {}}
-      }
-    },
-    DeprecatedInterface: {
-      __compat: {support: {chrome: {version_added: null}}}
-    },
-    DummyAPI: {
-      __compat: {support: {chrome: {version_added: null}}},
-      dummy: {
-        __compat: {support: {chrome: {version_added: null}}}
-      }
-    },
-    ExperimentalInterface: {
-      __compat: {
-        support: {
-          chrome: [
-            {
-              version_added: '70',
-              notes: 'Not supported on Windows XP.'
-            },
-            {
-              version_added: '64',
-              version_removed: '70',
-              flags: {},
-              notes: 'Not supported on Windows XP.'
-            }
-          ]
-        }
-      }
-    },
-    NullAPI: {
-      __compat: {support: {chrome: {version_added: '80'}}}
-    },
-    RemovedInterface: {
-      __compat: {support: {chrome: {version_added: null}}}
-    }
-  },
-  browsers: {
-    chrome: {name: 'Chrome', releases: {82: {}, 83: {}, 84: {}, 85: {}}},
-    chrome_android: {name: 'Chrome Android', releases: {85: {}}},
-    edge: {name: 'Edge', releases: {16: {}, 84: {}}},
-    safari: {name: 'Safari', releases: {13: {}, 13.1: {}, 14: {}}},
-    safari_ios: {
-      name: 'iOS Safari',
-      releases: {13: {}, 13.3: {}, 13.4: {}, 14: {}}
-    },
-    samsunginternet_android: {
-      name: 'Samsung Internet',
-      releases: {
-        '10.0': {},
-        10.2: {},
-        '11.0': {},
-        11.2: {},
-        '12.0': {},
-        12.1: {}
-      }
-    }
-  },
-  css: {
-    properties: {
-      'font-family': {
-        __compat: {support: {chrome: {version_added: null}}}
-      },
-      'font-face': {
-        __compat: {support: {chrome: {version_added: null}}}
-      }
-    }
-  }
-};
-
-const {
-  findEntry,
-  getSupportMap,
-  getSupportMatrix,
-  inferSupportStatements,
-  update
-} = proxyquire('../../update-bcd', {
-  './overrides': [
-    'Test overrides',
-    ['css.properties.font-family', 'safari', '5.1', false, ''],
-    ['css.properties.font-family', 'chrome', '83', false, ''],
-    ['css.properties.font-face', 'chrome', '*', null, '']
-  ],
-  '../browser-compat-data': bcd
-});
+import logger from '../../logger.js';
+import * from '../../update-bcd.js';
 
 const reports = [
   {

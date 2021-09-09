@@ -16,7 +16,14 @@ import { hideBin } from 'yargs/helpers';
 import logger from './logger.js';
 import {parseUA} from './ua-parser.js';
 
-const overrides = JSON.parse(await fs.readFile('./overrides.json')).filter(
+const tests = JSON.parse(
+  await fs.readFile(
+    process.env.NODE_ENV === 'test' ?
+      './unittest/unit/overrides.test.json' :
+      './overrides.json',
+    'utf8'
+  )
+).filter(
   Array.isArray
 );
 

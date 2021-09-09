@@ -14,9 +14,9 @@
 
 'use strict';
 
-const assert = require('chai').assert;
+import {assert} from "chai";
 
-const {parseResults} = require('../../results');
+import parseResults from "../../results.js";
 
 describe('results', () => {
   describe('parseResults', () => {

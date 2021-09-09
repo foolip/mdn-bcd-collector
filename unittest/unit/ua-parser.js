@@ -14,9 +14,9 @@
 
 'use strict';
 
-const {assert} = require('chai');
+import { assert } from "chai";
 
-const {getMajorMinorVersion, parseUA} = require('../../ua-parser');
+import { getMajorMinorVersion, parseUA } from "../../ua-parser.js";
 
 const browsers = {
   chrome: {name: 'Chrome', releases: {82: {}, 83: {}, 84: {}, 85: {}}},

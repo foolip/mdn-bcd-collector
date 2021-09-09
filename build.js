@@ -27,7 +27,7 @@ import customIDL from "./custom-idl/index.js";
 
 /* istanbul ignore next */
 const customTests = YAML.parse(
-    fs.readFileSync(
+    await fs.readFile(
     process.env.NODE_ENV === 'test' ?
       './unittest/unit/custom-tests.test.yaml' :
       './custom-tests.yaml',

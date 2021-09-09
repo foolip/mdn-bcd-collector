@@ -14,9 +14,9 @@
 
 'use strict';
 
-const assert = require('chai').assert;
+import { assert } from "chai";
 
-const {CloudStorage, MemoryStorage, getStorage} = require('../../storage');
+import { CloudStorage, MemoryStorage, getStorage } from "../../storage.js";
 
 const SESSION_ID = 'testsessionid';
 
