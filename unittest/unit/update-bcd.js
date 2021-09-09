@@ -12,6 +12,8 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+/* global esmock */
+
 'use strict';
 
 import {assert} from 'chai';
@@ -20,7 +22,7 @@ import sinon from 'sinon';
 
 import logger from '../../logger.js';
 
-import mockBcd from './bcd.test.js';
+import bcd from './bcd.test.js';
 
 const reports = [
   {
@@ -298,7 +300,7 @@ describe('BCD updater', () => {
     update
   } = esmock('../../update-bcd.js', {
     '../../../browser-compat-data/index.js': {
-      default: () => mockBcd
+      default: () => bcd
     }
   });
 

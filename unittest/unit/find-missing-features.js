@@ -12,18 +12,20 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+/* global esmock */
+
 'use strict';
 
 import {assert} from 'chai';
 
 import sinon from 'sinon';
 
-import mockBcd from './bcd.test.js';
+import bcd from './bcd.test.js';
 
 describe('find-missing', () => {
   const {traverseFeatures, getMissing} = esmock('../../find-missing-features.js', {
     '../../../browser-compat-data/index.js': {
-      default: () => mockBcd
+      default: () => bcd
     }
   });
 

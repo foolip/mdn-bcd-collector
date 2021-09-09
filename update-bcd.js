@@ -16,7 +16,7 @@ import {hideBin} from 'yargs/helpers';
 import logger from './logger.js';
 import {parseUA} from './ua-parser.js';
 
-const tests = JSON.parse(
+const overrides = JSON.parse(
   await fs.readFile(
     process.env.NODE_ENV === 'test' ?
       './unittest/unit/overrides.test.json' :

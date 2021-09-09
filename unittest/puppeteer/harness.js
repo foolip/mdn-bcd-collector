@@ -16,14 +16,13 @@
 
 import {assert} from "chai";
 import fs from "fs";
-import path from "path";
 import puppeteer from "puppeteer";
 import pti from "puppeteer-to-istanbul";
-import { fileURLToPath } from "url";
+import {fileURLToPath} from "url";
 
-import { app } from "../../app.js";
+import {app} from "../../app.js";
 
-const package = JSON.parse(await fs.readFile('../../package.json'));
+const pkg = JSON.parse(await fs.readFile('../../package.json'));
 
 // Firefox is temporarily disabled due to issues on CI
 const products = ['chrome']; // ['chrome', 'firefox'];
@@ -47,7 +46,7 @@ describe('harness.js', () => {
       if (
         product === 'firefox' &&
         process.platform === 'win32' &&
-        package.devDependencies.puppeteer === '5.4.1'
+        pkg.devDependencies.puppeteer === '5.4.1'
       ) {
         // Browser.close() Firefox support is broken on Windows and causes hang
         // https://github.com/puppeteer/puppeteer/issues/5673
