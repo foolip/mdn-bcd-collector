@@ -14,13 +14,16 @@
 
 'use strict';
 
-const css = require('@webref/css');
-const fs = require('fs-extra');
-const idl = require('@webref/idl');
-const path = require('path');
-const prettier = require('prettier');
-const WebIDL2 = require('webidl2');
-const YAML = require('yaml');
+import css from "@webref/css";
+import fs from "fs-extra";
+import idl from "@webref/idl";
+import path from "path";
+import prettier from "prettier";
+import { fileURLToPath } from "url";
+import {validate as WebIDL2validate} from "webidl2";
+import * as YAML from "yaml";
+
+import customIDL from "./custom-idl/index.js";
 
 /* istanbul ignore next */
 const customTests = YAML.parse(
@@ -31,11 +34,11 @@ const customTests = YAML.parse(
     'utf8'
     )
 );
-const customCSS = require('./custom-css.json');
-const customIDL = require('./custom-idl');
-const customJS = require('./custom-js.json');
 
-const generatedDir = path.join(__dirname, 'generated');
+const customCSS = JSON.parse(await fs.readFile('./custom-css.json'));
+const customJS = JSON.parse(await fs.readFile('./custom-js.json'));
+
+const generatedDir = fileURLToPath(new URL('./generated', import.meta.url));
 
 const formatCode = (code) => {
   return prettier
@@ -434,7 +437,7 @@ const getExposureSet = (node) => {
 };
 
 const validateIDL = (ast) => {
-  const validations = WebIDL2.validate(ast).filter((v) => {
+  const validations = WebIDL2validate(ast).filter((v) => {
     // TODO: https://github.com/w3c/webref/pull/196
     if (v.ruleName === 'dict-arg-default') {
       return false;
@@ -786,7 +789,7 @@ const copyResources = async () => {
     ['@mdi/font/fonts/materialdesignicons-webfont.woff2', 'fonts']
   ];
   for (const [srcInModules, destInGenerated, newFilename] of resources) {
-    const src = require.resolve(srcInModules);
+    const src = fileURLToPath(new URL(`./node_modules/${srcInModules}`, import.meta.url));
     const destDir = path.join(generatedDir, destInGenerated);
     const dest = path.join(destDir, path.basename(src));
     await fs.ensureDir(path.dirname(dest));
@@ -806,11 +809,16 @@ const build = async (customIDL, customCSS) => {
   const JSTests = buildJS(customJS);
   const tests = Object.assign({}, IDLTests, CSSTests, JSTests);
 
-  await fs.writeJson(path.join(__dirname, 'tests.json'), tests);
+  await fs.writeJson(new URL('./tests.json', import.meta.url), tests);
   await copyResources();
 };
 
-module.exports = {
+/* istanbul ignore if */
+if (import.meta.url === `file://${process.argv[1]}`) {
+  build(customIDL, customCSS);
+}
+
+export {
   getCustomTestAPI,
   getCustomSubtestsAPI,
   getCustomResourcesAPI,
@@ -825,11 +833,3 @@ module.exports = {
   cssPropertyToIDLAttribute,
   buildCSS
 };
-
-/* istanbul ignore if */
-if (require.main === module) {
-  build(customIDL, customCSS).catch((reason) => {
-    console.error(reason);
-    process.exit(1);
-  });
-}
