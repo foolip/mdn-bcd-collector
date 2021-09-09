@@ -1,17 +1,15 @@
 'use strict';
 
-const fs = require('fs-extra');
-const path = require('path');
+import fs from "fs-extra";
+import path from "path";
+import { getMissing } from "./find-missing-features.js";
+import { main as updateBcd } from "./update-bcd.js";
 
-const {getMissing} = require('./find-missing-features');
-const {main: updateBcd} = require('./update-bcd');
 
 const BCD_DIR = process.env.BCD_DIR || `../browser-compat-data`;
-const compareFeatures = require(path.join(
-    BCD_DIR,
-    'scripts',
-    'compare-features'
-));
+const {
+  default: compareFeatures
+} = await import(`${BCD_DIR}/scripts.compare-features.js`);
 
 const template = {
   __compat: {
@@ -123,7 +121,7 @@ const main = async () => {
   console.log('Done!');
 };
 
-main().catch((e) => {
-  console.error(e);
-  process.exit(1);
-});
+/* istanbul ignore if */
+if (import.meta.url === `file://${process.argv[1]}`) {
+  main();
+}
