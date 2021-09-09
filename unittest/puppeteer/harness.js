@@ -15,7 +15,7 @@
 'use strict';
 
 import {assert} from "chai";
-import fs from "fs";
+import fs from "fs-extra";
 import puppeteer from "puppeteer";
 import pti from "puppeteer-to-istanbul";
 import {fileURLToPath} from "url";
