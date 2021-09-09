@@ -21,7 +21,7 @@ import sinon from 'sinon';
 
 import bcd from './bcd.test.js';
 
-describe('find-missing', () => {
+describe('find-missing', async () => {
   const {traverseFeatures, getMissing} = await esmock('../../find-missing-features.js', {
     '../../../browser-compat-data/index.js': {
       default: () => bcd

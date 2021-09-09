@@ -290,7 +290,7 @@ const reports = [
   }
 ];
 
-describe('BCD updater', () => {
+describe('BCD updater', async () => {
   const {
     findEntry,
     getSupportMap,

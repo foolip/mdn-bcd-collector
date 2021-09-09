@@ -59,7 +59,7 @@ const REPORTS = [
   }
 ];
 
-describe('GitHub export', () => {
+describe('GitHub export', async () => {
   const octokit = new Octokit();
   const exporter = await esmock('../../exporter.js', {
     '@octokit/rest': {
