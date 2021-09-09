@@ -31,6 +31,7 @@ import chalk from 'chalk';
 import listr2 from 'listr2';
 const {Listr} = listr2;
 import yargs from 'yargs';
+import { hideBin } from 'yargs/helpers';
 
 const secrets = JSON.parse(await fs.readFile('./secrets.json'));
 
@@ -521,7 +522,7 @@ const runAll = async (limitBrowsers, oses, nonConcurrent, reverse) => {
 
 /* istanbul ignore if */
 if (import.meta.url === `file://${process.argv[1]}`) {
-  const {argv} = yargs().command(
+  const {argv} = yargs(hideBin(process.argv)).command(
     '$0 [browser..]',
     'Run Selenium on several browser versions',
     (yargs) => {

@@ -16,6 +16,7 @@ import childProcess from "child_process";
 import path from "path";
 import fs from "fs";
 import yargs from "yargs";
+import { hideBin } from "yargs/helpers";
 
 const exec = (cmd, env) => {
   env = {...process.env, ...env};
@@ -25,8 +26,8 @@ const exec = (cmd, env) => {
 
 const prepare = () => {
   // Copy secrets.sample.json to secrets.json if needed
-  const secretsPath = path.join(__dirname, 'secrets.json');
-  const secretsSamplePath = path.join(__dirname, 'secrets.sample.json');
+  const secretsPath = new URL('./secrets.json', import.meta.url);
+  const secretsSamplePath = new URL('./secrets.sample.json', import.meta.url);
 
   if (!fs.existsSync(secretsPath)) {
     fs.copyFileSync(secretsSamplePath, secretsPath);
@@ -43,7 +44,7 @@ const prepare = () => {
 
 /* istanbul ignore if */
 if (import.meta.url === `file://${process.argv[1]}`) {
-  const {argv} = yargs().command(
+  const {argv} = yargs(hideBin(process.argv)).command(
       '$0 <command>',
       'Run an action',
       (yargs) => {

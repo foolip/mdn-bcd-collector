@@ -16,6 +16,8 @@
 
 import compareVersions from "compare-versions";
 import yargs from "yargs";
+import { hideBin } from "yargs/helpers";
+
 import { parseUA } from "./ua-parser.js";
 import { loadJsonFiles } from "./update-bcd.js";
 
@@ -118,7 +120,7 @@ const main = async (argv) => {
 
 /* istanbul ignore if */
 if (import.meta.url === `file://${process.argv[1]}`) {
-  const {argv} = yargs().command(
+  const {argv} = yargs(hideBin(process.argv)).command(
       '$0 [reports..]',
       'Determine gaps in results',
       (yargs) => {

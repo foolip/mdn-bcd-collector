@@ -1,6 +1,7 @@
 'use strict';
 
 import yargs from "yargs";
+import { hideBin } from "yargs/helpers";
 
 const BCD_DIR = process.env.BCD_DIR || `../browser-compat-data`;
 const {
@@ -107,7 +108,7 @@ const getMissing = (
 
 /* istanbul ignore next */
 const main = () => {
-  const {argv} = yargs().command(
+  const {argv} = yargs(hideBin(process.argv)).command(
       '$0 [--direction]',
       'Find missing entries between BCD and the collector tests',
       (yargs) => {

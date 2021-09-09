@@ -13,6 +13,7 @@ import path from 'path';
 import logger from './logger.js';
 import {parseUA} from './ua-parser.js';
 import yargs from 'yargs';
+import { hideBin } from 'yargs/helpers';
 
 const overrides = JSON.parse(await fs.readFile('./overrides.json')).filter(
   Array.isArray
@@ -426,7 +427,7 @@ const main = async (reportPaths, filter) => {
 
 /* istanbul ignore if */
 if (import.meta.url === `file://${process.argv[1]}`) {
-  const {argv} = yargs().command(
+  const {argv} = yargs(hideBin(process.argv)).command(
     '$0 [reports..]',
     'Update BCD from a specified set of report files',
     (yargs) => {
