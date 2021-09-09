@@ -14,38 +14,42 @@
 
 'use strict';
 
-const fs = require('fs');
-const path = require('path');
-const querystring = require('querystring');
-const bcdBrowsers = require('@mdn/browser-compat-data').browsers;
+import fs from "fs-extra";
+import path from "path";
+import querystring from "querystring";
+import bcd from "@mdn/browser-compat-data";
+const bcdBrowsers = bcd.browsers;
+import express from "express";
+import cookieParser from "cookie-parser";
+import https from "https";
+import http from "http";
+import uniqueString from "unique-string";
+import expressLayouts from "express-ejs-layouts";
+import yargs from "yargs";
+import { hideBin } from "yargs/helpers";
 
-const express = require('express');
-const cookieParser = require('cookie-parser');
-const https = require('https');
-const http = require('http');
-const uniqueString = require('unique-string');
-const expressLayouts = require('express-ejs-layouts');
+import exporter from "./exporter.js";
+import logger from "./logger.js";
+import { parseResults } from "./results.js";
+import { getStorage } from "./storage.js";
+import { parseUA } from "./ua-parser.js";
+import Tests from "./tests.js";
 
-const exporter = require('./exporter');
-const logger = require('./logger');
-const {parseResults} = require('./results');
-const storage = require('./storage').getStorage();
-const {parseUA} = require('./ua-parser');
+const storage = getStorage();
 
 const appVersion =
   process.env.GAE_VERSION === 'production' ?
-    require('./package.json').version :
+    JSON.parse(await fs.readFile('./package.json')).version :
     'Dev';
 
 /* istanbul ignore next */
 const secrets =
   process.env.NODE_ENV === 'test' ?
-    require('./secrets.sample.json') :
-    require('./secrets.json');
+    JSON.parse(await fs.readFile('./secrets.sample.json')) :
+    JSON.parse(await fs.readFile('./secrets.json'));
 
-const Tests = require('./tests');
 const tests = new Tests({
-  tests: require('./tests.json'),
+  tests: JSON.parse(await fs.readFile('./tests.json')),
   httpOnly: process.env.NODE_ENV !== 'production'
 });
 
@@ -65,7 +69,7 @@ const createReport = (results, req) => {
 const app = express();
 
 // Layout config
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', './views');
 app.set('view engine', 'ejs');
 app.use(expressLayouts);
 app.set('layout extractScripts', true);
@@ -225,14 +229,9 @@ app.use((req, res) => {
   });
 });
 
-module.exports = {
-  app,
-  version: appVersion
-};
-
 /* istanbul ignore if */
-if (require.main === module) {
-  const {argv} = require('yargs').command(
+if (import.meta.url === `file://${process.argv[1]}`) {
+  const {argv} = yargs(hideBin(process.argv)).command(
       '$0',
       'Run the mdn-bcd-collector server',
       (yargs) => {
@@ -269,4 +268,9 @@ if (require.main === module) {
     logger.info(`Listening on port ${argv.httpsPort} (HTTPS)`);
   }
   logger.info('Press Ctrl+C to quit.');
+}
+
+export default {
+  app,
+  version: appVersion
 }
