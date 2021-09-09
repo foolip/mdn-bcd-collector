@@ -272,5 +272,5 @@ if (import.meta.url === `file://${process.argv[1]}`) {
 
 export {
   app,
-  version as appVersion
+  appVersion as version
 }
