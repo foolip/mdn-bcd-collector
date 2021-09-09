@@ -15,7 +15,6 @@
 'use strict';
 
 import fs from "fs-extra";
-import path from "path";
 import querystring from "querystring";
 import bcd from "@mdn/browser-compat-data";
 const bcdBrowsers = bcd.browsers;
