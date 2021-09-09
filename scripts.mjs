@@ -12,9 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-const childProcess = require('child_process');
-const path = require('path');
-const fs = require('fs');
+import childProcess from "child_process";
+import path from "path";
+import fs from "fs";
+import yargs from "yargs";
 
 const exec = (cmd, env) => {
   env = {...process.env, ...env};
@@ -40,8 +41,9 @@ const prepare = () => {
   exec('node install.js', {PUPPETEER_PRODUCT: 'firefox'});
 };
 
-if (require.main === module) {
-  const {argv} = require('yargs').command(
+/* istanbul ignore if */
+if (import.meta.url === `file://${process.argv[1]}`) {
+  const {argv} = yargs().command(
       '$0 <command>',
       'Run an action',
       (yargs) => {
