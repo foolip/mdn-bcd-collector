@@ -298,7 +298,7 @@ describe('BCD updater', async () => {
     inferSupportStatements,
     update
   } = await esmock('../../update-bcd.js', {
-    '../../../browser-compat-data/index.js': {
+    '../browser-compat-data/index.js': {
       default: () => bcd
     }
   });
