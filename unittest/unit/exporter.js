@@ -12,13 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+/* global esmock */
+
 'use strict';
 
-const assert = require('chai').assert;
+import {assert} from 'chai';
 
-const proxyquire = require('proxyquire').noCallThru();
-const sinon = require('sinon');
-const {Octokit} = require('@octokit/rest');
+import sinon from 'sinon';
+import {Octokit} from '@octokit/rest';
 
 const REPORTS = [
   {
@@ -61,12 +62,9 @@ const REPORTS = [
 
 describe('GitHub export', () => {
   const octokit = new Octokit();
-  const exporter = proxyquire('../../exporter', {
+  const exporter = esmock('../../exporter.js', {
     '@octokit/rest': {
-      /* eslint-disable-next-line prefer-arrow/prefer-arrow-functions */
-      Octokit: function () {
-        return octokit;
-      }
+      Octokit: () => octokit
     }
   });
 
