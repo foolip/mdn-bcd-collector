@@ -1,5 +1,6 @@
 'use strict';
 
+import esMain from 'es-main';
 import fs from 'fs-extra';
 import yargs from 'yargs';
 import {hideBin} from 'yargs/helpers';
@@ -163,7 +164,7 @@ const main = () => {
 };
 
 /* istanbul ignore if */
-if (import.meta.url === `file://${process.argv[1]}`) {
+if (esMain(import.meta)) {
   main();
 }
 

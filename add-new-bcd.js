@@ -1,15 +1,16 @@
 'use strict';
 
-import fs from "fs-extra";
-import path from "path";
+import fs from 'fs-extra';
+import path from 'path';
+import esMain from 'es-main';
 
-import {getMissing} from "./find-missing-features.js";
-import {main as updateBcd} from "./update-bcd.js";
+import {getMissing} from './find-missing-features.js';
+import {main as updateBcd} from './update-bcd.js';
 
 const BCD_DIR = process.env.BCD_DIR || `../browser-compat-data`;
-const {
-  default: compareFeatures
-} = await import(`${BCD_DIR}/scripts/compare-features.js`);
+const {default: compareFeatures} = await import(
+  `${BCD_DIR}/scripts/compare-features.js`
+);
 
 const template = {
   __compat: {
@@ -45,18 +46,18 @@ const recursiveAdd = (ident, i, data, obj) => {
 const orderFeatures = (key, value) => {
   if (value instanceof Object && '__compat' in value) {
     value = Object.keys(value)
-        .sort(compareFeatures)
-        .reduce((result, key) => {
-          result[key] = value[key];
-          return result;
-        }, {});
+      .sort(compareFeatures)
+      .reduce((result, key) => {
+        result[key] = value[key];
+        return result;
+      }, {});
   }
   return value;
 };
 
 const writeFile = async (ident, obj) => {
   const filepath = path.resolve(
-      path.join(BCD_DIR, ident[0], `${ident[1]}.json`)
+    path.join(BCD_DIR, ident[0], `${ident[1]}.json`)
   );
 
   let data = {api: {}};
@@ -65,9 +66,9 @@ const writeFile = async (ident, obj) => {
   }
 
   await fs.writeJSON(
-      filepath,
-      recursiveAdd(ident.concat(['__compat']), 0, data, obj.__compat),
-      {spaces: 2, replacer: orderFeatures}
+    filepath,
+    recursiveAdd(ident.concat(['__compat']), 0, data, obj.__compat),
+    {spaces: 2, replacer: orderFeatures}
   );
 };
 
@@ -93,7 +94,7 @@ const collectMissing = async (filepath) => {
   const missing = {api: {}};
 
   for (const entry of getMissing('bcd-from-collector', ['api'])
-      .missingEntries) {
+    .missingEntries) {
     recursiveAdd(entry.split('.'), 0, missing, template);
   }
 
@@ -104,7 +105,7 @@ const collectMissing = async (filepath) => {
 
 const main = async () => {
   const filepath = path.resolve(
-      path.join(BCD_DIR, '__missing', '__missing.json')
+    path.join(BCD_DIR, '__missing', '__missing.json')
   );
 
   console.log('Generating missing BCD...');
@@ -122,6 +123,6 @@ const main = async () => {
 };
 
 /* istanbul ignore if */
-if (import.meta.url === `file://${process.argv[1]}`) {
+if (esMain(import.meta)) {
   main();
 }

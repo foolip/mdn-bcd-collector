@@ -5,6 +5,7 @@
 
 import assert from 'assert';
 import compareVersions from 'compare-versions';
+import esMain from 'es-main';
 import fs from 'fs-extra';
 import klaw from 'klaw';
 import minimatch from 'minimatch';
@@ -436,7 +437,7 @@ const main = async (reportPaths, filter) => {
 };
 
 /* istanbul ignore if */
-if (import.meta.url === `file://${process.argv[1]}`) {
+if (esMain(import.meta)) {
   const {argv} = yargs(hideBin(process.argv)).command(
     '$0 [reports..]',
     'Update BCD from a specified set of report files',

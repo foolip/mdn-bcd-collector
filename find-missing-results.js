@@ -14,18 +14,17 @@
 
 'use strict';
 
-import compareVersions from "compare-versions";
-import fs from "fs-extra";
-import yargs from "yargs";
-import {hideBin} from "yargs/helpers";
+import compareVersions from 'compare-versions';
+import esMain from 'es-main';
+import fs from 'fs-extra';
+import yargs from 'yargs';
+import {hideBin} from 'yargs/helpers';
 
-import {parseUA} from "./ua-parser.js";
-import {loadJsonFiles} from "./update-bcd.js";
+import {parseUA} from './ua-parser.js';
+import {loadJsonFiles} from './update-bcd.js';
 
 const BCD_DIR = process.env.BCD_DIR || `../browser-compat-data`;
-const {
-  default: bcd
-} = await import(`${BCD_DIR}/index.js`);
+const {default: bcd} = await import(`${BCD_DIR}/index.js`);
 const {browsers} = bcd;
 
 const appVersion = JSON.parse(await fs.readFile('./package.json')).version;
@@ -39,8 +38,8 @@ const generateReportMap = (allResults) => {
     }
 
     const releases = Object.entries(browserData.releases)
-        .filter((r) => ['retired', 'current'].includes(r[1].status))
-        .map((r) => r[0]);
+      .filter((r) => ['retired', 'current'].includes(r[1].status))
+      .map((r) => r[0]);
     result[browserKey] = releases.sort(compareVersions);
 
     if (!allResults) {
@@ -50,13 +49,13 @@ const generateReportMap = (allResults) => {
       } else if (browserKey == 'safari') {
         // Ignore super old Safari releases, and Safari 6.1
         result[browserKey] = result[browserKey].filter(
-            (v) => v >= '4' && v != '6.1'
+          (v) => v >= '4' && v != '6.1'
         );
       } else if (browserKey == 'opera') {
         // Ignore all Opera versions besides 12.1, 15, and the latest stable
         result[browserKey] = result[browserKey].filter(
-            (v) =>
-              v == '12.1' ||
+          (v) =>
+            v == '12.1' ||
             v == '15' ||
             v == result[browserKey][result[browserKey].length - 1]
         );
@@ -66,7 +65,7 @@ const generateReportMap = (allResults) => {
       ) {
         // Ignore all mobile browser releases besides the most current
         result[browserKey] = result[browserKey].filter(
-            (v) => v == result[browserKey][result[browserKey].length - 1]
+          (v) => v == result[browserKey][result[browserKey].length - 1]
         );
       }
     }
@@ -97,7 +96,7 @@ const findMissingResults = async (reportPaths, allResults, version) => {
     if (browserKey in reportMap) {
       if (reportMap[browserKey].includes(browserVersion)) {
         reportMap[browserKey] = reportMap[browserKey].filter(
-            (v) => v !== browserVersion
+          (v) => v !== browserVersion
         );
       }
     }
@@ -108,9 +107,9 @@ const findMissingResults = async (reportPaths, allResults, version) => {
 
 const main = async (argv) => {
   const missingResults = await findMissingResults(
-      argv.reports,
-      argv.all,
-      argv.collectorVersion
+    argv.reports,
+    argv.all,
+    argv.collectorVersion
   );
 
   for (const [browser, releases] of Object.entries(missingResults)) {
@@ -121,30 +120,30 @@ const main = async (argv) => {
 };
 
 /* istanbul ignore if */
-if (import.meta.url === `file://${process.argv[1]}`) {
+if (esMain(import.meta)) {
   const {argv} = yargs(hideBin(process.argv)).command(
-      '$0 [reports..]',
-      'Determine gaps in results',
-      (yargs) => {
-        yargs
-            .positional('reports', {
-              describe: 'The report files to update from (also accepts folders)',
-              type: 'array',
-              default: ['../mdn-bcd-results/']
-            })
-            .option('collector-version', {
-              alias: 'c',
-              describe: 'Limit the collector version (set to "all" to disable)',
-              type: 'string',
-              default: 'current'
-            })
-            .option('all', {
-              describe: 'Include all results, including ignored ',
-              alias: 'a',
-              type: 'boolean',
-              nargs: 0
-            });
-      }
+    '$0 [reports..]',
+    'Determine gaps in results',
+    (yargs) => {
+      yargs
+        .positional('reports', {
+          describe: 'The report files to update from (also accepts folders)',
+          type: 'array',
+          default: ['../mdn-bcd-results/']
+        })
+        .option('collector-version', {
+          alias: 'c',
+          describe: 'Limit the collector version (set to "all" to disable)',
+          type: 'string',
+          default: 'current'
+        })
+        .option('all', {
+          describe: 'Include all results, including ignored ',
+          alias: 'a',
+          type: 'boolean',
+          nargs: 0
+        });
+    }
   );
 
   main(argv);

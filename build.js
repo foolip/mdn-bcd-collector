@@ -14,25 +14,26 @@
 
 'use strict';
 
-import css from "@webref/css";
-import fs from "fs-extra";
-import idl from "@webref/idl";
-import path from "path";
-import prettier from "prettier";
-import {fileURLToPath} from "url";
-import {validate} from "webidl2";
-import * as YAML from "yaml";
+import css from '@webref/css';
+import esMain from 'es-main';
+import fs from 'fs-extra';
+import idl from '@webref/idl';
+import path from 'path';
+import prettier from 'prettier';
+import {fileURLToPath} from 'url';
+import {validate} from 'webidl2';
+import * as YAML from 'yaml';
 
-import customIDL from "./custom-idl/index.js";
+import customIDL from './custom-idl/index.js';
 
 /* istanbul ignore next */
 const customTests = YAML.parse(
-    await fs.readFile(
+  await fs.readFile(
     process.env.NODE_ENV === 'test' ?
       './unittest/unit/custom-tests.test.yaml' :
       './custom-tests.yaml',
     'utf8'
-    )
+  )
 );
 
 const customCSS = JSON.parse(await fs.readFile('./custom-css.json'));
@@ -49,29 +50,29 @@ const formatCode = (code) => {
 const compileCustomTest = (code, format = true) => {
   // Import code from other tests
   code = code.replace(
-      /<%(\w+)\.(\w+)(?:\.(\w+))?:(\w+)%> ?/g,
-      (match, category, name, member, instancevar) => {
-        if (category === 'api') {
-          if (!(name in customTests.api && '__base' in customTests.api[name])) {
-            return `throw 'Test is malformed: ${match} is an invalid reference';`;
-          }
-          let importcode = compileCustomTest(customTests.api[name].__base, false);
-          const callback = importcode.includes('callback');
-
-          importcode = importcode
-              .replace(/var (instance|promise)/g, `var ${instancevar}`)
-              .replace(/callback\(/g, `${instancevar}(`)
-              .replace(/promise\.then/g, `${instancevar}.then`)
-              .replace(/(instance|promise) = /g, `${instancevar} = `);
-          if (!(['instance', 'promise'].includes(instancevar) || callback)) {
-            importcode += ` if (!${instancevar}) {return false;}`;
-          }
-          return importcode;
+    /<%(\w+)\.(\w+)(?:\.(\w+))?:(\w+)%> ?/g,
+    (match, category, name, member, instancevar) => {
+      if (category === 'api') {
+        if (!(name in customTests.api && '__base' in customTests.api[name])) {
+          return `throw 'Test is malformed: ${match} is an invalid reference';`;
         }
+        let importcode = compileCustomTest(customTests.api[name].__base, false);
+        const callback = importcode.includes('callback');
 
-        // TODO: add CSS category
-        return `throw 'Test is malformed: import ${match}, category ${category} is not importable';`;
+        importcode = importcode
+          .replace(/var (instance|promise)/g, `var ${instancevar}`)
+          .replace(/callback\(/g, `${instancevar}(`)
+          .replace(/promise\.then/g, `${instancevar}.then`)
+          .replace(/(instance|promise) = /g, `${instancevar} = `);
+        if (!(['instance', 'promise'].includes(instancevar) || callback)) {
+          importcode += ` if (!${instancevar}) {return false;}`;
+        }
+        return importcode;
       }
+
+      // TODO: add CSS category
+      return `throw 'Test is malformed: import ${match}, category ${category} is not importable';`;
+    }
   );
 
   if (format) {
@@ -148,7 +149,7 @@ const getCustomTestAPI = (name, member, type) => {
 
   if (test.includes('Test is malformed')) {
     console.error(
-        `api.${name}${member ? `.${member}` : ''}: ${test.replace('throw ', '')}`
+      `api.${name}${member ? `.${member}` : ''}: ${test.replace('throw ', '')}`
     );
   }
 
@@ -162,7 +163,7 @@ const getCustomSubtestsAPI = (name) => {
     const testbase = customTests.api[name].__base || '';
     if ('__additional' in customTests.api[name]) {
       for (const subtest of Object.entries(
-          customTests.api[name].__additional
+        customTests.api[name].__additional
       )) {
         subtests[subtest[0]] = compileCustomTest(`${testbase}${subtest[1]}`);
       }
@@ -186,7 +187,7 @@ const getCustomResourcesAPI = (name) => {
             customTests.api.__resources[key];
       } else {
         throw new Error(
-            `Resource ${key} is not defined but referenced in api.${name}`
+          `Resource ${key} is not defined but referenced in api.${name}`
         );
       }
     }
@@ -215,8 +216,8 @@ const compileTestCode = (test) => {
   }
   if (test.property.startsWith('Symbol.')) {
     return `"Symbol" in self && "${test.property.replace(
-        'Symbol.',
-        ''
+      'Symbol.',
+      ''
     )}" in Symbol && ${test.property} in ${test.owner}.prototype`;
   }
   if (test.inherit) {
@@ -274,11 +275,11 @@ const flattenIDL = (specIDLs, customIDLs) => {
     }
 
     const target = ast.find(
-        (it) => !it.partial && it.type === dfn.type && it.name === dfn.name
+      (it) => !it.partial && it.type === dfn.type && it.name === dfn.name
     );
     if (!target) {
       throw new Error(
-          `Original definition not found for partial ${dfn.type} ${dfn.name}`
+        `Original definition not found for partial ${dfn.type} ${dfn.name}`
       );
     }
 
@@ -292,22 +293,22 @@ const flattenIDL = (specIDLs, customIDLs) => {
   for (const dfn of ast) {
     if (dfn.type === 'includes') {
       const mixin = ast.find(
-          (it) =>
-            !it.partial &&
+        (it) =>
+          !it.partial &&
           it.type === 'interface mixin' &&
           it.name === dfn.includes
       );
       if (!mixin) {
         throw new Error(
-            `Interface mixin ${dfn.includes} not found for target ${dfn.target}`
+          `Interface mixin ${dfn.includes} not found for target ${dfn.target}`
         );
       }
       const target = ast.find(
-          (it) => !it.partial && it.type === 'interface' && it.name === dfn.target
+        (it) => !it.partial && it.type === 'interface' && it.name === dfn.target
       );
       if (!target) {
         throw new Error(
-            `Target ${dfn.target} not found for interface mixin ${dfn.includes}`
+          `Target ${dfn.target} not found for interface mixin ${dfn.includes}`
         );
       }
 
@@ -318,7 +319,7 @@ const flattenIDL = (specIDLs, customIDLs) => {
 
   // drop includes and mixins
   ast = ast.filter(
-      (dfn) => dfn.type !== 'includes' && dfn.type !== 'interface mixin'
+    (dfn) => dfn.type !== 'includes' && dfn.type !== 'interface mixin'
   );
 
   return ast;
@@ -326,7 +327,7 @@ const flattenIDL = (specIDLs, customIDLs) => {
 
 const flattenMembers = (iface) => {
   const members = iface.members.filter(
-      (member) => member.name && member.type !== 'const'
+    (member) => member.name && member.type !== 'const'
   );
   for (const member of iface.members.filter((member) => !member.name)) {
     switch (member.type) {
@@ -337,45 +338,45 @@ const flattenMembers = (iface) => {
         break;
       case 'iterable':
         members.push(
-            {name: '@@iterator', type: 'symbol'},
-            {name: 'entries', type: 'operation'},
-            {name: 'forEach', type: 'operation'},
-            {name: 'keys', type: 'operation'},
-            {name: 'values', type: 'operation'}
+          {name: '@@iterator', type: 'symbol'},
+          {name: 'entries', type: 'operation'},
+          {name: 'forEach', type: 'operation'},
+          {name: 'keys', type: 'operation'},
+          {name: 'values', type: 'operation'}
         );
         break;
       case 'maplike':
         members.push(
-            {name: 'entries', type: 'operation'},
-            {name: 'forEach', type: 'operation'},
-            {name: 'get', type: 'operation'},
-            {name: 'has', type: 'operation'},
-            {name: 'keys', type: 'operation'},
-            {name: 'size', type: 'attribute'},
-            {name: 'values', type: 'operation'}
+          {name: 'entries', type: 'operation'},
+          {name: 'forEach', type: 'operation'},
+          {name: 'get', type: 'operation'},
+          {name: 'has', type: 'operation'},
+          {name: 'keys', type: 'operation'},
+          {name: 'size', type: 'attribute'},
+          {name: 'values', type: 'operation'}
         );
         if (!member.readonly) {
           members.push(
-              {name: 'clear', type: 'operation'},
-              {name: 'delete', type: 'operation'},
-              {name: 'set', type: 'operation'}
+            {name: 'clear', type: 'operation'},
+            {name: 'delete', type: 'operation'},
+            {name: 'set', type: 'operation'}
           );
         }
         break;
       case 'setlike':
         members.push(
-            {name: 'entries', type: 'operation'},
-            {name: 'forEach', type: 'operation'},
-            {name: 'has', type: 'operation'},
-            {name: 'keys', type: 'operation'},
-            {name: 'size', type: 'attribute'},
-            {name: 'values', type: 'operation'}
+          {name: 'entries', type: 'operation'},
+          {name: 'forEach', type: 'operation'},
+          {name: 'has', type: 'operation'},
+          {name: 'keys', type: 'operation'},
+          {name: 'size', type: 'attribute'},
+          {name: 'values', type: 'operation'}
         );
         if (!member.readonly) {
           members.push(
-              {name: 'add', type: 'operation'},
-              {name: 'clear', type: 'operation'},
-              {name: 'delete', type: 'operation'}
+            {name: 'add', type: 'operation'},
+            {name: 'clear', type: 'operation'},
+            {name: 'delete', type: 'operation'}
           );
         }
         break;
@@ -410,7 +411,7 @@ const getExposureSet = (node) => {
   const attr = getExtAttr(node, 'Exposed');
   if (!attr) {
     throw new Error(
-        `Exposed extended attribute not found on ${node.type} ${node.name}`
+      `Exposed extended attribute not found on ${node.type} ${node.name}`
     );
   }
   const globals = new Set();
@@ -447,10 +448,10 @@ const validateIDL = (ast) => {
   });
   if (validations.length) {
     const message = validations
-        .map((v) => {
-          return `${v.message} [${v.ruleName}]`;
-        })
-        .join('\n\n');
+      .map((v) => {
+        return `${v.message} [${v.ruleName}]`;
+      })
+      .join('\n\n');
     throw new Error(`Web IDL validation failed:\n${message}`);
   }
 
@@ -570,8 +571,8 @@ const buildIDLTests = (ast) => {
 
       let expr;
       const customTestMember = getCustomTestAPI(
-          iface.name,
-          member.name,
+        iface.name,
+        member.name,
         isStatic ? 'static' : member.type
       );
 
@@ -789,7 +790,9 @@ const copyResources = async () => {
     ['@mdi/font/fonts/materialdesignicons-webfont.woff2', 'fonts']
   ];
   for (const [srcInModules, destInGenerated, newFilename] of resources) {
-    const src = fileURLToPath(new URL(`./node_modules/${srcInModules}`, import.meta.url));
+    const src = fileURLToPath(
+      new URL(`./node_modules/${srcInModules}`, import.meta.url)
+    );
     const destDir = path.join(generatedDir, destInGenerated);
     const dest = path.join(destDir, path.basename(src));
     await fs.ensureDir(path.dirname(dest));
@@ -814,7 +817,7 @@ const build = async (customIDL, customCSS) => {
 };
 
 /* istanbul ignore if */
-if (import.meta.url === `file://${process.argv[1]}`) {
+if (esMain(import.meta)) {
   build(customIDL, customCSS);
 }
 

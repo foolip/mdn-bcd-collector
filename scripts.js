@@ -13,6 +13,7 @@
 // limitations under the License.
 
 import childProcess from 'child_process';
+import esMain from 'es-main';
 import fs from 'fs';
 import yargs from 'yargs';
 import {hideBin} from 'yargs/helpers';
@@ -42,7 +43,7 @@ const prepare = () => {
 };
 
 /* istanbul ignore if */
-if (import.meta.url === `file://${process.argv[1]}`) {
+if (esMain(import.meta)) {
   const {argv} = yargs(hideBin(process.argv)).command(
     '$0 <command>',
     'Run an action',

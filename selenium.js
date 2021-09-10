@@ -25,6 +25,7 @@ import bcd from '@mdn/browser-compat-data';
 const bcdBrowsers = bcd.browsers;
 import compareVersions from 'compare-versions';
 import fetch from 'node-fetch';
+import esMain from 'es-main';
 import fs from 'fs-extra';
 import path from 'path';
 import chalk from 'chalk';
@@ -521,7 +522,7 @@ const runAll = async (limitBrowsers, oses, nonConcurrent, reverse) => {
 };
 
 /* istanbul ignore if */
-if (import.meta.url === `file://${process.argv[1]}`) {
+if (esMain(import.meta)) {
   const {argv} = yargs(hideBin(process.argv)).command(
     '$0 [browser..]',
     'Run Selenium on several browser versions',

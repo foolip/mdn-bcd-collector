@@ -14,25 +14,26 @@
 
 'use strict';
 
-import fs from "fs-extra";
-import querystring from "querystring";
-import bcd from "@mdn/browser-compat-data";
+import fs from 'fs-extra';
+import querystring from 'querystring';
+import bcd from '@mdn/browser-compat-data';
 const bcdBrowsers = bcd.browsers;
-import express from "express";
-import cookieParser from "cookie-parser";
-import https from "https";
-import http from "http";
-import uniqueString from "unique-string";
-import expressLayouts from "express-ejs-layouts";
-import yargs from "yargs";
-import {hideBin} from "yargs/helpers";
+import esMain from 'es-main';
+import express from 'express';
+import cookieParser from 'cookie-parser';
+import https from 'https';
+import http from 'http';
+import uniqueString from 'unique-string';
+import expressLayouts from 'express-ejs-layouts';
+import yargs from 'yargs';
+import {hideBin} from 'yargs/helpers';
 
-import * as exporter from "./exporter.js";
-import logger from "./logger.js";
-import parseResults from "./results.js";
-import {getStorage} from "./storage.js";
-import {parseUA} from "./ua-parser.js";
-import Tests from "./tests.js";
+import * as exporter from './exporter.js';
+import logger from './logger.js';
+import parseResults from './results.js';
+import {getStorage} from './storage.js';
+import {parseUA} from './ua-parser.js';
+import Tests from './tests.js';
 
 const storage = getStorage();
 
@@ -122,20 +123,20 @@ app.post('/api/results', (req, res, next) => {
   }
 
   storage
-      .put(req.sessionID, url, results)
-      .then(() => {
-        res.status(201).end();
-      })
-      .catch(next);
+    .put(req.sessionID, url, results)
+    .then(() => {
+      res.status(201).end();
+    })
+    .catch(next);
 });
 
 app.get('/api/results', (req, res, next) => {
   storage
-      .getAll(req.sessionID)
-      .then((results) => {
-        res.status(200).json(createReport(results, req));
-      })
-      .catch(next);
+    .getAll(req.sessionID)
+    .then((results) => {
+      res.status(200).json(createReport(results, req));
+    })
+    .catch(next);
 });
 
 // Test Resources
@@ -144,7 +145,7 @@ app.get('/api/results', (req, res, next) => {
 app.get('/eventstream', (req, res) => {
   res.header('Content-Type', 'text/event-stream');
   res.send(
-      'event: ping\ndata: Hello world!\ndata: {"foo": "bar"}\ndata: Goodbye world!'
+    'event: ping\ndata: Hello world!\ndata: {"foo": "bar"}\ndata: Goodbye world!'
   );
 });
 
@@ -160,13 +161,13 @@ app.get('/', (req, res) => {
 
 app.get('/download/:filename', (req, res, next) => {
   storage
-      .readFile(req.params.filename)
-      .then((data) => {
-        res.setHeader('content-type', 'application/json;charset=UTF-8');
-        res.setHeader('content-disposition', 'attachment');
-        res.send(data);
-      })
-      .catch(next);
+    .readFile(req.params.filename)
+    .then((data) => {
+      res.setHeader('content-type', 'application/json;charset=UTF-8');
+      res.setHeader('content-disposition', 'attachment');
+      res.send(data);
+    })
+    .catch(next);
 });
 
 // Accept both GET and POST requests. The form uses POST, but selenium.js
@@ -174,28 +175,28 @@ app.get('/download/:filename', (req, res, next) => {
 app.all('/export', (req, res, next) => {
   const github = !!req.body.github;
   storage
-      .getAll(req.sessionID)
-      .then(async (results) => {
-        const report = createReport(results, req);
-        if (github) {
-          const token = secrets.github.token;
-          const {url} = await exporter.exportAsPR(report, token);
-          res.render('export', {
-            title: 'Exported to GitHub',
-            description: url,
-            url
-          });
-        } else {
-          const {filename, buffer} = exporter.getReportMeta(report);
-          await storage.saveFile(filename, buffer);
-          res.render('export', {
-            title: 'Exported for download',
-            description: filename,
-            url: `/download/${filename}`
-          });
-        }
-      })
-      .catch(next);
+    .getAll(req.sessionID)
+    .then(async (results) => {
+      const report = createReport(results, req);
+      if (github) {
+        const token = secrets.github.token;
+        const {url} = await exporter.exportAsPR(report, token);
+        res.render('export', {
+          title: 'Exported to GitHub',
+          description: url,
+          url
+        });
+      } else {
+        const {filename, buffer} = exporter.getReportMeta(report);
+        await storage.saveFile(filename, buffer);
+        res.render('export', {
+          title: 'Exported for download',
+          description: filename,
+          url: `/download/${filename}`
+        });
+      }
+    })
+    .catch(next);
 });
 
 app.all('/tests/*', (req, res) => {
@@ -229,31 +230,31 @@ app.use((req, res) => {
 });
 
 /* istanbul ignore if */
-if (import.meta.url === `file://${process.argv[1]}`) {
+if (esMain(import.meta)) {
   const {argv} = yargs(hideBin(process.argv)).command(
-      '$0',
-      'Run the mdn-bcd-collector server',
-      (yargs) => {
-        yargs
-            .option('https-cert', {
-              describe: 'HTTPS cert chains in PEM format',
-              type: 'string'
-            })
-            .option('https-key', {
-              describe: 'HTTPS private keys in PEM format',
-              type: 'string'
-            })
-            .option('https-port', {
-              describe: 'HTTPS port (requires cert and key)',
-              type: 'number',
-              default: 8443
-            })
-            .option('port', {
-              describe: 'HTTP port',
-              type: 'number',
-              default: process.env.PORT ? +process.env.PORT : 8080
-            });
-      }
+    '$0',
+    'Run the mdn-bcd-collector server',
+    (yargs) => {
+      yargs
+        .option('https-cert', {
+          describe: 'HTTPS cert chains in PEM format',
+          type: 'string'
+        })
+        .option('https-key', {
+          describe: 'HTTPS private keys in PEM format',
+          type: 'string'
+        })
+        .option('https-port', {
+          describe: 'HTTPS port (requires cert and key)',
+          type: 'number',
+          default: 8443
+        })
+        .option('port', {
+          describe: 'HTTP port',
+          type: 'number',
+          default: process.env.PORT ? +process.env.PORT : 8080
+        });
+    }
   );
 
   http.createServer(app).listen(argv.port);
@@ -269,7 +270,4 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   logger.info('Press Ctrl+C to quit.');
 }
 
-export {
-  app,
-  appVersion as version
-};
+export {app, appVersion as version};
