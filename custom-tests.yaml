@@ -780,6 +780,14 @@ api:
       }
   FontFace:
     __base: var instance = new FontFace('Material Design Icons', 'url(/fonts/materialdesignicons-webfont.woff)');
+  FontFaceSet:
+    __base: >-
+      var instance;
+      if ('document' in self) {
+        instance = document.fonts;
+      } else {
+        instance = self.fonts;
+      }
   FontFaceSetLoadEvent:
     __base: var instance = new FontFaceSetLoadEvent('loading');
   GainNode:
