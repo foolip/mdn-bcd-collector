@@ -16,21 +16,13 @@
 
 import {assert} from 'chai';
 
-import esmock from 'esmock';
 import sinon from 'sinon';
+
+import {traverseFeatures, getMissing} from '../../find-missing-features.js';
 
 import bcd from './bcd.test.js';
 
 describe('find-missing', async () => {
-  const {
-    traverseFeatures,
-    getMissing
-  } = await esmock('../../find-missing-features.js', {
-    '../browser-compat-data/index.js': {
-      default: () => bcd
-    }
-  });
-
   it('traverseFeatures', () => {
     assert.deepEqual(traverseFeatures(bcd, ''), [
       'api.AbortController',

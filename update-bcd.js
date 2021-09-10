@@ -18,19 +18,19 @@ import {parseUA} from './ua-parser.js';
 
 const overrides = JSON.parse(
   await fs.readFile(
-    process.env.NODE_ENV === 'test' ?
-      './unittest/unit/overrides.test.json' :
-      './overrides.json',
+    process.env.NODE_ENV === 'test'
+      ? './unittest/unit/overrides.test.json'
+      : './overrides.json',
     'utf8'
   )
-).filter(
-  Array.isArray
-);
+).filter(Array.isArray);
 
 const BCD_DIR = process.env.BCD_DIR || `../browser-compat-data`;
-const {
-  default: {browsers}
-} = await import(`${BCD_DIR}/index.js`);
+const {default: bcd} = await import(
+  process.env.NODE_ENV === 'test'
+    ? `./unittest/unit/bcd.test.js`
+    : `${BCD_DIR}/index.js`
+);
 
 const findEntry = (bcd, ident) => {
   if (!ident) {
@@ -193,14 +193,14 @@ const inferSupportStatements = (versionMap) => {
       if (!lastStatement) {
         statements.push({
           version_added:
-            lastWasNull || lastKnown.support === false ?
-              `${lastKnown.version}> ≤${version}` :
-              version
+            lastWasNull || lastKnown.support === false
+              ? `${lastKnown.version}> ≤${version}`
+              : version
         });
       } else if (!lastStatement.version_added) {
-        lastStatement.version_added = lastWasNull ?
-          `${lastKnown.version}> ≤${version}` :
-          version;
+        lastStatement.version_added = lastWasNull
+          ? `${lastKnown.version}> ≤${version}`
+          : version;
       } else if (lastStatement.version_removed) {
         // added back again
         statements.push({
@@ -217,9 +217,9 @@ const inferSupportStatements = (versionMap) => {
         lastStatement.version_added &&
         !lastStatement.version_removed
       ) {
-        lastStatement.version_removed = lastWasNull ?
-          `${lastKnown.version}> ≤${version}` :
-          version;
+        lastStatement.version_removed = lastWasNull
+          ? `${lastKnown.version}> ≤${version}`
+          : version;
       } else if (!lastStatement) {
         statements.push({version_added: false});
       }
@@ -355,9 +355,9 @@ const update = (bcd, supportMatrix, filter) => {
         )
       ) {
         simpleStatement.version_added =
-          typeof inferredStatement.version_added === 'string' ?
-            inferredStatement.version_added.replace('0> ', '') :
-            inferredStatement.version_added;
+          typeof inferredStatement.version_added === 'string'
+            ? inferredStatement.version_added.replace('0> ', '')
+            : inferredStatement.version_added;
         modified = true;
       }
 

@@ -12,10 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-import childProcess from "child_process";
-import fs from "fs";
-import yargs from "yargs";
-import {hideBin} from "yargs/helpers";
+import childProcess from 'child_process';
+import fs from 'fs';
+import yargs from 'yargs';
+import {hideBin} from 'yargs/helpers';
 
 const exec = (cmd, env) => {
   env = {...process.env, ...env};
@@ -44,15 +44,15 @@ const prepare = () => {
 /* istanbul ignore if */
 if (import.meta.url === `file://${process.argv[1]}`) {
   const {argv} = yargs(hideBin(process.argv)).command(
-      '$0 <command>',
-      'Run an action',
-      (yargs) => {
-        yargs.positional('command', {
-          describe: 'What command to run',
-          type: 'string',
-          choices: ['unittest', 'prepare']
-        });
-      }
+    '$0 <command>',
+    'Run an action',
+    (yargs) => {
+      yargs.positional('command', {
+        describe: 'What command to run',
+        type: 'string',
+        choices: ['unittest', 'prepare']
+      });
+    }
   );
 
   switch (argv.command) {
@@ -60,7 +60,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
       prepare();
       break;
     case 'unittest':
-      exec('nyc mocha --loader=esmock --reporter dot --recursive unittest', {NODE_ENV: 'test'});
+      exec('nyc mocha --reporter dot --recursive unittest', {NODE_ENV: 'test'});
       break;
     default:
       console.error(`Unknown command ${argv.command}!`);

@@ -16,10 +16,16 @@
 
 import {assert} from 'chai';
 
-import esmock from 'esmock';
 import sinon from 'sinon';
 
 import logger from '../../logger.js';
+import {
+  findEntry,
+  getSupportMap,
+  getSupportMatrix,
+  inferSupportStatements,
+  update
+} from '../../update-bcd.js';
 
 import bcd from './bcd.test.js';
 
@@ -291,18 +297,6 @@ const reports = [
 ];
 
 describe('BCD updater', async () => {
-  const {
-    findEntry,
-    getSupportMap,
-    getSupportMatrix,
-    inferSupportStatements,
-    update
-  } = await esmock('../../update-bcd.js', {
-    '../browser-compat-data/index.js': {
-      default: () => bcd
-    }
-  });
-
   describe('findEntry', () => {
     it('equal', () => {
       assert.strictEqual(

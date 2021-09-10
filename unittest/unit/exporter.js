@@ -16,7 +16,6 @@
 
 import {assert} from 'chai';
 
-import esmock from 'esmock';
 import sinon from 'sinon';
 import {Octokit} from '@octokit/rest';
 

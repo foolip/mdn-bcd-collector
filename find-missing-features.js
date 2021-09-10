@@ -1,19 +1,21 @@
 'use strict';
 
-import fs from "fs-extra";
-import yargs from "yargs";
-import {hideBin} from "yargs/helpers";
+import fs from 'fs-extra';
+import yargs from 'yargs';
+import {hideBin} from 'yargs/helpers';
 
 const BCD_DIR = process.env.BCD_DIR || `../browser-compat-data`;
-const {
-  default: bcd
-} = await import(`${BCD_DIR}/index.js`);
+const {default: bcd} = await import(
+  process.env.NODE_ENV === 'test'
+    ? `./unittest/unit/bcd.test.js`
+    : `${BCD_DIR}/index.js`
+);
 
 const tests = JSON.parse(
   await fs.readFile(
-    process.env.NODE_ENV === 'test' ?
-      './unittest/unit/tests.test.json' :
-      './tests.json',
+    process.env.NODE_ENV === 'test'
+      ? './unittest/unit/tests.test.json'
+      : './tests.json',
     'utf8'
   )
 );
@@ -60,7 +62,7 @@ const traverseFeatures = (obj, path, includeAliases) => {
     }
 
     features.push(
-        ...traverseFeatures(obj[id], path + id + '.', includeAliases)
+      ...traverseFeatures(obj[id], path + id + '.', includeAliases)
     );
   }
 
@@ -80,9 +82,9 @@ const findMissing = (entries, allEntries) => {
 };
 
 const getMissing = (
-    direction = 'collector-from-bcd',
-    category = [],
-    includeAliases = false
+  direction = 'collector-from-bcd',
+  category = [],
+  includeAliases = false
 ) => {
   const filterCategory = (item) => {
     return (
@@ -94,9 +96,9 @@ const getMissing = (
     ...traverseFeatures(bcd.api, 'api.', includeAliases),
     ...traverseFeatures(bcd.css.properties, 'css.properties.', includeAliases),
     ...traverseFeatures(
-        bcd.javascript.builtins,
-        'javascript.builtins.',
-        includeAliases
+      bcd.javascript.builtins,
+      'javascript.builtins.',
+      includeAliases
     )
   ].filter(filterCategory);
   const collectorEntries = Object.keys(tests).filter(filterCategory);
@@ -106,7 +108,7 @@ const getMissing = (
       return findMissing(bcdEntries, collectorEntries);
     default:
       console.log(
-          `Direction '${direction}' is unknown; defaulting to collector <- bcd`
+        `Direction '${direction}' is unknown; defaulting to collector <- bcd`
       );
     // eslint-disable-next-line no-fallthrough
     case 'collector-from-bcd':
@@ -117,46 +119,46 @@ const getMissing = (
 /* istanbul ignore next */
 const main = () => {
   const {argv} = yargs(hideBin(process.argv)).command(
-      '$0 [--direction]',
-      'Find missing entries between BCD and the collector tests',
-      (yargs) => {
-        yargs
-            .option('include-aliases', {
-              alias: 'a',
-              describe: 'Include BCD entries using prefix or alternative_name',
-              type: 'boolean',
-              default: false
-            })
-            .option('direction', {
-              alias: 'd',
-              describe:
+    '$0 [--direction]',
+    'Find missing entries between BCD and the collector tests',
+    (yargs) => {
+      yargs
+        .option('include-aliases', {
+          alias: 'a',
+          describe: 'Include BCD entries using prefix or alternative_name',
+          type: 'boolean',
+          default: false
+        })
+        .option('direction', {
+          alias: 'd',
+          describe:
             'Which direction to find missing entries from ("a-from-b" will check what is in a that is missing from b)',
-              choices: ['bcd-from-collector', 'collector-from-bcd'],
-              nargs: 1,
-              type: 'string',
-              default: 'collector-from-bcd'
-            })
-            .option('category', {
-              alias: 'c',
-              describe: 'The BCD categories to filter',
-              type: 'array',
-              choices: ['api', 'css.properties', 'javascript.builtins'],
-              default: ['api', 'css.properties', 'javascript.builtins']
-            });
-      }
+          choices: ['bcd-from-collector', 'collector-from-bcd'],
+          nargs: 1,
+          type: 'string',
+          default: 'collector-from-bcd'
+        })
+        .option('category', {
+          alias: 'c',
+          describe: 'The BCD categories to filter',
+          type: 'array',
+          choices: ['api', 'css.properties', 'javascript.builtins'],
+          default: ['api', 'css.properties', 'javascript.builtins']
+        });
+    }
   );
 
   const {missingEntries, total} = getMissing(
-      argv.direction,
-      argv.category,
-      argv.includeAliases
+    argv.direction,
+    argv.category,
+    argv.includeAliases
   );
   console.log(missingEntries.join('\n'));
   console.log(
-      `\n${missingEntries.length}/${total} (${(
-        (missingEntries.length / total) *
+    `\n${missingEntries.length}/${total} (${(
+      (missingEntries.length / total) *
       100.0
-      ).toFixed(2)}%) missing`
+    ).toFixed(2)}%) missing`
   );
 };
 
@@ -165,8 +167,4 @@ if (import.meta.url === `file://${process.argv[1]}`) {
   main();
 }
 
-export {
-  traverseFeatures,
-  findMissing,
-  getMissing
-};
+export {traverseFeatures, findMissing, getMissing};
