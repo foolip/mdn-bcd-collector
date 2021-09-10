@@ -20,6 +20,8 @@ import esmock from 'esmock';
 import sinon from 'sinon';
 import {Octokit} from '@octokit/rest';
 
+import * as exporter from '../../exporter.js';
+
 const REPORTS = [
   {
     report: {
@@ -61,11 +63,6 @@ const REPORTS = [
 
 describe('GitHub export', async () => {
   const octokit = new Octokit();
-  const exporter = await esmock('../../exporter.js', {
-    '@octokit/rest': {
-      Octokit: () => octokit
-    }
-  });
 
   describe('happy path', async () => {
     // eslint-disable-next-line guard-for-in
@@ -119,7 +116,8 @@ describe('GitHub export', async () => {
             }
           });
 
-        const result = await exporter.exportAsPR(report, 'mocked');
+        const result = await exporter.exportAsPR(report, 'mocked', octokit);
+
         assert.deepEqual(result, {
           filename: `${expected.slug}.json`,
           url: 'https://github.com/foolip/mdn-bcd-results/pull/42'
@@ -133,7 +131,7 @@ describe('GitHub export', async () => {
   });
 
   it('no auth token', async () => {
-    const result = await exporter.exportAsPR(REPORTS[0].report);
+    const result = await exporter.exportAsPR(REPORTS[0].report, '', octokit);
     assert.equal(result, null);
   });
 });

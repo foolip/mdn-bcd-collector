@@ -17,14 +17,14 @@
 // This module is responsible for getting results/reports out of the collector
 // web service into JSON files that can be used by update-bcd.js.
 
-import crypto from "crypto";
-import {Octokit} from "@octokit/rest";
-import slugify from "slugify";
-import stringify from "json-stable-stringify";
-import bcd from "@mdn/browser-compat-data";
+import crypto from 'crypto';
+import {Octokit} from '@octokit/rest';
+import slugify from 'slugify';
+import stringify from 'json-stable-stringify';
+import bcd from '@mdn/browser-compat-data';
 const bcdBrowsers = bcd.browsers;
 
-import {parseUA} from "./ua-parser.js";
+import {parseUA} from './ua-parser.js';
 
 const getReportMeta = (report) => {
   const json = stringify(report);
@@ -70,21 +70,26 @@ const createBody = (meta) => {
       meta.ua.inBcd ? '' : ' - **Not in BCD**'
     }` +
     `\nHash Digest: ${meta.digest}\n` +
-    (meta.version == 'Dev' ?
-      '\n**WARNING:** this PR was created from a development/staging version!' :
-      '')
+    (meta.version == 'Dev'
+      ? '\n**WARNING:** this PR was created from a development/staging version!'
+      : '')
   );
 };
 
-const exportAsPR = async (report, token) => {
-  const octokit = new Octokit({auth: `token ${token}`});
+const exportAsPR = async (report, token, octokit) => {
+  if (!token) {
+    return null;
+  }
+
+  if (!octokit) {
+    octokit = new Octokit({auth: `token ${token}`});
+  }
 
   if ((await octokit.auth()).type == 'unauthenticated') {
     return null;
   }
 
   const meta = getReportMeta(report);
-
   await octokit.git.createRef({
     owner: 'foolip',
     repo: 'mdn-bcd-results',
