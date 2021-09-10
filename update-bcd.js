@@ -26,10 +26,12 @@ const overrides = JSON.parse(
 ).filter(Array.isArray);
 
 const BCD_DIR = process.env.BCD_DIR || `../browser-compat-data`;
-const {default: bcd} = await import(
-  process.env.NODE_ENV === 'test'
-    ? `./unittest/unit/bcd.test.js`
-    : `${BCD_DIR}/index.js`
+const {
+  default: {browsers}
+} = await import(
+  process.env.NODE_ENV === 'test' ?
+    './unittest/unit/bcd.test.js' :
+    `${BCD_DIR}/index.js`
 );
 
 const findEntry = (bcd, ident) => {

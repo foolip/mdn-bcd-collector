@@ -53,13 +53,21 @@ describe('find-missing', async () => {
     it('collector <- bcd', () => {
       assert.deepEqual(getMissing(), {
         missingEntries: [
+          'api.AbortController.AbortController',
+          'api.AbortController.abort',
           'api.AbortController.dummy',
+          'api.AudioContext',
+          'api.AudioContext.close',
+          'api.DeprecatedInterface',
           'api.DummyAPI',
           'api.DummyAPI.dummy',
+          'api.ExperimentalInterface',
+          'api.NullAPI',
+          'api.RemovedInterface',
           'css.properties.font-face',
           'javascript.builtins.Date'
         ],
-        total: 9
+        total: 17
       });
     });
 
@@ -73,24 +81,40 @@ describe('find-missing', async () => {
     it('filter category', () => {
       assert.deepEqual(getMissing('collector-from-bcd', ['api']), {
         missingEntries: [
+          'api.AbortController.AbortController',
+          'api.AbortController.abort',
           'api.AbortController.dummy',
+          'api.AudioContext',
+          'api.AudioContext.close',
+          'api.DeprecatedInterface',
           'api.DummyAPI',
-          'api.DummyAPI.dummy'
+          'api.DummyAPI.dummy',
+          'api.ExperimentalInterface',
+          'api.NullAPI',
+          'api.RemovedInterface'
         ],
-        total: 5
+        total: 13
       });
     });
 
     it('unknown direction', () => {
       assert.deepEqual(getMissing('foo-from-bar'), {
         missingEntries: [
+          'api.AbortController.AbortController',
+          'api.AbortController.abort',
           'api.AbortController.dummy',
+          'api.AudioContext',
+          'api.AudioContext.close',
+          'api.DeprecatedInterface',
           'api.DummyAPI',
           'api.DummyAPI.dummy',
+          'api.ExperimentalInterface',
+          'api.NullAPI',
+          'api.RemovedInterface',
           'css.properties.font-face',
           'javascript.builtins.Date'
         ],
-        total: 9
+        total: 17
       });
 
       assert.isTrue(
