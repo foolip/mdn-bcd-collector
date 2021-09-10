@@ -6,16 +6,16 @@ import {hideBin} from 'yargs/helpers';
 
 const BCD_DIR = process.env.BCD_DIR || `../browser-compat-data`;
 const {default: bcd} = await import(
-  process.env.NODE_ENV === 'test'
-    ? `./unittest/unit/bcd.test.js`
-    : `${BCD_DIR}/index.js`
+  process.env.NODE_ENV === 'test' ?
+    './unittest/unit/bcd.test.js' :
+    `${BCD_DIR}/index.js`
 );
 
 const tests = JSON.parse(
   await fs.readFile(
-    process.env.NODE_ENV === 'test'
-      ? './unittest/unit/tests.test.json'
-      : './tests.json',
+    process.env.NODE_ENV === 'test' ?
+      './unittest/unit/tests.test.json' :
+      './tests.json',
     'utf8'
   )
 );
