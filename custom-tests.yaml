@@ -760,7 +760,9 @@ api:
   External:
     __base: var instance = window.external;
   FetchEvent:
-    __base: var instance = new FetchEvent('fetch');
+    __base: >-
+      <%api.Request:req%>
+      var instance = new FetchEvent('fetch', { request: req });
   FileReader:
     __base: var instance = new FileReader();
   FocusEvent:
