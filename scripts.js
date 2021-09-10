@@ -60,7 +60,7 @@ if (import.meta.url === `file://${process.argv[1]}`) {
       prepare();
       break;
     case 'unittest':
-      exec('nyc mocha --reporter dot --recursive unittest', {NODE_ENV: 'test'});
+      exec('c8 mocha --reporter dot --recursive unittest', {NODE_ENV: 'test'});
       break;
     default:
       console.error(`Unknown command ${argv.command}!`);
