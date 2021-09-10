@@ -758,6 +758,16 @@ describe('BCD updater', async () => {
               __compat: {support: {chrome: {version_added: null}}}
             }
           }
+        },
+        javascript: {
+          builtins: {
+            Array: {
+              __compat: {}
+            },
+            Date: {
+              __compat: {}
+            }
+          }
         }
       });
     });
