@@ -471,7 +471,7 @@
         myWorker.port.postMessage(
           JSON.stringify({
             instances: reusableInstances.__sources,
-            tests: pending.Worker
+            tests: pending.SharedWorker
           })
         );
       } else {
@@ -530,7 +530,7 @@
               reg.active.postMessage(
                 JSON.stringify({
                   instances: reusableInstances.__sources,
-                  tests: pending.Worker
+                  tests: pending.ServiceWorker
                 }),
                 [messageChannel.port2]
               );
