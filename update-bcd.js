@@ -17,11 +17,11 @@ import {hideBin} from 'yargs/helpers';
 import logger from './logger.js';
 import {parseUA} from './ua-parser.js';
 
-const overrides = await fs.readJson(
+const overrides = (await fs.readJson(
     process.env.NODE_ENV === 'test' ?
       './unittest/unit/overrides.test.json' :
       './overrides.json'
-).filter(Array.isArray);
+)).filter(Array.isArray);
 
 const BCD_DIR = process.env.BCD_DIR || `../browser-compat-data`;
 const {
