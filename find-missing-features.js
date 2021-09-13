@@ -12,14 +12,10 @@ const {default: bcd} = await import(
     `${BCD_DIR}/index.js`
 );
 
-const tests = JSON.parse(
-  await fs.readFile(
+const tests = await fs.readJson(
     process.env.NODE_ENV === 'test' ?
       './unittest/unit/tests.test.json' :
-      './tests.json',
-    'utf8'
-  )
-);
+      './tests.json');
 
 const traverseFeatures = (obj, path, includeAliases) => {
   const features = [];

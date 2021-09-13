@@ -36,8 +36,8 @@ const customTests = YAML.parse(
   )
 );
 
-const customCSS = JSON.parse(await fs.readFile('./custom-css.json'));
-const customJS = JSON.parse(await fs.readFile('./custom-js.json'));
+const customCSS = await fs.readJson('./custom-css.json');
+const customJS = await fs.readJson('./custom-js.json');
 
 const generatedDir = fileURLToPath(new URL('./generated', import.meta.url));
 

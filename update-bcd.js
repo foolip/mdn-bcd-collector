@@ -17,13 +17,10 @@ import {hideBin} from 'yargs/helpers';
 import logger from './logger.js';
 import {parseUA} from './ua-parser.js';
 
-const overrides = JSON.parse(
-  await fs.readFile(
+const overrides = await fs.readJson(
     process.env.NODE_ENV === 'test' ?
       './unittest/unit/overrides.test.json' :
-      './overrides.json',
-    'utf8'
-  )
+      './overrides.json'
 ).filter(Array.isArray);
 
 const BCD_DIR = process.env.BCD_DIR || `../browser-compat-data`;
@@ -401,7 +398,7 @@ const loadJsonFiles = async (paths) => {
 
   const entries = await Promise.all(
     jsonFiles.map(async (file) => {
-      const data = JSON.parse(await fs.readFile(file));
+      const data = await fs.readJson(file);
       return [file, data];
     })
   );

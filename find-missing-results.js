@@ -27,7 +27,7 @@ const BCD_DIR = process.env.BCD_DIR || `../browser-compat-data`;
 const {default: bcd} = await import(`${BCD_DIR}/index.js`);
 const {browsers} = bcd;
 
-const appVersion = JSON.parse(await fs.readFile('./package.json')).version;
+const appVersion = (await fs.readJson('./package.json'))?.version;
 
 const generateReportMap = (allResults) => {
   const result = {};

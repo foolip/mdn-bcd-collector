@@ -35,7 +35,7 @@ import {fileURLToPath} from 'url';
 import yargs from 'yargs';
 import {hideBin} from 'yargs/helpers';
 
-const secrets = JSON.parse(await fs.readFile('./secrets.json'));
+const secrets = await fs.readJson('./secrets.json');
 
 const resultsDir = fileURLToPath(new URL('../mdn-bcd-results', import.meta.url));
 
