@@ -31,12 +31,13 @@ import path from 'path';
 import chalk from 'chalk';
 import listr2 from 'listr2';
 const {Listr} = listr2;
+import {fileURLToPath} from 'url';
 import yargs from 'yargs';
 import {hideBin} from 'yargs/helpers';
 
 const secrets = JSON.parse(await fs.readFile('./secrets.json'));
 
-const resultsDir = new URL('../mdn-bcd-results', import.meta.url);
+const resultsDir = fileURLToPath(new URL('../mdn-bcd-results', import.meta.url));
 
 const testenv = process.env.NODE_ENV === 'test';
 const host = `https://${
