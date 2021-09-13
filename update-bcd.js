@@ -479,10 +479,7 @@ if (esMain(import.meta)) {
     }
   );
 
-  main(argv.reports, argv).catch((error) => {
-    logger.error(error.stack);
-    process.exit(1);
-  });
+  await main(argv.reports, argv);
 }
 
 export {

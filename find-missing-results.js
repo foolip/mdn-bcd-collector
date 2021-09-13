@@ -146,7 +146,7 @@ if (esMain(import.meta)) {
     }
   );
 
-  main(argv);
+  await main(argv);
 }
 
 export default findMissingResults;

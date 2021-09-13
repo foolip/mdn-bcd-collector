@@ -124,5 +124,5 @@ const main = async () => {
 
 /* istanbul ignore if */
 if (esMain(import.meta)) {
-  main();
+  await main();
 }

@@ -818,7 +818,7 @@ const build = async (customIDL, customCSS) => {
 
 /* istanbul ignore if */
 if (esMain(import.meta)) {
-  build(customIDL, customCSS);
+  await build(customIDL, customCSS);
 }
 
 export {
