@@ -46,7 +46,7 @@ const customJS = await fs.readJson(
   new URL('./custom-js.json', import.meta.url)
 );
 
-const generatedDir = new URL('./generated', import.meta.url);
+const generatedDir = fileURLToPath(new URL('./generated', import.meta.url));
 
 const formatCode = (code) => {
   return prettier
