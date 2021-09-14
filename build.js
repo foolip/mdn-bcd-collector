@@ -20,7 +20,6 @@ import fs from 'fs-extra';
 import idl from '@webref/idl';
 import path from 'path';
 import prettier from 'prettier';
-import {fileURLToPath} from 'url';
 import * as WebIDL2 from 'webidl2';
 import * as YAML from 'yaml';
 

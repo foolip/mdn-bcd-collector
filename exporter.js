@@ -69,9 +69,9 @@ const createBody = (meta) => {
       meta.ua.inBcd ? '' : ' - **Not in BCD**'
     }` +
     `\nHash Digest: ${meta.digest}\n` +
-    (meta.version == 'Dev'
-      ? '\n**WARNING:** this PR was created from a development/staging version!'
-      : '')
+    (meta.version == 'Dev' ?
+      '\n**WARNING:** this PR was created from a development/staging version!' :
+      '')
   );
 };
 

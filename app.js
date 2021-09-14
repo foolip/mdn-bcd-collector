@@ -39,9 +39,9 @@ import Tests from './tests.js';
 const storage = getStorage();
 
 const appVersion =
-  process.env.GAE_VERSION === 'production'
-    ? (await fs.readJson('./package.json')).version
-    : 'Dev';
+  process.env.GAE_VERSION === 'production' ?
+    (await fs.readJson('./package.json')).version :
+    'Dev';
 
 /* istanbul ignore next */
 const secrets = await fs.readJson(
@@ -210,9 +210,9 @@ app.all('/export', (req, res, next) => {
 
 app.all('/tests/*', (req, res) => {
   const ident = req.params['0'].replace(/\//g, '.');
-  const ignoreIdents = req.query.ignore
-    ? req.query.ignore.split(',').filter((s) => s)
-    : [];
+  const ignoreIdents = req.query.ignore ?
+    req.query.ignore.split(',').filter((s) => s) :
+    [];
   const foundTests = tests.getTests(ident, req.query.exposure, ignoreIdents);
   if (foundTests && foundTests.length) {
     res.render('tests', {
