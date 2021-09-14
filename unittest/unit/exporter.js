@@ -115,7 +115,7 @@ describe('GitHub export', () => {
             }
           });
 
-        const result = await exporter.exportAsPR(report, 'mocked', octokit);
+        const result = await exporter.exportAsPR(report, octokit);
 
         assert.deepEqual(result, {
           filename: `${expected.slug}.json`,
@@ -130,7 +130,7 @@ describe('GitHub export', () => {
   });
 
   it('no auth token', async () => {
-    const result = await exporter.exportAsPR(REPORTS[0].report, '', octokit);
+    const result = await exporter.exportAsPR(REPORTS[0].report);
     assert.equal(result, null);
   });
 });

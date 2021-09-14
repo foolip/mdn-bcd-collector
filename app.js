@@ -27,6 +27,7 @@ import uniqueString from 'unique-string';
 import expressLayouts from 'express-ejs-layouts';
 import yargs from 'yargs';
 import {hideBin} from 'yargs/helpers';
+import {Octokit} from '@octokit/rest';
 
 import * as exporter from './exporter.js';
 import logger from './logger.js';
@@ -38,17 +39,14 @@ import Tests from './tests.js';
 const storage = getStorage();
 
 const appVersion =
-  process.env.GAE_VERSION === 'production' ?
-    (await fs.readJson('./package.json')).version :
-    'Dev';
+  process.env.GAE_VERSION === 'production'
+    ? (await fs.readJson('./package.json')).version
+    : 'Dev';
 
 /* istanbul ignore next */
 const secrets = await fs.readJson(
-  process.env.NODE_ENV === 'test' ?
-    './secrets.sample.json' :
-    './secrets.json'
+  process.env.NODE_ENV === 'test' ? './secrets.sample.json' : './secrets.json'
 );
-
 
 const tests = new Tests({
   tests: await fs.readJson('./tests.json'),
@@ -182,12 +180,21 @@ app.all('/export', (req, res, next) => {
       const report = createReport(results, req);
       if (github) {
         const token = secrets.github.token;
-        const {url} = await exporter.exportAsPR(report, token);
-        res.render('export', {
-          title: 'Exported to GitHub',
-          description: url,
-          url
-        });
+        if (token) {
+          const octokit = new Octokit({auth: `token ${token}`});
+          const {url} = await exporter.exportAsPR(report, octokit);
+          res.render('export', {
+            title: 'Exported to GitHub',
+            description: url,
+            url
+          });
+        } else {
+          res.render('export', {
+            title: 'Exported to GitHub',
+            description: '[No GitHub Token, GitHub Export Disabled]',
+            url: '/'
+          });
+        }
       } else {
         const {filename, buffer} = exporter.getReportMeta(report);
         await storage.saveFile(filename, buffer);
@@ -203,9 +210,9 @@ app.all('/export', (req, res, next) => {
 
 app.all('/tests/*', (req, res) => {
   const ident = req.params['0'].replace(/\//g, '.');
-  const ignoreIdents = req.query.ignore ?
-    req.query.ignore.split(',').filter((s) => s) :
-    [];
+  const ignoreIdents = req.query.ignore
+    ? req.query.ignore.split(',').filter((s) => s)
+    : [];
   const foundTests = tests.getTests(ident, req.query.exposure, ignoreIdents);
   if (foundTests && foundTests.length) {
     res.render('tests', {
