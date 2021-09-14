@@ -23,8 +23,12 @@ import fs from 'fs-extra';
 import {app, version} from '../../app.js';
 const agent = chai.request.agent(app);
 
-const tests = Object.entries(await fs.readJson('../../tests.json'));
-const packageLock = await fs.readJson('../../package-lock.json');
+const tests = Object.entries(
+  await fs.readJson(new URL('../../tests.json', import.meta.url))
+);
+const packageLock = await fs.readJson(
+  new URL('../../package-lock.json', import.meta.url)
+);
 
 const userAgent = `node-superagent/${packageLock.dependencies.superagent.version}`;
 

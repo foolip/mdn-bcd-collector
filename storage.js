@@ -38,12 +38,12 @@ class CloudStorage {
     const files = (await this._bucket.getFiles({prefix}))[0];
     const result = {};
     await Promise.all(
-        files.map(async (file) => {
-          assert(file.name.startsWith(prefix));
-          const key = decodeURIComponent(file.name.substr(prefix.length));
-          const data = (await file.download())[0];
-          result[key] = JSON.parse(data);
-        })
+      files.map(async (file) => {
+        assert(file.name.startsWith(prefix));
+        const key = decodeURIComponent(file.name.substr(prefix.length));
+        const data = (await file.download())[0];
+        result[key] = JSON.parse(data);
+      })
     );
     return result;
   }
@@ -90,12 +90,17 @@ class MemoryStorage {
 
   async saveFile(filename, data) {
     assert(!filename.includes('..'));
-    await fs.writeFile(`./download/${filename}`, data);
+    await fs.writeFile(
+      new URL(`./download/${filename}`, import.meta.url),
+      data
+    );
   }
 
   async readFile(filename) {
     assert(!filename.includes('..'));
-    return await fs.readFile(`./download/${filename}`);
+    return await fs.readFile(
+      new URL(`./download/${filename}`, import.meta.url)
+    );
   }
 }
 

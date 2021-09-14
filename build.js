@@ -19,6 +19,7 @@ import esMain from 'es-main';
 import fs from 'fs-extra';
 import idl from '@webref/idl';
 import path from 'path';
+import {fileURLToPath} from 'url';
 import prettier from 'prettier';
 import * as WebIDL2 from 'webidl2';
 import * as YAML from 'yaml';
@@ -28,17 +29,24 @@ import customIDL from './custom-idl/index.js';
 /* istanbul ignore next */
 const customTests = YAML.parse(
   await fs.readFile(
-    process.env.NODE_ENV === 'test' ?
-      './unittest/unit/custom-tests.test.yaml' :
-      './custom-tests.yaml',
+    new URL(
+      process.env.NODE_ENV === 'test' ?
+        './unittest/unit/custom-tests.test.yaml' :
+        './custom-tests.yaml',
+      import.meta.url
+    ),
     'utf8'
   )
 );
 
-const customCSS = await fs.readJson('./custom-css.json');
-const customJS = await fs.readJson('./custom-js.json');
+const customCSS = await fs.readJson(
+  new URL('./custom-css.json', import.meta.url)
+);
+const customJS = await fs.readJson(
+  new URL('./custom-js.json', import.meta.url)
+);
 
-const generatedDir = './generated';
+const generatedDir = new URL('./generated', import.meta.url);
 
 const formatCode = (code) => {
   return prettier
@@ -789,7 +797,9 @@ const copyResources = async () => {
     ['@mdi/font/fonts/materialdesignicons-webfont.woff2', 'fonts']
   ];
   for (const [srcInModules, destInGenerated, newFilename] of resources) {
-    const src = `./node_modules/${srcInModules}`;
+    const src = fileURLToPath(
+      new URL(`./node_modules/${srcInModules}`, import.meta.url)
+    );
     const destDir = path.join(generatedDir, destInGenerated);
     const dest = path.join(destDir, path.basename(src));
     await fs.ensureDir(path.dirname(dest));
@@ -809,7 +819,7 @@ const build = async (customIDL, customCSS) => {
   const JSTests = buildJS(customJS);
   const tests = Object.assign({}, IDLTests, CSSTests, JSTests);
 
-  await fs.writeJson('./tests.json', tests);
+  await fs.writeJson(new URL('./tests.json', import.meta.url), tests);
   await copyResources();
 };
 

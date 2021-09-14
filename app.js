@@ -40,16 +40,21 @@ const storage = getStorage();
 
 const appVersion =
   process.env.GAE_VERSION === 'production' ?
-    (await fs.readJson('./package.json')).version :
+    (await fs.readJson(new URL('./package.json', import.meta.url))).version :
     'Dev';
 
 /* istanbul ignore next */
 const secrets = await fs.readJson(
-  process.env.NODE_ENV === 'test' ? './secrets.sample.json' : './secrets.json'
+  new URL(
+    process.env.NODE_ENV === 'test' ?
+      './secrets.sample.json' :
+      './secrets.json',
+    import.meta.url
+  )
 );
 
 const tests = new Tests({
-  tests: await fs.readJson('./tests.json'),
+  tests: await fs.readJson(new URL('./tests.json', import.meta.url)),
   httpOnly: process.env.NODE_ENV !== 'production'
 });
 

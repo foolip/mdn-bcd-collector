@@ -28,15 +28,18 @@ import fetch from 'node-fetch';
 import esMain from 'es-main';
 import fs from 'fs-extra';
 import path from 'path';
+import {fileURLToPath} from 'url';
 import chalk from 'chalk';
 import listr2 from 'listr2';
 const {Listr} = listr2;
 import yargs from 'yargs';
 import {hideBin} from 'yargs/helpers';
 
-const secrets = await fs.readJson('./secrets.json');
+const secrets = await fs.readJson(new URL('./secrets.json', import.meta.url));
 
-const resultsDir = '../mdn-bcd-results';
+const resultsDir = fileURLToPath(
+  new URL('../mdn-bcd-results', import.meta.url)
+);
 
 const testenv = process.env.NODE_ENV === 'test';
 const host = `https://${

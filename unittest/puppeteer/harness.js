@@ -21,7 +21,7 @@ import pti from 'puppeteer-to-istanbul';
 
 import {app} from '../../app.js';
 
-const pkg = await fs.readJson('../../package.json');
+const pkg = await fs.readJson(new URL('../../package.json', import.meta.url));
 
 // Firefox is temporarily disabled due to issues on CI
 const products = ['chrome']; // ['chrome', 'firefox'];
@@ -81,7 +81,10 @@ describe('harness.js', () => {
         });
 
         // Slight adjustment of coverage files to point to original files
-        const coveragePath = '../../.nyc_output/out.json';
+        const coveragePath = new URL(
+          '../../.nyc_output/out.json',
+          import.meta.url
+        );
 
         const data = await fs.readFile(coveragePath, 'utf8');
 
