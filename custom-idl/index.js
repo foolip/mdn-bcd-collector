@@ -16,13 +16,12 @@
 
 import fs from 'fs-extra';
 import path from 'path';
-import {fileURLToPath} from 'url';
 import * as WebIDL2 from 'webidl2';
 
 // Load text (UTF-8) files from a directory and return an object mapping each
 // name (sans extension) to the parsed result of that text.
 const parseIDL = async () => {
-  const files = await fs.readdir(fileURLToPath(new URL('.', import.meta.url)));
+  const files = await fs.readdir('.');
   files.sort();
   const results = {};
   for (const file of files) {
@@ -31,7 +30,7 @@ const parseIDL = async () => {
       continue;
     }
     const name = path.parse(file).name;
-    const text = await fs.readFile(path.join(dirname, file), 'utf8');
+    const text = await fs.readFile(`./${file}`, 'utf8');
     results[name] = WebIDL2.parse(text);
   }
   return results;
