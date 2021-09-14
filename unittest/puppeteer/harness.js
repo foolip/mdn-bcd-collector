@@ -82,21 +82,15 @@ describe('harness.js', () => {
 
         // Slight adjustment of coverage files to point to original files
         const coveragePath = '../../.nyc_output/out.json';
-        fs.readFile(coveragePath, 'utf8', (err, data) => {
-          if (err) {
-            return console.log(err);
-          }
-          const result = data.replace(
-            /\.nyc_output\/resources/g,
-            'static/resources'
-          );
 
-          fs.writeFile(coveragePath, result, 'utf8', (err) => {
-            if (err) {
-              return console.log(err);
-            }
-          });
-        });
+        const data = await fs.readFile(coveragePath, 'utf8');
+
+        const result = data.replace(
+          /\.nyc_output\/resources/g,
+          'static/resources'
+        );
+
+        await fs.writeFile(coveragePath, result, 'utf8');
       }
 
       assert.equal(report.stats.failures, 0);
