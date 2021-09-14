@@ -26,8 +26,8 @@ const exec = (cmd, env) => {
 
 const prepare = () => {
   // Copy secrets.sample.json to secrets.json if needed
-  const secretsPath = new URL('./secrets.json', import.meta.url);
-  const secretsSamplePath = new URL('./secrets.sample.json', import.meta.url);
+  const secretsPath = './secrets.json';
+  const secretsSamplePath = './secrets.sample.json';
 
   if (!fs.existsSync(secretsPath)) {
     fs.copyFileSync(secretsSamplePath, secretsPath);
