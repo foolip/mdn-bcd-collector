@@ -14,17 +14,14 @@
 
 'use strict';
 
-import {assert} from "chai";
-import fs from "fs-extra";
-import puppeteer from "puppeteer";
-import pti from "puppeteer-to-istanbul";
-import {fileURLToPath} from "url";
+import {assert} from 'chai';
+import fs from 'fs-extra';
+import puppeteer from 'puppeteer';
+import pti from 'puppeteer-to-istanbul';
 
-import {app} from "../../app.js";
+import {app} from '../../app.js';
 
-const pkg = JSON.parse(await fs.readFile(
-  fileURLToPath(new URL('../../package.json', import.meta.url))
-));
+const pkg = await fs.readJson('../../package.json');
 
 // Firefox is temporarily disabled due to issues on CI
 const products = ['chrome']; // ['chrome', 'firefox'];
@@ -84,7 +81,7 @@ describe('harness.js', () => {
         });
 
         // Slight adjustment of coverage files to point to original files
-        const coveragePath = fileURLToPath(new URL('../../.nyc_output/out.json', import.meta.url));
+        const coveragePath = '../../.nyc_output/out.json';
         fs.readFile(coveragePath, 'utf8', (err, data) => {
           if (err) {
             return console.log(err);

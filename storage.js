@@ -14,10 +14,9 @@
 
 'use strict';
 
-import assert from "assert";
-import fs from "fs-extra";
-import {fileURLToPath} from "url";
-import {Storage} from "@google-cloud/storage";
+import assert from 'assert';
+import fs from 'fs-extra';
+import {Storage} from '@google-cloud/storage';
 
 class CloudStorage {
   constructor(projectId, bucketName) {
@@ -91,14 +90,12 @@ class MemoryStorage {
 
   async saveFile(filename, data) {
     assert(!filename.includes('..'));
-    const p = fileURLToPath(new URL(`./download/${filename}`, import.meta.url));
-    await fs.writeFile(p, data);
+    await fs.writeFile(`./download/${filename}`, data);
   }
 
   async readFile(filename) {
     assert(!filename.includes('..'));
-    const p = fileURLToPath(new URL(`./download/${filename}`, import.meta.url));
-    return await fs.readFile(p);
+    return await fs.readFile(`./download/${filename}`);
   }
 }
 

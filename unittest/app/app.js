@@ -14,22 +14,17 @@
 
 'use strict';
 
-import chai, {assert, expect} from "chai";
-import chaiHttp from "chai-http";
+import chai, {assert, expect} from 'chai';
+import chaiHttp from 'chai-http';
 chai.use(chaiHttp);
 
-import fs from "fs-extra";
-import {fileURLToPath} from "url";
+import fs from 'fs-extra';
 
-import {app, version} from "../../app.js";
+import {app, version} from '../../app.js';
 const agent = chai.request.agent(app);
 
-const tests = Object.entries(JSON.parse(await fs.readFile(
-  fileURLToPath(new URL('../../tests.json', import.meta.url))
-)));
-const packageLock = JSON.parse(await fs.readFile(
-  fileURLToPath(new URL('../../package-lock.json', import.meta.url))
-));
+const tests = Object.entries(await fs.readJson('../../tests.json'));
+const packageLock = await fs.readJson('../../package-lock.json');
 
 const userAgent = `node-superagent/${packageLock.dependencies.superagent.version}`;
 
@@ -183,38 +178,32 @@ describe('/api/get', () => {
   });
 
   it('get specific test, limit exposure', async () => {
-    const res = await agent
-      .post('/api/get')
-      .send({
-        testSelection: 'api.AbortController.signal',
-        limitExposure: 'Window'
-      });
+    const res = await agent.post('/api/get').send({
+      testSelection: 'api.AbortController.signal',
+      limitExposure: 'Window'
+    });
     expect(res).to.redirectTo(
       /\/tests\/api\/AbortController\/signal\?exposure=Window$/
     );
   });
 
   it('get specific test, hide results', async () => {
-    const res = await agent
-      .post('/api/get')
-      .send({
-        testSelection: 'api.AbortController.signal',
-        limitExposure: '',
-        selenium: true
-      });
+    const res = await agent.post('/api/get').send({
+      testSelection: 'api.AbortController.signal',
+      limitExposure: '',
+      selenium: true
+    });
     expect(res).to.redirectTo(
       /\/tests\/api\/AbortController\/signal\?selenium=true$/
     );
   });
 
   it('get specific test, limit exposure and hide results', async () => {
-    const res = await agent
-      .post('/api/get')
-      .send({
-        testSelection: 'api.AbortController.signal',
-        limitExposure: 'Window',
-        selenium: true
-      });
+    const res = await agent.post('/api/get').send({
+      testSelection: 'api.AbortController.signal',
+      limitExposure: 'Window',
+      selenium: true
+    });
     expect(res).to.redirectTo(
       /\/tests\/api\/AbortController\/signal\?selenium=true&exposure=Window$/
     );
