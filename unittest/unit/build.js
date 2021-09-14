@@ -14,12 +14,12 @@
 
 'use strict';
 
-import chai, {assert, expect} from "chai";
-import chaiSubset from "chai-subset";
+import chai, {assert, expect} from 'chai';
+import chaiSubset from 'chai-subset';
 chai.use(chaiSubset);
 
-import {parse} from "webidl2";
-import sinon from "sinon";
+import * as WebIDL2 from 'webidl2';
+import sinon from 'sinon';
 
 import {
   flattenIDL,
@@ -416,12 +416,12 @@ describe('build', () => {
 
   it('buildIDL', () => {
     const specIDLs = {
-      first: parse(`[Exposed=Window] interface DOMError {};`),
-      second: parse(`[Exposed=Window] interface XSLTProcessor {};`)
+      first: WebIDL2.parse(`[Exposed=Window] interface DOMError {};`),
+      second: WebIDL2.parse(`[Exposed=Window] interface XSLTProcessor {};`)
     };
 
     const customIDLs = {
-      second: parse(
+      second: WebIDL2.parse(
         `partial interface XSLTProcessor { undefined reset(); };`
       )
     };
@@ -432,19 +432,19 @@ describe('build', () => {
 
   describe('flattenIDL', () => {
     const customIDLs = {
-      first: parse(`[Exposed=Window] interface DOMError {};`),
-      second: parse(`[Exposed=Window] interface XSLTProcessor {};`)
+      first: WebIDL2.parse(`[Exposed=Window] interface DOMError {};`),
+      second: WebIDL2.parse(`[Exposed=Window] interface XSLTProcessor {};`)
     };
 
     it('interface + mixin', () => {
       const specIDLs = {
-        first: parse(
+        first: WebIDL2.parse(
           `[Exposed=Window]
              interface DummyError : Error {
                readonly attribute boolean imadumdum;
              };`
         ),
-        second: parse(
+        second: WebIDL2.parse(
           `[Exposed=Window]
              interface mixin DummyErrorHelper {
                DummyError geterror();
@@ -475,13 +475,13 @@ describe('build', () => {
 
     it('namespace + partial namespace', () => {
       const specIDLs = {
-        cssom: parse(
+        cssom: WebIDL2.parse(
           `[Exposed=Window]
              namespace CSS {
                boolean supports();
              };`
         ),
-        paint: parse(
+        paint: WebIDL2.parse(
           `partial namespace CSS {
                readonly attribute any paintWorklet;
              };`
@@ -511,12 +511,12 @@ describe('build', () => {
 
     it('mixin missing', () => {
       const specIDLs = {
-        first: parse(
+        first: WebIDL2.parse(
           `interface mixin DummyErrorHelper {
                DummyError geterror();
              };`
         ),
-        secnd: parse(`DummyError includes DummyErrorHelper;`)
+        secnd: WebIDL2.parse(`DummyError includes DummyErrorHelper;`)
       };
 
       expect(() => {
@@ -528,13 +528,13 @@ describe('build', () => {
 
     it('interface missing', () => {
       const specIDLs = {
-        first: parse(
+        first: WebIDL2.parse(
           `[Exposed=Window]
              interface DummyError : Error {
                readonly attribute boolean imadumdum;
              };`
         ),
-        secnd: parse(`DummyError includes DummyErrorHelper;`)
+        secnd: WebIDL2.parse(`DummyError includes DummyErrorHelper;`)
       };
 
       expect(() => {
@@ -546,18 +546,18 @@ describe('build', () => {
 
     it('Operation overloading', () => {
       const specIDLs = {
-        cssom: parse(
+        cssom: WebIDL2.parse(
           `[Exposed=Window]
              namespace CSS {
                boolean supports();
              };`
         ),
-        paint: parse(
+        paint: WebIDL2.parse(
           `partial namespace CSS {
                readonly attribute any paintWorklet;
              };`
         ),
-        paint2: parse(
+        paint2: WebIDL2.parse(
           `partial namespace CSS {
                boolean supports();
              };`
@@ -570,7 +570,7 @@ describe('build', () => {
 
     it('Partial missing main', () => {
       const specIDLs = {
-        paint: parse(
+        paint: WebIDL2.parse(
           `partial namespace CSS {
                readonly attribute any paintWorklet;
              };`
@@ -588,7 +588,7 @@ describe('build', () => {
 
     it('no defined exposure set', () => {
       const specIDLs = {
-        first: parse(
+        first: WebIDL2.parse(
           `interface Dummy {
                readonly attribute boolean imadumdum;
              };`
@@ -607,7 +607,7 @@ describe('build', () => {
 
     it('single exposure', () => {
       const specIDLs = {
-        first: parse(
+        first: WebIDL2.parse(
           `[Exposed=Worker]
              interface Dummy {
                readonly attribute boolean imadumdum;
@@ -622,7 +622,7 @@ describe('build', () => {
 
     it('multiple exposure', () => {
       const specIDLs = {
-        first: parse(
+        first: WebIDL2.parse(
           `[Exposed=(Window,Worker)]
              interface Dummy {
                readonly attribute boolean imadumdum;
@@ -637,7 +637,7 @@ describe('build', () => {
 
     it('exposed to DedicatedWorker', () => {
       const specIDLs = {
-        first: parse(
+        first: WebIDL2.parse(
           `[Exposed=DedicatedWorker]
              interface Dummy {
                readonly attribute boolean imadumdum;
@@ -653,7 +653,7 @@ describe('build', () => {
 
   describe('buildIDLTests', () => {
     it('interface with attribute', () => {
-      const ast = parse(
+      const ast = WebIDL2.parse(
         `[Exposed=Window]
            interface Attr {
              attribute any name;
@@ -672,7 +672,7 @@ describe('build', () => {
     });
 
     it('interface with method', () => {
-      const ast = parse(
+      const ast = WebIDL2.parse(
         `[Exposed=Window]
            interface Node {
              boolean contains(Node? other);
@@ -691,7 +691,7 @@ describe('build', () => {
     });
 
     it('interface with static method', () => {
-      const ast = parse(
+      const ast = WebIDL2.parse(
         `[Exposed=Window]
            interface MediaSource {
              static boolean isTypeSupported(DOMString type);
@@ -711,7 +711,7 @@ describe('build', () => {
     });
 
     it('interface with const', () => {
-      const ast = parse(
+      const ast = WebIDL2.parse(
         `[Exposed=Window]
            interface Window {
              const boolean isWindow = true;
@@ -727,7 +727,7 @@ describe('build', () => {
     });
 
     it('interface with custom test', () => {
-      const ast = parse(
+      const ast = WebIDL2.parse(
         `[Exposed=Window]
            interface ANGLE_instanced_arrays {
             undefined drawArraysInstancedANGLE(
@@ -784,7 +784,7 @@ describe('build', () => {
     });
 
     it('interface with legacy namespace', () => {
-      const ast = parse(
+      const ast = WebIDL2.parse(
         `[Exposed=Window, LegacyNamespace]
            interface Legacy {};`
       );
@@ -792,7 +792,7 @@ describe('build', () => {
     });
 
     it('global interface', () => {
-      const ast = parse(
+      const ast = WebIDL2.parse(
         `[Exposed=Worker, Global=Worker]
            interface WorkerGlobalScope {
              attribute boolean isLoaded;
@@ -813,7 +813,7 @@ describe('build', () => {
     });
 
     it('interface with constructor operation', () => {
-      const ast = parse(
+      const ast = WebIDL2.parse(
         `[Exposed=Window]
            interface Number {
              constructor(optional any value);
@@ -833,7 +833,7 @@ describe('build', () => {
     });
 
     it('iterable interface', () => {
-      const ast = parse(
+      const ast = WebIDL2.parse(
         `[Exposed=Window]
            interface DoubleList {
              iterable<double>;
@@ -868,7 +868,7 @@ describe('build', () => {
     });
 
     it('maplike interface', () => {
-      const ast = parse(
+      const ast = WebIDL2.parse(
         `[Exposed=Window]
            interface DoubleMap {
              maplike<DOMString, double>;
@@ -923,7 +923,7 @@ describe('build', () => {
     });
 
     it('setlike interface', () => {
-      const ast = parse(
+      const ast = WebIDL2.parse(
         `[Exposed=Window]
            interface DoubleSet {
              setlike<double>;
@@ -974,7 +974,7 @@ describe('build', () => {
     });
 
     it('interface with getter/setter', () => {
-      const ast = parse(
+      const ast = WebIDL2.parse(
         `[Exposed=Window]
            interface GetMe {
              getter GetMe (unsigned long index);
@@ -990,7 +990,7 @@ describe('build', () => {
     });
 
     it('varied exposure', () => {
-      const ast = parse(
+      const ast = WebIDL2.parse(
         `[Exposed=Window] interface Worker {};
            [Exposed=Worker] interface WorkerSync {};
            [Exposed=(Window,Worker)] interface MessageChannel {};
@@ -1017,7 +1017,7 @@ describe('build', () => {
     });
 
     it('interface with stringifier', () => {
-      const ast = parse(
+      const ast = WebIDL2.parse(
         `[Exposed=Window]
            interface Number {
              stringifier DOMString();
@@ -1037,7 +1037,7 @@ describe('build', () => {
     });
 
     it('operator variations', () => {
-      const ast = parse(
+      const ast = WebIDL2.parse(
         `[Exposed=Window]
            interface AudioNode : EventTarget {
              undefined disconnect ();
@@ -1058,7 +1058,7 @@ describe('build', () => {
     });
 
     it('namespace with attribute', () => {
-      const ast = parse(
+      const ast = WebIDL2.parse(
         `[Exposed=Window]
            namespace CSS {
              readonly attribute any paintWorklet;
@@ -1077,7 +1077,7 @@ describe('build', () => {
     });
 
     it('namespace with method', () => {
-      const ast = parse(
+      const ast = WebIDL2.parse(
         `[Exposed=Window]
            namespace CSS {
              boolean supports(CSSOMString property, CSSOMString value);
@@ -1096,7 +1096,7 @@ describe('build', () => {
     });
 
     it('namespace with custom test', () => {
-      const ast = parse(
+      const ast = WebIDL2.parse(
         `[Exposed=Window]
            namespace Scope {
              readonly attribute any specialWorklet;
@@ -1116,7 +1116,7 @@ describe('build', () => {
     });
 
     it('interface with legacy factory function', () => {
-      const ast = parse(
+      const ast = WebIDL2.parse(
         `[
              Exposed=Window,
              LegacyFactoryFunction=Image(DOMString src)
@@ -1139,7 +1139,7 @@ describe('build', () => {
 
   describe('validateIDL', () => {
     it('valid idl', () => {
-      const ast = parse(
+      const ast = WebIDL2.parse(
         `[Exposed=Window]
            interface Node {
              boolean contains(Node otherNode);
@@ -1151,7 +1151,7 @@ describe('build', () => {
     });
 
     it('unknown types', () => {
-      const ast = parse(
+      const ast = WebIDL2.parse(
         `[Exposed=Window]
            interface Dummy {
              attribute Dumdum imadumdum;
@@ -1163,7 +1163,7 @@ describe('build', () => {
     });
 
     it('ignored unknown types', () => {
-      const ast = parse(
+      const ast = WebIDL2.parse(
         `[Exposed=Window]
            interface Dummy {
              attribute CSSOMString style;

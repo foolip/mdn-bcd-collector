@@ -17,7 +17,7 @@
 import fs from 'fs-extra';
 import path from 'path';
 import {fileURLToPath} from 'url';
-import {parse} from 'webidl2';
+import * as WebIDL2 from 'webidl2';
 
 // Load text (UTF-8) files from a directory and return an object mapping each
 // name (sans extension) to the parsed result of that text.
@@ -32,7 +32,7 @@ const parseIDL = async () => {
     }
     const name = path.parse(file).name;
     const text = await fs.readFile(path.join(dirname, file), 'utf8');
-    results[name] = parse(text);
+    results[name] = WebIDL2.parse(text);
   }
   return results;
 };
