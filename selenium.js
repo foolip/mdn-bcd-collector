@@ -37,7 +37,9 @@ import {hideBin} from 'yargs/helpers';
 
 const secrets = await fs.readJson('./secrets.json');
 
-const resultsDir = fileURLToPath(new URL('../mdn-bcd-results', import.meta.url));
+const resultsDir = fileURLToPath(
+  new URL('../mdn-bcd-results', import.meta.url)
+);
 
 const testenv = process.env.NODE_ENV === 'test';
 const host = `https://${
@@ -513,13 +515,7 @@ const runAll = async (limitBrowsers, oses, nonConcurrent, reverse) => {
     }
   });
 
-  try {
-    await taskrun.run({testenv});
-    return true;
-  } catch (e) {
-    console.error(e);
-    return false;
-  }
+  await taskrun.run({testenv});
 };
 
 /* istanbul ignore if */
@@ -555,10 +551,5 @@ if (esMain(import.meta)) {
     }
   );
 
-  if (
-    (await runAll(argv.browser, argv.os, argv.nonConcurrent, argv.reverse)) ===
-    false
-  ) {
-    process.exit(1);
-  }
+  await runAll(argv.browser, argv.os, argv.nonConcurrent, argv.reverse);
 }
