@@ -296,7 +296,7 @@ const reports = [
   }
 ];
 
-describe('BCD updater', async () => {
+describe('BCD updater', () => {
   describe('findEntry', () => {
     it('equal', () => {
       assert.strictEqual(

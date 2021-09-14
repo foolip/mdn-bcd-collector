@@ -31,10 +31,7 @@ const parseIDL = async () => {
       continue;
     }
     const name = path.parse(file).name;
-    const text = await fs.readFile(
-      fileURLToPath(new URL(`./${file}`, import.meta.url)),
-      'utf8'
-    );
+    const text = await fs.readFile(path.join(dirname, file), 'utf8');
     results[name] = parse(text);
   }
   return results;

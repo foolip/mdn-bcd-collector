@@ -39,7 +39,7 @@ const customTests = YAML.parse(
 const customCSS = await fs.readJson('./custom-css.json');
 const customJS = await fs.readJson('./custom-js.json');
 
-const generatedDir = fileURLToPath(new URL('./generated', import.meta.url));
+const generatedDir = './generated';
 
 const formatCode = (code) => {
   return prettier
@@ -790,9 +790,7 @@ const copyResources = async () => {
     ['@mdi/font/fonts/materialdesignicons-webfont.woff2', 'fonts']
   ];
   for (const [srcInModules, destInGenerated, newFilename] of resources) {
-    const src = fileURLToPath(
-      new URL(`./node_modules/${srcInModules}`, import.meta.url)
-    );
+    const src = `./node_modules/${srcInModules}`;
     const destDir = path.join(generatedDir, destInGenerated);
     const dest = path.join(destDir, path.basename(src));
     await fs.ensureDir(path.dirname(dest));
@@ -812,7 +810,7 @@ const build = async (customIDL, customCSS) => {
   const JSTests = buildJS(customJS);
   const tests = Object.assign({}, IDLTests, CSSTests, JSTests);
 
-  await fs.writeJson(new URL('./tests.json', import.meta.url), tests);
+  await fs.writeJson('./tests.json', tests);
   await copyResources();
 };
 

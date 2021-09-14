@@ -39,7 +39,7 @@ const storage = getStorage();
 
 const appVersion =
   process.env.GAE_VERSION === 'production' ?
-    (await fs.readJson('./package.json'))?.version :
+    (await fs.readJson('./package.json')).version :
     'Dev';
 
 /* istanbul ignore next */

@@ -60,7 +60,7 @@ const REPORTS = [
   }
 ];
 
-describe('GitHub export', async () => {
+describe('GitHub export', () => {
   const octokit = new Octokit();
 
   describe('happy path', async () => {

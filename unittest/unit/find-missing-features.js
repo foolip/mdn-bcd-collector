@@ -22,7 +22,7 @@ import {traverseFeatures, getMissing} from '../../find-missing-features.js';
 
 import bcd from './bcd.test.js';
 
-describe('find-missing', async () => {
+describe('find-missing', () => {
   it('traverseFeatures', () => {
     assert.deepEqual(traverseFeatures(bcd, ''), [
       'api.AbortController',
