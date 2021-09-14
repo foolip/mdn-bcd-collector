@@ -28,9 +28,9 @@ import customIDL from './custom-idl/index.js';
 /* istanbul ignore next */
 const customTests = YAML.parse(
   await fs.readFile(
-    process.env.NODE_ENV === 'test'
-      ? './unittest/unit/custom-tests.test.yaml'
-      : './custom-tests.yaml',
+    process.env.NODE_ENV === 'test' ?
+      './unittest/unit/custom-tests.test.yaml' :
+      './custom-tests.yaml',
     'utf8'
   )
 );
@@ -102,14 +102,14 @@ const getCustomTestAPI = (name, member, type) => {
         test = testbase + customTests.api[name].__test;
       } else {
         const returnValue = '!!instance';
-        test = testbase
-          ? testbase +
-            (promise
-              ? `return promise.then(function(instance) {return ${returnValue}});`
-              : callback
-              ? `function callback(instance) {success(${returnValue})}; return 'callback';`
-              : `return ${returnValue};`)
-          : false;
+        test = testbase ?
+          testbase +
+            (promise ?
+              `return promise.then(function(instance) {return ${returnValue}});` :
+              callback ?
+              `function callback(instance) {success(${returnValue})}; return 'callback';` :
+              `return ${returnValue};`) :
+          false;
       }
     } else {
       if (
@@ -127,14 +127,14 @@ const getCustomTestAPI = (name, member, type) => {
           test = false;
         } else {
           const returnValue = `'${member}' in instance`;
-          test = testbase
-            ? testbase +
-              (promise
-                ? `return promise.then(function(instance) {return ${returnValue}});`
-                : callback
-                ? `function callback(instance) {success(${returnValue})}; return 'callback';`
-                : `return ${returnValue};`)
-            : false;
+          test = testbase ?
+            testbase +
+              (promise ?
+                `return promise.then(function(instance) {return ${returnValue}});` :
+                callback ?
+                `function callback(instance) {success(${returnValue})}; return 'callback';` :
+                `return ${returnValue};`) :
+            false;
         }
       }
     }
@@ -181,9 +181,9 @@ const getCustomResourcesAPI = (name) => {
       if (Object.keys(customTests.api.__resources).includes(key)) {
         const r = customTests.api.__resources[key];
         resources[key] =
-          r.type == 'instance'
-            ? {...r, src: formatCode(r.src)}
-            : customTests.api.__resources[key];
+          r.type == 'instance' ?
+            {...r, src: formatCode(r.src)} :
+            customTests.api.__resources[key];
       } else {
         throw new Error(
           `Resource ${key} is not defined but referenced in api.${name}`
