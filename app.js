@@ -195,7 +195,7 @@ app.all('/export', (req, res, next) => {
           });
         } else {
           res.render('export', {
-            title: 'Exported to GitHub',
+            title: 'GitHub Export Disabled',
             description: '[No GitHub Token, GitHub Export Disabled]',
             url: '/'
           });
