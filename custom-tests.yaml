@@ -1524,7 +1524,7 @@ api:
 
       var instance = new constructor({iceServers: []});
   RTCSessionDescription:
-    __base: "var instance = new RTCSessionDescription({type: offer});"
+    __base: 'var instance = new RTCSessionDescription({type: offer});'
   Screen:
     __base: var instance = window.screen;
   ScriptProcessorNode:
