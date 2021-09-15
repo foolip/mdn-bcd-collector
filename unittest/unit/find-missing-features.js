@@ -15,12 +15,13 @@
 'use strict';
 
 import {assert} from 'chai';
-
 import sinon from 'sinon';
+import fs from 'fs-extra';
 
 import {traverseFeatures, getMissing} from '../../find-missing-features.js';
 
 import bcd from './bcd.test.js';
+const tests = fs.readJson(new URL('./tests.test.json', import.meta.url));
 
 describe('find-missing', () => {
   it('traverseFeatures', () => {
@@ -51,7 +52,7 @@ describe('find-missing', () => {
     });
 
     it('collector <- bcd', () => {
-      assert.deepEqual(getMissing(), {
+      assert.deepEqual(getMissing(bcd, tests), {
         missingEntries: [
           'api.AbortController.AbortController',
           'api.AbortController.abort',
@@ -72,14 +73,14 @@ describe('find-missing', () => {
     });
 
     it('bcd <- collector', () => {
-      assert.deepEqual(getMissing('bcd-from-collector'), {
+      assert.deepEqual(getMissing(bcd, tests, 'bcd-from-collector'), {
         missingEntries: ['javascript.builtins.Error'],
         total: 5
       });
     });
 
     it('filter category', () => {
-      assert.deepEqual(getMissing('collector-from-bcd', ['api']), {
+      assert.deepEqual(getMissing(bcd, tests, 'collector-from-bcd', ['api']), {
         missingEntries: [
           'api.AbortController.AbortController',
           'api.AbortController.abort',
@@ -98,7 +99,7 @@ describe('find-missing', () => {
     });
 
     it('unknown direction', () => {
-      assert.deepEqual(getMissing('foo-from-bar'), {
+      assert.deepEqual(getMissing(bcd, tests, 'foo-from-bar'), {
         missingEntries: [
           'api.AbortController.AbortController',
           'api.AbortController.abort',

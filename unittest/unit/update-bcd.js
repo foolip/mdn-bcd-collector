@@ -15,8 +15,8 @@
 'use strict';
 
 import {assert} from 'chai';
-
 import sinon from 'sinon';
+import fs from 'fs-extra';
 
 import logger from '../../logger.js';
 import {
@@ -28,6 +28,9 @@ import {
 } from '../../update-bcd.js';
 
 import bcd from './bcd.test.js';
+const overrides = fs.readJson(
+  new URL('./overrides.test.json', import.meta.url)
+);
 
 const reports = [
   {
@@ -372,7 +375,7 @@ describe('BCD updater', () => {
 
     it('normal', () => {
       assert.deepEqual(
-        getSupportMatrix(reports),
+        getSupportMatrix(reports, bcd, overrides),
         new Map([
           [
             'api.AbortController',
@@ -601,7 +604,7 @@ describe('BCD updater', () => {
       'css.properties.font-face': {chrome: []}
     };
 
-    const supportMatrix = getSupportMatrix(reports);
+    const supportMatrix = getSupportMatrix(reports, bcd, overrides);
     for (const [path, browserMap] of supportMatrix.entries()) {
       for (const [browser, versionMap] of browserMap.entries()) {
         it(`${path}: ${browser}`, () => {
@@ -645,7 +648,7 @@ describe('BCD updater', () => {
   });
 
   describe('update', () => {
-    const supportMatrix = getSupportMatrix(reports);
+    const supportMatrix = getSupportMatrix(reports, bcd, overrides);
     let bcdCopy;
 
     beforeEach(() => {

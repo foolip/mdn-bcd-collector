@@ -11,25 +11,15 @@ import klaw from 'klaw';
 import minimatch from 'minimatch';
 const {Minimatch} = minimatch;
 import path from 'path';
+import {fileURLToPath} from 'url';
 import yargs from 'yargs';
 import {hideBin} from 'yargs/helpers';
 
 import logger from './logger.js';
 import {parseUA} from './ua-parser.js';
 
-const overrides = (await fs.readJson(
-    process.env.NODE_ENV === 'test' ?
-      './unittest/unit/overrides.test.json' :
-      './overrides.json'
-)).filter(Array.isArray);
-
-const BCD_DIR = process.env.BCD_DIR || `../browser-compat-data`;
-const {
-  default: {browsers}
-} = await import(
-  process.env.NODE_ENV === 'test' ?
-    './unittest/unit/bcd.test.js' :
-    `${BCD_DIR}/index.js`
+const BCD_DIR = fileURLToPath(
+  new URL(process.env.BCD_DIR || `../browser-compat-data`, import.meta.url)
 );
 
 const findEntry = (bcd, ident) => {
@@ -106,7 +96,7 @@ const getSupportMap = (report) => {
 
 // Load all reports and build a map from BCD path to browser + version
 // and test result (null/true/false) for that version.
-const getSupportMatrix = (reports) => {
+const getSupportMatrix = (reports, browsers, overrides) => {
   const supportMatrix = new Map();
 
   for (const report of reports) {
@@ -407,7 +397,7 @@ const loadJsonFiles = async (paths) => {
 };
 
 /* istanbul ignore next */
-const main = async (reportPaths, filter) => {
+const main = async (reportPaths, filter, browsers, overrides) => {
   // Replace filter.path with a minimatch object.
   if (filter.path) {
     filter.path = new Minimatch(filter.path);
@@ -418,7 +408,11 @@ const main = async (reportPaths, filter) => {
   );
 
   const reports = Object.values(await loadJsonFiles(reportPaths));
-  const supportMatrix = getSupportMatrix(reports);
+  const supportMatrix = getSupportMatrix(
+    reports,
+    browsers,
+    overrides.filter(Array.isArray)
+  );
 
   // Should match https://github.com/mdn/browser-compat-data/blob/f10bf2cc7d1b001a390e70b7854cab9435ffb443/test/linter/test-style.js#L63
   // TODO: https://github.com/mdn/browser-compat-data/issues/3617
@@ -476,7 +470,14 @@ if (esMain(import.meta)) {
     }
   );
 
-  await main(argv.reports, argv);
+  const {
+    default: {browsers}
+  } = await import(`${BCD_DIR}/index.js`);
+  const overrides = await fs.readJson(
+    new URL('./overrides.json', import.meta.url)
+  );
+
+  await main(argv.reports, argv, browsers, overrides);
 }
 
 export {

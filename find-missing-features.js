@@ -2,20 +2,9 @@
 
 import esMain from 'es-main';
 import fs from 'fs-extra';
+import {fileURLToPath} from 'url';
 import yargs from 'yargs';
 import {hideBin} from 'yargs/helpers';
-
-const BCD_DIR = process.env.BCD_DIR || `../browser-compat-data`;
-const {default: bcd} = await import(
-  process.env.NODE_ENV === 'test' ?
-    './unittest/unit/bcd.test.js' :
-    `${BCD_DIR}/index.js`
-);
-
-const tests = await fs.readJson(
-    process.env.NODE_ENV === 'test' ?
-      './unittest/unit/tests.test.json' :
-      './tests.json');
 
 const traverseFeatures = (obj, path, includeAliases) => {
   const features = [];
@@ -79,6 +68,8 @@ const findMissing = (entries, allEntries) => {
 };
 
 const getMissing = (
+  bcd,
+  tests,
   direction = 'collector-from-bcd',
   category = [],
   includeAliases = false
@@ -114,7 +105,7 @@ const getMissing = (
 };
 
 /* istanbul ignore next */
-const main = () => {
+const main = (bcd, tests) => {
   const {argv} = yargs(hideBin(process.argv)).command(
     '$0 [--direction]',
     'Find missing entries between BCD and the collector tests',
@@ -146,6 +137,8 @@ const main = () => {
   );
 
   const {missingEntries, total} = getMissing(
+    bcd,
+    tests,
     argv.direction,
     argv.category,
     argv.includeAliases
@@ -161,7 +154,13 @@ const main = () => {
 
 /* istanbul ignore if */
 if (esMain(import.meta)) {
-  main();
+  const BCD_DIR = fileURLToPath(
+    new URL(process.env.BCD_DIR || `../browser-compat-data`, import.meta.url)
+  );
+  const {default: bcd} = await import(`${BCD_DIR}/index.js`);
+  const tests = await fs.readJson(new URL('./tests.json', import.meta.url));
+
+  main(bcd, tests);
 }
 
 export {traverseFeatures, findMissing, getMissing};
