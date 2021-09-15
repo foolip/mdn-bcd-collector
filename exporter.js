@@ -77,11 +77,11 @@ const createBody = (meta) => {
 
 const exportAsPR = async (report, octokit) => {
   if (!octokit) {
-    return null;
+    throw new Error('"octokit" must be defined');
   }
 
   if ((await octokit.auth()).type == 'unauthenticated') {
-    return null;
+    throw new Error('Octokit authentication failure');
   }
 
   const meta = getReportMeta(report);
