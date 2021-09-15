@@ -1513,7 +1513,7 @@ api:
       <%api.RTCDataChannel:channel%>
       var instance = new RTCDataChannelEvent('', {channel: channel});
   RTCDTMFToneChangeEvent:
-    __base: "new RTCDTMFToneChangeEvent('', {tone: ''});"
+    __base: "var instance = new RTCDTMFToneChangeEvent('tonechange', {tone: ''});"
   RTCPeerConnection:
     __base: >-
       /* Firefox briefly defines RTCPeerConnection in older versions, but it is not a valid constructor until later versions. */
@@ -1523,6 +1523,8 @@ api:
       };
 
       var instance = new constructor({iceServers: []});
+  RTCSessionDescription:
+    __base: "var instance = new RTCSessionDescription({type: 'offer'});"
   Screen:
     __base: var instance = window.screen;
   ScriptProcessorNode:
