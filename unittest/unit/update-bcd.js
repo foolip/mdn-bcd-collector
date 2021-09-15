@@ -28,7 +28,7 @@ import {
 } from '../../update-bcd.js';
 
 import bcd from './bcd.test.js';
-const overrides = fs.readJson(
+const overrides = await fs.readJson(
   new URL('./overrides.test.json', import.meta.url)
 );
 
@@ -375,7 +375,7 @@ describe('BCD updater', () => {
 
     it('normal', () => {
       assert.deepEqual(
-        getSupportMatrix(reports, bcd, overrides),
+        getSupportMatrix(reports, bcd.browsers, overrides),
         new Map([
           [
             'api.AbortController',
@@ -604,7 +604,7 @@ describe('BCD updater', () => {
       'css.properties.font-face': {chrome: []}
     };
 
-    const supportMatrix = getSupportMatrix(reports, bcd, overrides);
+    const supportMatrix = getSupportMatrix(reports, bcd.browsers, overrides);
     for (const [path, browserMap] of supportMatrix.entries()) {
       for (const [browser, versionMap] of browserMap.entries()) {
         it(`${path}: ${browser}`, () => {
@@ -633,7 +633,7 @@ describe('BCD updater', () => {
             userAgent:
               'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.61 Safari/537.36'
           };
-          const versionMap = getSupportMatrix([report])
+          const versionMap = getSupportMatrix([report], bcd.browsers, overrides)
             .entries()
             .next()
             .value[1].entries()
@@ -648,7 +648,7 @@ describe('BCD updater', () => {
   });
 
   describe('update', () => {
-    const supportMatrix = getSupportMatrix(reports, bcd, overrides);
+    const supportMatrix = getSupportMatrix(reports, bcd.browsers, overrides);
     let bcdCopy;
 
     beforeEach(() => {

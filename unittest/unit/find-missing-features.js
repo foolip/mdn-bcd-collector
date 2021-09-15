@@ -21,9 +21,9 @@ import fs from 'fs-extra';
 import {traverseFeatures, getMissing} from '../../find-missing-features.js';
 
 import bcd from './bcd.test.js';
-const tests = fs.readJson(new URL('./tests.test.json', import.meta.url));
+const tests = await fs.readJson(new URL('./tests.test.json', import.meta.url));
 
-describe('find-missing', () => {
+describe('find-missing-features', () => {
   it('traverseFeatures', () => {
     assert.deepEqual(traverseFeatures(bcd, ''), [
       'api.AbortController',

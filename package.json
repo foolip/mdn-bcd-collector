@@ -66,6 +66,7 @@
     "@webref/idl": "2.4.0",
     "c8": "7.9.0",
     "chai": "4.3.4",
+    "chai-as-promised": "^7.1.1",
     "chai-fs": "2.0.0",
     "chai-http": "4.3.0",
     "chai-subset": "1.6.0",

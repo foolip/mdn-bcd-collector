@@ -14,7 +14,9 @@
 
 'use strict';
 
-import {assert} from 'chai';
+import chai, {assert, expect} from 'chai';
+import chaiAsPromised from 'chai-as-promised';
+chai.use(chaiAsPromised);
 
 import sinon from 'sinon';
 import {Octokit} from '@octokit/rest';
@@ -130,7 +132,6 @@ describe('GitHub export', () => {
   });
 
   it('no auth token', async () => {
-    const result = await exporter.exportAsPR(REPORTS[0].report);
-    assert.equal(result, null);
+    expect(exporter.exportAsPR(REPORTS[0].report)).to.be.rejectedWith(Error);
   });
 });
