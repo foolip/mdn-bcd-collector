@@ -1307,7 +1307,7 @@ api:
       - audioContext
     __base: >-
       <%api.AudioBuffer:buffer%>
-      var instance = new OfflineAudioCompletionEvent('', {renderedBuffer: buffer});
+      var instance = new OfflineAudioCompletionEvent('complete', {renderedBuffer: buffer});
   OfflineAudioContext:
     __resources:
       - offlineAudioContext
@@ -1511,7 +1511,7 @@ api:
   RTCDataChannelEvent:
     __base: >-
       <%api.RTCDataChannel:channel%>
-      var instance = new RTCDataChannelEvent('', {channel: channel});
+      var instance = new RTCDataChannelEvent('datachannel', {channel: channel});
   RTCDTMFToneChangeEvent:
     __base: "var instance = new RTCDTMFToneChangeEvent('tonechange', {tone: ''});"
   RTCPeerConnection:
