@@ -14,74 +14,31 @@
 
 'use strict';
 
-const assert = require('chai').assert;
+import {assert} from 'chai';
+import sinon from 'sinon';
+import fs from 'fs-extra';
 
-const proxyquire = require('proxyquire').noCallThru();
-const sinon = require('sinon');
+import {traverseFeatures, getMissing} from '../../find-missing-features.js';
 
-const tests = {
-  'api.AbortController': {},
-  'api.AbortController.signal': {},
-  'css.properties.font-family': {},
-  'javascript.builtins.Array': {},
-  'javascript.builtins.Error': {}
-};
-const bcd = {
-  api: {
-    AbortController: {
-      __compat: {},
-      dummy: {
-        __compat: {}
-      },
-      signal: {
-        __compat: {}
-      }
-    },
-    DummyAPI: {
-      __compat: {},
-      dummy: {
-        __compat: {}
-      }
-    }
-  },
-  css: {
-    properties: {
-      'font-family': {
-        __compat: {}
-      },
-      'font-face': {
-        __compat: {}
-      }
-    }
-  },
-  javascript: {
-    builtins: {
-      Array: {
-        __compat: {}
-      },
-      Date: {
-        __compat: {}
-      }
-    }
-  }
-};
+import bcd from './bcd.test.js';
+const tests = await fs.readJson(new URL('./tests.test.json', import.meta.url));
 
-const {traverseFeatures, getMissing} = proxyquire(
-  '../../find-missing-features',
-  {
-    './tests.json': tests,
-    '../browser-compat-data': bcd
-  }
-);
-
-describe('find-missing', () => {
+describe('find-missing-features', () => {
   it('traverseFeatures', () => {
     assert.deepEqual(traverseFeatures(bcd, ''), [
       'api.AbortController',
+      'api.AbortController.AbortController',
+      'api.AbortController.abort',
       'api.AbortController.dummy',
       'api.AbortController.signal',
+      'api.AudioContext',
+      'api.AudioContext.close',
+      'api.DeprecatedInterface',
       'api.DummyAPI',
       'api.DummyAPI.dummy',
+      'api.ExperimentalInterface',
+      'api.NullAPI',
+      'api.RemovedInterface',
       'css.properties.font-family',
       'css.properties.font-face',
       'javascript.builtins.Array',
@@ -95,46 +52,70 @@ describe('find-missing', () => {
     });
 
     it('collector <- bcd', () => {
-      assert.deepEqual(getMissing(), {
+      assert.deepEqual(getMissing(bcd, tests), {
         missingEntries: [
+          'api.AbortController.AbortController',
+          'api.AbortController.abort',
           'api.AbortController.dummy',
+          'api.AudioContext',
+          'api.AudioContext.close',
+          'api.DeprecatedInterface',
           'api.DummyAPI',
           'api.DummyAPI.dummy',
+          'api.ExperimentalInterface',
+          'api.NullAPI',
+          'api.RemovedInterface',
           'css.properties.font-face',
           'javascript.builtins.Date'
         ],
-        total: 9
+        total: 17
       });
     });
 
     it('bcd <- collector', () => {
-      assert.deepEqual(getMissing('bcd-from-collector'), {
+      assert.deepEqual(getMissing(bcd, tests, 'bcd-from-collector'), {
         missingEntries: ['javascript.builtins.Error'],
         total: 5
       });
     });
 
     it('filter category', () => {
-      assert.deepEqual(getMissing('collector-from-bcd', ['api']), {
+      assert.deepEqual(getMissing(bcd, tests, 'collector-from-bcd', ['api']), {
         missingEntries: [
+          'api.AbortController.AbortController',
+          'api.AbortController.abort',
           'api.AbortController.dummy',
+          'api.AudioContext',
+          'api.AudioContext.close',
+          'api.DeprecatedInterface',
           'api.DummyAPI',
-          'api.DummyAPI.dummy'
+          'api.DummyAPI.dummy',
+          'api.ExperimentalInterface',
+          'api.NullAPI',
+          'api.RemovedInterface'
         ],
-        total: 5
+        total: 13
       });
     });
 
     it('unknown direction', () => {
-      assert.deepEqual(getMissing('foo-from-bar'), {
+      assert.deepEqual(getMissing(bcd, tests, 'foo-from-bar'), {
         missingEntries: [
+          'api.AbortController.AbortController',
+          'api.AbortController.abort',
           'api.AbortController.dummy',
+          'api.AudioContext',
+          'api.AudioContext.close',
+          'api.DeprecatedInterface',
           'api.DummyAPI',
           'api.DummyAPI.dummy',
+          'api.ExperimentalInterface',
+          'api.NullAPI',
+          'api.RemovedInterface',
           'css.properties.font-face',
           'javascript.builtins.Date'
         ],
-        total: 9
+        total: 17
       });
 
       assert.isTrue(

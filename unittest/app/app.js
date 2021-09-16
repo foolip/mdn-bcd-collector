@@ -14,20 +14,23 @@
 
 'use strict';
 
-const chai = require('chai');
-const chaiHttp = require('chai-http');
+import chai, {assert, expect} from 'chai';
+import chaiHttp from 'chai-http';
 chai.use(chaiHttp);
-const assert = chai.assert;
-const expect = chai.expect;
 
-const {app, version} = require('../../app');
+import fs from 'fs-extra';
+
+import {app, version} from '../../app.js';
 const agent = chai.request.agent(app);
 
-const tests = Object.entries(require('../../tests.json'));
+const tests = Object.entries(
+  await fs.readJson(new URL('../../tests.json', import.meta.url))
+);
+const packageLock = await fs.readJson(
+  new URL('../../package-lock.json', import.meta.url)
+);
 
-const userAgent = `node-superagent/${
-  require('../../package-lock.json').dependencies.superagent.version
-}`;
+const userAgent = `node-superagent/${packageLock.dependencies.superagent.version}`;
 
 describe('/api/results', () => {
   it('missing `Content-Type` header', async () => {
@@ -179,38 +182,32 @@ describe('/api/get', () => {
   });
 
   it('get specific test, limit exposure', async () => {
-    const res = await agent
-      .post('/api/get')
-      .send({
-        testSelection: 'api.AbortController.signal',
-        limitExposure: 'Window'
-      });
+    const res = await agent.post('/api/get').send({
+      testSelection: 'api.AbortController.signal',
+      limitExposure: 'Window'
+    });
     expect(res).to.redirectTo(
       /\/tests\/api\/AbortController\/signal\?exposure=Window$/
     );
   });
 
   it('get specific test, hide results', async () => {
-    const res = await agent
-      .post('/api/get')
-      .send({
-        testSelection: 'api.AbortController.signal',
-        limitExposure: '',
-        selenium: true
-      });
+    const res = await agent.post('/api/get').send({
+      testSelection: 'api.AbortController.signal',
+      limitExposure: '',
+      selenium: true
+    });
     expect(res).to.redirectTo(
       /\/tests\/api\/AbortController\/signal\?selenium=true$/
     );
   });
 
   it('get specific test, limit exposure and hide results', async () => {
-    const res = await agent
-      .post('/api/get')
-      .send({
-        testSelection: 'api.AbortController.signal',
-        limitExposure: 'Window',
-        selenium: true
-      });
+    const res = await agent.post('/api/get').send({
+      testSelection: 'api.AbortController.signal',
+      limitExposure: 'Window',
+      selenium: true
+    });
     expect(res).to.redirectTo(
       /\/tests\/api\/AbortController\/signal\?selenium=true&exposure=Window$/
     );

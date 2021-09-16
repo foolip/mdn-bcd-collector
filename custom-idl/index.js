@@ -14,14 +14,14 @@
 
 'use strict';
 
-const fs = require('fs');
-const path = require('path');
-const WebIDL2 = require('webidl2');
+import fs from 'fs-extra';
+import path from 'path';
+import * as WebIDL2 from 'webidl2';
 
 // Load text (UTF-8) files from a directory and return an object mapping each
 // name (sans extension) to the parsed result of that text.
-const parseIDL = () => {
-  const files = fs.readdirSync(__dirname);
+const parseIDL = async () => {
+  const files = await fs.readdir(new URL('.', import.meta.url));
   files.sort();
   const results = {};
   for (const file of files) {
@@ -30,10 +30,13 @@ const parseIDL = () => {
       continue;
     }
     const name = path.parse(file).name;
-    const text = fs.readFileSync(path.join(__dirname, file), 'utf8');
+    const text = await fs.readFile(
+      new URL(`./${file}`, import.meta.url),
+      'utf8'
+    );
     results[name] = WebIDL2.parse(text);
   }
   return results;
 };
 
-module.exports = parseIDL();
+export default parseIDL();

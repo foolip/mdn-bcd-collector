@@ -1,8 +1,10 @@
 'use strict';
 
-const BCD_DIR = process.env.BCD_DIR || `../browser-compat-data`;
-const bcd = require(BCD_DIR);
-const tests = require('./tests.json');
+import esMain from 'es-main';
+import fs from 'fs-extra';
+import {fileURLToPath} from 'url';
+import yargs from 'yargs';
+import {hideBin} from 'yargs/helpers';
 
 const traverseFeatures = (obj, path, includeAliases) => {
   const features = [];
@@ -46,7 +48,7 @@ const traverseFeatures = (obj, path, includeAliases) => {
     }
 
     features.push(
-        ...traverseFeatures(obj[id], path + id + '.', includeAliases)
+      ...traverseFeatures(obj[id], path + id + '.', includeAliases)
     );
   }
 
@@ -66,9 +68,11 @@ const findMissing = (entries, allEntries) => {
 };
 
 const getMissing = (
-    direction = 'collector-from-bcd',
-    category = [],
-    includeAliases = false
+  bcd,
+  tests,
+  direction = 'collector-from-bcd',
+  category = [],
+  includeAliases = false
 ) => {
   const filterCategory = (item) => {
     return (
@@ -80,9 +84,9 @@ const getMissing = (
     ...traverseFeatures(bcd.api, 'api.', includeAliases),
     ...traverseFeatures(bcd.css.properties, 'css.properties.', includeAliases),
     ...traverseFeatures(
-        bcd.javascript.builtins,
-        'javascript.builtins.',
-        includeAliases
+      bcd.javascript.builtins,
+      'javascript.builtins.',
+      includeAliases
     )
   ].filter(filterCategory);
   const collectorEntries = Object.keys(tests).filter(filterCategory);
@@ -92,7 +96,7 @@ const getMissing = (
       return findMissing(bcdEntries, collectorEntries);
     default:
       console.log(
-          `Direction '${direction}' is unknown; defaulting to collector <- bcd`
+        `Direction '${direction}' is unknown; defaulting to collector <- bcd`
       );
     // eslint-disable-next-line no-fallthrough
     case 'collector-from-bcd':
@@ -101,58 +105,62 @@ const getMissing = (
 };
 
 /* istanbul ignore next */
-const main = () => {
-  const {argv} = require('yargs').command(
-      '$0 [--direction]',
-      'Find missing entries between BCD and the collector tests',
-      (yargs) => {
-        yargs
-            .option('include-aliases', {
-              alias: 'a',
-              describe: 'Include BCD entries using prefix or alternative_name',
-              type: 'boolean',
-              default: false
-            })
-            .option('direction', {
-              alias: 'd',
-              describe:
+const main = (bcd, tests) => {
+  const {argv} = yargs(hideBin(process.argv)).command(
+    '$0 [--direction]',
+    'Find missing entries between BCD and the collector tests',
+    (yargs) => {
+      yargs
+        .option('include-aliases', {
+          alias: 'a',
+          describe: 'Include BCD entries using prefix or alternative_name',
+          type: 'boolean',
+          default: false
+        })
+        .option('direction', {
+          alias: 'd',
+          describe:
             'Which direction to find missing entries from ("a-from-b" will check what is in a that is missing from b)',
-              choices: ['bcd-from-collector', 'collector-from-bcd'],
-              nargs: 1,
-              type: 'string',
-              default: 'collector-from-bcd'
-            })
-            .option('category', {
-              alias: 'c',
-              describe: 'The BCD categories to filter',
-              type: 'array',
-              choices: ['api', 'css.properties', 'javascript.builtins'],
-              default: ['api', 'css.properties', 'javascript.builtins']
-            });
-      }
+          choices: ['bcd-from-collector', 'collector-from-bcd'],
+          nargs: 1,
+          type: 'string',
+          default: 'collector-from-bcd'
+        })
+        .option('category', {
+          alias: 'c',
+          describe: 'The BCD categories to filter',
+          type: 'array',
+          choices: ['api', 'css.properties', 'javascript.builtins'],
+          default: ['api', 'css.properties', 'javascript.builtins']
+        });
+    }
   );
 
   const {missingEntries, total} = getMissing(
-      argv.direction,
-      argv.category,
-      argv.includeAliases
+    bcd,
+    tests,
+    argv.direction,
+    argv.category,
+    argv.includeAliases
   );
   console.log(missingEntries.join('\n'));
   console.log(
-      `\n${missingEntries.length}/${total} (${(
-        (missingEntries.length / total) *
+    `\n${missingEntries.length}/${total} (${(
+      (missingEntries.length / total) *
       100.0
-      ).toFixed(2)}%) missing`
+    ).toFixed(2)}%) missing`
   );
 };
 
-module.exports = {
-  traverseFeatures,
-  findMissing,
-  getMissing
-};
-
 /* istanbul ignore if */
-if (require.main === module) {
-  main();
+if (esMain(import.meta)) {
+  const BCD_DIR = fileURLToPath(
+    new URL(process.env.BCD_DIR || `../browser-compat-data`, import.meta.url)
+  );
+  const {default: bcd} = await import(`${BCD_DIR}/index.js`);
+  const tests = await fs.readJson(new URL('./tests.json', import.meta.url));
+
+  main(bcd, tests);
 }
+
+export {traverseFeatures, findMissing, getMissing};

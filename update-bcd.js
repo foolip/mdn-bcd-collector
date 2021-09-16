@@ -3,19 +3,24 @@
 
 'use strict';
 
-const assert = require('assert');
-const compareVersions = require('compare-versions');
-const fs = require('fs').promises;
-const klaw = require('klaw');
-const {Minimatch} = require('minimatch');
-const path = require('path');
+import assert from 'assert';
+import compareVersions from 'compare-versions';
+import esMain from 'es-main';
+import fs from 'fs-extra';
+import klaw from 'klaw';
+import minimatch from 'minimatch';
+const {Minimatch} = minimatch;
+import path from 'path';
+import {fileURLToPath} from 'url';
+import yargs from 'yargs';
+import {hideBin} from 'yargs/helpers';
 
-const logger = require('./logger');
-const overrides = require('./overrides').filter(Array.isArray);
-const {parseUA} = require('./ua-parser');
+import logger from './logger.js';
+import {parseUA} from './ua-parser.js';
 
-const BCD_DIR = process.env.BCD_DIR || `../browser-compat-data`;
-const {browsers} = require(BCD_DIR);
+const BCD_DIR = fileURLToPath(
+  new URL(process.env.BCD_DIR || `../browser-compat-data`, import.meta.url)
+);
 
 const findEntry = (bcd, ident) => {
   if (!ident) {
@@ -91,7 +96,7 @@ const getSupportMap = (report) => {
 
 // Load all reports and build a map from BCD path to browser + version
 // and test result (null/true/false) for that version.
-const getSupportMatrix = (reports) => {
+const getSupportMatrix = (reports, browsers, overrides) => {
   const supportMatrix = new Map();
 
   for (const report of reports) {
@@ -99,11 +104,11 @@ const getSupportMatrix = (reports) => {
     if (!inBcd) {
       if (inBcd === false) {
         logger.warn(
-            `Ignoring unknown ${browser.name} version ${version} (${report.userAgent})`
+          `Ignoring unknown ${browser.name} version ${version} (${report.userAgent})`
         );
       } else if (browser.name) {
         logger.warn(
-            `Ignoring unknown browser ${browser.name} ${version} (${report.userAgent})`
+          `Ignoring unknown browser ${browser.name} ${version} (${report.userAgent})`
         );
       } else {
         logger.warn(`Unable to parse browser from UA ${report.userAgent}`);
@@ -125,7 +130,7 @@ const getSupportMatrix = (reports) => {
       if (!versionMap) {
         versionMap = new Map();
         for (const browserVersion of Object.keys(
-            browsers[browser.id].releases
+          browsers[browser.id].releases
         )) {
           versionMap.set(browserVersion, null);
         }
@@ -319,14 +324,14 @@ const update = (bcd, supportMatrix, filter) => {
         const range = inferredStatement.version_added.split('> ≤');
         if (
           compareVersions.compare(
-              simpleStatement.version_added.replace('≤', ''),
-              range[0],
-              '<='
+            simpleStatement.version_added.replace('≤', ''),
+            range[0],
+            '<='
           ) ||
           compareVersions.compare(
-              simpleStatement.version_added.replace('≤', ''),
-              range[1],
-              '>'
+            simpleStatement.version_added.replace('≤', ''),
+            range[1],
+            '>'
           )
         ) {
           simpleStatement.version_added =
@@ -371,39 +376,43 @@ const loadJsonFiles = async (paths) => {
   for (const p of paths) {
     await new Promise((resolve, reject) => {
       klaw(p, {filter: dotFilter})
-          .on('data', (item) => {
-            if (item.path.endsWith('.json')) {
-              jsonFiles.push(item.path);
-            }
-          })
-          .on('error', reject)
-          .on('end', resolve);
+        .on('data', (item) => {
+          if (item.path.endsWith('.json')) {
+            jsonFiles.push(item.path);
+          }
+        })
+        .on('error', reject)
+        .on('end', resolve);
     });
   }
 
   const entries = await Promise.all(
-      jsonFiles.map(async (file) => {
-        const data = JSON.parse(await fs.readFile(file));
-        return [file, data];
-      })
+    jsonFiles.map(async (file) => {
+      const data = await fs.readJson(file);
+      return [file, data];
+    })
   );
 
   return Object.fromEntries(entries);
 };
 
 /* istanbul ignore next */
-const main = async (reportPaths, filter) => {
+const main = async (reportPaths, filter, browsers, overrides) => {
   // Replace filter.path with a minimatch object.
   if (filter.path) {
     filter.path = new Minimatch(filter.path);
   }
 
   const bcdFiles = await loadJsonFiles(
-      filter.category.map((cat) => path.join(BCD_DIR, ...cat.split('.')))
+    filter.category.map((cat) => path.join(BCD_DIR, ...cat.split('.')))
   );
 
   const reports = Object.values(await loadJsonFiles(reportPaths));
-  const supportMatrix = getSupportMatrix(reports);
+  const supportMatrix = getSupportMatrix(
+    reports,
+    browsers,
+    overrides.filter(Array.isArray)
+  );
 
   // Should match https://github.com/mdn/browser-compat-data/blob/f10bf2cc7d1b001a390e70b7854cab9435ffb443/test/linter/test-style.js#L63
   // TODO: https://github.com/mdn/browser-compat-data/issues/3617
@@ -418,7 +427,60 @@ const main = async (reportPaths, filter) => {
   }
 };
 
-module.exports = {
+/* istanbul ignore if */
+if (esMain(import.meta)) {
+  const {argv} = yargs(hideBin(process.argv)).command(
+    '$0 [reports..]',
+    'Update BCD from a specified set of report files',
+    (yargs) => {
+      yargs
+        .positional('reports', {
+          describe: 'The report files to update from (also accepts folders)',
+          type: 'array',
+          default: ['../mdn-bcd-results/']
+        })
+        .option('category', {
+          alias: 'c',
+          describe: 'The BCD categories to update',
+          type: 'array',
+          choices: ['api', 'css.properties', 'javascript.builtins'],
+          default: ['api', 'css.properties', 'javascript.builtins']
+        })
+        .option('path', {
+          alias: 'p',
+          describe:
+            'The BCD path to update (interpreted as a minimatch pattern)',
+          type: 'string',
+          default: null
+        })
+        .option('browser', {
+          alias: 'b',
+          describe: 'The browser to update',
+          type: 'array',
+          choices: Object.keys(browsers),
+          default: []
+        })
+        .option('release', {
+          alias: 'r',
+          describe:
+            'Only update when version_added or version_removed is set to the given value',
+          type: 'string',
+          default: null
+        });
+    }
+  );
+
+  const {
+    default: {browsers}
+  } = await import(`${BCD_DIR}/index.js`);
+  const overrides = await fs.readJson(
+    new URL('./overrides.json', import.meta.url)
+  );
+
+  await main(argv.reports, argv, browsers, overrides);
+}
+
+export {
   findEntry,
   getSupportMap,
   getSupportMatrix,
@@ -427,52 +489,3 @@ module.exports = {
   loadJsonFiles,
   main
 };
-
-/* istanbul ignore if */
-if (require.main === module) {
-  const {argv} = require('yargs').command(
-      '$0 [reports..]',
-      'Update BCD from a specified set of report files',
-      (yargs) => {
-        yargs
-            .positional('reports', {
-              describe: 'The report files to update from (also accepts folders)',
-              type: 'array',
-              default: ['../mdn-bcd-results/']
-            })
-            .option('category', {
-              alias: 'c',
-              describe: 'The BCD categories to update',
-              type: 'array',
-              choices: ['api', 'css.properties', 'javascript.builtins'],
-              default: ['api', 'css.properties', 'javascript.builtins']
-            })
-            .option('path', {
-              alias: 'p',
-              describe:
-            'The BCD path to update (interpreted as a minimatch pattern)',
-              type: 'string',
-              default: null
-            })
-            .option('browser', {
-              alias: 'b',
-              describe: 'The browser to update',
-              type: 'array',
-              choices: Object.keys(browsers),
-              default: []
-            })
-            .option('release', {
-              alias: 'r',
-              describe:
-            'Only update when version_added or version_removed is set to the given value',
-              type: 'string',
-              default: null
-            });
-      }
-  );
-
-  main(argv.reports, argv).catch((error) => {
-    logger.error(error.stack);
-    process.exit(1);
-  });
-}
