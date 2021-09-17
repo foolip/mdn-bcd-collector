@@ -972,6 +972,13 @@ api:
   HTMLOptionElement:
     __base: var instance = document.createElement('option');
     __test: return bcd.testObjectName(instance, 'HTMLOptionElement');
+  HTMLOptionsCollection:
+    __base: >-
+      var el = document.createElement('select');
+      for (var i = 0; i < 3; i++) {
+        el.appendChild(document.createElement('option'));
+      }
+      var instance = el.options;
   HTMLOutputElement:
     __base: var instance = document.createElement('output');
     __test: return bcd.testObjectName(instance, 'HTMLOutputElement');
