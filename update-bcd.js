@@ -435,7 +435,7 @@ if (esMain(import.meta)) {
   const overrides = await fs.readJson(
     new URL('./overrides.json', import.meta.url)
   );
-  
+
   const {argv} = yargs(hideBin(process.argv)).command(
     '$0 [reports..]',
     'Update BCD from a specified set of report files',
