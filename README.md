@@ -69,16 +69,18 @@ These errors are worth looking out for:
 
 - False negatives, where a test fails to detect support. This results in either an incorrect `false` or support actually going back further than inferred. Common causes are:
 
-  - Missing [interface objects](https://heycam.github.io/webidl/#interface-object). For example, `crypto.subtle` was shipped long before the `SubtleCrypto` interface was [exposed](https://webkit.org/b/165629) in some browsers. Missing interface objects was common in the past but is quite *uncommon* for APIs introduced after ~2020.
-  - [Attributes](https://heycam.github.io/webidl/#es-attributes) weren't on the prototypes in some older browsers, for example [before Chrome 43](https://github.com/mdn/browser-compat-data/issues/7843).
+  - Missing [interface objects](https://heycam.github.io/webidl/#interface-object). For example, `crypto.subtle` was shipped long before the `SubtleCrypto` interface was [exposed](https://webkit.org/b/165629) in some browsers. Missing interface objects was common in the past, especially for events, but is quite *uncommon* for APIs introduced after ~2020. See [#7963](https://github.com/mdn/browser-compat-data/pull/7963), [#7986](https://github.com/mdn/browser-compat-data/pull/7986) and [#10837](https://github.com/mdn/browser-compat-data/pull/10837) for examples.
+  - [Attributes](https://heycam.github.io/webidl/#es-attributes) weren't on the prototypes in some older browsers, for example [before Chrome 43](https://github.com/mdn/browser-compat-data/issues/7843). See [#6568](https://github.com/mdn/browser-compat-data/pull/6568#discussion_r479039982) for an example.
 
-  To guard against this, follow the link to the test and expand the code. A simple `'propertyName' in InterfaceName` test can yield false negatives, so an *instance* of the type should be created and tested.
+  To guard against this, follow the link to the test and expand the code. A simple `'propertyName' in InterfaceName` test can yield false negatives, so an *instance* of the type should be created and tested using the [custom tests](https://github.com/foolip/mdn-bcd-collector/blob/main/custom-tests.yaml) mechanism. Ask for this when reviewing, you don't need to create the tests yourself.
 
 - Consistency with other parts of the same feature. Does it seem plausible that the feature was introduced earlier or later than other parts? Examples of consistency to look for:
 
   - Support for `navigator.gpu` implies support for the `GPU` interface, because `navigator.gpu` is an instance of that interface.
   - Support for `audioContext.createPanner()` implies support for `PannerNode`, because that is the return type.
   - Support for `AnalyserNode` implies support for `AudioNode`, because `AnalyserNode` inherits from `AudioNode`.
+
+  Examples of consistency checks in review are [#10397](https://github.com/mdn/browser-compat-data/pull/10397), [#12028](https://github.com/mdn/browser-compat-data/pull/12028) and [#12033](https://github.com/mdn/browser-compat-data/pull/12033). [#6571](https://github.com/mdn/browser-compat-data/issues/6571) proposes automating many such consistency checks.
 
 ## Running the server locally
 
