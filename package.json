@@ -83,7 +83,7 @@
     "node-fetch": "2.6.1",
     "nodemon": "2.0.12",
     "open-cli": "7.0.1",
-    "prettier": "2.4.0",
+    "prettier": "2.4.1",
     "puppeteer": "10.2.0",
     "puppeteer-to-istanbul": "1.4.0",
     "selenium-webdriver": "3.6.0",
