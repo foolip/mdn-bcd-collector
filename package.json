@@ -14,7 +14,7 @@
   },
   "scripts": {
     "prepare": "node scripts.js prepare",
-    "lint": "eslint . && prettier -c \"**/*.json\" \"**/*.md\"  \"**/*.scss\"\"**/*.yaml\" --color && ejslint views/*",
+    "lint": "eslint . && prettier -c \"**/*.json\" \"**/*.md\" \"**/*.scss\" \"**/*.yaml\" --color && ejslint views/*",
     "lint-fix": "eslint --fix . && prettier --write \"**/*.json\" \"**/*.md\" \"**/*.scss\" \"**/*.yaml\"",
     "clean": "rm -rf .nyc_output coverage generated tests.json",
     "build": "node build.js",
