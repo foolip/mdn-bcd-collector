@@ -1,50 +1,60 @@
+/* Colors */
+$background: #111;
+$background-2: #031706;
+$paper-bg: #191919;
+$main: #88f6a2;
+$text: white;
+$link: #99f;
+$link-hover: #bbf;
+$input-bg: #3d8a3f;
+$input-hover-bg: #4caf50;
+$input-disabled-bg: #636363;
+$input-placeholder: #ccc;
+$error: #faa;
+$error-bg: rgba(255, 170, 170);
+$warning: #ffa;
+$success: #afa;
+
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Roboto:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@500&display=swap');
 
-html {
-  background: #111;
-}
-
+html,
 body {
-  font-family: 'Roboto', Arial, sans-serif;
-  color: white;
-  min-height: 100vh;
-  margin: 0;
-  padding: 8px;
-
-  background: #111111; /* Old browsers */
+  background: $background; /* Old browsers */
   background: -moz-linear-gradient(
     30deg,
-    #111111 0%,
-    #031706 100%
+    $background 0%,
+    $background-2 100%
   ); /* FF3.6-15 */
   background: -webkit-gradient(
     linear,
     left bottom,
     right top,
-    color-stop(0%, #111111),
-    color-stop(100%, #031706)
+    color-stop(0%, $background),
+    color-stop(100%, $background-2)
   ); /* Chrome4-9,Safari4-5 */
   background: -webkit-linear-gradient(
     30deg,
-    #111111 0%,
-    #031706 100%
+    $background 0%,
+    $background-2 100%
   ); /* Chrome10-25,Safari5.1-6 */
   background: -o-linear-gradient(
     30deg,
-    #111111 0%,
-    #031706 100%
+    $background 0%,
+    $background-2 100%
   ); /* Opera 11.10-11.50 */
-  background: -ms-linear-gradient(
-    30deg,
-    #111111 0%,
-    #031706 100%
-  ); /* IE10 preview */
   background: linear-gradient(
     30deg,
-    #111111 0%,
-    #031706 100%
+    $background 0%,
+    $background-2 100%
   ); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
-  /*filter: progid:DXImageTransform.Microsoft.gradient(startColorstr="#111111",endColorstr="#031706",GradientType=1);*/ /* IE6-9 fallback on horizontal gradient */
+}
+
+body {
+  font-family: 'Roboto', Arial, sans-serif;
+  color: $text;
+  min-height: 100vh;
+  margin: 0;
+  padding: 8px;
 }
 
 h1,
@@ -55,12 +65,12 @@ h2 {
 
 a {
   text-decoration: none;
-  color: #99f;
+  color: $link;
   transition: color 0.2s;
-}
 
-a:hover {
-  color: #bbf;
+  &:hover {
+    color: $link-hover;
+  }
 }
 
 code {
@@ -71,7 +81,7 @@ code {
 button,
 select,
 input {
-  background-color: #3d8a3f;
+  background-color: $input-bg;
   border: none;
   color: white;
   text-align: center;
@@ -80,33 +90,27 @@ input {
   font-size: 14px;
   transition: background-color 0.2s;
   padding: 8px;
+
+  &:hover {
+    cursor: pointer;
+    background-color: $input-hover-bg;
+  }
+
+  &:disabled,
+  &:disabled:hover {
+    cursor: not-allowed;
+    background-color: $input-disabled-bg;
+    color: $input-placeholder;
+  }
 }
 
 input {
   text-align: left;
   margin-left: -2px;
-}
 
-button:hover,
-select:hover,
-input[type='submit']:hover {
-  cursor: pointer;
-  background-color: #4caf50;
-}
-
-button:disabled,
-button:disabled:hover,
-select:disabled,
-select:disabled:hover,
-input[type='submit']:disabled,
-input[type='submit']:disabled:hover {
-  cursor: not-allowed;
-  background-color: #636363;
-  color: #ccc;
-}
-
-input::placeholder {
-  color: #ccc;
+  &::placeholder {
+    color: $input-placeholder;
+  }
 }
 
 footer {
@@ -117,17 +121,17 @@ footer {
   width: 100vw;
   margin-top: 1em;
   margin-left: -8px;
-}
 
-footer > * {
-  display: inline-block;
-  margin-left: 4px;
-}
+  & > * {
+    display: inline-block;
+    margin-left: 4px;
+  }
 
-footer #browserinfo {
-  display: block;
-  margin: 0;
-  padding-bottom: 1em;
+  #browserinfo {
+    display: block;
+    margin: 0;
+    padding-bottom: 1em;
+  }
 }
 
 hr {
@@ -137,21 +141,21 @@ hr {
 
 .paper {
   padding: 12px 8px;
-  background-color: #191919;
+  background-color: $paper-bg;
   box-shadow: 0 0 10px black;
   border-radius: 8px;
 }
 
 .error-notice {
-  color: #faa;
+  color: $error;
 }
 
 .warning-notice {
-  color: #ffa;
+  color: $warning;
 }
 
 .success-notice {
-  color: #afa;
+  color: $success;
 }
 
 .mdi:before {
@@ -162,23 +166,23 @@ hr {
 /* Homepage */
 
 #title {
-  color: #88f6a2;
+  color: $main;
   font-family: Montserrat;
   font-size: 36pt;
   font-weight: 500;
   text-align: center;
   margin-top: 0.5em;
   margin-bottom: 0.1em;
-}
 
-#title img {
-  width: 48px;
-  height: 48px;
-}
+  img {
+    width: 48px;
+    height: 48px;
+  }
 
-#title .version {
-  font-size: 40%;
-  opacity: 0.4;
+  .version {
+    font-size: 40%;
+    opacity: 0.4;
+  }
 }
 
 #subtitle {
@@ -198,10 +202,10 @@ hr {
   margin-top: 2em;
   padding: 2em;
   text-align: center;
-}
 
-#runTests #test-entry {
-  display: block;
+  #test-entry {
+    display: block;
+  }
 }
 
 #test-selection {
@@ -218,38 +222,36 @@ hr {
 .compat-table {
   margin: auto;
   text-align: center;
-}
 
-.compat-table .compat-table-entry {
-  display: inline-block;
-  margin-right: 16px;
-}
+  .compat-table-entry {
+    display: inline-block;
+    margin-right: 16px;
 
-.compat-table .compat-table-entry img {
-  display: inline-block;
-  width: 32px;
-  height: 32px;
-  vertical-align: middle;
-}
+    img {
+      display: inline-block;
+      width: 32px;
+      height: 32px;
+      vertical-align: middle;
+    }
 
-.compat-table .compat-table-entry p {
-  display: inline-block;
-  margin: 0;
-  margin-left: 8px;
-}
+    p {
+      display: inline-block;
+      margin: 0;
+      margin-left: 8px;
+    }
+  }
 
-.compat-table .compat-table-separator {
-  display: none;
-}
+  .compat-table-separator {
+    display: none;
 
-@media screen and (max-width: 900px), screen and (max-device-width: 900px) {
-  .compat-table .compat-table-separator {
-    display: block;
+    @media screen and (max-width: 900px), screen and (max-device-width: 900px) {
+      display: block;
+    }
   }
 }
 
 #known-caveats {
-  background: rgba(255, 170, 170, 0.05);
+  background: rgba($error-bg, 0.05);
   width: intrinsic;
   width: -webkit-max-content;
   width: -moz-max-content;
@@ -269,29 +271,29 @@ hr {
 
 .result {
   margin-bottom: 0.5em;
-}
 
-.result .result-value {
-  font-weight: bold;
-}
+  .result-value {
+    font-weight: bold;
 
-.result-value-true {
-  color: #afa;
-}
+    &.result-value-true {
+      color: $success;
+    }
 
-.result-value-false {
-  color: #faa;
-}
+    &.result-value-false {
+      color: $error;
+    }
+  }
 
-.result .result-info {
-  display: block;
-  margin-left: 1.5em;
-  margin-bottom: 1em;
-}
+  .result-info {
+    display: block;
+    margin-left: 1.5em;
+    margin-bottom: 1em;
+  }
 
-.result .result-message {
-  font-style: italic;
-  margin-top: 0;
+  .result-message {
+    font-style: italic;
+    margin-top: 0;
+  }
 }
 
 @media (prefers-color-scheme: light) {
