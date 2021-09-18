@@ -21,6 +21,7 @@ import idl from '@webref/idl';
 import path from 'path';
 import {fileURLToPath} from 'url';
 import prettier from 'prettier';
+import sass from 'sass';
 import * as WebIDL2 from 'webidl2';
 import * as YAML from 'yaml';
 
@@ -811,6 +812,17 @@ const copyResources = async () => {
 };
 
 /* istanbul ignore next */
+const generateCSS = async () => {
+  const scssPath = fileURLToPath(new URL('./style.scss', import.meta.url));
+  const outPath = path.join(generatedDir, 'resources', 'style.css');
+  const result = sass.renderSync({file: scssPath});
+  if (typeof result === Error) {
+    throw result;
+  }
+  await fs.writeFile(outPath, result.css.toString(), 'utf8');
+};
+
+/* istanbul ignore next */
 const build = async (customIDL, customCSS) => {
   const specCSS = await css.listAll();
   const specIDLs = await idl.parseAll();
@@ -821,6 +833,7 @@ const build = async (customIDL, customCSS) => {
 
   await fs.writeJson(new URL('./tests.json', import.meta.url), tests);
   await copyResources();
+  await generateCSS();
 };
 
 /* istanbul ignore if */
