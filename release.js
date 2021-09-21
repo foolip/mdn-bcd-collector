@@ -52,13 +52,22 @@ const doVersionBump = async (newVersion) => {
   }
 };
 
+const getChanges = () => {
+  const changes = exec(`git log --pretty=reference v${currentVersion}..main`)
+    .toString('utf8')
+    .split('\n')
+    .map((c) => c.substring(8));
+  changes.pop();
+  return changes.join('\n');
+};
+
 const doChangelogUpdate = async () => {
   const filepath = new URL('./CHANGELOG.md', import.meta.url);
   const changelog = await fs.readFile(filepath, 'utf8');
   const idx = changelog.indexOf('##');
   const newChangelog =
     changelog.substring(0, idx) +
-    exec(`git log --pretty=reference v${currentVersion}..main`) +
+    getChanges() +
     '\n\n' +
     changelog.substring(idx, changelog.length);
   await fs.writeFile(filepath, newChangelog, 'utf8');
