@@ -18,12 +18,12 @@ import fs from 'fs';
 import yargs from 'yargs';
 import {hideBin} from 'yargs/helpers';
 
-export const exec = (cmd, env, log = false) => {
+export const exec = (cmd, env, pipe = true) => {
   env = {...process.env, ...env};
-  if (log) {
+  if (!pipe) {
     console.log(`> ${cmd}`);
   }
-  return childProcess.execSync(cmd, {env, stdio: 'inherit'});
+  return childProcess.execSync(cmd, {env, stdio: pipe ? 'pipe' : 'inherit'});
 };
 
 const prepare = () => {
@@ -41,7 +41,7 @@ const prepare = () => {
   } catch (e) {
     return;
   }
-  exec('node install.js', {PUPPETEER_PRODUCT: 'firefox'}, true);
+  exec('node install.js', {PUPPETEER_PRODUCT: 'firefox'}, false);
 };
 
 /* istanbul ignore if */
@@ -66,7 +66,7 @@ if (esMain(import.meta)) {
       exec(
         'c8 mocha --reporter dot --recursive unittest',
         {NODE_ENV: 'test'},
-        true
+        false
       );
       break;
     default:
