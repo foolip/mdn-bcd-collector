@@ -8,8 +8,12 @@ const currentVersion = (
 ).version;
 
 const getNewVersion = async () => {
-  const versionParts = currentVersion.split('.').map(x =>  new Number(x));
-  const newVersions = [`${versionParts[0] + 1}.0.0`, `${versionParts[0]}.${versionParts[1] + 1}.0`, `${versionParts[0]}.${versionParts[1]}.${versionParts[2] + 1}`];
+  const versionParts = currentVersion.split('.').map((x) => new Number(x));
+  const newVersions = [
+    `${versionParts[0] + 1}.0.0`,
+    `${versionParts[0]}.${versionParts[1] + 1}.0`,
+    `${versionParts[0]}.${versionParts[1]}.${versionParts[2] + 1}`
+  ];
 
   const answers = await inquirer.prompt([
     {
@@ -33,7 +37,7 @@ const getNewVersion = async () => {
       default: 2
     }
   ]);
-  
+
   return answers.newVersion;
 };
 
@@ -58,19 +62,21 @@ const getNewChangelogSection = async (newVersion) => {
   ]);
 
   return answers.changelog;
-}
+};
 
 const doChangelogUpdate = async (newChangelogSection) => {
   const filepath = new URL('./CHANGELOG.md', import.meta.url);
   const changelog = await fs.readFile(filepath, 'utf8');
   const idx = changelog.indexOf('##');
-  const newChangelog = changelog.substring(0, idx) + newChangelogSection + '\n\n' + changelog.substring(idx, changelog.length);
+  const newChangelog =
+    changelog.substring(0, idx) +
+    newChangelogSection +
+    '\n\n' +
+    changelog.substring(idx, changelog.length);
   await fs.writeFile(filepath, newChangelog, 'utf8');
-}
+};
 
-const doPR = async (newVersion) => {
-  
-}
+const doPR = async (newVersion) => {};
 
 const main = async () => {
   const newVersion = await getNewVersion();
@@ -85,7 +91,7 @@ const main = async () => {
   ]);
 
   if (!answers.confirm) {
-    console.log(chalk`{yellow Release cancelled by user}`)
+    console.log(chalk`{yellow Release cancelled by user}`);
     process.exit(0);
   }
 
