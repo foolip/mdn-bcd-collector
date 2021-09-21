@@ -611,6 +611,14 @@ api:
       } catch(e) {
         instance = document.createElement('b');
       }
+    __additional:
+      scroll.options_behavior_parameter: >-
+        var accessed = false;
+        var options = Object.defineProperty({}, 'behavior', {
+          get: function() { accessed = true; return "auto"; }
+        });
+        instance.scroll(options);
+        return accessed;
   ErrorEvent:
     __base: >-
       var instance;
