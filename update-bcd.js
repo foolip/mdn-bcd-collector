@@ -429,6 +429,13 @@ const main = async (reportPaths, filter, browsers, overrides) => {
 
 /* istanbul ignore if */
 if (esMain(import.meta)) {
+  const {
+    default: {browsers}
+  } = await import(`${BCD_DIR}/index.js`);
+  const overrides = await fs.readJson(
+    new URL('./overrides.json', import.meta.url)
+  );
+
   const {argv} = yargs(hideBin(process.argv)).command(
     '$0 [reports..]',
     'Update BCD from a specified set of report files',
@@ -468,13 +475,6 @@ if (esMain(import.meta)) {
           default: null
         });
     }
-  );
-
-  const {
-    default: {browsers}
-  } = await import(`${BCD_DIR}/index.js`);
-  const overrides = await fs.readJson(
-    new URL('./overrides.json', import.meta.url)
   );
 
   await main(argv.reports, argv, browsers, overrides);

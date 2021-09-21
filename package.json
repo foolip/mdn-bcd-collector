@@ -54,7 +54,7 @@
   },
   "devDependencies": {
     "@babel/core": "7.15.5",
-    "@babel/eslint-parser": "7.15.4",
+    "@babel/eslint-parser": "7.15.7",
     "@babel/preset-env": "7.15.6",
     "@browser-logos/chrome": "1.0.18",
     "@browser-logos/edge": "2.0.5",
@@ -76,7 +76,7 @@
     "eslint-config-google": "0.14.0",
     "eslint-plugin-prefer-arrow": "1.2.3",
     "json3": "3.3.3",
-    "klaw": "3.0.0",
+    "klaw": "4.0.1",
     "listr2": "3.12.1",
     "minimatch": "3.0.4",
     "mocha": "9.1.1",

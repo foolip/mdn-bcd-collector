@@ -235,7 +235,7 @@ hr {
 
 .paper {
   @include themedProperty(background, 'paper-bg');
-  padding: 12px 8px;
+  padding: 1em 8px;
   box-shadow: 0 0 10px black;
   border-radius: 8px;
 }
@@ -352,9 +352,13 @@ hr {
   width: max-content;
   max-width: calc(100vw - 4em - 24px);
   margin: auto;
-  padding: 2em;
+  margin-bottom: 1em;
   text-align: center;
   list-style-position: inside;
+}
+
+#privacy-notice {
+  text-align: center;
 }
 
 /* End: Homepage */
