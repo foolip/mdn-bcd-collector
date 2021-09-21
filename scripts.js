@@ -18,9 +18,9 @@ import fs from 'fs';
 import yargs from 'yargs';
 import {hideBin} from 'yargs/helpers';
 
-const exec = (cmd, env) => {
+export const exec = (cmd, env, log = false) => {
   env = {...process.env, ...env};
-  console.log(`> ${cmd}`);
+  if (log) console.log(`> ${cmd}`);
   return childProcess.execSync(cmd, {env, stdio: 'inherit'});
 };
 
@@ -39,7 +39,7 @@ const prepare = () => {
   } catch (e) {
     return;
   }
-  exec('node install.js', {PUPPETEER_PRODUCT: 'firefox'});
+  exec('node install.js', {PUPPETEER_PRODUCT: 'firefox'}, true);
 };
 
 /* istanbul ignore if */
@@ -61,7 +61,11 @@ if (esMain(import.meta)) {
       prepare();
       break;
     case 'unittest':
-      exec('c8 mocha --reporter dot --recursive unittest', {NODE_ENV: 'test'});
+      exec(
+        'c8 mocha --reporter dot --recursive unittest',
+        {NODE_ENV: 'test'},
+        true
+      );
       break;
     default:
       console.error(`Unknown command ${argv.command}!`);
