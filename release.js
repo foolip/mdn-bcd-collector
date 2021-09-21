@@ -1,9 +1,8 @@
 import chalk from 'chalk';
+import {execSync as exec} from 'child_process';
 import esMain from 'es-main';
 import fs from 'fs-extra';
 import inquirer from 'inquirer';
-
-import {exec} from './scripts.js';
 
 const currentVersion = (
   await fs.readJson(new URL('./package.json', import.meta.url))
@@ -52,36 +51,22 @@ const doVersionBump = async (newVersion) => {
   }
 };
 
-const getNewChangelogSection = async (newVersion) => {
-  const answers = await inquirer.prompt([
-    {
-      type: 'editor',
-      name: 'changelog',
-      message: 'Write updates to the changelog',
-      default: `## ${newVersion}\n\n### Test Changes\n\n\n\n### Other Changes\n\n`,
-      postfix: '.md'
-    }
-  ]);
-
-  return answers.changelog;
-};
-
-const doChangelogUpdate = async (newChangelogSection) => {
+const doChangelogUpdate = async () => {
   const filepath = new URL('./CHANGELOG.md', import.meta.url);
   const changelog = await fs.readFile(filepath, 'utf8');
   const idx = changelog.indexOf('##');
   const newChangelog =
     changelog.substring(0, idx) +
-    newChangelogSection +
+    exec(`git log --pretty=reference v${currentVersion}..main`) +
     '\n\n' +
     changelog.substring(idx, changelog.length);
   await fs.writeFile(filepath, newChangelog, 'utf8');
 };
 
-const doPR = async (newVersion) => {
+const doPR = (newVersion) => {
   const branch = `release-${newVersion}`;
 
-  // exec('git checkout main');
+  exec('git checkout main');
   exec(`git branch ${branch}`);
   exec(`git checkout ${branch}`);
   exec('git stage package.json package-lock.json CHANGELOG.md');
@@ -94,26 +79,12 @@ const doPR = async (newVersion) => {
 
 const main = async () => {
   const newVersion = await getNewVersion();
-  const newChangelogSection = await getNewChangelogSection(newVersion);
-
-  const answers = await inquirer.prompt([
-    {
-      type: 'confirm',
-      name: 'confirm',
-      message: `Ready to release ${newVersion}?`
-    }
-  ]);
-
-  if (!answers.confirm) {
-    console.log(chalk`{yellow Release cancelled by user}`);
-    process.exit(0);
-  }
 
   console.log('');
 
   await doVersionBump(newVersion);
-  await doChangelogUpdate(newChangelogSection);
-  await doPR(newVersion);
+  await doChangelogUpdate();
+  doPR(newVersion);
 };
 
 /* istanbul ignore if */
