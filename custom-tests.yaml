@@ -528,13 +528,6 @@ api:
       }
   Document:
     __base: var instance = document;
-    __additional:
-      createElement.options: >-
-        <%api.Document:d%>
-        return !!d.createElement('span', {});
-      createElementNS.options: >-
-        <%api.Document:d%>
-        return !!d.createElement('span', {});
   DocumentFragment:
     __base: var instance = document.createDocumentFragment();
   DocumentType:
