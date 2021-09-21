@@ -20,7 +20,9 @@ import {hideBin} from 'yargs/helpers';
 
 export const exec = (cmd, env, log = false) => {
   env = {...process.env, ...env};
-  if (log) console.log(`> ${cmd}`);
+  if (log) {
+console.log(`> ${cmd}`);
+}
   return childProcess.execSync(cmd, {env, stdio: 'inherit'});
 };
 

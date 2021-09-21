@@ -10,7 +10,7 @@ const currentVersion = (
 ).version;
 
 const getNewVersion = async () => {
-  const versionParts = currentVersion.split('.').map((x) => new Number(x));
+  const versionParts = currentVersion.split('.').map((x) => Number(x));
   const newVersions = [
     `${versionParts[0] + 1}.0.0`,
     `${versionParts[0]}.${versionParts[1] + 1}.0`,
