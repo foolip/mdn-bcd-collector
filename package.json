@@ -84,7 +84,7 @@
     "nodemon": "2.0.12",
     "open-cli": "7.0.1",
     "prettier": "2.4.1",
-    "puppeteer": "10.2.0",
+    "puppeteer": "10.4.0",
     "puppeteer-to-istanbul": "1.4.0",
     "sass": "1.41.1",
     "selenium-webdriver": "3.6.0",
