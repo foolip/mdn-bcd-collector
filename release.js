@@ -1,3 +1,4 @@
+import chalk from 'chalk';
 import esMain from 'es-main';
 import fs from 'fs-extra';
 import inquirer from 'inquirer';
@@ -36,7 +37,16 @@ const getNewVersion = async () => {
   return answers.newVersion;
 };
 
-const getNewChangelog = async (newVersion) => {
+const doVersionBump = async (newVersion) => {
+  for (const f of ['./package.json', './package-lock.json']) {
+    const filepath = new URL(f, import.meta.url);
+    const data = await fs.readJson(filepath);
+    data.version = newVersion;
+    await fs.writeJson(filepath, data, {spaces: 2});
+  }
+};
+
+const getNewChangelogSection = async (newVersion) => {
   const answers = await inquirer.prompt([
     {
       type: 'editor',
@@ -50,9 +60,21 @@ const getNewChangelog = async (newVersion) => {
   return answers.changelog;
 }
 
+const doChangelogUpdate = async (newChangelogSection) => {
+  const filepath = new URL('./CHANGELOG.md', import.meta.url);
+  const changelog = await fs.readFile(filepath, 'utf8');
+  const idx = changelog.indexOf('##');
+  const newChangelog = changelog.substring(0, idx) + newChangelogSection + '\n\n' + changelog.substring(idx, changelog.length);
+  await fs.writeFile(filepath, newChangelog, 'utf8');
+}
+
+const doPR = async (newVersion) => {
+  
+}
+
 const main = async () => {
   const newVersion = await getNewVersion();
-  const newChangelog = await getNewChangelog(newVersion);
+  const newChangelogSection = await getNewChangelogSection(newVersion);
 
   const answers = await inquirer.prompt([
     {
@@ -61,6 +83,17 @@ const main = async () => {
       message: `Ready to release ${newVersion}?`
     }
   ]);
+
+  if (!answers.confirm) {
+    console.log(chalk`{yellow Release cancelled by user}`)
+    process.exit(0);
+  }
+
+  console.log('');
+
+  await doVersionBump(newVersion);
+  await doChangelogUpdate(newChangelogSection);
+  await doPR(newVersion);
 };
 
 /* istanbul ignore if */
