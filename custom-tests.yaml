@@ -2426,7 +2426,7 @@ api:
   XPathResult:
     __base: >-
       <%api.XPathExpression:exp%>
-      var instance = exp.evaluate(document);
+      var instance = exp.evaluate(document, 0, null);
 
 css:
   properties:
