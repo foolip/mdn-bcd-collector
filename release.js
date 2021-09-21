@@ -58,7 +58,7 @@ const getNewChangelogSection = async (newVersion) => {
       type: 'editor',
       name: 'changelog',
       message: 'Write updates to the changelog',
-      default: `## ${newVersion}\n\n### Tests\n\n#### New\n\n\n\n#### Updated\n\n\n\n### Additions\n\n\n\n### Changes\n\n\n\n### Removal\n\n`,
+      default: `## ${newVersion}\n\n### Test Changes\n\n\n\n### Other Changes\n\n`,
       postfix: '.md'
     }
   ]);
