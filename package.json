@@ -29,7 +29,8 @@
     "update-bcd": "node update-bcd.js",
     "find-missing-features": "node find-missing-features.js",
     "find-missing-results": "node find-missing-results.js",
-    "add-new-bcd": "node add-new-bcd.js"
+    "add-new-bcd": "node add-new-bcd.js",
+    "release": "node release.js"
   },
   "dependencies": {
     "@google-cloud/logging-winston": "4.1.1",
