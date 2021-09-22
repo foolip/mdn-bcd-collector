@@ -83,6 +83,7 @@
     "minimatch": "3.0.4",
     "mocha": "9.1.1",
     "node-fetch": "2.6.1",
+    "nodegit": "0.27.0",
     "nodemon": "2.0.12",
     "open-cli": "7.0.1",
     "prettier": "2.4.1",
