@@ -160,6 +160,12 @@ const prepareBranch = async (newVersion) => {
   return branch;
 };
 
+const createPR = async (branch) => {
+  const branchName = await branch.name();
+  exec(`git push --set-upstream origin ${branchName}`);
+  exec('gh pr create -f');
+};
+
 const main = async () => {
   if (!(await prepare())) {
     process.exit(1);
@@ -187,7 +193,7 @@ const main = async () => {
   ]);
 
   if (answers.confirm) {
-    exec(`gh pr create -f`, {}, true);
+    await createPR(branch);
   } else {
     console.log(chalk`{yellow Release cancelled by user}`);
   }
