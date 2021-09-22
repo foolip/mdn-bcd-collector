@@ -27,7 +27,7 @@ const prepare = async () => {
     console.error(
       chalk`{red You currently have {bold uncommitted changes}. Please {bold commit} or {bold stash} your changes and try again.}`
     );
-    // return false;
+    return false;
   }
 
   console.log(chalk`{blue Checking for GitHub CLI...}`);
