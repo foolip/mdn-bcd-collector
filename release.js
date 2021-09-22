@@ -2,12 +2,40 @@ import chalk from 'chalk';
 import esMain from 'es-main';
 import fs from 'fs-extra';
 import inquirer from 'inquirer';
+import NodeGit from 'nodegit';
 
 import {exec} from './scripts.js';
+
+const gitRepo = await NodeGit.Repository.open('.');
 
 const currentVersion = (
   await fs.readJson(new URL('./package.json', import.meta.url))
 ).version;
+
+const prepare = async () => {
+  console.log(chalk`{blue Fetching...}`);
+  await gitRepo.fetchAll();
+
+  console.log(chalk`{blue Checking status...}`);
+  const status = await gitRepo.getStatus();
+  if (status.length) {
+    console.error(
+      chalk`{red You currently have {bold uncommitted changes}. Please {bold commit} or {bold stash} your changes and try again.}`
+    );
+    // return false;
+  }
+
+  console.log(chalk`{blue Checking out main branch...}`);
+  try {
+    await gitRepo.checkoutBranch('main');
+    await gitRepo.mergeBranches('main', 'origin/main');
+  } catch (e) {
+    throw new Error('XXX To implement...');
+    const commit = gitRepo.getBranchCommit('refs/remotes/origin/main');
+  }
+
+  return true;
+};
 
 const getNewVersion = async () => {
   const versionParts = currentVersion.split('.').map((x) => Number(x));
@@ -94,7 +122,9 @@ const prepareBranch = (newVersion) => {
 };
 
 const main = async () => {
-  exec('git fetch');
+  if (!(await prepare())) {
+    process.exit(1);
+  }
 
   const newVersion = await getNewVersion();
   if (newVersion == 'cancel') {
