@@ -56,8 +56,8 @@ const getChanges = () => {
   const changes = exec(`git log --pretty=reference v${currentVersion}..main`)
     .toString('utf8')
     .split('\n')
-    .map((c) => '- ' + c.substring(8));
-  changes.pop();
+    .map((c) => '- ' + c.substring(8))
+    .filter((c) => !!c);
   return changes.join('\n');
 };
 
