@@ -24,16 +24,20 @@ const getNewVersion = async () => {
       message: 'How should we bump the version?',
       choices: [
         {
-          name: `Major (${newVersions[0]})`,
+          name: chalk`Major {blue (${newVersions[0]})}`,
           value: newVersions[0]
         },
         {
-          name: `Minor (${newVersions[1]})`,
+          name: chalk`Minor {blue (${newVersions[1]})}`,
           value: newVersions[1]
         },
         {
-          name: `Patch (${newVersions[2]})`,
+          name: chalk`Patch {blue (${newVersions[2]})}`,
           value: newVersions[2]
+        },
+        {
+          name: chalk`{yellow Cancel}`,
+          value: 'cancel'
         }
       ],
       default: 2
@@ -93,6 +97,10 @@ const main = async () => {
   exec('git fetch');
 
   const newVersion = await getNewVersion();
+  if (newVersion == 'cancel') {
+    console.log(chalk`{yellow Release cancelled by user}`);
+    process.exit(0);
+  }
 
   console.log('');
 
