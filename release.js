@@ -96,14 +96,20 @@ const doVersionBump = async (newVersion) => {
 };
 
 const getChanges = () => {
-  const changes = exec(
+  const allChanges = exec(
     `git log --pretty=reference v${currentVersion}..origin/main`
   )
     .toString('utf8')
     .split('\n')
     .map((c) => '- ' + c.substring(8))
     .filter((c) => !!c);
-  return changes.join('\n');
+
+  const depsChanges = allChanges
+    .filter((c) => c.startsWith('- (Bump '))
+    .filter((c) => c.includes('@webref') || c.includes('@mdn'));
+  const otherChanges = allChanges.filter((c) => !c.startsWith('- (Bump '));
+
+  return [...otherChanges, ...depsChanges].join('\n');
 };
 
 const doChangelogUpdate = async () => {
