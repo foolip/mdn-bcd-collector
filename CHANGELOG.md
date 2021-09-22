@@ -193,7 +193,7 @@
 ## v3.1.7
 
 - (Remove custom SourceBuffer.changeType now in @webref/idl, 2021-06-18)
-- (Fix Peformance* custom tests (#1238), 2021-06-18)
+- (Fix Peformance\* custom tests (#1238), 2021-06-18)
 - (Create an instance for XMLHttpRequest tests (#1237), 2021-06-16)
 - (Fix the fallback for creating an Event instance (#1236), 2021-06-16)
 - (Always show form buttons, but disable by default (#1231), 2021-06-12)
@@ -452,7 +452,7 @@
 - (Update styling for results display (#839), 2020-12-01)
 - (Add custom IDL for webkit-prefixed canvas APIs (#843), 2020-12-01)
 - (Create add-new-bcd script (#838), 2020-11-30)
-- (Add custom IDL for WebKitPoint and webkitConvertPointFrom* methods (#842), 2020-11-30)
+- (Add custom IDL for WebKitPoint and webkitConvertPointFrom\* methods (#842), 2020-11-30)
 - (Remove miscapitalized entries (#837), 2020-11-28)
 - (Rename a variable to prevent conflict (#836), 2020-11-28)
 - (Use simplified dots for Mocha output (#835), 2020-11-28)
