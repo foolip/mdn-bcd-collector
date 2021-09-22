@@ -30,8 +30,9 @@ const prepare = async () => {
     await gitRepo.checkoutBranch('main');
     await gitRepo.mergeBranches('main', 'origin/main');
   } catch (e) {
-    throw new Error('XXX To implement...');
-    const commit = gitRepo.getBranchCommit('refs/remotes/origin/main');
+    const commit = await gitRepo.getBranchCommit('refs/remotes/origin/main');
+    const branch = await gitRepo.createBranch('main', commit);
+    NodeGit.Branch.setUpstream(branch, 'refs/remotes/origin/main');
   }
 
   return true;
