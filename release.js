@@ -97,7 +97,14 @@ const getChanges = () => {
   )
     .toString('utf8')
     .split('\n')
-    .map((c) => '- ' + c.substring(8))
+    .map(
+      (c) =>
+        '- ' +
+        c
+          .substring(9, c.length() - 1)
+          .replace('<', '&lt;')
+          .replace('>', '&gt;')
+    )
     .filter((c) => !!c);
 
   const depsChanges = allChanges
