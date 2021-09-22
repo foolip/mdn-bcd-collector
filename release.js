@@ -19,9 +19,6 @@ const currentVersion = (
 ).version;
 
 const prepare = async () => {
-  console.log(chalk`{blue Fetching...}`);
-  await gitRepo.fetchAll();
-
   console.log(chalk`{blue Checking status...}`);
   const status = await gitRepo.getStatus();
   if (status.length) {
@@ -41,17 +38,8 @@ const prepare = async () => {
     return false;
   }
 
-  console.log(chalk`{blue Checking out main branch...}`);
-  let branch;
-  try {
-    branch = gitRepo.getBranch('main');
-  } catch (e) {
-    const commit = await gitRepo.getBranchCommit('refs/remotes/origin/main');
-    branch = await gitRepo.createBranch('main', commit);
-    NodeGit.Branch.setUpstream(branch, 'refs/remotes/origin/main');
-  }
-  await gitRepo.checkoutBranch('main');
-  await gitRepo.mergeBranches('main', 'origin/main');
+  console.log(chalk`{blue Fetching from remote...}`);
+  await gitRepo.fetchAll();
 
   return true;
 };
@@ -136,7 +124,7 @@ const doChangelogUpdate = async () => {
 const prepareBranch = async (newVersion) => {
   const branchName = `release-${newVersion}`;
 
-  const commit = await gitRepo.getHeadCommit();
+  const commit = await gitRepo.getBranchCommit('refs/remotes/origin/main');
   const branch = await gitRepo.createBranch(branchName, commit, true);
   await gitRepo.checkoutBranch(branch);
 
@@ -198,9 +186,6 @@ const main = async () => {
   } else {
     console.log(chalk`{yellow Release cancelled by user}`);
   }
-
-  await gitRepo.checkoutBranch('main');
-  branch.delete();
 };
 
 /* istanbul ignore if */
