@@ -20,7 +20,7 @@ api:
     audioContext:
       type: instance
       src: >-
-        var constructor = (window.AudioContext || window.webkitAudioContext);
+        var constructor = window.AudioContext || window.webkitAudioContext;
         if (!constructor) {
           return false;
         }
@@ -54,8 +54,7 @@ api:
     offlineAudioContext:
       type: instance
       src: >-
-        var constructor = (window.OfflineAudioContext ||
-        window.webkitOfflineAudioContext);
+        var constructor = window.OfflineAudioContext || window.webkitOfflineAudioContext;
         if (!constructor) {
           return false;
         }
@@ -63,8 +62,7 @@ api:
     speechRecognition:
       type: instance
       src: >-
-        var constructor = (window.SpeechRecognition ||
-        window.webkitSpeechRecognition);
+        var constructor = window.SpeechRecognition || window.webkitSpeechRecognition;
         if (!constructor) {
           return false;
         }
@@ -1291,6 +1289,13 @@ api:
         }
         throw e;
       }
+  MutationObserver:
+    __base: >-
+      var constructor = window.MutationObserver || window.WebKitMutationObserver;
+      if (!constructor) {
+        return false;
+      };
+      var instance = new constructor(function(mutations){});
   NamedNodeMap:
     __base: var instance = document.body.attributes;
   Navigator:
@@ -1524,11 +1529,10 @@ api:
   RTCPeerConnection:
     __base: >-
       /* Firefox briefly defines RTCPeerConnection in older versions, but it is not a valid constructor until later versions. */
-      var constructor = (window.mozRTCPeerConnection || window.RTCPeerConnection || window.webkitRTCPeerConnection);
+      var constructor = window.mozRTCPeerConnection || window.RTCPeerConnection || window.webkitRTCPeerConnection;
       if (!constructor) {
         return false;
       };
-
       var instance = new constructor({iceServers: []});
   RTCSessionDescription:
     __base: "var instance = new RTCSessionDescription({type: 'offer'});"
