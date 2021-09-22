@@ -3,6 +3,7 @@ import esMain from 'es-main';
 import fs from 'fs-extra';
 import inquirer from 'inquirer';
 import NodeGit from 'nodegit';
+import prettier from 'prettier';
 import {fileURLToPath} from 'url';
 
 import {exec} from './scripts.js';
@@ -123,11 +124,12 @@ const doChangelogUpdate = async () => {
   const filepath = new URL('./CHANGELOG.md', import.meta.url);
   const changelog = await fs.readFile(filepath, 'utf8');
   const idx = changelog.indexOf('##');
-  const newChangelog =
+  let newChangelog =
     changelog.substring(0, idx) +
     getChanges() +
     '\n\n' +
     changelog.substring(idx, changelog.length);
+  newChangelog = prettier.format(newChangelog, {parser: 'markdown'});
   await fs.writeFile(filepath, newChangelog, 'utf8');
 };
 
@@ -181,7 +183,6 @@ const main = async () => {
 
   await doVersionBump(newVersion);
   await doChangelogUpdate();
-
   const branch = await prepareBranch(newVersion);
 
   const answers = await inquirer.prompt([
