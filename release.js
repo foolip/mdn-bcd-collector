@@ -22,7 +22,17 @@ const prepare = async () => {
     console.error(
       chalk`{red You currently have {bold uncommitted changes}. Please {bold commit} or {bold stash} your changes and try again.}`
     );
-    // return false;
+    return false;
+  }
+
+  console.log(chalk`{blue Checking for GitHub CLI...}`);
+  try {
+    exec('gh --version');
+  } catch (e) {
+    console.error(
+      chalk`{red This script depends on the {bold GitHub CLI}. Please {bold install} the CLI using the following instructions:} {blue https://cli.github.com/}`
+    );
+    return false;
   }
 
   console.log(chalk`{blue Checking out main branch...}`);
