@@ -25,6 +25,11 @@ partial interface ShadowRoot {
 partial interface Screen {
   readonly attribute long availLeft;
   readonly attribute long availTop;
+  readonly attribute long left;
+  readonly attribute long top;
+
+  attribute double mozBrightness;
+  attribute boolean mozEnabled;
 };
 
 // StyleMedia was originally named Media, and was removed from the spec

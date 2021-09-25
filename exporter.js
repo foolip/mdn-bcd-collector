@@ -17,12 +17,13 @@
 // This module is responsible for getting results/reports out of the collector
 // web service into JSON files that can be used by update-bcd.js.
 
-const crypto = require('crypto');
-const {Octokit} = require('@octokit/rest');
-const slugify = require('slugify');
-const stringify = require('json-stable-stringify');
-const {parseUA} = require('./ua-parser');
-const bcdBrowsers = require('@mdn/browser-compat-data').browsers;
+import crypto from 'crypto';
+import slugify from 'slugify';
+import stringify from 'json-stable-stringify';
+import bcd from '@mdn/browser-compat-data';
+const bcdBrowsers = bcd.browsers;
+
+import {parseUA} from './ua-parser.js';
 
 const getReportMeta = (report) => {
   const json = stringify(report);
@@ -74,15 +75,16 @@ const createBody = (meta) => {
   );
 };
 
-const exportAsPR = async (report, token) => {
-  const octokit = new Octokit({auth: `token ${token}`});
+const exportAsPR = async (report, octokit) => {
+  if (!octokit) {
+    throw new Error('"octokit" must be defined');
+  }
 
   if ((await octokit.auth()).type == 'unauthenticated') {
-    return null;
+    throw new Error('Octokit authentication failure');
   }
 
   const meta = getReportMeta(report);
-
   await octokit.git.createRef({
     owner: 'foolip',
     repo: 'mdn-bcd-results',
@@ -115,4 +117,4 @@ const exportAsPR = async (report, token) => {
   };
 };
 
-module.exports = {getReportMeta, createBody, exportAsPR};
+export {getReportMeta, createBody, exportAsPR};

@@ -14,38 +14,47 @@
 
 'use strict';
 
-const fs = require('fs');
-const path = require('path');
-const querystring = require('querystring');
-const bcdBrowsers = require('@mdn/browser-compat-data').browsers;
+import fs from 'fs-extra';
+import querystring from 'querystring';
+import bcd from '@mdn/browser-compat-data';
+const bcdBrowsers = bcd.browsers;
+import esMain from 'es-main';
+import express from 'express';
+import cookieParser from 'cookie-parser';
+import https from 'https';
+import http from 'http';
+import uniqueString from 'unique-string';
+import expressLayouts from 'express-ejs-layouts';
+import yargs from 'yargs';
+import {hideBin} from 'yargs/helpers';
+import {Octokit} from '@octokit/rest';
 
-const express = require('express');
-const cookieParser = require('cookie-parser');
-const https = require('https');
-const http = require('http');
-const uniqueString = require('unique-string');
-const expressLayouts = require('express-ejs-layouts');
+import * as exporter from './exporter.js';
+import logger from './logger.js';
+import parseResults from './results.js';
+import {getStorage} from './storage.js';
+import {parseUA} from './ua-parser.js';
+import Tests from './tests.js';
 
-const exporter = require('./exporter');
-const logger = require('./logger');
-const {parseResults} = require('./results');
-const storage = require('./storage').getStorage();
-const {parseUA} = require('./ua-parser');
+const storage = getStorage();
 
 const appVersion =
   process.env.GAE_VERSION === 'production' ?
-    require('./package.json').version :
+    (await fs.readJson(new URL('./package.json', import.meta.url))).version :
     'Dev';
 
 /* istanbul ignore next */
-const secrets =
-  process.env.NODE_ENV === 'test' ?
-    require('./secrets.sample.json') :
-    require('./secrets.json');
+const secrets = await fs.readJson(
+  new URL(
+    process.env.NODE_ENV === 'test' ?
+      './secrets.sample.json' :
+      './secrets.json',
+    import.meta.url
+  )
+);
 
-const Tests = require('./tests');
 const tests = new Tests({
-  tests: require('./tests.json'),
+  tests: await fs.readJson(new URL('./tests.json', import.meta.url)),
   httpOnly: process.env.NODE_ENV !== 'production'
 });
 
@@ -65,7 +74,7 @@ const createReport = (results, req) => {
 const app = express();
 
 // Layout config
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', './views');
 app.set('view engine', 'ejs');
 app.use(expressLayouts);
 app.set('layout extractScripts', true);
@@ -119,20 +128,20 @@ app.post('/api/results', (req, res, next) => {
   }
 
   storage
-      .put(req.sessionID, url, results)
-      .then(() => {
-        res.status(201).end();
-      })
-      .catch(next);
+    .put(req.sessionID, url, results)
+    .then(() => {
+      res.status(201).end();
+    })
+    .catch(next);
 });
 
 app.get('/api/results', (req, res, next) => {
   storage
-      .getAll(req.sessionID)
-      .then((results) => {
-        res.status(200).json(createReport(results, req));
-      })
-      .catch(next);
+    .getAll(req.sessionID)
+    .then((results) => {
+      res.status(200).json(createReport(results, req));
+    })
+    .catch(next);
 });
 
 // Test Resources
@@ -141,7 +150,7 @@ app.get('/api/results', (req, res, next) => {
 app.get('/eventstream', (req, res) => {
   res.header('Content-Type', 'text/event-stream');
   res.send(
-      'event: ping\ndata: Hello world!\ndata: {"foo": "bar"}\ndata: Goodbye world!'
+    'event: ping\ndata: Hello world!\ndata: {"foo": "bar"}\ndata: Goodbye world!'
   );
 });
 
@@ -157,13 +166,13 @@ app.get('/', (req, res) => {
 
 app.get('/download/:filename', (req, res, next) => {
   storage
-      .readFile(req.params.filename)
-      .then((data) => {
-        res.setHeader('content-type', 'application/json;charset=UTF-8');
-        res.setHeader('content-disposition', 'attachment');
-        res.send(data);
-      })
-      .catch(next);
+    .readFile(req.params.filename)
+    .then((data) => {
+      res.setHeader('content-type', 'application/json;charset=UTF-8');
+      res.setHeader('content-disposition', 'attachment');
+      res.send(data);
+    })
+    .catch(next);
 });
 
 // Accept both GET and POST requests. The form uses POST, but selenium.js
@@ -171,28 +180,37 @@ app.get('/download/:filename', (req, res, next) => {
 app.all('/export', (req, res, next) => {
   const github = !!req.body.github;
   storage
-      .getAll(req.sessionID)
-      .then(async (results) => {
-        const report = createReport(results, req);
-        if (github) {
-          const token = secrets.github.token;
-          const {url} = await exporter.exportAsPR(report, token);
+    .getAll(req.sessionID)
+    .then(async (results) => {
+      const report = createReport(results, req);
+      if (github) {
+        const token = secrets.github.token;
+        if (token) {
+          const octokit = new Octokit({auth: `token ${token}`});
+          const {url} = await exporter.exportAsPR(report, octokit);
           res.render('export', {
             title: 'Exported to GitHub',
             description: url,
             url
           });
         } else {
-          const {filename, buffer} = exporter.getReportMeta(report);
-          await storage.saveFile(filename, buffer);
           res.render('export', {
-            title: 'Exported for download',
-            description: filename,
-            url: `/download/${filename}`
+            title: 'GitHub Export Disabled',
+            description: '[No GitHub Token, GitHub Export Disabled]',
+            url: '/'
           });
         }
-      })
-      .catch(next);
+      } else {
+        const {filename, buffer} = exporter.getReportMeta(report);
+        await storage.saveFile(filename, buffer);
+        res.render('export', {
+          title: 'Exported for download',
+          description: filename,
+          url: `/download/${filename}`
+        });
+      }
+    })
+    .catch(next);
 });
 
 app.all('/tests/*', (req, res) => {
@@ -225,37 +243,32 @@ app.use((req, res) => {
   });
 });
 
-module.exports = {
-  app,
-  version: appVersion
-};
-
 /* istanbul ignore if */
-if (require.main === module) {
-  const {argv} = require('yargs').command(
-      '$0',
-      'Run the mdn-bcd-collector server',
-      (yargs) => {
-        yargs
-            .option('https-cert', {
-              describe: 'HTTPS cert chains in PEM format',
-              type: 'string'
-            })
-            .option('https-key', {
-              describe: 'HTTPS private keys in PEM format',
-              type: 'string'
-            })
-            .option('https-port', {
-              describe: 'HTTPS port (requires cert and key)',
-              type: 'number',
-              default: 8443
-            })
-            .option('port', {
-              describe: 'HTTP port',
-              type: 'number',
-              default: process.env.PORT ? +process.env.PORT : 8080
-            });
-      }
+if (esMain(import.meta)) {
+  const {argv} = yargs(hideBin(process.argv)).command(
+    '$0',
+    'Run the mdn-bcd-collector server',
+    (yargs) => {
+      yargs
+        .option('https-cert', {
+          describe: 'HTTPS cert chains in PEM format',
+          type: 'string'
+        })
+        .option('https-key', {
+          describe: 'HTTPS private keys in PEM format',
+          type: 'string'
+        })
+        .option('https-port', {
+          describe: 'HTTPS port (requires cert and key)',
+          type: 'number',
+          default: 8443
+        })
+        .option('port', {
+          describe: 'HTTP port',
+          type: 'number',
+          default: process.env.PORT ? +process.env.PORT : 8080
+        });
+    }
   );
 
   http.createServer(app).listen(argv.port);
@@ -270,3 +283,5 @@ if (require.main === module) {
   }
   logger.info('Press Ctrl+C to quit.');
 }
+
+export {app, appVersion as version};

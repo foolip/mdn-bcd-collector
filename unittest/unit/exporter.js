@@ -14,11 +14,14 @@
 
 'use strict';
 
-const assert = require('chai').assert;
+import chai, {assert, expect} from 'chai';
+import chaiAsPromised from 'chai-as-promised';
+chai.use(chaiAsPromised);
 
-const proxyquire = require('proxyquire').noCallThru();
-const sinon = require('sinon');
-const {Octokit} = require('@octokit/rest');
+import sinon from 'sinon';
+import {Octokit} from '@octokit/rest';
+
+import * as exporter from '../../exporter.js';
 
 const REPORTS = [
   {
@@ -61,14 +64,6 @@ const REPORTS = [
 
 describe('GitHub export', () => {
   const octokit = new Octokit();
-  const exporter = proxyquire('../../exporter', {
-    '@octokit/rest': {
-      /* eslint-disable-next-line prefer-arrow/prefer-arrow-functions */
-      Octokit: function () {
-        return octokit;
-      }
-    }
-  });
 
   describe('happy path', async () => {
     // eslint-disable-next-line guard-for-in
@@ -122,7 +117,8 @@ describe('GitHub export', () => {
             }
           });
 
-        const result = await exporter.exportAsPR(report, 'mocked');
+        const result = await exporter.exportAsPR(report, octokit);
+
         assert.deepEqual(result, {
           filename: `${expected.slug}.json`,
           url: 'https://github.com/foolip/mdn-bcd-results/pull/42'
@@ -136,7 +132,6 @@ describe('GitHub export', () => {
   });
 
   it('no auth token', async () => {
-    const result = await exporter.exportAsPR(REPORTS[0].report);
-    assert.equal(result, null);
+    expect(exporter.exportAsPR(REPORTS[0].report)).to.be.rejectedWith(Error);
   });
 });

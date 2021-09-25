@@ -12,9 +12,11 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-const childProcess = require('child_process');
-const path = require('path');
-const fs = require('fs');
+import childProcess from 'child_process';
+import esMain from 'es-main';
+import fs from 'fs';
+import yargs from 'yargs';
+import {hideBin} from 'yargs/helpers';
 
 const exec = (cmd, env) => {
   env = {...process.env, ...env};
@@ -24,8 +26,8 @@ const exec = (cmd, env) => {
 
 const prepare = () => {
   // Copy secrets.sample.json to secrets.json if needed
-  const secretsPath = path.join(__dirname, 'secrets.json');
-  const secretsSamplePath = path.join(__dirname, 'secrets.sample.json');
+  const secretsPath = new URL('./secrets.json', import.meta.url);
+  const secretsSamplePath = new URL('./secrets.sample.json', import.meta.url);
 
   if (!fs.existsSync(secretsPath)) {
     fs.copyFileSync(secretsSamplePath, secretsPath);
@@ -40,17 +42,18 @@ const prepare = () => {
   exec('node install.js', {PUPPETEER_PRODUCT: 'firefox'});
 };
 
-if (require.main === module) {
-  const {argv} = require('yargs').command(
-      '$0 <command>',
-      'Run an action',
-      (yargs) => {
-        yargs.positional('command', {
-          describe: 'What command to run',
-          type: 'string',
-          choices: ['unittest', 'prepare']
-        });
-      }
+/* istanbul ignore if */
+if (esMain(import.meta)) {
+  const {argv} = yargs(hideBin(process.argv)).command(
+    '$0 <command>',
+    'Run an action',
+    (yargs) => {
+      yargs.positional('command', {
+        describe: 'What command to run',
+        type: 'string',
+        choices: ['unittest', 'prepare']
+      });
+    }
   );
 
   switch (argv.command) {
@@ -58,7 +61,7 @@ if (require.main === module) {
       prepare();
       break;
     case 'unittest':
-      exec('nyc mocha --reporter dot --recursive unittest', {NODE_ENV: 'test'});
+      exec('c8 mocha --reporter dot --recursive unittest', {NODE_ENV: 'test'});
       break;
     default:
       console.error(`Unknown command ${argv.command}!`);

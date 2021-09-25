@@ -1,0 +1,395 @@
+@use 'sass:map';
+
+// Variables, Functions, Mixins
+
+$colors: (
+  background: (
+    dark: #111,
+    light: white
+  ),
+  background-2: (
+    dark: #031706,
+    light: #f2fff4
+  ),
+  paper-bg: (
+    dark: #191919,
+    light: #eee
+  ),
+  main: (
+    dark: #88f6a2,
+    light: #097923
+  ),
+  text: (
+    dark: white,
+    light: black
+  ),
+  link: (
+    dark: #99f,
+    light: #00f
+  ),
+  link-hover: (
+    dark: #bbf,
+    light: #44f
+  ),
+  input-bg: (
+    dark: #3d8a3f,
+    light: #3d8a3f
+  ),
+  input-hover-bg: (
+    dark: #4caf50,
+    light: #4caf50
+  ),
+  input-disabled-bg: (
+    dark: #636363,
+    light: #636363
+  ),
+  input-placeholder: (
+    dark: #ccc,
+    light: #ccc
+  ),
+  error: (
+    dark: #faa,
+    light: #700
+  ),
+  error-bg: (
+    dark: rgba(255, 170, 170),
+    light: rgba(119, 0, 0)
+  ),
+  warning: (
+    dark: #ffa,
+    light: #770
+  ),
+  success: (
+    dark: #afa,
+    light: #070
+  )
+);
+
+/// Map deep get - https://css-tricks.com/snippets/sass/deep-getset-maps/
+/// @author Kitty Giraudel
+/// @access public
+/// @param {Map} $map - Map
+/// @param {Arglist} $keys - Key chain
+/// @return {*} - Desired value
+@function map-deep-get($map, $keys...) {
+  @each $key in $keys {
+    $map: map.get($map, $key);
+  }
+  @return $map;
+}
+/// End Map deep get
+
+@mixin themedProperty($property, $color, $opacity: 1) {
+  #{$property}: rgba(map-deep-get($colors, $color, 'dark'), $opacity);
+
+  @media (prefers-color-scheme: light) {
+    #{$property}: rgba(map-deep-get($colors, $color, 'light'), $opacity);
+  }
+}
+
+@mixin gradient-base($direction, $color-1, $color-2) {
+  background: $color-1; /* Old browsers */
+  background: -moz-linear-gradient(
+    $direction,
+    $color-1 0%,
+    $color-2 100%
+  ); /* FF3.6-15 */
+  background: -webkit-gradient(
+    linear,
+    left bottom,
+    right top,
+    color-stop(0%, $color-1),
+    color-stop(100%, $color-2)
+  ); /* Chrome4-9,Safari4-5 */
+  background: -webkit-linear-gradient(
+    $direction,
+    $color-1 0%,
+    $color-2 100%
+  ); /* Chrome10-25,Safari5.1-6 */
+  background: -o-linear-gradient(
+    $direction,
+    $color-1 0%,
+    $color-2 100%
+  ); /* Opera 11.10-11.50 */
+  background: linear-gradient(
+    $direction,
+    $color-1 0%,
+    $color-2 100%
+  ); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+}
+
+@mixin gradient($direction, $color-1, $color-2) {
+  @include gradient-base(
+    $direction,
+    map-deep-get($colors, $color-1, 'dark'),
+    map-deep-get($colors, $color-2, 'dark')
+  );
+
+  @media (prefers-color-scheme: light) {
+    @include gradient-base(
+      $direction,
+      map-deep-get($colors, $color-1, 'dark'),
+      map-deep-get($colors, $color-2, 'dark')
+    );
+  }
+}
+
+// End Variables, Functions, Mixins
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Roboto:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@500&display=swap');
+
+html {
+  @include themedProperty(background, 'background');
+}
+
+body {
+  font-family: 'Roboto', Arial, sans-serif;
+  @include themedProperty(color, 'text');
+  @include gradient(30deg, 'background', 'background-2');
+  min-height: 100vh;
+  margin: 0;
+  padding: 8px;
+}
+
+h1,
+h2 {
+  text-align: center;
+  margin-top: 0;
+}
+
+a {
+  text-decoration: none;
+  @include themedProperty(color, 'link');
+  transition: color 0.2s;
+
+  &:hover {
+    @include themedProperty(color, 'link-hover');
+  }
+}
+
+code {
+  font-family: 'Roboto Mono', monospace;
+  font-size: 12px;
+}
+
+button,
+select,
+input {
+  @include themedProperty(background, 'input-bg');
+  @include themedProperty(color, 'text');
+  border: none;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+  transition: background-color 0.2s;
+  padding: 8px;
+
+  &:hover {
+    cursor: pointer;
+    @include themedProperty(background, 'input-hover-bg');
+  }
+
+  &:disabled,
+  &:disabled:hover {
+    cursor: not-allowed;
+    @include themedProperty(background, 'input-disabled-bg');
+    @include themedProperty(color, 'input-placeholder');
+  }
+}
+
+input {
+  text-align: left;
+  margin-left: -2px;
+
+  &::placeholder {
+    @include themedProperty(color, 'input-placeholder');
+  }
+}
+
+footer {
+  display: block;
+  text-align: center;
+  opacity: 0.75;
+  background-color: rgb(0, 0, 0, 0.25);
+  width: 100vw;
+  margin-top: 1em;
+  margin-left: -8px;
+
+  & > * {
+    display: inline-block;
+    margin-left: 4px;
+  }
+
+  #browserinfo {
+    display: block;
+    margin: 0;
+    padding-bottom: 1em;
+  }
+}
+
+hr {
+  width: 100vw;
+  margin-left: -8px;
+}
+
+.paper {
+  @include themedProperty(background, 'paper-bg');
+  padding: 1em 8px;
+  box-shadow: 0 0 10px black;
+  border-radius: 8px;
+}
+
+.error-notice {
+  @include themedProperty(color, 'error');
+}
+
+.warning-notice {
+  @include themedProperty(color, 'warning');
+}
+
+.success-notice {
+  @include themedProperty(color, 'success');
+}
+
+.mdi:before {
+  /* Ensure that *something* shows up on older browsers */
+  content: '\FFFD';
+}
+
+/* Homepage */
+
+#title {
+  @include themedProperty(color, 'main');
+  font-family: Montserrat;
+  font-size: 36pt;
+  font-weight: 500;
+  text-align: center;
+  margin-top: 0.5em;
+  margin-bottom: 0.1em;
+
+  img {
+    width: 48px;
+    height: 48px;
+  }
+
+  .version {
+    font-size: 40%;
+    opacity: 0.4;
+  }
+}
+
+#subtitle {
+  width: 90%;
+  margin: auto;
+  font-size: 16pt;
+  text-align: center;
+}
+
+#run-tests {
+  width: 100%;
+  max-width: intrinsic;
+  max-width: -webkit-max-content;
+  max-width: -moz-max-content;
+  max-width: max-content;
+  margin: auto;
+  margin-top: 2em;
+  padding: 2em;
+  text-align: center;
+
+  #test-entry {
+    display: block;
+  }
+}
+
+#test-selection {
+  padding-left: 16px;
+  width: 70%;
+}
+
+#supported-browsers {
+  margin-top: 2em;
+  padding-top: 0.5em;
+  padding-bottom: 1em;
+}
+
+.compat-table {
+  margin: auto;
+  text-align: center;
+
+  .compat-table-entry {
+    display: inline-block;
+    margin-right: 16px;
+
+    img {
+      display: inline-block;
+      width: 32px;
+      height: 32px;
+      vertical-align: middle;
+    }
+
+    p {
+      display: inline-block;
+      margin: 0;
+      margin-left: 8px;
+    }
+  }
+
+  .compat-table-separator {
+    display: none;
+
+    @media screen and (max-width: 900px), screen and (max-device-width: 900px) {
+      display: block;
+    }
+  }
+}
+
+#known-caveats {
+  @include themedProperty(background, 'error-bg', 0.05);
+  width: intrinsic;
+  width: -webkit-max-content;
+  width: -moz-max-content;
+  width: max-content;
+  max-width: calc(100vw - 4em - 24px);
+  margin: auto;
+  margin-bottom: 1em;
+  text-align: center;
+  list-style-position: inside;
+}
+
+#privacy-notice {
+  text-align: center;
+}
+
+/* End: Homepage */
+
+#status {
+  font-weight: bold;
+}
+
+.result {
+  margin-bottom: 0.5em;
+
+  .result-value {
+    font-weight: bold;
+
+    &.result-value-true {
+      @include themedProperty(color, 'success');
+    }
+
+    &.result-value-false {
+      @include themedProperty(color, 'error');
+    }
+  }
+
+  .result-info {
+    display: block;
+    margin-left: 1.5em;
+    margin-bottom: 1em;
+  }
+
+  .result-message {
+    font-style: italic;
+    margin-top: 0;
+  }
+}

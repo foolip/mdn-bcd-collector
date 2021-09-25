@@ -14,8 +14,9 @@
 
 'use strict';
 
-const winston = require('winston');
-const {LoggingWinston} = require('@google-cloud/logging-winston');
+import winston from "winston";
+import {LoggingWinston} from "@google-cloud/logging-winston";
+
 
 const getTransport = () => {
   /* istanbul ignore if */
@@ -36,4 +37,4 @@ const logger = winston.createLogger({
   silent: process.env.NODE_ENV === 'test'
 });
 
-module.exports = logger;
+export default logger;

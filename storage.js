@@ -14,11 +14,9 @@
 
 'use strict';
 
-const assert = require('assert');
-const fs = require('fs').promises;
-const path = require('path');
-
-const {Storage} = require('@google-cloud/storage');
+import assert from 'assert';
+import fs from 'fs-extra';
+import {Storage} from '@google-cloud/storage';
 
 class CloudStorage {
   constructor(projectId, bucketName) {
@@ -40,12 +38,12 @@ class CloudStorage {
     const files = (await this._bucket.getFiles({prefix}))[0];
     const result = {};
     await Promise.all(
-        files.map(async (file) => {
-          assert(file.name.startsWith(prefix));
-          const key = decodeURIComponent(file.name.substr(prefix.length));
-          const data = (await file.download())[0];
-          result[key] = JSON.parse(data);
-        })
+      files.map(async (file) => {
+        assert(file.name.startsWith(prefix));
+        const key = decodeURIComponent(file.name.substr(prefix.length));
+        const data = (await file.download())[0];
+        result[key] = JSON.parse(data);
+      })
     );
     return result;
   }
@@ -92,14 +90,17 @@ class MemoryStorage {
 
   async saveFile(filename, data) {
     assert(!filename.includes('..'));
-    const p = path.join(__dirname, 'download', filename);
-    await fs.writeFile(p, data);
+    await fs.writeFile(
+      new URL(`./download/${filename}`, import.meta.url),
+      data
+    );
   }
 
   async readFile(filename) {
     assert(!filename.includes('..'));
-    const p = path.join(__dirname, 'download', filename);
-    return await fs.readFile(p);
+    return await fs.readFile(
+      new URL(`./download/${filename}`, import.meta.url)
+    );
   }
 }
 
@@ -120,4 +121,4 @@ const getStorage = () => {
   return new MemoryStorage();
 };
 
-module.exports = {CloudStorage, MemoryStorage, getStorage};
+export {CloudStorage, MemoryStorage, getStorage};

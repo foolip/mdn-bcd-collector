@@ -196,6 +196,11 @@ partial interface DataTransfer {
   readonly attribute Node? mozSourceNode;
 };
 
+dictionary ElementRegistrationOptions {
+  object? prototype = null;
+  DOMString? extends = null;
+};
+
 partial interface Document {
   // https://chromium.googlesource.com/chromium/src.git/+/24e58b0d8fab28fa20e69f191d833fe97aaff75d
   any getCSSCanvasContext(DOMString contextId, DOMString name, long width, long height);
@@ -209,6 +214,8 @@ partial interface Document {
 
   // https://github.com/whatwg/html/pull/951
   readonly attribute DOMString origin;
+
+  any registerElement(DOMString type, optional ElementRegistrationOptions options = {});
 };
 
 partial interface DragEvent {
@@ -221,6 +228,8 @@ partial interface Element {
 
   // https://github.com/whatwg/html/issues/667
   attribute EventHandler onsearch;
+
+  readonly attribute boolean tabStop;
 
   // event handler attributes in the wrong place
   attribute EventHandler oncopy;
@@ -609,6 +618,13 @@ partial interface ImageBitmapRenderingContext {
   undefined transferImageBitmap(ImageBitmap? bitmap);
 };
 
+partial interface Location {
+  attribute USVString password;
+  attribute USVString username;
+
+  stringifier;
+};
+
 partial interface MessageEvent {
   // https://github.com/whatwg/html/pull/4009
   readonly attribute UserActivation? userActivation;
@@ -633,6 +649,11 @@ partial interface Navigator {
 
   // https://developer.mozilla.org/en-US/docs/Web/API/Navigator/mozIsLocallyAvailable
   boolean mozIsLocallyAvailable(DOMString url, boolean ifOffline);
+
+  attribute any authentication;
+  readonly attribute DOMString buildID;
+  readonly attribute DOMString doNotTrack;
+  undefined registerContentHandler();
 };
 
 partial interface Plugin {
@@ -650,6 +671,10 @@ partial interface TextTrackCueList {
 
 partial interface TextTrackList {
    TextTrack item(unsigned long index);
+};
+
+[Exposed=(Window,Worker)]
+interface Transferable {
 };
 
 partial interface VideoTrackList {

@@ -14,9 +14,9 @@
 
 'use strict';
 
-const assert = require('chai').assert;
+import {assert} from "chai";
 
-const Tests = require('../../tests');
+import Tests from "../../tests.js";
 
 const testDatabase = {
   'api.AbortController': {

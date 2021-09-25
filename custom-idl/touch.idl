@@ -1,8 +1,0 @@
-partial interface Document {
-  Touch createTouch();
-  TouchList createTouchList();
-};
-
-partial interface TouchList {
-  Touch identifiedTouch();
-};

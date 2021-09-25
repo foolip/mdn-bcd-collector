@@ -20,7 +20,7 @@ api:
     audioContext:
       type: instance
       src: >-
-        var constructor = (window.AudioContext || window.webkitAudioContext);
+        var constructor = window.AudioContext || window.webkitAudioContext;
         if (!constructor) {
           return false;
         }
@@ -54,8 +54,7 @@ api:
     offlineAudioContext:
       type: instance
       src: >-
-        var constructor = (window.OfflineAudioContext ||
-        window.webkitOfflineAudioContext);
+        var constructor = window.OfflineAudioContext || window.webkitOfflineAudioContext;
         if (!constructor) {
           return false;
         }
@@ -63,8 +62,7 @@ api:
     speechRecognition:
       type: instance
       src: >-
-        var constructor = (window.SpeechRecognition ||
-        window.webkitSpeechRecognition);
+        var constructor = window.SpeechRecognition || window.webkitSpeechRecognition;
         if (!constructor) {
           return false;
         }
@@ -528,24 +526,6 @@ api:
       }
   Document:
     __base: var instance = document;
-    __additional:
-      createElement.options: >-
-        <%api.Document:d%>
-        return !!d.createElement('span', {});
-      createElementNS.options: >-
-        <%api.Document:d%>
-        return !!d.createElement('span', {});
-      documentURI.readonly: >-
-        <%api.Document:d%>
-        var orig = d.documentURI;
-        try {
-          d.documentURI = 'http://example.org/';
-          var result = d.documentURI === orig;
-          d.documentURI = orig; // Reset just in case
-          return result;
-        } catch(e) {
-          return e instanceof TypeError;
-        }
   DocumentFragment:
     __base: var instance = document.createDocumentFragment();
   DocumentType:
@@ -569,17 +549,28 @@ api:
       }
       var instance = el.getClientRects();
   DOMTokenList:
+    __base: >-
+      var elm = document.createElement('b');
+      var instance = elm.classList;
     __additional:
       trim_whitespace: >-
-        var elm = document.createElement('b');
+        if (!instance) { return false; }
         elm.className = ' foo bar foo ';
-        elm.classList.remove('bar');
+        instance.remove('bar');
         return elm.className === 'foo foo' || elm.className === 'foo';
       remove_duplicates: >-
-        var elm = document.createElement('b');
+        if (!instance) { return false; }
         elm.className = ' foo bar foo ';
-        elm.classList.remove('bar');
+        instance.remove('bar');
         return elm.className === 'foo';
+      toggle.force_parameter: >-
+        if (!instance) { return false; }
+        elm.className = 'foo bar';
+        if (!('toggle' in instance)) {
+          return {result: false, message: 'Element.classList.toggle is not defined'};
+        }
+        instance.toggle('foo', true);
+        return elm.className === 'foo bar';
   DragEvent:
     __base: >-
       var instance;
@@ -760,7 +751,9 @@ api:
   External:
     __base: var instance = window.external;
   FetchEvent:
-    __base: var instance = new FetchEvent('fetch');
+    __base: >-
+      <%api.Request:req%>
+      var instance = new FetchEvent('fetch', { request: req });
   FileReader:
     __base: var instance = new FileReader();
   FocusEvent:
@@ -780,6 +773,14 @@ api:
       }
   FontFace:
     __base: var instance = new FontFace('Material Design Icons', 'url(/fonts/materialdesignicons-webfont.woff)');
+  FontFaceSet:
+    __base: >-
+      var instance;
+      if ('document' in self) {
+        instance = document.fonts;
+      } else {
+        instance = self.fonts;
+      }
   FontFaceSetLoadEvent:
     __base: var instance = new FontFaceSetLoadEvent('loading');
   GainNode:
@@ -962,6 +963,13 @@ api:
   HTMLOptionElement:
     __base: var instance = document.createElement('option');
     __test: return bcd.testObjectName(instance, 'HTMLOptionElement');
+  HTMLOptionsCollection:
+    __base: >-
+      var el = document.createElement('select');
+      for (var i = 0; i < 3; i++) {
+        el.appendChild(document.createElement('option'));
+      }
+      var instance = el.options;
   HTMLOutputElement:
     __base: var instance = document.createElement('output');
     __test: return bcd.testObjectName(instance, 'HTMLOutputElement');
@@ -1103,8 +1111,13 @@ api:
       });
   ImageData:
     __base: >-
-      <%api.CanvasRenderingContext2D:ctx%>
-      var instance = ctx.createImageData(16, 16);
+      var instance;
+      if ('ImageData' in self) {
+        instance = new ImageData(5, 5);
+      } else if ('document' in self) {
+        <%api.CanvasRenderingContext2D:ctx%>
+        instance = ctx.createImageData(16, 16);
+      }
   InstallEvent:
     __base: var instance = new InstallEvent('install');
   KeyboardEvent:
@@ -1269,6 +1282,13 @@ api:
         }
         throw e;
       }
+  MutationObserver:
+    __base: >-
+      var constructor = window.MutationObserver || window.WebKitMutationObserver;
+      if (!constructor) {
+        return false;
+      };
+      var instance = new constructor(function(mutations){});
   NamedNodeMap:
     __base: var instance = document.body.attributes;
   Navigator:
@@ -1292,7 +1312,7 @@ api:
       - audioContext
     __base: >-
       <%api.AudioBuffer:buffer%>
-      var instance = new OfflineAudioCompletionEvent('', {renderedBuffer: buffer});
+      var instance = new OfflineAudioCompletionEvent('complete', {renderedBuffer: buffer});
   OfflineAudioContext:
     __resources:
       - offlineAudioContext
@@ -1416,7 +1436,12 @@ api:
       };
       var instance = performance;
   PerformanceEntry:
-    __base: <%api.PerformanceMark:instance%>
+    __base: >-
+      <%api.Performance:prf%>
+      if (!('getEntries' in prf)) {
+        return false;
+      }
+      var instance = prf.getEntries()[0];
   PerformanceMark:
     __base: >-
       if (!('performance' in self)) {
@@ -1491,20 +1516,19 @@ api:
   RTCDataChannelEvent:
     __base: >-
       <%api.RTCDataChannel:channel%>
-      var instance = new RTCDataChannelEvent('', {channel: channel});
+      var instance = new RTCDataChannelEvent('datachannel', {channel: channel});
   RTCDTMFToneChangeEvent:
-    __base: "new RTCDTMFToneChangeEvent('', {tone: ''});"
+    __base: "var instance = new RTCDTMFToneChangeEvent('tonechange', {tone: ''});"
   RTCPeerConnection:
     __base: >-
-      var constructor = (window.RTCPeerConnection || window.mozRTCPeerConnection || window.webkitRTCPeerConnection);
+      /* Firefox briefly defines RTCPeerConnection in older versions, but it is not a valid constructor until later versions. */
+      var constructor = window.mozRTCPeerConnection || window.RTCPeerConnection || window.webkitRTCPeerConnection;
       if (!constructor) {
         return false;
-      }
-      var cnstResult = bcd.testConstructor(constructor);
-      if (cnstResult.result !== true) {
-        return cnstResult;
-      }
+      };
       var instance = new constructor({iceServers: []});
+  RTCSessionDescription:
+    __base: "var instance = new RTCSessionDescription({type: 'offer'});"
   Screen:
     __base: var instance = window.screen;
   ScriptProcessorNode:
@@ -1680,6 +1704,10 @@ api:
     __base: >-
       <%api.SVGViewElement:el%>
       var instance = el.viewBox;
+  SVGAnimatedString:
+    __base: >-
+      <%api.SVGElement:el%>
+      var instance = el.className;
   SVGAnimatedTransformList:
     __base: >-
       <%api.SVGGraphicsElement:el%>
@@ -2353,6 +2381,7 @@ api:
       }
   Window:
     __base: var instance = window;
+    crypto: return !!self.crypto;
   WindowOrWorkerGlobalScope:
     __base: var instance = self;
   WorkerGlobalScope:
@@ -2394,7 +2423,7 @@ api:
   XPathResult:
     __base: >-
       <%api.XPathExpression:exp%>
-      var instance = exp.evaluate(document);
+      var instance = exp.evaluate(document, 0, null);
 
 css:
   properties:
