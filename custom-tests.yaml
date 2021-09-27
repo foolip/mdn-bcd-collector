@@ -884,8 +884,6 @@ api:
       <%api.HTMLFormElement:form%>
       for (var i = 0; i < 3; i++) {
         var input = document.createElement('input');
-        input.type = "radio";
-        input.name = "radio";
         input.value = i;
         form.appendChild(input);
       }
@@ -1517,6 +1515,10 @@ api:
   RadioNodeList:
     __base: >-
       <%api.HTMLFormControlsCollection:controls%>
+      for (var i = 0; i < controls.length; i++) {
+        controls[i].type = "radio";
+        controls[i].name = "radio";
+      }
       var instance = controls.namedItem('radio');
   Range:
     __base: var instance = document.createRange();
