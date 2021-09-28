@@ -174,7 +174,6 @@ const main = async () => {
 
   await doVersionBump(newVersion);
   await doChangelogUpdate();
-  const branch = await prepareBranch(newVersion);
 
   const answers = await inquirer.prompt([
     {
@@ -185,9 +184,13 @@ const main = async () => {
   ]);
 
   if (answers.confirm) {
+    const branch = await prepareBranch(newVersion);
     await createPR(branch);
   } else {
-    console.log(chalk`{yellow Release cancelled by user}`);
+    console.log(
+      chalk`{yellow Release cancelled by user, reverting package[-lock.json] changes (changelog retained)}`
+    );
+    await doVersionBump(currentVersion);
   }
 };
 
