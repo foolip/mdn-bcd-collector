@@ -85,7 +85,9 @@
 ## v3.2.8
 
 - Bug fixes (#1400), 2021-08-15
-- Release 3.2.7 (#1399), 2021-08-15
+
+## v3.2.7
+
 - Revert documentURI after testing api.Document.documentURI.readonly (#1398), 2021-08-15
 
 ## v3.2.6
