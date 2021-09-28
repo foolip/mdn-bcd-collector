@@ -4,78 +4,50 @@
 
 - Automatically tag new releases (#1484), 2021-09-15
 - Add RTCSessionDescription test; fix RTCDTMFToneChangeEvent (#1488), 2021-09-15
-- Bump @google-cloud/storage from 5.14.1 to 5.14.2, 2021-09-14
-- Bump listr2 from 3.11.1 to 3.12.1, 2021-09-13
-- Bump @mdn/browser-compat-data from 4.0.2 to 4.0.3 (#1483), 2021-09-12
 
 ## v3.3.0
 
 - Add required request parameter to FetchEvent constructor (#1481), 2021-09-10
 - Send the right tests to SharedWorker and ServiceWorker (#1479), 2021-09-10
-- Bump @webref/idl from 2.3.0 to 2.4.0, 2021-09-09
-- Bump prettier from 2.3.2 to 2.4.0, 2021-09-09
 - Use document.fonts or self.fonts as FontFaceSet instance (#1474), 2021-09-10
-- Bump @google-cloud/storage from 5.14.0 to 5.14.1 (#1473), 2021-09-09
-- Bump @google-cloud/logging-winston from 4.1.0 to 4.1.1, 2021-09-08
 - Remove custom test for api.Document.documentURI.readonly (#1471), 2021-09-08
 - Add comment explaining RTCPeerConnection constructor order (#1470), 2021-09-08
 - Fix custom test for RTCPeerConnection (#1469), 2021-09-08
 - Add .nvmrc (#1468), 2021-09-08
-- Bump @mdi/font from 5.9.55 to 6.1.95, 2021-09-06
 - Revert "Create custom test for RTCRtpReceiver" (#1464), 2021-09-07
 - Simplify window.crypto custom test (#1465), 2021-09-07
-- Bump yaml from 2.0.0-7 to 2.0.0-8, 2021-09-06
 - Update custom test for ImageData (#1461), 2021-09-05
 - Change Vinyl's username on footer to match rebranding (#1460), 2021-09-05
 - Create custom test for RTCRtpReceiver (#1459), 2021-09-05
 - Create custom tests for DOMTokenList (#1458), 2021-09-04
 - Fix Safari bug for window.crypto (#1457), 2021-09-04
-- Bump @octokit/rest from 18.9.1 to 18.10.0, 2021-09-02
 - Remove stray semicolon (#1456), 2021-09-03
 
 ## v3.2.12
 
-- Bump @mdn/browser-compat-data from 4.0.1 to 4.0.2, 2021-09-02
 - Add back PaymentAddress as custom IDL, 2021-09-02
-- Bump @webref/idl from 2.2.13 to 2.3.0, 2021-09-02
-- Bump @webref/css from 2.0.9 to 2.0.10, 2021-09-02
-- Bump listr2 from 3.11.0 to 3.11.1, 2021-08-31
-- Bump @google-cloud/storage from 5.13.2 to 5.14.0, 2021-08-27
-- Bump open-cli from 7.0.0 to 7.0.1, 2021-08-30
-- Bump mocha from 9.1.0 to 9.1.1, 2021-08-30
 
 ## v3.2.11
 
 - Reorganize custom IDL by spec affinity (#1441), 2021-08-27
 - Remove navigator.canShare() custom IDL, 2021-08-27
-- Bump @webref/idl from 2.2.12 to 2.2.13, 2021-08-26
-- Bump @webref/css from 2.0.8 to 2.0.9, 2021-08-26
-- Bump @google-cloud/storage from 5.13.1 to 5.13.2, 2021-08-26
-- Bump @mdn/browser-compat-data from 4.0.0 to 4.0.1, 2021-08-26
 - testConstructor: add catch for Safari's "Can't find variable" error (#1434), 2021-08-23
 - Add custom test for DOMTokenList.toggle.force_parameter (#1433), 2021-08-23
 - Add custom test for SVGAnimatedString (#1432), 2021-08-23
 - Ignore .DS_Store (#1431), 2021-08-21
 - Format comments in custom tests to ensure they remain on their own line (#1430), 2021-08-21
 - Fix the comment for RTCPeerConnection (#1429), 2021-08-20
-- Bump mocha from 9.0.3 to 9.1.0 (#1428), 2021-08-20
 - Fix import in add-new-bcd (#1427), 2021-08-20
 - Add comment explaining the RTCPeerConnection constructor test (#1426), 2021-08-20
 
 ## v3.2.10
 
-- Bump @mdn/browser-compat-data from 3.3.14 to 4.0.0 (#1420), 2021-08-20
-- Bump @webref/css from 2.0.7 to 2.0.8, 2021-08-20
-- Bump @webref/idl from 2.2.11 to 2.2.12, 2021-08-19
 - Use performance.getEntries() to get PerformanceEntry instance (#1417), 2021-08-20
 - Addressing Lighthouse audit report (#1411), 2021-08-19
 - Add initWebKitAnimationEvent and initWebKitTransitionEvent tests (#1415), 2021-08-19
-- Bump @google-cloud/storage from 5.13.0 to 5.13.1, 2021-08-18
 - Fix test for RTCPeerConnection (#1409), 2021-08-17
 - Make testConstructor able to test constructor objects (#1408), 2021-08-16
 - Updates for event custom tests (#1405), 2021-08-16
-- Bump @octokit/rest from 18.9.0 to 18.9.1 (#1407), 2021-08-16
-- Bump yargs from 17.1.0 to 17.1.1 (#1406), 2021-08-16
 - Account for Opera Presto error (#1404), 2021-08-16
 
 ## v3.2.9
@@ -106,9 +78,7 @@
 - Fix find-missing-releases (#1387), 2021-08-14
 - Add .prettierrc file (#1386), 2021-08-14
 - Add find-missing-results (#1385), 2021-08-14
-- Bump @webref/idl from 2.2.10 to 2.2.11 (#1383), 2021-08-14
 - Add debug mode console logs (#1384), 2021-08-13
-- Bump @webref/css from 2.0.6 to 2.0.7, 2021-08-12
 - Make Plugin test inconclusive if navigator.plugins is empty (#1377), 2021-08-12
 - Add instances for XMLHttpRequestEventTarget and XMLHttpRequestUpload (#1376), 2021-08-12
 
@@ -116,31 +86,12 @@
 
 - Add a type string for most event constructors (#1375), 2021-08-11
 - Remove ^ from package.json (#1379), 2021-08-11
-- Bump jszip from 3.5.0 to 3.7.1, 2021-08-11
-- Bump path-parse from 1.0.6 to 1.0.7, 2021-08-10
-- Bump @google-cloud/storage from 5.12.0 to 5.13.0, 2021-08-09
-- Bump yargs from 17.0.1 to 17.1.0 (#1373), 2021-08-05
-- Bump @mdn/browser-compat-data from 3.3.13 to 3.3.14 (#1372), 2021-08-05
 - Add more custom tests (#1367), 2021-08-05
-- Bump @webref/idl from 2.2.9 to 2.2.10 (#1371), 2021-08-04
-- Bump puppeteer from 10.1.0 to 10.2.0 (#1368), 2021-08-04
-- Bump @webref/css from 2.0.5 to 2.0.6 (#1370), 2021-08-04
-- Bump @google-cloud/storage from 5.11.1 to 5.12.0 (#1369), 2021-08-04
-- Bump @octokit/rest from 18.8.0 to 18.9.0 (#1366), 2021-08-04
-- Bump @google-cloud/storage from 5.11.0 to 5.11.1 (#1365), 2021-08-04
 - Add/update custom tests (#1364), 2021-08-03
-- Bump @octokit/rest from 18.7.2 to 18.8.0 (#1360), 2021-08-02
-- Bump eslint from 7.31.0 to 7.32.0 (#1359), 2021-08-02
 - Convert custom-tests.json to YAML (for multiline formatting) (#1358), 2021-08-02
 - Fix custom test for Notification API (#1357), 2021-08-02
 - Fix test for XPathResult (#1355), 2021-07-31
-- Bump chalk from 4.1.1 to 4.1.2 (#1354), 2021-07-31
-- Bump @octokit/rest from 18.7.0 to 18.7.2 (#1353), 2021-07-30
-- Bump @mdn/browser-compat-data from 3.3.12 to 3.3.13 (#1352), 2021-07-30
 - Add additional additional for several APIs (#1347), 2021-07-30
-- Bump sinon from 11.1.1 to 11.1.2 (#1351), 2021-07-30
-- Bump mocha from 9.0.2 to 9.0.3 (#1349), 2021-07-30
-- Bump @google-cloud/storage from 5.10.0 to 5.11.0 (#1348), 2021-07-30
 - Improve test for WebSocket API (#1346), 2021-07-26
 
 ## v3.2.3
@@ -148,28 +99,18 @@
 - Add a test for Object.hasOwn() (#1342), 2021-07-23
 - Combine results from different reports for the same browser version (#1340), 2021-07-23
 - Simplify getSupportMap by ignoring URL (#1339), 2021-07-23
-- Bump @webref/idl from 2.2.8 to 2.2.9, 2021-07-22
-- Bump @webref/css from 2.0.4 to 2.0.5, 2021-07-22
-- Bump @google-cloud/storage from 5.9.0 to 5.10.0, 2021-07-22
-- Bump @mdn/browser-compat-data from 3.3.11 to 3.3.12, 2021-07-22
-- Bump listr2 from 3.10.0 to 3.11.0, 2021-07-22
 - Correct preference for fake Firefox media stream (#1333), 2021-07-22
 - Simplify getSupportMap to use bare values, not {result: ...} (#1332), 2021-07-22
-- Bump @google-cloud/storage from 5.8.5 to 5.9.0, 2021-07-21
-- Bump @octokit/rest from 18.6.8 to 18.7.0, 2021-07-21
 - Fix tests for WritableStreamDefaultController/Writer (#1324), 2021-07-21
 - Remove mapping of console-&gt;Console (#1326), 2021-07-21
-- Bump @octokit/rest from 18.6.7 to 18.6.8, 2021-07-20
 - Fix variable names in custom tests to avoid "interface" (#1323), 2021-07-20
 
 ## v3.2.2
 
 - Revert "Update lockfile version to 2" (#1321), 2021-07-20
-- Bump eslint from 7.30.0 to 7.31.0 (#1322), 2021-07-19
 - Ignore user media tests on Firefox 34-52 (#1319), 2021-07-19
 - Update lockfile version to 2 (#1317), 2021-07-19
 - Cover inherited attributes (#1318), 2021-07-19
-- Bump slugify from 1.5.3 to 1.6.0, 2021-07-16
 - Add instrumentKey custom IDL (#1314), 2021-07-16
 
 ## v3.2.1
@@ -183,25 +124,14 @@
 - Generate test for JavaScript constructors (#1307), 2021-07-16
 - Generate tests for property symbols (@@ features) (#1306), 2021-07-16
 - Generate tests for JavaScript builtins (#1302), 2021-07-16
-- Bump @webref/css from 2.0.3 to 2.0.4 (#1303), 2021-07-15
-- Bump ejs-lint from 1.2.0 to 1.2.1 (#1304), 2021-07-15
-- Bump @mdn/browser-compat-data from 3.3.10 to 3.3.11 (#1305), 2021-07-15
 
 ## v3.1.11
 
 - Add back custom IDL now gone from @webref/idl (#1300), 2021-07-15
-- Bump @webref/idl from 2.2.7 to 2.2.8 (#1299), 2021-07-15
-- Bump nodemon from 2.0.11 to 2.0.12, 2021-07-12
 - Add MutationEvent instance (document.createEvent('MutationEvent')) (#1297), 2021-07-12
-- Bump @webref/idl from 2.2.6 to 2.2.7 (#1293), 2021-07-09
-- Bump nodemon from 2.0.9 to 2.0.11 (#1296), 2021-07-09
-- Bump @webref/css from 2.0.2 to 2.0.3 (#1291), 2021-07-09
 - Add custom tests for WritableStreamDefaultController/Writer (#1295), 2021-07-09
 - Update UA parser to better handle iOS browsers (#1290), 2021-07-08
 - Enable fake media stream for Firefox in Selenium script (#1289), 2021-07-08
-- Bump eslint from 7.29.0 to 7.30.0 (#1286), 2021-07-06
-- Bump @octokit/rest from 18.6.6 to 18.6.7 (#1285), 2021-07-06
-- Bump mocha from 9.0.1 to 9.0.2 (#1284), 2021-07-06
 - Custom tests: replace variable assignments as well (#1288), 2021-07-06
 
 ## v3.1.10
@@ -215,26 +145,7 @@
 
 ## v3.1.9
 
-- Bump @webref/idl from 2.2.4 to 2.2.6, 2021-07-01
-- Bump @webref/css from 2.0.1 to 2.0.2, 2021-07-01
-- Bump @mdn/browser-compat-data from 3.3.9 to 3.3.10, 2021-07-01
 - Remove custom IDL now in @webref/idl, 2021-07-01
-- Bump @webref/idl from 2.2.3 to 2.2.4, 2021-06-25
-- Bump nodemon from 2.0.8 to 2.0.9, 2021-06-30
-- Bump @octokit/rest from 18.6.4 to 18.6.6, 2021-06-30
-- Bump @octokit/rest from 18.6.3 to 18.6.4, 2021-06-29
-- Bump puppeteer from 10.0.0 to 10.1.0, 2021-06-29
-- Bump nodemon from 2.0.7 to 2.0.8, 2021-06-29
-- Bump @octokit/rest from 18.6.2 to 18.6.3, 2021-06-28
-- Bump webidl2 from 24.1.1 to 24.1.2, 2021-06-28
-- Bump prettier from 2.3.1 to 2.3.2, 2021-06-28
-- Bump @octokit/rest from 18.6.1 to 18.6.2, 2021-06-25
-- Bump @webref/css from 2.0.0 to 2.0.1, 2021-06-24
-- Bump didyoumean from 1.2.1 to 1.2.2, 2021-06-24
-- Bump @mdn/browser-compat-data from 3.3.8 to 3.3.9, 2021-06-24
-- Bump color-string from 1.5.3 to 1.5.5, 2021-06-23
-- Bump @octokit/rest from 18.6.0 to 18.6.1, 2021-06-23
-- Bump eslint from 7.28.0 to 7.29.0, 2021-06-21
 
 ## v3.1.8
 
@@ -247,241 +158,110 @@
 - Add custom code for MouseEvent instance (#1248), 2021-06-21
 - Add custom code for WheelEvent instance (#1247), 2021-06-21
 - Add RTCPeerConnection instance with prefixed variants (#1246), 2021-06-20
-- Bump mocha from 9.0.0 to 9.0.1, 2021-06-18
 
 ## v3.1.7
 
 - Remove custom SourceBuffer.changeType now in @webref/idl, 2021-06-18
-- Bump @webref/idl from 2.2.2 to 2.2.3, 2021-06-17
 - Fix Peformance\* custom tests (#1238), 2021-06-18
-- Bump @webref/css from 1.1.0 to 2.0.0, 2021-06-17
-- Bump @mdn/browser-compat-data from 3.3.7 to 3.3.8, 2021-06-17
 - Create an instance for XMLHttpRequest tests (#1237), 2021-06-16
 - Fix the fallback for creating an Event instance (#1236), 2021-06-16
-- Bump open-cli from 6.0.1 to 7.0.0, 2021-06-16
-- Bump @google-cloud/logging-winston from 4.0.5 to 4.1.0, 2021-06-15
-- Bump @octokit/rest from 18.5.6 to 18.6.0, 2021-06-14
-- Bump express-ejs-layouts from 2.5.0 to 2.5.1, 2021-06-14
 - Always show form buttons, but disable by default (#1231), 2021-06-12
-- Bump @mdn/browser-compat-data from 3.3.6 to 3.3.7, 2021-06-11
 
 ## v3.1.6
 
-- Bump @webref/idl from 2.2.1 to 2.2.2, 2021-06-10
 - Test for crypto.webkitSubtle and use it as a SubtleCrypto instance (#1219), 2021-06-10
-- Bump normalize-url from 4.5.0 to 4.5.1, 2021-06-09
 - Simplify subtle.crypto custom test instance (#1216), 2021-06-08
-- Bump trim-newlines from 3.0.0 to 3.0.1, 2021-06-08
-- Bump glob-parent from 5.1.1 to 5.1.2, 2021-06-08
-- Bump mocha from 8.4.0 to 9.0.0, 2021-06-08
-- Bump listr2 from 3.9.0 to 3.10.0, 2021-06-08
 - Add custom test instance for WorkerLocation (#1211), 2021-06-07
 - Update custom test for ProcessingInstruction (#1210), 2021-06-07
-- Bump prettier from 2.3.0 to 2.3.1, 2021-06-07
-- Bump eslint from 7.27.0 to 7.28.0, 2021-06-07
-- Bump @mdn/browser-compat-data from 3.3.5 to 3.3.6, 2021-06-07
 - Get a DOMException instance from a thrown exception (#1192), 2021-06-06
 
 ## v3.1.5
 
 - Fix http-&gt;https (#1205), 2021-06-04
-- Bump @webref/idl from 2.2.0 to 2.2.1, 2021-06-04
 - Improve MediaStream tests for camera-less devices (#1203), 2021-06-03
 - Document how to diff tests in the release process (#1201), 2021-06-03
 - Revert "Add reusable instances of Worker and SharedWorker" (#1202), 2021-06-03
 - Add reusable instances of Worker and SharedWorker (#1200), 2021-06-03
 - Fix custom test for ProcessingInstruction API (#1198), 2021-06-03
 - Selenium: don't try to test Safari 14.0 in BrowserStack (#1197), 2021-06-03
-- Bump @webref/css from 1.0.2 to 1.1.0, 2021-06-03
 - Add custom test for WebGLVertexArrayObjectOES API (#1195), 2021-06-02
 - Use navigator as the WorkerNavigator instance (#1194), 2021-06-02
-- Bump @octokit/rest from 18.5.5 to 18.5.6, 2021-06-02
-- Bump puppeteer from 9.1.1 to 10.0.0 (#1191), 2021-06-01
 
 ## v3.1.4
 
 - Test SVGElement using a &lt;title&gt; element instance (#1189), 2021-05-31
-- Bump @octokit/rest from 18.5.4 to 18.5.5, 2021-05-31
-- Bump ws from 7.4.5 to 7.4.6, 2021-05-29
 
 ## v3.1.3
 
 - Document the manual release process, 2021-05-28
-- Bump @mdn/browser-compat-data from 3.3.4 to 3.3.5, 2021-05-28
-- Bump @webref/idl from 2.1.4 to 2.2.0, 2021-05-28
-- Bump @webref/css from 1.0.1 to 1.0.2, 2021-05-28
-- Bump @octokit/rest from 18.5.3 to 18.5.4, 2021-05-28
-- Bump listr2 from 3.8.4 to 3.9.0, 2021-05-28
 - Fix SVGFEFuncAlement typo in SVGComponentTransferFunctionElement test (#1179), 2021-05-27
-- Bump sinon from 11.1.0 to 11.1.1, 2021-05-27
-- Bump listr2 from 3.8.3 to 3.8.4, 2021-05-26
-- Bump sinon from 11.0.0 to 11.1.0, 2021-05-26
-- Bump listr2 from 3.8.2 to 3.8.3, 2021-05-25
-- Bump sinon from 10.0.1 to 11.0.0, 2021-05-25
-- Bump eslint from 7.26.0 to 7.27.0, 2021-05-24
 - Avoid external URL in FontFace source (#1172), 2021-05-21
-- Bump @mdn/browser-compat-data from 3.3.3 to 3.3.4, 2021-05-21
 - Avoid hardcoded appspot.com URLs in custom tests (#1170), 2021-05-20
 - Update UA parser to handle old Android WebView versions (#1162), 2021-05-20
 
 ## v3.1.2
 
 - Add custom IDL for webkitSlice (#1169), 2021-05-20
-- Bump @webref/idl from 2.1.3 to 2.1.4 (#1167), 2021-05-20
 - Add custom IDL for zoomAndPan attributes (#1166), 2021-05-20
-- Bump @webref/css from 1.0.0 to 1.0.1, 2021-05-20
-- Bump webidl2 from 24.1.0 to 24.1.1, 2021-05-20
-- Bump required Node.js version from 12 to 14 (#1160), 2021-05-19
 
 ## v3.1.1
 
 - Update a few URLs to master branches already renamed to main (#1159), 2021-05-19
 - Add custom IDL for payment APIs still shipping in Chrome, 2021-05-18
 - Remove outerText custom IDL now in webref, 2021-05-18
-- Bump @webref/idl from 2.1.2 to 2.1.3, 2021-05-18
-- Bump webidl2 from 24.0.1 to 24.1.0, 2021-05-14
-- Bump slugify from 1.5.2 to 1.5.3, 2021-05-12
-- Bump prettier from 2.2.1 to 2.3.0, 2021-05-10
-- Bump @google-cloud/logging-winston from 4.0.4 to 4.0.5, 2021-05-11
-- Bump slugify from 1.5.1 to 1.5.2, 2021-05-10
-- Bump mocha from 8.3.2 to 8.4.0, 2021-05-10
-- Bump eslint from 7.25.0 to 7.26.0, 2021-05-10
-- Bump hosted-git-info from 2.8.8 to 2.8.9, 2021-05-09
 
 ## v3.1.0
 
 - Add custom IDL for createEncodedStreams() methods (#1147), 2021-05-08
 - Remove Sanitizer API custom IDL now in webref, 2021-05-08
 - Remove web-animations-2 custom IDL now in webref, 2021-05-08
-- Bump @webref/idl from 2.1.1 to 2.1.2, 2021-05-08
-- Bump @mdn/browser-compat-data from 3.3.2 to 3.3.3, 2021-05-07
-- Bump lodash from 4.17.19 to 4.17.21, 2021-05-08
-- Bump puppeteer from 9.1.0 to 9.1.1, 2021-05-06
-- Bump @google-cloud/storage from 5.8.4 to 5.8.5, 2021-05-05
-- Bump fs-extra from 9.1.0 to 10.0.0, 2021-05-04
-- Bump puppeteer from 9.0.0 to 9.1.0, 2021-05-04
-- Bump yargs from 17.0.0 to 17.0.1, 2021-05-04
-- Bump listr2 from 3.8.1 to 3.8.2, 2021-05-04
-- Bump slugify from 1.5.0 to 1.5.1, 2021-05-03
-- Bump yargs from 16.2.0 to 17.0.0, 2021-05-03
-- Bump @webref/idl from 2.1.0 to 2.1.1, 2021-04-30
-- Bump @mdn/browser-compat-data from 3.3.1 to 3.3.2, 2021-04-30
 - Stop using CSS.supports for CSS property tests (#1132), 2021-04-29
 - Remove '&&' combinator in compileTest calls where not needed (#1131), 2021-04-29
 - Use webkitSpeechRecognition to test SpeechRecognition members (#1130), 2021-04-28
-- Bump listr2 from 3.8.0 to 3.8.1, 2021-04-27
-- Bump listr2 from 3.7.1 to 3.8.0, 2021-04-26
-- Bump eslint from 7.24.0 to 7.25.0, 2021-04-26
-- Bump @mdn/browser-compat-data from 3.3.0 to 3.3.1, 2021-04-23
 
 ## v3.0.2
 
 - Drop support for [Constructor] extended attribute (#1124), 2021-04-22
-- Bump @webref/idl from 2.0.0 to 2.1.0 (#1123), 2021-04-22
 - Once again validate custom IDL (#1122), 2021-04-22
-- Bump @octokit/rest from 18.5.2 to 18.5.3, 2021-04-22
-- Bump chalk from 4.1.0 to 4.1.1, 2021-04-22
-- Bump puppeteer from 8.0.0 to 9.0.0, 2021-04-22
 - Fix BluetoothGATTRemoteServer unknown type (renamed) (#1118), 2021-04-20
 - Check for all duplicates (not just operations) in mergeMembers (#1117), 2021-04-20
 - Remove some types from the ignore list, fixing remaining issues (#1116), 2021-04-20
-- Bump webidl2 and @webref/idl, 2021-04-20
-- Bump listr2 from 3.7.0 to 3.7.1, 2021-04-20
-- Bump @google-cloud/storage from 5.8.3 to 5.8.4, 2021-04-20
-- Bump listr2 from 3.6.2 to 3.7.0, 2021-04-19
-- Bump @mdn/browser-compat-data from 3.2.4 to 3.3.0, 2021-04-16
-- Bump @webref/idl from 1.0.14 to 1.1.0, 2021-04-16
 
 ## v3.0.1
 
-- Bump @webref/idl from 1.0.13 to 1.0.14 (#1107), 2021-04-15
-- Bump ua-parser-js from 0.7.25 to 0.7.28, 2021-04-12
-- Bump eslint from 7.23.0 to 7.24.0, 2021-04-12
-- Bump @webref/idl from 1.0.12 to 1.0.13, 2021-04-09
-- Bump sinon from 10.0.0 to 10.0.1, 2021-04-09
-- Bump @mdn/browser-compat-data from 3.2.3 to 3.2.4, 2021-04-09
-- Bump ejs-lint from 1.1.0 to 1.2.0, 2021-04-08
 - Add back initWheelEvent as custom IDL (#1100), 2021-04-06
-- Bump listr2 from 3.4.5 to 3.6.2, 2021-04-06
-- Bump listr2 from 3.4.4 to 3.4.5, 2021-04-05
-- Bump @mdn/browser-compat-data from 3.2.2 to 3.2.3, 2021-04-02
-- Bump @webref/idl from 1.0.11 to 1.0.12, 2021-04-02
 - Update button/select/submit styling (#1092), 2021-04-01
-- Bump listr2 from 3.4.3 to 3.4.4, 2021-04-01
-- Bump y18n from 4.0.0 to 4.0.1, 2021-03-30
-- Bump @google-cloud/storage from 5.8.2 to 5.8.3, 2021-03-30
 
 ## v3.0.0
 
 - Make update-bcd more conservative about updating existing data (#1088), 2021-03-29
 - Remove unused support for update-bcd to updated prefixed entries (#1087), 2021-03-29
 - Remove custom tests around AudioScheduledSourceNode (#1076), 2021-03-29
-- Bump @octokit/rest from 18.5.0 to 18.5.2, 2021-03-29
-- Bump eslint from 7.22.0 to 7.23.0, 2021-03-29
 - Adapt to @webref/idl 1.0.11, 2021-03-26
-- Bump @webref/idl from 1.0.10 to 1.0.11, 2021-03-26
-- Bump @octokit/rest from 18.4.0 to 18.5.0, 2021-03-26
-- Bump @mdn/browser-compat-data from 3.2.1 to 3.2.2, 2021-03-26
 - Add custom IDL for webkitCreateShadowRoot() (#1080), 2021-03-25
-- Bump @octokit/rest from 18.3.5 to 18.4.0, 2021-03-25
-- Bump ua-parser-js from 0.7.24 to 0.7.25, 2021-03-25
-- Bump @google-cloud/storage from 5.8.1 to 5.8.2, 2021-03-24
 - Add required arguments to createPeriodicWave custom test (#1077), 2021-03-24
 - Use a AudioBufferSourceNode instance to test AudioScheduledSourceNode (#1074), 2021-03-23
-- Bump sinon from 9.2.4 to 10.0.0, 2021-03-23
 - Add ms-prefixed APIs based on find-missing output (#1072), 2021-03-22
 - Add a --include-aliases option to the find-missing script (#1071), 2021-03-22
-- Bump slugify from 1.4.7 to 1.5.0, 2021-03-22
 - Add custom IDL for navigator.mozBattery/webkitBattery (#1069), 2021-03-20
 - Support running a HTTPS server locally with a custom certificate (#1046), 2021-03-19
-- Bump @webref/idl from 1.0.9 to 1.0.10, 2021-03-19
-- Bump @mdn/browser-compat-data from 3.2.0 to 3.2.1, 2021-03-19
 - Simplify code and resources in tests.json (#1063), 2021-03-17
 - Simplify compileTest internally (#1062), 2021-03-17
 - Remove the test category from tests.json (#1061), 2021-03-17
-- Bump @webref/idl from 1.0.8 to 1.0.9, 2021-03-17
 - Fix typo in SVGHKernElement custom IDL (#1055), 2021-03-15
-- Bump @webref/idl from 1.0.7 to 1.0.8, 2021-03-15
-- Bump mocha from 8.3.1 to 8.3.2, 2021-03-15
-- Bump eslint from 7.21.0 to 7.22.0, 2021-03-15
-- Bump chai from 4.3.3 to 4.3.4, 2021-03-15
-- Bump @mdn/browser-compat-data from 3.1.3 to 3.2.0, 2021-03-12
 - Add --release argument (filter) for update-bcd.js (#1019), 2021-03-12
 - Simplify how custom IDL is loaded/parsed (#1048), 2021-03-10
 - Use @webref/css package for CSS property list (#1047), 2021-03-10
-- Bump @webref/idl from 1.0.6 to 1.0.7, 2021-03-10
 - Add more custom IDL (#1044), 2021-03-09
-- Bump @webref/idl from 1.0.5 to 1.0.6, 2021-03-09
 - Clarify where to get the collector results from (#1043), 2021-03-09
-- Bump listr2 from 3.4.1 to 3.4.3, 2021-03-09
-- Bump @octokit/rest from 18.3.4 to 18.3.5, 2021-03-09
 - Add more custom IDL (#1039), 2021-03-08
-- Bump listr2 from 3.3.4 to 3.4.1, 2021-03-08
-- Bump mocha from 8.3.0 to 8.3.1, 2021-03-08
-- Bump @octokit/rest from 18.3.3 to 18.3.4, 2021-03-08
-- Bump @mdn/browser-compat-data from 3.1.2 to 3.1.3, 2021-03-05
-- Bump @octokit/rest from 18.3.2 to 18.3.3, 2021-03-05
-- Bump chai from 4.3.1 to 4.3.3, 2021-03-04
-- Bump @google-cloud/storage from 5.8.0 to 5.8.1, 2021-03-04
-- Bump @octokit/rest from 18.3.1 to 18.3.2, 2021-03-04
-- Bump chai from 4.3.0 to 4.3.1, 2021-03-03
-- Bump @octokit/rest from 18.3.0 to 18.3.1, 2021-03-02
-- Bump listr2 from 3.3.3 to 3.3.4, 2021-03-01
-- Bump @octokit/rest from 18.2.1 to 18.3.0, 2021-03-01
-- Bump eslint from 7.20.0 to 7.21.0, 2021-03-01
-- Bump puppeteer from 7.1.0 to 8.0.0, 2021-03-01
 - Let update-bcd script use ../mdn-bcd-results/ by default (#1024), 2021-02-27
-- Bump @webref/idl from 1.0.4 to 1.0.5, 2021-02-26
-- Bump @mdn/browser-compat-data from 3.1.1 to 3.1.2, 2021-02-26
 - Document how to use the update-bcd script (#1020), 2021-02-26
 - Document the design of update-bcd.js (not how to use it) (#1021), 2021-02-26
 - Undo some unsightly Prettier formatting (#1018), 2021-02-24
 - Restore getUserMedia() for custom tests and skip them in Edge 12-18 (#1017), 2021-02-24
 - Move ignore (test filtering) logic in getTests (#1016), 2021-02-24
-- Bump @webref/idl from 1.0.3 to 1.0.4, 2021-02-24
 - Add custom IDL for XMLSerializer.serializeToStream method (#1012), 2021-02-24
-- Bump listr2 from 3.3.2 to 3.3.3, 2021-02-24
-- Bump @octokit/rest from 18.2.0 to 18.2.1, 2021-02-24
 
 ## v2.0.1
 
@@ -499,31 +279,21 @@
 - Export results to a downloadable URL by default (#979), 2021-02-22
 - Document /api/get, 2021-02-22
 - Remove XML-style &lt;br /&gt; self-closing tags, 2021-02-22
-- Bump @webref/idl from 1.0.2 to 1.0.3, 2021-02-22
-- Bump listr2 from 3.3.1 to 3.3.2, 2021-02-22
-- Bump slugify from 1.4.6 to 1.4.7, 2021-02-22
 - Remove copyright statements from HTML files (#993), 2021-02-21
 - Rename github.js to exporter.js to expand its responsibilities (#992), 2021-02-19
 - Validate the payloads sent to /api/results (#991), 2021-02-19
 - Send no response for /api/results (#990), 2021-02-19
-- Bump @mdn/browser-compat-data from 3.1.0 to 3.1.1, 2021-02-19
-- Bump @octokit/rest from 18.1.1 to 18.2.0, 2021-02-19
 - Drop the empty string prefixes from tests.json (#985), 2021-02-18
 - Drop support for building prefixed variants of tests (#984), 2021-02-18
 - Simplify error handling in express request handlers (#983), 2021-02-18
 - Capitalize appVersion (#982), 2021-02-18
 - Bring DESIGN.md more into sync with how things currently work (#981), 2021-02-18
-- Bump @google-cloud/storage from 5.7.4 to 5.8.0, 2021-02-18
-- Bump @webref/idl and webidl2 (#978), 2021-02-17
 
 ## v1.3.3
 
 - Remove MediaSettingsRange (dictionary) custom test (#974), 2021-02-16
 - Fix some custom Web Audio API tests (#973), 2021-02-16
 - Test BaseAudioContext members using an AudioContext instance (#971), 2021-02-16
-- Bump @octokit/rest from 18.1.0 to 18.1.1, 2021-02-15
-- Bump puppeteer from 7.0.4 to 7.1.0, 2021-02-15
-- Bump eslint from 7.19.0 to 7.20.0, 2021-02-15
 
 ## v1.3.2
 
@@ -531,46 +301,24 @@
 - Switch to google-github-actions to avoid warning (#963), 2021-02-13
 - Use innerHTML instead of innerText to create a Text instance (#962), 2021-02-13
 - Get spec IDL from the new @webref/idl package (#959), 2021-02-12
-- Bump @mdn/browser-compat-data from 3.0.6 to 3.1.0, 2021-02-12
-- Bump ua-parser-js from 0.7.23 to 0.7.24, 2021-02-12
-- Bump mocha from 8.2.1 to 8.3.0, 2021-02-12
-- Bump @google-cloud/logging-winston from 4.0.3 to 4.0.4, 2021-02-10
-- Bump puppeteer from 7.0.1 to 7.0.4, 2021-02-10
-- Bump ejs from 3.1.5 to 3.1.6, 2021-02-08
 
 ## v1.3.1
 
-- Bump @mdn/browser-compat-data from 3.0.5 to 3.0.6, 2021-02-05
-- Bump puppeteer from 7.0.0 to 7.0.1, 2021-02-05
-- Bump chai from 4.2.0 to 4.3.0, 2021-02-05
 - IE 5.5 no longer supported (#947), 2021-02-04
-- Bump puppeteer from 5.5.0 to 7.0.0, 2021-02-04
-- Bump @octokit/rest from 18.0.15 to 18.1.0, 2021-02-03
-- Bump @google-cloud/storage from 5.7.3 to 5.7.4, 2021-02-02
-- Bump eslint from 7.18.0 to 7.19.0, 2021-02-01
-- Bump listr2 from 3.3.0 to 3.3.1, 2021-02-01
 - Add another bucket of custom IDL (#940), 2021-01-29
-- Bump eslint-plugin-prefer-arrow from 1.2.2 to 1.2.3, 2021-01-29
 
 ## v1.3.0
 
 - Add ever more custom IDL from Confluence (#938), 2021-01-29
-- Bump @mdn/browser-compat-data from 3.0.4 to 3.0.5, 2021-01-29
 - Add more custom IDL found via Confluence (#926), 2021-01-28
 - Update webref IDL (#935), 2021-01-27
-- Bump @google-cloud/storage from 5.7.2 to 5.7.3, 2021-01-26
-- Bump @octokit/rest from 18.0.14 to 18.0.15, 2021-01-26
 - Expand on custom prefixed interface tests (#931), 2021-01-25
 - Use prefixed webkitOfflineAudioContext if possible, 2021-01-25
 - Fix AudioContext custom tests (use prefixed for members), 2021-01-25
-- Bump sinon from 9.2.3 to 9.2.4, 2021-01-25
 - Avoid generating extra tests for readonly setlike/maplike (#928), 2021-01-24
 - Add missing forEach member test for IDL setlike declarations (#927), 2021-01-24
 - Add custom IDL for more things found via Confluence (#923), 2021-01-22
 - Generate tests for event interfaces, 2021-01-22
-- Bump @octokit/rest from 18.0.12 to 18.0.14, 2021-01-22
-- Bump @google-cloud/logging-winston from 4.0.2 to 4.0.3, 2021-01-22
-- Bump @mdn/browser-compat-data from 3.0.3 to 3.0.4, 2021-01-22
 - Add custom CSS/IDL for things found via Confluence (#919), 2021-01-22
 - Update webref (#918), 2021-01-21
 
@@ -582,27 +330,14 @@
 - Add additional custom CSS properties from Confluence (#912), 2021-01-21
 - Break the dependency on BCD for building tests (#911), 2021-01-21
 - Trim the selenium.js BCD dependency to just browsers (#909), 2021-01-21
-- Bump @mdn/browser-compat-data from 3.0.1 to 3.0.3, 2021-01-21
 - Fix the custom test for SVGPointList (#908), 2021-01-21
-- Bump listr2 from 3.2.3 to 3.3.0, 2021-01-21
-- Bump fs-extra from 9.0.1 to 9.1.0, 2021-01-20
-- Bump @mdi/font from 5.8.55 to 5.9.55, 2021-01-18
-- Bump eslint from 7.17.0 to 7.18.0, 2021-01-18
-- Bump @google-cloud/storage from 5.7.1 to 5.7.2, 2021-01-12
-- Bump @google-cloud/storage from 5.7.0 to 5.7.1, 2021-01-08
-- Bump sinon from 9.2.2 to 9.2.3, 2021-01-07
-- Bump nodemon from 2.0.6 to 2.0.7, 2021-01-07
-- Bump eslint from 7.16.0 to 7.17.0, 2021-01-04
 - Add and update custom tests (#894), 2020-12-31
-- Bump date-and-time from 0.14.1 to 0.14.2, 2020-12-24
 
 ## v1.1.8
 
 - Update custom tests (#889), 2020-12-23
 - Improve DOMRectList and ShadowRoot custom tests (#888), 2020-12-22
-- Bump eslint from 7.15.0 to 7.16.0 (#887), 2020-12-22
 - Add and improve custom tests (#885), 2020-12-18
-- Bump @mdn/browser-compat-data from 3.0.0 to 3.0.1 (#884), 2020-12-18
 - Use macOS Big Sur when testing with Selenium (#882), 2020-12-15
 
 ## v1.1.7
@@ -615,7 +350,6 @@
 - Update Webref (#874), 2020-12-14
 - Fix typo in custom test for DOMRectList (#873), 2020-12-14
 - Add custom tests for HTMLCollection and HTMLAllCollection APIs (#872), 2020-12-14
-- Bump sinon from 9.2.1 to 9.2.2 (#871), 2020-12-14
 - Improve custom test for FontFace API (#870), 2020-12-13
 - Add custom test for HTMLDocument API (#869), 2020-12-13
 - Add custom test for URL API (#868), 2020-12-13
@@ -624,30 +358,18 @@
 - Add custom test for MediaList API (#864), 2020-12-11
 - Add custom test for NamedNodeMap API (#863), 2020-12-11
 - Add custom test for DOMRectList API (#862), 2020-12-11
-- Bump @mdn/browser-compat-data from 2.0.7 to 3.0.0 (#861), 2020-12-11
-- Bump @google-cloud/storage from 5.6.0 to 5.7.0 (#860), 2020-12-11
-- Bump ini from 1.3.5 to 1.3.7 (#859), 2020-12-10
 - Fix const attribute check (#858), 2020-12-10
-- Bump ua-parser-js from 0.7.22 to 0.7.23 (#857), 2020-12-10
-- Bump @google-cloud/logging-winston from 4.0.1 to 4.0.2 (#855), 2020-12-10
 - Don't generate tests for const attributes (#856), 2020-12-09
 - Use local BCD repo for find-missing script (#851), 2020-12-07
-- Bump eslint from 7.14.0 to 7.15.0, 2020-12-07
-- Bump @octokit/rest from 18.0.11 to 18.0.12, 2020-12-07
-- Bump yargs from 16.1.1 to 16.2.0, 2020-12-07
 
 ## v1.1.6
 
 - Add additional custom tests (#849), 2020-12-04
-- Bump @octokit/rest from 18.0.10 to 18.0.11, 2020-12-04
-- Bump @google-cloud/storage from 5.5.0 to 5.6.0, 2020-12-03
 - Update custom tests (#845), 2020-12-02
-- Bump @octokit/rest from 18.0.9 to 18.0.10, 2020-12-02
 - Update styling for results display (#839), 2020-12-01
 - Add custom IDL for webkit-prefixed canvas APIs (#843), 2020-12-01
 - Create add-new-bcd script (#838), 2020-11-30
 - Add custom IDL for WebKitPoint and webkitConvertPointFrom\* methods (#842), 2020-11-30
-- Bump prettier from 2.2.0 to 2.2.1 (#840), 2020-11-30
 - Remove miscapitalized entries (#837), 2020-11-28
 - Rename a variable to prevent conflict (#836), 2020-11-28
 - Use simplified dots for Mocha output (#835), 2020-11-28
@@ -657,7 +379,6 @@
 - Fix UA parsing for Firefox 3.6 on BrowserStack (#834), 2020-11-28
 - Update tests for PerformanceMark and PerformanceEntry APIs (#833), 2020-11-27
 - Add additional autocapitalize custom IDL (#832), 2020-11-27
-- Bump listr2 from 3.2.2 to 3.2.3, 2020-11-27
 - Add prefixed variants of preservesPitch (#831), 2020-11-27
 - Fix test for MediaSession API (#829), 2020-11-26
 - Fix test for HTMLModElement for older Firefox versions (#828), 2020-11-25
@@ -677,7 +398,6 @@
 - Map 'DedicatedWorker' as 'Worker' (#811), 2020-11-23
 - Fix test for MediaSource.isTypeSupported (#809), 2020-11-23
 - Include "promise.then" replacement when importing custom tests (#810), 2020-11-23
-- Bump eslint from 7.13.0 to 7.14.0 (#806), 2020-11-23
 - Remove formEncType and lowSrc custom IDL (#807), 2020-11-23
 - Include percentage of missing entries in find-missing output (#805), 2020-11-22
 - Fix default value of browser argument in update-bcd (#804), 2020-11-22
@@ -686,8 +406,6 @@
 - Fix custom tests for HTML and SVG element APIs (#800), 2020-11-21
 - Update BCD: improve ranges (#798), 2020-11-19
 - Add "max-parallel: 1" to deploy step in push (#797), 2020-11-19
-- Bump @mdn/browser-compat-data from 2.0.6 to 2.0.7 (#796), 2020-11-19
-- Bump prettier from 2.1.2 to 2.2.0 (#795), 2020-11-19
 - Compact report JSON (#794), 2020-11-19
 - Revert "Compress results JSON with GZip compression (#791)" (#793), 2020-11-19
 - Compress results JSON with GZip compression (#791), 2020-11-19
@@ -704,7 +422,6 @@
 
 - Improve performance for harness.js (#782), 2020-11-17
 - UA parser: more lenient version matching on last version (#781), 2020-11-17
-- Bump puppeteer from 5.4.1 to 5.5.0 (#780), 2020-11-17
 
 ## v1.1.1
 
@@ -712,7 +429,6 @@
 - Improve error when a report has no results (#777), 2020-11-16
 - Update update-bcd arguments (#776), 2020-11-16
 - Fix misuse of word for "non-concurrent" Selenium argument (#773), 2020-11-16
-- Bump yargs from 16.1.0 to 16.1.1 (#771), 2020-11-16
 - Fix exitOnError placement (#772), 2020-11-15
 
 ## v1.1.0
