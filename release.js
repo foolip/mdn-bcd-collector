@@ -121,6 +121,7 @@ const doChangelogUpdate = async () => {
     changelog.substring(idx, changelog.length);
   newChangelog = prettier.format(newChangelog, {parser: 'markdown'});
   await fs.writeFile(filepath, newChangelog, 'utf8');
+  console.log('Please review the changelog and make changes as needed.');
 };
 
 const prepareBranch = async (newVersion) => {
