@@ -2041,6 +2041,10 @@ api:
     __base: var instance = new TextDecoder();
   TextEncoder:
     __base: var instance = new TextEncoder();
+  TextMetrics:
+    __base: >-
+      <%api.CanvasRenderingContext2D:canvas%>
+      var instance = canvas.measureText('mdn-bcd-collector');
   TextTrack:
     __resources:
       - video-blank
