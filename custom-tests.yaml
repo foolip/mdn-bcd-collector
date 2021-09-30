@@ -1522,8 +1522,7 @@ api:
         input.name = "radio";
         form.appendChild(input);
       }
-      var controls = form.elements;
-      var instance = controls.namedItem('radio');
+      var instance = form.elements.namedItem('radio');
   Range:
     __base: var instance = document.createRange();
   Request:
