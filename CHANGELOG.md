@@ -162,7 +162,7 @@
 ## v3.1.7
 
 - Remove custom SourceBuffer.changeType now in @webref/idl, 2021-06-18
-- Fix Peformance\* custom tests (#1238), 2021-06-18
+- Fix Performance\* custom tests (#1238), 2021-06-18
 - Create an instance for XMLHttpRequest tests (#1237), 2021-06-16
 - Fix the fallback for creating an Event instance (#1236), 2021-06-16
 - Always show form buttons, but disable by default (#1231), 2021-06-12
