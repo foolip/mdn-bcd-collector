@@ -1514,11 +1514,15 @@ api:
     __base: var instance = new PushEvent('push');
   RadioNodeList:
     __base: >-
-      <%api.HTMLFormControlsCollection:controls%>
-      for (var i = 0; i < controls.length; i++) {
-        controls[i].type = "radio";
-        controls[i].name = "radio";
+      <%api.HTMLFormElement:form%>
+      for (var i = 0; i < 3; i++) {
+        var input = document.createElement('input');
+        input.value = i;
+        input.type = "radio";
+        input.name = "radio";
+        form.appendChild(input);
       }
+      var controls = form.elements;
       var instance = controls.namedItem('radio');
   Range:
     __base: var instance = document.createRange();
