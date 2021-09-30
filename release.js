@@ -101,7 +101,7 @@ const getChanges = () => {
       (c) =>
         '- ' +
         c
-          .substring(9, c.length() - 1)
+          .substring(9, c.length - 1)
           .replace('<', '&lt;')
           .replace('>', '&gt;')
     )
