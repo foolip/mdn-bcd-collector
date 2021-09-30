@@ -20,7 +20,7 @@ api:
     audioContext:
       type: instance
       src: >-
-        var constructor = (window.AudioContext || window.webkitAudioContext);
+        var constructor = window.AudioContext || window.webkitAudioContext;
         if (!constructor) {
           return false;
         }
@@ -54,8 +54,7 @@ api:
     offlineAudioContext:
       type: instance
       src: >-
-        var constructor = (window.OfflineAudioContext ||
-        window.webkitOfflineAudioContext);
+        var constructor = window.OfflineAudioContext || window.webkitOfflineAudioContext;
         if (!constructor) {
           return false;
         }
@@ -63,8 +62,7 @@ api:
     speechRecognition:
       type: instance
       src: >-
-        var constructor = (window.SpeechRecognition ||
-        window.webkitSpeechRecognition);
+        var constructor = window.SpeechRecognition || window.webkitSpeechRecognition;
         if (!constructor) {
           return false;
         }
@@ -528,13 +526,6 @@ api:
       }
   Document:
     __base: var instance = document;
-    __additional:
-      createElement.options: >-
-        <%api.Document:d%>
-        return !!d.createElement('span', {});
-      createElementNS.options: >-
-        <%api.Document:d%>
-        return !!d.createElement('span', {});
   DocumentFragment:
     __base: var instance = document.createDocumentFragment();
   DocumentType:
@@ -1291,6 +1282,13 @@ api:
         }
         throw e;
       }
+  MutationObserver:
+    __base: >-
+      var constructor = window.MutationObserver || window.WebKitMutationObserver;
+      if (!constructor) {
+        return false;
+      };
+      var instance = new constructor(function(mutations){});
   NamedNodeMap:
     __base: var instance = document.body.attributes;
   Navigator:
@@ -1524,11 +1522,10 @@ api:
   RTCPeerConnection:
     __base: >-
       /* Firefox briefly defines RTCPeerConnection in older versions, but it is not a valid constructor until later versions. */
-      var constructor = (window.mozRTCPeerConnection || window.RTCPeerConnection || window.webkitRTCPeerConnection);
+      var constructor = window.mozRTCPeerConnection || window.RTCPeerConnection || window.webkitRTCPeerConnection;
       if (!constructor) {
         return false;
       };
-
       var instance = new constructor({iceServers: []});
   RTCSessionDescription:
     __base: "var instance = new RTCSessionDescription({type: 'offer'});"
@@ -2044,6 +2041,10 @@ api:
     __base: var instance = new TextDecoder();
   TextEncoder:
     __base: var instance = new TextEncoder();
+  TextMetrics:
+    __base: >-
+      <%api.CanvasRenderingContext2D:canvas%>
+      var instance = canvas.measureText('mdn-bcd-collector');
   TextTrack:
     __resources:
       - video-blank
@@ -2426,7 +2427,7 @@ api:
   XPathResult:
     __base: >-
       <%api.XPathExpression:exp%>
-      var instance = exp.evaluate(document);
+      var instance = exp.evaluate(document, 0, null);
 
 css:
   properties:
