@@ -97,6 +97,7 @@ const getChanges = () => {
   )
     .toString('utf8')
     .split('\n')
+    .filter((c) => !!c)
     .map(
       (c) =>
         '- ' +
@@ -105,7 +106,7 @@ const getChanges = () => {
           .replace('<', '&lt;')
           .replace('>', '&gt;')
     )
-    .filter((c) => !!c && !c.startsWith('- (Bump '));
+    .filter((c) => !c.startsWith('- Bump '));
 
   return changes.join('\n');
 };
