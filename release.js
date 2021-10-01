@@ -91,24 +91,15 @@ const doVersionBump = async (newVersion) => {
   }
 };
 
-const getChanges = () => {
-  const changes = exec(
-    `git log --pretty=reference v${currentVersion}..origin/main`
-  )
-    .toString('utf8')
-    .split('\n')
-    .filter((c) => !!c)
-    .map(
-      (c) =>
-        '- ' +
-        c
-          .substring(9, c.length - 1)
-          .replace('<', '&lt;')
-          .replace('>', '&gt;')
-    )
-    .filter((c) => !c.startsWith('- Bump '));
-
-  return changes.join('\n');
+const getChanges = async () => {
+  const revwalk = gitRepo.createRevWalk();
+  revwalk.pushRange(`v${currentVersion}..origin/main`);
+  const commits = await revwalk.getCommits(Infinity);
+  return commits
+    .map((commit) => commit.summary())
+    .filter((summary) => !summary.startsWith('Bump '))
+    .map((summary) => `- ${summary.replace('<', '&lt;').replace('>', '&gt;')}`)
+    .join('\n');
 };
 
 const doChangelogUpdate = async () => {
@@ -117,7 +108,7 @@ const doChangelogUpdate = async () => {
   const idx = changelog.indexOf('##');
   let newChangelog =
     changelog.substring(0, idx) +
-    getChanges() +
+    await getChanges() +
     '\n\n' +
     changelog.substring(idx, changelog.length);
   newChangelog = prettier.format(newChangelog, {parser: 'markdown'});
