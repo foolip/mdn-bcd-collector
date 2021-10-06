@@ -76,7 +76,7 @@
     "eslint": "7.32.0",
     "eslint-config-google": "0.14.0",
     "eslint-plugin-prefer-arrow": "1.2.3",
-    "inquirer": "8.1.5",
+    "inquirer": "8.2.0",
     "json3": "3.3.3",
     "klaw": "4.0.1",
     "listr2": "3.12.2",
