@@ -300,6 +300,10 @@ const flattenIDL = (specIDLs, customIDLs) => {
   // mix in the mixins
   for (const dfn of ast) {
     if (dfn.type === 'includes') {
+      if (dfn.includes === 'WindowOrWorkerGlobalScope') {
+        // WindowOrWorkerGlobalScope is mapped differently in BCD
+        continue;
+      }
       const mixin = ast.find(
         (it) =>
           !it.partial &&
@@ -327,7 +331,10 @@ const flattenIDL = (specIDLs, customIDLs) => {
 
   // drop includes and mixins
   ast = ast.filter(
-    (dfn) => dfn.type !== 'includes' && dfn.type !== 'interface mixin'
+    (dfn) =>
+      (dfn.type !== 'includes' && dfn.type !== 'interface mixin') ||
+      // WindowOrWorkerGlobalScope is mapped differently in BCD
+      dfn.name === 'WindowOrWorkerGlobalScope'
   );
 
   return ast;
@@ -539,7 +546,12 @@ const buildIDLTests = (ast) => {
   const tests = {};
 
   const interfaces = ast.filter((dfn) => {
-    return dfn.type === 'interface' || dfn.type === 'namespace';
+    return (
+      dfn.type === 'interface' ||
+      dfn.type === 'namespace' ||
+      // WindowOrWorkerGlobalScope is mapped differently in BCD
+      dfn.name === 'WindowOrWorkerGlobalScope'
+    );
   });
   interfaces.sort((a, b) => a.name.localeCompare(b.name));
 
@@ -551,18 +563,28 @@ const buildIDLTests = (ast) => {
       continue;
     }
 
-    const exposureSet = getExposureSet(iface);
-    const isGlobal = !!getExtAttr(iface, 'Global');
+    // WindowOrWorkerGlobalScope is mapped differently in BCD, so we need to
+    // special-case it
+
+    const exposureSet =
+      iface.name === 'WindowOrWorkerGlobalScope' ?
+        new Set(['Window', 'Worker']) :
+        getExposureSet(iface);
+    const isGlobal =
+      iface.name === 'WindowOrWorkerGlobalScope' ||
+      !!getExtAttr(iface, 'Global');
     const customIfaceTest = getCustomTestAPI(iface.name);
     const resources = getCustomResourcesAPI(iface.name);
 
-    tests[`api.${iface.name}`] = compileTest({
-      raw: {
-        code: customIfaceTest || {property: iface.name, owner: 'self'}
-      },
-      exposure: Array.from(exposureSet),
-      resources: resources
-    });
+    if (iface.name !== 'WindowOrWorkerGlobalScope') {
+      tests[`api.${iface.name}`] = compileTest({
+        raw: {
+          code: customIfaceTest || {property: iface.name, owner: 'self'}
+        },
+        exposure: Array.from(exposureSet),
+        resources: resources
+      });
+    }
 
     const members = flattenMembers(iface);
 
@@ -621,7 +643,14 @@ const buildIDLTests = (ast) => {
         }
       }
 
-      tests[`api.${iface.name}.${member.name}`] = compileTest({
+      // WindowOrWorkerGlobalScope is mapped differently in BCD, so we need to
+      // special-case it
+      const testName =
+        iface.name === 'WindowOrWorkerGlobalScope' ?
+          `api.${member.name}` :
+          `api.${iface.name}.${member.name}`;
+
+      tests[testName] = compileTest({
         raw: {
           code: expr
         },
