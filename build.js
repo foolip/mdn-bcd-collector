@@ -329,7 +329,7 @@ const flattenIDL = (specIDLs, customIDLs) => {
     }
   }
 
-  // drop includes and mixins
+  // drop includes and mixins, except WindowOrWorkerGlobalScope
   ast = ast.filter(
     (dfn) =>
       (dfn.type !== 'includes' && dfn.type !== 'interface mixin') ||
