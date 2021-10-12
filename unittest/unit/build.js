@@ -509,6 +509,44 @@ describe('build', () => {
       assert.equal(interfaces[1].name, 'XSLTProcessor');
     });
 
+    it('WindowOrWorkerGlobalScope remains separate', () => {
+      const specIDLs = {
+        first: WebIDL2.parse(
+          `[Exposed=Window]
+             interface Window {
+               readonly attribute boolean imadumdum;
+             };`
+        ),
+        second: WebIDL2.parse(
+          `[Exposed=Window]
+             interface mixin WindowOrWorkerGlobalScope {
+               undefined atob();
+             };
+
+             Window includes WindowOrWorkerGlobalScope;`
+        )
+      };
+      const interfaces = flattenIDL(specIDLs, customIDLs);
+      assert.lengthOf(interfaces, 4);
+
+      assert.equal(interfaces[0].name, 'Window');
+      assert.lengthOf(interfaces[0].members, 1);
+      assert.containSubset(interfaces[0].members[0], {
+        type: 'attribute',
+        name: 'imadumdum'
+      });
+
+      assert.equal(interfaces[1].name, 'WindowOrWorkerGlobalScope');
+      assert.lengthOf(interfaces[1].members, 1);
+      assert.containSubset(interfaces[1].members[0], {
+        type: 'operation',
+        name: 'atob'
+      });
+
+      assert.equal(interfaces[2].name, 'DOMError');
+      assert.equal(interfaces[3].name, 'XSLTProcessor');
+    });
+
     it('mixin missing', () => {
       const specIDLs = {
         first: WebIDL2.parse(
@@ -1132,6 +1170,37 @@ describe('build', () => {
         'api.HTMLImageElement.Image': {
           code: 'bcd.testConstructor("Image");',
           exposure: ['Window']
+        }
+      });
+    });
+
+    it('WindowOrWorkerGlobalScope remains separate', () => {
+      const ast = WebIDL2.parse(
+        `[Exposed=Window]
+           interface Window {
+             readonly attribute boolean imadumdum;
+           };
+
+           [Exposed=Window]
+           interface mixin WindowOrWorkerGlobalScope {
+             undefined atob();
+           };
+
+           Window includes WindowOrWorkerGlobalScope;`
+      );
+
+      assert.deepEqual(buildIDLTests(ast), {
+        'api.Window': {
+          code: '"Window" in self',
+          exposure: ['Window']
+        },
+        'api.Window.imadumdum': {
+          code: '"imadumdum" in Window.prototype',
+          exposure: ['Window']
+        },
+        'api.atob': {
+          code: '"atob" in self',
+          exposure: ['Window', 'Worker']
         }
       });
     });
