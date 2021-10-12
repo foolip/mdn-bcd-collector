@@ -329,15 +329,14 @@ const flattenIDL = (specIDLs, customIDLs) => {
     }
   }
 
+  const globals = ast.filter((dfn) => dfn.name === 'WindowOrWorkerGlobalScope');
+
   // drop includes and mixins, except WindowOrWorkerGlobalScope
   ast = ast.filter(
-    (dfn) =>
-      (dfn.type !== 'includes' && dfn.type !== 'interface mixin') ||
-      // WindowOrWorkerGlobalScope is mapped differently in BCD
-      dfn.name === 'WindowOrWorkerGlobalScope'
+    (dfn) => dfn.type !== 'includes' && dfn.type !== 'interface mixin'
   );
 
-  return ast;
+  return {ast, globals};
 };
 
 const flattenMembers = (iface) => {
@@ -542,16 +541,86 @@ const validateIDL = (ast) => {
   }
 };
 
-const buildIDLTests = (ast) => {
+const buildIDLChildrenTests = (
+  members,
+  iface,
+  exposureSet,
+  isGlobal,
+  resources
+) => {
+  const tests = {};
+  // Avoid generating duplicate tests for operations.
+  const handledMemberNames = new Set();
+
+  for (const member of members) {
+    if (handledMemberNames.has(member.name)) {
+      continue;
+    }
+
+    const isStatic = member.special === 'static' || iface.type === 'namespace';
+
+    let expr;
+    const customTestMember = getCustomTestAPI(
+      iface.name,
+      member.name,
+      isStatic ? 'static' : member.type
+    );
+
+    if (customTestMember) {
+      expr = customTestMember;
+    } else {
+      switch (member.type) {
+        case 'attribute':
+        case 'operation':
+        case 'field':
+          if (isGlobal) {
+            expr = {property: member.name, owner: 'self'};
+          } else if (isStatic) {
+            expr = {property: member.name, owner: iface.name};
+          } else {
+            expr = {
+              property: member.name,
+              owner: `${iface.name}.prototype`,
+              inherit: member.special === 'inherit'
+            };
+          }
+          break;
+        case 'const':
+          if (isGlobal) {
+            expr = {property: member.name, owner: 'self'};
+          } else {
+            expr = {property: member.name, owner: iface.name};
+          }
+          break;
+        case 'constructor':
+          expr = {property: `constructor.${member.name}`, owner: iface.name};
+          break;
+        case 'symbol':
+          // eslint-disable-next-line no-case-declarations
+          const symbol = member.name.replace('@@', '');
+          expr = {property: `Symbol.${symbol}`, owner: `${iface.name}`};
+          break;
+      }
+    }
+
+    tests[member.name] = compileTest({
+      raw: {
+        code: expr
+      },
+      exposure: Array.from(exposureSet),
+      resources: resources
+    });
+    handledMemberNames.add(member.name);
+  }
+
+  return tests;
+};
+
+const buildIDLTests = (ast, globals) => {
   const tests = {};
 
   const interfaces = ast.filter((dfn) => {
-    return (
-      dfn.type === 'interface' ||
-      dfn.type === 'namespace' ||
-      // WindowOrWorkerGlobalScope is mapped differently in BCD
-      dfn.name === 'WindowOrWorkerGlobalScope'
-    );
+    return dfn.type === 'interface' || dfn.type === 'namespace';
   });
   interfaces.sort((a, b) => a.name.localeCompare(b.name));
 
@@ -563,101 +632,29 @@ const buildIDLTests = (ast) => {
       continue;
     }
 
-    // WindowOrWorkerGlobalScope is mapped differently in BCD, so we need to
-    // special-case it
-
-    const exposureSet =
-      iface.name === 'WindowOrWorkerGlobalScope' ?
-        new Set(['Window', 'Worker']) :
-        getExposureSet(iface);
-    const isGlobal =
-      iface.name === 'WindowOrWorkerGlobalScope' ||
-      !!getExtAttr(iface, 'Global');
+    const exposureSet = getExposureSet(iface);
+    const isGlobal = !!getExtAttr(iface, 'Global');
     const customIfaceTest = getCustomTestAPI(iface.name);
     const resources = getCustomResourcesAPI(iface.name);
 
-    if (iface.name !== 'WindowOrWorkerGlobalScope') {
-      tests[`api.${iface.name}`] = compileTest({
-        raw: {
-          code: customIfaceTest || {property: iface.name, owner: 'self'}
-        },
-        exposure: Array.from(exposureSet),
-        resources: resources
-      });
-    }
+    tests[`api.${iface.name}`] = compileTest({
+      raw: {
+        code: customIfaceTest || {property: iface.name, owner: 'self'}
+      },
+      exposure: Array.from(exposureSet),
+      resources: resources
+    });
 
     const members = flattenMembers(iface);
-
-    // Avoid generating duplicate tests for operations.
-    const handledMemberNames = new Set();
-
-    for (const member of members) {
-      if (handledMemberNames.has(member.name)) {
-        continue;
-      }
-
-      const isStatic =
-        member.special === 'static' || iface.type === 'namespace';
-
-      let expr;
-      const customTestMember = getCustomTestAPI(
-        iface.name,
-        member.name,
-        isStatic ? 'static' : member.type
-      );
-
-      if (customTestMember) {
-        expr = customTestMember;
-      } else {
-        switch (member.type) {
-          case 'attribute':
-          case 'operation':
-          case 'field':
-            if (isGlobal) {
-              expr = {property: member.name, owner: 'self'};
-            } else if (isStatic) {
-              expr = {property: member.name, owner: iface.name};
-            } else {
-              expr = {
-                property: member.name,
-                owner: `${iface.name}.prototype`,
-                inherit: member.special === 'inherit'
-              };
-            }
-            break;
-          case 'const':
-            if (isGlobal) {
-              expr = {property: member.name, owner: 'self'};
-            } else {
-              expr = {property: member.name, owner: iface.name};
-            }
-            break;
-          case 'constructor':
-            expr = {property: `constructor.${member.name}`, owner: iface.name};
-            break;
-          case 'symbol':
-            // eslint-disable-next-line no-case-declarations
-            const symbol = member.name.replace('@@', '');
-            expr = {property: `Symbol.${symbol}`, owner: `${iface.name}`};
-            break;
-        }
-      }
-
-      // WindowOrWorkerGlobalScope is mapped differently in BCD, so we need to
-      // special-case it
-      const testName =
-        iface.name === 'WindowOrWorkerGlobalScope' ?
-          `api.${member.name}` :
-          `api.${iface.name}.${member.name}`;
-
-      tests[testName] = compileTest({
-        raw: {
-          code: expr
-        },
-        exposure: Array.from(exposureSet),
-        resources: resources
-      });
-      handledMemberNames.add(member.name);
+    const memberTests = buildIDLChildrenTests(
+      members,
+      iface,
+      exposureSet,
+      isGlobal,
+      resources
+    );
+    for (const [k, v] of Object.entries(memberTests)) {
+      tests[`api.${iface.name}.${k}`] = v;
     }
 
     const subtests = getCustomSubtestsAPI(iface.name);
@@ -672,13 +669,27 @@ const buildIDLTests = (ast) => {
     }
   }
 
+  for (const iface of globals) {
+    const members = flattenMembers(iface);
+    const memberTests = buildIDLChildrenTests(
+      members,
+      iface,
+      new Set(['Window', 'Worker']),
+      true,
+      {}
+    );
+    for (const [k, v] of Object.entries(memberTests)) {
+      tests[`api.${k}`] = v;
+    }
+  }
+
   return tests;
 };
 
 const buildIDL = (specIDLs, customIDLs) => {
-  const ast = flattenIDL(specIDLs, customIDLs);
+  const {ast, globals} = flattenIDL(specIDLs, customIDLs);
   validateIDL(ast);
-  return buildIDLTests(ast);
+  return buildIDLTests(ast, globals);
 };
 
 // https://drafts.csswg.org/cssom/#css-property-to-idl-attribute
