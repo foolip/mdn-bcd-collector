@@ -505,8 +505,6 @@ describe('build', () => {
 
       const interfaces = ast.filter((dfn) => dfn.type === 'interface');
       assert.lengthOf(interfaces, 2);
-      assert.equal(interfaces[0].name, 'DOMError');
-      assert.equal(interfaces[1].name, 'XSLTProcessor');
     });
 
     it('WindowOrWorkerGlobalScope remains separate', () => {
@@ -530,12 +528,9 @@ describe('build', () => {
       assert.lengthOf(ast, 3);
       assert.lengthOf(globals, 1);
 
-      assert.equal(ast[0].name, 'Window');
+      // Window shouldn't include any of WindowOrWorkerGlobalScope's members
+      // in this case; WindowOrWorkerGlobalScope remaps to _globals
       assert.lengthOf(ast[0].members, 1);
-      assert.containSubset(ast[0].members[0], {
-        type: 'attribute',
-        name: 'imadumdum'
-      });
 
       assert.equal(globals[0].name, 'WindowOrWorkerGlobalScope');
       assert.lengthOf(globals[0].members, 1);
@@ -543,9 +538,6 @@ describe('build', () => {
         type: 'operation',
         name: 'atob'
       });
-
-      assert.equal(ast[1].name, 'DOMError');
-      assert.equal(ast[2].name, 'XSLTProcessor');
     });
 
     it('mixin missing', () => {
@@ -1178,7 +1170,7 @@ describe('build', () => {
     it('Globals', () => {
       const ast = WebIDL2.parse(
         `[Exposed=Window]
-           interface Window {
+           interface Dummy {
              readonly attribute boolean imadumdum;
            };`
       );
@@ -1190,12 +1182,12 @@ describe('build', () => {
       );
 
       assert.deepEqual(buildIDLTests(ast, globals), {
-        'api.Window': {
-          code: '"Window" in self',
+        'api.Dummy': {
+          code: '"Dummy" in self',
           exposure: ['Window']
         },
-        'api.Window.imadumdum': {
-          code: '"imadumdum" in Window.prototype',
+        'api.Dummy.imadumdum': {
+          code: '"imadumdum" in Dummy.prototype',
           exposure: ['Window']
         },
         'api.atob': {
