@@ -670,11 +670,15 @@ const buildIDLTests = (ast, globals) => {
   }
 
   for (const iface of globals) {
+    // Remap globals tests and exposure
+    const fakeIface = {name: '_globals'};
+    const exposureSet = new Set(['Window', 'Worker']);
+
     const members = flattenMembers(iface);
     const memberTests = buildIDLMemberTests(
       members,
-      iface,
-      new Set(['Window', 'Worker']),
+      fakeIface,
+      exposureSet,
       true,
       {}
     );
