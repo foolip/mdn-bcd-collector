@@ -331,7 +331,7 @@ const flattenIDL = (specIDLs, customIDLs) => {
 
   const globals = ast.filter((dfn) => dfn.name === 'WindowOrWorkerGlobalScope');
 
-  // drop includes and mixins, except WindowOrWorkerGlobalScope
+  // drop includes and mixins
   ast = ast.filter(
     (dfn) => dfn.type !== 'includes' && dfn.type !== 'interface mixin'
   );
@@ -541,7 +541,7 @@ const validateIDL = (ast) => {
   }
 };
 
-const buildIDLChildrenTests = (
+const buildIDLMemberTests = (
   members,
   iface,
   exposureSet,
@@ -646,7 +646,7 @@ const buildIDLTests = (ast, globals) => {
     });
 
     const members = flattenMembers(iface);
-    const memberTests = buildIDLChildrenTests(
+    const memberTests = buildIDLMemberTests(
       members,
       iface,
       exposureSet,
