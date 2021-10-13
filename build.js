@@ -671,7 +671,7 @@ const buildIDLTests = (ast, globals) => {
 
   for (const iface of globals) {
     const members = flattenMembers(iface);
-    const memberTests = buildIDLChildrenTests(
+    const memberTests = buildIDLMemberTests(
       members,
       iface,
       new Set(['Window', 'Worker']),
