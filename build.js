@@ -413,7 +413,7 @@ const getExtAttr = (node, name) => {
   return node.extAttrs && node.extAttrs.find((i) => i.name === name);
 };
 
-// https://heycam.github.io/webidl/#dfn-exposure-set
+// https://webidl.spec.whatwg.org/#dfn-exposure-set
 const getExposureSet = (node) => {
   // step 6-8
   const attr = getExtAttr(node, 'Exposed');
@@ -482,40 +482,40 @@ const validateIDL = (ast) => {
   }
   // These are the types defined by Web IDL itself.
   const knownTypes = new Set([
-    'any', // https://heycam.github.io/webidl/#idl-any
-    'ArrayBuffer', // https://heycam.github.io/webidl/#idl-ArrayBuffer
-    'bigint', // https://heycam.github.io/webidl/#idl-bigint
-    'BigInt64Array', // https://heycam.github.io/webidl/#idl-BigInt64Array
-    'BigUint64Array', // https://heycam.github.io/webidl/#idl-BigUint64Array
-    'boolean', // https://heycam.github.io/webidl/#idl-boolean
-    'byte', // https://heycam.github.io/webidl/#idl-byte
-    'ByteString', // https://heycam.github.io/webidl/#idl-ByteString
-    'DataView', // https://heycam.github.io/webidl/#idl-DataView
-    'DOMString', // https://heycam.github.io/webidl/#idl-DOMString
-    'double', // https://heycam.github.io/webidl/#idl-double
-    'float', // https://heycam.github.io/webidl/#idl-float
-    'Float32Array', // https://heycam.github.io/webidl/#idl-Float32Array
-    'Float64Array', // https://heycam.github.io/webidl/#idl-Float64Array
-    'Int16Array', // https://heycam.github.io/webidl/#idl-Int16Array
-    'Int32Array', // https://heycam.github.io/webidl/#idl-Int32Array
-    'Int8Array', // https://heycam.github.io/webidl/#idl-Int8Array
-    'long long', // https://heycam.github.io/webidl/#idl-long-long
-    'long', // https://heycam.github.io/webidl/#idl-long
-    'object', // https://heycam.github.io/webidl/#idl-object
-    'octet', // https://heycam.github.io/webidl/#idl-octet
-    'short', // https://heycam.github.io/webidl/#idl-short
-    'symbol', // https://heycam.github.io/webidl/#idl-symbol
-    'Uint16Array', // https://heycam.github.io/webidl/#idl-Uint16Array
-    'Uint32Array', // https://heycam.github.io/webidl/#idl-Uint32Array
-    'Uint8Array', // https://heycam.github.io/webidl/#idl-Uint8Array
-    'Uint8ClampedArray', // https://heycam.github.io/webidl/#idl-Uint8ClampedArray
-    'unrestricted double', // https://heycam.github.io/webidl/#idl-unrestricted-double
-    'unrestricted float', // https://heycam.github.io/webidl/#idl-unrestricted-float
-    'unsigned long long', // https://heycam.github.io/webidl/#idl-unsigned-long-long
-    'unsigned long', // https://heycam.github.io/webidl/#idl-unsigned-long
-    'unsigned short', // https://heycam.github.io/webidl/#idl-unsigned-short
-    'USVString', // https://heycam.github.io/webidl/#idl-USVString
-    'undefined' // https://heycam.github.io/webidl/#idl-undefined
+    'any', // https://webidl.spec.whatwg.org/#idl-any
+    'ArrayBuffer', // https://webidl.spec.whatwg.org/#idl-ArrayBuffer
+    'bigint', // https://webidl.spec.whatwg.org/#idl-bigint
+    'BigInt64Array', // https://webidl.spec.whatwg.org/#idl-BigInt64Array
+    'BigUint64Array', // https://webidl.spec.whatwg.org/#idl-BigUint64Array
+    'boolean', // https://webidl.spec.whatwg.org/#idl-boolean
+    'byte', // https://webidl.spec.whatwg.org/#idl-byte
+    'ByteString', // https://webidl.spec.whatwg.org/#idl-ByteString
+    'DataView', // https://webidl.spec.whatwg.org/#idl-DataView
+    'DOMString', // https://webidl.spec.whatwg.org/#idl-DOMString
+    'double', // https://webidl.spec.whatwg.org/#idl-double
+    'float', // https://webidl.spec.whatwg.org/#idl-float
+    'Float32Array', // https://webidl.spec.whatwg.org/#idl-Float32Array
+    'Float64Array', // https://webidl.spec.whatwg.org/#idl-Float64Array
+    'Int16Array', // https://webidl.spec.whatwg.org/#idl-Int16Array
+    'Int32Array', // https://webidl.spec.whatwg.org/#idl-Int32Array
+    'Int8Array', // https://webidl.spec.whatwg.org/#idl-Int8Array
+    'long long', // https://webidl.spec.whatwg.org/#idl-long-long
+    'long', // https://webidl.spec.whatwg.org/#idl-long
+    'object', // https://webidl.spec.whatwg.org/#idl-object
+    'octet', // https://webidl.spec.whatwg.org/#idl-octet
+    'short', // https://webidl.spec.whatwg.org/#idl-short
+    'symbol', // https://webidl.spec.whatwg.org/#idl-symbol
+    'Uint16Array', // https://webidl.spec.whatwg.org/#idl-Uint16Array
+    'Uint32Array', // https://webidl.spec.whatwg.org/#idl-Uint32Array
+    'Uint8Array', // https://webidl.spec.whatwg.org/#idl-Uint8Array
+    'Uint8ClampedArray', // https://webidl.spec.whatwg.org/#idl-Uint8ClampedArray
+    'unrestricted double', // https://webidl.spec.whatwg.org/#idl-unrestricted-double
+    'unrestricted float', // https://webidl.spec.whatwg.org/#idl-unrestricted-float
+    'unsigned long long', // https://webidl.spec.whatwg.org/#idl-unsigned-long-long
+    'unsigned long', // https://webidl.spec.whatwg.org/#idl-unsigned-long
+    'unsigned short', // https://webidl.spec.whatwg.org/#idl-unsigned-short
+    'USVString', // https://webidl.spec.whatwg.org/#idl-USVString
+    'undefined' // https://webidl.spec.whatwg.org/#idl-undefined
   ]);
   // Add any types defined by the (flattened) spec and custom IDL.
   for (const dfn of ast) {
