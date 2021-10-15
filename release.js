@@ -102,13 +102,14 @@ const getChanges = async () => {
     .join('\n');
 };
 
-const doChangelogUpdate = async () => {
+const doChangelogUpdate = async (newVersion) => {
   const filepath = new URL('./CHANGELOG.md', import.meta.url);
   const changelog = await fs.readFile(filepath, 'utf8');
   const idx = changelog.indexOf('##');
   let newChangelog =
     changelog.substring(0, idx) +
-    await getChanges() +
+    `## v${newVersion}\n\n` +
+    (await getChanges()) +
     '\n\n' +
     changelog.substring(idx, changelog.length);
   newChangelog = prettier.format(newChangelog, {parser: 'markdown'});
@@ -165,7 +166,7 @@ const main = async () => {
   console.log('');
 
   await doVersionBump(newVersion);
-  await doChangelogUpdate();
+  await doChangelogUpdate(newVersion);
 
   const answers = await inquirer.prompt([
     {
