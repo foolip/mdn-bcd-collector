@@ -20,8 +20,9 @@ jobs:
     name: Deploy
     needs: test
     runs-on: ubuntu-latest
-    strategy:
-      max-parallel: 1
+    concurrency:
+      group: deploy
+      cancel-in-progress: true
     steps:
     - uses: MontyD/package-json-updated-action@1.0.1
       id: version-updated
