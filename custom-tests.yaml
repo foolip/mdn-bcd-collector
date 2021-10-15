@@ -92,6 +92,8 @@ api:
         };
         return canvas.getContext('webgl2');
 
+  _globals:
+    crypto: return !!self.crypto;
   Attr:
     __base: >-
       var el = document.createElement('b');
@@ -2405,9 +2407,6 @@ api:
       }
   Window:
     __base: var instance = window;
-    crypto: return !!self.crypto;
-  WindowOrWorkerGlobalScope:
-    __base: var instance = self;
   WorkerGlobalScope:
     __base: var instance = self;
   WorkerLocation:

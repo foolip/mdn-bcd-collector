@@ -453,7 +453,7 @@ describe('build', () => {
              DummyError includes DummyErrorHelper;`
         )
       };
-      const ast = flattenIDL(specIDLs, customIDLs);
+      const {ast} = flattenIDL(specIDLs, customIDLs);
 
       const interfaces = ast.filter((dfn) => dfn.type === 'interface');
       assert.lengthOf(interfaces, 3);
@@ -487,7 +487,7 @@ describe('build', () => {
              };`
         )
       };
-      const ast = flattenIDL(specIDLs, customIDLs);
+      const {ast} = flattenIDL(specIDLs, customIDLs);
 
       const namespaces = ast.filter((dfn) => dfn.type === 'namespace');
       assert.lengthOf(namespaces, 1);
@@ -505,8 +505,39 @@ describe('build', () => {
 
       const interfaces = ast.filter((dfn) => dfn.type === 'interface');
       assert.lengthOf(interfaces, 2);
-      assert.equal(interfaces[0].name, 'DOMError');
-      assert.equal(interfaces[1].name, 'XSLTProcessor');
+    });
+
+    it('WindowOrWorkerGlobalScope remains separate', () => {
+      const specIDLs = {
+        first: WebIDL2.parse(
+          `[Exposed=Window]
+             interface Window {
+               readonly attribute boolean imadumdum;
+             };`
+        ),
+        second: WebIDL2.parse(
+          `[Exposed=Window]
+             interface mixin WindowOrWorkerGlobalScope {
+               undefined atob();
+             };
+
+             Window includes WindowOrWorkerGlobalScope;`
+        )
+      };
+      const {ast, globals} = flattenIDL(specIDLs, customIDLs);
+      assert.lengthOf(ast, 3);
+      assert.lengthOf(globals, 1);
+
+      // Window shouldn't include any of WindowOrWorkerGlobalScope's members
+      // in this case; WindowOrWorkerGlobalScope remaps to _globals
+      assert.lengthOf(ast[0].members, 1);
+
+      assert.equal(globals[0].name, 'WindowOrWorkerGlobalScope');
+      assert.lengthOf(globals[0].members, 1);
+      assert.containSubset(globals[0].members[0], {
+        type: 'operation',
+        name: 'atob'
+      });
     });
 
     it('mixin missing', () => {
@@ -594,7 +625,7 @@ describe('build', () => {
              };`
         )
       };
-      const ast = flattenIDL(specIDLs, customIDLs);
+      const {ast} = flattenIDL(specIDLs, customIDLs);
       const interfaces = ast.filter((dfn) => dfn.type === 'interface');
       assert.throws(
         () => {
@@ -614,7 +645,7 @@ describe('build', () => {
              };`
         )
       };
-      const ast = flattenIDL(specIDLs, customIDLs);
+      const {ast} = flattenIDL(specIDLs, customIDLs);
       const interfaces = ast.filter((dfn) => dfn.type === 'interface');
       const exposureSet = getExposureSet(interfaces[0]);
       assert.hasAllKeys(exposureSet, ['Worker']);
@@ -629,7 +660,7 @@ describe('build', () => {
              };`
         )
       };
-      const ast = flattenIDL(specIDLs, customIDLs);
+      const {ast} = flattenIDL(specIDLs, customIDLs);
       const interfaces = ast.filter((dfn) => dfn.type === 'interface');
       const exposureSet = getExposureSet(interfaces[0]);
       assert.hasAllKeys(exposureSet, ['Window', 'Worker']);
@@ -644,7 +675,7 @@ describe('build', () => {
              };`
         )
       };
-      const ast = flattenIDL(specIDLs, customIDLs);
+      const {ast} = flattenIDL(specIDLs, customIDLs);
       const interfaces = ast.filter((dfn) => dfn.type === 'interface');
       const exposureSet = getExposureSet(interfaces[0]);
       assert.hasAllKeys(exposureSet, ['Worker']);
@@ -659,7 +690,7 @@ describe('build', () => {
              attribute any name;
            };`
       );
-      assert.deepEqual(buildIDLTests(ast), {
+      assert.deepEqual(buildIDLTests(ast, []), {
         'api.Attr': {
           code: '"Attr" in self',
           exposure: ['Window']
@@ -678,7 +709,7 @@ describe('build', () => {
              boolean contains(Node? other);
            };`
       );
-      assert.deepEqual(buildIDLTests(ast), {
+      assert.deepEqual(buildIDLTests(ast, []), {
         'api.Node': {
           code: '"Node" in self',
           exposure: ['Window']
@@ -698,7 +729,7 @@ describe('build', () => {
            };`
       );
 
-      assert.deepEqual(buildIDLTests(ast), {
+      assert.deepEqual(buildIDLTests(ast, []), {
         'api.MediaSource': {
           code: '"MediaSource" in self',
           exposure: ['Window']
@@ -718,7 +749,7 @@ describe('build', () => {
            };`
       );
 
-      assert.deepEqual(buildIDLTests(ast), {
+      assert.deepEqual(buildIDLTests(ast, []), {
         'api.Window': {
           code: '"Window" in self',
           exposure: ['Window']
@@ -751,7 +782,7 @@ describe('build', () => {
           };`
       );
 
-      assert.deepEqual(buildIDLTests(ast), {
+      assert.deepEqual(buildIDLTests(ast, []), {
         'api.ANGLE_instanced_arrays': {
           code: "(function () {\n  var canvas = document.createElement('canvas');\n  var gl = canvas.getContext('webgl');\n  var instance = gl.getExtension('ANGLE_instanced_arrays');\n  return !!instance;\n})();",
           exposure: ['Window']
@@ -788,7 +819,7 @@ describe('build', () => {
         `[Exposed=Window, LegacyNamespace]
            interface Legacy {};`
       );
-      assert.deepEqual(buildIDLTests(ast), {});
+      assert.deepEqual(buildIDLTests(ast, []), {});
     });
 
     it('global interface', () => {
@@ -800,7 +831,7 @@ describe('build', () => {
            };`
       );
 
-      assert.deepEqual(buildIDLTests(ast), {
+      assert.deepEqual(buildIDLTests(ast, []), {
         'api.WorkerGlobalScope': {
           code: '"WorkerGlobalScope" in self',
           exposure: ['Worker']
@@ -820,7 +851,7 @@ describe('build', () => {
            };`
       );
 
-      assert.deepEqual(buildIDLTests(ast), {
+      assert.deepEqual(buildIDLTests(ast, []), {
         'api.Number': {
           code: '"Number" in self',
           exposure: ['Window']
@@ -839,7 +870,7 @@ describe('build', () => {
              iterable<double>;
            };`
       );
-      assert.deepEqual(buildIDLTests(ast), {
+      assert.deepEqual(buildIDLTests(ast, []), {
         'api.DoubleList': {
           code: '"DoubleList" in self',
           exposure: ['Window']
@@ -874,7 +905,7 @@ describe('build', () => {
              maplike<DOMString, double>;
            };`
       );
-      assert.deepEqual(buildIDLTests(ast), {
+      assert.deepEqual(buildIDLTests(ast, []), {
         'api.DoubleMap': {
           code: '"DoubleMap" in self',
           exposure: ['Window']
@@ -929,7 +960,7 @@ describe('build', () => {
              setlike<double>;
            };`
       );
-      assert.deepEqual(buildIDLTests(ast), {
+      assert.deepEqual(buildIDLTests(ast, []), {
         'api.DoubleSet': {
           code: '"DoubleSet" in self',
           exposure: ['Window']
@@ -981,7 +1012,7 @@ describe('build', () => {
              setter undefined (GetMe data, optional unsigned long index);
            };`
       );
-      assert.deepEqual(buildIDLTests(ast), {
+      assert.deepEqual(buildIDLTests(ast, []), {
         'api.GetMe': {
           code: '"GetMe" in self',
           exposure: ['Window']
@@ -996,7 +1027,7 @@ describe('build', () => {
            [Exposed=(Window,Worker)] interface MessageChannel {};
            [Exposed=Window] namespace console {};`
       );
-      assert.deepEqual(buildIDLTests(ast), {
+      assert.deepEqual(buildIDLTests(ast, []), {
         'api.console': {
           code: '"console" in self',
           exposure: ['Window']
@@ -1024,7 +1055,7 @@ describe('build', () => {
            };`
       );
 
-      assert.deepEqual(buildIDLTests(ast), {
+      assert.deepEqual(buildIDLTests(ast, []), {
         'api.Number': {
           code: '"Number" in self',
           exposure: ['Window']
@@ -1045,7 +1076,7 @@ describe('build', () => {
              undefined disconnect (AudioNode destinationNode);
            };`
       );
-      assert.deepEqual(buildIDLTests(ast), {
+      assert.deepEqual(buildIDLTests(ast, []), {
         'api.AudioNode': {
           code: '"AudioNode" in self',
           exposure: ['Window']
@@ -1064,7 +1095,7 @@ describe('build', () => {
              readonly attribute any paintWorklet;
            };`
       );
-      assert.deepEqual(buildIDLTests(ast), {
+      assert.deepEqual(buildIDLTests(ast, []), {
         'api.CSS': {
           code: '"CSS" in self',
           exposure: ['Window']
@@ -1083,7 +1114,7 @@ describe('build', () => {
              boolean supports(CSSOMString property, CSSOMString value);
            };`
       );
-      assert.deepEqual(buildIDLTests(ast), {
+      assert.deepEqual(buildIDLTests(ast, []), {
         'api.CSS': {
           code: '"CSS" in self',
           exposure: ['Window']
@@ -1103,7 +1134,7 @@ describe('build', () => {
            };`
       );
 
-      assert.deepEqual(buildIDLTests(ast), {
+      assert.deepEqual(buildIDLTests(ast, []), {
         'api.Scope': {
           code: '(function () {\n  var scope = Scope;\n  return !!scope;\n})();',
           exposure: ['Window']
@@ -1124,7 +1155,7 @@ describe('build', () => {
            interface HTMLImageElement {};`
       );
 
-      assert.deepEqual(buildIDLTests(ast), {
+      assert.deepEqual(buildIDLTests(ast, []), {
         'api.HTMLImageElement': {
           code: '"HTMLImageElement" in self',
           exposure: ['Window']
@@ -1134,6 +1165,37 @@ describe('build', () => {
           exposure: ['Window']
         }
       });
+    });
+
+    it('Globals', () => {
+      const ast = WebIDL2.parse(
+        `[Exposed=Window]
+           interface Dummy {
+             readonly attribute boolean imadumdum;
+           };`
+      );
+      const globals = WebIDL2.parse(
+        `[Exposed=Window]
+           interface mixin WindowOrWorkerGlobalScope {
+             undefined atob();
+           };`
+      );
+
+      assert.deepEqual(buildIDLTests(ast, globals), {
+        'api.Dummy': {
+          code: '"Dummy" in self',
+          exposure: ['Window']
+        },
+        'api.Dummy.imadumdum': {
+          code: '"imadumdum" in Dummy.prototype',
+          exposure: ['Window']
+        },
+        'api.atob': {
+          code: '"atob" in self',
+          exposure: ['Window', 'Worker']
+        }
+      });
+      assert.deep;
     });
   });
 
