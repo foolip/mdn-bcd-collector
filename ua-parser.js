@@ -77,10 +77,11 @@ const parseUA = (userAgent, browsers) => {
   // Certain Safari versions are backports of newer versions, but contain less
   // features, particularly ones involving OS integration. We will ignore these
   // versions instead of remapping them to other versions to avoid confusion.
-  if (data.browser.id === 'safari') {
-    if (['4.1', '6.1', '6.2', '7.1'].includes(data.version)) {
-      return data;
-    }
+  if (
+    data.browser.id === 'safari' &&
+    ['4.1', '6.1', '6.2', '7.1'].includes(data.version)
+  ) {
+    return data;
   }
 
   // The |version| from the UA string is typically more precise than |versions|
