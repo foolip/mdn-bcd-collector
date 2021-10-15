@@ -31,13 +31,17 @@ $colors: (
     dark: #bbf,
     light: #44f
   ),
+  input-fg: (
+    dark: white,
+    light: white
+  ),
   input-bg: (
-    dark: #3d8a3f,
-    light: #3d8a3f
+    dark: #2d672f,
+    light: #2d672f
   ),
   input-hover-bg: (
-    dark: #4caf50,
-    light: #4caf50
+    dark: #3d8a3f,
+    light: #3d8a3f
   ),
   input-disabled-bg: (
     dark: #636363,
@@ -128,8 +132,8 @@ $colors: (
   @media (prefers-color-scheme: light) {
     @include gradient-base(
       $direction,
-      map-deep-get($colors, $color-1, 'dark'),
-      map-deep-get($colors, $color-2, 'dark')
+      map-deep-get($colors, $color-1, 'light'),
+      map-deep-get($colors, $color-2, 'light')
     );
   }
 }
@@ -176,7 +180,7 @@ button,
 select,
 input {
   @include themedProperty(background, 'input-bg');
-  @include themedProperty(color, 'text');
+  @include themedProperty(color, 'input-fg');
   border: none;
   text-align: center;
   text-decoration: none;
