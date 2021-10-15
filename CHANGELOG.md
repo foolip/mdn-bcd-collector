@@ -1,5 +1,27 @@
 # mdn-bcd-collector Changelog
 
+## v4.0.0
+
+- Fix styling for inputs and light background (#1571)
+- Limit deploy action to only run one at a time (#1570)
+- Map WindowOrWorkerGlobalScope members to \_globals folder (#1558)
+- Update URLs to Web IDL (#1549)
+- Use NodeGit's Revwalk to generate the changelog (#1539)
+- Create release preparation script (#1513)
+- Add custom tests for HTMLFormControlsCollection and RadioNodeList (#1528)
+- Create a changelog (#1514)
+- Ignore Deno by default in find-missing-results script (#1535)
+- Add custom test for TextMetrics API (#1534)
+- Remove insufficient tests for document.createElement() options (#1508)
+- Use WebKitMutationObserver to create a MutationObserver instance (#1511)
+- Fix test for XPathResult in old Firefox versions (#1507)
+- Sass it up! Convert styling to SCSS (#1502)
+- Add a type string for more event constructors (#1489)
+- Add documentation for how to review changes from the collector (#1436)
+- Add a privacy notice to homepage (#1499)
+- Add custom test for HTMLOptionsCollection (#1497)
+- Convert from CJS to ESM (#1475)
+
 ## v3.3.1
 
 - Automatically tag new releases (#1484)
