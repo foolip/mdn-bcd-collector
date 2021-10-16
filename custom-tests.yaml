@@ -19,7 +19,7 @@ api:
       src: /media/black.png
     audioContext:
       type: instance
-      src: >-
+      src: |-
         var constructor = window.AudioContext || window.webkitAudioContext;
         if (!constructor) {
           return false;
@@ -27,7 +27,7 @@ api:
         return new constructor();
     createStyleSheet:
       type: instance
-      src: >-
+      src: |-
         return function(css) {
           var el = document.createElement('style');
           el.innerHTML = css;
@@ -37,7 +37,7 @@ api:
         }
     cryptoKey:
       type: instance
-      src: >-
+      src: |-
         if (!('crypto' in self) || !crypto) {
           return false;
         };
@@ -53,7 +53,7 @@ api:
         }, true, ['encrypt', 'decrypt']);
     offlineAudioContext:
       type: instance
-      src: >-
+      src: |-
         var constructor = window.OfflineAudioContext || window.webkitOfflineAudioContext;
         if (!constructor) {
           return false;
@@ -61,7 +61,7 @@ api:
         return new constructor(2,44100*40,44100);
     speechRecognition:
       type: instance
-      src: >-
+      src: |-
         var constructor = window.SpeechRecognition || window.webkitSpeechRecognition;
         if (!constructor) {
           return false;
@@ -69,7 +69,7 @@ api:
         return new constructor();
     webGL:
       type: instance
-      src: >-
+      src: |-
         var canvas = document.createElement('canvas');
         if (!canvas) {
           return false;
@@ -77,7 +77,7 @@ api:
         return canvas.getContext('webgl2') || canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
     webGL1:
       type: instance
-      src: >-
+      src: |-
         var canvas = document.createElement('canvas');
         if (!canvas) {
           return false;
@@ -85,7 +85,7 @@ api:
         return canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
     webGL2:
       type: instance
-      src: >-
+      src: |-
         var canvas = document.createElement('canvas');
         if (!canvas) {
           return false;
@@ -95,14 +95,14 @@ api:
   _globals:
     crypto: return !!self.crypto;
   Attr:
-    __base: >-
+    __base: |-
       var el = document.createElement('b');
       el.setAttribute('data-foo', 'bar');
       var instance = el.getAttributeNode('data-foo');
   ANGLE_instanced_arrays:
     __resources:
       - webGL1
-    __base: >-
+    __base: |-
       if (!reusableInstances.webGL1) {
         return false;
       };
@@ -111,13 +111,13 @@ api:
   AnalyserNode:
     __resources:
       - audioContext
-    __base: >-
+    __base: |-
       if (!reusableInstances.audioContext) {
         return false;
       }
       var instance = reusableInstances.audioContext.createAnalyser();
   AnimationEvent:
-    __base: >-
+    __base: |-
       var instance;
       try {
         instance = new AnimationEvent('animationend');
@@ -136,7 +136,7 @@ api:
   AudioBuffer:
     __resources:
       - audioContext
-    __base: >-
+    __base: |-
       if (!reusableInstances.audioContext) {
         return false;
       }
@@ -144,7 +144,7 @@ api:
   AudioBufferSourceNode:
     __resources:
       - audioContext
-    __base: >-
+    __base: |-
       if (!reusableInstances.audioContext) {
         return false;
       }
@@ -157,7 +157,7 @@ api:
   AudioDestinationNode:
     __resources:
       - audioContext
-    __base: >-
+    __base: |-
       if (!reusableInstances.audioContext) {
         return false;
       }
@@ -165,7 +165,7 @@ api:
   AudioListener:
     __resources:
       - audioContext
-    __base: >-
+    __base: |-
       if (!reusableInstances.audioContext) {
         return false;
       }
@@ -173,7 +173,7 @@ api:
   AudioNode:
     __resources:
       - audioContext
-    __base: >-
+    __base: |-
       if (!reusableInstances.audioContext) {
         return false;
       }
@@ -183,7 +183,7 @@ api:
       - audioContext
     __base: <%api.GainNode:gainNode%> var instance = gainNode.gain;
   AudioProcessingEvent:
-    __base: >-
+    __base: |-
       var instance;
       try {
         instance = new AudioProcessingEvent('audioprocess');
@@ -200,7 +200,7 @@ api:
   AudioScheduledSourceNode:
     __resources:
       - audioContext
-    __base: >-
+    __base: |-
       if (!reusableInstances.audioContext) {
         return false;
       }
@@ -213,13 +213,13 @@ api:
   AudioTrackList:
     __resources:
       - audio-blip
-    __base: >-
+    __base: |-
       var el = document.getElementById('resource-audio-blip');
       var instance = el.audioTracks;
   AudioWorkletNode:
     __resources:
       - audioContext
-    __base: >-
+    __base: |-
       if (!reusableInstances.audioContext) {
         return false;
       }
@@ -241,19 +241,19 @@ api:
     __base: var instance = reusableInstances.audioContext;
     __test: return 'BaseAudioContext' in self
     __additional:
-      decodeAudioData.promise_syntax: >-
+      decodeAudioData.promise_syntax: |-
         <%api.BaseAudioContext:ctx%>
         return ctx.decodeAudioData.length === 1;
   # XXX Freezes in many versions of Chrome and Firefox
   # BatteryManager:
-  #   __base: >-
+  #   __base: |-
   #     if (!('getBattery' in navigator)) {
   #       return false;
   #     };
   #     var promise = navigator.getBattery();
   #     promise.then(function() {});
   BeforeUnloadEvent:
-    __base: >-
+    __base: |-
       try {
         var instance = document.createEvent('BeforeUnloadEvent');
       } catch(e) {
@@ -265,13 +265,13 @@ api:
   BiquadFilterNode:
     __resources:
       - audioContext
-    __base: >-
+    __base: |-
       if (!reusableInstances.audioContext) {
         return false;
       }
       var instance = reusableInstances.audioContext.createBiquadFilter();
   Blob:
-    __base: >-
+    __base: |-
       var instance;
       try {
         instance = new Blob();
@@ -279,7 +279,7 @@ api:
         instance = new BlobBuilder();
       }
   CacheStorage:
-    __base: >-
+    __base: |-
       if (!('caches' in self)) {
         return false;
       };
@@ -287,18 +287,18 @@ api:
   CanvasPattern:
     __resources:
       - image-black
-    __base: >-
+    __base: |-
       <%api.CanvasRenderingContext2D:canvas%>
       var instance = canvas.createPattern(document.getElementById('resource-image-black'), 'repeat');
   CanvasRenderingContext2D:
-    __base: >-
+    __base: |-
       var canvas = document.createElement('canvas');
       if (!canvas) {
         return false;
       };
       var instance = canvas.getContext('2d');
     __additional:
-      drawImage.SVGImageElement_source_image: >-
+      drawImage.SVGImageElement_source_image: |-
         <%api.CanvasRenderingContext2D:canvas%>
         <%api.SVGImageElement:image%>
         canvas.drawImage(image, 0, 0);
@@ -306,7 +306,7 @@ api:
   ChannelMergerNode:
     __resources:
       - audioContext
-    __base: >-
+    __base: |-
       if (!reusableInstances.audioContext) {
         return false;
       }
@@ -314,7 +314,7 @@ api:
   ChannelSplitterNode:
     __resources:
       - audioContext
-    __base: >-
+    __base: |-
       if (!reusableInstances.audioContext) {
         return false;
       }
@@ -324,7 +324,7 @@ api:
   Clients:
     __base: var instance = clients;
   CloseEvent:
-    __base: >-
+    __base: |-
       var instance;
       try {
         instance = new CloseEvent('close');
@@ -339,7 +339,7 @@ api:
         }
       }
   CompositionEvent:
-    __base: >-
+    __base: |-
       var instance;
       try {
         instance = new CompositionEvent('compositionstart');
@@ -356,7 +356,7 @@ api:
   ConstantSourceNode:
     __resources:
       - audioContext
-    __base: >-
+    __base: |-
       if (!reusableInstances.audioContext) {
         return false;
       }
@@ -364,13 +364,13 @@ api:
   ConvolverNode:
     __resources:
       - audioContext
-    __base: >-
+    __base: |-
       if (!reusableInstances.audioContext) {
         return false;
       }
       var instance = reusableInstances.audioContext.createConvolver();
   Crypto:
-    __base: >-
+    __base: |-
       if (!('crypto' in self)) {
         return false;
       };
@@ -378,7 +378,7 @@ api:
   CryptoKey:
     __resources:
       - cryptoKey
-    __base: >-
+    __base: |-
       var promise = reusableInstances.cryptoKey;
   CSSConditionRule:
     __resources:
@@ -387,19 +387,19 @@ api:
   CSSCounterStyleRule:
     __resources:
       - createStyleSheet
-    __base: >-
+    __base: |-
       var stylesheet = reusableInstances.createStyleSheet('@counter-style thumbs {system: cyclic; symbols: "👍"; suffix: " ";}');
       var instance = stylesheet.cssRules.item(0);
   CSSFontFaceRule:
     __resources:
       - createStyleSheet
-    __base: >-
+    __base: |-
       var stylesheet = reusableInstances.createStyleSheet('@font-face {font-family: somefont; src: url(somefont.ttf);}');
       var instance = stylesheet.cssRules.item(0);
   CSSFontFeatureValuesRule:
     __resources:
       - createStyleSheet
-    __base: >-
+    __base: |-
       var stylesheet = reusableInstances.createStyleSheet('@font-feature-values Font {@styleset {nice-style: 12;}}');
       var instance = stylesheet.cssRules.item(0);
   CSSGroupingRule:
@@ -409,48 +409,48 @@ api:
   CSSImportRule:
     __resources:
       - createStyleSheet
-    __base: >-
+    __base: |-
       var stylesheet = reusableInstances.createStyleSheet('@import url(/resources/style.css);');
       var instance = stylesheet.cssRules.item(0);
   CSSKeyframeRule:
     __resources:
       - createStyleSheet
-    __base: >-
+    __base: |-
       <%api.CSSKeyframesRule:keyframes%>
       var instance = keyframes.cssRules.item(0);
   CSSKeyframesRule:
     __resources:
       - createStyleSheet
-    __base: >-
+    __base: |-
       var stylesheet = reusableInstances.createStyleSheet('@keyframes test {0% {
       top: 0 } 100% { top: 100px; }} @-webkit-keyframes test {0% { top: 0 } 100% { top: 100px; }} @-moz-keyframes test {0% { top: 0 } 100% { top: 100px; }} @-o-keyframes test {0% { top: 0 } 100% { top: 100px; }}');
       var instance = stylesheet.cssRules.item(0);
   CSSMediaRule:
     __resources:
       - createStyleSheet
-    __base: >-
+    __base: |-
       var stylesheet = reusableInstances.createStyleSheet('@media (max-width: 600px) {body {background-color: #111;color: white;}}');
       var instance = stylesheet.cssRules.item(0);
   CSSPageRule:
     __resources:
       - createStyleSheet
-    __base: >-
+    __base: |-
       var stylesheet = reusableInstances.createStyleSheet('@page {margin: 1cm;}');
       var instance = stylesheet.cssRules.item(0);
   CSSRule:
     __resources:
       - createStyleSheet
-    __base: >-
+    __base: |-
       <%api.CSSRuleList:cssRules%>
       var instance = cssRules.item(0);
   CSSRuleList:
     __resources:
       - createStyleSheet
-    __base: >-
+    __base: |-
       <%api.CSSStyleSheet:stylesheet%>
       var instance = stylesheet.cssRules;
   CSSStyleDeclaration:
-    __base: >-
+    __base: |-
       var el = document.createElement('b');
       var instance = el.style;
   CSSStyleRule:
@@ -464,17 +464,17 @@ api:
   CSSSupportsRule:
     __resources:
       - createStyleSheet
-    __base: >-
+    __base: |-
       var stylesheet = reusableInstances.createStyleSheet('@supports (display: grid) {div {display: grid;}}');
       var instance = stylesheet.cssRules.item(0);
   CSSViewportRule:
     __resources:
       - createStyleSheet
-    __base: >-
+    __base: |-
       var stylesheet = reusableInstances.createStyleSheet('@viewport {width: 100vw;}');
       var instance = stylesheet.cssRules.item(0);
   CustomEvent:
-    __base: >-
+    __base: |-
       var instance;
       try {
         instance = new CustomEvent('custom');
@@ -491,13 +491,13 @@ api:
   DelayNode:
     __resources:
       - audioContext
-    __base: >-
+    __base: |-
       if (!reusableInstances.audioContext) {
         return false;
       }
       var instance = reusableInstances.audioContext.createDelay();
   DeviceMotionEvent:
-    __base: >-
+    __base: |-
       var instance;
       try {
         instance = new DeviceMotionEvent('devicemotion');
@@ -512,7 +512,7 @@ api:
         }
       }
   DeviceOrientationEvent:
-    __base: >-
+    __base: |-
       var instance;
       try {
         instance = new DeviceOrientationEvent('deviceorientation');
@@ -535,7 +535,7 @@ api:
   DOMError:
     __base: var instance = new DOMError('name');
   DOMException:
-    __base: >-
+    __base: |-
       var instance;
       try {
         document.createElement('1');
@@ -545,27 +545,27 @@ api:
   DOMImplementation:
     __base: var instance = document.implementation;
   DOMRectList:
-    __base: >-
+    __base: |-
       <%api.Element:el%> if (!el.getClientRects) {
         return false;
       }
       var instance = el.getClientRects();
   DOMTokenList:
-    __base: >-
+    __base: |-
       var elm = document.createElement('b');
       var instance = elm.classList;
     __additional:
-      trim_whitespace: >-
+      trim_whitespace: |-
         if (!instance) { return false; }
         elm.className = ' foo bar foo ';
         instance.remove('bar');
         return elm.className === 'foo foo' || elm.className === 'foo';
-      remove_duplicates: >-
+      remove_duplicates: |-
         if (!instance) { return false; }
         elm.className = ' foo bar foo ';
         instance.remove('bar');
         return elm.className === 'foo';
-      toggle.force_parameter: >-
+      toggle.force_parameter: |-
         if (!instance) { return false; }
         elm.className = 'foo bar';
         if (!('toggle' in instance)) {
@@ -574,7 +574,7 @@ api:
         instance.toggle('foo', true);
         return elm.className === 'foo bar';
   DragEvent:
-    __base: >-
+    __base: |-
       var instance;
       try {
         instance = new DragEvent('drag');
@@ -591,13 +591,13 @@ api:
   DynamicsCompressorNode:
     __resources:
       - audioContext
-    __base: >-
+    __base: |-
       if (!reusableInstances.audioContext) {
         return false;
       }
       var instance = reusableInstances.audioContext.createDynamicsCompressor();
   Element:
-    __base: >-
+    __base: |-
       var instance;
       try {
         instance = document.createElementNS('', 'el');
@@ -605,7 +605,7 @@ api:
         instance = document.createElement('b');
       }
   ErrorEvent:
-    __base: >-
+    __base: |-
       var instance;
       try {
         instance = new ErrorEvent('error');
@@ -620,7 +620,7 @@ api:
         }
       }
   Event:
-    __base: >-
+    __base: |-
       var instance;
       try {
         instance = new Event('type');
@@ -639,7 +639,7 @@ api:
   EXT_blend_minmax:
     __resources:
       - webGL1
-    __base: >-
+    __base: |-
       if (!reusableInstances.webGL1) {
         return false;
       };
@@ -647,7 +647,7 @@ api:
   EXT_clip_cull_distance:
     __resources:
       - webGL
-    __base: >-
+    __base: |-
       if (!reusableInstances.webGL) {
         return false;
       };
@@ -655,7 +655,7 @@ api:
   EXT_color_buffer_float:
     __resources:
       - webGL2
-    __base: >-
+    __base: |-
       if (!reusableInstances.webGL2) {
         return false;
       };
@@ -663,7 +663,7 @@ api:
   EXT_color_buffer_half_float:
     __resources:
       - webGL1
-    __base: >-
+    __base: |-
       if (!reusableInstances.webGL1) {
         return false;
       };
@@ -671,7 +671,7 @@ api:
   EXT_disjoint_timer_query:
     __resources:
       - webGL1
-    __base: >-
+    __base: |-
       if (!reusableInstances.webGL1) {
         return false;
       };
@@ -679,7 +679,7 @@ api:
   EXT_disjoint_timer_query_webgl2:
     __resources:
       - webGL2
-    __base: >-
+    __base: |-
       if (!reusableInstances.webGL2) {
         return false;
       };
@@ -687,7 +687,7 @@ api:
   EXT_float_blend:
     __resources:
       - webGL
-    __base: >-
+    __base: |-
       if (!reusableInstances.webGL) {
         return false;
       };
@@ -695,7 +695,7 @@ api:
   EXT_frag_depth:
     __resources:
       - webGL1
-    __base: >-
+    __base: |-
       if (!reusableInstances.webGL1) {
         return false;
       };
@@ -703,7 +703,7 @@ api:
   EXT_shader_texture_lod:
     __resources:
       - webGL1
-    __base: >-
+    __base: |-
       if (!reusableInstances.webGL1) {
         return false;
       };
@@ -711,7 +711,7 @@ api:
   EXT_sRGB:
     __resources:
       - webGL1
-    __base: >-
+    __base: |-
       if (!reusableInstances.webGL1) {
         return false;
       };
@@ -719,7 +719,7 @@ api:
   EXT_texture_compression_bptc:
     __resources:
       - webGL
-    __base: >-
+    __base: |-
       if (!reusableInstances.webGL) {
         return false;
       };
@@ -727,7 +727,7 @@ api:
   EXT_texture_compression_rgtc:
     __resources:
       - webGL
-    __base: >-
+    __base: |-
       if (!reusableInstances.webGL) {
         return false;
       };
@@ -735,7 +735,7 @@ api:
   EXT_texture_filter_anisotropic:
     __resources:
       - webGL
-    __base: >-
+    __base: |-
       if (!reusableInstances.webGL) {
         return false;
       };
@@ -743,7 +743,7 @@ api:
   EXT_texture_norm16:
     __resources:
       - webGL2
-    __base: >-
+    __base: |-
       if (!reusableInstances.webGL2) {
         return false;
       };
@@ -753,13 +753,13 @@ api:
   External:
     __base: var instance = window.external;
   FetchEvent:
-    __base: >-
+    __base: |-
       <%api.Request:req%>
       var instance = new FetchEvent('fetch', { request: req });
   FileReader:
     __base: var instance = new FileReader();
   FocusEvent:
-    __base: >-
+    __base: |-
       var instance;
       try {
         instance = new FocusEvent('focus');
@@ -776,7 +776,7 @@ api:
   FontFace:
     __base: var instance = new FontFace('Material Design Icons', 'url(/fonts/materialdesignicons-webfont.woff)');
   FontFaceSet:
-    __base: >-
+    __base: |-
       var instance;
       if ('document' in self) {
         instance = document.fonts;
@@ -788,7 +788,7 @@ api:
   GainNode:
     __resources:
       - audioContext
-    __base: >-
+    __base: |-
       if (!reusableInstances.audioContext) {
         return false;
       }
@@ -796,7 +796,7 @@ api:
   GamepadEvent:
     __base: var instance = new GamepadEvent('gamepadconnected');
   HashChangeEvent:
-    __base: >-
+    __base: |-
       var instance;
       try {
         instance = new HashChangeEvent('hashchange');
@@ -882,7 +882,7 @@ api:
     __base: var instance = document.createElement('font');
     __test: return bcd.testObjectName(instance, 'HTMLFontElement');
   HTMLFormControlsCollection:
-    __base: >-
+    __base: |-
       <%api.HTMLFormElement:form%>
       for (var i = 0; i < 3; i++) {
         var input = document.createElement('input');
@@ -975,7 +975,7 @@ api:
     __base: var instance = document.createElement('option');
     __test: return bcd.testObjectName(instance, 'HTMLOptionElement');
   HTMLOptionsCollection:
-    __base: >-
+    __base: |-
       var el = document.createElement('select');
       for (var i = 0; i < 3; i++) {
         el.appendChild(document.createElement('option'));
@@ -1069,7 +1069,7 @@ api:
     __base: var instance = document.createElement('video');
     __test: return bcd.testObjectName(instance, 'HTMLVideoElement');
   IDBDatabase:
-    __base: >-
+    __base: |-
       <%api.IDBOpenDBRequest:req%>
       req.onsuccess = function() {
         callback(req.result);
@@ -1080,13 +1080,13 @@ api:
   IDBFactory:
     __base: var instance = self.indexedDB || self.mozIndexedDB || self.webkitIndexedDB || self.msIndexedDB;
   IDBOpenDBRequest:
-    __base: >-
+    __base: |-
       <%api.IDBFactory:idb%>
       var instance = idb.open("collector");
   IDBRequest:
     __base: <%api.IDBOpenDBRequest:instance%>
   IDBVersionChangeEvent:
-    __base: >-
+    __base: |-
       var instance;
       try {
         instance = new IDBVersionChangeEvent('upgradeneeded');
@@ -1103,7 +1103,7 @@ api:
   IIRFilterNode:
     __resources:
       - audioContext
-    __base: >-
+    __base: |-
       if (!reusableInstances.audioContext) {
         return false;
       }
@@ -1113,7 +1113,7 @@ api:
       - image-black
     __base: var instance = createImageBitmap(document.getElementById('resource-image-black'));
   ImageCapture:
-    __base: >-
+    __base: |-
       <%api.MediaDevices:mediaDevices%>
       var track = mediaDevices.getUserMedia({video: true});
       track.then(function() {});
@@ -1121,7 +1121,7 @@ api:
         return new ImageCapture(t);
       });
   ImageData:
-    __base: >-
+    __base: |-
       var instance;
       if ('ImageData' in self) {
         instance = new ImageData(5, 5);
@@ -1132,7 +1132,7 @@ api:
   InstallEvent:
     __base: var instance = new InstallEvent('install');
   KeyboardEvent:
-    __base: >-
+    __base: |-
       var instance;
       try {
         instance = new KeyboardEvent('keypress');
@@ -1149,7 +1149,7 @@ api:
   KHR_parallel_shader_compile:
     __resources:
       - webGL
-    __base: >-
+    __base: |-
       if (!reusableInstances.webGL) {
         return false;
       };
@@ -1159,7 +1159,7 @@ api:
   MediaCapabilities:
     __base: var instance = navigator.mediaCapabilities;
   MediaDeviceInfo:
-    __base: >-
+    __base: |-
       <%api.MediaDevices:mediaDevices%>
       var promise = navigator.mediaDevices.enumerateDevices().then(
         function(devices) {
@@ -1172,7 +1172,7 @@ api:
     __resources:
       - audio-blip
       - audioContext
-    __base: >-
+    __base: |-
       if (!reusableInstances.audioContext) {
         return false;
       }
@@ -1184,7 +1184,7 @@ api:
   MediaList:
     __resources:
       - createStyleSheet
-    __base: >-
+    __base: |-
       var stylesheet = reusableInstances.createStyleSheet('@media (max-width: 600px) {body {background-color: #111;color: white;}}');
       var instance = stylesheet.media;
   MediaQuery:
@@ -1197,14 +1197,14 @@ api:
     __base: var instance = new MediaSource();
     isTypeSupported: return 'isTypeSupported' in MediaSource;
   MediaStream:
-    __base: >-
+    __base: |-
       <%api.MediaDevices:mediaDevices%>
       var promise = mediaDevices.getUserMedia({audio: true});
       promise.then(function() {});
   MediaStreamAudioDestinationNode:
     __resources:
       - audioContext
-    __base: >-
+    __base: |-
       if (!reusableInstances.audioContext) {
         return false;
       }
@@ -1212,7 +1212,7 @@ api:
   MediaStreamAudioSourceNode:
     __resources:
       - audioContext
-    __base: >-
+    __base: |-
       <%api.MediaStream:mediaStream%>
       if (!reusableInstances.audioContext) {
         return false;
@@ -1221,7 +1221,7 @@ api:
         return reusableInstances.audioContext.createMediaStreamSource(ms)
       });
   MediaStreamTrack:
-    __base: >-
+    __base: |-
       <%api.MediaStream:mediaStream%>
       var promise = mediaStream.then(function(ms) {
         return ms.getAudioTracks()[0]
@@ -1229,7 +1229,7 @@ api:
   MediaStreamTrackAudioSourceNode:
     __resources:
       - audioContext
-    __base: >-
+    __base: |-
       <%api.MediaStream:mediaStream%>
       if (!reusableInstances.audioContext) {
         return false;
@@ -1240,7 +1240,7 @@ api:
   MerchantValidationEvent:
     __base: var instance = new MerchantValidationEvent('merchantvalidation');
   MessageEvent:
-    __base: >-
+    __base: |-
       var instance;
       try {
         instance = new MessageEvent('message');
@@ -1255,13 +1255,13 @@ api:
         }
       }
   MessageChannel:
-    __base: >-
+    __base: |-
       if (!('MessageChannel' in self)) {
         return false;
       }
       var instance = new MessageChannel();
   MessagePort:
-    __base: >-
+    __base: |-
       <%api.MessageChannel:channel%>
       var instance = channel.port1;
   MimeType:
@@ -1269,7 +1269,7 @@ api:
   MimeTypeArray:
     __base: var instance = navigator.mimeTypes;
   MouseEvent:
-    __base: >-
+    __base: |-
       var instance;
       try {
         instance = new MouseEvent('click');
@@ -1284,7 +1284,7 @@ api:
         }
       }
   MutationEvent:
-    __base: >-
+    __base: |-
       try {
         var instance = document.createEvent('MutationEvent');
       } catch(e) {
@@ -1294,7 +1294,7 @@ api:
         throw e;
       }
   MutationObserver:
-    __base: >-
+    __base: |-
       var constructor = window.MutationObserver || window.WebKitMutationObserver;
       if (!constructor) {
         return false;
@@ -1311,7 +1311,7 @@ api:
   NodeIterator:
     __base: var instance = document.createNodeIterator(document);
   Notification:
-    __base: >-
+    __base: |-
       if (!('Notification' in self)) {
         return false;
       }
@@ -1321,7 +1321,7 @@ api:
   OfflineAudioCompletionEvent:
     __resources:
       - audioContext
-    __base: >-
+    __base: |-
       <%api.AudioBuffer:buffer%>
       var instance = new OfflineAudioCompletionEvent('complete', {renderedBuffer: buffer});
   OfflineAudioContext:
@@ -1332,7 +1332,7 @@ api:
   OscillatorNode:
     __resources:
       - audioContext
-    __base: >-
+    __base: |-
       if (!reusableInstances.audioContext) {
         return false;
       }
@@ -1340,7 +1340,7 @@ api:
   OES_draw_buffers_indexed:
     __resources:
       - webGL
-    __base: >-
+    __base: |-
       if (!reusableInstances.webGL) {
         return false;
       };
@@ -1348,7 +1348,7 @@ api:
   OES_element_index_uint:
     __resources:
       - webGL1
-    __base: >-
+    __base: |-
       if (!reusableInstances.webGL1) {
         return false;
       };
@@ -1356,7 +1356,7 @@ api:
   OES_fbo_render_mipmap:
     __resources:
       - webGL1
-    __base: >-
+    __base: |-
       if (!reusableInstances.webGL1) {
         return false;
       };
@@ -1364,7 +1364,7 @@ api:
   OES_standard_derivatives:
     __resources:
       - webGL1
-    __base: >-
+    __base: |-
       if (!reusableInstances.webGL1) {
         return false;
       };
@@ -1372,7 +1372,7 @@ api:
   OES_texture_float:
     __resources:
       - webGL1
-    __base: >-
+    __base: |-
       if (!reusableInstances.webGL1) {
         return false;
       };
@@ -1380,7 +1380,7 @@ api:
   OES_texture_float_linear:
     __resources:
       - webGL
-    __base: >-
+    __base: |-
       if (!reusableInstances.webGL) {
         return false;
       };
@@ -1388,7 +1388,7 @@ api:
   OES_texture_half_float:
     __resources:
       - webGL1
-    __base: >-
+    __base: |-
       if (!reusableInstances.webGL1) {
         return false;
       };
@@ -1396,7 +1396,7 @@ api:
   OES_texture_half_float_linear:
     __resources:
       - webGL
-    __base: >-
+    __base: |-
       if (!reusableInstances.webGL) {
         return false;
       };
@@ -1404,7 +1404,7 @@ api:
   OES_vertex_array_object:
     __resources:
       - webGL1
-    __base: >-
+    __base: |-
       if (!reusableInstances.webGL1) {
         return false;
       };
@@ -1412,13 +1412,13 @@ api:
   OVR_multiview2:
     __resources:
       - webGL2
-    __base: >-
+    __base: |-
       if (!reusableInstances.webGL2) {
         return false;
       };
       var instance = reusableInstances.webGL2.getExtension('OVR_multiview2');
   PageTransitionEvent:
-    __base: >-
+    __base: |-
       var instance;
       try {
         instance = new PageTransitionEvent('pageshow');
@@ -1435,26 +1435,26 @@ api:
   PannerNode:
     __resources:
       - audioContext
-    __base: >-
+    __base: |-
       if (!reusableInstances.audioContext) {
         return false;
       }
       var instance = reusableInstances.audioContext.createPanner();
   Performance:
-    __base: >-
+    __base: |-
       if (!('performance' in self)) {
         return false;
       };
       var instance = performance;
   PerformanceEntry:
-    __base: >-
+    __base: |-
       <%api.Performance:prf%>
       if (!('getEntries' in prf)) {
         return false;
       }
       var instance = prf.getEntries()[0];
   PerformanceMark:
-    __base: >-
+    __base: |-
       if (!('performance' in self)) {
         return false;
       };
@@ -1464,13 +1464,13 @@ api:
       performance.mark('mark');
       var instance = performance.getEntriesByName('mark')[0];
   PerformanceNavigation:
-    __base: >-
+    __base: |-
       if (!('performance' in self)) {
         return false;
       };
       var instance = performance.navigation;
   PerformanceTiming:
-    __base: >-
+    __base: |-
       if (!('performance' in self)) {
         return false;
       };
@@ -1478,7 +1478,7 @@ api:
   PeriodicWave:
     __resources:
       - audioContext
-    __base: >-
+    __base: |-
       if (!reusableInstances.audioContext) {
         return false;
       }
@@ -1486,7 +1486,7 @@ api:
       var imag = new Float32Array(2);
       var instance = reusableInstances.audioContext.createPeriodicWave(real, imag);
   Plugin:
-    __base: >-
+    __base: |-
       if (!navigator.plugins.length) {
         throw new Error('navigator.plugins is empty');
       }
@@ -1494,7 +1494,7 @@ api:
   PluginArray:
     __base: var instance = navigator.plugins;
   PopStateEvent:
-    __base: >-
+    __base: |-
       var instance;
       try {
         instance = new PopStateEvent('popstate');
@@ -1509,13 +1509,13 @@ api:
         }
       }
   ProcessingInstruction:
-    __base: >-
+    __base: |-
       var doc = new DOMParser().parseFromString('<foo />', 'application/xml');
       var instance = doc.createProcessingInstruction('xml-stylesheet', 'href="mycss.css" type="text/css"');
   PushEvent:
     __base: var instance = new PushEvent('push');
   RadioNodeList:
-    __base: >-
+    __base: |-
       <%api.HTMLFormElement:form%>
       for (var i = 0; i < 3; i++) {
         var input = document.createElement('input');
@@ -1532,17 +1532,17 @@ api:
   Response:
     __base: var instance = new Response('');
   RTCDataChannel:
-    __base: >-
+    __base: |-
       <%api.RTCPeerConnection:connection%>
       var instance = connection.createDataChannel('channel');
   RTCDataChannelEvent:
-    __base: >-
+    __base: |-
       <%api.RTCDataChannel:channel%>
       var instance = new RTCDataChannelEvent('datachannel', {channel: channel});
   RTCDTMFToneChangeEvent:
     __base: "var instance = new RTCDTMFToneChangeEvent('tonechange', {tone: ''});"
   RTCPeerConnection:
-    __base: >-
+    __base: |-
       /* Firefox briefly defines RTCPeerConnection in older versions, but it is not a valid constructor until later versions. */
       var constructor = window.mozRTCPeerConnection || window.RTCPeerConnection || window.webkitRTCPeerConnection;
       if (!constructor) {
@@ -1556,13 +1556,13 @@ api:
   ScriptProcessorNode:
     __resources:
       - audioContext
-    __base: >-
+    __base: |-
       if (!reusableInstances.audioContext) {
         return false;
       }
       var instance = reusableInstances.audioContext.createScriptProcessor();
   SecurityPolicyViolationEvent:
-    __base: >-
+    __base: |-
       if (!('SecurityPolicyViolationEvent' in self)) {
         return false;
       }
@@ -1570,7 +1570,7 @@ api:
   Selection:
     __base: var instance = window.getSelection();
   ShadowRoot:
-    __base: >-
+    __base: |-
       var el = document.createElement('div');
       if (!el.attachShadow) {
         return false;
@@ -1583,7 +1583,7 @@ api:
     __base: var instance = reusableInstances.speechRecognition;
     __test: return 'SpeechRecognition' in self
   SpeechRecognitionErrorEvent:
-    __base: >-
+    __base: |-
       var instance;
       try {
         instance = new SpeechRecognitionErrorEvent('error');
@@ -1598,7 +1598,7 @@ api:
         }
       }
   SpeechRecognitionEvent:
-    __base: >-
+    __base: |-
       var instance;
       try {
         instance = new SpeechRecognitionEvent('result');
@@ -1613,7 +1613,7 @@ api:
         }
       }
   SpeechSynthesisErrorEvent:
-    __base: >-
+    __base: |-
       var instance;
       try {
         instance = new SpeechSynthesisErrorEvent('error');
@@ -1628,7 +1628,7 @@ api:
         }
       }
   SpeechSynthesisEvent:
-    __base: >-
+    __base: |-
       var instance;
       try {
         instance = new SpeechSynthesisEvent('start');
@@ -1645,13 +1645,13 @@ api:
   StereoPannerNode:
     __resources:
       - audioContext
-    __base: >-
+    __base: |-
       if (!reusableInstances.audioContext) {
         return false;
       }
       var instance = reusableInstances.audioContext.createStereoPanner();
   StorageEvent:
-    __base: >-
+    __base: |-
       var instance;
       try {
         instance = new StorageEvent('storage');
@@ -1674,7 +1674,7 @@ api:
   StyleSheetList:
     __base: var instance = document.styleSheets;
   SubtleCrypto:
-    __base: >-
+    __base: |-
       if (!('crypto' in self)) {
         return false;
       };
@@ -1683,55 +1683,55 @@ api:
     __base: var instance = document.createElementNS('http://www.w3.org/2000/svg', 'a');
     __test: return bcd.testObjectName(instance, 'SVGAElement');
   SVGAngle:
-    __base: >-
+    __base: |-
       <%api.SVGSVGElement:el%>
       var instance = el.createSVGAngle();
   SVGAnimatedAngle:
-    __base: >-
+    __base: |-
       <%api.SVGMarkerElement:el%>
       var instance = el.orientAngle;
   SVGAnimatedBoolean:
-    __base: >-
+    __base: |-
       <%api.SVGFEConvolveMatrixElement:el%>
       var instance = el.preserveAlpha;
   SVGAnimatedEnumeration:
-    __base: >-
+    __base: |-
       <%api.SVGMarkerElement:el%>
       var instance = el.orientType;
   SVGAnimatedInteger:
-    __base: >-
+    __base: |-
       <%api.SVGFEConvolveMatrixElement:el%>
       var instance = el.orderX;
   SVGAnimatedLength:
-    __base: >-
+    __base: |-
       <%api.SVGMarkerElement:el%>
       var instance = el.refX;
   SVGAnimatedLengthList:
-    __base: >-
+    __base: |-
       <%api.SVGTextPositioningElement:el%>
       var instance = el.x;
   SVGAnimatedNumber:
-    __base: >-
+    __base: |-
       <%api.SVGGeometryElement:el%>
       var instance = el.pathLength;
   SVGAnimatedNumberList:
-    __base: >-
+    __base: |-
       <%api.SVGFEConvolveMatrixElement:el%>
       var instance = el.kernelMatrix;
   SVGAnimatedPreserveAspectRatio:
-    __base: >-
+    __base: |-
       <%api.SVGFEImageElement:el%>
       var instance = el.preserveAspectRatio;
   SVGAnimatedRect:
-    __base: >-
+    __base: |-
       <%api.SVGViewElement:el%>
       var instance = el.viewBox;
   SVGAnimatedString:
-    __base: >-
+    __base: |-
       <%api.SVGElement:el%>
       var instance = el.className;
   SVGAnimatedTransformList:
-    __base: >-
+    __base: |-
       <%api.SVGGraphicsElement:el%>
       var instance = el.transform;
   SVGAltGlyphDefElement:
@@ -1911,11 +1911,11 @@ api:
     __base: var instance = document.createElementNS('http://www.w3.org/2000/svg', 'image');
     __test: return bcd.testObjectName(instance, 'SVGImageElement');
   SVGLength:
-    __base: >-
+    __base: |-
       <%api.SVGSVGElement:el%>
       var instance = el.createSVGLength();
   SVGLengthList:
-    __base: >-
+    __base: |-
       <%api.SVGAnimatedLengthList:list%>
       var instance = list.baseVal;
   SVGLinearGradientElement:
@@ -1943,11 +1943,11 @@ api:
     __base: var instance = document.createElementNS('http://www.w3.org/2000/svg', 'mpath');
     __test: return bcd.testObjectName(instance, 'SVGMPathElement');
   SVGNumber:
-    __base: >-
+    __base: |-
       <%api.SVGSVGElement:el%>
       var instance = el.createSVGNumber();
   SVGNumberList:
-    __base: >-
+    __base: |-
       <%api.SVGAnimatedNumberList:list%>
       var instance = list.baseVal;
   SVGPathElement:
@@ -1957,11 +1957,11 @@ api:
     __base: var instance = document.createElementNS('http://www.w3.org/2000/svg', 'pattern');
     __test: return bcd.testObjectName(instance, 'SVGPatternElement');
   SVGPoint:
-    __base: >-
+    __base: |-
       <%api.SVGSVGElement:el%>
       var instance = el.createSVGPoint();
   SVGPointList:
-    __base: >-
+    __base: |-
       <%api.SVGPolygonElement:el%>
       var instance = el.points;
   SVGPolygonElement:
@@ -1971,14 +1971,14 @@ api:
     __base: var instance = document.createElementNS('http://www.w3.org/2000/svg', 'polyline');
     __test: return bcd.testObjectName(instance, 'SVGPolylineElement');
   SVGPreserveAspectRatio:
-    __base: >-
+    __base: |-
       <%api.SVGSVGElement:el%>
       var instance = el.preserveAspectRatio.baseVal;
   SVGRadialGradientElement:
     __base: var instance = document.createElementNS('http://www.w3.org/2000/svg', 'radialGradient');
     __test: return bcd.testObjectName(instance, 'SVGRadialGradientElement');
   SVGRect:
-    __base: >-
+    __base: |-
       <%api.SVGSVGElement:el%>
       var instance = el.createSVGRect();
   SVGRectElement:
@@ -1997,7 +1997,7 @@ api:
     __base: var instance = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
     __test: return bcd.testObjectName(instance, 'SVGStopElement');
   SVGStringList:
-    __base: >-
+    __base: |-
       <%api.SVGGraphicsElement:el%>
       var instance = el.systemLanguage;
   SVGStyleElement:
@@ -2028,11 +2028,11 @@ api:
     __base: var instance = document.createElementNS('http://www.w3.org/2000/svg', 'title');
     __test: return bcd.testObjectName(instance, 'SVGTitleElement');
   SVGTransform:
-    __base: >-
+    __base: |-
       <%api.SVGSVGElement:el%>
       var instance = el.createSVGTransform();
   SVGTransformList:
-    __base: >-
+    __base: |-
       <%api.SVGAnimatedTransformList:list%>
       var instance = list.baseVal;
   SVGTRefElement:
@@ -2054,7 +2054,7 @@ api:
     __base: var instance = document.createElementNS('http://www.w3.org/2000/svg', 'vkern');
     __test: return bcd.testObjectName(instance, 'SVGVKernElement');
   Text:
-    __base: >-
+    __base: |-
       var el = document.createElement('b');
       el.innerHTML = 'text';
       var instance
@@ -2064,43 +2064,43 @@ api:
   TextEncoder:
     __base: var instance = new TextEncoder();
   TextMetrics:
-    __base: >-
+    __base: |-
       <%api.CanvasRenderingContext2D:canvas%>
       var instance = canvas.measureText('mdn-bcd-collector');
   TextTrack:
     __resources:
       - video-blank
-    __base: >-
+    __base: |-
       <%api.TextTrackList:texttracks%>
       var instance = texttracks[0];
   TextTrackCue:
     __resources:
       - video-blank
-    __base: >-
+    __base: |-
       <%api.TextTrackCueList:cues%>
       var instance = cues[0];
   TextTrackCueList:
     __resources:
       - video-blank
-    __base: >-
+    __base: |-
       <%api.TextTrack:texttrack%>
       var instance = texttrack.cues;
   TextTrackList:
     __resources:
       - video-blank
-    __base: >-
+    __base: |-
       var el = document.getElementById('resource-video-blank');
       var instance = el.textTracks;
   TimeRanges:
     __resources:
       - video-blank
-    __base: >-
+    __base: |-
       var el = document.getElementById('resource-video-blank');
       var instance = el.buffered;
   TouchEvent:
     __base: var instance = new TouchEvent('touchstart');
   TrackEvent:
-    __base: >-
+    __base: |-
       var instance;
       try {
         instance = new TrackEvent('addtrack');
@@ -2115,7 +2115,7 @@ api:
         }
       }
   TransitionEvent:
-    __base: >-
+    __base: |-
       var instance;
         try {instance = new TransitionEvent('transitionend');
       } catch(e) {
@@ -2131,7 +2131,7 @@ api:
   TreeWalker:
     __base: var instance = document.createTreeWalker(document);
   UIEvent:
-    __base: >-
+    __base: |-
       var instance;
       try {
         instance = new UIEvent('');
@@ -2146,7 +2146,7 @@ api:
         }
       }
   URL:
-    __base: >-
+    __base: |-
       var instance;
       try {
         instance = new URL(location.href)
@@ -2155,19 +2155,19 @@ api:
       };
     __test: return 'URL' in self;
   ValidityState:
-    __base: >-
+    __base: |-
       <%api.HTMLInputElement:el%>
       var instance = el.validity;
   VideoTrack:
     __resources:
       - video-blank
-    __base: >-
+    __base: |-
       <%api.VideoTrackList:videoTracks%>
       var instance = videoTracks[0];
   VideoTrackList:
     __resources:
       - video-blank
-    __base: >-
+    __base: |-
       var el = document.getElementById('resource-video-blank');
       var instance = el.videoTracks;
   VTTCue:
@@ -2177,13 +2177,13 @@ api:
   WaveShaperNode:
     __resources:
       - audioContext
-    __base: >-
+    __base: |-
       if (!reusableInstances.audioContext) {
         return false;
       }
       var instance = reusableInstances.audioContext.createWaveShaper();
   WebGLContextEvent:
-    __base: >-
+    __base: |-
       var instance;
       try {
         instance = new WebGLContextEvent('webglcontextlost');
@@ -2208,7 +2208,7 @@ api:
   WEBGL_blend_equation_advanced_coherent:
     __resources:
       - webGL
-    __base: >-
+    __base: |-
       if (!reusableInstances.webGL) {
         return false;
       };
@@ -2216,7 +2216,7 @@ api:
   WEBGL_color_buffer_float:
     __resources:
       - webGL1
-    __base: >-
+    __base: |-
       if (!reusableInstances.webGL1) {
         return false;
       };
@@ -2224,7 +2224,7 @@ api:
   WEBGL_compressed_texture_astc:
     __resources:
       - webGL
-    __base: >-
+    __base: |-
       if (!reusableInstances.webGL) {
         return false;
       };
@@ -2232,7 +2232,7 @@ api:
   WEBGL_compressed_texture_atc:
     __resources:
       - webGL
-    __base: >-
+    __base: |-
       if (!reusableInstances.webGL) {
         return false;
       };
@@ -2240,7 +2240,7 @@ api:
   WEBGL_compressed_texture_etc:
     __resources:
       - webGL
-    __base: >-
+    __base: |-
       if (!reusableInstances.webGL) {
         return false;
       };
@@ -2248,7 +2248,7 @@ api:
   WEBGL_compressed_texture_etc1:
     __resources:
       - webGL
-    __base: >-
+    __base: |-
       if (!reusableInstances.webGL) {
         return false;
       };
@@ -2256,7 +2256,7 @@ api:
   WEBGL_compressed_texture_pvrtc:
     __resources:
       - webGL
-    __base: >-
+    __base: |-
       if (!reusableInstances.webGL) {
         return false;
       };
@@ -2264,7 +2264,7 @@ api:
   WEBGL_compressed_texture_s3tc:
     __resources:
       - webGL
-    __base: >-
+    __base: |-
       if (!reusableInstances.webGL) {
         return false;
       };
@@ -2272,7 +2272,7 @@ api:
   WEBGL_compressed_texture_s3tc_srgb:
     __resources:
       - webGL
-    __base: >-
+    __base: |-
       if (!reusableInstances.webGL) {
         return false;
       };
@@ -2280,7 +2280,7 @@ api:
   WEBGL_debug_renderer_info:
     __resources:
       - webGL
-    __base: >-
+    __base: |-
       if (!reusableInstances.webGL) {
         return false;
       };
@@ -2288,7 +2288,7 @@ api:
   WEBGL_debug_shaders:
     __resources:
       - webGL
-    __base: >-
+    __base: |-
       if (!reusableInstances.webGL) {
         return false;
       };
@@ -2296,7 +2296,7 @@ api:
   WEBGL_depth_texture:
     __resources:
       - webGL1
-    __base: >-
+    __base: |-
       if (!reusableInstances.webGL1) {
         return false;
       };
@@ -2304,7 +2304,7 @@ api:
   WEBGL_draw_buffers:
     __resources:
       - webGL1
-    __base: >-
+    __base: |-
       if (!reusableInstances.webGL1) {
         return false;
       };
@@ -2312,7 +2312,7 @@ api:
   WEBGL_draw_instanced_base_vertex_base_instance:
     __resources:
       - webGL
-    __base: >-
+    __base: |-
       if (!reusableInstances.webGL) {
         return false;
       };
@@ -2320,7 +2320,7 @@ api:
   WEBGL_multi_draw:
     __resources:
       - webGL
-    __base: >-
+    __base: |-
       if (!reusableInstances.webGL) {
         return false;
       };
@@ -2328,7 +2328,7 @@ api:
   WEBGL_multi_draw_instanced_base_vertex_base_instance:
     __resources:
       - webGL
-    __base: >-
+    __base: |-
       if (!reusableInstances.webGL) {
         return false;
       };
@@ -2336,7 +2336,7 @@ api:
   WEBGL_lose_context:
     __resources:
       - webGL
-    __base: >-
+    __base: |-
       if (!reusableInstances.webGL) {
         return false;
       };
@@ -2344,17 +2344,17 @@ api:
   WebGLTimerQueryEXT:
     __resources:
       - webGL
-    __base: >-
+    __base: |-
       <%api.EXT_disjoint_timer_query:ext%>
       var instance = ext.createQueryEXT();
   WebGLVertexArrayObjectOES:
     __resources:
       - webGL1
-    __base: >-
+    __base: |-
       <%api.OES_vertex_array_object:ext%>
       var instance = ext.createVertexArrayOES();
   WebKitAnimationEvent:
-    __base: >-
+    __base: |-
       var instance;
       try {
         instance = new WebKitAnimationEvent('webkitAnimationEnd');
@@ -2369,7 +2369,7 @@ api:
         }
       }
   WebKitTransitionEvent:
-    __base: >-
+    __base: |-
       var instance;
       try {
         instance = new WebKitTransitionEvent('webkitTransitionEnd');
@@ -2384,14 +2384,14 @@ api:
         }
       }
   WebSocket:
-    __base: >-
+    __base: |-
       var constructor = self.WebSocket || self.MozWebSocket;
       if (!constructor) {
         return false;
       }
       var instance = new constructor('wss://' + location.hostname);
   WheelEvent:
-    __base: >-
+    __base: |-
       var instance;
       try {
         instance = new WheelEvent('wheel');
@@ -2414,7 +2414,7 @@ api:
   WorkerNavigator:
     __base: var instance = navigator;
   WritableStreamDefaultController:
-    __base: >-
+    __base: |-
       if (!('WritableStream' in self)) {
         return false;
       };
@@ -2426,7 +2426,7 @@ api:
         })
       });
   WritableStreamDefaultWriter:
-    __base: >-
+    __base: |-
       if (!('WritableStream' in self)) {
         return false;
       };
@@ -2436,20 +2436,20 @@ api:
   XMLHttpRequestEventTarget:
     __base: <%api.XMLHttpRequest:instance%>
   XMLHttpRequestUpload:
-    __base: >-
+    __base: |-
       <%api.XMLHttpRequest:xhr%>
       var instance = xhr.upload;
   XPathExpression:
-    __base: >-
+    __base: |-
       var xpe = new XPathEvaluator();
       var instance = xpe.createExpression('//div', xpe.createNSResolver(document));
   XPathResult:
-    __base: >-
+    __base: |-
       <%api.XPathExpression:exp%>
       var instance = exp.evaluate(document, 0, null);
 
 css:
   properties:
-    custom-property: >-
+    custom-property: |-
       return CSS.supports('color', 'var(--foo)') || CSS.supports('color',
       'env(--foo)');
