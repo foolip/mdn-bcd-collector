@@ -109,15 +109,6 @@ describe('build', () => {
       });
     });
 
-    it('custom test with invalid syntax', () => {
-      assert.include(getCustomTestAPI('invalid'), "throw 'Test is malformed:");
-      assert.include(
-        getCustomTestAPI('invalid', 'ghost'),
-        "throw 'Test is malformed:"
-      );
-      assert.isTrue(console.error.calledTwice);
-    });
-
     describe('promise-based custom tests', () => {
       it('interface', () => {
         assert.equal(
