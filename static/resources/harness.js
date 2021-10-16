@@ -728,24 +728,23 @@
       var reusedInstances = result.info.code.match(
         /reusableInstances\.([^.);]*)/g
       );
-      var reusedInstances = [];
-      for (var i = 0; i < rawReusedInstances.length; i++) {
-        var reusedInstance = rawReusedInstances[i].replace(
-          'reusableInstances.',
-          ''
-        );
-        // De-duplicate reusable instances list
-        if (reusedInstances.indexOf(reusedInstance) == -1) {
-          reusedInstances.push(reusedInstance);
-        }
-      }
+      var addedInstances = [];
 
       if (reusedInstances) {
         for (var i = 0; i < reusedInstances.length; i++) {
-          var reusedInstance = reusedInstances[i];
+          var reusedInstance = reusedInstances[i].replace(
+            'reusableInstances.',
+            ''
+          );
+
+          // De-duplicate instances
+          if (addedInstances.indexOf(reusedInstance) > -1) {
+            continue;
+          }
+          addedInstances.push(reusedInstance);
+
           code =
-            'reusableInstances.' +
-            reusedInstance +
+            reusedInstances[i] +
             ' = ' +
             reusableInstances.__sources[reusedInstance] +
             '\n\n' +
