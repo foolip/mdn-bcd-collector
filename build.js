@@ -116,7 +116,14 @@ const getCustomTestAPI = (name, member, type) => {
             (promise ?
               `return promise.then(function(instance) {return ${returnValue}});` :
               callback ?
-              `function callback(instance) {success(${returnValue})}; return 'callback';` :
+              `function callback(instance) {
+                  try {
+                    success(${returnValue});
+                  } catch(e) {
+                    fail(e);
+                  }
+                };
+                return 'callback';` :
               `return ${returnValue};`) :
           false;
       }
@@ -141,7 +148,14 @@ const getCustomTestAPI = (name, member, type) => {
               (promise ?
                 `return promise.then(function(instance) {return ${returnValue}});` :
                 callback ?
-                `function callback(instance) {success(${returnValue})}; return 'callback';` :
+                `function callback(instance) {
+                   try {
+                     success(${returnValue});
+                   } catch(e) {
+                     fail(e);
+                   }
+                 };
+                 return 'callback';` :
                 `return ${returnValue};`) :
             false;
         }
