@@ -66,7 +66,7 @@ const compileCustomTest = (code, format = true) => {
           .replace(/promise\.then/g, `${instancevar}.then`)
           .replace(/(instance|promise) = /g, `${instancevar} = `);
         if (!(['instance', 'promise'].includes(instancevar) || callback)) {
-          importcode += ` if (!${instancevar}) {return false;}`;
+          importcode += `\n  if (!${instancevar}) {\n    return false;\n  }`;
         }
         return importcode;
       }
@@ -78,7 +78,7 @@ const compileCustomTest = (code, format = true) => {
 
   if (format) {
     // Wrap in a function
-    code = `(function () {\n${code}\n})();`;
+    code = `(function() {\n  ${code}\n})();`;
   }
 
   return code;
@@ -90,29 +90,31 @@ const getCustomTestAPI = (name, member, type) => {
   if (name in customTests.api) {
     const testbase =
       '__base' in customTests.api[name] ?
-        '  ' + customTests.api[name].__base + '\n' :
+        customTests.api[name].__base.replace(/\n/g, '\n  ') + '\n  ' :
         '';
     const promise = testbase.includes('var promise');
     const callback = testbase.includes('callback(');
 
     if (member === undefined) {
       if ('__test' in customTests.api[name]) {
-        test = testbase + '  ' + customTests.api[name].__test;
+        test = testbase + customTests.api[name].__test;
       } else {
         const returnValue = '!!instance';
         test = testbase ?
           testbase +
             (promise ?
-              `return promise.then(function(instance) {return ${returnValue}});` :
+              `return promise.then(function(instance) {
+    return ${returnValue};
+  });` :
               callback ?
               `function callback(instance) {
-                  try {
-                    success(${returnValue});
-                  } catch(e) {
-                    fail(e);
-                  }
-                };
-                return 'callback';` :
+    try {
+      success(${returnValue});
+    } catch(e) {
+      fail(e);
+    }
+  };
+  return 'callback';` :
               `return ${returnValue};`) :
           false;
       }
@@ -121,7 +123,7 @@ const getCustomTestAPI = (name, member, type) => {
         member in customTests.api[name] &&
         typeof customTests.api[name][member] === 'string'
       ) {
-        test = testbase + '  ' + customTests.api[name][member];
+        test = testbase + customTests.api[name][member];
       } else {
         if (
           ['constructor', 'static'].includes(type) ||
@@ -135,16 +137,18 @@ const getCustomTestAPI = (name, member, type) => {
           test = testbase ?
             testbase +
               (promise ?
-                `return promise.then(function(instance) {return ${returnValue}});` :
+                `return promise.then(function(instance) {
+    return ${returnValue};
+  });` :
                 callback ?
                 `function callback(instance) {
-                   try {
-                     success(${returnValue});
-                   } catch(e) {
-                     fail(e);
-                   }
-                 };
-                 return 'callback';` :
+    try {
+      success(${returnValue});
+    } catch(e) {
+      fail(e);
+    }
+  };
+  return 'callback';` :
                 `return ${returnValue};`) :
             false;
         }
