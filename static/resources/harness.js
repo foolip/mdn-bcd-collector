@@ -725,8 +725,8 @@
       var code = result.info.code;
 
       // Display the code that creates the reusable instance in results
-      var rawReusedInstances = result.info.code.match(
-        /reusableInstances\.([^\.);]*)/g
+      var reusedInstances = result.info.code.match(
+        /reusableInstances\.([^.);]*)/g
       );
       var reusedInstances = [];
       for (var i = 0; i < rawReusedInstances.length; i++) {
