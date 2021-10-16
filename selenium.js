@@ -70,7 +70,7 @@ const ignore = {
     12: gumTests,
     13: gumTests,
     14: gumTests,
-    15: ['SecurityPolicyViolationEvent', ...gumTests],
+    15: ['api.SecurityPolicyViolationEvent', ...gumTests],
     16: gumTests,
     17: gumTests,
     18: gumTests
