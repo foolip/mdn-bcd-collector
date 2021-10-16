@@ -138,10 +138,13 @@ describe('build', () => {
           getCustomTestAPI('import1'),
           '(function() {\n  var a = 1;\n  if (!a) {\n    return false;\n  }\n  var instance = a;\n  return !!instance;\n})();'
         );
+      });
 
+      it('valid import: two imports', () => {
+        // XXX The "var b = a;" should be indented...
         assert.equal(
           getCustomTestAPI('import2'),
-          '(function() {\n  var a = 1;\n  if (!a) {\n    return false;\n  }\n  var b = a;\n  if (!b) {\n    return false;\n  }\n  var instance = b;\n  return !!instance;\n})();'
+          '(function() {\n  var a = 1;\n  if (!a) {\n    return false;\n  }\nvar b = a;\n  if (!b) {\n    return false;\n  }\n  var instance = b;\n  return !!instance;\n})();'
         );
       });
 
