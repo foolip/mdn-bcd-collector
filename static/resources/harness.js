@@ -725,17 +725,27 @@
       var code = result.info.code;
 
       // Display the code that creates the reusable instance in results
-      var reusedInstances = result.info.code.match(
+      var rawReusedInstances = result.info.code.match(
         /reusableInstances\.([^\.);]*)/g
       );
+      var reusedInstances = [];
+      for (var i = 0; i < rawReusedInstances.length; i++) {
+        var reusedInstance = rawReusedInstances[i].replace(
+          'reusableInstances.',
+          ''
+        );
+        // De-duplicate reusable instances list
+        if (reusedInstances.indexOf(reusedInstance) == -1) {
+          reusedInstances.push(reusedInstance);
+        }
+      }
+
       if (reusedInstances) {
         for (var i = 0; i < reusedInstances.length; i++) {
-          var reusedInstance = reusedInstances[i].replace(
-            'reusableInstances.',
-            ''
-          );
+          var reusedInstance = reusedInstances[i];
           code =
-            reusedInstances[i] +
+            'reusableInstances.' +
+            reusedInstance +
             ' = ' +
             reusableInstances.__sources[reusedInstance] +
             '\n\n' +
