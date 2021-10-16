@@ -78,7 +78,7 @@ const compileCustomTest = (code, format = true) => {
 
   if (format) {
     // Wrap in a function
-    code = `(function () {\n${code}\n})()`;
+    code = `(function () {\n${code}\n})();`;
   }
 
   return code;

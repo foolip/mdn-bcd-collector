@@ -153,7 +153,7 @@ api:
     __resources:
       - audioContext
     __base: var instance = reusableInstances.audioContext;
-    __test: return 'AudioContext' in self
+    __test: return 'AudioContext' in self;
   AudioDestinationNode:
     __resources:
       - audioContext
@@ -205,7 +205,7 @@ api:
         return false;
       }
       var instance = reusableInstances.audioContext.createBufferSource();
-    __test: return 'AudioScheduledSourceNode' in self
+    __test: return 'AudioScheduledSourceNode' in self;
   AudioTrack:
     __resources:
       - audio-blip
@@ -239,7 +239,7 @@ api:
     __resources:
       - audioContext
     __base: var instance = reusableInstances.audioContext;
-    __test: return 'BaseAudioContext' in self
+    __test: return 'BaseAudioContext' in self;
     __additional:
       decodeAudioData.promise_syntax: |-
         <%api.BaseAudioContext:ctx%>
@@ -1581,7 +1581,7 @@ api:
     __resources:
       - speechRecognition
     __base: var instance = reusableInstances.speechRecognition;
-    __test: return 'SpeechRecognition' in self
+    __test: return 'SpeechRecognition' in self;
   SpeechRecognitionErrorEvent:
     __base: |-
       var instance;
