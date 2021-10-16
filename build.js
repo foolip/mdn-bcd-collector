@@ -175,7 +175,10 @@ const getCustomSubtestsAPI = (name) => {
   const subtests = {};
 
   if (name in customTests.api) {
-    const testbase = customTests.api[name].__base || '';
+    const testbase =
+      '__base' in customTests.api[name] ?
+        customTests.api[name].__base.replace(/\n/g, '\n  ') + '\n  ' :
+        '';
     if ('__additional' in customTests.api[name]) {
       for (const subtest of Object.entries(
         customTests.api[name].__additional
