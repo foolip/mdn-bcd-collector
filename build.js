@@ -156,7 +156,19 @@ const getCustomTestAPI = (name, member, type) => {
     }
   }
 
-  return test && compileCustomTest(test);
+  if (!test) {
+    return false;
+  }
+
+  test = compileCustomTest(test);
+
+  if (test.includes('Test is malformed')) {
+    console.error(
+      `api.${name}${member ? `.${member}` : ''}: ${test.replace('throw ', '')}`
+    );
+  }
+
+  return test;
 };
 
 const getCustomSubtestsAPI = (name) => {
