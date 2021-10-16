@@ -87,9 +87,11 @@ app.use(express.json({limit: '32mb'}));
 app.use(express.static('static'));
 app.use(express.static('generated'));
 
+app.locals.appVersion = appVersion;
+
+// Get user agent
 app.use((req, res, next) => {
-  app.locals.appVersion = appVersion;
-  app.locals.browser = parseUA(req.get('User-Agent'), bcdBrowsers);
+  res.locals.browser = parseUA(req.get('User-Agent'), bcdBrowsers);
   next();
 });
 
