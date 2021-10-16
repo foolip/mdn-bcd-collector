@@ -20,7 +20,6 @@ import fs from 'fs-extra';
 import idl from '@webref/idl';
 import path from 'path';
 import {fileURLToPath} from 'url';
-import prettier from 'prettier';
 import sass from 'sass';
 import * as WebIDL2 from 'webidl2';
 import * as YAML from 'yaml';
@@ -48,12 +47,6 @@ const customJS = await fs.readJson(
 );
 
 const generatedDir = fileURLToPath(new URL('./generated', import.meta.url));
-
-const formatCode = (code) => {
-  return prettier
-    .format(code.replace(/\*\//g, '*/\n'), {singleQuote: true, parser: 'babel'})
-    .trim();
-};
 
 const compileCustomTest = (code, format = true) => {
   // Import code from other tests
@@ -85,14 +78,7 @@ const compileCustomTest = (code, format = true) => {
 
   if (format) {
     // Wrap in a function
-    code = `(function () {${code}})()`;
-
-    // Format
-    try {
-      code = formatCode(code);
-    } catch (e) {
-      return `throw 'Test is malformed: ${e}'`;
-    }
+    code = `(function () {\n${code}\n})()`;
   }
 
   return code;
@@ -102,13 +88,16 @@ const getCustomTestAPI = (name, member, type) => {
   let test = false;
 
   if (name in customTests.api) {
-    const testbase = customTests.api[name].__base || '';
+    const testbase =
+      '__base' in customTests.api[name] ?
+        '  ' + customTests.api[name].__base + '\n' :
+        '';
     const promise = testbase.includes('var promise');
     const callback = testbase.includes('callback(');
 
     if (member === undefined) {
       if ('__test' in customTests.api[name]) {
-        test = testbase + customTests.api[name].__test;
+        test = testbase + '  ' + customTests.api[name].__test;
       } else {
         const returnValue = '!!instance';
         test = testbase ?
@@ -132,7 +121,7 @@ const getCustomTestAPI = (name, member, type) => {
         member in customTests.api[name] &&
         typeof customTests.api[name][member] === 'string'
       ) {
-        test = testbase + customTests.api[name][member];
+        test = testbase + '  ' + customTests.api[name][member];
       } else {
         if (
           ['constructor', 'static'].includes(type) ||
@@ -163,19 +152,7 @@ const getCustomTestAPI = (name, member, type) => {
     }
   }
 
-  if (!test) {
-    return false;
-  }
-
-  test = compileCustomTest(test);
-
-  if (test.includes('Test is malformed')) {
-    console.error(
-      `api.${name}${member ? `.${member}` : ''}: ${test.replace('throw ', '')}`
-    );
-  }
-
-  return test;
+  return test && compileCustomTest(test);
 };
 
 const getCustomSubtestsAPI = (name) => {
@@ -204,9 +181,7 @@ const getCustomResourcesAPI = (name) => {
       if (Object.keys(customTests.api.__resources).includes(key)) {
         const r = customTests.api.__resources[key];
         resources[key] =
-          r.type == 'instance' ?
-            {...r, src: formatCode(r.src)} :
-            customTests.api.__resources[key];
+          r.type == 'instance' ? r : customTests.api.__resources[key];
       } else {
         throw new Error(
           `Resource ${key} is not defined but referenced in api.${name}`
