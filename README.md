@@ -180,7 +180,7 @@ npm run clean
 
 ## Release process
 
-These are the manual steps to release and deploy a new version on https://mdn-bcd-collector.appspot.com/:
+To create a release, run the following command:
 
 ```sh
 npm run release
