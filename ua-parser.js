@@ -74,6 +74,16 @@ const parseUA = (userAgent, browsers) => {
   const versions = Object.keys(browsers[data.browser.id].releases);
   versions.sort(compareVersions);
 
+  // Certain Safari versions are backports of newer versions, but contain less
+  // features, particularly ones involving OS integration. We are explicitly
+  // marking these versions as "not in BCD" to avoid confusion.
+  if (
+    data.browser.id === 'safari' &&
+    ['4.1', '6.1', '6.2', '7.1'].includes(data.version)
+  ) {
+    return data;
+  }
+
   // The |version| from the UA string is typically more precise than |versions|
   // from BCD, and some "uninteresting" releases are missing from BCD. To deal
   // with this, find the pair of versions in |versions| that sandwiches
