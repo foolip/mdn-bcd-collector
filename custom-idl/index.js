@@ -20,23 +20,20 @@ import * as WebIDL2 from 'webidl2';
 
 // Load text (UTF-8) files from a directory and return an object mapping each
 // name (sans extension) to the parsed result of that text.
-const parseIDL = async () => {
-  const files = await fs.readdir(new URL('.', import.meta.url));
-  files.sort();
-  const results = {};
-  for (const file of files) {
-    /* istanbul ignore next */
-    if (path.extname(file) !== '.idl') {
-      continue;
-    }
-    const name = path.parse(file).name;
-    const text = await fs.readFile(
-      new URL(`./${file}`, import.meta.url),
-      'utf8'
-    );
-    results[name] = WebIDL2.parse(text);
+const files = await fs.readdir(new URL('.', import.meta.url));
+files.sort();
+const results = {};
+for (const file of files) {
+  /* istanbul ignore next */
+  if (path.extname(file) !== '.idl') {
+    continue;
   }
-  return results;
-};
+  const name = path.parse(file).name;
+  const text = await fs.readFile(
+    new URL(`./${file}`, import.meta.url),
+    'utf8'
+  );
+  results[name] = WebIDL2.parse(text);
+}
 
-export default parseIDL();
+export default results;
