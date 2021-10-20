@@ -381,9 +381,8 @@
   }
 
   function runWindow(callback) {
-    setCurrentExposure('Window');
-
     if (pending.Window) {
+      setCurrentExposure('Window');
       runTests(pending.Window, callback);
     } else {
       callback([]);
@@ -391,9 +390,9 @@
   }
 
   function runWorker(callback) {
-    setCurrentExposure('Worker');
-
     if (pending.Worker) {
+      setCurrentExposure('Worker');
+
       var myWorker = null;
 
       if ('Worker' in self) {
@@ -450,9 +449,9 @@
   }
 
   function runSharedWorker(callback) {
-    setCurrentExposure('SharedWorker');
-
     if (pending.SharedWorker) {
+      setCurrentExposure('SharedWorker');
+
       var myWorker = null;
 
       if ('SharedWorker' in self) {
@@ -507,9 +506,9 @@
   }
 
   function runServiceWorker(callback) {
-    setCurrentExposure('ServiceWorker');
-
     if (pending.ServiceWorker) {
+      setCurrentExposure('ServiceWorker');
+
       if ('serviceWorker' in navigator) {
         window.__workerCleanup().then(function () {
           navigator.serviceWorker
