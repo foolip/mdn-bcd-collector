@@ -100,9 +100,11 @@
     consoleLog(statusElement.innerHTML.replace(/<br>/g, '\n'));
   }
 
-  function setCurrentExposure(exposure) {
+  function setCurrentExposure(exposure, hasTests) {
     state.currentExposure = exposure;
-    updateStatus('Running tests for ' + exposure + '...');
+    if (hasTests) {
+      updateStatus('Running tests for ' + exposure + '...');
+    }
   }
 
   function addInstance(name, code) {
@@ -381,8 +383,9 @@
   }
 
   function runWindow(callback) {
+    setCurrentExposure('Window', !!pending.Window);
+
     if (pending.Window) {
-      setCurrentExposure('Window');
       runTests(pending.Window, callback);
     } else {
       callback([]);
@@ -390,9 +393,9 @@
   }
 
   function runWorker(callback) {
-    if (pending.Worker) {
-      setCurrentExposure('Worker');
+    setCurrentExposure('Worker', !!pending.Worker);
 
+    if (pending.Worker) {
       var myWorker = null;
 
       if ('Worker' in self) {
@@ -449,9 +452,9 @@
   }
 
   function runSharedWorker(callback) {
-    if (pending.SharedWorker) {
-      setCurrentExposure('SharedWorker');
+    setCurrentExposure('SharedWorker', !!pending.SharedWorker);
 
+    if (pending.SharedWorker) {
       var myWorker = null;
 
       if ('SharedWorker' in self) {
@@ -506,9 +509,9 @@
   }
 
   function runServiceWorker(callback) {
-    if (pending.ServiceWorker) {
-      setCurrentExposure('ServiceWorker');
+    setCurrentExposure('ServiceWorker', !!pending.ServiceWorker);
 
+    if (pending.ServiceWorker) {
       if ('serviceWorker' in navigator) {
         window.__workerCleanup().then(function () {
           navigator.serviceWorker
