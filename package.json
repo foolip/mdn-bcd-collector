@@ -89,7 +89,7 @@
     "prettier": "2.4.1",
     "puppeteer": "10.4.0",
     "puppeteer-to-istanbul": "1.4.0",
-    "sass": "1.43.2",
+    "sass": "1.43.3",
     "selenium-webdriver": "3.6.0",
     "sinon": "11.1.2",
     "webidl2": "24.1.2",
