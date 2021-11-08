@@ -1119,7 +1119,6 @@ api:
       stream.then(function() {});
       var promise = stream.then(function(s) {
         var tracks = s.getVideoTracks();
-        console.log(tracks);
         return new ImageCapture(tracks[0]);
       });
   ImageData:
