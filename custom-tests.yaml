@@ -1115,10 +1115,12 @@ api:
   ImageCapture:
     __base: >-
       <%api.MediaDevices:mediaDevices%>
-      var track = mediaDevices.getUserMedia({video: true});
-      track.then(function() {});
-      var promise = track.then(function(t) {
-        return new ImageCapture(t);
+      var stream = mediaDevices.getUserMedia({video: true});
+      stream.then(function() {});
+      var promise = stream.then(function(s) {
+        var tracks = s.getTracks();
+        console.log(tracks);
+        return new ImageCapture(tracks[0]);
       });
   ImageData:
     __base: >-
