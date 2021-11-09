@@ -726,14 +726,23 @@
 
       // Display the code that creates the reusable instance in results
       var reusedInstances = result.info.code.match(
-        /reusableInstances\.([^;]*)/g
+        /reusableInstances\.([^.);]*)/g
       );
+      var addedInstances = [];
+
       if (reusedInstances) {
         for (var i = 0; i < reusedInstances.length; i++) {
           var reusedInstance = reusedInstances[i].replace(
             'reusableInstances.',
             ''
           );
+
+          // De-duplicate instances
+          if (addedInstances.indexOf(reusedInstance) > -1) {
+            continue;
+          }
+          addedInstances.push(reusedInstance);
+
           code =
             reusedInstances[i] +
             ' = ' +

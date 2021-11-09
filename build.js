@@ -116,7 +116,14 @@ const getCustomTestAPI = (name, member, type) => {
             (promise ?
               `return promise.then(function(instance) {return ${returnValue}});` :
               callback ?
-              `function callback(instance) {success(${returnValue})}; return 'callback';` :
+              `function callback(instance) {
+                  try {
+                    success(${returnValue});
+                  } catch(e) {
+                    fail(e);
+                  }
+                };
+                return 'callback';` :
               `return ${returnValue};`) :
           false;
       }
@@ -141,7 +148,14 @@ const getCustomTestAPI = (name, member, type) => {
               (promise ?
                 `return promise.then(function(instance) {return ${returnValue}});` :
                 callback ?
-                `function callback(instance) {success(${returnValue})}; return 'callback';` :
+                `function callback(instance) {
+                   try {
+                     success(${returnValue});
+                   } catch(e) {
+                     fail(e);
+                   }
+                 };
+                 return 'callback';` :
                 `return ${returnValue};`) :
             false;
         }
@@ -300,6 +314,10 @@ const flattenIDL = (specIDLs, customIDLs) => {
   // mix in the mixins
   for (const dfn of ast) {
     if (dfn.type === 'includes') {
+      if (dfn.includes === 'WindowOrWorkerGlobalScope') {
+        // WindowOrWorkerGlobalScope is mapped differently in BCD
+        continue;
+      }
       const mixin = ast.find(
         (it) =>
           !it.partial &&
@@ -325,12 +343,14 @@ const flattenIDL = (specIDLs, customIDLs) => {
     }
   }
 
+  const globals = ast.filter((dfn) => dfn.name === 'WindowOrWorkerGlobalScope');
+
   // drop includes and mixins
   ast = ast.filter(
     (dfn) => dfn.type !== 'includes' && dfn.type !== 'interface mixin'
   );
 
-  return ast;
+  return {ast, globals};
 };
 
 const flattenMembers = (iface) => {
@@ -413,7 +433,7 @@ const getExtAttr = (node, name) => {
   return node.extAttrs && node.extAttrs.find((i) => i.name === name);
 };
 
-// https://heycam.github.io/webidl/#dfn-exposure-set
+// https://webidl.spec.whatwg.org/#dfn-exposure-set
 const getExposureSet = (node) => {
   // step 6-8
   const attr = getExtAttr(node, 'Exposed');
@@ -482,40 +502,40 @@ const validateIDL = (ast) => {
   }
   // These are the types defined by Web IDL itself.
   const knownTypes = new Set([
-    'any', // https://heycam.github.io/webidl/#idl-any
-    'ArrayBuffer', // https://heycam.github.io/webidl/#idl-ArrayBuffer
-    'bigint', // https://heycam.github.io/webidl/#idl-bigint
-    'BigInt64Array', // https://heycam.github.io/webidl/#idl-BigInt64Array
-    'BigUint64Array', // https://heycam.github.io/webidl/#idl-BigUint64Array
-    'boolean', // https://heycam.github.io/webidl/#idl-boolean
-    'byte', // https://heycam.github.io/webidl/#idl-byte
-    'ByteString', // https://heycam.github.io/webidl/#idl-ByteString
-    'DataView', // https://heycam.github.io/webidl/#idl-DataView
-    'DOMString', // https://heycam.github.io/webidl/#idl-DOMString
-    'double', // https://heycam.github.io/webidl/#idl-double
-    'float', // https://heycam.github.io/webidl/#idl-float
-    'Float32Array', // https://heycam.github.io/webidl/#idl-Float32Array
-    'Float64Array', // https://heycam.github.io/webidl/#idl-Float64Array
-    'Int16Array', // https://heycam.github.io/webidl/#idl-Int16Array
-    'Int32Array', // https://heycam.github.io/webidl/#idl-Int32Array
-    'Int8Array', // https://heycam.github.io/webidl/#idl-Int8Array
-    'long long', // https://heycam.github.io/webidl/#idl-long-long
-    'long', // https://heycam.github.io/webidl/#idl-long
-    'object', // https://heycam.github.io/webidl/#idl-object
-    'octet', // https://heycam.github.io/webidl/#idl-octet
-    'short', // https://heycam.github.io/webidl/#idl-short
-    'symbol', // https://heycam.github.io/webidl/#idl-symbol
-    'Uint16Array', // https://heycam.github.io/webidl/#idl-Uint16Array
-    'Uint32Array', // https://heycam.github.io/webidl/#idl-Uint32Array
-    'Uint8Array', // https://heycam.github.io/webidl/#idl-Uint8Array
-    'Uint8ClampedArray', // https://heycam.github.io/webidl/#idl-Uint8ClampedArray
-    'unrestricted double', // https://heycam.github.io/webidl/#idl-unrestricted-double
-    'unrestricted float', // https://heycam.github.io/webidl/#idl-unrestricted-float
-    'unsigned long long', // https://heycam.github.io/webidl/#idl-unsigned-long-long
-    'unsigned long', // https://heycam.github.io/webidl/#idl-unsigned-long
-    'unsigned short', // https://heycam.github.io/webidl/#idl-unsigned-short
-    'USVString', // https://heycam.github.io/webidl/#idl-USVString
-    'undefined' // https://heycam.github.io/webidl/#idl-undefined
+    'any', // https://webidl.spec.whatwg.org/#idl-any
+    'ArrayBuffer', // https://webidl.spec.whatwg.org/#idl-ArrayBuffer
+    'bigint', // https://webidl.spec.whatwg.org/#idl-bigint
+    'BigInt64Array', // https://webidl.spec.whatwg.org/#idl-BigInt64Array
+    'BigUint64Array', // https://webidl.spec.whatwg.org/#idl-BigUint64Array
+    'boolean', // https://webidl.spec.whatwg.org/#idl-boolean
+    'byte', // https://webidl.spec.whatwg.org/#idl-byte
+    'ByteString', // https://webidl.spec.whatwg.org/#idl-ByteString
+    'DataView', // https://webidl.spec.whatwg.org/#idl-DataView
+    'DOMString', // https://webidl.spec.whatwg.org/#idl-DOMString
+    'double', // https://webidl.spec.whatwg.org/#idl-double
+    'float', // https://webidl.spec.whatwg.org/#idl-float
+    'Float32Array', // https://webidl.spec.whatwg.org/#idl-Float32Array
+    'Float64Array', // https://webidl.spec.whatwg.org/#idl-Float64Array
+    'Int16Array', // https://webidl.spec.whatwg.org/#idl-Int16Array
+    'Int32Array', // https://webidl.spec.whatwg.org/#idl-Int32Array
+    'Int8Array', // https://webidl.spec.whatwg.org/#idl-Int8Array
+    'long long', // https://webidl.spec.whatwg.org/#idl-long-long
+    'long', // https://webidl.spec.whatwg.org/#idl-long
+    'object', // https://webidl.spec.whatwg.org/#idl-object
+    'octet', // https://webidl.spec.whatwg.org/#idl-octet
+    'short', // https://webidl.spec.whatwg.org/#idl-short
+    'symbol', // https://webidl.spec.whatwg.org/#idl-symbol
+    'Uint16Array', // https://webidl.spec.whatwg.org/#idl-Uint16Array
+    'Uint32Array', // https://webidl.spec.whatwg.org/#idl-Uint32Array
+    'Uint8Array', // https://webidl.spec.whatwg.org/#idl-Uint8Array
+    'Uint8ClampedArray', // https://webidl.spec.whatwg.org/#idl-Uint8ClampedArray
+    'unrestricted double', // https://webidl.spec.whatwg.org/#idl-unrestricted-double
+    'unrestricted float', // https://webidl.spec.whatwg.org/#idl-unrestricted-float
+    'unsigned long long', // https://webidl.spec.whatwg.org/#idl-unsigned-long-long
+    'unsigned long', // https://webidl.spec.whatwg.org/#idl-unsigned-long
+    'unsigned short', // https://webidl.spec.whatwg.org/#idl-unsigned-short
+    'USVString', // https://webidl.spec.whatwg.org/#idl-USVString
+    'undefined' // https://webidl.spec.whatwg.org/#idl-undefined
   ]);
   // Add any types defined by the (flattened) spec and custom IDL.
   for (const dfn of ast) {
@@ -535,7 +555,82 @@ const validateIDL = (ast) => {
   }
 };
 
-const buildIDLTests = (ast) => {
+const buildIDLMemberTests = (
+  members,
+  iface,
+  exposureSet,
+  isGlobal,
+  resources
+) => {
+  const tests = {};
+  // Avoid generating duplicate tests for operations.
+  const handledMemberNames = new Set();
+
+  for (const member of members) {
+    if (handledMemberNames.has(member.name)) {
+      continue;
+    }
+
+    const isStatic = member.special === 'static' || iface.type === 'namespace';
+
+    let expr;
+    const customTestMember = getCustomTestAPI(
+      iface.name,
+      member.name,
+      isStatic ? 'static' : member.type
+    );
+
+    if (customTestMember) {
+      expr = customTestMember;
+    } else {
+      switch (member.type) {
+        case 'attribute':
+        case 'operation':
+        case 'field':
+          if (isGlobal) {
+            expr = {property: member.name, owner: 'self'};
+          } else if (isStatic) {
+            expr = {property: member.name, owner: iface.name};
+          } else {
+            expr = {
+              property: member.name,
+              owner: `${iface.name}.prototype`,
+              inherit: member.special === 'inherit'
+            };
+          }
+          break;
+        case 'const':
+          if (isGlobal) {
+            expr = {property: member.name, owner: 'self'};
+          } else {
+            expr = {property: member.name, owner: iface.name};
+          }
+          break;
+        case 'constructor':
+          expr = {property: `constructor.${member.name}`, owner: iface.name};
+          break;
+        case 'symbol':
+          // eslint-disable-next-line no-case-declarations
+          const symbol = member.name.replace('@@', '');
+          expr = {property: `Symbol.${symbol}`, owner: `${iface.name}`};
+          break;
+      }
+    }
+
+    tests[member.name] = compileTest({
+      raw: {
+        code: expr
+      },
+      exposure: Array.from(exposureSet),
+      resources: resources
+    });
+    handledMemberNames.add(member.name);
+  }
+
+  return tests;
+};
+
+const buildIDLTests = (ast, globals) => {
   const tests = {};
 
   const interfaces = ast.filter((dfn) => {
@@ -565,70 +660,15 @@ const buildIDLTests = (ast) => {
     });
 
     const members = flattenMembers(iface);
-
-    // Avoid generating duplicate tests for operations.
-    const handledMemberNames = new Set();
-
-    for (const member of members) {
-      if (handledMemberNames.has(member.name)) {
-        continue;
-      }
-
-      const isStatic =
-        member.special === 'static' || iface.type === 'namespace';
-
-      let expr;
-      const customTestMember = getCustomTestAPI(
-        iface.name,
-        member.name,
-        isStatic ? 'static' : member.type
-      );
-
-      if (customTestMember) {
-        expr = customTestMember;
-      } else {
-        switch (member.type) {
-          case 'attribute':
-          case 'operation':
-          case 'field':
-            if (isGlobal) {
-              expr = {property: member.name, owner: 'self'};
-            } else if (isStatic) {
-              expr = {property: member.name, owner: iface.name};
-            } else {
-              expr = {
-                property: member.name,
-                owner: `${iface.name}.prototype`,
-                inherit: member.special === 'inherit'
-              };
-            }
-            break;
-          case 'const':
-            if (isGlobal) {
-              expr = {property: member.name, owner: 'self'};
-            } else {
-              expr = {property: member.name, owner: iface.name};
-            }
-            break;
-          case 'constructor':
-            expr = {property: `constructor.${member.name}`, owner: iface.name};
-            break;
-          case 'symbol':
-            // eslint-disable-next-line no-case-declarations
-            const symbol = member.name.replace('@@', '');
-            expr = {property: `Symbol.${symbol}`, owner: `${iface.name}`};
-            break;
-        }
-      }
-
-      tests[`api.${iface.name}.${member.name}`] = compileTest({
-        raw: {
-          code: expr
-        },
-        exposure: Array.from(exposureSet),
-        resources: resources
-      });
-      handledMemberNames.add(member.name);
+    const memberTests = buildIDLMemberTests(
+      members,
+      iface,
+      exposureSet,
+      isGlobal,
+      resources
+    );
+    for (const [k, v] of Object.entries(memberTests)) {
+      tests[`api.${iface.name}.${k}`] = v;
     }
 
     const subtests = getCustomSubtestsAPI(iface.name);
@@ -643,13 +683,31 @@ const buildIDLTests = (ast) => {
     }
   }
 
+  for (const iface of globals) {
+    // Remap globals tests and exposure
+    const fakeIface = {name: '_globals'};
+    const exposureSet = new Set(['Window', 'Worker']);
+
+    const members = flattenMembers(iface);
+    const memberTests = buildIDLMemberTests(
+      members,
+      fakeIface,
+      exposureSet,
+      true,
+      {}
+    );
+    for (const [k, v] of Object.entries(memberTests)) {
+      tests[`api.${k}`] = v;
+    }
+  }
+
   return tests;
 };
 
 const buildIDL = (specIDLs, customIDLs) => {
-  const ast = flattenIDL(specIDLs, customIDLs);
+  const {ast, globals} = flattenIDL(specIDLs, customIDLs);
   validateIDL(ast);
-  return buildIDLTests(ast);
+  return buildIDLTests(ast, globals);
 };
 
 // https://drafts.csswg.org/cssom/#css-property-to-idl-attribute

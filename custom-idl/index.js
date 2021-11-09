@@ -39,4 +39,4 @@ const parseIDL = async () => {
   return results;
 };
 
-export default parseIDL();
+export default await parseIDL();

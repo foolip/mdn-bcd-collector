@@ -92,6 +92,8 @@ api:
         };
         return canvas.getContext('webgl2');
 
+  _globals:
+    crypto: return !!self.crypto;
   Attr:
     __base: >-
       var el = document.createElement('b');
@@ -879,6 +881,15 @@ api:
   HTMLFontElement:
     __base: var instance = document.createElement('font');
     __test: return bcd.testObjectName(instance, 'HTMLFontElement');
+  HTMLFormControlsCollection:
+    __base: >-
+      <%api.HTMLFormElement:form%>
+      for (var i = 0; i < 3; i++) {
+        var input = document.createElement('input');
+        input.value = i;
+        form.appendChild(input);
+      }
+      var instance = form.elements;
   HTMLFormElement:
     __base: var instance = document.createElement('form');
     __test: return bcd.testObjectName(instance, 'HTMLFormElement');
@@ -1104,10 +1115,11 @@ api:
   ImageCapture:
     __base: >-
       <%api.MediaDevices:mediaDevices%>
-      var track = mediaDevices.getUserMedia({video: true});
-      track.then(function() {});
-      var promise = track.then(function(t) {
-        return new ImageCapture(t);
+      var stream = mediaDevices.getUserMedia({video: true});
+      stream.then(function() {});
+      var promise = stream.then(function(s) {
+        var tracks = s.getVideoTracks();
+        return new ImageCapture(tracks[0]);
       });
   ImageData:
     __base: >-
@@ -1503,6 +1515,17 @@ api:
       var instance = doc.createProcessingInstruction('xml-stylesheet', 'href="mycss.css" type="text/css"');
   PushEvent:
     __base: var instance = new PushEvent('push');
+  RadioNodeList:
+    __base: >-
+      <%api.HTMLFormElement:form%>
+      for (var i = 0; i < 3; i++) {
+        var input = document.createElement('input');
+        input.value = i;
+        input.type = "radio";
+        input.name = "radio";
+        form.appendChild(input);
+      }
+      var instance = form.elements.namedItem('radio');
   Range:
     __base: var instance = document.createRange();
   Request:
@@ -2385,9 +2408,6 @@ api:
       }
   Window:
     __base: var instance = window;
-    crypto: return !!self.crypto;
-  WindowOrWorkerGlobalScope:
-    __base: var instance = self;
   WorkerGlobalScope:
     __base: var instance = self;
   WorkerLocation:
