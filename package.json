@@ -56,7 +56,7 @@
   "devDependencies": {
     "@babel/core": "7.15.8",
     "@babel/eslint-parser": "7.15.8",
-    "@babel/preset-env": "7.15.8",
+    "@babel/preset-env": "7.16.0",
     "@browser-logos/chrome": "1.0.18",
     "@browser-logos/edge": "2.0.5",
     "@browser-logos/firefox": "3.0.9",
