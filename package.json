@@ -47,7 +47,7 @@
     "express-ejs-layouts": "2.5.1",
     "fs-extra": "10.0.0",
     "json-stable-stringify": "1.0.1",
-    "slugify": "1.6.1",
+    "slugify": "1.6.2",
     "ua-parser-js": "1.0.2",
     "unique-string": "2.0.0",
     "winston": "3.3.3",
