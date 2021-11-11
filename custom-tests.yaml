@@ -241,7 +241,7 @@ api:
     __base: var instance = reusableInstances.audioContext;
     __test: return 'BaseAudioContext' in self;
     __additional:
-      decodeAudioData.promise_syntax: |-
+      decodeAudioData.returns_promise: |-
         <%api.BaseAudioContext:ctx%>
         return ctx.decodeAudioData.length === 1;
   # XXX Freezes in many versions of Chrome and Firefox
@@ -1115,10 +1115,11 @@ api:
   ImageCapture:
     __base: |-
       <%api.MediaDevices:mediaDevices%>
-      var track = mediaDevices.getUserMedia({video: true});
-      track.then(function() {});
-      var promise = track.then(function(t) {
-        return new ImageCapture(t);
+      var stream = mediaDevices.getUserMedia({video: true});
+      stream.then(function() {});
+      var promise = stream.then(function(s) {
+        var tracks = s.getVideoTracks();
+        return new ImageCapture(tracks[0]);
       });
   ImageData:
     __base: |-

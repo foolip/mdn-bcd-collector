@@ -7,7 +7,13 @@ import esMain from 'es-main';
 import {getMissing} from './find-missing-features.js';
 import {main as updateBcd} from './update-bcd.js';
 
+const tests = await fs.readJson(new URL('./tests.json', import.meta.url));
+const overrides = await fs.readJson(
+  new URL('./overrides.json', import.meta.url)
+);
+
 const BCD_DIR = process.env.BCD_DIR || `../browser-compat-data`;
+const {default: bcd} = await import(`${BCD_DIR}/index.js`);
 const {default: compareFeatures} = await import(
   `${BCD_DIR}/scripts/compare-features.js`
 );
@@ -93,8 +99,13 @@ const traverseFeatures = async (obj, identifier) => {
 const collectMissing = async (filepath) => {
   const missing = {api: {}};
 
-  for (const entry of getMissing('bcd-from-collector', ['api'])
-    .missingEntries) {
+  for (const entry of getMissing(
+    bcd,
+    tests,
+    'bcd-from-collector',
+    ['api'],
+    false
+  ).missingEntries) {
     recursiveAdd(entry.split('.'), 0, missing, template);
   }
 
@@ -110,7 +121,12 @@ const main = async () => {
 
   console.log('Generating missing BCD...');
   await collectMissing(filepath);
-  await updateBcd(['../mdn-bcd-results/'], {category: ['__missing']});
+  await updateBcd(
+    ['../mdn-bcd-results/'],
+    {category: ['__missing']},
+    bcd.browsers,
+    overrides
+  );
 
   console.log('Injecting BCD...');
   const data = await fs.readJSON(filepath);

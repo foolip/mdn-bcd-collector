@@ -8,6 +8,15 @@ partial interface Document {
   TouchList createTouchList();
 };
 
+partial interface Touch {
+  // https://bugs.chromium.org/p/chromium/issues/detail?id=460099
+  // https://chromium.googlesource.com/chromium/src/+/4850153414e5cb795d15db5635632b844eb51e98
+  readonly attribute float webkitRadiusX;
+  readonly attribute float webkitRadiusY;
+  readonly attribute float webkitRotationAngle;
+  readonly attribute float webkitForce;
+};
+
 partial interface TouchList {
   Touch identifiedTouch();
 };

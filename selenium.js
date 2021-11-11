@@ -261,14 +261,17 @@ const buildDriver = async (browser, version, os) => {
         `mdn-bcd-collector: ${prettyName(browser, version, os)}`
       );
 
-      capabilities.set(Capability.VERSION, version.split('.')[0]);
+      capabilities.set(Capability.BROWSER_VERSION, version.split('.')[0]);
 
       // Remap target OS for Safari x.0 vs. x.1 on SauceLabs
       if (service === 'saucelabs') {
         if (browser === 'safari') {
-          capabilities.set('platform', getSafariOS(version));
+          capabilities.set(Capabilities.PLATFORM_NAME, getSafariOS(version));
         } else {
-          capabilities.set('platform', `${osName} ${osVersion}`);
+          capabilities.set(
+            Capabilities.PLATFORM_NAME,
+            `${osName} ${osVersion}`
+          );
         }
       } else {
         capabilities.set('os', osName);
