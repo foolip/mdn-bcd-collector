@@ -241,7 +241,7 @@ api:
     __base: var instance = reusableInstances.audioContext;
     __test: return 'BaseAudioContext' in self
     __additional:
-      decodeAudioData.promise_syntax: >-
+      decodeAudioData.returns_promise: >-
         <%api.BaseAudioContext:ctx%>
         return ctx.decodeAudioData.length === 1;
   # XXX Freezes in many versions of Chrome and Firefox
