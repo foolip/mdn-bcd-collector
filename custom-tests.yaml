@@ -1470,6 +1470,8 @@ api:
         return false;
       };
       var instance = performance.navigation;
+  PerformanceResourceTiming:
+    __base: var instance = performance.getEntriesByType("resource")[0];
   PerformanceTiming:
     __base: >-
       if (!('performance' in self)) {
