@@ -39,7 +39,7 @@
     "@mdn/browser-compat-data": "4.0.10",
     "@octokit/rest": "18.12.0",
     "compare-versions": "4.1.1",
-    "cookie-parser": "1.4.5",
+    "cookie-parser": "1.4.6",
     "didyoumean": "1.2.2",
     "ejs": "3.1.6",
     "es-main": "1.0.2",
