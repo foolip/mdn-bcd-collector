@@ -2063,13 +2063,13 @@ api:
       var instance
       = el.childNodes[0];
   TextDecoder:
-    __base: >-
+    __base: |-
       if (!('TextDecoder' in self)) {
         return false;
       };
       var instance = new TextDecoder();
   TextEncoder:
-    __base: >-
+    __base: |-
       if (!('TextEncoder' in self)) {
         return false;
       };
