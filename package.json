@@ -35,11 +35,11 @@
   "dependencies": {
     "@google-cloud/logging-winston": "4.1.1",
     "@google-cloud/storage": "5.16.0",
-    "@mdi/font": "6.4.95",
-    "@mdn/browser-compat-data": "4.0.10",
+    "@mdi/font": "6.5.95",
+    "@mdn/browser-compat-data": "4.0.11",
     "@octokit/rest": "18.12.0",
-    "compare-versions": "4.0.1",
-    "cookie-parser": "1.4.5",
+    "compare-versions": "4.1.1",
+    "cookie-parser": "1.4.6",
     "didyoumean": "1.2.2",
     "ejs": "3.1.6",
     "es-main": "1.0.2",
@@ -93,6 +93,6 @@
     "selenium-webdriver": "4.0.0",
     "sinon": "12.0.1",
     "webidl2": "24.2.0",
-    "yaml": "2.0.0-8"
+    "yaml": "2.0.0-9"
   }
 }

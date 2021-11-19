@@ -1470,6 +1470,8 @@ api:
         return false;
       };
       var instance = performance.navigation;
+  PerformanceResourceTiming:
+    __base: var instance = performance.getEntriesByType("resource")[0];
   PerformanceTiming:
     __base: |-
       if (!('performance' in self)) {
@@ -2061,9 +2063,17 @@ api:
       var instance
       = el.childNodes[0];
   TextDecoder:
-    __base: var instance = new TextDecoder();
+    __base: >-
+      if (!('TextDecoder' in self)) {
+        return false;
+      };
+      var instance = new TextDecoder();
   TextEncoder:
-    __base: var instance = new TextEncoder();
+    __base: >-
+      if (!('TextEncoder' in self)) {
+        return false;
+      };
+      var instance = new TextEncoder();
   TextMetrics:
     __base: |-
       <%api.CanvasRenderingContext2D:canvas%>
