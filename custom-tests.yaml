@@ -1107,6 +1107,9 @@ api:
       if (!reusableInstances.audioContext) {
         return false;
       }
+      if (!('createIIRFilter' in reusableInstances.audioContext)) {
+        return false;
+      }
       var instance = reusableInstances.audioContext.createIIRFilter([1], [1]);
   ImageBitmap:
     __resources:
@@ -1207,6 +1210,9 @@ api:
       - audioContext
     __base: >-
       if (!reusableInstances.audioContext) {
+        return false;
+      }
+      if (!('createMediaStreamDestination' in reusableInstances.audioContext)) {
         return false;
       }
       var instance = reusableInstances.audioContext.createMediaStreamDestination();
