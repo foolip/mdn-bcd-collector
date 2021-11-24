@@ -795,6 +795,22 @@ api:
       var instance = reusableInstances.audioContext.createGain();
   GamepadEvent:
     __base: var instance = new GamepadEvent('gamepadconnected');
+  Geolocation:
+    __base: var instance = navigator.geolocation;
+  GeolocationCoordinates:
+    __base: >-
+      <%api.GeolocationPosition:posCallback%>
+      function posCallback(pos) {
+        callback(pos.coords);
+      }
+  GeolocationPosition:
+    __base: >-
+      <%api.Geolocation:geo%>
+      geo.getCurrentPosition(function(pos) {
+        callback(pos);
+      }, function(err) {
+        fail(err.message);
+      });
   HashChangeEvent:
     __base: >-
       var instance;
