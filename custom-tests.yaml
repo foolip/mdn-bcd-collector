@@ -299,9 +299,8 @@ api:
       var instance = canvas.getContext('2d');
     __additional:
       drawImage.SVGImageElement_source_image: >-
-        <%api.CanvasRenderingContext2D:canvas%>
         <%api.SVGImageElement:image%>
-        canvas.drawImage(image, 0, 0);
+        instance.drawImage(image, 0, 0);
         return true;
   ChannelMergerNode:
     __resources:
