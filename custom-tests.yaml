@@ -301,8 +301,12 @@ api:
       drawFocusIfNeeded.path_parameter: >-
         var path = new Path2D();
         var el = document.createElement('p');
-        instance.drawFocusIfNeeded(path, el);
-        return true;
+        try {
+          instance.drawFocusIfNeeded(path, el);
+          return true;
+        } catch(e) {
+          return {result: false, message: e.message};
+        }
       drawImage.SVGImageElement_source_image: >-
         <%api.CanvasRenderingContext2D:canvas%>
         <%api.SVGImageElement:image%>
