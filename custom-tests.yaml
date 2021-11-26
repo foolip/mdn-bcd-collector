@@ -1550,6 +1550,8 @@ api:
       var instance = new RTCDataChannelEvent('datachannel', {channel: channel});
   RTCDTMFToneChangeEvent:
     __base: "var instance = new RTCDTMFToneChangeEvent('tonechange', {tone: ''});"
+  RTCIceCandidate:
+    __base: var instance = new RTCIceCandidate();
   RTCPeerConnection:
     __base: >-
       /* Firefox briefly defines RTCPeerConnection in older versions, but it is not a valid constructor until later versions. */
