@@ -86,7 +86,7 @@
     "nodegit": "0.27.0",
     "nodemon": "2.0.15",
     "open-cli": "7.0.1",
-    "prettier": "2.4.1",
+    "prettier": "2.5.0",
     "puppeteer": "11.0.0",
     "puppeteer-to-istanbul": "1.4.0",
     "sass": "1.44.0",
