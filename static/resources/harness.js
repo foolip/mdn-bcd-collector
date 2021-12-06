@@ -753,10 +753,20 @@
         }
       }
 
+      var formattedCode;
+      if ('hljs' in self) {
+        formattedCode = hljs.highlight(code, {
+          language: 'js'
+        }).value;
+      }
+
       resultCodeEl.className = 'result-code';
-      resultCodeEl.innerHTML = code
-        .replace(/ /g, '&nbsp;')
-        .replace(/\n/g, '<br>');
+      resultCodeEl.innerHTML = (formattedCode || code).replace(
+        /\n([^\S\r\n]*)/g,
+        function (match, p1) {
+          return '<br>' + p1.replace(/ /g, '&nbsp;');
+        }
+      );
       resultInfoEl.appendChild(resultCodeEl);
     }
 

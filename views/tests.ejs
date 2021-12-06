@@ -42,6 +42,10 @@
 <!-- TODO: https://github.com/foolip/mdn-bcd-collector/issues/407 -->
 <script src="/resources/json3.min.js"></script>
 <script src="/resources/harness.js"></script>
+
+<link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/default.min.css">
+<script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/highlight.min.js"></script>
+
 <script>
   <% for (const [instanceId, instance] of Object.entries(resources)
     .filter((item) => (item[1].type === 'instance'))) { %>
