@@ -298,6 +298,15 @@ api:
       };
       var instance = canvas.getContext('2d');
     __additional:
+      drawFocusIfNeeded.path_parameter: >-
+        var path = new Path2D();
+        var el = document.createElement('p');
+        try {
+          instance.drawFocusIfNeeded(path, el);
+          return true;
+        } catch(e) {
+          return {result: false, message: e.message};
+        }
       drawImage.SVGImageElement_source_image: >-
         <%api.SVGImageElement:image%>
         instance.drawImage(image, 0, 0);
