@@ -766,6 +766,37 @@ api:
       var instance = new FetchEvent('fetch', { request: req });
   FileReader:
     __base: var instance = new FileReader();
+  FileSystem:
+    __base: >-
+      window.webkitRequestFileSystem(TEMPORARY, 8*1024 /* 8KB */, function(fs) {
+        callback(fs);
+      }, function(event) {
+        fail(event.message);
+      });
+  FileSystemEntry:
+    __base: <%api.FileSystemDirectoryEntry:callback%>
+  FileSystemDirectoryEntry:
+    __base: >-
+      <%api.FileSystem:fsCallback%>
+      function fsCallback(fs) {
+        callback(fs.root);
+      }
+  FileSystemDirectoryReader:
+    __base: >-
+      <%api.FileSystemDirectoryEntry:dirCallback%>
+      function dirCallback(dir) {
+        callback(dir.createReader());
+      }
+  FileSystemFileEntry:
+    __base: >-
+      <%api.FileSystem:fsCallback%>
+      function fsCallback(fs) {
+        fs.root.getFile('foo.txt', { create: true }, function(file) {
+          callback(file);
+        }, function(event) {
+          fail(event.message);
+        });
+      }
   FocusEvent:
     __base: >-
       var instance;
