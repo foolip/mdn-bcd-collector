@@ -298,10 +298,19 @@ api:
       };
       var instance = canvas.getContext('2d');
     __additional:
+      drawFocusIfNeeded.path_parameter: |-
+        var path = new Path2D();
+        var el = document.createElement('p');
+        try {
+          instance.drawFocusIfNeeded(path, el);
+          return true;
+        } catch(e) {
+          return {result: false, message: e.message};
+        }
       drawImage.SVGImageElement_source_image: |-
         <%api.CanvasRenderingContext2D:canvas%>
         <%api.SVGImageElement:image%>
-        canvas.drawImage(image, 0, 0);
+        instance.drawImage(image, 0, 0);
         return true;
   ChannelMergerNode:
     __resources:
@@ -1107,6 +1116,9 @@ api:
       if (!reusableInstances.audioContext) {
         return false;
       }
+      if (!('createIIRFilter' in reusableInstances.audioContext)) {
+        return false;
+      }
       var instance = reusableInstances.audioContext.createIIRFilter([1], [1]);
   ImageBitmap:
     __resources:
@@ -1207,6 +1219,9 @@ api:
       - audioContext
     __base: |-
       if (!reusableInstances.audioContext) {
+        return false;
+      }
+      if (!('createMediaStreamDestination' in reusableInstances.audioContext)) {
         return false;
       }
       var instance = reusableInstances.audioContext.createMediaStreamDestination();
