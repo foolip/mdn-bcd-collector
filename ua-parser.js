@@ -74,6 +74,18 @@ const parseUA = (userAgent, browsers) => {
   const versions = Object.keys(browsers[data.browser.id].releases);
   versions.sort(compareVersions);
 
+  // Android 4.4.3 needs to be handled as a special case, because its data
+  // differs from 4.4, and the code below will strip out the patch versions from
+  // our version numbers.
+  if (
+    data.browser.id === 'webview_android' &&
+    compareVersions.compare(data.fullVersion, '4.4.3', '>=') &&
+    compareVersions.compare(data.fullVersion, '5.0', '<')
+  ) {
+    data.inBcd = true;
+    return true;
+  }
+
   // Certain Safari versions are backports of newer versions, but contain less
   // features, particularly ones involving OS integration. We are explicitly
   // marking these versions as "not in BCD" to avoid confusion.
