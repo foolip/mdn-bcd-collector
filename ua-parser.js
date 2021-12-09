@@ -83,7 +83,7 @@ const parseUA = (userAgent, browsers) => {
     compareVersions.compare(data.fullVersion, '5.0', '<')
   ) {
     data.inBcd = true;
-    return true;
+    return data;
   }
 
   // Certain Safari versions are backports of newer versions, but contain less
