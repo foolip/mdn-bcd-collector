@@ -770,8 +770,8 @@ api:
     __base: >-
       window.webkitRequestFileSystem(TEMPORARY, 8*1024 /* 8KB */, function(fs) {
         callback(fs);
-      }, function(event) {
-        fail(event.message);
+      }, function(error) {
+        fail(error.message);
       });
   FileSystemEntry:
     __base: <%api.FileSystemDirectoryEntry:callback%>
