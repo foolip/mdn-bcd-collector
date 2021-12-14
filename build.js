@@ -20,7 +20,6 @@ import fs from 'fs-extra';
 import idl from '@webref/idl';
 import path from 'path';
 import {fileURLToPath} from 'url';
-import prettier from 'prettier';
 import sass from 'sass';
 import * as WebIDL2 from 'webidl2';
 import * as YAML from 'yaml';
@@ -49,12 +48,6 @@ const customJS = await fs.readJson(
 
 const generatedDir = fileURLToPath(new URL('./generated', import.meta.url));
 
-const formatCode = (code) => {
-  return prettier
-    .format(code.replace(/\*\//g, '*/\n'), {singleQuote: true, parser: 'babel'})
-    .trim();
-};
-
 const compileCustomTest = (code, format = true) => {
   // Import code from other tests
   code = code.replace(
@@ -73,7 +66,7 @@ const compileCustomTest = (code, format = true) => {
           .replace(/promise\.then/g, `${instancevar}.then`)
           .replace(/(instance|promise) = /g, `${instancevar} = `);
         if (!(['instance', 'promise'].includes(instancevar) || callback)) {
-          importcode += ` if (!${instancevar}) {return false;}`;
+          importcode += `\n  if (!${instancevar}) {\n    return false;\n  }`;
         }
         return importcode;
       }
@@ -85,14 +78,7 @@ const compileCustomTest = (code, format = true) => {
 
   if (format) {
     // Wrap in a function
-    code = `(function () {${code}})()`;
-
-    // Format
-    try {
-      code = formatCode(code);
-    } catch (e) {
-      return `throw 'Test is malformed: ${e}'`;
-    }
+    code = `(function() {\n  ${code}\n})();`;
   }
 
   return code;
@@ -102,7 +88,10 @@ const getCustomTestAPI = (name, member, type) => {
   let test = false;
 
   if (name in customTests.api) {
-    const testbase = customTests.api[name].__base || '';
+    const testbase =
+      '__base' in customTests.api[name] ?
+        customTests.api[name].__base.replace(/\n/g, '\n  ') + '\n  ' :
+        '';
     const promise = testbase.includes('var promise');
     const callback = testbase.includes('callback(');
 
@@ -114,16 +103,18 @@ const getCustomTestAPI = (name, member, type) => {
         test = testbase ?
           testbase +
             (promise ?
-              `return promise.then(function(instance) {return ${returnValue}});` :
+              `return promise.then(function(instance) {
+    return ${returnValue};
+  });` :
               callback ?
               `function callback(instance) {
-                  try {
-                    success(${returnValue});
-                  } catch(e) {
-                    fail(e);
-                  }
-                };
-                return 'callback';` :
+    try {
+      success(${returnValue});
+    } catch(e) {
+      fail(e);
+    }
+  };
+  return 'callback';` :
               `return ${returnValue};`) :
           false;
       }
@@ -146,16 +137,18 @@ const getCustomTestAPI = (name, member, type) => {
           test = testbase ?
             testbase +
               (promise ?
-                `return promise.then(function(instance) {return ${returnValue}});` :
+                `return promise.then(function(instance) {
+    return ${returnValue};
+  });` :
                 callback ?
                 `function callback(instance) {
-                   try {
-                     success(${returnValue});
-                   } catch(e) {
-                     fail(e);
-                   }
-                 };
-                 return 'callback';` :
+    try {
+      success(${returnValue});
+    } catch(e) {
+      fail(e);
+    }
+  };
+  return 'callback';` :
                 `return ${returnValue};`) :
             false;
         }
@@ -182,7 +175,10 @@ const getCustomSubtestsAPI = (name) => {
   const subtests = {};
 
   if (name in customTests.api) {
-    const testbase = customTests.api[name].__base || '';
+    const testbase =
+      '__base' in customTests.api[name] ?
+        customTests.api[name].__base.replace(/\n/g, '\n  ') + '\n  ' :
+        '';
     if ('__additional' in customTests.api[name]) {
       for (const subtest of Object.entries(
         customTests.api[name].__additional
@@ -204,9 +200,7 @@ const getCustomResourcesAPI = (name) => {
       if (Object.keys(customTests.api.__resources).includes(key)) {
         const r = customTests.api.__resources[key];
         resources[key] =
-          r.type == 'instance' ?
-            {...r, src: formatCode(r.src)} :
-            customTests.api.__resources[key];
+          r.type == 'instance' ? r : customTests.api.__resources[key];
       } else {
         throw new Error(
           `Resource ${key} is not defined but referenced in api.${name}`

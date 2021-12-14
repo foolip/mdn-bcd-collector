@@ -7,7 +7,7 @@ api:
         - /media/blip.ogg
     webGL:
       type: instance
-      src: >-
+      src: |-
         var canvas = document.createElement('canvas');
         if (!canvas) {
           return false;
@@ -21,11 +21,11 @@ api:
       multiple: return 1 + 1 + 1;
       one.only: return 1;
   import1:
-    __base: >-
+    __base: |-
       <%api.foo:a%>
       var instance = a;
   import2:
-    __base: >-
+    __base: |-
       <%api.import1:b%>
       var instance = b;
   straightimport:
@@ -42,7 +42,7 @@ api:
   promise:
     __base: var promise = somePromise();
   newpromise:
-    __base: >-
+    __base: |-
       <%api.promise:p%>
       var promise = p.then(function() {});
   audiocontext:
@@ -56,7 +56,7 @@ api:
       - webGL
     __base: return reusableInstances.webGL;
   ANGLE_instanced_arrays:
-    __base: >-
+    __base: |-
       var canvas = document.createElement('canvas');
       var gl = canvas.getContext('webgl');
       var instance = gl.getExtension('ANGLE_instanced_arrays');
