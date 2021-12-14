@@ -719,8 +719,6 @@ partial interface Window {
   undefined home();
   undefined maximize();
   undefined minimize();
-  attribute EventHandler onappinstalled;
-  attribute EventHandler onbeforeinstallprompt;
   attribute EventHandler onpaint;
   undefined openDialog();
   attribute object pkcs11;
