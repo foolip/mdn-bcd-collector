@@ -82,6 +82,7 @@ const parseUA = (userAgent, browsers) => {
     compareVersions.compare(data.fullVersion, '4.4.3', '>=') &&
     compareVersions.compare(data.fullVersion, '5.0', '<')
   ) {
+    data.version = '4.4.3';
     data.inBcd = true;
     return data;
   }
