@@ -693,6 +693,36 @@
     }
   }
 
+  function loadHighlightJs(callback) {
+    try {
+      // Load dark (main) style
+      var darkStyle = document.createElement('link');
+      darkStyle.rel = 'stylesheet';
+      darkStyle.href =
+        '//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/stackoverflow-dark.min.css';
+      document.body.appendChild(darkStyle);
+
+      // Load light style
+      var lightStyle = document.createElement('link');
+      lightStyle.rel = 'stylesheet';
+      lightStyle.href =
+        '//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/stackoverflow-light.min.css';
+      lightStyle.media = '(prefers-color-scheme: light)';
+      document.body.appendChild(lightStyle);
+
+      // Load script
+      var script = document.createElement('script');
+      script.src =
+        '//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/highlight.min.js';
+      script.addEventListener('load', callback);
+      script.addEventListener('error', callback);
+      document.body.appendChild(script);
+    } catch (e) {
+      // If anything fails with loading, continue
+      callback();
+    }
+  }
+
   function renderReportEl(result, resultsEl) {
     var resultEl = document.createElement('details');
     resultEl.className = 'result';
@@ -826,9 +856,11 @@
     var resultsEl = document.getElementById('results');
 
     if (resultsEl && !hideResults) {
-      for (var i = 0; i < results.length; i++) {
-        renderReportEl(results[i], resultsEl);
-      }
+      loadHighlightJs(function () {
+        for (var i = 0; i < results.length; i++) {
+          renderReportEl(results[i], resultsEl);
+        }
+      });
     }
   }
 
