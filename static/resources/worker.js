@@ -14,7 +14,6 @@
 
 /* global self, bcd */
 
-self.importScripts('json3.min.js');
 self.importScripts('harness.js');
 
 self.onmessage = function (event) {
