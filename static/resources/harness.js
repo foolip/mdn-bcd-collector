@@ -833,7 +833,6 @@
       }
     } catch (e) {
       updateStatus('Failed to upload results: client error.', 'error-notice');
-      alert(e.message);
       consoleError(e);
     }
 
