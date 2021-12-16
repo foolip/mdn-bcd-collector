@@ -818,18 +818,22 @@
         var polyfill = document.createElement('script');
         polyfill.src = '/resources/json3.min.js';
 
-        polyfill.addEventListener(
-          'load',
-          function () {
+        if ('onload' in polyfill) {
+          polyfill.onload = function () {
             sendReport(results);
-          },
-          false
-        );
+          };
+        } else {
+          // If we can't determine when the polyfill loads, use a delay
+          setTimeout(function () {
+            sendReport(results);
+          }, 500);
+        }
 
         document.body.appendChild(polyfill);
       }
     } catch (e) {
       updateStatus('Failed to upload results: client error.', 'error-notice');
+      alert(e.message);
       consoleError(e);
     }
 
