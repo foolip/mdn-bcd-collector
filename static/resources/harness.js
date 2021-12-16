@@ -714,8 +714,15 @@
       var script = document.createElement('script');
       script.src =
         '//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/highlight.min.js';
-      script.addEventListener('load', callback);
-      script.addEventListener('error', callback);
+
+      if ('onload' in script) {
+        script.onload = callback;
+        script.onerror = callback;
+      } else {
+        // If we can't determine when harness.js loads, use a delay
+        setTimeout(callback, 500);
+      }
+
       document.body.appendChild(script);
     } catch (e) {
       // If anything fails with loading, continue
