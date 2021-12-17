@@ -19,8 +19,12 @@ const currentVersion = (
   await fs.readJson(new URL('./package.json', import.meta.url))
 ).version;
 
+const logStatus = (status) => {
+  console.log(chalk`{blue ${status}}`);
+};
+
 const prepare = async () => {
-  console.log(chalk`{blue Checking status...}`);
+  logStatus('Checking status...');
   const status = await gitRepo.getStatus();
   if (status.length) {
     console.error(
@@ -29,7 +33,7 @@ const prepare = async () => {
     return false;
   }
 
-  console.log(chalk`{blue Checking for GitHub CLI...}`);
+  logStatus('Checking for GitHub CLI...');
   try {
     exec('gh --version');
   } catch (e) {
@@ -39,7 +43,7 @@ const prepare = async () => {
     return false;
   }
 
-  console.log(chalk`{blue Fetching from remote...}`);
+  logStatus('Fetching from remote...');
   await gitRepo.fetchAll();
 
   return true;
@@ -93,6 +97,8 @@ const doVersionBump = async (newVersion) => {
 };
 
 const getGitChanges = async () => {
+  logStatus('Getting commits...');
+
   const revwalk = gitRepo.createRevWalk();
   revwalk.pushRange(`v${currentVersion}..origin/main`);
   const commits = await revwalk.getCommits(Infinity);
@@ -104,6 +110,8 @@ const getGitChanges = async () => {
 };
 
 const getTestChanges = async () => {
+  logStatus('Getting test changes...');
+
   const head = await NodeGit.Reference.nameToId(gitRepo, 'HEAD');
 
   // Build tests from the last release
@@ -172,6 +180,7 @@ const doChangelogUpdate = async (newVersion) => {
 };
 
 const prepareBranch = async (newVersion) => {
+  logStatus('Preparing release branch...');
   const branchName = `release-${newVersion}`;
 
   const commit = await gitRepo.getBranchCommit('refs/remotes/origin/main');
