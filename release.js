@@ -162,6 +162,9 @@ const getTestChanges = async () => {
 };
 
 const doChangelogUpdate = async (newVersion) => {
+  const testChanges = await getTestChanges();
+  const commmits = await getGitChanges();
+
   const filepath = new URL('./CHANGELOG.md', import.meta.url);
   const changelog = await fs.readFile(filepath, 'utf8');
   const idx = changelog.indexOf('##');
@@ -169,9 +172,9 @@ const doChangelogUpdate = async (newVersion) => {
     changelog.substring(0, idx) +
     `## v${newVersion}\n\n` +
     '### Test Changes\n' +
-    (await getTestChanges()) +
+    testChanges +
     '\n### Commits\n\n' +
-    (await getGitChanges()) +
+    commits +
     '\n\n' +
     changelog.substring(idx, changelog.length);
   newChangelog = prettier.format(newChangelog, {parser: 'markdown'});
