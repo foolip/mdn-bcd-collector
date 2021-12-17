@@ -140,6 +140,9 @@ const getTestChanges = async () => {
     }
   }
 
+  // Remove tests.old.json for cleanup
+  await fs.rm(new URL('./tests.old.json', import.meta.url));
+
   return;
   '\n#### Added\n' +
     '\n'.join(added) +
