@@ -133,7 +133,7 @@ const getTestChanges = async () => {
 
   const added = newTestKeys.filter((k) => !oldTestKeys.includes(k));
   const removed = oldTestKeys.filter((k) => !newTestKeys.includes(k));
-  let changed = [];
+  const changed = [];
   for (const t in newTestKeys.filter((k) => oldTestKeys.includes(k))) {
     if (oldTests[t].code != newTests[t].code) {
       changed.push(t);
@@ -143,13 +143,14 @@ const getTestChanges = async () => {
   // Remove tests.old.json for cleanup
   await fs.rm(new URL('./tests.old.json', import.meta.url));
 
-  return;
-  '\n#### Added\n' +
+  return (
+    '\n#### Added\n' +
     '\n'.join(added) +
     '\n#### Removed\n' +
     '\n'.join(removed) +
     '\n#### Changed\n' +
-    '\n'.join(changed);
+    '\n'.join(changed)
+  );
 };
 
 const doChangelogUpdate = async (newVersion) => {
