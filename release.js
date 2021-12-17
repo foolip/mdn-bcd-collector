@@ -111,12 +111,10 @@ const getGitChanges = async () => {
 const getTestChanges = async () => {
   logStatus('Getting test changes...');
 
-  const head = await gitRepo.head();
-
   // Build tests from the last release
   logStatus('Checking out last release...');
-  const prevRelease = await gitRepo.getReference(`v${currentVersion}`);
-  await gitRepo.checkoutRef(prevRelease);
+  const prev = await gitRepo.getReference(`v${currentVersion}`);
+  await gitRepo.checkoutRef(prev);
   exec('npm up @webref/idl @webref/css');
 
   logStatus('Building tests for last release...');
@@ -128,7 +126,8 @@ const getTestChanges = async () => {
 
   // Build tests for current release
   logStatus('Checking out current release...');
-  await gitRepo.checkoutRef(head);
+  const current = await gitRepo.getReference('refs/remotes/origin/main');
+  await gitRepo.checkoutRef(current);
   exec('npm up @webref/idl @webref/css');
 
   logStatus('Building tests for current release...');
@@ -193,7 +192,7 @@ const prepareBranch = async (newVersion) => {
   logStatus('Preparing release branch...');
   const branchName = `release-${newVersion}`;
 
-  const commit = await gitRepo.getBranchCommit('refs/remotes/origin/main');
+  const commit = await gitRepo.getHeadCommit();
   const branch = await gitRepo.createBranch(branchName, commit, true);
   await gitRepo.checkoutBranch(branch);
 
