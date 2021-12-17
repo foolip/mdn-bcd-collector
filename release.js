@@ -115,8 +115,8 @@ const getTestChanges = async () => {
   const head = await gitRepo.head();
 
   // Build tests from the last release
-  const prevRelease = await gitRepo.getReferenceCommit(`v${currentVersion}`);
-  await gitRepo.setHeadDetached(prevRelease.id());
+  const prevRelease = await gitRepo.getReference(`v${currentVersion}`);
+  await gitRepo.checkoutRef(prevRelease);
   exec('npm i --save-dev');
   await build(customIDL, customCSS);
   await fs.rename(
@@ -125,7 +125,7 @@ const getTestChanges = async () => {
   );
 
   // Build tests for current release
-  await gitRepo.setHead(head.name());
+  await gitRepo.checkoutRef(head);
   exec('npm i --save-dev');
   await build(customIDL, customCSS);
 
@@ -233,8 +233,8 @@ const main = async () => {
 
   console.log('');
 
-  await doVersionBump(newVersion);
   await doChangelogUpdate(newVersion);
+  await doVersionBump(newVersion);
 
   const answers = await inquirer.prompt([
     {
