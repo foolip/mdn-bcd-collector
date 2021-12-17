@@ -229,6 +229,9 @@ const main = async () => {
     process.exit(1);
   }
 
+  // Get current head
+  const head = await gitRepo.head();
+
   const newVersion = await getNewVersion();
   if (newVersion == 'cancel') {
     console.log(chalk`{yellow Release cancelled by user}`);
@@ -257,6 +260,9 @@ const main = async () => {
     );
     await doVersionBump(currentVersion);
   }
+
+  // Restore original head when finished
+  gitRepo.checkoutRef(head);
 };
 
 /* istanbul ignore if */
