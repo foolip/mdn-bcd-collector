@@ -7,7 +7,6 @@ import prettier from 'prettier';
 import {fileURLToPath} from 'url';
 
 import {exec} from './scripts.js';
-import {build, customIDL, customCSS} from './build.js';
 
 const gitRepo = await NodeGit.Repository.open(
   fileURLToPath(new URL('.', import.meta.url))
@@ -121,7 +120,7 @@ const getTestChanges = async () => {
   exec('npm up @webref/idl @webref/css');
 
   logStatus('Building tests for last release...');
-  await build(customIDL, customCSS);
+  exec('npm run build');
   await fs.rename(
     new URL('./tests.json', import.meta.url),
     new URL('./tests.old.json', import.meta.url)
@@ -133,7 +132,7 @@ const getTestChanges = async () => {
   exec('npm up @webref/idl @webref/css');
 
   logStatus('Building tests for current release...');
-  await build(customIDL, customCSS);
+  exec('npm run build');
 
   // Compare tests
   const oldTests = await fs.readJson(

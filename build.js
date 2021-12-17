@@ -906,8 +906,5 @@ export {
   buildIDL,
   validateIDL,
   cssPropertyToIDLAttribute,
-  buildCSS,
-  customIDL,
-  customCSS,
-  build
+  buildCSS
 };
