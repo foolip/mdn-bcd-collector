@@ -114,11 +114,10 @@ const getTestChanges = async () => {
 
   const head = await gitRepo.getReference('HEAD');
 
-  // Get last release
+  // Build tests from the last release
   const prevRelease = await gitRepo.getReferenceCommit(`v${currentVersion}`);
   await gitRepo.setHeadDetached(prevRelease.id());
-
-  // Build tests from the last release
+  exec('npm i --save-dev');
   await build(customIDL, customCSS);
   await fs.rename(
     new URL('./tests.json', import.meta.url),
@@ -127,6 +126,7 @@ const getTestChanges = async () => {
 
   // Build tests for current release
   await gitRepo.setHead(head.name());
+  exec('npm i --save-dev');
   await build(customIDL, customCSS);
 
   // Compare tests
