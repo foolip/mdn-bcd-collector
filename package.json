@@ -64,7 +64,7 @@
     "@browser-logos/opera": "1.1.11",
     "@browser-logos/safari": "2.1.0",
     "@webref/css": "2.1.9",
-    "@webref/idl": "2.9.0",
+    "@webref/idl": "2.10.0",
     "c8": "7.10.0",
     "chai": "4.3.4",
     "chai-as-promised": "^7.1.1",
