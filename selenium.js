@@ -30,8 +30,7 @@ import fs from 'fs-extra';
 import path from 'path';
 import {fileURLToPath} from 'url';
 import chalk from 'chalk';
-import listr2 from 'listr2';
-const {Listr} = listr2;
+import {Listr} from 'listr2';
 import yargs from 'yargs';
 import {hideBin} from 'yargs/helpers';
 
@@ -499,8 +498,8 @@ const runAll = async (limitBrowsers, oses, nonConcurrent, reverse) => {
 
     tasks.push({
       title: bcdBrowsers[browser].name,
-      task: () => {
-        return new Listr(browsertasks, {
+      task: (_, task) => {
+        task.newListr(browsertasks, {
           concurrent: nonConcurrent ? false : 5,
           exitOnError: false
         });
