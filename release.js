@@ -146,7 +146,7 @@ const getTestChanges = async () => {
   const added = newTestKeys.filter((k) => !oldTestKeys.includes(k));
   const removed = oldTestKeys.filter((k) => !newTestKeys.includes(k));
   const changed = [];
-  for (const t in newTestKeys.filter((k) => oldTestKeys.includes(k))) {
+  for (const t of newTestKeys.filter((k) => oldTestKeys.includes(k))) {
     if (oldTests[t].code != newTests[t].code) {
       changed.push(t);
     }
@@ -157,18 +157,18 @@ const getTestChanges = async () => {
 
   return (
     '\n#### Added\n' +
-    '\n'.join(added) +
+    added.join('\n') +
     '\n#### Removed\n' +
-    '\n'.join(removed) +
+    removed.join('\n') +
     '\n#### Changed\n' +
-    '\n'.join(changed)
+    changed.join('\n')
   );
 };
 
 const doChangelogUpdate = async (newVersion) => {
   logStatus('Updating changelog...');
   const testChanges = await getTestChanges();
-  const commmits = await getGitChanges();
+  const commits = await getGitChanges();
 
   const filepath = new URL('./CHANGELOG.md', import.meta.url);
   const changelog = await fs.readFile(filepath, 'utf8');
