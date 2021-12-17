@@ -1,4 +1,4 @@
-import chalk from 'chalk';
+import chalk from 'chalk-template';
 import esMain from 'es-main';
 import fs from 'fs-extra';
 import inquirer from 'inquirer';
