@@ -112,7 +112,7 @@ const getGitChanges = async () => {
 const getTestChanges = async () => {
   logStatus('Getting test changes...');
 
-  const head = await gitRepo.getReference('HEAD');
+  const head = await gitRepo.head();
 
   // Build tests from the last release
   const prevRelease = await gitRepo.getReferenceCommit(`v${currentVersion}`);
