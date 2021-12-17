@@ -7,6 +7,7 @@ import prettier from 'prettier';
 import {fileURLToPath} from 'url';
 
 import {exec} from './scripts.js';
+import {build, customIDL, customCSS} from './build.js';
 
 const gitRepo = await NodeGit.Repository.open(
   fileURLToPath(new URL('.', import.meta.url))
@@ -91,7 +92,7 @@ const doVersionBump = async (newVersion) => {
   }
 };
 
-const getChanges = async () => {
+const getGitChanges = async () => {
   const revwalk = gitRepo.createRevWalk();
   revwalk.pushRange(`v${currentVersion}..origin/main`);
   const commits = await revwalk.getCommits(Infinity);
@@ -102,6 +103,52 @@ const getChanges = async () => {
     .join('\n');
 };
 
+const getTestChanges = async () => {
+  const head = await NodeGit.Reference.nameToId(gitRepo, 'HEAD');
+
+  // Build tests from the last release
+  const prevRef = await NodeGit.Reference.nameToId(
+    gitRepo,
+    `refs/tags/v${currentVersion}`
+  );
+  await gitRepo.checkoutRef(prevRef);
+  await build(customIDL, customCSS);
+  await fs.rename(
+    new URL('./tests.json', import.meta.url),
+    new URL('./tests.old.json', import.meta.url)
+  );
+
+  // Build tests for current release
+  await gitRepo.checkoutRef(head);
+  await build(customIDL, customCSS);
+
+  // Compare tests
+  const oldTests = await fs.readJson(
+    new URL('./tests.old.json', import.meta.url)
+  );
+  const newTests = await fs.readJson(new URL('./tests.json', import.meta.url));
+
+  const oldTestKeys = Object.keys(oldTests);
+  const newTestKeys = Object.keys(newTests);
+
+  const added = newTestKeys.filter((k) => !oldTestKeys.includes(k));
+  const removed = oldTestKeys.filter((k) => !newTestKeys.includes(k));
+  let changed = [];
+  for (const t in newTestKeys.filter((k) => oldTestKeys.includes(k))) {
+    if (oldTests[t].code != newTests[t].code) {
+      changed.push(t);
+    }
+  }
+
+  return;
+  '\n#### Added\n' +
+    '\n'.join(added) +
+    '\n#### Removed\n' +
+    '\n'.join(removed) +
+    '\n#### Changed\n' +
+    '\n'.join(changed);
+};
+
 const doChangelogUpdate = async (newVersion) => {
   const filepath = new URL('./CHANGELOG.md', import.meta.url);
   const changelog = await fs.readFile(filepath, 'utf8');
@@ -109,7 +156,10 @@ const doChangelogUpdate = async (newVersion) => {
   let newChangelog =
     changelog.substring(0, idx) +
     `## v${newVersion}\n\n` +
-    (await getChanges()) +
+    '### Test Changes\n' +
+    (await getTestChanges()) +
+    '\n### Commits\n\n' +
+    (await getGitChanges()) +
     '\n\n' +
     changelog.substring(idx, changelog.length);
   newChangelog = prettier.format(newChangelog, {parser: 'markdown'});
