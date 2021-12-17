@@ -579,6 +579,11 @@
     };
 
     var startTests = function () {
+      if (state.started) {
+        consoleError('Warning: Tests started twice!');
+        return;
+      }
+
       state.started = true;
 
       var timeout = setTimeout(function () {
@@ -685,6 +690,7 @@
         }
       } catch (e) {
         // Couldn't use resource loading code, start anyways
+        clearTimeout(resourceTimeout);
         consoleError(e);
         startTests();
       }
