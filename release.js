@@ -112,7 +112,7 @@ const getGitChanges = async () => {
 const getTestChanges = async () => {
   logStatus('Getting test changes...');
 
-  const head = await gitRepo.getReferenceCommit('HEAD');
+  const head = await gitRepo.getReference('HEAD');
 
   // Get last release
   const prevRelease = await gitRepo.getReferenceCommit(`v${currentVersion}`);
@@ -199,8 +199,7 @@ const prepareBranch = async (newVersion) => {
   await index.write();
   const changes = await index.writeTree();
 
-  const head = await NodeGit.Reference.nameToId(gitRepo, 'HEAD');
-  const parent = await gitRepo.getCommit(head);
+  const parent = await gitRepo.getHeadCommit();
 
   await gitRepo.createCommit(
     'HEAD',
