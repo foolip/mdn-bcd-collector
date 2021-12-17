@@ -187,9 +187,6 @@ const doChangelogUpdate = async (ctx) => {
     changelog.substring(idx, changelog.length);
   newChangelog = prettier.format(newChangelog, {parser: 'markdown'});
   await fs.writeFile(filepath, newChangelog, 'utf8');
-  console.log(
-    chalk`{yellow Please review the changelog and make changes as needed.}`
-  );
 };
 
 const doVersionBump = async (newVersion) => {
