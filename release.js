@@ -18,10 +18,6 @@ const currentVersion = (
   await fs.readJson(new URL('./package.json', import.meta.url))
 ).version;
 
-const logStatus = (status) => {
-  console.log(chalk`{blue ${status}}`);
-};
-
 const prepare = () => {
   return [
     {
