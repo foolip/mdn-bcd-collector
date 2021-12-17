@@ -112,14 +112,13 @@ const getGitChanges = async () => {
 const getTestChanges = async () => {
   logStatus('Getting test changes...');
 
-  const head = await NodeGit.Reference.nameToId(gitRepo, 'HEAD');
+  const head = await gitRepo.getReferenceCommit('HEAD');
+
+  // Get last release
+  const prevRelease = await gitRepo.getReferenceCommit(`v${currentVersion}`);
+  await gitRepo.setHeadDetached(prevRelease.id());
 
   // Build tests from the last release
-  const prevRef = await NodeGit.Reference.nameToId(
-    gitRepo,
-    `refs/tags/v${currentVersion}`
-  );
-  await gitRepo.checkoutRef(prevRef);
   await build(customIDL, customCSS);
   await fs.rename(
     new URL('./tests.json', import.meta.url),
@@ -127,7 +126,7 @@ const getTestChanges = async () => {
   );
 
   // Build tests for current release
-  await gitRepo.checkoutRef(head);
+  await gitRepo.setHead(head.name());
   await build(customIDL, customCSS);
 
   // Compare tests
