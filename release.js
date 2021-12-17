@@ -162,6 +162,7 @@ const getTestChanges = async () => {
 };
 
 const doChangelogUpdate = async (newVersion) => {
+  logStatus('Updating changelog...');
   const testChanges = await getTestChanges();
   const commmits = await getGitChanges();
 
@@ -179,7 +180,9 @@ const doChangelogUpdate = async (newVersion) => {
     changelog.substring(idx, changelog.length);
   newChangelog = prettier.format(newChangelog, {parser: 'markdown'});
   await fs.writeFile(filepath, newChangelog, 'utf8');
-  console.log('Please review the changelog and make changes as needed.');
+  console.log(
+    chalk`{yellow Please review the changelog and make changes as needed.}`
+  );
 };
 
 const prepareBranch = async (newVersion) => {
@@ -213,6 +216,7 @@ const prepareBranch = async (newVersion) => {
 };
 
 const createPR = async (branch) => {
+  logStatus('Creating pull request...');
   const branchName = await branch.name();
   exec(`git push --set-upstream origin ${branchName}`);
   exec('gh pr create -f');
