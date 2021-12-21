@@ -4,3 +4,4 @@ download/
 generated/
 node_modules/
 tests.json
+tests.old.json
