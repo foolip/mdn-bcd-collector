@@ -29,7 +29,7 @@ import esMain from 'es-main';
 import fs from 'fs-extra';
 import path from 'path';
 import {fileURLToPath} from 'url';
-import chalk from 'chalk';
+import chalk from 'chalk-template';
 import {Listr} from 'listr2';
 import yargs from 'yargs';
 import {hideBin} from 'yargs/helpers';
@@ -498,12 +498,11 @@ const runAll = async (limitBrowsers, oses, nonConcurrent, reverse) => {
 
     tasks.push({
       title: bcdBrowsers[browser].name,
-      task: (_, task) => {
-        task.newListr(browsertasks, {
+      task: () =>
+        new Listr(browsertasks, {
           concurrent: nonConcurrent ? false : 5,
           exitOnError: false
-        });
-      }
+        })
     });
   }
 
