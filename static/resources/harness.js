@@ -579,6 +579,11 @@
     };
 
     var startTests = function () {
+      if (state.started) {
+        consoleError('Warning: Tests started twice!');
+        return;
+      }
+
       state.started = true;
 
       var timeout = setTimeout(function () {
@@ -685,6 +690,7 @@
         }
       } catch (e) {
         // Couldn't use resource loading code, start anyways
+        clearTimeout(resourceTimeout);
         consoleError(e);
         startTests();
       }
@@ -811,50 +817,73 @@
     resultsEl.appendChild(resultEl);
   }
 
+  function sendReport(results) {
+    var body = JSON.stringify(results);
+
+    var client;
+    if ('XMLHttpRequest' in self) {
+      client = new XMLHttpRequest();
+    } else if ('ActiveXObject' in self) {
+      client = new ActiveXObject('Microsoft.XMLHTTP');
+    }
+
+    if (!client) {
+      updateStatus(
+        'Cannot upload results: XMLHttpRequest is not supported.',
+        'error-notice'
+      );
+      return;
+    }
+
+    var resultsURL =
+      (location.origin || location.protocol + '//' + location.host) +
+      '/api/results?for=' +
+      encodeURIComponent(location.href);
+
+    client.open('POST', resultsURL);
+    client.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+    client.send(body);
+    client.onreadystatechange = function () {
+      if (client.readyState == 4) {
+        if (client.status >= 200 && client.status <= 299) {
+          document.getElementById('export-download').disabled = false;
+          document.getElementById('export-github').disabled = false;
+          updateStatus('Results uploaded.', 'success-notice');
+        } else {
+          updateStatus(
+            'Failed to upload results: server error.',
+            'error-notice'
+          );
+          consoleLog('Server response: ' + client.response);
+        }
+      }
+    };
+  }
+
   function report(results, hideResults) {
     updateStatus('Tests complete. Posting results to server...');
 
     try {
-      var body = JSON.stringify(results);
+      if ('JSON' in self && 'parse' in JSON) {
+        sendReport(results);
+      } else {
+        // Load JSON polyfill if needed
+        var polyfill = document.createElement('script');
+        polyfill.src = '/resources/json3.min.js';
 
-      var client;
-      if ('XMLHttpRequest' in self) {
-        client = new XMLHttpRequest();
-      } else if ('ActiveXObject' in self) {
-        client = new ActiveXObject('Microsoft.XMLHTTP');
-      }
-
-      if (!client) {
-        updateStatus(
-          'Cannot upload results: XMLHttpRequest is not supported.',
-          'error-notice'
-        );
-        return;
-      }
-
-      var resultsURL =
-        (location.origin || location.protocol + '//' + location.host) +
-        '/api/results?for=' +
-        encodeURIComponent(location.href);
-
-      client.open('POST', resultsURL);
-      client.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
-      client.send(body);
-      client.onreadystatechange = function () {
-        if (client.readyState == 4) {
-          if (client.status >= 200 && client.status <= 299) {
-            document.getElementById('export-download').disabled = false;
-            document.getElementById('export-github').disabled = false;
-            updateStatus('Results uploaded.', 'success-notice');
-          } else {
-            updateStatus(
-              'Failed to upload results: server error.',
-              'error-notice'
-            );
-            console.log('Server response: ' + client.response);
-          }
+        if ('onload' in polyfill) {
+          polyfill.onload = function () {
+            sendReport(results);
+          };
+        } else {
+          // If we can't determine when the polyfill loads, use a delay
+          setTimeout(function () {
+            sendReport(results);
+          }, 500);
         }
-      };
+
+        document.body.appendChild(polyfill);
+      }
     } catch (e) {
       updateStatus('Failed to upload results: client error.', 'error-notice');
       consoleError(e);

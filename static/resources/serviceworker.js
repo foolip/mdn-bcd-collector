@@ -14,7 +14,6 @@
 
 /* global self, caches, Request, Response, bcd */
 
-self.importScripts('json3.min.js');
 self.importScripts('harness.js');
 
 self.addEventListener('install', function (event) {
