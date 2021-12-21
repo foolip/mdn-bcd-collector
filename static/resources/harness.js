@@ -29,7 +29,6 @@
   };
   var state = {
     started: false,
-    currentExposure: '',
     timedout: false,
     completed: false
   };
@@ -98,11 +97,6 @@
     }
 
     consoleLog(statusElement.innerHTML.replace(/<br>/g, '\n'));
-  }
-
-  function setCurrentExposure(exposure) {
-    state.currentExposure = exposure;
-    updateStatus('Running tests for ' + exposure + '...');
   }
 
   function addInstance(name, code) {
@@ -371,8 +365,12 @@
         }
       }
 
-      if (completedTests >= tests.length) {
+      if (completedTests == tests.length) {
         callback(results);
+      } else if (completedTests > tests.length) {
+        consoleWarn(
+          'Warning! More tests were completed than there should have been; did a test run twice?'
+        );
       }
     };
 
@@ -382,9 +380,8 @@
   }
 
   function runWindow(callback) {
-    setCurrentExposure('Window');
-
     if (pending.Window) {
+      updateStatus('Running tests for Window...');
       runTests(pending.Window, callback);
     } else {
       callback([]);
@@ -392,9 +389,8 @@
   }
 
   function runWorker(callback) {
-    setCurrentExposure('Worker');
-
     if (pending.Worker) {
+      updateStatus('Running tests for Worker...');
       var myWorker = null;
 
       if ('Worker' in self) {
@@ -451,9 +447,8 @@
   }
 
   function runSharedWorker(callback) {
-    setCurrentExposure('SharedWorker');
-
     if (pending.SharedWorker) {
+      updateStatus('Running tests for Shared Worker...');
       var myWorker = null;
 
       if ('SharedWorker' in self) {
@@ -508,9 +503,8 @@
   }
 
   function runServiceWorker(callback) {
-    setCurrentExposure('ServiceWorker');
-
     if (pending.ServiceWorker) {
+      updateStatus('Running tests for Service Worker...');
       if ('serviceWorker' in navigator) {
         window.__workerCleanup().then(function () {
           navigator.serviceWorker
@@ -573,7 +567,6 @@
     var allresults = [];
     state = {
       started: false,
-      currentExposure: '',
       timedout: false,
       completed: false
     };
@@ -591,43 +584,15 @@
       }, 20000);
 
       runWindow(function (results) {
-        if (state.completed || state.currentExposure !== 'Window') {
-          consoleError(
-            'Warning: Tests for Window exposure were completed multiple times!'
-          );
-          return;
-        }
-
         allresults = allresults.concat(results);
 
         runWorker(function (results) {
-          if (state.completed || state.currentExposure !== 'Worker') {
-            consoleError(
-              'Warning: Tests for Worker exposure were completed multiple times!'
-            );
-            return;
-          }
-
           allresults = allresults.concat(results);
 
           runSharedWorker(function (results) {
-            if (state.completed || state.currentExposure !== 'SharedWorker') {
-              consoleError(
-                'Warning: Tests for SharedWorker exposure were completed multiple times!'
-              );
-              return;
-            }
-
             allresults = allresults.concat(results);
 
             runServiceWorker(function (results) {
-              if (state.completed) {
-                consoleError(
-                  'Warning: Tests for ServiceWorker exposure were completed multiple times!'
-                );
-                return;
-              }
-
               allresults = allresults.concat(results);
 
               pending = {};
