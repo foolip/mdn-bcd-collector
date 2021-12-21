@@ -14,7 +14,7 @@
 
 /* global console, document, window, location, navigator, XMLHttpRequest,
           self, Worker, Promise, setTimeout, clearTimeout, MessageChannel,
-          SharedWorker, ActiveXObject */
+          SharedWorker, ActiveXObject, hljs */
 
 'use strict';
 
@@ -699,6 +699,43 @@
     }
   }
 
+  function loadHighlightJs(callback) {
+    try {
+      // Load dark (main) style
+      var darkStyle = document.createElement('link');
+      darkStyle.rel = 'stylesheet';
+      darkStyle.href =
+        '//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/stackoverflow-dark.min.css';
+      document.body.appendChild(darkStyle);
+
+      // Load light style
+      var lightStyle = document.createElement('link');
+      lightStyle.rel = 'stylesheet';
+      lightStyle.href =
+        '//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/stackoverflow-light.min.css';
+      lightStyle.media = '(prefers-color-scheme: light)';
+      document.body.appendChild(lightStyle);
+
+      // Load script
+      var script = document.createElement('script');
+      script.src =
+        '//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/highlight.min.js';
+
+      if ('onload' in script) {
+        script.onload = callback;
+        script.onerror = callback;
+      } else {
+        // If we can't determine when harness.js loads, use a delay
+        setTimeout(callback, 500);
+      }
+
+      document.body.appendChild(script);
+    } catch (e) {
+      // If anything fails with loading, continue
+      callback();
+    }
+  }
+
   function renderReportEl(result, resultsEl) {
     var resultEl = document.createElement('details');
     resultEl.className = 'result';
@@ -759,10 +796,20 @@
         }
       }
 
+      var formattedCode;
+      if ('hljs' in self) {
+        formattedCode = hljs.highlight(code, {
+          language: 'js'
+        }).value;
+      }
+
       resultCodeEl.className = 'result-code';
-      resultCodeEl.innerHTML = code
-        .replace(/ /g, '&nbsp;')
-        .replace(/\n/g, '<br>');
+      resultCodeEl.innerHTML = (formattedCode || code).replace(
+        /\n([^\S\r\n]*)/g,
+        function (match, p1) {
+          return '<br>' + p1.replace(/ /g, '&nbsp;');
+        }
+      );
       resultInfoEl.appendChild(resultCodeEl);
     }
 
@@ -845,9 +892,11 @@
     var resultsEl = document.getElementById('results');
 
     if (resultsEl && !hideResults) {
-      for (var i = 0; i < results.length; i++) {
-        renderReportEl(results[i], resultsEl);
-      }
+      loadHighlightJs(function () {
+        for (var i = 0; i < results.length; i++) {
+          renderReportEl(results[i], resultsEl);
+        }
+      });
     }
   }
 
