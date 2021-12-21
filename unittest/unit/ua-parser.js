@@ -338,6 +338,38 @@ describe('parseUA', () => {
     );
   });
 
+  it('WebView Android (Android Browser, 4.4.3, Chrome 33)', () => {
+    assert.deepEqual(
+      parseUA(
+        'Mozilla/5.0 (Linux; U; Android 4.4.3; en-us; HTC_0P6B130 Build/KTU84L) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30',
+        browsers
+      ),
+      {
+        browser: {id: 'webview_android', name: 'WebView Android'},
+        version: '4.4.3',
+        fullVersion: '4.4.3',
+        os: {name: 'Android', version: '4.4.3'},
+        inBcd: true
+      }
+    );
+  });
+
+  it('WebView Android (Android Browser, 4.4.4, Chrome 33)', () => {
+    assert.deepEqual(
+      parseUA(
+        'Mozilla/5.0 (Linux; U; Android 4.4.4; en-us; HTC_0P6B130 Build/KTU84L) AppleWebKit/534.30 (KHTML, like Gecko) Version/4.0 Mobile Safari/534.30',
+        browsers
+      ),
+      {
+        browser: {id: 'webview_android', name: 'WebView Android'},
+        version: '4.4.3',
+        fullVersion: '4.4.4',
+        os: {name: 'Android', version: '4.4.4'},
+        inBcd: true
+      }
+    );
+  });
+
   it('WebView Android (Android Browser, 5.0.2, Chrome 37)', () => {
     assert.deepEqual(
       parseUA(
