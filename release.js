@@ -162,12 +162,13 @@ const getTestChanges = () => {
         changed = changed.filter(simplifyTestChangesList);
 
         ctx.testChanges =
-          '\n#### Added\n' +
-          added.join('\n') +
-          '\n#### Removed\n' +
-          removed.join('\n') +
-          '\n#### Changed\n' +
-          changed.join('\n');
+          '\n#### Added\n<details>\n' +
+          added.join('<br />\n') +
+          '\n</details>\n\n#### Removed\n<details>\n' +
+          removed.join('<br />\n') +
+          '\n</details>\n\n#### Changed\n<details>\n' +
+          changed.join('<br />\n') +
+          '\n</details>\n';
       }
     },
     {
