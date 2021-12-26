@@ -164,13 +164,12 @@ const getTestChanges = () => {
         changed = changed.filter(simplifyTestChangesList);
 
         ctx.testChanges =
-          '\n#### Added\n<details>\n' +
-          added.join('<br />\n') +
-          '\n</details>\n\n#### Removed\n<details>\n' +
-          removed.join('<br />\n') +
-          '\n</details>\n\n#### Changed\n<details>\n' +
-          changed.join('<br />\n') +
-          '\n</details>\n';
+          '\n#### Added\n\n' +
+          added.map((x) => '- ' + x).join('\n') +
+          '\n\n#### Removed\n\n' +
+          removed.map((x) => '- ' + x).join('\n') +
+          '\n\n#### Changed\n\n' +
+          changed.map((x) => '- ' + x).join('\n');
       }
     },
     {
