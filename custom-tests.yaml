@@ -98,7 +98,12 @@ api:
     __base: |-
       var el = document.createElement('b');
       el.setAttribute('data-foo', 'bar');
-      var instance = el.getAttributeNode('data-foo');
+      var instance;
+      if ('getAttributeNode' in el) {
+        instance = el.getAttributeNode('data-foo');
+      } else if ('attributes' in el) {
+        instance = el.attributes.item(0);
+      }
   ANGLE_instanced_arrays:
     __resources:
       - webGL1
