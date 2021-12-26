@@ -1,0 +1,22 @@
+// https://alvestrand.github.io/mediacapture-transform/chrome-96.html#idl-index
+
+[Exposed=Window]
+interface MediaStreamTrackProcessor {
+    constructor(MediaStreamTrackProcessorInit init);
+    attribute ReadableStream readable;
+};
+
+dictionary MediaStreamTrackProcessorInit {
+  required MediaStreamTrack track;
+  [EnforceRange] unsigned short maxBufferSize;
+};
+
+[Exposed=Window]
+interface MediaStreamTrackGenerator : MediaStreamTrack {
+    constructor(MediaStreamTrackGeneratorInit init);
+    attribute WritableStream writable;  // VideoFrame or AudioFrame
+};
+
+dictionary MediaStreamTrackGeneratorInit {
+  required DOMString kind;
+};
