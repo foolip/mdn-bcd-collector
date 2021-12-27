@@ -1061,6 +1061,30 @@ describe('build', () => {
       });
     });
 
+    it('interface with named stringifier', () => {
+      const ast = WebIDL2.parse(
+        `[Exposed=Window]
+           interface HTMLAreaElement {
+             stringifier readonly attribute USVString href;
+           };`
+      );
+
+      assert.deepEqual(buildIDLTests(ast, []), {
+        'api.HTMLAreaElement': {
+          code: '"HTMLAreaElement" in self',
+          exposure: ['Window']
+        },
+        'api.HTMLAreaElement.href': {
+          code: '"href" in HTMLAreaElement.prototype',
+          exposure: ['Window']
+        },
+        'api.HTMLAreaElement.toString': {
+          code: '"toString" in HTMLAreaElement.prototype',
+          exposure: ['Window']
+        }
+      });
+    });
+
     it('operator variations', () => {
       const ast = WebIDL2.parse(
         `[Exposed=Window]

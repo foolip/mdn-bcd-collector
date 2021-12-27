@@ -412,6 +412,13 @@ const flattenMembers = (iface) => {
     }
   }
 
+  // Catch named stringifiers
+  for (const _ of members.filter(
+    (member) => member.special === 'stringifier'
+  )) {
+    members.push({name: 'toString', type: 'operation'});
+  }
+
   // Add members from ExtAttrs
   if (getExtAttr(iface, 'LegacyFactoryFunction')) {
     members.push({
