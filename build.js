@@ -369,6 +369,7 @@ const flattenMembers = (iface) => {
         break;
       case 'maplike':
         members.push(
+          {name: '@@iterator', type: 'symbol'},
           {name: 'entries', type: 'operation'},
           {name: 'forEach', type: 'operation'},
           {name: 'get', type: 'operation'},
@@ -387,6 +388,7 @@ const flattenMembers = (iface) => {
         break;
       case 'setlike':
         members.push(
+          {name: '@@iterator', type: 'symbol'},
           {name: 'entries', type: 'operation'},
           {name: 'forEach', type: 'operation'},
           {name: 'has', type: 'operation'},
