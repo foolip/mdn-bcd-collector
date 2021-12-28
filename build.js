@@ -413,7 +413,7 @@ const flattenMembers = (iface) => {
   }
 
   // Catch named stringifiers
-  if (member.some((member) => member.special === 'stringifier')) {
+  if (members.some((member) => member.special === 'stringifier')) {
     members.push({name: 'toString', type: 'operation'});
   }
 
