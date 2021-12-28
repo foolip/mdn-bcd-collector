@@ -2443,9 +2443,7 @@ api:
     __base: var instance = self;
   WorkerLocation:
     __base: var instance = location;
-    toString: |-
-      instance.href = 'https://mdn-bcd-collector.appspot.com/';
-      return instance.toString() == instance.href;
+    toString: return instance.toString() == instance.href;
   WorkerNavigator:
     __base: var instance = navigator;
   WritableStreamDefaultController:
