@@ -72,7 +72,7 @@
     "chai-http": "4.3.0",
     "chai-subset": "1.6.0",
     "chalk": "5.0.0",
-    "chalk-template": "0.2.0",
+    "chalk-template": "0.3.0",
     "ejs-lint": "1.2.1",
     "enquirer": "2.3.6",
     "eslint": "8.6.0",
