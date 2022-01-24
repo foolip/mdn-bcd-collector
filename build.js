@@ -777,20 +777,60 @@ const cssPropertyToIDLAttribute = (property, lowercaseFirst) => {
   return output;
 };
 
-const buildCSS = (webrefCSS, customCSS) => {
-  const propertySet = new Set();
+const buildCSSValuesTest = (property, values) => {
+  if (!Array.isArray(values)) {
+    values = [values];
+  }
 
-  for (const data of Object.values(webrefCSS)) {
+  const propertyNames = property.startsWith("-") ? [property] : ["", "-webkit-", "-moz-", "-ms-"].map((p) => p + property);
+  let code = [];
+
+  for (const propertyName of propertyNames) {
+    code = code.concat(values.map((value) => `
+("CSS" in window && CSS.supports ? CSS.supports("${propertyName}", "${value}") : (function(){
+  var div = document.createElement('div');
+  div.style["${propertyName}"] = "";
+  div.style["${propertyName}"] = "${value}";
+  return div.style.getPropertyValue("${propertyName}") !== "";
+})())
+`));
+  }
+
+  return compileTest({
+    raw: {
+      code: code, combinator: '||'
+    },
+    category: 'css',
+    exposure: ['Window']
+  });
+};
+
+const buildCSS = (specCSS, customCSS) => {
+  const properties = new Map();
+
+  for (const data of Object.values(specCSS)) {
     for (const prop of Object.keys(data.properties)) {
-      propertySet.add(prop);
+      properties.set(prop, new Map());
     }
   }
 
-  for (const prop of Object.keys(customCSS.properties)) {
-    if (propertySet.has(prop)) {
-      throw new Error(`Custom CSS property already known: ${prop}`);
+  for (const [name, data] of Object.entries(customCSS.properties)) {
+    const values = "__values" in data ? data["__values"] : [];
+    const additionalValues = "__additional_values" in data ? data["__additional_values"] : {};
+
+    const mergedValues = new Map(Object.entries(additionalValues));
+    for (const value of values) {
+      if (mergedValues.has(value)) {
+        throw new Error(`CSS property value already known: ${value}`);
+      }
+      mergedValues.set(value, value);
     }
-    propertySet.add(prop);
+
+    if (properties.has(name) && mergedValues.size === 0) {
+      throw new Error(`Custom CSS property already known: ${name}`);
+    }
+
+    properties.set(name, mergedValues);
   }
 
   const tests = {};
@@ -810,10 +850,19 @@ const buildCSS = (webrefCSS, customCSS) => {
     if (name !== attrName) {
       code.push({property: name, owner: 'document.body.style'});
     }
-    tests[`css.properties.${name}`] = compileTest({
+    const legacyTest = compileTest({
       raw: {code, combinator: '||'},
       exposure: ['Window']
     });
+    tests[`css.properties.${name}`] = compileTest({
+      raw: {code: `"CSS" in window && CSS.supports ? CSS.supports("${name}", "inherit") : (${legacyTest.code})`},
+      exposure: ['Window']
+    });
+
+    // Tests for values
+    for (const [key, values] of Array.from(properties.get(name).entries()).sort()) {
+      tests[`css.properties.${name}.${key}`] = buildCSSValuesTest(name, values);
+    }
   }
 
   return tests;
