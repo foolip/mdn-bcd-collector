@@ -429,9 +429,9 @@ const getExtAttr = (node, name) => {
   return node.extAttrs && node.extAttrs.find((i) => i.name === name);
 };
 
-// https://webidl.spec.whatwg.org/#dfn-exposure-set
+// https://webidl.spec.whatwg.org/#Exposed
 const getExposureSet = (node) => {
-  // step 6-8
+  // step 6-8 of https://webidl.spec.whatwg.org/#dfn-exposure-set
   const attr = getExtAttr(node, 'Exposed');
   if (!attr) {
     throw new Error(
@@ -445,6 +445,16 @@ const getExposureSet = (node) => {
       break;
     case 'identifier-list':
       for (const {value} of attr.rhs.value) {
+        exposure.add(value);
+      }
+      break;
+    case '*':
+      for (const value of [
+        'Window',
+        'Worker',
+        'SharedWorker',
+        'ServiceWorker'
+      ]) {
         exposure.add(value);
       }
       break;
