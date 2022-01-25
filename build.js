@@ -438,14 +438,14 @@ const getExposureSet = (node) => {
       `Exposed extended attribute not found on ${node.type} ${node.name}`
     );
   }
-  const globals = new Set();
+  const exposure = new Set();
   switch (attr.rhs.type) {
     case 'identifier':
-      globals.add(attr.rhs.value);
+      exposure.add(attr.rhs.value);
       break;
     case 'identifier-list':
       for (const {value} of attr.rhs.value) {
-        globals.add(value);
+        exposure.add(value);
       }
       break;
     /* istanbul ignore next */
@@ -453,12 +453,12 @@ const getExposureSet = (node) => {
       throw new Error(`Unexpected RHS for Exposed extended attribute`);
   }
 
-  if (globals.has('DedicatedWorker')) {
-    globals.delete('DedicatedWorker');
-    globals.add('Worker');
+  if (exposure.has('DedicatedWorker')) {
+    exposure.delete('DedicatedWorker');
+    exposure.add('Worker');
   }
 
-  return globals;
+  return exposure;
 };
 
 const validateIDL = (ast) => {
