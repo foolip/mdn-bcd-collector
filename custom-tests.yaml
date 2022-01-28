@@ -615,6 +615,14 @@ api:
       }
     __additional:
       scroll.options_behavior_parameter: return bcd.testOptionParam(instance, 'scroll', 'behavior', 'auto');
+      scroll.options_left_parameter: return bcd.testOptionParam(instance, 'scroll', 'left', '0');
+      scroll.options_top_parameter: return bcd.testOptionParam(instance, 'scroll', 'top', '0');
+      scrollBy.options_behavior_parameter: return bcd.testOptionParam(instance, 'scrollBy', 'behavior', 'auto');
+      scrollBy.options_left_parameter: return bcd.testOptionParam(instance, 'scrollBy', 'left', '0');
+      scrollBy.options_top_parameter: return bcd.testOptionParam(instance, 'scrollBy', 'top', '0');
+      scrollTo.options_behavior_parameter: return bcd.testOptionParam(instance, 'scrollTo', 'behavior', 'auto');
+      scrollTo.options_left_parameter: return bcd.testOptionParam(instance, 'scrollTo', 'left', '0');
+      scrollTo.options_top_parameter: return bcd.testOptionParam(instance, 'scrollTo', 'top', '0');
   ErrorEvent:
     __base: |-
       var instance;
