@@ -205,6 +205,25 @@
     };
   }
 
+  function testOptionParam(instance, methodName, paramName, paramValue) {
+    if (!('Object' in self && 'defineProperty' in Object)) {
+      return {
+        result: null,
+        message: 'Browser does not support detection methods'
+      };
+    }
+
+    var accessed = false;
+    var options = Object.defineProperty({}, paramName, {
+      get: function () {
+        accessed = true;
+        return paramValue;
+      }
+    });
+    instance[methodName](options);
+    return accessed;
+  }
+
   // Once a test is evaluated and run, it calls this function with the result.
   // This function then compiles a result object from the given result value,
   // and then passes the result to `callback()` (or if the result is not true
@@ -935,6 +954,7 @@
   global.bcd = {
     testConstructor: testConstructor,
     testObjectName: testObjectName,
+    testOptionParam: testOptionParam,
     addInstance: addInstance,
     addTest: addTest,
     runTests: runTests,
