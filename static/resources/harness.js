@@ -14,7 +14,7 @@
 
 /* global console, document, window, location, navigator, XMLHttpRequest,
           self, Worker, Promise, setTimeout, clearTimeout, MessageChannel,
-          SharedWorker, ActiveXObject */
+          SharedWorker, ActiveXObject, hljs */
 
 'use strict';
 
@@ -29,7 +29,6 @@
   };
   var state = {
     started: false,
-    currentExposure: '',
     timedout: false,
     completed: false
   };
@@ -100,11 +99,6 @@
     consoleLog(statusElement.innerHTML.replace(/<br>/g, '\n'));
   }
 
-  function setCurrentExposure(exposure) {
-    state.currentExposure = exposure;
-    updateStatus('Running tests for ' + exposure + '...');
-  }
-
   function addInstance(name, code) {
     var newCode = '(function () {\n  ' + code.replace(/\n/g, '\n  ') + '\n})()';
     reusableInstances.__sources[name] = newCode;
@@ -157,7 +151,8 @@
         stringIncludes(err.message, 'arguments required') ||
         stringIncludes(err.message, 'Argument not optional') ||
         stringIncludes(err.message, "Arguments can't be empty") ||
-        stringIncludes(err.message, 'undefined is not an object')
+        stringIncludes(err.message, 'undefined is not an object') ||
+        stringIncludes(err.message, 'WRONG_ARGUMENTS_ERR')
       ) {
         // If it failed to construct and it's not illegal or just needs
         // more arguments, the constructor's good
@@ -370,8 +365,12 @@
         }
       }
 
-      if (completedTests >= tests.length) {
+      if (completedTests == tests.length) {
         callback(results);
+      } else if (completedTests > tests.length) {
+        consoleWarn(
+          'Warning! More tests were completed than there should have been; did a test run twice?'
+        );
       }
     };
 
@@ -381,9 +380,8 @@
   }
 
   function runWindow(callback) {
-    setCurrentExposure('Window');
-
     if (pending.Window) {
+      updateStatus('Running tests for Window...');
       runTests(pending.Window, callback);
     } else {
       callback([]);
@@ -391,9 +389,8 @@
   }
 
   function runWorker(callback) {
-    setCurrentExposure('Worker');
-
     if (pending.Worker) {
+      updateStatus('Running tests for Worker...');
       var myWorker = null;
 
       if ('Worker' in self) {
@@ -450,9 +447,8 @@
   }
 
   function runSharedWorker(callback) {
-    setCurrentExposure('SharedWorker');
-
     if (pending.SharedWorker) {
+      updateStatus('Running tests for Shared Worker...');
       var myWorker = null;
 
       if ('SharedWorker' in self) {
@@ -507,9 +503,8 @@
   }
 
   function runServiceWorker(callback) {
-    setCurrentExposure('ServiceWorker');
-
     if (pending.ServiceWorker) {
+      updateStatus('Running tests for Service Worker...');
       if ('serviceWorker' in navigator) {
         window.__workerCleanup().then(function () {
           navigator.serviceWorker
@@ -572,12 +567,16 @@
     var allresults = [];
     state = {
       started: false,
-      currentExposure: '',
       timedout: false,
       completed: false
     };
 
     var startTests = function () {
+      if (state.started) {
+        consoleError('Warning: Tests started twice!');
+        return;
+      }
+
       state.started = true;
 
       var timeout = setTimeout(function () {
@@ -585,43 +584,15 @@
       }, 20000);
 
       runWindow(function (results) {
-        if (state.completed || state.currentExposure !== 'Window') {
-          consoleError(
-            'Warning: Tests for Window exposure were completed multiple times!'
-          );
-          return;
-        }
-
         allresults = allresults.concat(results);
 
         runWorker(function (results) {
-          if (state.completed || state.currentExposure !== 'Worker') {
-            consoleError(
-              'Warning: Tests for Worker exposure were completed multiple times!'
-            );
-            return;
-          }
-
           allresults = allresults.concat(results);
 
           runSharedWorker(function (results) {
-            if (state.completed || state.currentExposure !== 'SharedWorker') {
-              consoleError(
-                'Warning: Tests for SharedWorker exposure were completed multiple times!'
-              );
-              return;
-            }
-
             allresults = allresults.concat(results);
 
             runServiceWorker(function (results) {
-              if (state.completed) {
-                consoleError(
-                  'Warning: Tests for ServiceWorker exposure were completed multiple times!'
-                );
-                return;
-              }
-
               allresults = allresults.concat(results);
 
               pending = {};
@@ -684,11 +655,49 @@
         }
       } catch (e) {
         // Couldn't use resource loading code, start anyways
+        clearTimeout(resourceTimeout);
         consoleError(e);
         startTests();
       }
     } else {
       startTests();
+    }
+  }
+
+  function loadHighlightJs(callback) {
+    try {
+      // Load dark (main) style
+      var darkStyle = document.createElement('link');
+      darkStyle.rel = 'stylesheet';
+      darkStyle.href =
+        '//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/stackoverflow-dark.min.css';
+      document.body.appendChild(darkStyle);
+
+      // Load light style
+      var lightStyle = document.createElement('link');
+      lightStyle.rel = 'stylesheet';
+      lightStyle.href =
+        '//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/stackoverflow-light.min.css';
+      lightStyle.media = '(prefers-color-scheme: light)';
+      document.body.appendChild(lightStyle);
+
+      // Load script
+      var script = document.createElement('script');
+      script.src =
+        '//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/highlight.min.js';
+
+      if ('onload' in script) {
+        script.onload = callback;
+        script.onerror = callback;
+      } else {
+        // If we can't determine when harness.js loads, use a delay
+        setTimeout(callback, 500);
+      }
+
+      document.body.appendChild(script);
+    } catch (e) {
+      // If anything fails with loading, continue
+      callback();
     }
   }
 
@@ -726,14 +735,23 @@
 
       // Display the code that creates the reusable instance in results
       var reusedInstances = result.info.code.match(
-        /reusableInstances\.([^;]*)/g
+        /reusableInstances\.([^.);]*)/g
       );
+      var addedInstances = [];
+
       if (reusedInstances) {
         for (var i = 0; i < reusedInstances.length; i++) {
           var reusedInstance = reusedInstances[i].replace(
             'reusableInstances.',
             ''
           );
+
+          // De-duplicate instances
+          if (addedInstances.indexOf(reusedInstance) > -1) {
+            continue;
+          }
+          addedInstances.push(reusedInstance);
+
           code =
             reusedInstances[i] +
             ' = ' +
@@ -743,10 +761,20 @@
         }
       }
 
+      var formattedCode;
+      if ('hljs' in self) {
+        formattedCode = hljs.highlight(code, {
+          language: 'js'
+        }).value;
+      }
+
       resultCodeEl.className = 'result-code';
-      resultCodeEl.innerHTML = code
-        .replace(/ /g, '&nbsp;')
-        .replace(/\n/g, '<br>');
+      resultCodeEl.innerHTML = (formattedCode || code).replace(
+        /\n([^\S\r\n]*)/g,
+        function (match, p1) {
+          return '<br>' + p1.replace(/ /g, '&nbsp;');
+        }
+      );
       resultInfoEl.appendChild(resultCodeEl);
     }
 
@@ -754,50 +782,73 @@
     resultsEl.appendChild(resultEl);
   }
 
+  function sendReport(results) {
+    var body = JSON.stringify(results);
+
+    var client;
+    if ('XMLHttpRequest' in self) {
+      client = new XMLHttpRequest();
+    } else if ('ActiveXObject' in self) {
+      client = new ActiveXObject('Microsoft.XMLHTTP');
+    }
+
+    if (!client) {
+      updateStatus(
+        'Cannot upload results: XMLHttpRequest is not supported.',
+        'error-notice'
+      );
+      return;
+    }
+
+    var resultsURL =
+      (location.origin || location.protocol + '//' + location.host) +
+      '/api/results?for=' +
+      encodeURIComponent(location.href);
+
+    client.open('POST', resultsURL);
+    client.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+    client.send(body);
+    client.onreadystatechange = function () {
+      if (client.readyState == 4) {
+        if (client.status >= 200 && client.status <= 299) {
+          document.getElementById('export-download').disabled = false;
+          document.getElementById('export-github').disabled = false;
+          updateStatus('Results uploaded.', 'success-notice');
+        } else {
+          updateStatus(
+            'Failed to upload results: server error.',
+            'error-notice'
+          );
+          consoleLog('Server response: ' + client.response);
+        }
+      }
+    };
+  }
+
   function report(results, hideResults) {
     updateStatus('Tests complete. Posting results to server...');
 
     try {
-      var body = JSON.stringify(results);
+      if ('JSON' in self && 'parse' in JSON) {
+        sendReport(results);
+      } else {
+        // Load JSON polyfill if needed
+        var polyfill = document.createElement('script');
+        polyfill.src = '/resources/json3.min.js';
 
-      var client;
-      if ('XMLHttpRequest' in self) {
-        client = new XMLHttpRequest();
-      } else if ('ActiveXObject' in self) {
-        client = new ActiveXObject('Microsoft.XMLHTTP');
-      }
-
-      if (!client) {
-        updateStatus(
-          'Cannot upload results: XMLHttpRequest is not supported.',
-          'error-notice'
-        );
-        return;
-      }
-
-      var resultsURL =
-        (location.origin || location.protocol + '//' + location.host) +
-        '/api/results?for=' +
-        encodeURIComponent(location.href);
-
-      client.open('POST', resultsURL);
-      client.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
-      client.send(body);
-      client.onreadystatechange = function () {
-        if (client.readyState == 4) {
-          if (client.status >= 200 && client.status <= 299) {
-            document.getElementById('export-download').disabled = false;
-            document.getElementById('export-github').disabled = false;
-            updateStatus('Results uploaded.', 'success-notice');
-          } else {
-            updateStatus(
-              'Failed to upload results: server error.',
-              'error-notice'
-            );
-            console.log('Server response: ' + client.response);
-          }
+        if ('onload' in polyfill) {
+          polyfill.onload = function () {
+            sendReport(results);
+          };
+        } else {
+          // If we can't determine when the polyfill loads, use a delay
+          setTimeout(function () {
+            sendReport(results);
+          }, 500);
         }
-      };
+
+        document.body.appendChild(polyfill);
+      }
     } catch (e) {
       updateStatus('Failed to upload results: client error.', 'error-notice');
       consoleError(e);
@@ -806,9 +857,11 @@
     var resultsEl = document.getElementById('results');
 
     if (resultsEl && !hideResults) {
-      for (var i = 0; i < results.length; i++) {
-        renderReportEl(results[i], resultsEl);
-      }
+      loadHighlightJs(function () {
+        for (var i = 0; i < results.length; i++) {
+          renderReportEl(results[i], resultsEl);
+        }
+      });
     }
   }
 

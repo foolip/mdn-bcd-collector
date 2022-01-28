@@ -33,7 +33,7 @@ const generateReportMap = (allResults) => {
   const result = {};
 
   for (const [browserKey, browserData] of Object.entries(browsers)) {
-    if (!allResults && browserKey == 'nodejs') {
+    if (!allResults && ['nodejs', 'deno'].includes(browserKey)) {
       continue;
     }
 

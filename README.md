@@ -69,8 +69,8 @@ These errors are worth looking out for:
 
 - False negatives, where a test fails to detect support. This results in either an incorrect `false` or support actually going back further than inferred. Common causes are:
 
-  - Missing [interface objects](https://heycam.github.io/webidl/#interface-object). For example, `crypto.subtle` was shipped long before the `SubtleCrypto` interface was [exposed](https://webkit.org/b/165629) in some browsers. Missing interface objects was common in the past, especially for events, but is quite _uncommon_ for APIs introduced after ~2020. See [#7963](https://github.com/mdn/browser-compat-data/pull/7963), [#7986](https://github.com/mdn/browser-compat-data/pull/7986) and [#10837](https://github.com/mdn/browser-compat-data/pull/10837) for examples.
-  - [Attributes](https://heycam.github.io/webidl/#es-attributes) weren't on the prototypes in some older browsers, for example [before Chrome 43](https://github.com/mdn/browser-compat-data/issues/7843). See [#6568](https://github.com/mdn/browser-compat-data/pull/6568#discussion_r479039982) for an example.
+  - Missing [interface objects](https://webidl.spec.whatwg.org/#interface-object). For example, `crypto.subtle` was shipped long before the `SubtleCrypto` interface was [exposed](https://webkit.org/b/165629) in some browsers. Missing interface objects was common in the past, especially for events, but is quite _uncommon_ for APIs introduced after ~2020. See [#7963](https://github.com/mdn/browser-compat-data/pull/7963), [#7986](https://github.com/mdn/browser-compat-data/pull/7986) and [#10837](https://github.com/mdn/browser-compat-data/pull/10837) for examples.
+  - [Attributes](https://webidl.spec.whatwg.org/#es-attributes) weren't on the prototypes in some older browsers, for example [before Chrome 43](https://github.com/mdn/browser-compat-data/issues/7843). See [#6568](https://github.com/mdn/browser-compat-data/pull/6568#discussion_r479039982) for an example.
 
   To guard against this, follow the link to the test and expand the code. A simple `'propertyName' in InterfaceName` test can yield false negatives, so an _instance_ of the type should be created and tested using the [custom tests](https://github.com/foolip/mdn-bcd-collector/blob/main/custom-tests.yaml) mechanism. Ask for this when reviewing, you don't need to create the tests yourself.
 
@@ -180,16 +180,8 @@ npm run clean
 
 ## Release process
 
-These are the manual steps to release and deploy a new version on https://mdn-bcd-collector.appspot.com/:
+To create a release, run the following command:
 
-- Check out the previously tagged commit
-- Run `npm install; npm run build`
-- Run `mv tests.json tests.json.orig`
-- Run `git checkout -b release-x.y.z origin/main`
-- Run `npm install; npm run build`
-- List added tests: `comm -13 <(jq -r 'keys[]' tests.json.orig) <(jq -r 'keys[]' tests.json)`
-- List removed tests: `comm -23 <(jq -r 'keys[]' tests.json.orig) <(jq -r 'keys[]' tests.json)`
-- Look for test changes: `diff -u <(python3 -m json.tool tests.json.orig) <(python3 -m json.tool tests.json)`
-- Bump the version in `package.json` and run `npm install` to update `package-lock.json`
-- Commit the result with a commit message similar to the last release and create a pull request
-- Once the pull request is merged, tag the result as `vx.y.z` and push the tag
+```sh
+npm run release
+```

@@ -6,4 +6,5 @@ generated/
 node_modules/
 secrets.json
 tests.json
+tests.old.json
 .testtmp
