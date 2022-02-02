@@ -349,7 +349,7 @@
         } else {
           consoleWarn('Warning! ' + result.name + ' ran twice!');
         }
-        if (remaining.length && remaining.length <= 20) {
+        if (remaining.length > 0 && remaining.length <= 20) {
           consoleLog('Remaining (' + result.info.exposure + '): ' + remaining);
         } else if (
           (remaining.length >= 50 &&
