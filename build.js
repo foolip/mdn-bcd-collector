@@ -496,6 +496,10 @@ const getExposureSet = (node, scopes) => {
     exposure.add('RTCIdentityProvider');
   }
 
+  // Some specs use "DedicatedWorker" for the exposure while others use
+  // "Worker". We spawn a dedicated worker for the "Worker" exposure.
+  // This code ensures we generate tests for either exposure.
+  // https://github.com/foolip/mdn-bcd-collector/pull/811
   if (exposure.has('DedicatedWorker')) {
     exposure.delete('DedicatedWorker');
     exposure.add('Worker');
