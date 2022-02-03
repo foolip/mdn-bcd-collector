@@ -347,10 +347,6 @@ const flattenIDL = (specIDLs, customIDLs) => {
   // Get all possible scopes
   const scopes = new Set();
   for (const dfn of ast) {
-    const attr = getExtAttr(dfn, 'Global');
-    if (!attr) {
-      continue;
-    }
     // Special case RTCIdentityProviderGlobalScope since it doesn't use the
     // Global extended attribute correctly:
     // https://github.com/w3c/webrtc-identity/pull/36
@@ -358,19 +354,10 @@ const flattenIDL = (specIDLs, customIDLs) => {
       scopes.add('RTCIdentityProvider');
       continue;
     }
-    switch (attr.rhs.type) {
-      case 'identifier':
-        scopes.add(attr.rhs.value);
-        break;
-      case 'identifier-list':
-        for (const {value} of attr.rhs.value) {
-          scopes.add(value);
-        }
-        break;
-      default:
-        throw new Error(
-          `Unable to parse Global extended attribute of ${dfn.name}`
-        );
+
+    const attr = getExtAttrSet(dfn, 'Global', false);
+    for (const s of attr) {
+      scopes.add(s);
     }
   }
 
@@ -459,33 +446,52 @@ const getExtAttr = (node, name) => {
   return node.extAttrs && node.extAttrs.find((i) => i.name === name);
 };
 
-// https://webidl.spec.whatwg.org/#Exposed
-const getExposureSet = (node, scopes) => {
-  // step 6-8 of https://webidl.spec.whatwg.org/#dfn-exposure-set
-  const attr = getExtAttr(node, 'Exposed');
+const getExtAttrSet = (node, name, throwError = true) => {
+  const attr = getExtAttr(node, name);
   if (!attr) {
-    throw new Error(
-      `Exposed extended attribute not found on ${node.type} ${node.name}`
-    );
+    if (throwError) {
+      throw new Error(
+        `${name} extended attribute not found on ${node.type} ${node.name}`
+      );
+    } else {
+      return new Set();
+    }
   }
-  const exposure = new Set();
+
+  const set = new Set();
   switch (attr.rhs.type) {
     case 'identifier':
-      exposure.add(attr.rhs.value);
+      set.add(attr.rhs.value);
       break;
     case 'identifier-list':
       for (const {value} of attr.rhs.value) {
-        exposure.add(value);
+        set.add(value);
       }
       break;
     case '*':
-      for (const value of scopes) {
-        exposure.add(value);
-      }
+      set.add('*');
       break;
     /* istanbul ignore next */
     default:
-      throw new Error(`Unexpected RHS for Exposed extended attribute`);
+      throw new Error(
+        `Unexpected RHS "${attr.rhs.type}" for ${name} extended attribute`
+      );
+  }
+
+  return set;
+};
+
+// https://webidl.spec.whatwg.org/#Exposed
+const getExposureSet = (node, scopes) => {
+  // step 6-8 of https://webidl.spec.whatwg.org/#dfn-exposure-set
+  const exposure = getExtAttrSet(node, 'Exposed');
+
+  // Handle wildcard exposures
+  if (exposure.has('*')) {
+    exposure.remove('*');
+    for (const value of scopes) {
+      exposure.add(value);
+    }
   }
 
   // Special case RTCIdentityProviderGlobalScope since it doesn't use the
