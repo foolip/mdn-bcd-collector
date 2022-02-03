@@ -683,7 +683,7 @@ describe('build', () => {
       const {ast} = flattenIDL(specIDLs, customIDLs);
       const interfaces = ast.filter((dfn) => dfn.type === 'interface');
       const exposureSet = getExposureSet(interfaces[0], scopes);
-      assert.hasAllKeys(exposureSet, scopes);
+      assert.hasAllKeys(exposureSet, [...scopes]);
     });
 
     it('DedicatedWorker remaps to Worker', () => {
