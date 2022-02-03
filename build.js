@@ -345,12 +345,34 @@ const flattenIDL = (specIDLs, customIDLs) => {
   );
 
   // Get all possible scopes
-  const scopes = ast
-    .filter((dfn) => dfn.name && getExtAttr(dfn, 'Global'))
-    .map((dfn) =>
-      dfn.name.replace('DedicatedWorker', 'Worker').replace('GlobalScope', '')
-    );
-  scopes.push('Worklet');
+  const scopes = new Set();
+  for (const dfn of ast) {
+    const attr = getExtAttr(dfn, 'Global');
+    if (!attr) {
+      continue;
+    }
+    // Special case RTCIdentityProviderGlobalScope since it doesn't use the
+    // Global extended attribute correctly:
+    // https://github.com/w3c/webrtc-identity/pull/36
+    if (dfn.name === 'RTCIdentityProviderGlobalScope') {
+      scopes.add('RTCIdentityProvider');
+      continue;
+    }
+    switch (attr.rhs.type) {
+      case 'identifier':
+        scopes.add(attr.rhs.value);
+        break;
+      case 'identifier-list':
+        for (const {value} of attr.rhs.value) {
+          scopes.add(value);
+        }
+        break;
+      default:
+        throw new Error(
+          `Unable to parse Global extended attribute of ${dfn.name}`
+        );
+    }
+  }
 
   return {ast, globals, scopes};
 };
@@ -472,7 +494,7 @@ const getExposureSet = (node, scopes) => {
   }
 
   for (const e of exposure) {
-    if (!scopes.includes(e)) {
+    if (!scopes.has(e)) {
       throw new Error(
         `${node.type} ${node.name} is exposed on ${e} but ${e} is not a valid scope`
       );
