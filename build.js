@@ -348,6 +348,8 @@ const flattenIDL = (specIDLs, customIDLs) => {
   const scopes = ast
     .filter((dfn) => dfn.name && dfn.name.includes('GlobalScope'))
     .map((dfn) => dfn.name.substr(0, dfn.name.length - 'GlobalScope'.length));
+  // There is no 'WindowGlobalScope'
+  scopes.push('Window');
 
   return {ast, globals, scopes};
 };
