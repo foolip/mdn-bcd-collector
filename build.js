@@ -346,9 +346,11 @@ const flattenIDL = (specIDLs, customIDLs) => {
 
   // Get all possible scopes
   const scopes = ast
-    .filter((dfn) => getExtAttr(dfn, 'Global'))
-    .map((dfn) => dfn.name.replace('GlobalScope', ''));
-  scopes.push('Worker', 'Worklet');
+    .filter((dfn) => dfn.name && getExtAttr(dfn, 'Global'))
+    .map((dfn) =>
+      dfn.name.replace('DedicatedWorker', 'Worker').replace('GlobalScope', '')
+    );
+  scopes.push('Worklet');
 
   return {ast, globals, scopes};
 };
