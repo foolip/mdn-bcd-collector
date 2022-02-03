@@ -1,5 +1,4 @@
 import chalk from 'chalk-template';
-import enquirer from 'enquirer';
 import esMain from 'es-main';
 import fs from 'fs-extra';
 import {Listr} from 'listr2';
@@ -63,7 +62,7 @@ const getNewVersion = async (ctx, task) => {
     `${versionParts[0]}.${versionParts[1]}.${versionParts[2] + 1}`
   ];
 
-  ctx.newVersion = await enquirer.prompt([
+  ctx.newVersion = await task.prompt([
     {
       type: 'select',
       name: 'newVersion',
@@ -249,7 +248,7 @@ const main = async () => {
       {
         title: 'Get confirmation to continue',
         task: async (ctx, task) => {
-          const confirm = await enquirer.prompt([
+          const confirm = await task.prompt([
             {
               type: 'confirm',
               name: 'confirm',
