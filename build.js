@@ -488,7 +488,7 @@ const getExposureSet = (node, scopes) => {
 
   // Handle wildcard exposures
   if (exposure.has('*')) {
-    exposure.remove('*');
+    exposure.delete('*');
     for (const value of scopes) {
       exposure.add(value);
     }
