@@ -469,6 +469,15 @@ const getExposureSet = (node, scopes) => {
     exposure.add('Worker');
   }
 
+  for (const e of exposure) {
+    if (!scopes.includes(e)) {
+      console.log(scopes);
+      throw new Error(
+        `${node.type} ${node.name} is exposed on ${e} but ${e} is not a valid scope`
+      );
+    }
+  }
+
   return exposure;
 };
 

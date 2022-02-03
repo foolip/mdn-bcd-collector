@@ -630,7 +630,7 @@ describe('build', () => {
       const interfaces = ast.filter((dfn) => dfn.type === 'interface');
       assert.throws(
         () => {
-          getExposureSet(interfaces[0]);
+          getExposureSet(interfaces[0], scopes);
         },
         Error,
         'Exposed extended attribute not found on interface Dummy'
@@ -695,6 +695,26 @@ describe('build', () => {
       const interfaces = ast.filter((dfn) => dfn.type === 'interface');
       const exposureSet = getExposureSet(interfaces[0], scopes);
       assert.hasAllKeys(exposureSet, ['Worker']);
+    });
+
+    it('invalid exposure', () => {
+      const specIDLs = {
+        first: WebIDL2.parse(
+          `[Exposed=WrongGlobalScope]
+          interface Dummy {
+               readonly attribute boolean imadumdum;
+             };`
+        )
+      };
+      const {ast} = flattenIDL(specIDLs, customIDLs);
+      const interfaces = ast.filter((dfn) => dfn.type === 'interface');
+      assert.throws(
+        () => {
+          getExposureSet(interfaces[0], scopes);
+        },
+        Error,
+        'interface Dummy is exposed on WrongGlobalScope but WrongGlobalScope is not a valid scope'
+      );
     });
   });
 
