@@ -610,6 +610,13 @@ describe('build', () => {
   describe('getExposureSet', () => {
     // Combining spec and custom IDL is not important to these tests.
     const customIDLs = {};
+    const scopes = [
+      'Window',
+      'Worker',
+      'SharedWorker',
+      'ServiceWorker',
+      'AudioWorklet'
+    ];
 
     it('no defined exposure set', () => {
       const specIDLs = {
@@ -641,7 +648,7 @@ describe('build', () => {
       };
       const {ast} = flattenIDL(specIDLs, customIDLs);
       const interfaces = ast.filter((dfn) => dfn.type === 'interface');
-      const exposureSet = getExposureSet(interfaces[0]);
+      const exposureSet = getExposureSet(interfaces[0], scopes);
       assert.hasAllKeys(exposureSet, ['Worker']);
     });
 
@@ -656,8 +663,23 @@ describe('build', () => {
       };
       const {ast} = flattenIDL(specIDLs, customIDLs);
       const interfaces = ast.filter((dfn) => dfn.type === 'interface');
-      const exposureSet = getExposureSet(interfaces[0]);
+      const exposureSet = getExposureSet(interfaces[0], scopes);
       assert.hasAllKeys(exposureSet, ['Window', 'Worker']);
+    });
+
+    it('wildcard exposure', () => {
+      const specIDLs = {
+        first: WebIDL2.parse(
+          `[Exposed=*]
+             interface Dummy {
+               readonly attribute boolean imadumdum;
+             };`
+        )
+      };
+      const {ast} = flattenIDL(specIDLs, customIDLs);
+      const interfaces = ast.filter((dfn) => dfn.type === 'interface');
+      const exposureSet = getExposureSet(interfaces[0], scopes);
+      assert.hasAllKeys(exposureSet, scopes);
     });
 
     it('exposed to DedicatedWorker', () => {
@@ -671,7 +693,7 @@ describe('build', () => {
       };
       const {ast} = flattenIDL(specIDLs, customIDLs);
       const interfaces = ast.filter((dfn) => dfn.type === 'interface');
-      const exposureSet = getExposureSet(interfaces[0]);
+      const exposureSet = getExposureSet(interfaces[0], scopes);
       assert.hasAllKeys(exposureSet, ['Worker']);
     });
   });
