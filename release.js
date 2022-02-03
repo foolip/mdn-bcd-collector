@@ -2,31 +2,25 @@ import chalk from 'chalk-template';
 import esMain from 'es-main';
 import fs from 'fs-extra';
 import {Listr} from 'listr2';
-import NodeGit from 'nodegit';
 import prettier from 'prettier';
 import {fileURLToPath} from 'url';
 
 import {exec} from './scripts.js';
 
-const gitRepo = await NodeGit.Repository.open(
-  fileURLToPath(new URL('.', import.meta.url))
-);
-
-const authorSignature = await NodeGit.Signature.default(gitRepo);
-
-const currentVersion = (
-  await fs.readJson(new URL('./package.json', import.meta.url))
-).version;
+const currentVersion = (await fs.readJson(
+  new URL('./package.json', import.meta.url)
+)).version;
 
 const prepare = () => {
   return [
     {
-      title: 'Checking git status',
-      task: async () => {
-        const status = await gitRepo.getStatus();
-        if (status.length) {
+      title: 'Checking for Git',
+      task: () => {
+        try {
+          exec('git --version');
+        } catch (e) {
           throw new Error(
-            chalk`{red You currently have {bold uncommitted changes}. Please {bold commit} or {bold stash} your changes and try again.}`
+            chalk`{red This script depends on {bold git}. Please {bold install} git using the following instructions:} {blue https://git-scm.com/book/en/v2/Getting-Started-Installing-Git}`
           );
         }
       }
@@ -44,14 +38,25 @@ const prepare = () => {
       }
     },
     {
+      title: 'Checking git status',
+      task: () => {
+        const changes = exec('git status -s');
+        if (changes.length) {
+          throw new Error(
+            chalk`{red You currently have {bold uncommitted changes}. Please {bold commit} or {bold stash} your changes and try again.}`
+          );
+        }
+      }
+    },
+    {
       title: 'Fetching from remote',
-      task: async () => await gitRepo.fetchAll()
+      task: () => exec('git fetch --all')
     }
   ];
 };
 
 const getNewVersion = async (ctx, task) => {
-  const versionParts = currentVersion.split('.').map((x) => Number(x));
+  const versionParts = currentVersion.split('.').map(x => Number(x));
   const newVersions = [
     `${versionParts[0] + 1}.0.0`,
     `${versionParts[0]}.${versionParts[1] + 1}.0`,
@@ -95,8 +100,7 @@ const getTestChanges = () => {
     {
       title: 'Checkout last release',
       task: async () => {
-        const prev = await gitRepo.getReference(`v${currentVersion}`);
-        await gitRepo.checkoutRef(prev);
+        exec(`git checkout v${currentVersion}`);
         exec('npm up @webref/idl @webref/css');
       }
     },
@@ -113,8 +117,7 @@ const getTestChanges = () => {
     {
       title: 'Checkout current release',
       task: async () => {
-        const current = await gitRepo.getReference('refs/remotes/origin/main');
-        await gitRepo.checkoutRef(current);
+        exec('git checkout origin/main');
         exec('npm up @webref/idl @webref/css');
       }
     },
@@ -124,7 +127,7 @@ const getTestChanges = () => {
     },
     {
       title: 'Compare tests',
-      task: async (ctx) => {
+      task: async ctx => {
         const oldTests = await fs.readJson(
           new URL('./tests.old.json', import.meta.url)
         );
@@ -135,10 +138,10 @@ const getTestChanges = () => {
         const oldTestKeys = Object.keys(oldTests);
         const newTestKeys = Object.keys(newTests);
 
-        const added = newTestKeys.filter((k) => !oldTestKeys.includes(k));
-        const removed = oldTestKeys.filter((k) => !newTestKeys.includes(k));
+        const added = newTestKeys.filter(k => !oldTestKeys.includes(k));
+        const removed = oldTestKeys.filter(k => !newTestKeys.includes(k));
         const changed = [];
-        for (const t of newTestKeys.filter((k) => oldTestKeys.includes(k))) {
+        for (const t of newTestKeys.filter(k => oldTestKeys.includes(k))) {
           if (oldTests[t].code != newTests[t].code) {
             changed.push(t);
           }
@@ -161,18 +164,18 @@ const getTestChanges = () => {
   ];
 };
 
-const getGitChanges = async (ctx) => {
-  const revwalk = gitRepo.createRevWalk();
-  revwalk.pushRange(`v${currentVersion}..origin/main`);
-  const commits = await revwalk.getCommits(Infinity);
+const getGitChanges = async ctx => {
+  const commits = exec(
+    `git log --pretty=format:%s v${currentVersion}..origin/main`
+  );
   ctx.commits = commits
-    .map((commit) => commit.summary())
-    .filter((summary) => !summary.startsWith('Bump '))
-    .map((summary) => `- ${summary.replace('<', '&lt;').replace('>', '&gt;')}`)
+    .map(commit => commit.summary())
+    .filter(summary => !summary.startsWith('Bump '))
+    .map(summary => `- ${summary.replace('<', '&lt;').replace('>', '&gt;')}`)
     .join('\n');
 };
 
-const doChangelogUpdate = async (ctx) => {
+const doChangelogUpdate = async ctx => {
   const filepath = new URL('./CHANGELOG.md', import.meta.url);
   const changelog = await fs.readFile(filepath, 'utf8');
   const idx = changelog.indexOf('##');
@@ -189,7 +192,7 @@ const doChangelogUpdate = async (ctx) => {
   await fs.writeFile(filepath, newChangelog, 'utf8');
 };
 
-const doVersionBump = async (newVersion) => {
+const doVersionBump = async newVersion => {
   for (const f of ['./package.json', './package-lock.json']) {
     const filepath = new URL(f, import.meta.url);
     const data = await fs.readJson(filepath);
@@ -198,44 +201,26 @@ const doVersionBump = async (newVersion) => {
   }
 };
 
-const prepareBranch = async (ctx) => {
-  const branchName = `release-${ctx.newVersion}`;
+const prepareBranch = async ctx => {
+  ctx.branchName = `release-${ctx.newVersion}`;
 
-  const commit = await gitRepo.getHeadCommit();
-  const branch = await gitRepo.createBranch(branchName, commit, true);
-  await gitRepo.checkoutBranch(branch);
+  // Create and checkout branch
+  exec(`git branch ${ctx.branchName}`);
+  exec(`git checkout ${ctx.branchName}`);
 
-  const index = await gitRepo.refreshIndex();
-  for (const f of ['package.json', 'package-lock.json', 'CHANGELOG.md']) {
-    await index.addByPath(f);
-  }
-  await index.write();
-  const changes = await index.writeTree();
-
-  const parent = await gitRepo.getHeadCommit();
-
-  await gitRepo.createCommit(
-    'HEAD',
-    authorSignature,
-    authorSignature,
-    `Release ${ctx.newVersion}\n\nRelease v${ctx.newVersion}, generated by \`release.js\`.`,
-    changes,
-    [parent]
+  // Commit
+  exec('git add package.json package-lock.json CHANGELOG.md');
+  exec(
+    `git commit -m "Release ${ctx.newVersion}"" -m "" -m "Release v${ctx.newVersion}, generated by \`release.js\`."`
   );
-
-  ctx.newBranch = branch;
 };
 
-const createPR = async (ctx) => {
-  const branchName = await ctx.newBranch.name();
-  exec(`git push --set-upstream origin ${branchName}`);
+const createPR = async ctx => {
+  exec(`git push --set-upstream origin ${ctx.branchName}`);
   exec('gh pr create -f');
 };
 
 const main = async () => {
-  // Get current head
-  const head = await gitRepo.head();
-
   const tasks = new Listr(
     [
       {
@@ -260,7 +245,7 @@ const main = async () => {
       },
       {
         title: 'Bump version number',
-        task: async (ctx) => await doVersionBump(ctx.newVersion)
+        task: async ctx => await doVersionBump(ctx.newVersion)
       },
       {
         title: 'Get confirmation to continue',
@@ -303,7 +288,11 @@ const main = async () => {
   }
 
   // Restore original head when finished
-  gitRepo.checkoutRef(head);
+  try {
+    exec('git switch -');
+  } catch (e) {
+    // Don't worry if the command fails
+  }
 };
 
 /* istanbul ignore if */
