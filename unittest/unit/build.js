@@ -613,14 +613,14 @@ describe('build', () => {
   describe('getExposureSet', () => {
     // Combining spec and custom IDL is not important to these tests.
     const customIDLs = {};
-    const scopes = [
+    const scopes = new Set([
       'Window',
       'Worker',
       'SharedWorker',
       'ServiceWorker',
       'AudioWorklet',
       'RTCIdentityProvider'
-    ];
+    ]);
 
     it('no defined exposure set', () => {
       const specIDLs = {
@@ -738,13 +738,13 @@ describe('build', () => {
   });
 
   describe('buildIDLTests', () => {
-    const scopes = [
+    const scopes = new Set([
       'Window',
       'Worker',
       'SharedWorker',
       'ServiceWorker',
       'AudioWorklet'
-    ];
+    ]);
 
     it('interface with attribute', () => {
       const ast = WebIDL2.parse(
