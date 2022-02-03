@@ -682,7 +682,7 @@ describe('build', () => {
       assert.hasAllKeys(exposureSet, scopes);
     });
 
-    it('exposed to DedicatedWorker', () => {
+    it('DedicatedWorker remaps to Worker', () => {
       const specIDLs = {
         first: WebIDL2.parse(
           `[Exposed=DedicatedWorker]
@@ -697,10 +697,25 @@ describe('build', () => {
       assert.hasAllKeys(exposureSet, ['Worker']);
     });
 
+    it('"GlobalScope" stripped from exposure set names', () => {
+      const specIDLs = {
+        first: WebIDL2.parse(
+          `[Exposed=AudioWorkletGlobalScope]
+             interface Dummy {
+               readonly attribute boolean imadumdum;
+             };`
+        )
+      };
+      const {ast} = flattenIDL(specIDLs, customIDLs);
+      const interfaces = ast.filter((dfn) => dfn.type === 'interface');
+      const exposureSet = getExposureSet(interfaces[0], scopes);
+      assert.hasAllKeys(exposureSet, ['AudioWorklet']);
+    });
+
     it('invalid exposure', () => {
       const specIDLs = {
         first: WebIDL2.parse(
-          `[Exposed=WrongGlobalScope]
+          `[Exposed=SomeWrongScope]
           interface Dummy {
                readonly attribute boolean imadumdum;
              };`
@@ -713,7 +728,7 @@ describe('build', () => {
           getExposureSet(interfaces[0], scopes);
         },
         Error,
-        'interface Dummy is exposed on WrongGlobalScope but WrongGlobalScope is not a valid scope'
+        'interface Dummy is exposed on SomeWrongScope but SomeWrongScope is not a valid scope'
       );
     });
   });
