@@ -8,44 +8,46 @@ See [DESIGN.md](./DESIGN.md) for details of how this service works.
 
 ## Setup
 
+This project uses `yarn` v3 as its package manager. Please check out the [`yarn` installation guide](https://yarnpkg.com/getting-started/install) if you have not already configured it.
+
 ```sh
-npm install
+yarn
 ```
 
 ## Updating BCD using the results
 
-Given a checkout of [BCD](https://github.com/mdn/browser-compat-data) at `../browser-compat-data` and a checkout of [collector results](https://github.com/foolip/mdn-bcd-results) at `../mdn-bcd-results`, `npm run update-bcd` can be used to update existing BCD entries.
+Given a checkout of [BCD](https://github.com/mdn/browser-compat-data) at `../browser-compat-data` and a checkout of [collector results](https://github.com/foolip/mdn-bcd-results) at `../mdn-bcd-results`, `yarn update-bcd` can be used to update existing BCD entries.
 
 If you have results from a browser not yet in BCD, first add the release in `../browser-compat-data/browsers/`. This is because the full version (from the `User-Agent` header) is mapped to BCD browser release as part of the processing.
 
 Updating all data:
 
 ```sh
-npm run update-bcd
+yarn update-bcd
 ```
 
 Updating a specific entry, e.g., the `appendChild()` method on `Node`:
 
 ```sh
-npm run update-bcd -- --path=api.Node.appendChild
+yarn update-bcd -- --path=api.Node.appendChild
 ```
 
 Updating paths matched with wildcards, e.g., everything related to WebRTC:
 
 ```sh
-npm run update-bcd -- --path=api.RTC*
+yarn update-bcd -- --path=api.RTC*
 ```
 
 The `--browser` argument can be used to only update data for one or more browsers:
 
 ```sh
-npm run update-bcd -- --browser=safari --browser=safari_ios
+yarn update-bcd -- --browser=safari --browser=safari_ios
 ```
 
 The `--release` arguments can be used to only update data for a specific browser release, e.g., Firefox 84:
 
 ```sh
-npm run update-bcd -- --browser=firefox --release=84
+yarn update-bcd -- --browser=firefox --release=84
 ```
 
 This will only make changes that set either `version_added` or `version_removed` to "84".
@@ -85,7 +87,7 @@ These errors are worth looking out for:
 ## Running the server locally
 
 ```sh
-npm run start-dev
+yarn start-dev
 ```
 
 (`start-dev`, as opposed to `start`, will automatically rebuild the tests and reload the server on file changes.)
@@ -93,7 +95,7 @@ npm run start-dev
 To also handle HTTPS traffic, use the `--https-cert` and `--https-key` arguments:
 
 ```sh
-npm start -- --https-cert=my-cert.pem --https-key=my-cert.key
+yarn start -- --https-cert=my-cert.pem --https-key=my-cert.key
 ```
 
 Test certificates and instructions for generating certificates can be found in [web-platform-tests](https://github.com/web-platform-tests/wpt/tree/master/tools/certs).
@@ -101,7 +103,7 @@ Test certificates and instructions for generating certificates can be found in [
 ## Deploying to App Engine
 
 ```sh
-npm run deploy
+yarn deploy
 ```
 
 This step is performed automatically when the `main` branch is updated:
@@ -150,32 +152,32 @@ You may use other Selenium hosts, but please be aware that they have not been te
 To test using the latest deployed version, run:
 
 ```sh
-npm run selenium
+yarn selenium
 ```
 
 You can also limit the browsers to test by defining browsers as arguments:
 
 ```sh
-npm run selenium chrome
-npm run selenium edge ie
+yarn selenium chrome
+yarn selenium edge ie
 ```
 
 ## Running the unit tests and linter
 
 ```sh
-npm test
+yarn test
 ```
 
 Code coverage reports can be viewed in a browser by running:
 
 ```sh
-npm run coverage
+yarn coverage
 ```
 
 ## Cleaning up generated files
 
 ```sh
-npm run clean
+yarn clean
 ```
 
 ## Release process
@@ -183,5 +185,5 @@ npm run clean
 To create a release, run the following command:
 
 ```sh
-npm run release
+yarn release
 ```

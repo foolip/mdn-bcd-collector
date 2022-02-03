@@ -97,13 +97,13 @@ const getTestChanges = () => {
       task: async () => {
         const prev = await gitRepo.getReference(`v${currentVersion}`);
         await gitRepo.checkoutRef(prev);
-        exec('npm up @webref/idl @webref/css');
+        exec('yarn upgrade @webref/idl @webref/css');
       }
     },
     {
       title: 'Build tests from last release',
       task: async () => {
-        exec('npm run build');
+        exec('yarn build');
         await fs.rename(
           new URL('./tests.json', import.meta.url),
           new URL('./tests.old.json', import.meta.url)
@@ -115,12 +115,12 @@ const getTestChanges = () => {
       task: async () => {
         const current = await gitRepo.getReference('refs/remotes/origin/main');
         await gitRepo.checkoutRef(current);
-        exec('npm up @webref/idl @webref/css');
+        exec('yarn upgrade @webref/idl @webref/css');
       }
     },
     {
       title: 'Build tests from current release',
-      task: () => exec('npm run build')
+      task: () => exec('yarn build')
     },
     {
       title: 'Compare tests',

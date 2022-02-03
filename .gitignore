@@ -4,6 +4,13 @@ coverage.lcov
 coverage/
 generated/
 node_modules/
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
 secrets.json
 tests.json
 tests.old.json
