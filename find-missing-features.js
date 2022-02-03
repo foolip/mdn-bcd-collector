@@ -120,7 +120,7 @@ const main = (bcd, tests) => {
         .option('direction', {
           alias: 'd',
           describe:
-            'Which direction to find missing entries from ("a-from-b" will check what is in a that is missing from b)',
+            'Which direction to find missing entries from ("a-from-b" will check what is missing in a but present in b)',
           choices: ['bcd-from-collector', 'collector-from-bcd'],
           nargs: 1,
           type: 'string',

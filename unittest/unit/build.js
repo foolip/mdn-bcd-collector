@@ -904,6 +904,10 @@ describe('build', () => {
           code: '"DoubleMap" in self',
           exposure: ['Window']
         },
+        'api.DoubleMap.@@iterator': {
+          code: '"Symbol" in self && "iterator" in Symbol && Symbol.iterator in DoubleMap.prototype',
+          exposure: ['Window']
+        },
         'api.DoubleMap.clear': {
           code: '"clear" in DoubleMap.prototype',
           exposure: ['Window']
@@ -957,6 +961,10 @@ describe('build', () => {
       assert.deepEqual(buildIDLTests(ast, []), {
         'api.DoubleSet': {
           code: '"DoubleSet" in self',
+          exposure: ['Window']
+        },
+        'api.DoubleSet.@@iterator': {
+          code: '"Symbol" in self && "iterator" in Symbol && Symbol.iterator in DoubleSet.prototype',
           exposure: ['Window']
         },
         'api.DoubleSet.add': {
