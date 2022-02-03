@@ -471,11 +471,11 @@ const getExposureSet = (node, scopes) => {
   const exposure = new Set();
   switch (attr.rhs.type) {
     case 'identifier':
-      exposure.add(attr.rhs.value.replace('GlobalScope', ''));
+      exposure.add(attr.rhs.value);
       break;
     case 'identifier-list':
       for (const {value} of attr.rhs.value) {
-        exposure.add(value.replace('GlobalScope', ''));
+        exposure.add(value);
       }
       break;
     case '*':
@@ -486,6 +486,14 @@ const getExposureSet = (node, scopes) => {
     /* istanbul ignore next */
     default:
       throw new Error(`Unexpected RHS for Exposed extended attribute`);
+  }
+
+  // Special case RTCIdentityProviderGlobalScope since it doesn't use the
+  // Exposed extended attribute correctly:
+  // https://github.com/w3c/webrtc-identity/pull/36
+  if (exposure.has('RTCIdentityProviderGlobalScope')) {
+    exposure.delete('RTCIdentityProviderGlobalScope');
+    exposure.add('RTCIdentityProvider');
   }
 
   if (exposure.has('DedicatedWorker')) {
