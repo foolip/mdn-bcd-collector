@@ -344,7 +344,12 @@ const flattenIDL = (specIDLs, customIDLs) => {
     (dfn) => dfn.type !== 'includes' && dfn.type !== 'interface mixin'
   );
 
-  return {ast, globals};
+  // Get all possible scopes
+  const scopes = ast
+    .filter((dfn) => dfn.name && dfn.name.includes('GlobalScope'))
+    .map((dfn) => dfn.name.substr(0, dfn.name.length - 'GlobalScope'.length));
+
+  return {ast, globals, scopes};
 };
 
 const flattenMembers = (iface) => {
@@ -430,7 +435,7 @@ const getExtAttr = (node, name) => {
 };
 
 // https://webidl.spec.whatwg.org/#Exposed
-const getExposureSet = (node) => {
+const getExposureSet = (node, scopes) => {
   // step 6-8 of https://webidl.spec.whatwg.org/#dfn-exposure-set
   const attr = getExtAttr(node, 'Exposed');
   if (!attr) {
@@ -449,12 +454,7 @@ const getExposureSet = (node) => {
       }
       break;
     case '*':
-      for (const value of [
-        'Window',
-        'Worker',
-        'SharedWorker',
-        'ServiceWorker'
-      ]) {
+      for (const value of scopes) {
         exposure.add(value);
       }
       break;
@@ -636,7 +636,7 @@ const buildIDLMemberTests = (
   return tests;
 };
 
-const buildIDLTests = (ast, globals) => {
+const buildIDLTests = (ast, globals, scopes) => {
   const tests = {};
 
   const interfaces = ast.filter((dfn) => {
@@ -652,7 +652,7 @@ const buildIDLTests = (ast, globals) => {
       continue;
     }
 
-    const exposureSet = getExposureSet(iface);
+    const exposureSet = getExposureSet(iface, scopes);
     const isGlobal = !!getExtAttr(iface, 'Global');
     const customIfaceTest = getCustomTestAPI(iface.name);
     const resources = getCustomResourcesAPI(iface.name);
@@ -711,9 +711,9 @@ const buildIDLTests = (ast, globals) => {
 };
 
 const buildIDL = (specIDLs, customIDLs) => {
-  const {ast, globals} = flattenIDL(specIDLs, customIDLs);
+  const {ast, globals, scopes} = flattenIDL(specIDLs, customIDLs);
   validateIDL(ast);
-  return buildIDLTests(ast, globals);
+  return buildIDLTests(ast, globals, scopes);
 };
 
 // https://drafts.csswg.org/cssom/#css-property-to-idl-attribute
