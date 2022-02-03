@@ -449,11 +449,11 @@ const getExposureSet = (node, scopes) => {
   const exposure = new Set();
   switch (attr.rhs.type) {
     case 'identifier':
-      exposure.add(attr.rhs.value);
+      exposure.add(attr.rhs.value.replace('GlobalScope', ''));
       break;
     case 'identifier-list':
       for (const {value} of attr.rhs.value) {
-        exposure.add(value);
+        exposure.add(value.replace('GlobalScope', ''));
       }
       break;
     case '*':
