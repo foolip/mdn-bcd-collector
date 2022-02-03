@@ -618,7 +618,8 @@ describe('build', () => {
       'Worker',
       'SharedWorker',
       'ServiceWorker',
-      'AudioWorklet'
+      'AudioWorklet',
+      'RTCIdentityProvider'
     ];
 
     it('no defined exposure set', () => {
@@ -700,10 +701,10 @@ describe('build', () => {
       assert.hasAllKeys(exposureSet, ['Worker']);
     });
 
-    it('"GlobalScope" stripped from exposure set names', () => {
+    it('Special case for RTCIdentityProviderGlobalScope', () => {
       const specIDLs = {
         first: WebIDL2.parse(
-          `[Exposed=AudioWorkletGlobalScope]
+          `[Exposed=RTCIdentityProviderGlobalScope]
              interface Dummy {
                readonly attribute boolean imadumdum;
              };`
@@ -712,7 +713,7 @@ describe('build', () => {
       const {ast} = flattenIDL(specIDLs, customIDLs);
       const interfaces = ast.filter((dfn) => dfn.type === 'interface');
       const exposureSet = getExposureSet(interfaces[0], scopes);
-      assert.hasAllKeys(exposureSet, ['AudioWorklet']);
+      assert.hasAllKeys(exposureSet, ['RTCIdentityProvider']);
     });
 
     it('invalid exposure', () => {
