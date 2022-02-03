@@ -3,13 +3,12 @@ import esMain from 'es-main';
 import fs from 'fs-extra';
 import {Listr} from 'listr2';
 import prettier from 'prettier';
-import {fileURLToPath} from 'url';
 
 import {exec} from './scripts.js';
 
-const currentVersion = (await fs.readJson(
-  new URL('./package.json', import.meta.url)
-)).version;
+const currentVersion = (
+  await fs.readJson(new URL('./package.json', import.meta.url))
+).version;
 
 const prepare = () => {
   return [
@@ -56,7 +55,7 @@ const prepare = () => {
 };
 
 const getNewVersion = async (ctx, task) => {
-  const versionParts = currentVersion.split('.').map(x => Number(x));
+  const versionParts = currentVersion.split('.').map((x) => Number(x));
   const newVersions = [
     `${versionParts[0] + 1}.0.0`,
     `${versionParts[0]}.${versionParts[1] + 1}.0`,
@@ -127,7 +126,7 @@ const getTestChanges = () => {
     },
     {
       title: 'Compare tests',
-      task: async ctx => {
+      task: async (ctx) => {
         const oldTests = await fs.readJson(
           new URL('./tests.old.json', import.meta.url)
         );
@@ -138,10 +137,10 @@ const getTestChanges = () => {
         const oldTestKeys = Object.keys(oldTests);
         const newTestKeys = Object.keys(newTests);
 
-        const added = newTestKeys.filter(k => !oldTestKeys.includes(k));
-        const removed = oldTestKeys.filter(k => !newTestKeys.includes(k));
+        const added = newTestKeys.filter((k) => !oldTestKeys.includes(k));
+        const removed = oldTestKeys.filter((k) => !newTestKeys.includes(k));
         const changed = [];
-        for (const t of newTestKeys.filter(k => oldTestKeys.includes(k))) {
+        for (const t of newTestKeys.filter((k) => oldTestKeys.includes(k))) {
           if (oldTests[t].code != newTests[t].code) {
             changed.push(t);
           }
@@ -164,18 +163,18 @@ const getTestChanges = () => {
   ];
 };
 
-const getGitChanges = async ctx => {
+const getGitChanges = async (ctx) => {
   const commits = exec(
     `git log --pretty=format:%s v${currentVersion}..origin/main`
   );
   ctx.commits = commits
-    .map(commit => commit.summary())
-    .filter(summary => !summary.startsWith('Bump '))
-    .map(summary => `- ${summary.replace('<', '&lt;').replace('>', '&gt;')}`)
+    .map((commit) => commit.summary())
+    .filter((summary) => !summary.startsWith('Bump '))
+    .map((summary) => `- ${summary.replace('<', '&lt;').replace('>', '&gt;')}`)
     .join('\n');
 };
 
-const doChangelogUpdate = async ctx => {
+const doChangelogUpdate = async (ctx) => {
   const filepath = new URL('./CHANGELOG.md', import.meta.url);
   const changelog = await fs.readFile(filepath, 'utf8');
   const idx = changelog.indexOf('##');
@@ -192,7 +191,7 @@ const doChangelogUpdate = async ctx => {
   await fs.writeFile(filepath, newChangelog, 'utf8');
 };
 
-const doVersionBump = async newVersion => {
+const doVersionBump = async (newVersion) => {
   for (const f of ['./package.json', './package-lock.json']) {
     const filepath = new URL(f, import.meta.url);
     const data = await fs.readJson(filepath);
@@ -201,7 +200,7 @@ const doVersionBump = async newVersion => {
   }
 };
 
-const prepareBranch = async ctx => {
+const prepareBranch = async (ctx) => {
   ctx.branchName = `release-${ctx.newVersion}`;
 
   // Create and checkout branch
@@ -215,7 +214,7 @@ const prepareBranch = async ctx => {
   );
 };
 
-const createPR = async ctx => {
+const createPR = async (ctx) => {
   exec(`git push --set-upstream origin ${ctx.branchName}`);
   exec('gh pr create -f');
 };
@@ -245,7 +244,7 @@ const main = async () => {
       },
       {
         title: 'Bump version number',
-        task: async ctx => await doVersionBump(ctx.newVersion)
+        task: async (ctx) => await doVersionBump(ctx.newVersion)
       },
       {
         title: 'Get confirmation to continue',
