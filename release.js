@@ -165,11 +165,10 @@ const getTestChanges = () => {
 };
 
 const getGitChanges = async (ctx) => {
-  const commits = exec(
-    `git log --pretty=format:%s v${currentVersion}..origin/main`
-  );
+  const commits = String(
+    exec(`git log --pretty=format:%s v${currentVersion}..origin/main`)
+  ).split('\n');
   ctx.commits = commits
-    .map((commit) => commit.summary())
     .filter((summary) => !summary.startsWith('Bump '))
     .map((summary) => `- ${summary.replace('<', '&lt;').replace('>', '&gt;')}`)
     .join('\n');
