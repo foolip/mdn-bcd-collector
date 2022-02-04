@@ -26,7 +26,6 @@ export const exec = (cmd, env, pipe = true) => {
   return childProcess.execSync(cmd, {env, stdio: pipe ? 'pipe' : 'inherit'});
 };
 
-/* c8 ignore start */
 const prepare = () => {
   // Copy secrets.sample.json to secrets.json if needed
   const secretsPath = new URL('./secrets.json', import.meta.url);
@@ -73,4 +72,3 @@ if (esMain(import.meta)) {
       console.error(`Unknown command ${argv.command}!`);
   }
 }
-/* c8 ignore stop */
