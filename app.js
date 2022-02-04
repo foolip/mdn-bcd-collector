@@ -166,6 +166,7 @@ app.get('/', (req, res) => {
   });
 });
 
+/* c8 ignore start */
 app.get('/download/:filename', (req, res, next) => {
   storage
     .readFile(req.params.filename)
@@ -214,6 +215,7 @@ app.all('/export', (req, res, next) => {
     })
     .catch(next);
 });
+/* c8 ignore stop */
 
 app.all('/tests/*', (req, res) => {
   const ident = req.params['0'].replace(/\//g, '.');
@@ -245,7 +247,7 @@ app.use((req, res) => {
   });
 });
 
-/* istanbul ignore if */
+/* c8 ignore start */
 if (esMain(import.meta)) {
   const {argv} = yargs(hideBin(process.argv)).command(
     '$0',
@@ -285,5 +287,6 @@ if (esMain(import.meta)) {
   }
   logger.info('Press Ctrl+C to quit.');
 }
+/* c8 ignore stop */
 
 export {app, appVersion as version};
