@@ -822,7 +822,7 @@ const buildJS = (customJS) => {
   return tests;
 };
 
-/* istanbul ignore next */
+/* c8 ignore start */
 const copyResources = async () => {
   const resources = [
     ['json3/lib/json3.min.js', 'resources'],
@@ -865,7 +865,6 @@ const copyResources = async () => {
   }
 };
 
-/* istanbul ignore next */
 const generateCSS = async () => {
   const scssPath = fileURLToPath(new URL('./style.scss', import.meta.url));
   const outPath = path.join(generatedDir, 'resources', 'style.css');
@@ -876,7 +875,6 @@ const generateCSS = async () => {
   await fs.writeFile(outPath, result.css.toString(), 'utf8');
 };
 
-/* istanbul ignore next */
 const build = async (customIDL, customCSS) => {
   const specCSS = await css.listAll();
   const specIDLs = await idl.parseAll();
@@ -890,10 +888,10 @@ const build = async (customIDL, customCSS) => {
   await generateCSS();
 };
 
-/* istanbul ignore if */
 if (esMain(import.meta)) {
   await build(customIDL, customCSS);
 }
+/* c8 ignore stop */
 
 export {
   getCustomTestAPI,
