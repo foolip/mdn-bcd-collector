@@ -132,6 +132,29 @@ describe('build', () => {
       });
     });
 
+    describe('callback-based custom tests', () => {
+      it('interface', () => {
+        assert.equal(
+          getCustomTestAPI('callback'),
+          "(function() {\n  function onsuccess(res) {\n    callback(res.result);\n  }\n  function callback(instance) {\n    try {\n      success(!!instance);\n    } catch(e) {\n      fail(e);\n    }\n  };\n  return 'callback';\n})();"
+        );
+      });
+
+      it('member', () => {
+        assert.equal(
+          getCustomTestAPI('callback', 'bar'),
+          "(function() {\n  function onsuccess(res) {\n    callback(res.result);\n  }\n  function callback(instance) {\n    try {\n      success('bar' in instance);\n    } catch(e) {\n      fail(e);\n    }\n  };\n  return 'callback';\n})();"
+        );
+      });
+
+      it('interface with import', () => {
+        assert.equal(
+          getCustomTestAPI('newcallback'),
+          "(function() {\n  function onsuccess(res) {\n  c(res.result);\n}\n  function c(result) {\n    callback(result);\n  }\n  function callback(instance) {\n    try {\n      success(!!instance);\n    } catch(e) {\n      fail(e);\n    }\n  };\n  return 'callback';\n})();"
+        );
+      });
+    });
+
     describe('import other test', () => {
       it('valid import', () => {
         assert.equal(

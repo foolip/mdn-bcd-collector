@@ -45,6 +45,17 @@ api:
     __base: |-
       <%api.promise:p%>
       var promise = p.then(function() {});
+  callback:
+    __base: |-
+      function onsuccess(res) {
+        callback(res.result);
+      }
+  newcallback:
+    __base: |-
+      <%api.callback:c%>
+      function c(result) {
+        callback(result);
+      }
   audiocontext:
     __resources:
       - audio-blip
