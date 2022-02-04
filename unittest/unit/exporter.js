@@ -147,8 +147,15 @@ describe('GitHub export', () => {
     });
   });
 
-  it('no auth token', async () => {
+  it('no Octokit', async () => {
     expect(exportAsPR(REPORTS[0].report)).to.be.rejectedWith(
+      Error,
+      '"octokit" must be defined'
+    );
+  });
+
+  it('no auth token', async () => {
+    expect(exportAsPR(REPORTS[0].report, octokit)).to.be.rejectedWith(
       Error,
       'Octokit authentication failure'
     );
