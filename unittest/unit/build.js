@@ -653,6 +653,26 @@ describe('build', () => {
       );
     });
 
+    it('invalid exposure set', () => {
+      const specIDLs = {
+        first: WebIDL2.parse(
+          `[Exposed=40]
+          interface Dummy {
+               readonly attribute boolean imadumdum;
+             };`
+        )
+      };
+      const {ast} = flattenIDL(specIDLs, customIDLs);
+      const interfaces = ast.filter((dfn) => dfn.type === 'interface');
+      assert.throws(
+        () => {
+          getExposureSet(interfaces[0]);
+        },
+        Error,
+        'Unexpected RHS for Exposed extended attribute'
+      );
+    });
+
     it('single exposure', () => {
       const specIDLs = {
         first: WebIDL2.parse(
