@@ -519,7 +519,7 @@ const runAll = async (limitBrowsers, oses, nonConcurrent, reverse) => {
   await taskrun.run({testenv});
 };
 
-/* istanbul ignore if */
+/* c8 ignore start */
 if (esMain(import.meta)) {
   const {argv} = yargs(hideBin(process.argv)).command(
     '$0 [browser..]',
@@ -554,3 +554,4 @@ if (esMain(import.meta)) {
 
   await runAll(argv.browser, argv.os, argv.nonConcurrent, argv.reverse);
 }
+/* c8 ignore stop */

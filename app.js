@@ -43,7 +43,7 @@ const appVersion =
     (await fs.readJson(new URL('./package.json', import.meta.url))).version :
     'Dev';
 
-/* istanbul ignore next */
+/* c8 ignore start */
 const secrets = await fs.readJson(
   new URL(
     process.env.NODE_ENV === 'test' ?
@@ -52,6 +52,7 @@ const secrets = await fs.readJson(
     import.meta.url
   )
 );
+/* c8 ignore stop */
 
 const tests = new Tests({
   tests: await fs.readJson(new URL('./tests.json', import.meta.url)),

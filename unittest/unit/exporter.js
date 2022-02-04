@@ -132,6 +132,9 @@ describe('GitHub export', () => {
   });
 
   it('no auth token', async () => {
-    expect(exporter.exportAsPR(REPORTS[0].report)).to.be.rejectedWith(Error);
+    expect(exporter.exportAsPR(REPORTS[0].report)).to.be.rejectedWith(
+      Error,
+      'Octokit authentication failure'
+    );
   });
 });

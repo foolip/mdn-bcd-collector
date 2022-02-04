@@ -119,7 +119,7 @@ const main = async (argv) => {
   }
 };
 
-/* istanbul ignore if */
+/* c8 ignore start */
 if (esMain(import.meta)) {
   const {argv} = yargs(hideBin(process.argv)).command(
     '$0 [reports..]',
@@ -148,5 +148,6 @@ if (esMain(import.meta)) {
 
   await main(argv);
 }
+/* c8 ignore stop */
 
 export default findMissingResults;

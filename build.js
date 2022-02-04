@@ -26,7 +26,7 @@ import * as YAML from 'yaml';
 
 import customIDL from './custom-idl/index.js';
 
-/* istanbul ignore next */
+/* c8 ignore start */
 const customTests = YAML.parse(
   await fs.readFile(
     new URL(
@@ -38,6 +38,7 @@ const customTests = YAML.parse(
     'utf8'
   )
 );
+/* c8 ignore stop */
 
 const customCSS = await fs.readJson(
   new URL('./custom-css.json', import.meta.url)
@@ -448,7 +449,6 @@ const getExposureSet = (node) => {
         globals.add(value);
       }
       break;
-    /* istanbul ignore next */
     default:
       throw new Error(`Unexpected RHS for Exposed extended attribute`);
   }

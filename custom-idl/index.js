@@ -25,10 +25,11 @@ const parseIDL = async () => {
   files.sort();
   const results = {};
   for (const file of files) {
-    /* istanbul ignore next */
+    /* c8 ignore next 3 */
     if (path.extname(file) !== '.idl') {
       continue;
     }
+
     const name = path.parse(file).name;
     const text = await fs.readFile(
       new URL(`./${file}`, import.meta.url),

@@ -26,6 +26,7 @@ export const exec = (cmd, env, pipe = true) => {
   return childProcess.execSync(cmd, {env, stdio: pipe ? 'pipe' : 'inherit'});
 };
 
+/* c8 ignore start */
 const prepare = () => {
   // Copy secrets.sample.json to secrets.json if needed
   const secretsPath = new URL('./secrets.json', import.meta.url);
@@ -44,7 +45,6 @@ const prepare = () => {
   exec('node install.js', {PUPPETEER_PRODUCT: 'firefox'}, false);
 };
 
-/* istanbul ignore if */
 if (esMain(import.meta)) {
   const {argv} = yargs(hideBin(process.argv)).command(
     '$0 <command>',
@@ -73,3 +73,4 @@ if (esMain(import.meta)) {
       console.error(`Unknown command ${argv.command}!`);
   }
 }
+/* c8 ignore stop */

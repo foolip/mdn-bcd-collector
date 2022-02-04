@@ -14,19 +14,19 @@
 
 'use strict';
 
-import winston from "winston";
-import {LoggingWinston} from "@google-cloud/logging-winston";
-
+import winston from 'winston';
+import {LoggingWinston} from '@google-cloud/logging-winston';
 
 const getTransport = () => {
-  /* istanbul ignore if */
+  /* c8 ignore next 3 */
   if (process.env.GOOGLE_APPLICATION_CREDENTIALS) {
     return new LoggingWinston();
   }
+
   return new winston.transports.Console({
     format: winston.format.combine(
-        winston.format.colorize(),
-        winston.format.simple()
+      winston.format.colorize(),
+      winston.format.simple()
     )
   });
 };
