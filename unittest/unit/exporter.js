@@ -21,7 +21,7 @@ chai.use(chaiAsPromised);
 import sinon from 'sinon';
 import {Octokit} from '@octokit/rest';
 
-import * as exporter from '../../exporter.js';
+import {exportAsPR} from '../../exporter.js';
 
 const REPORTS = [
   {
@@ -33,7 +33,8 @@ const REPORTS = [
     },
     expected: {
       slug: '1.2.3-safari-12.0-mac-os-10.14-cadc34e83f',
-      title: 'Results from Safari 12 / Mac OS 10.14 / Collector v1.2.3'
+      title: 'Results from Safari 12 / Mac OS 10.14 / Collector v1.2.3',
+      body: 'User Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_14) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/12.0 Safari/605.1.15\nBrowser: Safari 12 (on Mac OS 10.14)\nHash Digest: cadc34e83f'
     }
   },
   {
@@ -45,7 +46,8 @@ const REPORTS = [
     },
     expected: {
       slug: 'dev-chrome-86.0.4240.198-mac-os-11.0.0-31072b9b56',
-      title: 'Results from Chrome 86 / Mac OS 11.0.0 / Collector vDev'
+      title: 'Results from Chrome 86 / Mac OS 11.0.0 / Collector vDev',
+      body: 'User Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 11_0_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36\nBrowser: Chrome 86 (on Mac OS 11.0.0)\nHash Digest: 31072b9b56\n\n**WARNING:** this PR was created from a development/staging version!'
     }
   },
   {
@@ -57,7 +59,21 @@ const REPORTS = [
     },
     expected: {
       slug: 'dev-samsunginternet-android-12.1-android-11-d425ab14a8',
-      title: 'Results from Samsung Internet 12.1 / Android 11 / Collector vDev'
+      title: 'Results from Samsung Internet 12.1 / Android 11 / Collector vDev',
+      body: 'User Agent: Mozilla/5.0 (Linux; Android 11; Pixel 2) AppleWebKit/537.36 (KHTML, like Gecko) SamsungBrowser/12.1 Chrome/79.0.3945.136 Mobile Safari/537.36\nBrowser: Samsung Internet 12.1 (on Android 11)\nHash Digest: d425ab14a8\n\n**WARNING:** this PR was created from a development/staging version!'
+    }
+  },
+  {
+    report: {
+      __version: 'Dev',
+      results: {},
+      userAgent:
+        'Mozilla/5.0 (Macintosh; Intel Mac OS X 11_0_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/800.0.1.2 Safari/537.36'
+    },
+    expected: {
+      slug: 'dev-chrome-800.0.1.2-mac-os-11.0.0-ba1d3dabc2',
+      title: 'Results from Chrome 800.0 / Mac OS 11.0.0 / Collector vDev',
+      body: 'User Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 11_0_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/800.0.1.2 Safari/537.36\nBrowser: Chrome 800.0 (on Mac OS 11.0.0) - **Not in BCD**\nHash Digest: ba1d3dabc2\n\n**WARNING:** this PR was created from a development/staging version!'
     }
   }
 ];
@@ -108,7 +124,7 @@ describe('GitHub export', () => {
             repo: 'mdn-bcd-results',
             title: expected.title,
             head: `collector/${expected.slug}`,
-            body: exporter.createBody(exporter.getReportMeta(report)),
+            body: expected.body,
             base: 'main'
           })
           .resolves({
@@ -117,7 +133,7 @@ describe('GitHub export', () => {
             }
           });
 
-        const result = await exporter.exportAsPR(report, octokit);
+        const result = await exportAsPR(report, octokit);
 
         assert.deepEqual(result, {
           filename: `${expected.slug}.json`,
@@ -132,7 +148,7 @@ describe('GitHub export', () => {
   });
 
   it('no auth token', async () => {
-    expect(exporter.exportAsPR(REPORTS[0].report)).to.be.rejectedWith(
+    expect(exportAsPR(REPORTS[0].report)).to.be.rejectedWith(
       Error,
       'Octokit authentication failure'
     );
