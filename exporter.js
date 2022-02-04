@@ -59,7 +59,8 @@ const getReportMeta = (report) => {
     title,
     slug,
     filename,
-    branch
+    branch,
+    version
   };
 };
 
