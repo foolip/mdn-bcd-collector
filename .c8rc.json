@@ -1,6 +1,7 @@
 {
   "all": true,
   "exclude": [
+    "**/.nyc_output/**",
     "**/generated/**",
     "**/unittest/**",
     "**/coverage/**",
