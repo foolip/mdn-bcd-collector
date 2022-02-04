@@ -355,9 +355,11 @@ const flattenIDL = (specIDLs, customIDLs) => {
       continue;
     }
 
-    const attr = getExtAttrSet(dfn, 'Global', false);
-    for (const s of attr) {
-      scopes.add(s);
+    const attr = getExtAttrSet(dfn, 'Global');
+    if (attr) {
+      for (const s of attr) {
+        scopes.add(s);
+      }
     }
   }
 
@@ -446,16 +448,10 @@ const getExtAttr = (node, name) => {
   return node.extAttrs && node.extAttrs.find((i) => i.name === name);
 };
 
-const getExtAttrSet = (node, name, throwError = true) => {
+const getExtAttrSet = (node, name) => {
   const attr = getExtAttr(node, name);
   if (!attr) {
-    if (throwError) {
-      throw new Error(
-        `${name} extended attribute not found on ${node.type} ${node.name}`
-      );
-    } else {
-      return new Set();
-    }
+    return null;
   }
 
   const set = new Set();
@@ -485,6 +481,11 @@ const getExtAttrSet = (node, name, throwError = true) => {
 const getExposureSet = (node, scopes) => {
   // step 6-8 of https://webidl.spec.whatwg.org/#dfn-exposure-set
   const exposure = getExtAttrSet(node, 'Exposed');
+  if (!exposure) {
+    throw new Error(
+      `Exposed extended attribute not found on ${node.type} ${node.name}`
+    );
+  }
 
   // Handle wildcard exposures
   if (exposure.has('*')) {
