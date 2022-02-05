@@ -34,7 +34,8 @@ import {
   getCustomResourcesAPI,
   cssPropertyToIDLAttribute,
   buildCSS,
-  getCustomTestCSS
+  getCustomTestCSS,
+  buildJS
 } from '../../build.js';
 
 describe('build', () => {
@@ -1391,6 +1392,74 @@ describe('build', () => {
           exposure: ['Window']
         }
       });
+    });
+  });
+
+  it('buildJS', () => {
+    const customJS = {
+      builtins: {
+        AggregateError: {
+          ctor_args: "[new Error('message')]"
+        },
+        Array: {
+          ctor_args: '2'
+        },
+        'Array.prototype.at': {},
+        'Array.prototype.@@iterator': {},
+        'Array.@@species': {},
+        Atomics: {},
+        'Atomics.add': {},
+        BigInt: {
+          ctor_args: '1',
+          ctor_new: false
+        }
+      }
+    };
+    assert.deepEqual(buildJS(customJS), {
+      'javascript.builtins.AggregateError': {
+        code: 'self.hasOwnProperty("AggregateError")',
+        exposure: ['Window']
+      },
+      'javascript.builtins.AggregateError.AggregateError': {
+        code: "(function() {\n  new AggregateError([new Error('message')]); return true;\n})();",
+        exposure: ['Window']
+      },
+      'javascript.builtins.Array': {
+        code: 'self.hasOwnProperty("Array")',
+        exposure: ['Window']
+      },
+      'javascript.builtins.Array.@@iterator': {
+        code: 'Array.prototype.hasOwnProperty(Symbol.iterator)',
+        exposure: ['Window']
+      },
+      'javascript.builtins.Array.@@species': {
+        code: 'Array.hasOwnProperty(Symbol.species)',
+        exposure: ['Window']
+      },
+      'javascript.builtins.Array.Array': {
+        code: '(function() {\n  new Array(2); return true;\n})();',
+        exposure: ['Window']
+      },
+      'javascript.builtins.Array.at': {
+        code: 'Array.prototype.hasOwnProperty("at")',
+        exposure: ['Window']
+      },
+      'javascript.builtins.Atomics': {
+        code: 'self.hasOwnProperty("Atomics")',
+        exposure: ['Window']
+      },
+      'javascript.builtins.Atomics.add': {
+        code: 'Atomics.hasOwnProperty("add")',
+        exposure: ['Window']
+      },
+      'javascript.builtins.BigInt': {
+        code: 'self.hasOwnProperty("BigInt")',
+        exposure: ['Window']
+      },
+      'javascript.builtins.BigInt.BigInt': {
+        code: '(function() {\n   BigInt(1); return true;\n})();',
+        exposure: ['Window']
+      }
     });
   });
 });
