@@ -657,13 +657,6 @@ const buildIDLMemberTests = (
             };
           }
           break;
-        case 'const':
-          if (isGlobal) {
-            expr = {property: member.name, owner: 'self'};
-          } else {
-            expr = {property: member.name, owner: iface.name};
-          }
-          break;
         case 'constructor':
           expr = {property: `constructor.${member.name}`, owner: iface.name};
           break;
