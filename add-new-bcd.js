@@ -61,6 +61,7 @@ const orderFeatures = (key, value) => {
   return value;
 };
 
+/* c8 ignore start */
 const writeFile = async (ident, obj) => {
   const filepath = path.resolve(
     path.join(BCD_DIR, ident[0], `${ident[1]}.json`)
@@ -77,6 +78,7 @@ const writeFile = async (ident, obj) => {
     {spaces: 2, replacer: orderFeatures}
   );
 };
+/* c8 ignore stop */
 
 const traverseFeatures = async (obj, identifier) => {
   for (const i in obj) {
@@ -114,6 +116,7 @@ const collectMissing = async (filepath) => {
   await fs.writeFile(filepath, json);
 };
 
+/* c8 ignore start */
 const main = async () => {
   const filepath = path.resolve(
     path.join(BCD_DIR, '__missing', '__missing.json')
@@ -138,7 +141,6 @@ const main = async () => {
   console.log('Done!');
 };
 
-/* c8 ignore start */
 if (esMain(import.meta)) {
   await main();
 }
