@@ -249,6 +249,11 @@ describe('/tests/', () => {
     assert.equal(res.status, 200);
   });
 
+  it('get all tests, ignore CSS', async () => {
+    const res = await agent.get('/tests/?ignore=css');
+    assert.equal(res.status, 200);
+  });
+
   it('get a non-existent test', async () => {
     const res = await agent.get(`/tests/dummy/test`);
     assert.equal(res.status, 404);
