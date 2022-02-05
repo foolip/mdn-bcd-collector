@@ -358,13 +358,9 @@ describe('BCD updater', () => {
     });
 
     it('no results', () => {
-      assert.throws(
-        () => {
-          getSupportMap({results: {}, userAgent: 'abc/1.2.3-beta'});
-        },
-        Error,
-        'Report for "abc/1.2.3-beta" has no results!'
-      );
+      assert.throws(() => {
+        getSupportMap({results: {}, userAgent: 'abc/1.2.3-beta'});
+      }, 'Report for "abc/1.2.3-beta" has no results!');
     });
   });
 
@@ -617,33 +613,29 @@ describe('BCD updater', () => {
     }
 
     it('Invalid results', () => {
-      assert.throws(
-        () => {
-          const report = {
-            __version: '0.3.1',
-            results: {
-              'https://mdn-bcd-collector.appspot.com/tests/': [
-                {
-                  name: 'api.AbortController',
-                  info: {exposure: 'Window'},
-                  result: 87
-                }
-              ]
-            },
-            userAgent:
-              'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.61 Safari/537.36'
-          };
-          const versionMap = getSupportMatrix([report], bcd.browsers, overrides)
-            .entries()
-            .next()
-            .value[1].entries()
-            .next().value[1];
+      assert.throws(() => {
+        const report = {
+          __version: '0.3.1',
+          results: {
+            'https://mdn-bcd-collector.appspot.com/tests/': [
+              {
+                name: 'api.AbortController',
+                info: {exposure: 'Window'},
+                result: 87
+              }
+            ]
+          },
+          userAgent:
+            'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.61 Safari/537.36'
+        };
+        const versionMap = getSupportMatrix([report], bcd.browsers, overrides)
+          .entries()
+          .next()
+          .value[1].entries()
+          .next().value[1];
 
-          inferSupportStatements(versionMap);
-        },
-        Error,
-        'result not true/false/null; got 87'
-      );
+        inferSupportStatements(versionMap);
+      }, 'result not true/false/null; got 87');
     });
   });
 

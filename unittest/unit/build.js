@@ -14,7 +14,7 @@
 
 'use strict';
 
-import chai, {assert, expect} from 'chai';
+import chai, {assert} from 'chai';
 import chaiSubset from 'chai-subset';
 chai.use(chaiSubset);
 
@@ -575,11 +575,9 @@ describe('build', () => {
         secnd: WebIDL2.parse(`DummyError includes DummyErrorHelper;`)
       };
 
-      expect(() => {
+      assert.throws(() => {
         flattenIDL(specIDLs, customIDLs);
-      }).to.throw(
-        'Target DummyError not found for interface mixin DummyErrorHelper'
-      );
+      }, 'Target DummyError not found for interface mixin DummyErrorHelper');
     });
 
     it('interface missing', () => {
@@ -593,11 +591,9 @@ describe('build', () => {
         secnd: WebIDL2.parse(`DummyError includes DummyErrorHelper;`)
       };
 
-      expect(() => {
+      assert.throws(() => {
         flattenIDL(specIDLs, customIDLs);
-      }).to.throw(
-        'Interface mixin DummyErrorHelper not found for target DummyError'
-      );
+      }, 'Interface mixin DummyErrorHelper not found for target DummyError');
     });
 
     it('Operation overloading', () => {
@@ -619,9 +615,9 @@ describe('build', () => {
              };`
         )
       };
-      expect(() => {
+      assert.throws(() => {
         flattenIDL(specIDLs, customIDLs);
-      }).to.throw('Duplicate definition of CSS.supports');
+      }, 'Duplicate definition of CSS.supports');
     });
 
     it('Partial missing main', () => {
@@ -632,9 +628,9 @@ describe('build', () => {
              };`
         )
       };
-      expect(() => {
+      assert.throws(() => {
         flattenIDL(specIDLs, customIDLs);
-      }).to.throw('Original definition not found for partial namespace CSS');
+      }, 'Original definition not found for partial namespace CSS');
     });
   });
 
@@ -1260,18 +1256,16 @@ describe('build', () => {
              boolean contains(Node otherNode);
            };`
       );
-      expect(() => {
+      assert.doesNotThrow(() => {
         validateIDL(ast);
-      }).to.not.throw();
+      });
     });
 
     it('invalid idl', () => {
       const ast = WebIDL2.parse(`interface Invalid {};`);
-      expect(() => {
+      assert.throws(() => {
         validateIDL(ast);
-      }).to.throw(
-        'Web IDL validation failed:\nValidation error at line 1, inside `interface Invalid`:\ninterface Invalid {};\n          ^ Interfaces must have `[Exposed]` extended attribute. To fix, add, for example, `[Exposed=Window]`. Please also consider carefully if your interface should also be exposed in a Worker scope. Refer to the [WebIDL spec section on Exposed](https://heycam.github.io/webidl/#Exposed) for more information. [require-exposed]'
-      );
+      }, 'Web IDL validation failed:\nValidation error at line 1, inside `interface Invalid`:\ninterface Invalid {};\n          ^ Interfaces must have `[Exposed]` extended attribute. To fix, add, for example, `[Exposed=Window]`. Please also consider carefully if your interface should also be exposed in a Worker scope. Refer to the [WebIDL spec section on Exposed](https://heycam.github.io/webidl/#Exposed) for more information. [require-exposed]');
     });
 
     it('unknown types', () => {
@@ -1281,9 +1275,9 @@ describe('build', () => {
              attribute Dumdum imadumdum;
            };`
       );
-      expect(() => {
+      assert.throws(() => {
         validateIDL(ast);
-      }).to.throw('Unknown type Dumdum');
+      }, 'Unknown type Dumdum');
     });
 
     it('ignored unknown types', () => {
@@ -1293,9 +1287,9 @@ describe('build', () => {
              attribute CSSOMString style;
            };`
       );
-      expect(() => {
+      assert.doesNotThrow(() => {
         validateIDL(ast);
-      }).to.not.throw();
+      });
     });
 
     it('allow LegacyNoInterfaceObject', () => {
@@ -1303,9 +1297,9 @@ describe('build', () => {
         `[Exposed=(Window,Worker), LegacyNoInterfaceObject]
            interface ANGLE_instanced_arrays {};`
       );
-      expect(() => {
+      assert.doesNotThrow(() => {
         validateIDL(ast);
-      }).to.not.throw();
+      });
     });
   });
 
