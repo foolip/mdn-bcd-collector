@@ -14,9 +14,9 @@
 
 'use strict';
 
-import {assert} from "chai";
+import {assert} from 'chai';
 
-import {getMajorMinorVersion, parseUA} from "../../ua-parser.js";
+import {getMajorMinorVersion, parseUA} from '../../ua-parser.js';
 
 const browsers = {
   chrome: {name: 'Chrome', releases: {82: {}, 83: {}, 84: {}, 85: {}}},
@@ -236,6 +236,22 @@ describe('parseUA', () => {
         browser: {id: 'safari', name: 'Safari'},
         version: '15.0',
         fullVersion: '15.0',
+        os: {name: 'Mac OS', version: '10.15.6'},
+        inBcd: false
+      }
+    );
+  });
+
+  it('Safari 7.1 (ignored)', () => {
+    assert.deepEqual(
+      parseUA(
+        'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/600.8.9 (KHTML, like Gecko) Version/7.1 Safari/600.8.9',
+        browsers
+      ),
+      {
+        browser: {id: 'safari', name: 'Safari'},
+        version: '7.1',
+        fullVersion: '7.1',
         os: {name: 'Mac OS', version: '10.15.6'},
         inBcd: false
       }
