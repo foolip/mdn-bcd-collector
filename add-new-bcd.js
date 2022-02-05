@@ -145,3 +145,5 @@ if (esMain(import.meta)) {
   await main();
 }
 /* c8 ignore stop */
+
+export {recursiveAdd, orderFeatures, traverseFeatures, collectMissing};
