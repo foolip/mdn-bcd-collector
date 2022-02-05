@@ -178,10 +178,18 @@ describe('build', () => {
         );
       });
 
-      it('invalid import', () => {
+      it('invalid import: 1st', () => {
         assert.equal(
           getCustomTestAPI('badimport'),
           "(function() {\n  throw 'Test is malformed: <%api.foobar:apple%> is an invalid reference';\n  return !!instance;\n})();"
+        );
+        assert.isTrue(console.error.calledOnce);
+      });
+
+      it('invalid import: 2nd', () => {
+        assert.equal(
+          getCustomTestAPI('badimport2'),
+          "(function() {\n  throw 'Test is malformed: <%api.foobar.bar:apple%> is an invalid reference';\n  return !!instance;\n})();"
         );
         assert.isTrue(console.error.calledOnce);
       });
@@ -1257,6 +1265,15 @@ describe('build', () => {
       }).to.not.throw();
     });
 
+    it('invalid idl', () => {
+      const ast = WebIDL2.parse(`interface Invalid {};`);
+      expect(() => {
+        validateIDL(ast);
+      }).to.throw(
+        'Web IDL validation failed:\nValidation error at line 1, inside `interface Invalid`:\ninterface Invalid {};\n          ^ Interfaces must have `[Exposed]` extended attribute. To fix, add, for example, `[Exposed=Window]`. Please also consider carefully if your interface should also be exposed in a Worker scope. Refer to the [WebIDL spec section on Exposed](https://heycam.github.io/webidl/#Exposed) for more information. [require-exposed]'
+      );
+    });
+
     it('unknown types', () => {
       const ast = WebIDL2.parse(
         `[Exposed=Window]
@@ -1266,7 +1283,7 @@ describe('build', () => {
       );
       expect(() => {
         validateIDL(ast);
-      }).to.throw();
+      }).to.throw('Unknown type Dumdum');
     });
 
     it('ignored unknown types', () => {
@@ -1275,6 +1292,16 @@ describe('build', () => {
            interface Dummy {
              attribute CSSOMString style;
            };`
+      );
+      expect(() => {
+        validateIDL(ast);
+      }).to.not.throw();
+    });
+
+    it('allow LegacyNoInterfaceObject', () => {
+      const ast = WebIDL2.parse(
+        `[Exposed=(Window,Worker), LegacyNoInterfaceObject]
+           interface ANGLE_instanced_arrays {};`
       );
       expect(() => {
         validateIDL(ast);

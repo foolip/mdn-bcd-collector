@@ -32,6 +32,8 @@ api:
     __base: <%api.foo:instance%>
   badimport:
     __base: <%api.foobar:apple%>
+  badimport2:
+    __base: <%api.foobar.bar:apple%>
   fig:
     __test: return 2;
   apple:
