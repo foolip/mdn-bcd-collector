@@ -6,7 +6,9 @@
     "**/unittest/**",
     "**/coverage/**",
     "**/resources/custom-tests/**",
+    "release.js",
     "selenium.js",
-    "scripts.js"
+    "scripts.js",
+    "json3.min.js"
   ]
 }
