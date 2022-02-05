@@ -105,6 +105,7 @@ const findMissingResults = async (reportPaths, allResults, version) => {
   return reportMap;
 };
 
+/* c8 ignore start */
 const main = async (argv) => {
   const missingResults = await findMissingResults(
     argv.reports,
@@ -119,7 +120,6 @@ const main = async (argv) => {
   }
 };
 
-/* c8 ignore start */
 if (esMain(import.meta)) {
   const {argv} = yargs(hideBin(process.argv)).command(
     '$0 [reports..]',

@@ -24,26 +24,52 @@ import bcd from './bcd.test.js';
 const tests = await fs.readJson(new URL('./tests.test.json', import.meta.url));
 
 describe('find-missing-features', () => {
-  it('traverseFeatures', () => {
-    assert.deepEqual(traverseFeatures(bcd, ''), [
-      'api.AbortController',
-      'api.AbortController.AbortController',
-      'api.AbortController.abort',
-      'api.AbortController.dummy',
-      'api.AbortController.signal',
-      'api.AudioContext',
-      'api.AudioContext.close',
-      'api.DeprecatedInterface',
-      'api.DummyAPI',
-      'api.DummyAPI.dummy',
-      'api.ExperimentalInterface',
-      'api.NullAPI',
-      'api.RemovedInterface',
-      'css.properties.font-family',
-      'css.properties.font-face',
-      'javascript.builtins.Array',
-      'javascript.builtins.Date'
-    ]);
+  describe('traverseFeatures', () => {
+    it('normal', () => {
+      assert.deepEqual(traverseFeatures(bcd, ''), [
+        'api.AbortController',
+        'api.AbortController.AbortController',
+        'api.AbortController.abort',
+        'api.AbortController.dummy',
+        'api.AbortController.signal',
+        'api.AudioContext',
+        'api.AudioContext.close',
+        'api.DeprecatedInterface',
+        'api.DummyAPI',
+        'api.DummyAPI.dummy',
+        'api.ExperimentalInterface',
+        'api.NullAPI',
+        'api.RemovedInterface',
+        'css.properties.font-family',
+        'css.properties.font-face',
+        'javascript.builtins.Array',
+        'javascript.builtins.Date'
+      ]);
+    });
+
+    it('include aliases', () => {
+      assert.deepEqual(traverseFeatures(bcd, '', true), [
+        'api.AbortController',
+        'api.AbortController.AbortController',
+        'api.AbortController.abort',
+        'api.AbortController.dummy',
+        'api.AbortController.signal',
+        'api.AudioContext',
+        'api.webkitAudioContext',
+        'api.AudioContext.close',
+        'api.DeprecatedInterface',
+        'api.DummyAPI',
+        'api.DummyAPI.dummy',
+        'api.ExperimentalInterface',
+        'api.TryingOutInterface',
+        'api.NullAPI',
+        'api.RemovedInterface',
+        'css.properties.font-family',
+        'css.properties.font-face',
+        'javascript.builtins.Array',
+        'javascript.builtins.Date'
+      ]);
+    });
   });
 
   describe('getMissing', () => {

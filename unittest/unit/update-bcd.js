@@ -672,7 +672,19 @@ describe('BCD updater', () => {
             }
           },
           AudioContext: {
-            __compat: {support: {chrome: {version_added: '85'}}},
+            __compat: {
+              support: {
+                chrome: [
+                  {
+                    version_added: '85'
+                  },
+                  {
+                    version_added: '1',
+                    prefix: 'webkit'
+                  }
+                ]
+              }
+            },
             close: {
               __compat: {support: {chrome: {version_added: '85'}}}
             }
@@ -705,6 +717,12 @@ describe('BCD updater', () => {
                     version_added: '64',
                     version_removed: '70',
                     flags: {},
+                    notes: 'Not supported on Windows XP.'
+                  },
+                  {
+                    version_added: '50',
+                    version_removed: '70',
+                    alternative_name: 'TryingOutInterface',
                     notes: 'Not supported on Windows XP.'
                   }
                 ]
@@ -757,10 +775,10 @@ describe('BCD updater', () => {
         javascript: {
           builtins: {
             Array: {
-              __compat: {}
+              __compat: {support: {chrome: {version_added: null}}}
             },
             Date: {
-              __compat: {}
+              __compat: {support: {chrome: {version_added: null}}}
             }
           }
         }
