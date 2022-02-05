@@ -1303,44 +1303,94 @@ describe('build', () => {
     });
   });
 
-  it('buildCSS', () => {
-    const webrefCSS = {
-      'css-fonts': {
-        properties: {
-          'font-family': {},
-          'font-weight': {}
+  describe('buildCSS', () => {
+    it('valid input', () => {
+      const webrefCSS = {
+        'css-fonts': {
+          properties: {
+            'font-family': {},
+            'font-weight': {}
+          }
+        },
+        'css-grid': {
+          properties: {
+            grid: {}
+          }
         }
-      },
-      'css-grid': {
+      };
+
+      const customCSS = {
         properties: {
-          grid: {}
+          zoom: {}
         }
-      }
-    };
+      };
 
-    const customCSS = {
-      properties: {
-        zoom: {}
-      }
-    };
+      assert.deepEqual(buildCSS(webrefCSS, customCSS), {
+        'css.properties.font-family': {
+          code: '"fontFamily" in document.body.style || "font-family" in document.body.style',
+          exposure: ['Window']
+        },
+        'css.properties.font-weight': {
+          code: '"fontWeight" in document.body.style || "font-weight" in document.body.style',
+          exposure: ['Window']
+        },
+        'css.properties.grid': {
+          code: '"grid" in document.body.style',
+          exposure: ['Window']
+        },
+        'css.properties.zoom': {
+          code: '"zoom" in document.body.style',
+          exposure: ['Window']
+        }
+      });
+    });
 
-    assert.deepEqual(buildCSS(webrefCSS, customCSS), {
-      'css.properties.font-family': {
-        code: '"fontFamily" in document.body.style || "font-family" in document.body.style',
-        exposure: ['Window']
-      },
-      'css.properties.font-weight': {
-        code: '"fontWeight" in document.body.style || "font-weight" in document.body.style',
-        exposure: ['Window']
-      },
-      'css.properties.grid': {
-        code: '"grid" in document.body.style',
-        exposure: ['Window']
-      },
-      'css.properties.zoom': {
-        code: '"zoom" in document.body.style',
-        exposure: ['Window']
-      }
+    it('with custom test', () => {
+      const css = {
+        'css-dummy': {
+          properties: {
+            foo: {}
+          }
+        }
+      };
+
+      assert.deepEqual(buildCSS(css, {properties: {}}), {
+        'css.properties.foo': {
+          code: '(function() {\n  return 1;\n})();',
+          exposure: ['Window']
+        }
+      });
+    });
+
+    it('double-defined property', () => {
+      const css = {
+        'css-dummy': {
+          properties: {
+            foo: {}
+          }
+        }
+      };
+
+      assert.throws(() => {
+        buildCSS(css, {properties: {foo: {}}});
+      }, 'Custom CSS property already known: foo');
+    });
+
+    it('invalid import', () => {
+      const css = {
+        'css-dummy': {
+          properties: {
+            bar: {}
+          }
+        }
+      };
+
+      assert.deepEqual(buildCSS(css, {properties: {}}), {
+        'css.properties.bar': {
+          code: "(function() {\n  throw 'Test is malformed: import <%css.properties.foo:a%>, category css is not importable';\n})();",
+          exposure: ['Window']
+        }
+      });
     });
   });
 });
