@@ -685,7 +685,7 @@ describe('build', () => {
           getExposureSet(interfaces[0]);
         },
         Error,
-        'Unexpected RHS for Exposed extended attribute'
+        'Unexpected RHS "integer" for Exposed extended attribute'
       );
     });
 
