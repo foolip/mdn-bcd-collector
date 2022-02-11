@@ -525,10 +525,6 @@ const getExposureSet = (node, scopes) => {
 
 const validateIDL = (ast) => {
   const validations = WebIDL2.validate(ast).filter((v) => {
-    // TODO: https://github.com/w3c/webref/pull/196
-    if (v.ruleName === 'dict-arg-default') {
-      return false;
-    }
     // Ignore the [LegacyNoInterfaceObject] rule.
     return v.ruleName !== 'no-nointerfaceobject';
   });
@@ -655,13 +651,6 @@ const buildIDLMemberTests = (
               owner: `${iface.name}.prototype`,
               inherit: member.special === 'inherit'
             };
-          }
-          break;
-        case 'const':
-          if (isGlobal) {
-            expr = {property: member.name, owner: 'self'};
-          } else {
-            expr = {property: member.name, owner: iface.name};
           }
           break;
         case 'constructor':
