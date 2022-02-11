@@ -20,17 +20,26 @@ chai.use(chaiHttp);
 
 import fs from 'fs-extra';
 
+import {exec} from '../../scripts.js';
+
 import {app, version} from '../../app.js';
 const agent = chai.request.agent(app);
 
 const tests = Object.entries(
   await fs.readJson(new URL('../../tests.json', import.meta.url))
 );
-const packageLock = await fs.readJson(
-  new URL('../../package-lock.json', import.meta.url)
-);
 
-const userAgent = `node-superagent/${packageLock.dependencies.superagent.version}`;
+const getSuperagentVersion = () => {
+  const list = JSON.parse(
+    exec(
+      'yarn list --pattern superagent --json --non-interactive --no-progress'
+    )
+  );
+  const saData = list.data.trees.find((e) => e.name.startsWith('superagent@'));
+  return saData.name.split('@')[1];
+};
+
+const userAgent = `node-superagent/${getSuperagentVersion()}`;
 
 describe('/api/results', () => {
   it('missing `Content-Type` header', async () => {
