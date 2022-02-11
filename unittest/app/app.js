@@ -26,11 +26,8 @@ const agent = chai.request.agent(app);
 const tests = Object.entries(
   await fs.readJson(new URL('../../tests.json', import.meta.url))
 );
-const packageLock = await fs.readJson(
-  new URL('../../package-lock.json', import.meta.url)
-);
 
-const userAgent = `node-superagent/${packageLock.dependencies.superagent.version}`;
+const userAgent = `node/${process.versions.node}`;
 
 describe('/api/results', () => {
   it('missing `Content-Type` header', async () => {
