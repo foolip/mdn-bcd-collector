@@ -94,6 +94,20 @@ const getNewVersion = async (ctx, task) => {
   }
 };
 
+const simplifyTestChangesList = (el, _, list) => {
+  const parts = el.split('.');
+  let p = '';
+
+  for (let i = 0; i < parts.length - 1; i++) {
+    p += (i > 0 ? '.' : '') + parts[i];
+    if (list.includes(p)) {
+      return false;
+    }
+  }
+
+  return true;
+};
+
 const getTestChanges = () => {
   return [
     {
@@ -137,22 +151,27 @@ const getTestChanges = () => {
         const oldTestKeys = Object.keys(oldTests);
         const newTestKeys = Object.keys(newTests);
 
-        const added = newTestKeys.filter((k) => !oldTestKeys.includes(k));
-        const removed = oldTestKeys.filter((k) => !newTestKeys.includes(k));
-        const changed = [];
+        const added = newTestKeys
+          .filter((k) => !oldTestKeys.includes(k))
+          .filter(simplifyTestChangesList);
+        const removed = oldTestKeys
+          .filter((k) => !newTestKeys.includes(k))
+          .filter(simplifyTestChangesList);
+        let changed = [];
         for (const t of newTestKeys.filter((k) => oldTestKeys.includes(k))) {
           if (oldTests[t].code != newTests[t].code) {
             changed.push(t);
           }
         }
+        changed = changed.filter(simplifyTestChangesList);
 
         ctx.testChanges =
-          '\n#### Added\n' +
-          added.join('\n') +
-          '\n#### Removed\n' +
-          removed.join('\n') +
-          '\n#### Changed\n' +
-          changed.join('\n');
+          '\n#### Added\n\n' +
+          added.map((x) => '- ' + x).join('\n') +
+          '\n\n#### Removed\n\n' +
+          removed.map((x) => '- ' + x).join('\n') +
+          '\n\n#### Changed\n\n' +
+          changed.map((x) => '- ' + x).join('\n');
       }
     },
     {
