@@ -1,4 +1,5 @@
 import chalk from 'chalk-template';
+import enquirer from 'enquirer';
 import esMain from 'es-main';
 import fs from 'fs-extra';
 import {Listr} from 'listr2';
@@ -294,7 +295,9 @@ const main = async () => {
       }
     ],
     {
-      showErrorMessage: true
+      showErrorMessage: true,
+      // Mitigates https://github.com/cenk1cenk2/listr2/issues/631
+      injectWrapper: {enquirer}
     }
   );
 
