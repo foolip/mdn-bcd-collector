@@ -1,6 +1,0 @@
-// This entry is in BCD, but was never a part of a working draft
-// or editor's draft for https://w3c.github.io/webcodecs/
-
-partial interface ImageDecoder {
-    attribute DOMString type;
-};
