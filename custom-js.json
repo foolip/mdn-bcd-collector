@@ -581,21 +581,30 @@
     },
     "Intl.Locale.prototype.baseName": {},
     "Intl.Locale.prototype.calendar": {},
+    "Intl.Locale.prototype.calendars": {},
     "Intl.Locale.prototype.caseFirst": {},
     "Intl.Locale.prototype.collation": {},
+    "Intl.Locale.prototype.collations": {},
     "Intl.Locale.prototype.hourCycle": {},
+    "Intl.Locale.prototype.hourCycles": {},
     "Intl.Locale.prototype.language": {},
     "Intl.Locale.prototype.maximize": {},
     "Intl.Locale.prototype.minimize": {},
     "Intl.Locale.prototype.numberingSystem": {},
+    "Intl.Locale.prototype.numberingSystems": {},
     "Intl.Locale.prototype.numeric": {},
     "Intl.Locale.prototype.region": {},
     "Intl.Locale.prototype.script": {},
+    "Intl.Locale.prototype.textInfo": {},
+    "Intl.Locale.prototype.timeZones": {},
     "Intl.Locale.prototype.toString": {},
+    "Intl.Locale.prototype.weekInfo": {},
     "Intl.NumberFormat": {
       "ctor_args": "'sv'"
     },
     "Intl.NumberFormat.prototype.format": {},
+    "Intl.NumberFormat.prototype.formatRange": {},
+    "Intl.NumberFormat.prototype.formatRangeToParts": {},
     "Intl.NumberFormat.prototype.formatToParts": {},
     "Intl.NumberFormat.prototype.resolvedOptions": {},
     "Intl.NumberFormat.supportedLocalesOf": {},
@@ -604,6 +613,7 @@
     },
     "Intl.PluralRules.prototype.resolvedOptions": {},
     "Intl.PluralRules.prototype.select": {},
+    "Intl.PluralRules.prototype.selectRange": {},
     "Intl.PluralRules.supportedLocalesOf": {},
     "Intl.RelativeTimeFormat": {
       "ctor_args": "'sv'"
@@ -612,6 +622,13 @@
     "Intl.RelativeTimeFormat.prototype.formatToParts": {},
     "Intl.RelativeTimeFormat.prototype.resolvedOptions": {},
     "Intl.RelativeTimeFormat.supportedLocalesOf": {},
+    "Intl.Segmenter": {
+      "ctor_args": ""
+    },
+    "Intl.Segmenter.prototype.resolvedOptions": {},
+    "Intl.Segmenter.prototype.segment": {},
+    "Intl.Segmenter.supportedLocalesOf": {},
+    "Intl.supportedValuesOf": {},
     "WebAssembly": {},
     "WebAssembly.CompileError": {
       "ctor_args": "'message'"
