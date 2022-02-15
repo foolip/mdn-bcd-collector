@@ -40,6 +40,7 @@ const getReportMeta = (report) => {
   const os = `${ua.os.name} ${ua.os.version}`;
   const desc = `${browser} / ${os}`;
   const title = `Results from ${desc} / Collector v${version}`;
+  const urls = Object.keys(report.results);
 
   const slug = `${version.toLowerCase()}-${ua.browser.id.replace(/_/g, '-')}-${
     ua.fullVersion
@@ -57,6 +58,7 @@ const getReportMeta = (report) => {
     os,
     desc,
     title,
+    urls,
     slug,
     filename,
     branch,
@@ -70,9 +72,10 @@ const createBody = (meta) => {
       meta.ua.inBcd ? '' : ' - **Not in BCD**'
     }` +
     `\nHash Digest: ${meta.digest}\n` +
-    (meta.version == 'Dev' ?
-      '\n**WARNING:** this PR was created from a development/staging version!' :
-      '')
+    `Test URLs: ${meta.urls.join(', ')}\n` +
+    (meta.version == 'Dev'
+      ? '\n**WARNING:** this PR was created from a development/staging version!'
+      : '')
   );
 };
 
