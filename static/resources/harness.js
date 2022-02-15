@@ -872,16 +872,16 @@
         renderWarning.innerHTML =
           'There are ' +
           results.length +
-          ' test results.<br />Displaying all results may cause your browser to freeze, especially on older browsers.<br />Display results anyways?';
+          ' test results.<br>Displaying all results may cause your browser to freeze, especially on older browsers.<br>Display results anyways?';
         resultsEl.appendChild(renderWarning);
 
         var renderButton = document.createElement('button');
-        renderButton.innerText = 'Show Results';
+        renderButton.innerHTML = 'Show Results';
         resultsEl.appendChild(renderButton);
 
         renderButton.onclick = function () {
-          renderWarning.style.display = 'none';
-          renderButton.style.display = 'none';
+          resultsEl.removeChild(renderWarning);
+          resultsEl.removeChild(renderButton);
 
           doRenderResults();
         };
