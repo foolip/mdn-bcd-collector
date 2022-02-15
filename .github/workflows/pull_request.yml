@@ -18,15 +18,14 @@ jobs:
       - uses: actions/setup-node@v2
         with:
           node-version: 16
-      - run: corepack enable
-      - run: yarn install --immutable
+      - run: yarn install --frozen-lockfile
       - run: yarn lint
       - run: yarn build
       - run: yarn unittest
       # ensure we can start the server without dev dependencies
       - name: production smoke test
         run: |
-          yarn install --immutable
+          yarn install --frozen-lockfile
           cp secrets.sample.json secrets.json
           yarn &
           npx wait-on -t 10000 -v http://localhost:8080
