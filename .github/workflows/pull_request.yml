@@ -27,7 +27,7 @@ jobs:
         run: |
           yarn install --frozen-lockfile
           cp secrets.sample.json secrets.json
-          yarn &
+          yarn start &
           npx wait-on -t 10000 -v http://localhost:8080
         env:
           NODE_ENV: production
