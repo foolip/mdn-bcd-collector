@@ -43,7 +43,7 @@
     "didyoumean": "1.2.2",
     "ejs": "3.1.6",
     "es-main": "1.0.2",
-    "express": "4.17.2",
+    "express": "4.17.3",
     "express-ejs-layouts": "2.5.1",
     "fs-extra": "10.0.0",
     "json-stable-stringify": "1.0.1",
