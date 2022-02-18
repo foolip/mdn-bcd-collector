@@ -5,31 +5,31 @@ jobs:
     strategy:
       matrix:
         include:
-          - name: Linux
-            runs-on: ubuntu-latest
-          - name: macOS
-            runs-on: macos-latest
-          - name: Windows
-            runs-on: windows-latest
+        - name: Linux
+          runs-on: ubuntu-latest
+        - name: macOS
+          runs-on: macos-latest
+        - name: Windows
+          runs-on: windows-latest
     name: Test (${{ matrix.name }})
     runs-on: ${{ matrix.runs-on }}
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
-        with:
-          node-version: 16
-      - run: npm ci
-      - run: npm run lint
-      - run: npm run build
-      - run: npm run unittest
-      # ensure we can start the server without dev dependencies
-      - name: production smoke test
-        run: |
-          npm ci
-          cp secrets.sample.json secrets.json
-          npm start &
-          npx wait-on -t 10000 -v http://localhost:8080
-        env:
-          NODE_ENV: production
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v2
+      with:
+        node-version: 16
+    - run: npm ci
+    - run: npm run lint
+    - run: npm run build
+    - run: npm run unittest
+    # ensure we can start the server without dev dependencies
+    - name: production smoke test
+      run: |
+        npm ci
+        cp secrets.sample.json secrets.json
+        npm start &
+        npx wait-on -t 10000 -v http://localhost:8080
+      env:
+        NODE_ENV: production
 env:
   FORCE_COLOR: 3
