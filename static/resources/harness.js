@@ -855,12 +855,36 @@
 
     var resultsEl = document.getElementById('results');
 
-    if (resultsEl && !hideResults) {
+    function doRenderResults() {
       loadHighlightJs(function () {
         for (var i = 0; i < results.length; i++) {
           renderReportEl(results[i], resultsEl);
         }
       });
+    }
+
+    if (resultsEl && !hideResults) {
+      if (results.length > 250) {
+        var renderWarning = document.createElement('p');
+        renderWarning.innerHTML =
+          'There are ' +
+          results.length +
+          ' test results.<br>Displaying all results may cause your browser to freeze, especially on older browsers.<br>Display results anyways?';
+        resultsEl.appendChild(renderWarning);
+
+        var renderButton = document.createElement('button');
+        renderButton.innerHTML = 'Show Results';
+        resultsEl.appendChild(renderButton);
+
+        renderButton.onclick = function () {
+          resultsEl.removeChild(renderWarning);
+          resultsEl.removeChild(renderButton);
+
+          doRenderResults();
+        };
+      } else {
+        doRenderResults();
+      }
     }
   }
 
