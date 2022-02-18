@@ -8,6 +8,8 @@ See [DESIGN.md](./DESIGN.md) for details of how this service works.
 
 ## Setup
 
+This project requires Node.js 16 or greater.
+
 This project uses `yarn` (Classic/v1) as its package manager. Please check out the [`yarn` installation guide](https://classic.yarnpkg.com/en/docs/install) if you have not already configured it.
 
 ```sh

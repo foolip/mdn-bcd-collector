@@ -14,22 +14,22 @@ jobs:
     name: Test (${{ matrix.name }})
     runs-on: ${{ matrix.runs-on }}
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
-        with:
-          node-version: 16
-      - run: yarn install --frozen-lockfile
-      - run: yarn lint
-      - run: yarn build
-      - run: yarn unittest
-      # ensure we can start the server without dev dependencies
-      - name: production smoke test
-        run: |
-          yarn install --frozen-lockfile
-          cp secrets.sample.json secrets.json
-          yarn start &
-          npx wait-on -t 10000 -v http://localhost:8080
-        env:
-          NODE_ENV: production
+    - uses: actions/checkout@v2
+    - uses: actions/setup-node@v2
+      with:
+        node-version: 16
+    - run: yarn install --frozen-lockfile
+    - run: yarn lint
+    - run: yarn build
+    - run: yarn unittest
+    # ensure we can start the server without dev dependencies
+    - name: production smoke test
+      run: |
+        yarn install --frozen-lockfile
+        cp secrets.sample.json secrets.json
+        yarn start &
+        npx wait-on -t 10000 -v http://localhost:8080
+      env:
+        NODE_ENV: production
 env:
   FORCE_COLOR: 3
