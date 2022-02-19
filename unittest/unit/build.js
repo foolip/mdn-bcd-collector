@@ -820,6 +820,25 @@ describe('build', () => {
       });
     });
 
+    it('interface with event handler', () => {
+      const ast = WebIDL2.parse(
+        `[Exposed=Window]
+           interface Foo {
+             attribute EventHandler onadd;
+           };`
+      );
+      assert.deepEqual(buildIDLTests(ast, [], scopes), {
+        'api.Foo': {
+          code: '"Foo" in self',
+          exposure: ['Window']
+        },
+        'api.Foo.add_event': {
+          code: '"onadd" in Foo.prototype',
+          exposure: ['Window']
+        }
+      });
+    });
+
     it('interface with custom test', () => {
       const ast = WebIDL2.parse(
         `[Exposed=Window]
