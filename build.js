@@ -626,6 +626,9 @@ const buildIDLMemberTests = (
     }
 
     const isStatic = member.special === 'static' || iface.type === 'namespace';
+    const isEventHandler =
+      member.idlType?.type === 'attribute-type' &&
+      (member.idlType?.idlType || '').includes('EventHandler');
 
     let expr;
     const customTestMember = getCustomTestAPI(
@@ -664,7 +667,11 @@ const buildIDLMemberTests = (
       }
     }
 
-    tests[member.name] = compileTest({
+    const name = isEventHandler ?
+      `${member.name.replace('on', '')}_event` :
+      member.name;
+
+    tests[name] = compileTest({
       raw: {
         code: expr
       },
