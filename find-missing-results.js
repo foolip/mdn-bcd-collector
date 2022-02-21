@@ -45,10 +45,14 @@ const generateReportMap = (allResults) => {
     if (!allResults) {
       if (browserKey == 'ie') {
         // Ignore super old IE releases
-        result[browserKey] = result[browserKey].filter((v) => v >= 6);
+        result[browserKey] = result[browserKey].filter((v) =>
+          compareVersions.compare(v, '6', '>')
+        );
       } else if (browserKey == 'safari') {
         // Ignore super old Safari releases
-        result[browserKey] = result[browserKey].filter((v) => v >= 4);
+        result[browserKey] = result[browserKey].filter((v) =>
+          compareVersions.compare(v, '4', '>')
+        );
       } else if (browserKey == 'opera') {
         // Ignore all Opera versions besides 12.1, 15, and the latest stable
         result[browserKey] = result[browserKey].filter(
