@@ -777,34 +777,6 @@ const cssPropertyToIDLAttribute = (property, lowercaseFirst) => {
   return output;
 };
 
-const buildCSSValuesTest = (property, values) => {
-  if (!Array.isArray(values)) {
-    values = [values];
-  }
-
-  const propertyNames = property.startsWith("-") ? [property] : ["", "-webkit-", "-moz-", "-ms-"].map((p) => p + property);
-  let code = [];
-
-  for (const propertyName of propertyNames) {
-    code = code.concat(values.map((value) => `
-("CSS" in window && CSS.supports ? CSS.supports("${propertyName}", "${value}") : (function(){
-  var div = document.createElement('div');
-  div.style["${propertyName}"] = "";
-  div.style["${propertyName}"] = "${value}";
-  return div.style.getPropertyValue("${propertyName}") !== "";
-})())
-`));
-  }
-
-  return compileTest({
-    raw: {
-      code: code, combinator: '||'
-    },
-    category: 'css',
-    exposure: ['Window']
-  });
-};
-
 const buildCSS = (specCSS, customCSS) => {
   const properties = new Map();
 
@@ -835,7 +807,7 @@ const buildCSS = (specCSS, customCSS) => {
 
   const tests = {};
 
-  for (const name of Array.from(propertySet).sort()) {
+  for (const name of Array.from(properties.keys()).sort()) {
     const customTest = getCustomTestCSS(name);
     if (customTest) {
       tests[`css.properties.${name}`] = compileTest({
@@ -845,23 +817,20 @@ const buildCSS = (specCSS, customCSS) => {
       continue;
     }
 
-    const attrName = cssPropertyToIDLAttribute(name, name.startsWith('-'));
-    const code = [{property: attrName, owner: 'document.body.style'}];
-    if (name !== attrName) {
-      code.push({property: name, owner: 'document.body.style'});
-    }
-    const legacyTest = compileTest({
-      raw: {code, combinator: '||'},
-      exposure: ['Window']
-    });
+    // Test for the property itself
     tests[`css.properties.${name}`] = compileTest({
-      raw: {code: `"CSS" in window && CSS.supports ? CSS.supports("${name}", "inherit") : (${legacyTest.code})`},
+      raw: {code: `bcd.testCSSProperty("${name}")`},
       exposure: ['Window']
     });
 
     // Tests for values
-    for (const [key, values] of Array.from(properties.get(name).entries()).sort()) {
-      tests[`css.properties.${name}.${key}`] = buildCSSValuesTest(name, values);
+    for (const [key, value] of Array.from(properties.get(name).entries()).sort()) {
+      const values = Array.isArray(value) ? value : [value];
+      const code = values.map((value) => `bcd.testCSSPropertyValue("${name}", "${value}")`).join(" || ");
+      tests[`css.properties.${name}.${key}`] = compileTest({
+        raw: {code: code},
+        exposure: ['Window']
+      });
     }
   }
 

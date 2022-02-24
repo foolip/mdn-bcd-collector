@@ -9,21 +9,31 @@
     "-epub-text-emphasis": {},
     "-epub-text-emphasis-color": {},
     "-epub-text-emphasis-style": {},
-    "-epub-text-orientation": {},
-    "-epub-text-transform": {},
-    "-epub-word-break": {},
+    "-epub-text-orientation": {
+      "__values": ["sideways"]
+    },
+    "-epub-text-transform": {
+      "__values": ["capitalize", "full-size-kana", "full-width"]
+    },
+    "-epub-word-break": {
+      "__values": ["break-word", "keep-all"]
+    },
     "-epub-writing-mode": {},
     "-internal-text-autosizing-status": {},
     "-moz-animation": {},
     "-moz-animation-delay": {},
-    "-moz-animation-direction": {},
+    "-moz-animation-direction": {
+      "__values": ["alternate-reverse", "reverse"]
+    },
     "-moz-animation-duration": {},
     "-moz-animation-fill-mode": {},
     "-moz-animation-iteration-count": {},
     "-moz-animation-name": {},
     "-moz-animation-play-state": {},
     "-moz-animation-timing-function": {},
-    "-moz-appearance": {},
+    "-moz-appearance": {
+      "__values": ["auto", "menulist-button", "none", "textfield"]
+    },
     "-moz-backface-visibility": {},
     "-moz-background-inline-policy": {},
     "-moz-binding": {},
@@ -50,9 +60,13 @@
     "-moz-box-ordinal-group": {},
     "-moz-box-orient": {},
     "-moz-box-pack": {},
-    "-moz-box-sizing": {},
+    "-moz-box-sizing": {
+      "__values": ["padding-box"]
+    },
     "-moz-column-count": {},
-    "-moz-column-fill": {},
+    "-moz-column-fill": {
+      "__values": ["balance-all"]
+    },
     "-moz-column-gap": {},
     "-moz-column-rule": {},
     "-moz-column-rule-color": {},
@@ -71,10 +85,7 @@
     "-moz-margin-end": {},
     "-moz-margin-start": {},
     "-moz-orient": {
-      "__values": [
-        "auto",
-        "inline_and_block"
-      ]
+      "__values": ["auto", "inline_and_block"]
     },
     "-moz-osx-font-smoothing": {},
     "-moz-outline-radius": {},
@@ -93,22 +104,33 @@
     "-moz-transform": {},
     "-moz-transform-origin": {},
     "-moz-transform-style": {},
-    "-moz-transition": {},
+    "-moz-transition": {
+      "__values": ["gradients"]
+    },
     "-moz-transition-delay": {},
     "-moz-transition-duration": {},
-    "-moz-transition-property": {},
+    "-moz-transition-property": {
+      "__values": ["IDENT_value"]
+    },
     "-moz-transition-timing-function": {},
     "-moz-user-focus": {},
     "-moz-user-input": {
+      "__values": ["auto", "disabled", "enabled", "none"]
+    },
+    "-moz-user-modify": {
+      "__values": ["read-write-plaintext-only"]
+    },
+    "-moz-user-select": {
       "__values": [
+        "-moz-none",
+        "all",
         "auto",
-        "disabled",
-        "enabled",
-        "none"
+        "contain",
+        "element",
+        "none",
+        "text"
       ]
     },
-    "-moz-user-modify": {},
-    "-moz-user-select": {},
     "-moz-window-dragging": {},
     "-ms-content-zoom-chaining": {},
     "-ms-content-zoom-limit": {},
@@ -159,7 +181,17 @@
     "-ms-text-combine-horizontal": {},
     "-ms-text-size-adjust": {},
     "-ms-touch-select": {},
-    "-ms-user-select": {},
+    "-ms-user-select": {
+      "__values": [
+        "-moz-none",
+        "all",
+        "auto",
+        "contain",
+        "element",
+        "none",
+        "text"
+      ]
+    },
     "-ms-wrap-flow": {},
     "-ms-wrap-margin": {},
     "-ms-wrap-through": {},
@@ -204,7 +236,9 @@
     "-webkit-column-break-before": {},
     "-webkit-column-break-inside": {},
     "-webkit-column-count": {},
-    "-webkit-column-fill": {},
+    "-webkit-column-fill": {
+      "__values": ["balance-all"]
+    },
     "-webkit-column-gap": {},
     "-webkit-column-progression": {},
     "-webkit-column-rule": {},
@@ -236,9 +270,7 @@
     "-webkit-line-box-contain": {},
     "-webkit-line-break": {},
     "-webkit-line-clamp": {
-      "__values": [
-        "none"
-      ]
+      "__values": ["none"]
     },
     "-webkit-line-grid": {},
     "-webkit-line-snap": {},
@@ -285,7 +317,9 @@
     "-webkit-region-break-inside": {},
     "-webkit-region-fragment": {},
     "-webkit-rtl-ordering": {},
-    "-webkit-ruby-position": {},
+    "-webkit-ruby-position": {
+      "__values": ["alternate", "inter-character"]
+    },
     "-webkit-scroll-snap-coordinate": {},
     "-webkit-scroll-snap-destination": {},
     "-webkit-scroll-snap-points-x": {},
@@ -297,38 +331,47 @@
     "-webkit-svg-shadow": {},
     "-webkit-tap-highlight-color": {},
     "-webkit-text-combine": {},
-    "-webkit-text-decoration": {},
+    "-webkit-text-decoration": {
+      "__values": ["blink"]
+    },
     "-webkit-text-decoration-color": {},
-    "-webkit-text-decoration-line": {},
+    "-webkit-text-decoration-line": {
+      "__values": ["blink"]
+    },
     "-webkit-text-decoration-skip": {},
-    "-webkit-text-decoration-style": {},
+    "-webkit-text-decoration-style": {
+      "__values": ["wavy"]
+    },
     "-webkit-text-decorations-in-effect": {},
     "-webkit-text-emphasis": {},
     "-webkit-text-emphasis-color": {},
-    "-webkit-text-emphasis-position": {},
+    "-webkit-text-emphasis-position": {
+      "__values": ["over", "under"]
+    },
     "-webkit-text-emphasis-style": {},
-    "-webkit-text-orientation": {},
+    "-webkit-text-orientation": {
+      "__values": ["sideways"]
+    },
     "-webkit-text-security": {},
-    "-webkit-text-underline-position": {},
+    "-webkit-text-underline-position": {
+      "__values": ["auto-pos", "from-font", "left", "right", "under"]
+    },
     "-webkit-text-zoom": {},
     "-webkit-touch-callout": {},
     "-webkit-transform-origin-x": {},
     "-webkit-transform-origin-y": {},
     "-webkit-transform-origin-z": {},
     "-webkit-user-drag": {},
-    "-webkit-user-modify": {},
+    "-webkit-user-modify": {
+      "__values": ["read-write-plaintext-only"]
+    },
     "-webkit-writing-mode": {},
     "all": {
-      "__values": [
-        "revert"
-      ]
+      "__values": ["revert"]
     },
     "alt": {},
     "animation-direction": {
-      "__values": [
-        "alternate-reverse",
-        "reverse"
-      ]
+      "__values": ["alternate-reverse", "reverse"]
     },
     "animation-timing-function": {
       "__additional_values": {
@@ -352,12 +395,7 @@
           "textarea"
         ]
       },
-      "__values": [
-        "auto",
-        "menulist-button",
-        "none",
-        "textfield"
-      ]
+      "__values": ["auto", "menulist-button", "none", "textfield"]
     },
     "background": {
       "__additional_values": {
@@ -371,16 +409,10 @@
       "__additional_values": {
         "multiple_backgrounds": "fixed, scroll"
       },
-      "__values": [
-        "fixed",
-        "local"
-      ]
+      "__values": ["fixed", "local"]
     },
     "background-clip": {
-      "__values": [
-        "content-box",
-        "text"
-      ]
+      "__values": ["content-box", "text"]
     },
     "background-image": {
       "__additional_values": {
@@ -395,9 +427,7 @@
       }
     },
     "background-origin": {
-      "__values": [
-        "content-box"
-      ]
+      "__values": ["content-box"]
     },
     "background-position": {
       "__additional_values": {
@@ -419,20 +449,14 @@
       "__additional_values": {
         "2-value": "repeat no-repeat",
         "multiple_backgrounds": "repeat, no-repeat",
-        "round_space": [
-          "space",
-          "round"
-        ]
+        "round_space": ["space", "round"]
       }
     },
     "background-repeat-x": {},
     "background-repeat-y": {},
     "background-size": {
       "__additional_values": {
-        "contain_and_cover": [
-          "contain",
-          "cover"
-        ]
+        "contain_and_cover": ["contain", "cover"]
       }
     },
     "block-size": {
@@ -469,10 +493,7 @@
       }
     },
     "border-image-repeat": {
-      "__values": [
-        "round",
-        "space"
-      ]
+      "__values": ["round", "space"]
     },
     "border-radius": {
       "__additional_values": {
@@ -509,9 +530,7 @@
       }
     },
     "box-sizing": {
-      "__values": [
-        "padding-box"
-      ]
+      "__values": ["padding-box"]
     },
     "break-after": {
       "__values": [
@@ -546,42 +565,28 @@
     },
     "clear": {
       "__additional_values": {
-        "flow_relative_values": [
-          "inline-end",
-          "inline-start"
-        ]
+        "flow_relative_values": ["inline-end", "inline-start"]
       }
     },
     "clip-path": {
       "__additional_values": {
         "-webkit-path": "-webkit-path('M20,20 L50,80 L80,20')",
         "basic_shape": "circle(50px at 0 100px)",
-        "fill_and_stroke_box": [
-          "fill-box",
-          "stroke-box"
-        ],
+        "fill_and_stroke_box": ["fill-box", "stroke-box"],
         "path": "path('M20,20 L50,80 L80,20')"
       }
     },
     "color-profile": {},
     "color-rendering": {},
     "color-scheme": {
-      "__values": [
-        "only",
-        "only_dark",
-        "only_light"
-      ]
+      "__values": ["only", "only_dark", "only_light"]
     },
     "column-fill": {
-      "__values": [
-        "balance-all"
-      ]
+      "__values": ["balance-all"]
     },
     "column-progression": {},
     "contain": {
-      "__values": [
-        "style"
-      ]
+      "__values": ["style"]
     },
     "content": {
       "__additional_values": {
@@ -614,10 +619,7 @@
         ],
         "url": "url(hand.cur), pointer",
         "url_positioning_syntax": "url(cursor_1.png) 4 12, auto",
-        "zoom": [
-          "zoom-in",
-          "zoom-out"
-        ]
+        "zoom": ["zoom-in", "zoom-out"]
       },
       "__values": [
         "-moz-grab",
@@ -650,11 +652,7 @@
     },
     "display": {
       "__additional_values": {
-        "display-outside": [
-          "block",
-          "inline",
-          "run-in"
-        ],
+        "display-outside": ["block", "inline", "run-in"],
         "multi-keyword_values": "inline flow",
         "ruby_values": [
           "ruby",
@@ -673,20 +671,10 @@
           "table-row",
           "table-row-group"
         ],
-        "xul_box_values": [
-          "-moz-box",
-          "-moz-inline-box"
-        ],
+        "xul_box_values": ["-moz-box", "-moz-inline-box"],
         "xul_deck_values": "-moz-deck",
-        "xul_grid_values": [
-          "-moz-grid",
-          "-moz-grid-group",
-          "-moz-grid-line"
-        ],
-        "xul_inline_grid_stack": [
-          "-moz-inline-grid",
-          "-moz-inline-stack"
-        ],
+        "xul_grid_values": ["-moz-grid", "-moz-grid-group", "-moz-grid-line"],
+        "xul_inline_grid_stack": ["-moz-inline-grid", "-moz-inline-stack"],
         "xul_popup_values": "-moz-popup",
         "xul_stack_value": "-moz-stack"
       },
@@ -725,10 +713,7 @@
     },
     "float": {
       "__additional_values": {
-        "flow_relative_values": [
-          "inline-end",
-          "inline-start"
-        ]
+        "flow_relative_values": ["inline-end", "inline-start"]
       }
     },
     "font": {
@@ -746,18 +731,13 @@
     },
     "font-display": {},
     "font-family": {
-      "__values": [
-        "-apple-system",
-        "system_ui"
-      ]
+      "__values": ["-apple-system", "system_ui"]
     },
     "font-size": {
       "__additional_values": {
         "rem_values": "10rem"
       },
-      "__values": [
-        "xxx-large"
-      ]
+      "__values": ["xxx-large"]
     },
     "font-size-adjust": {
       "__additional_values": {
@@ -776,16 +756,10 @@
       }
     },
     "font-synthesis": {
-      "__values": [
-        "small-caps"
-      ]
+      "__values": ["small-caps"]
     },
     "font-variant": {
-      "__values": [
-        "historical-forms",
-        "sub",
-        "super"
-      ]
+      "__values": ["historical-forms", "sub", "super"]
     },
     "font-variant-alternates": {
       "__additional_values": {
@@ -870,14 +844,10 @@
     "layout-grid-mode": {},
     "layout-grid-type": {},
     "line-height": {
-      "__values": [
-        "-moz-block-height"
-      ]
+      "__values": ["-moz-block-height"]
     },
     "list-style": {
-      "__values": [
-        "symbols"
-      ]
+      "__values": ["symbols"]
     },
     "list-style-type": {
       "__values": [
@@ -1013,38 +983,23 @@
       ]
     },
     "margin": {
-      "__values": [
-        "auto"
-      ]
+      "__values": ["auto"]
     },
     "margin-bottom": {
-      "__values": [
-        "auto"
-      ]
+      "__values": ["auto"]
     },
     "margin-left": {
-      "__values": [
-        "auto"
-      ]
+      "__values": ["auto"]
     },
     "margin-right": {
-      "__values": [
-        "auto"
-      ]
+      "__values": ["auto"]
     },
     "margin-top": {
-      "__values": [
-        "auto"
-      ]
+      "__values": ["auto"]
     },
     "marker-offset": {},
     "mask-clip": {
-      "__values": [
-        "border",
-        "content",
-        "padding",
-        "text"
-      ]
+      "__values": ["border", "content", "padding", "text"]
     },
     "mask-image": {
       "__additional_values": {
@@ -1053,17 +1008,9 @@
     },
     "mask-origin": {
       "__additional_values": {
-        "non_standard_values": [
-          "content",
-          "padding",
-          "border"
-        ]
+        "non_standard_values": ["content", "padding", "border"]
       },
-      "__values": [
-        "fill-box",
-        "stroke-box",
-        "view-box"
-      ]
+      "__values": ["fill-box", "stroke-box", "view-box"]
     },
     "mask-position": {
       "__additional_values": {
@@ -1239,44 +1186,28 @@
     },
     "orientation": {},
     "outline-color": {
-      "__values": [
-        "invert"
-      ]
+      "__values": ["invert"]
     },
     "outline-style": {
-      "__values": [
-        "auto"
-      ]
+      "__values": ["auto"]
     },
     "overflow": {
       "__additional_values": {
         "multiple_keywords": "hidden visible"
       },
-      "__values": [
-        "-moz-hidden-unscrollable",
-        "clip"
-      ]
+      "__values": ["-moz-hidden-unscrollable", "clip"]
     },
     "overflow-clip-box": {},
     "overflow-clip-box-block": {},
     "overflow-clip-box-inline": {},
     "overflow-wrap": {
-      "__values": [
-        "anywhere",
-        "break-word"
-      ]
+      "__values": ["anywhere", "break-word"]
     },
     "overflow-x": {
-      "__values": [
-        "-moz-hidden-unscrollable",
-        "clip"
-      ]
+      "__values": ["-moz-hidden-unscrollable", "clip"]
     },
     "overflow-y": {
-      "__values": [
-        "-moz-hidden-unscrollable",
-        "clip"
-      ]
+      "__values": ["-moz-hidden-unscrollable", "clip"]
     },
     "page-orientation": {},
     "pen-action": {},
@@ -1288,11 +1219,7 @@
     "perspective-origin-x": {},
     "perspective-origin-y": {},
     "position": {
-      "__values": [
-        "-webkit-sticky",
-        "fixed",
-        "sticky"
-      ]
+      "__values": ["-webkit-sticky", "fixed", "sticky"]
     },
     "quotes": {
       "__additional_values": {
@@ -1301,10 +1228,7 @@
     },
     "resize": {
       "__additional_values": {
-        "flow_relative_support": [
-          "block",
-          "inline"
-        ]
+        "flow_relative_support": ["block", "inline"]
       }
     },
     "rotate": {
@@ -1313,10 +1237,7 @@
       }
     },
     "ruby-position": {
-      "__values": [
-        "alternate",
-        "inter-character"
-      ]
+      "__values": ["alternate", "inter-character"]
     },
     "scroll-snap-coordinate": {},
     "scroll-snap-destination": {},
@@ -1371,50 +1292,30 @@
     },
     "text-align": {
       "__additional_values": {
-        "block_alignment_values": [
-          "center",
-          "left",
-          "right"
-        ],
-        "flow_relative_values_start_and_end": [
-          "start",
-          "end"
-        ],
+        "block_alignment_values": ["center", "left", "right"],
+        "flow_relative_values_start_and_end": ["start", "end"],
         "string": "'.'"
       },
-      "__values": [
-        "justify-all",
-        "match-parent"
-      ]
+      "__values": ["justify-all", "match-parent"]
     },
     "text-combine-horizontal": {},
     "text-combine-upright": {
-      "__values": [
-        "digits"
-      ]
+      "__values": ["digits"]
     },
     "text-decoration": {
       "__additional_values": {
         "text-decoration-thickness": "solid underline purple 4px"
       },
-      "__values": [
-        "blink"
-      ]
+      "__values": ["blink"]
     },
     "text-decoration-line": {
-      "__values": [
-        "blink"
-      ]
+      "__values": ["blink"]
     },
     "text-decoration-skip-ink": {
-      "__values": [
-        "all"
-      ]
+      "__values": ["all"]
     },
     "text-decoration-style": {
-      "__values": [
-        "wavy"
-      ]
+      "__values": ["wavy"]
     },
     "text-decoration-thickness": {
       "__additional_values": {
@@ -1424,21 +1325,12 @@
     "text-decoration-width": {},
     "text-emphasis-position": {
       "__additional_values": {
-        "left_and_right": [
-          "over left",
-          "over right"
-        ]
+        "left_and_right": ["over left", "over right"]
       },
-      "__values": [
-        "over",
-        "under"
-      ]
+      "__values": ["over", "under"]
     },
     "text-indent": {
-      "__values": [
-        "each-line",
-        "hanging"
-      ]
+      "__values": ["each-line", "hanging"]
     },
     "text-kashida": {},
     "text-kashida-space": {},
@@ -1448,9 +1340,7 @@
     "text-line-through-style": {},
     "text-line-through-width": {},
     "text-orientation": {
-      "__values": [
-        "sideways"
-      ]
+      "__values": ["sideways"]
     },
     "text-overflow": {
       "__additional_values": {
@@ -1466,10 +1356,7 @@
     "text-overline-style": {},
     "text-overline-width": {},
     "text-rendering": {
-      "__values": [
-        "auto",
-        "geometricPrecision"
-      ]
+      "__values": ["auto", "geometricPrecision"]
     },
     "text-size-adjust": {
       "__additional_values": {
@@ -1477,11 +1364,7 @@
       }
     },
     "text-transform": {
-      "__values": [
-        "capitalize",
-        "full-size-kana",
-        "full-width"
-      ]
+      "__values": ["capitalize", "full-size-kana", "full-width"]
     },
     "text-underline": {},
     "text-underline-color": {},
@@ -1493,44 +1376,19 @@
     },
     "text-underline-position": {
       "__additional_values": {
-        "above_below": [
-          "above",
-          "below"
-        ],
-        "left_right": [
-          "left",
-          "right"
-        ]
+        "above_below": ["above", "below"],
+        "left_right": ["left", "right"]
       },
-      "__values": [
-        "auto-pos",
-        "from-font",
-        "left",
-        "right",
-        "under"
-      ]
+      "__values": ["auto-pos", "from-font", "left", "right", "under"]
     },
     "text-underline-style": {},
     "text-underline-width": {},
     "touch-action": {
       "__additional_values": {
-        "axis-pan": [
-          "pan-x",
-          "pan-y"
-        ],
-        "unidirectional-pan": [
-          "pan-up",
-          "pan-down",
-          "pan-left",
-          "pan-right"
-        ]
+        "axis-pan": ["pan-x", "pan-y"],
+        "unidirectional-pan": ["pan-up", "pan-down", "pan-left", "pan-right"]
       },
-      "__values": [
-        "double-tap-zoom",
-        "manipulation",
-        "none",
-        "pinch-zoom"
-      ]
+      "__values": ["double-tap-zoom", "manipulation", "none", "pinch-zoom"]
     },
     "transform": {
       "__additional_values": {
@@ -1542,11 +1400,7 @@
       }
     },
     "transform-box": {
-      "__values": [
-        "border-box",
-        "content-box",
-        "stroke-box"
-      ]
+      "__values": ["border-box", "content-box", "stroke-box"]
     },
     "transform-origin": {
       "__additional_values": {
@@ -1557,14 +1411,10 @@
     "transform-origin-y": {},
     "transform-origin-z": {},
     "transition": {
-      "__values": [
-        "gradients"
-      ]
+      "__values": ["gradients"]
     },
     "transition-property": {
-      "__values": [
-        "IDENT_value"
-      ]
+      "__values": ["IDENT_value"]
     },
     "transition-timing-function": {
       "__additional_values": {
@@ -1586,9 +1436,7 @@
     },
     "unicode-range": {},
     "user-modify": {
-      "__values": [
-        "read-write-plaintext-only"
-      ]
+      "__values": ["read-write-plaintext-only"]
     },
     "user-select": {
       "__values": [
@@ -1604,9 +1452,7 @@
     "user-zoom": {},
     "viewport-fit": {},
     "visibility": {
-      "__values": [
-        "collapse"
-      ]
+      "__values": ["collapse"]
     },
     "white-space": {
       "__values": [
@@ -1640,10 +1486,7 @@
       ]
     },
     "word-break": {
-      "__values": [
-        "break-word",
-        "keep-all"
-      ]
+      "__values": ["break-word", "keep-all"]
     },
     "word-spacing": {
       "__additional_values": {
@@ -1657,18 +1500,8 @@
           "vertical-lr",
           "vertical-rl"
         ],
-        "sideways_values": [
-          "sideways-lr",
-          "sideways-rl"
-        ],
-        "svg_values": [
-          "lr",
-          "lr-tb",
-          "rl",
-          "rl-tb",
-          "tb",
-          "tb-rl"
-        ]
+        "sideways_values": ["sideways-lr", "sideways-rl"],
+        "svg_values": ["lr", "lr-tb", "rl", "rl-tb", "tb", "tb-rl"]
       }
     },
     "z-index": {
@@ -1677,9 +1510,7 @@
       }
     },
     "zoom": {
-      "__values": [
-        "reset"
-      ]
+      "__values": ["reset"]
     }
   }
 }

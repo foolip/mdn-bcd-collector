@@ -205,6 +205,58 @@
     };
   }
 
+  function cssPropertyToIDLAttribute(property, lowercaseFirst) {
+    var output = '';
+    var uppercaseNext = false;
+
+    if (lowercaseFirst) {
+      property = property.substr(1);
+    }
+
+    for (var i = 0; i < property.length; i++) {
+      var c = property[i];
+
+      if (c === '-') {
+        uppercaseNext = true;
+      } else if (uppercaseNext) {
+        uppercaseNext = false;
+        output += c.toUpperCase();
+      } else {
+        output += c;
+      }
+    }
+
+    return output;
+  }
+
+  function testCSSProperty(name) {
+    if ("CSS" in window && window.CSS.supports) {
+      return window.CSS.supports(name, "inherit");
+    }
+
+    var attrs = [name];
+    attrs.push(cssPropertyToIDLAttribute(name, name.startsWith('-')));
+    for (var i = 0; i < attrs.length; i++) {
+      var attr = attrs[i];
+      if (attr in document.body.style) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  function testCSSPropertyValue(name, value) {
+    if ("CSS" in window && window.CSS.supports) {
+      return window.CSS.supports(name, value);
+    }
+
+    var div = document.createElement('div');
+    div.style[name] = "";
+    div.style[name] = value;
+    return div.style.getPropertyValue(name) !== "";
+  }
+
   // Once a test is evaluated and run, it calls this function with the result.
   // This function then compiles a result object from the given result value,
   // and then passes the result to `callback()` (or if the result is not true
@@ -937,6 +989,8 @@
   global.bcd = {
     testConstructor: testConstructor,
     testObjectName: testObjectName,
+    testCSSProperty: testCSSProperty,
+    testCSSPropertyValue: testCSSPropertyValue,
     addInstance: addInstance,
     addTest: addTest,
     runTests: runTests,
