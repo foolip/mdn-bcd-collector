@@ -787,8 +787,9 @@ const buildCSS = (specCSS, customCSS) => {
   }
 
   for (const [name, data] of Object.entries(customCSS.properties)) {
-    const values = "__values" in data ? data["__values"] : [];
-    const additionalValues = "__additional_values" in data ? data["__additional_values"] : {};
+    const values = '__values' in data ? data['__values'] : [];
+    const additionalValues =
+      '__additional_values' in data ? data['__additional_values'] : {};
 
     const mergedValues = new Map(Object.entries(additionalValues));
     for (const value of values) {
@@ -824,9 +825,13 @@ const buildCSS = (specCSS, customCSS) => {
     });
 
     // Tests for values
-    for (const [key, value] of Array.from(properties.get(name).entries()).sort()) {
+    for (const [key, value] of Array.from(
+      properties.get(name).entries()
+    ).sort()) {
       const values = Array.isArray(value) ? value : [value];
-      const code = values.map((value) => `bcd.testCSSPropertyValue("${name}", "${value}")`).join(" || ");
+      const code = values
+        .map((value) => `bcd.testCSSPropertyValue("${name}", "${value}")`)
+        .join(' || ');
       tests[`css.properties.${name}.${key}`] = compileTest({
         raw: {code: code},
         exposure: ['Window']
