@@ -54,7 +54,7 @@
     "yargs": "17.3.1"
   },
   "devDependencies": {
-    "@babel/core": "7.17.5",
+    "@babel/core": "7.17.7",
     "@babel/eslint-parser": "7.17.0",
     "@babel/preset-env": "7.16.11",
     "@browser-logos/chrome": "2.0.0",
@@ -83,7 +83,7 @@
     "listr2": "4.0.5",
     "minimatch": "5.0.1",
     "mocha": "9.2.2",
-    "node-fetch": "3.2.2",
+    "node-fetch": "3.2.3",
     "nodemon": "2.0.15",
     "open-cli": "7.0.1",
     "prettier": "2.5.1",
