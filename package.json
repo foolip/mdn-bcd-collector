@@ -54,7 +54,7 @@
     "yargs": "17.3.1"
   },
   "devDependencies": {
-    "@babel/core": "7.17.5",
+    "@babel/core": "7.17.7",
     "@babel/eslint-parser": "7.17.0",
     "@babel/preset-env": "7.16.11",
     "@browser-logos/chrome": "2.0.0",
@@ -75,7 +75,7 @@
     "chalk-template": "0.4.0",
     "ejs-lint": "1.2.1",
     "enquirer": "2.3.6",
-    "eslint": "8.10.0",
+    "eslint": "8.11.0",
     "eslint-config-google": "0.14.0",
     "eslint-plugin-prefer-arrow": "1.2.3",
     "json3": "3.3.3",
