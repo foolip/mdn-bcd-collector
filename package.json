@@ -86,7 +86,7 @@
     "node-fetch": "3.2.3",
     "nodemon": "2.0.15",
     "open-cli": "7.0.1",
-    "prettier": "2.5.1",
+    "prettier": "2.6.0",
     "puppeteer": "13.5.1",
     "sass": "1.49.9",
     "selenium-webdriver": "4.1.1",
