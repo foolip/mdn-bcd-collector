@@ -1344,25 +1344,43 @@ describe('build', () => {
 
     const customCSS = {
       properties: {
+        'font-family': {
+          __values: ['emoji', 'system-ui'],
+          __additional_values: {
+            historic: ['sans-serif', 'serif']
+          }
+        },
         zoom: {}
       }
     };
 
     assert.deepEqual(buildCSS(webrefCSS, customCSS), {
       'css.properties.font-family': {
-        code: '"fontFamily" in document.body.style || "font-family" in document.body.style',
+        code: 'bcd.testCSSProperty("font-family")',
+        exposure: ['Window']
+      },
+      'css.properties.font-family.emoji': {
+        code: 'bcd.testCSSPropertyValue("font-family", "emoji")',
+        exposure: ['Window']
+      },
+      'css.properties.font-family.historic': {
+        code: 'bcd.testCSSPropertyValue("font-family", "sans-serif") || bcd.testCSSPropertyValue("font-family", "serif")',
+        exposure: ['Window']
+      },
+      'css.properties.font-family.system-ui': {
+        code: 'bcd.testCSSPropertyValue("font-family", "system-ui")',
         exposure: ['Window']
       },
       'css.properties.font-weight': {
-        code: '"fontWeight" in document.body.style || "font-weight" in document.body.style',
+        code: 'bcd.testCSSProperty("font-weight")',
         exposure: ['Window']
       },
       'css.properties.grid': {
-        code: '"grid" in document.body.style',
+        code: 'bcd.testCSSProperty("grid")',
         exposure: ['Window']
       },
       'css.properties.zoom': {
-        code: '"zoom" in document.body.style',
+        code: 'bcd.testCSSProperty("zoom")',
         exposure: ['Window']
       }
     });
