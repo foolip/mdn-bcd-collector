@@ -625,6 +625,9 @@ const buildIDLMemberTests = (
       continue;
     }
 
+    // TODO: too many events tests are being generated, see
+    // https://github.com/foolip/mdn-bcd-collector/pull/1825#issuecomment-1048009920
+
     const isStatic = member.special === 'static' || iface.type === 'namespace';
     const isEventHandler =
       member.idlType?.type === 'attribute-type' &&
