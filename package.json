@@ -51,7 +51,7 @@
     "ua-parser-js": "1.0.2",
     "unique-string": "2.0.0",
     "winston": "3.6.0",
-    "yargs": "17.3.1"
+    "yargs": "17.4.0"
   },
   "devDependencies": {
     "@babel/core": "7.17.8",
