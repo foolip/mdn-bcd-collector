@@ -1400,7 +1400,7 @@ describe('build', () => {
         zoom: {}
       }
     };
-      
+
       assert.deepEqual(buildCSS(webrefCSS, customCSS), {
         'css.properties.font-family': {
           code: 'bcd.testCSSProperty("font-family")',
