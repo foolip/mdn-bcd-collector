@@ -777,25 +777,38 @@ const cssPropertyToIDLAttribute = (property, lowercaseFirst) => {
   return output;
 };
 
-const buildCSS = (webrefCSS, customCSS) => {
-  const propertySet = new Set();
+const buildCSS = (specCSS, customCSS) => {
+  const properties = new Map();
 
-  for (const data of Object.values(webrefCSS)) {
+  for (const data of Object.values(specCSS)) {
     for (const prop of Object.keys(data.properties)) {
-      propertySet.add(prop);
+      properties.set(prop, new Map());
     }
   }
 
-  for (const prop of Object.keys(customCSS.properties)) {
-    if (propertySet.has(prop)) {
-      throw new Error(`Custom CSS property already known: ${prop}`);
+  for (const [name, data] of Object.entries(customCSS.properties)) {
+    const values = '__values' in data ? data['__values'] : [];
+    const additionalValues =
+      '__additional_values' in data ? data['__additional_values'] : {};
+
+    const mergedValues = new Map(Object.entries(additionalValues));
+    for (const value of values) {
+      if (mergedValues.has(value)) {
+        throw new Error(`CSS property value already known: ${value}`);
+      }
+      mergedValues.set(value, value);
     }
-    propertySet.add(prop);
+
+    if (properties.has(name) && mergedValues.size === 0) {
+      throw new Error(`Custom CSS property already known: ${name}`);
+    }
+
+    properties.set(name, mergedValues);
   }
 
   const tests = {};
 
-  for (const name of Array.from(propertySet).sort()) {
+  for (const name of Array.from(properties.keys()).sort()) {
     const customTest = getCustomTestCSS(name);
     if (customTest) {
       tests[`css.properties.${name}`] = compileTest({
@@ -805,15 +818,25 @@ const buildCSS = (webrefCSS, customCSS) => {
       continue;
     }
 
-    const attrName = cssPropertyToIDLAttribute(name, name.startsWith('-'));
-    const code = [{property: attrName, owner: 'document.body.style'}];
-    if (name !== attrName) {
-      code.push({property: name, owner: 'document.body.style'});
-    }
+    // Test for the property itself
     tests[`css.properties.${name}`] = compileTest({
-      raw: {code, combinator: '||'},
+      raw: {code: `bcd.testCSSProperty("${name}")`},
       exposure: ['Window']
     });
+
+    // Tests for values
+    for (const [key, value] of Array.from(
+      properties.get(name).entries()
+    ).sort()) {
+      const values = Array.isArray(value) ? value : [value];
+      const code = values
+        .map((value) => `bcd.testCSSPropertyValue("${name}", "${value}")`)
+        .join(' || ');
+      tests[`css.properties.${name}.${key}`] = compileTest({
+        raw: {code: code},
+        exposure: ['Window']
+      });
+    }
   }
 
   return tests;
