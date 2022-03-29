@@ -104,7 +104,7 @@ const getMissing = (
   }
 };
 
-/* istanbul ignore next */
+/* c8 ignore start */
 const main = (bcd, tests) => {
   const {argv} = yargs(hideBin(process.argv)).command(
     '$0 [--direction]',
@@ -152,7 +152,6 @@ const main = (bcd, tests) => {
   );
 };
 
-/* istanbul ignore if */
 if (esMain(import.meta)) {
   const BCD_DIR = fileURLToPath(
     new URL(process.env.BCD_DIR || `../browser-compat-data`, import.meta.url)
@@ -162,5 +161,6 @@ if (esMain(import.meta)) {
 
   main(bcd, tests);
 }
+/* c8 ignore stop */
 
 export {traverseFeatures, findMissing, getMissing};

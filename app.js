@@ -38,12 +38,12 @@ import Tests from './tests.js';
 
 const storage = getStorage();
 
+/* c8 ignore start */
 const appVersion =
   process.env.GAE_VERSION === 'production' ?
     (await fs.readJson(new URL('./package.json', import.meta.url))).version :
     'Dev';
 
-/* istanbul ignore next */
 const secrets = await fs.readJson(
   new URL(
     process.env.NODE_ENV === 'test' ?
@@ -52,6 +52,7 @@ const secrets = await fs.readJson(
     import.meta.url
   )
 );
+/* c8 ignore stop */
 
 const tests = new Tests({
   tests: await fs.readJson(new URL('./tests.json', import.meta.url)),
@@ -166,6 +167,7 @@ app.get('/', (req, res) => {
   });
 });
 
+/* c8 ignore start */
 app.get('/download/:filename', (req, res, next) => {
   storage
     .readFile(req.params.filename)
@@ -214,6 +216,7 @@ app.all('/export', (req, res, next) => {
     })
     .catch(next);
 });
+/* c8 ignore stop */
 
 app.all('/tests/*', (req, res) => {
   const ident = req.params['0'].replace(/\//g, '.');
@@ -245,7 +248,7 @@ app.use((req, res) => {
   });
 });
 
-/* istanbul ignore if */
+/* c8 ignore start */
 if (esMain(import.meta)) {
   const {argv} = yargs(hideBin(process.argv)).command(
     '$0',
@@ -285,5 +288,6 @@ if (esMain(import.meta)) {
   }
   logger.info('Press Ctrl+C to quit.');
 }
+/* c8 ignore stop */
 
 export {app, appVersion as version};

@@ -39,28 +39,25 @@
   // Set to true for debugging output, and 'full' to include completion logging
   var debugmode = false;
 
-  /* istanbul ignore next */
+  /* c8 ignore start */
   function consoleLog(message) {
     if ('console' in self) {
       console.log(message);
     }
   }
 
-  /* istanbul ignore next */
   function consoleWarn(message) {
     if ('console' in self) {
       console.warn(message);
     }
   }
 
-  /* istanbul ignore next */
   function consoleError(message) {
     if ('console' in self) {
       console.error(message);
     }
   }
 
-  /* istanbul ignore next */
   function stringify(value) {
     try {
       return String(value);
@@ -69,13 +66,13 @@
     }
   }
 
-  /* istanbul ignore next */
   function stringIncludes(string, search) {
     if (string.includes) {
       return string.includes(search);
     }
     return string.indexOf(search) !== -1;
   }
+  /* c8 ignore stop */
 
   function updateStatus(newStatus, className) {
     var statusElement = document.getElementById('status');

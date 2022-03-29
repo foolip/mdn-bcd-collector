@@ -1,12 +1,14 @@
 {
   "all": true,
   "exclude": [
+    "**/.nyc_output/**",
     "**/generated/**",
     "**/unittest/**",
     "**/coverage/**",
     "**/resources/custom-tests/**",
-    "**/json3.min.js",
+    "release.js",
     "selenium.js",
-    "scripts.js"
+    "scripts.js",
+    "json3.min.js"
   ]
 }

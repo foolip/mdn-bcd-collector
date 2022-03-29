@@ -44,7 +44,6 @@ const prepare = () => {
   exec('node install.js', {PUPPETEER_PRODUCT: 'firefox'}, false);
 };
 
-/* istanbul ignore if */
 if (esMain(import.meta)) {
   const {argv} = yargs(hideBin(process.argv)).command(
     '$0 <command>',

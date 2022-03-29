@@ -363,7 +363,7 @@ const update = (bcd, supportMatrix, filter) => {
 
 // |paths| can be files or directories. Returns an object mapping
 // from (absolute) path to the parsed file content.
-/* istanbul ignore next */
+/* c8 ignore start */
 const loadJsonFiles = async (paths) => {
   // Ignores .DS_Store, .git, etc.
   const dotFilter = (item) => {
@@ -396,7 +396,6 @@ const loadJsonFiles = async (paths) => {
   return Object.fromEntries(entries);
 };
 
-/* istanbul ignore next */
 const main = async (reportPaths, filter, browsers, overrides) => {
   // Replace filter.path with a minimatch object.
   if (filter.path) {
@@ -427,7 +426,6 @@ const main = async (reportPaths, filter, browsers, overrides) => {
   }
 };
 
-/* istanbul ignore if */
 if (esMain(import.meta)) {
   const {
     default: {browsers}
@@ -479,6 +477,7 @@ if (esMain(import.meta)) {
 
   await main(argv.reports, argv, browsers, overrides);
 }
+/* c8 ignore stop */
 
 export {
   findEntry,
