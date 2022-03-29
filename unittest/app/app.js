@@ -240,16 +240,19 @@ describe('rendered pages', () => {
 
 describe('/tests/', () => {
   it('get a test', async () => {
+    // XXX Test page content and ensure we're loading the right tests
     const res = await agent.get(`/tests/${tests[1][0].replace(/\./g, '/')}`);
     assert.equal(res.status, 200);
   });
 
   it('get all tests', async () => {
+    // XXX Test page content and ensure we're loading the right tests
     const res = await agent.get('/tests/');
     assert.equal(res.status, 200);
   });
 
   it('get all tests, ignore CSS', async () => {
+    // XXX Test page content and ensure we're loading the right tests
     const res = await agent.get('/tests/?ignore=css');
     assert.equal(res.status, 200);
   });
