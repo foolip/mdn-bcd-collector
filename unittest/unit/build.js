@@ -1390,16 +1390,16 @@ describe('build', () => {
       };
 
       const customCSS = {
-      properties: {
-        'font-family': {
-          __values: ['emoji', 'system-ui'],
-          __additional_values: {
-            historic: ['sans-serif', 'serif']
-          }
-        },
-        zoom: {}
-      }
-    };
+        properties: {
+          'font-family': {
+            __values: ['emoji', 'system-ui'],
+            __additional_values: {
+              historic: ['sans-serif', 'serif']
+            }
+          },
+          zoom: {}
+        }
+      };
 
       assert.deepEqual(buildCSS(webrefCSS, customCSS), {
         'css.properties.font-family': {
