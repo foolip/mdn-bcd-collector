@@ -26,7 +26,7 @@ import * as YAML from 'yaml';
 
 import customIDL from './custom-idl/index.js';
 
-/* istanbul ignore next */
+/* c8 ignore start */
 const customTests = YAML.parse(
   await fs.readFile(
     new URL(
@@ -38,6 +38,7 @@ const customTests = YAML.parse(
     'utf8'
   )
 );
+/* c8 ignore stop */
 
 const customCSS = await fs.readJson(
   new URL('./custom-css.json', import.meta.url)
@@ -467,7 +468,6 @@ const getExtAttrSet = (node, name) => {
     case '*':
       set.add('*');
       break;
-    /* istanbul ignore next */
     default:
       throw new Error(
         `Unexpected RHS "${attr.rhs.type}" for ${name} extended attribute`
@@ -625,7 +625,14 @@ const buildIDLMemberTests = (
       continue;
     }
 
+    // TODO: too many events tests are being generated, see
+    // https://github.com/foolip/mdn-bcd-collector/pull/1825#issuecomment-1048009920
+
     const isStatic = member.special === 'static' || iface.type === 'namespace';
+    const isEventHandler =
+      member.idlType?.type === 'attribute-type' &&
+      typeof member.idlType?.idlType === 'string' &&
+      member.idlType?.idlType.endsWith('EventHandler');
 
     let expr;
     const customTestMember = getCustomTestAPI(
@@ -664,7 +671,11 @@ const buildIDLMemberTests = (
       }
     }
 
-    tests[member.name] = compileTest({
+    const name = isEventHandler ?
+      `${member.name.replace(/^on/, '')}_event` :
+      member.name;
+
+    tests[name] = compileTest({
       raw: {
         code: expr
       },
@@ -777,25 +788,38 @@ const cssPropertyToIDLAttribute = (property, lowercaseFirst) => {
   return output;
 };
 
-const buildCSS = (webrefCSS, customCSS) => {
-  const propertySet = new Set();
+const buildCSS = (specCSS, customCSS) => {
+  const properties = new Map();
 
-  for (const data of Object.values(webrefCSS)) {
+  for (const data of Object.values(specCSS)) {
     for (const prop of Object.keys(data.properties)) {
-      propertySet.add(prop);
+      properties.set(prop, new Map());
     }
   }
 
-  for (const prop of Object.keys(customCSS.properties)) {
-    if (propertySet.has(prop)) {
-      throw new Error(`Custom CSS property already known: ${prop}`);
+  for (const [name, data] of Object.entries(customCSS.properties)) {
+    const values = '__values' in data ? data['__values'] : [];
+    const additionalValues =
+      '__additional_values' in data ? data['__additional_values'] : {};
+
+    const mergedValues = new Map(Object.entries(additionalValues));
+    for (const value of values) {
+      if (mergedValues.has(value)) {
+        throw new Error(`CSS property value already known: ${value}`);
+      }
+      mergedValues.set(value, value);
     }
-    propertySet.add(prop);
+
+    if (properties.has(name) && mergedValues.size === 0) {
+      throw new Error(`Custom CSS property already known: ${name}`);
+    }
+
+    properties.set(name, mergedValues);
   }
 
   const tests = {};
 
-  for (const name of Array.from(propertySet).sort()) {
+  for (const name of Array.from(properties.keys()).sort()) {
     const customTest = getCustomTestCSS(name);
     if (customTest) {
       tests[`css.properties.${name}`] = compileTest({
@@ -805,15 +829,25 @@ const buildCSS = (webrefCSS, customCSS) => {
       continue;
     }
 
-    const attrName = cssPropertyToIDLAttribute(name, name.startsWith('-'));
-    const code = [{property: attrName, owner: 'document.body.style'}];
-    if (name !== attrName) {
-      code.push({property: name, owner: 'document.body.style'});
-    }
+    // Test for the property itself
     tests[`css.properties.${name}`] = compileTest({
-      raw: {code, combinator: '||'},
+      raw: {code: `bcd.testCSSProperty("${name}")`},
       exposure: ['Window']
     });
+
+    // Tests for values
+    for (const [key, value] of Array.from(
+      properties.get(name).entries()
+    ).sort()) {
+      const values = Array.isArray(value) ? value : [value];
+      const code = values
+        .map((value) => `bcd.testCSSPropertyValue("${name}", "${value}")`)
+        .join(' || ');
+      tests[`css.properties.${name}.${key}`] = compileTest({
+        raw: {code: code},
+        exposure: ['Window']
+      });
+    }
   }
 
   return tests;
@@ -873,7 +907,7 @@ const buildJS = (customJS) => {
   return tests;
 };
 
-/* istanbul ignore next */
+/* c8 ignore start */
 const copyResources = async () => {
   const resources = [
     ['json3/lib/json3.min.js', 'resources'],
@@ -916,7 +950,6 @@ const copyResources = async () => {
   }
 };
 
-/* istanbul ignore next */
 const generateCSS = async () => {
   const scssPath = fileURLToPath(new URL('./style.scss', import.meta.url));
   const outPath = path.join(generatedDir, 'resources', 'style.css');
@@ -927,7 +960,6 @@ const generateCSS = async () => {
   await fs.writeFile(outPath, result.css.toString(), 'utf8');
 };
 
-/* istanbul ignore next */
 const build = async (customIDL, customCSS) => {
   const specCSS = await css.listAll();
   const specIDLs = await idl.parseAll();
@@ -941,10 +973,10 @@ const build = async (customIDL, customCSS) => {
   await generateCSS();
 };
 
-/* istanbul ignore if */
 if (esMain(import.meta)) {
   await build(customIDL, customCSS);
 }
+/* c8 ignore stop */
 
 export {
   getCustomTestAPI,
@@ -959,5 +991,6 @@ export {
   buildIDL,
   validateIDL,
   cssPropertyToIDLAttribute,
-  buildCSS
+  buildCSS,
+  buildJS
 };

@@ -365,7 +365,6 @@ partial interface HTMLElement {
   attribute HTMLMenuElement? contextMenu;
   attribute DOMSettableTokenList dropzone;
   undefined forceSpellCheck();
-  attribute boolean inert;
   attribute boolean noModule;
   attribute EventHandler onModule;
 };

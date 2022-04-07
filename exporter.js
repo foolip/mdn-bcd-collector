@@ -68,13 +68,13 @@ const getReportMeta = (report) => {
 
 const createBody = (meta) => {
   return (
-    `User Agent: ${meta.uaString}\nBrowser: ${meta.browser} (on ${meta.os}) ${
+    `User Agent: ${meta.uaString}\nBrowser: ${meta.browser} (on ${meta.os})${
       meta.ua.inBcd ? '' : ' - **Not in BCD**'
     }` +
-    `\nHash Digest: ${meta.digest}\n` +
-    `Test URLs: ${meta.urls.join(', ')}\n` +
+    `\nHash Digest: ${meta.digest}` +
+    `\nTest URLs: ${meta.urls.join(', ')}` +
     (meta.version == 'Dev' ?
-      '\n**WARNING:** this PR was created from a development/staging version!' :
+      '\n\n**WARNING:** this PR was created from a development/staging version!' :
       '')
   );
 };

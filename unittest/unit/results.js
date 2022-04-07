@@ -14,9 +14,9 @@
 
 'use strict';
 
-import {assert} from "chai";
+import {assert} from 'chai';
 
-import parseResults from "../../results.js";
+import parseResults from '../../results.js';
 
 describe('results', () => {
   describe('parseResults', () => {
@@ -110,7 +110,7 @@ describe('results', () => {
       );
     });
 
-    it('invalid name', () => {
+    it('invalid name: wrong format', () => {
       assert.throws(
         () => {
           parseResults('http://localhost', [
@@ -123,6 +123,22 @@ describe('results', () => {
         },
         Error,
         'results[0].name should be a string; got number'
+      );
+    });
+
+    it('invalid name: too long', () => {
+      assert.throws(
+        () => {
+          parseResults('http://localhost', [
+            {
+              exposure: 'Window',
+              name: 'a'.repeat(1100),
+              result: true
+            }
+          ]);
+        },
+        Error,
+        'results[0].name should be a short string; string is too long'
       );
     });
 

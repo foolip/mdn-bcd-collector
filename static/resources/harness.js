@@ -39,28 +39,25 @@
   // Set to true for debugging output, and 'full' to include completion logging
   var debugmode = false;
 
-  /* istanbul ignore next */
+  /* c8 ignore start */
   function consoleLog(message) {
     if ('console' in self) {
       console.log(message);
     }
   }
 
-  /* istanbul ignore next */
   function consoleWarn(message) {
     if ('console' in self) {
       console.warn(message);
     }
   }
 
-  /* istanbul ignore next */
   function consoleError(message) {
     if ('console' in self) {
       console.error(message);
     }
   }
 
-  /* istanbul ignore next */
   function stringify(value) {
     try {
       return String(value);
@@ -69,13 +66,13 @@
     }
   }
 
-  /* istanbul ignore next */
   function stringIncludes(string, search) {
     if (string.includes) {
       return string.includes(search);
     }
     return string.indexOf(search) !== -1;
   }
+  /* c8 ignore stop */
 
   function updateStatus(newStatus, className) {
     var statusElement = document.getElementById('status');
@@ -203,6 +200,58 @@
         names.join(', ') +
         ')'
     };
+  }
+
+  function cssPropertyToIDLAttribute(property, lowercaseFirst) {
+    var output = '';
+    var uppercaseNext = false;
+
+    if (lowercaseFirst) {
+      property = property.substr(1);
+    }
+
+    for (var i = 0; i < property.length; i++) {
+      var c = property[i];
+
+      if (c === '-') {
+        uppercaseNext = true;
+      } else if (uppercaseNext) {
+        uppercaseNext = false;
+        output += c.toUpperCase();
+      } else {
+        output += c;
+      }
+    }
+
+    return output;
+  }
+
+  function testCSSProperty(name) {
+    if ("CSS" in window && window.CSS.supports) {
+      return window.CSS.supports(name, "inherit");
+    }
+
+    var attrs = [name];
+    attrs.push(cssPropertyToIDLAttribute(name, name.startsWith('-')));
+    for (var i = 0; i < attrs.length; i++) {
+      var attr = attrs[i];
+      if (attr in document.body.style) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  function testCSSPropertyValue(name, value) {
+    if ("CSS" in window && window.CSS.supports) {
+      return window.CSS.supports(name, value);
+    }
+
+    var div = document.createElement('div');
+    div.style[name] = "";
+    div.style[name] = value;
+    return div.style.getPropertyValue(name) !== "";
   }
 
   // Once a test is evaluated and run, it calls this function with the result.
@@ -858,12 +907,36 @@
 
     var resultsEl = document.getElementById('results');
 
-    if (resultsEl && !hideResults) {
+    function doRenderResults() {
       loadHighlightJs(function () {
         for (var i = 0; i < results.length; i++) {
           renderReportEl(results[i], resultsEl);
         }
       });
+    }
+
+    if (resultsEl && !hideResults) {
+      if (results.length > 250) {
+        var renderWarning = document.createElement('p');
+        renderWarning.innerHTML =
+          'There are ' +
+          results.length +
+          ' test results.<br>Displaying all results may cause your browser to freeze, especially on older browsers.<br>Display results anyways?';
+        resultsEl.appendChild(renderWarning);
+
+        var renderButton = document.createElement('button');
+        renderButton.innerHTML = 'Show Results';
+        resultsEl.appendChild(renderButton);
+
+        renderButton.onclick = function () {
+          resultsEl.removeChild(renderWarning);
+          resultsEl.removeChild(renderButton);
+
+          doRenderResults();
+        };
+      } else {
+        doRenderResults();
+      }
     }
   }
 
@@ -937,6 +1010,8 @@
   global.bcd = {
     testConstructor: testConstructor,
     testObjectName: testObjectName,
+    testCSSProperty: testCSSProperty,
+    testCSSPropertyValue: testCSSPropertyValue,
     addInstance: addInstance,
     addTest: addTest,
     runTests: runTests,
