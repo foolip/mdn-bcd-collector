@@ -1213,7 +1213,7 @@ describe('build', () => {
            };`
       );
 
-      assert.deepEqual(buildIDLTests(ast, []), {
+      assert.deepEqual(buildIDLTests(ast, [], scopes), {
         'api.HTMLAreaElement': {
           code: '"HTMLAreaElement" in self',
           exposure: ['Window']
