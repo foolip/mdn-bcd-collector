@@ -672,7 +672,7 @@ const buildIDLMemberTests = (
     }
 
     const name = isEventHandler ?
-      `${member.name.replace('on', '')}_event` :
+      `${member.name.replace(/^on/, '')}_event` :
       member.name;
 
     tests[name] = compileTest({
