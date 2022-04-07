@@ -631,7 +631,7 @@ const buildIDLMemberTests = (
     const isStatic = member.special === 'static' || iface.type === 'namespace';
     const isEventHandler =
       member.idlType?.type === 'attribute-type' &&
-      (member.idlType?.idlType || '').includes('EventHandler');
+      member.idlType?.idlType?.endsWith('EventHandler');
 
     let expr;
     const customTestMember = getCustomTestAPI(
