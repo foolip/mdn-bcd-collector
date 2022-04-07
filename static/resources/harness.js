@@ -202,6 +202,25 @@
     };
   }
 
+  function testOptionParam(instance, methodName, paramName, paramValue) {
+    if (!('Object' in self && 'defineProperty' in Object)) {
+      return {
+        result: null,
+        message: 'Browser does not support detection methods'
+      };
+    }
+
+    var accessed = false;
+    var options = Object.defineProperty({}, paramName, {
+      get: function () {
+        accessed = true;
+        return paramValue;
+      }
+    });
+    instance[methodName](options);
+    return accessed;
+  }
+
   function cssPropertyToIDLAttribute(property, lowercaseFirst) {
     var output = '';
     var uppercaseNext = false;
@@ -1010,6 +1029,7 @@
   global.bcd = {
     testConstructor: testConstructor,
     testObjectName: testObjectName,
+    testOptionParam: testOptionParam,
     testCSSProperty: testCSSProperty,
     testCSSPropertyValue: testCSSPropertyValue,
     addInstance: addInstance,
