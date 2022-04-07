@@ -8,6 +8,8 @@ See [DESIGN.md](./DESIGN.md) for details of how this service works.
 
 ## Setup
 
+This project requires Node.js 16 or greater.
+
 ```sh
 npm install
 ```

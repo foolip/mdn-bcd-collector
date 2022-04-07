@@ -16,8 +16,8 @@
 
 import {assert} from 'chai';
 import fs from 'fs-extra';
+import {fileURLToPath} from 'url';
 import puppeteer from 'puppeteer';
-import pti from 'puppeteer-to-istanbul';
 
 import {app} from '../../app.js';
 
@@ -58,7 +58,7 @@ describe('harness.js', () => {
 
       const page = await browser.newPage();
       if (product == 'chrome') {
-        await page.coverage.startJSCoverage();
+        await page.coverage.startJSCoverage({includeRawScriptCoverage: true});
       }
 
       const reportPromise = new Promise((resolve, reject) => {
@@ -75,25 +75,28 @@ describe('harness.js', () => {
 
       if (product == 'chrome') {
         const jsCoverage = await page.coverage.stopJSCoverage();
-        pti.write(jsCoverage, {
-          includeHostname: false,
-          storagePath: './.nyc_output'
-        });
 
-        // Slight adjustment of coverage files to point to original files
-        const coveragePath = new URL(
-          '../../.nyc_output/out.json',
-          import.meta.url
+        // Adjust coverage reports to point to original files
+        // and filter for non-generated files
+        const coverage = jsCoverage
+          .map(({rawScriptCoverage: it}) => ({
+            ...it,
+            scriptId: String(it.scriptId),
+            url: it.url.replace(
+              `http://localhost:${port}/`,
+              new URL('../../static/', import.meta.url)
+            )
+          }))
+          .filter((it) => fs.existsSync(fileURLToPath(it.url)));
+
+        coverage.forEach((it, idx) =>
+          fs.writeFileSync(
+            `${
+              process.env.NODE_V8_COVERAGE
+            }/coverage-${Date.now()}-${idx}.json`,
+            JSON.stringify({result: [it]})
+          )
         );
-
-        const data = await fs.readFile(coveragePath, 'utf8');
-
-        const result = data.replace(
-          /\.nyc_output\/resources/g,
-          'static/resources'
-        );
-
-        await fs.writeFile(coveragePath, result, 'utf8');
       }
 
       assert.equal(report.stats.failures, 0);

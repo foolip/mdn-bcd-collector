@@ -1,0 +1,7 @@
+// These entries are in BCD, but they're not described in the
+// Manifest Incubations (https://wicg.github.io/manifest-incubations/) spec
+
+partial interface BeforeInstallPromptEvent {
+  attribute FrozenArray<DOMString> platform;
+  attribute Promise<DOMString> userChoice;
+};

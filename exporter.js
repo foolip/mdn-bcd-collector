@@ -40,6 +40,7 @@ const getReportMeta = (report) => {
   const os = `${ua.os.name} ${ua.os.version}`;
   const desc = `${browser} / ${os}`;
   const title = `Results from ${desc} / Collector v${version}`;
+  const urls = Object.keys(report.results);
 
   const slug = `${version.toLowerCase()}-${ua.browser.id.replace(/_/g, '-')}-${
     ua.fullVersion
@@ -57,20 +58,23 @@ const getReportMeta = (report) => {
     os,
     desc,
     title,
+    urls,
     slug,
     filename,
-    branch
+    branch,
+    version
   };
 };
 
 const createBody = (meta) => {
   return (
-    `User Agent: ${meta.uaString}\nBrowser: ${meta.browser} (on ${meta.os}) ${
+    `User Agent: ${meta.uaString}\nBrowser: ${meta.browser} (on ${meta.os})${
       meta.ua.inBcd ? '' : ' - **Not in BCD**'
     }` +
-    `\nHash Digest: ${meta.digest}\n` +
+    `\nHash Digest: ${meta.digest}` +
+    `\nTest URLs: ${meta.urls.join(', ')}` +
     (meta.version == 'Dev' ?
-      '\n**WARNING:** this PR was created from a development/staging version!' :
+      '\n\n**WARNING:** this PR was created from a development/staging version!' :
       '')
   );
 };

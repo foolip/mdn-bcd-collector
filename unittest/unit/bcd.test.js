@@ -21,7 +21,19 @@ export default {
       }
     },
     AudioContext: {
-      __compat: {support: {chrome: {version_added: null}}},
+      __compat: {
+        support: {
+          chrome: [
+            {
+              version_added: null
+            },
+            {
+              version_added: '1',
+              prefix: 'webkit'
+            }
+          ]
+        }
+      },
       close: {
         __compat: {support: {}}
       }
@@ -47,6 +59,12 @@ export default {
               version_added: '64',
               version_removed: '70',
               flags: {},
+              notes: 'Not supported on Windows XP.'
+            },
+            {
+              version_added: '50',
+              version_removed: '70',
+              alternative_name: 'TryingOutInterface',
               notes: 'Not supported on Windows XP.'
             }
           ]
@@ -94,10 +112,10 @@ export default {
   javascript: {
     builtins: {
       Array: {
-        __compat: {}
+        __compat: {support: {chrome: {version_added: null}}}
       },
       Date: {
-        __compat: {}
+        __compat: {support: {chrome: {version_added: null}}}
       }
     }
   }

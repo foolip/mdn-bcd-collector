@@ -26,7 +26,7 @@ import * as YAML from 'yaml';
 
 import customIDL from './custom-idl/index.js';
 
-/* istanbul ignore next */
+/* c8 ignore start */
 const customTests = YAML.parse(
   await fs.readFile(
     new URL(
@@ -38,6 +38,7 @@ const customTests = YAML.parse(
     'utf8'
   )
 );
+/* c8 ignore stop */
 
 const customCSS = await fs.readJson(
   new URL('./custom-css.json', import.meta.url)
@@ -344,7 +345,26 @@ const flattenIDL = (specIDLs, customIDLs) => {
     (dfn) => dfn.type !== 'includes' && dfn.type !== 'interface mixin'
   );
 
-  return {ast, globals};
+  // Get all possible scopes
+  const scopes = new Set();
+  for (const dfn of ast) {
+    // Special case RTCIdentityProviderGlobalScope since it doesn't use the
+    // Global extended attribute correctly:
+    // https://github.com/w3c/webrtc-identity/pull/36
+    if (dfn.name === 'RTCIdentityProviderGlobalScope') {
+      scopes.add('RTCIdentityProvider');
+      continue;
+    }
+
+    const attr = getExtAttrSet(dfn, 'Global');
+    if (attr) {
+      for (const s of attr) {
+        scopes.add(s);
+      }
+    }
+  }
+
+  return {ast, globals, scopes};
 };
 
 const flattenMembers = (iface) => {
@@ -414,6 +434,11 @@ const flattenMembers = (iface) => {
     }
   }
 
+  // Catch named stringifiers
+  if (members.some((member) => member.special === 'stringifier')) {
+    members.push({name: 'toString', type: 'operation'});
+  }
+
   // Add members from ExtAttrs
   if (getExtAttr(iface, 'LegacyFactoryFunction')) {
     members.push({
@@ -429,44 +454,82 @@ const getExtAttr = (node, name) => {
   return node.extAttrs && node.extAttrs.find((i) => i.name === name);
 };
 
-// https://webidl.spec.whatwg.org/#dfn-exposure-set
-const getExposureSet = (node) => {
-  // step 6-8
-  const attr = getExtAttr(node, 'Exposed');
+const getExtAttrSet = (node, name) => {
+  const attr = getExtAttr(node, name);
   if (!attr) {
+    return null;
+  }
+
+  const set = new Set();
+  switch (attr.rhs.type) {
+    case 'identifier':
+      set.add(attr.rhs.value);
+      break;
+    case 'identifier-list':
+      for (const {value} of attr.rhs.value) {
+        set.add(value);
+      }
+      break;
+    case '*':
+      set.add('*');
+      break;
+    default:
+      throw new Error(
+        `Unexpected RHS "${attr.rhs.type}" for ${name} extended attribute`
+      );
+  }
+
+  return set;
+};
+
+// https://webidl.spec.whatwg.org/#Exposed
+const getExposureSet = (node, scopes) => {
+  // step 6-8 of https://webidl.spec.whatwg.org/#dfn-exposure-set
+  const exposure = getExtAttrSet(node, 'Exposed');
+  if (!exposure) {
     throw new Error(
       `Exposed extended attribute not found on ${node.type} ${node.name}`
     );
   }
-  const globals = new Set();
-  switch (attr.rhs.type) {
-    case 'identifier':
-      globals.add(attr.rhs.value);
-      break;
-    case 'identifier-list':
-      for (const {value} of attr.rhs.value) {
-        globals.add(value);
-      }
-      break;
-    /* istanbul ignore next */
-    default:
-      throw new Error(`Unexpected RHS for Exposed extended attribute`);
+
+  // Handle wildcard exposures
+  if (exposure.has('*')) {
+    exposure.delete('*');
+    for (const value of scopes) {
+      exposure.add(value);
+    }
   }
 
-  if (globals.has('DedicatedWorker')) {
-    globals.delete('DedicatedWorker');
-    globals.add('Worker');
+  // Special case RTCIdentityProviderGlobalScope since it doesn't use the
+  // Exposed extended attribute correctly:
+  // https://github.com/w3c/webrtc-identity/pull/36
+  if (exposure.has('RTCIdentityProviderGlobalScope')) {
+    exposure.delete('RTCIdentityProviderGlobalScope');
+    exposure.add('RTCIdentityProvider');
   }
 
-  return globals;
+  // Some specs use "DedicatedWorker" for the exposure while others use
+  // "Worker". We spawn a dedicated worker for the "Worker" exposure.
+  // This code ensures we generate tests for either exposure.
+  // https://github.com/foolip/mdn-bcd-collector/pull/811
+  if (exposure.has('DedicatedWorker')) {
+    exposure.delete('DedicatedWorker');
+    exposure.add('Worker');
+  }
+
+  for (const e of exposure) {
+    if (!scopes.has(e)) {
+      throw new Error(
+        `${node.type} ${node.name} is exposed on ${e} but ${e} is not a valid scope`
+      );
+    }
+  }
+
+  return exposure;
 };
 
 const validateIDL = (ast) => {
   const validations = WebIDL2.validate(ast).filter((v) => {
-    // TODO: https://github.com/w3c/webref/pull/196
-    if (v.ruleName === 'dict-arg-default') {
-      return false;
-    }
     // Ignore the [LegacyNoInterfaceObject] rule.
     return v.ruleName !== 'no-nointerfaceobject';
   });
@@ -567,7 +630,14 @@ const buildIDLMemberTests = (
       continue;
     }
 
+    // TODO: too many events tests are being generated, see
+    // https://github.com/foolip/mdn-bcd-collector/pull/1825#issuecomment-1048009920
+
     const isStatic = member.special === 'static' || iface.type === 'namespace';
+    const isEventHandler =
+      member.idlType?.type === 'attribute-type' &&
+      typeof member.idlType?.idlType === 'string' &&
+      member.idlType?.idlType.endsWith('EventHandler');
 
     let expr;
     const customTestMember = getCustomTestAPI(
@@ -595,13 +665,6 @@ const buildIDLMemberTests = (
             };
           }
           break;
-        case 'const':
-          if (isGlobal) {
-            expr = {property: member.name, owner: 'self'};
-          } else {
-            expr = {property: member.name, owner: iface.name};
-          }
-          break;
         case 'constructor':
           expr = {property: `constructor.${member.name}`, owner: iface.name};
           break;
@@ -613,7 +676,11 @@ const buildIDLMemberTests = (
       }
     }
 
-    tests[member.name] = compileTest({
+    const name = isEventHandler ?
+      `${member.name.replace(/^on/, '')}_event` :
+      member.name;
+
+    tests[name] = compileTest({
       raw: {
         code: expr
       },
@@ -626,7 +693,7 @@ const buildIDLMemberTests = (
   return tests;
 };
 
-const buildIDLTests = (ast, globals) => {
+const buildIDLTests = (ast, globals, scopes) => {
   const tests = {};
 
   const interfaces = ast.filter((dfn) => {
@@ -642,7 +709,7 @@ const buildIDLTests = (ast, globals) => {
       continue;
     }
 
-    const exposureSet = getExposureSet(iface);
+    const exposureSet = getExposureSet(iface, scopes);
     const isGlobal = !!getExtAttr(iface, 'Global');
     const customIfaceTest = getCustomTestAPI(iface.name);
     const resources = getCustomResourcesAPI(iface.name);
@@ -701,9 +768,9 @@ const buildIDLTests = (ast, globals) => {
 };
 
 const buildIDL = (specIDLs, customIDLs) => {
-  const {ast, globals} = flattenIDL(specIDLs, customIDLs);
+  const {ast, globals, scopes} = flattenIDL(specIDLs, customIDLs);
   validateIDL(ast);
-  return buildIDLTests(ast, globals);
+  return buildIDLTests(ast, globals, scopes);
 };
 
 // https://drafts.csswg.org/cssom/#css-property-to-idl-attribute
@@ -726,25 +793,38 @@ const cssPropertyToIDLAttribute = (property, lowercaseFirst) => {
   return output;
 };
 
-const buildCSS = (webrefCSS, customCSS) => {
-  const propertySet = new Set();
+const buildCSS = (specCSS, customCSS) => {
+  const properties = new Map();
 
-  for (const data of Object.values(webrefCSS)) {
+  for (const data of Object.values(specCSS)) {
     for (const prop of Object.keys(data.properties)) {
-      propertySet.add(prop);
+      properties.set(prop, new Map());
     }
   }
 
-  for (const prop of Object.keys(customCSS.properties)) {
-    if (propertySet.has(prop)) {
-      throw new Error(`Custom CSS property already known: ${prop}`);
+  for (const [name, data] of Object.entries(customCSS.properties)) {
+    const values = '__values' in data ? data['__values'] : [];
+    const additionalValues =
+      '__additional_values' in data ? data['__additional_values'] : {};
+
+    const mergedValues = new Map(Object.entries(additionalValues));
+    for (const value of values) {
+      if (mergedValues.has(value)) {
+        throw new Error(`CSS property value already known: ${value}`);
+      }
+      mergedValues.set(value, value);
     }
-    propertySet.add(prop);
+
+    if (properties.has(name) && mergedValues.size === 0) {
+      throw new Error(`Custom CSS property already known: ${name}`);
+    }
+
+    properties.set(name, mergedValues);
   }
 
   const tests = {};
 
-  for (const name of Array.from(propertySet).sort()) {
+  for (const name of Array.from(properties.keys()).sort()) {
     const customTest = getCustomTestCSS(name);
     if (customTest) {
       tests[`css.properties.${name}`] = compileTest({
@@ -754,15 +834,25 @@ const buildCSS = (webrefCSS, customCSS) => {
       continue;
     }
 
-    const attrName = cssPropertyToIDLAttribute(name, name.startsWith('-'));
-    const code = [{property: attrName, owner: 'document.body.style'}];
-    if (name !== attrName) {
-      code.push({property: name, owner: 'document.body.style'});
-    }
+    // Test for the property itself
     tests[`css.properties.${name}`] = compileTest({
-      raw: {code, combinator: '||'},
+      raw: {code: `bcd.testCSSProperty("${name}")`},
       exposure: ['Window']
     });
+
+    // Tests for values
+    for (const [key, value] of Array.from(
+      properties.get(name).entries()
+    ).sort()) {
+      const values = Array.isArray(value) ? value : [value];
+      const code = values
+        .map((value) => `bcd.testCSSPropertyValue("${name}", "${value}")`)
+        .join(' || ');
+      tests[`css.properties.${name}.${key}`] = compileTest({
+        raw: {code: code},
+        exposure: ['Window']
+      });
+    }
   }
 
   return tests;
@@ -822,7 +912,7 @@ const buildJS = (customJS) => {
   return tests;
 };
 
-/* istanbul ignore next */
+/* c8 ignore start */
 const copyResources = async () => {
   const resources = [
     ['json3/lib/json3.min.js', 'resources'],
@@ -865,7 +955,6 @@ const copyResources = async () => {
   }
 };
 
-/* istanbul ignore next */
 const generateCSS = async () => {
   const scssPath = fileURLToPath(new URL('./style.scss', import.meta.url));
   const outPath = path.join(generatedDir, 'resources', 'style.css');
@@ -876,7 +965,6 @@ const generateCSS = async () => {
   await fs.writeFile(outPath, result.css.toString(), 'utf8');
 };
 
-/* istanbul ignore next */
 const build = async (customIDL, customCSS) => {
   const specCSS = await css.listAll();
   const specIDLs = await idl.parseAll();
@@ -890,10 +978,10 @@ const build = async (customIDL, customCSS) => {
   await generateCSS();
 };
 
-/* istanbul ignore if */
 if (esMain(import.meta)) {
   await build(customIDL, customCSS);
 }
+/* c8 ignore stop */
 
 export {
   getCustomTestAPI,
@@ -908,5 +996,6 @@ export {
   buildIDL,
   validateIDL,
   cssPropertyToIDLAttribute,
-  buildCSS
+  buildCSS,
+  buildJS
 };

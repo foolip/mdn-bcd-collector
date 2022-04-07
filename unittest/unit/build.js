@@ -14,7 +14,7 @@
 
 'use strict';
 
-import chai, {assert, expect} from 'chai';
+import chai, {assert} from 'chai';
 import chaiSubset from 'chai-subset';
 chai.use(chaiSubset);
 
@@ -34,7 +34,8 @@ import {
   getCustomResourcesAPI,
   cssPropertyToIDLAttribute,
   buildCSS,
-  getCustomTestCSS
+  getCustomTestCSS,
+  buildJS
 } from '../../build.js';
 
 describe('build', () => {
@@ -132,6 +133,29 @@ describe('build', () => {
       });
     });
 
+    describe('callback-based custom tests', () => {
+      it('interface', () => {
+        assert.equal(
+          getCustomTestAPI('callback'),
+          "(function() {\n  function onsuccess(res) {\n    callback(res.result);\n  }\n  function callback(instance) {\n    try {\n      success(!!instance);\n    } catch(e) {\n      fail(e);\n    }\n  };\n  return 'callback';\n})();"
+        );
+      });
+
+      it('member', () => {
+        assert.equal(
+          getCustomTestAPI('callback', 'bar'),
+          "(function() {\n  function onsuccess(res) {\n    callback(res.result);\n  }\n  function callback(instance) {\n    try {\n      success('bar' in instance);\n    } catch(e) {\n      fail(e);\n    }\n  };\n  return 'callback';\n})();"
+        );
+      });
+
+      it('interface with import', () => {
+        assert.equal(
+          getCustomTestAPI('newcallback'),
+          "(function() {\n  function onsuccess(res) {\n  c(res.result);\n}\n  function c(result) {\n    callback(result);\n  }\n  function callback(instance) {\n    try {\n      success(!!instance);\n    } catch(e) {\n      fail(e);\n    }\n  };\n  return 'callback';\n})();"
+        );
+      });
+    });
+
     describe('import other test', () => {
       it('valid import', () => {
         assert.equal(
@@ -155,10 +179,18 @@ describe('build', () => {
         );
       });
 
-      it('invalid import', () => {
+      it('invalid import: 1st', () => {
         assert.equal(
           getCustomTestAPI('badimport'),
           "(function() {\n  throw 'Test is malformed: <%api.foobar:apple%> is an invalid reference';\n  return !!instance;\n})();"
+        );
+        assert.isTrue(console.error.calledOnce);
+      });
+
+      it('invalid import: 2nd', () => {
+        assert.equal(
+          getCustomTestAPI('badimport2'),
+          "(function() {\n  throw 'Test is malformed: <%api.foobar.bar:apple%> is an invalid reference';\n  return !!instance;\n})();"
         );
         assert.isTrue(console.error.calledOnce);
       });
@@ -410,7 +442,10 @@ describe('build', () => {
 
   it('buildIDL', () => {
     const specIDLs = {
-      first: WebIDL2.parse(`[Exposed=Window] interface DOMError {};`),
+      first: WebIDL2.parse(
+        `[Global=Window, Exposed=Window] interface Window {};
+        [Exposed=Window] interface DOMError {};`
+      ),
       second: WebIDL2.parse(`[Exposed=Window] interface XSLTProcessor {};`)
     };
 
@@ -544,11 +579,9 @@ describe('build', () => {
         secnd: WebIDL2.parse(`DummyError includes DummyErrorHelper;`)
       };
 
-      expect(() => {
+      assert.throws(() => {
         flattenIDL(specIDLs, customIDLs);
-      }).to.throw(
-        'Target DummyError not found for interface mixin DummyErrorHelper'
-      );
+      }, 'Target DummyError not found for interface mixin DummyErrorHelper');
     });
 
     it('interface missing', () => {
@@ -562,11 +595,9 @@ describe('build', () => {
         secnd: WebIDL2.parse(`DummyError includes DummyErrorHelper;`)
       };
 
-      expect(() => {
+      assert.throws(() => {
         flattenIDL(specIDLs, customIDLs);
-      }).to.throw(
-        'Interface mixin DummyErrorHelper not found for target DummyError'
-      );
+      }, 'Interface mixin DummyErrorHelper not found for target DummyError');
     });
 
     it('Operation overloading', () => {
@@ -588,9 +619,9 @@ describe('build', () => {
              };`
         )
       };
-      expect(() => {
+      assert.throws(() => {
         flattenIDL(specIDLs, customIDLs);
-      }).to.throw('Duplicate definition of CSS.supports');
+      }, 'Duplicate definition of CSS.supports');
     });
 
     it('Partial missing main', () => {
@@ -601,15 +632,23 @@ describe('build', () => {
              };`
         )
       };
-      expect(() => {
+      assert.throws(() => {
         flattenIDL(specIDLs, customIDLs);
-      }).to.throw('Original definition not found for partial namespace CSS');
+      }, 'Original definition not found for partial namespace CSS');
     });
   });
 
   describe('getExposureSet', () => {
     // Combining spec and custom IDL is not important to these tests.
     const customIDLs = {};
+    const scopes = new Set([
+      'Window',
+      'Worker',
+      'SharedWorker',
+      'ServiceWorker',
+      'AudioWorklet',
+      'RTCIdentityProvider'
+    ]);
 
     it('no defined exposure set', () => {
       const specIDLs = {
@@ -623,10 +662,30 @@ describe('build', () => {
       const interfaces = ast.filter((dfn) => dfn.type === 'interface');
       assert.throws(
         () => {
-          getExposureSet(interfaces[0]);
+          getExposureSet(interfaces[0], scopes);
         },
         Error,
         'Exposed extended attribute not found on interface Dummy'
+      );
+    });
+
+    it('invalid exposure set', () => {
+      const specIDLs = {
+        first: WebIDL2.parse(
+          `[Exposed=40]
+          interface Dummy {
+               readonly attribute boolean imadumdum;
+             };`
+        )
+      };
+      const {ast} = flattenIDL(specIDLs, customIDLs);
+      const interfaces = ast.filter((dfn) => dfn.type === 'interface');
+      assert.throws(
+        () => {
+          getExposureSet(interfaces[0]);
+        },
+        Error,
+        'Unexpected RHS "integer" for Exposed extended attribute'
       );
     });
 
@@ -641,7 +700,7 @@ describe('build', () => {
       };
       const {ast} = flattenIDL(specIDLs, customIDLs);
       const interfaces = ast.filter((dfn) => dfn.type === 'interface');
-      const exposureSet = getExposureSet(interfaces[0]);
+      const exposureSet = getExposureSet(interfaces[0], scopes);
       assert.hasAllKeys(exposureSet, ['Worker']);
     });
 
@@ -656,11 +715,26 @@ describe('build', () => {
       };
       const {ast} = flattenIDL(specIDLs, customIDLs);
       const interfaces = ast.filter((dfn) => dfn.type === 'interface');
-      const exposureSet = getExposureSet(interfaces[0]);
+      const exposureSet = getExposureSet(interfaces[0], scopes);
       assert.hasAllKeys(exposureSet, ['Window', 'Worker']);
     });
 
-    it('exposed to DedicatedWorker', () => {
+    it('wildcard exposure', () => {
+      const specIDLs = {
+        first: WebIDL2.parse(
+          `[Exposed=*]
+             interface Dummy {
+               readonly attribute boolean imadumdum;
+             };`
+        )
+      };
+      const {ast} = flattenIDL(specIDLs, customIDLs);
+      const interfaces = ast.filter((dfn) => dfn.type === 'interface');
+      const exposureSet = getExposureSet(interfaces[0], scopes);
+      assert.hasAllKeys(exposureSet, [...scopes]);
+    });
+
+    it('DedicatedWorker remaps to Worker', () => {
       const specIDLs = {
         first: WebIDL2.parse(
           `[Exposed=DedicatedWorker]
@@ -671,12 +745,55 @@ describe('build', () => {
       };
       const {ast} = flattenIDL(specIDLs, customIDLs);
       const interfaces = ast.filter((dfn) => dfn.type === 'interface');
-      const exposureSet = getExposureSet(interfaces[0]);
+      const exposureSet = getExposureSet(interfaces[0], scopes);
       assert.hasAllKeys(exposureSet, ['Worker']);
+    });
+
+    it('Special case for RTCIdentityProviderGlobalScope', () => {
+      const specIDLs = {
+        first: WebIDL2.parse(
+          `[Exposed=RTCIdentityProviderGlobalScope]
+             interface Dummy {
+               readonly attribute boolean imadumdum;
+             };`
+        )
+      };
+      const {ast} = flattenIDL(specIDLs, customIDLs);
+      const interfaces = ast.filter((dfn) => dfn.type === 'interface');
+      const exposureSet = getExposureSet(interfaces[0], scopes);
+      assert.hasAllKeys(exposureSet, ['RTCIdentityProvider']);
+    });
+
+    it('invalid exposure', () => {
+      const specIDLs = {
+        first: WebIDL2.parse(
+          `[Exposed=SomeWrongScope]
+          interface Dummy {
+               readonly attribute boolean imadumdum;
+             };`
+        )
+      };
+      const {ast} = flattenIDL(specIDLs, customIDLs);
+      const interfaces = ast.filter((dfn) => dfn.type === 'interface');
+      assert.throws(
+        () => {
+          getExposureSet(interfaces[0], scopes);
+        },
+        Error,
+        'interface Dummy is exposed on SomeWrongScope but SomeWrongScope is not a valid scope'
+      );
     });
   });
 
   describe('buildIDLTests', () => {
+    const scopes = new Set([
+      'Window',
+      'Worker',
+      'SharedWorker',
+      'ServiceWorker',
+      'AudioWorklet'
+    ]);
+
     it('interface with attribute', () => {
       const ast = WebIDL2.parse(
         `[Exposed=Window]
@@ -684,7 +801,7 @@ describe('build', () => {
              attribute any name;
            };`
       );
-      assert.deepEqual(buildIDLTests(ast, []), {
+      assert.deepEqual(buildIDLTests(ast, [], scopes), {
         'api.Attr': {
           code: '"Attr" in self',
           exposure: ['Window']
@@ -703,7 +820,7 @@ describe('build', () => {
              boolean contains(Node? other);
            };`
       );
-      assert.deepEqual(buildIDLTests(ast, []), {
+      assert.deepEqual(buildIDLTests(ast, [], scopes), {
         'api.Node': {
           code: '"Node" in self',
           exposure: ['Window']
@@ -723,7 +840,7 @@ describe('build', () => {
            };`
       );
 
-      assert.deepEqual(buildIDLTests(ast, []), {
+      assert.deepEqual(buildIDLTests(ast, [], scopes), {
         'api.MediaSource': {
           code: '"MediaSource" in self',
           exposure: ['Window']
@@ -743,9 +860,28 @@ describe('build', () => {
            };`
       );
 
-      assert.deepEqual(buildIDLTests(ast, []), {
+      assert.deepEqual(buildIDLTests(ast, [], scopes), {
         'api.Window': {
           code: '"Window" in self',
+          exposure: ['Window']
+        }
+      });
+    });
+
+    it('interface with event handler', () => {
+      const ast = WebIDL2.parse(
+        `[Exposed=Window]
+           interface Foo {
+             attribute EventHandler onadd;
+           };`
+      );
+      assert.deepEqual(buildIDLTests(ast, [], scopes), {
+        'api.Foo': {
+          code: '"Foo" in self',
+          exposure: ['Window']
+        },
+        'api.Foo.add_event': {
+          code: '"onadd" in Foo.prototype',
           exposure: ['Window']
         }
       });
@@ -776,7 +912,7 @@ describe('build', () => {
           };`
       );
 
-      assert.deepEqual(buildIDLTests(ast, []), {
+      assert.deepEqual(buildIDLTests(ast, [], scopes), {
         'api.ANGLE_instanced_arrays': {
           code: "(function() {\n  var canvas = document.createElement('canvas');\n  var gl = canvas.getContext('webgl');\n  var instance = gl.getExtension('ANGLE_instanced_arrays');\n  return !!instance;\n})();",
           exposure: ['Window']
@@ -813,7 +949,7 @@ describe('build', () => {
         `[Exposed=Window, LegacyNamespace]
            interface Legacy {};`
       );
-      assert.deepEqual(buildIDLTests(ast, []), {});
+      assert.deepEqual(buildIDLTests(ast, [], scopes), {});
     });
 
     it('global interface', () => {
@@ -825,7 +961,7 @@ describe('build', () => {
            };`
       );
 
-      assert.deepEqual(buildIDLTests(ast, []), {
+      assert.deepEqual(buildIDLTests(ast, [], scopes), {
         'api.WorkerGlobalScope': {
           code: '"WorkerGlobalScope" in self',
           exposure: ['Worker']
@@ -845,7 +981,7 @@ describe('build', () => {
            };`
       );
 
-      assert.deepEqual(buildIDLTests(ast, []), {
+      assert.deepEqual(buildIDLTests(ast, [], scopes), {
         'api.Number': {
           code: '"Number" in self',
           exposure: ['Window']
@@ -864,7 +1000,7 @@ describe('build', () => {
              iterable<double>;
            };`
       );
-      assert.deepEqual(buildIDLTests(ast, []), {
+      assert.deepEqual(buildIDLTests(ast, [], scopes), {
         'api.DoubleList': {
           code: '"DoubleList" in self',
           exposure: ['Window']
@@ -899,7 +1035,7 @@ describe('build', () => {
              maplike<DOMString, double>;
            };`
       );
-      assert.deepEqual(buildIDLTests(ast, []), {
+      assert.deepEqual(buildIDLTests(ast, [], scopes), {
         'api.DoubleMap': {
           code: '"DoubleMap" in self',
           exposure: ['Window']
@@ -958,7 +1094,7 @@ describe('build', () => {
              setlike<double>;
            };`
       );
-      assert.deepEqual(buildIDLTests(ast, []), {
+      assert.deepEqual(buildIDLTests(ast, [], scopes), {
         'api.DoubleSet': {
           code: '"DoubleSet" in self',
           exposure: ['Window']
@@ -1014,7 +1150,7 @@ describe('build', () => {
              setter undefined (GetMe data, optional unsigned long index);
            };`
       );
-      assert.deepEqual(buildIDLTests(ast, []), {
+      assert.deepEqual(buildIDLTests(ast, [], scopes), {
         'api.GetMe': {
           code: '"GetMe" in self',
           exposure: ['Window']
@@ -1029,7 +1165,7 @@ describe('build', () => {
            [Exposed=(Window,Worker)] interface MessageChannel {};
            [Exposed=Window] namespace console {};`
       );
-      assert.deepEqual(buildIDLTests(ast, []), {
+      assert.deepEqual(buildIDLTests(ast, [], scopes), {
         'api.console': {
           code: '"console" in self',
           exposure: ['Window']
@@ -1057,13 +1193,37 @@ describe('build', () => {
            };`
       );
 
-      assert.deepEqual(buildIDLTests(ast, []), {
+      assert.deepEqual(buildIDLTests(ast, [], scopes), {
         'api.Number': {
           code: '"Number" in self',
           exposure: ['Window']
         },
         'api.Number.toString': {
           code: '"toString" in Number.prototype',
+          exposure: ['Window']
+        }
+      });
+    });
+
+    it('interface with named stringifier', () => {
+      const ast = WebIDL2.parse(
+        `[Exposed=Window]
+           interface HTMLAreaElement {
+             stringifier readonly attribute USVString href;
+           };`
+      );
+
+      assert.deepEqual(buildIDLTests(ast, []), {
+        'api.HTMLAreaElement': {
+          code: '"HTMLAreaElement" in self',
+          exposure: ['Window']
+        },
+        'api.HTMLAreaElement.href': {
+          code: '"href" in HTMLAreaElement.prototype',
+          exposure: ['Window']
+        },
+        'api.HTMLAreaElement.toString': {
+          code: '"toString" in HTMLAreaElement.prototype',
           exposure: ['Window']
         }
       });
@@ -1078,7 +1238,7 @@ describe('build', () => {
              undefined disconnect (AudioNode destinationNode);
            };`
       );
-      assert.deepEqual(buildIDLTests(ast, []), {
+      assert.deepEqual(buildIDLTests(ast, [], scopes), {
         'api.AudioNode': {
           code: '"AudioNode" in self',
           exposure: ['Window']
@@ -1097,7 +1257,7 @@ describe('build', () => {
              readonly attribute any paintWorklet;
            };`
       );
-      assert.deepEqual(buildIDLTests(ast, []), {
+      assert.deepEqual(buildIDLTests(ast, [], scopes), {
         'api.CSS': {
           code: '"CSS" in self',
           exposure: ['Window']
@@ -1116,7 +1276,7 @@ describe('build', () => {
              boolean supports(CSSOMString property, CSSOMString value);
            };`
       );
-      assert.deepEqual(buildIDLTests(ast, []), {
+      assert.deepEqual(buildIDLTests(ast, [], scopes), {
         'api.CSS': {
           code: '"CSS" in self',
           exposure: ['Window']
@@ -1136,7 +1296,7 @@ describe('build', () => {
            };`
       );
 
-      assert.deepEqual(buildIDLTests(ast, []), {
+      assert.deepEqual(buildIDLTests(ast, [], scopes), {
         'api.Scope': {
           code: '(function() {\n  var scope = Scope;\n  return !!scope;\n})();',
           exposure: ['Window']
@@ -1157,7 +1317,7 @@ describe('build', () => {
            interface HTMLImageElement {};`
       );
 
-      assert.deepEqual(buildIDLTests(ast, []), {
+      assert.deepEqual(buildIDLTests(ast, [], scopes), {
         'api.HTMLImageElement': {
           code: '"HTMLImageElement" in self',
           exposure: ['Window']
@@ -1183,7 +1343,7 @@ describe('build', () => {
            };`
       );
 
-      assert.deepEqual(buildIDLTests(ast, globals), {
+      assert.deepEqual(buildIDLTests(ast, globals, scopes), {
         'api.Dummy': {
           code: '"Dummy" in self',
           exposure: ['Window']
@@ -1209,9 +1369,16 @@ describe('build', () => {
              boolean contains(Node otherNode);
            };`
       );
-      expect(() => {
+      assert.doesNotThrow(() => {
         validateIDL(ast);
-      }).to.not.throw();
+      });
+    });
+
+    it('invalid idl', () => {
+      const ast = WebIDL2.parse(`interface Invalid {};`);
+      assert.throws(() => {
+        validateIDL(ast);
+      }, 'Web IDL validation failed:\nValidation error at line 1, inside `interface Invalid`:\ninterface Invalid {};\n          ^ Interfaces must have `[Exposed]` extended attribute. To fix, add, for example, `[Exposed=Window]`. Please also consider carefully if your interface should also be exposed in a Worker scope. Refer to the [WebIDL spec section on Exposed](https://heycam.github.io/webidl/#Exposed) for more information. [require-exposed]');
     });
 
     it('unknown types', () => {
@@ -1221,9 +1388,9 @@ describe('build', () => {
              attribute Dumdum imadumdum;
            };`
       );
-      expect(() => {
+      assert.throws(() => {
         validateIDL(ast);
-      }).to.throw();
+      }, 'Unknown type Dumdum');
     });
 
     it('ignored unknown types', () => {
@@ -1233,48 +1400,194 @@ describe('build', () => {
              attribute CSSOMString style;
            };`
       );
-      expect(() => {
+      assert.doesNotThrow(() => {
         validateIDL(ast);
-      }).to.not.throw();
+      });
+    });
+
+    it('allow LegacyNoInterfaceObject', () => {
+      const ast = WebIDL2.parse(
+        `[Exposed=(Window,Worker), LegacyNoInterfaceObject]
+           interface ANGLE_instanced_arrays {};`
+      );
+      assert.doesNotThrow(() => {
+        validateIDL(ast);
+      });
     });
   });
 
-  it('buildCSS', () => {
-    const webrefCSS = {
-      'css-fonts': {
-        properties: {
-          'font-family': {},
-          'font-weight': {}
+  describe('buildCSS', () => {
+    it('valid input', () => {
+      const webrefCSS = {
+        'css-fonts': {
+          properties: {
+            'font-family': {},
+            'font-weight': {}
+          }
+        },
+        'css-grid': {
+          properties: {
+            grid: {}
+          }
         }
-      },
-      'css-grid': {
+      };
+
+      const customCSS = {
         properties: {
-          grid: {}
+          'font-family': {
+            __values: ['emoji', 'system-ui'],
+            __additional_values: {
+              historic: ['sans-serif', 'serif']
+            }
+          },
+          zoom: {}
+        }
+      };
+
+      assert.deepEqual(buildCSS(webrefCSS, customCSS), {
+        'css.properties.font-family': {
+          code: 'bcd.testCSSProperty("font-family")',
+          exposure: ['Window']
+        },
+        'css.properties.font-family.emoji': {
+          code: 'bcd.testCSSPropertyValue("font-family", "emoji")',
+          exposure: ['Window']
+        },
+        'css.properties.font-family.historic': {
+          code: 'bcd.testCSSPropertyValue("font-family", "sans-serif") || bcd.testCSSPropertyValue("font-family", "serif")',
+          exposure: ['Window']
+        },
+        'css.properties.font-family.system-ui': {
+          code: 'bcd.testCSSPropertyValue("font-family", "system-ui")',
+          exposure: ['Window']
+        },
+        'css.properties.font-weight': {
+          code: 'bcd.testCSSProperty("font-weight")',
+          exposure: ['Window']
+        },
+        'css.properties.grid': {
+          code: 'bcd.testCSSProperty("grid")',
+          exposure: ['Window']
+        },
+        'css.properties.zoom': {
+          code: 'bcd.testCSSProperty("zoom")',
+          exposure: ['Window']
+        }
+      });
+    });
+
+    it('with custom test', () => {
+      const css = {
+        'css-dummy': {
+          properties: {
+            foo: {}
+          }
+        }
+      };
+
+      assert.deepEqual(buildCSS(css, {properties: {}}), {
+        'css.properties.foo': {
+          code: '(function() {\n  return 1;\n})();',
+          exposure: ['Window']
+        }
+      });
+    });
+
+    it('double-defined property', () => {
+      const css = {
+        'css-dummy': {
+          properties: {
+            foo: {}
+          }
+        }
+      };
+
+      assert.throws(() => {
+        buildCSS(css, {properties: {foo: {}}});
+      }, 'Custom CSS property already known: foo');
+    });
+
+    it('invalid import', () => {
+      const css = {
+        'css-dummy': {
+          properties: {
+            bar: {}
+          }
+        }
+      };
+
+      assert.deepEqual(buildCSS(css, {properties: {}}), {
+        'css.properties.bar': {
+          code: "(function() {\n  throw 'Test is malformed: import <%css.properties.foo:a%>, category css is not importable';\n})();",
+          exposure: ['Window']
+        }
+      });
+    });
+  });
+
+  it('buildJS', () => {
+    const customJS = {
+      builtins: {
+        AggregateError: {
+          ctor_args: "[new Error('message')]"
+        },
+        Array: {
+          ctor_args: '2'
+        },
+        'Array.prototype.at': {},
+        'Array.prototype.@@iterator': {},
+        'Array.@@species': {},
+        Atomics: {},
+        'Atomics.add': {},
+        BigInt: {
+          ctor_args: '1',
+          ctor_new: false
         }
       }
     };
-
-    const customCSS = {
-      properties: {
-        zoom: {}
-      }
-    };
-
-    assert.deepEqual(buildCSS(webrefCSS, customCSS), {
-      'css.properties.font-family': {
-        code: '"fontFamily" in document.body.style || "font-family" in document.body.style',
+    assert.deepEqual(buildJS(customJS), {
+      'javascript.builtins.AggregateError': {
+        code: 'self.hasOwnProperty("AggregateError")',
         exposure: ['Window']
       },
-      'css.properties.font-weight': {
-        code: '"fontWeight" in document.body.style || "font-weight" in document.body.style',
+      'javascript.builtins.AggregateError.AggregateError': {
+        code: "(function() {\n  new AggregateError([new Error('message')]); return true;\n})();",
         exposure: ['Window']
       },
-      'css.properties.grid': {
-        code: '"grid" in document.body.style',
+      'javascript.builtins.Array': {
+        code: 'self.hasOwnProperty("Array")',
         exposure: ['Window']
       },
-      'css.properties.zoom': {
-        code: '"zoom" in document.body.style',
+      'javascript.builtins.Array.@@iterator': {
+        code: 'Array.prototype.hasOwnProperty(Symbol.iterator)',
+        exposure: ['Window']
+      },
+      'javascript.builtins.Array.@@species': {
+        code: 'Array.hasOwnProperty(Symbol.species)',
+        exposure: ['Window']
+      },
+      'javascript.builtins.Array.Array': {
+        code: '(function() {\n  new Array(2); return true;\n})();',
+        exposure: ['Window']
+      },
+      'javascript.builtins.Array.at': {
+        code: 'Array.prototype.hasOwnProperty("at")',
+        exposure: ['Window']
+      },
+      'javascript.builtins.Atomics': {
+        code: 'self.hasOwnProperty("Atomics")',
+        exposure: ['Window']
+      },
+      'javascript.builtins.Atomics.add': {
+        code: 'Atomics.hasOwnProperty("add")',
+        exposure: ['Window']
+      },
+      'javascript.builtins.BigInt': {
+        code: 'self.hasOwnProperty("BigInt")',
+        exposure: ['Window']
+      },
+      'javascript.builtins.BigInt.BigInt': {
+        code: '(function() {\n   BigInt(1); return true;\n})();',
         exposure: ['Window']
       }
     });

@@ -80,6 +80,7 @@ interface Counter {
 
 partial interface CSSStyleDeclaration {
   CSSValue getPropertyCSSValue(DOMString property);
+  iterable<CSSNumericValue>;
 };
 
 partial interface Document {
