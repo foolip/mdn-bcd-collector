@@ -1641,6 +1641,8 @@ api:
           throw e;
         }
       }
+  SpeechSynthesis:
+    __base: var instance = window.speechSynthesis;
   SpeechSynthesisErrorEvent:
     __base: |-
       var instance;
@@ -1671,6 +1673,12 @@ api:
           throw e;
         }
       }
+  SpeechSynthesisUtterance:
+    __base: var instance = new SpeechSynthesisUtterance('Hello world!');
+  SpeechSynthesisVoice:
+    __base: |-
+      <%api.SpeechSynthesis:synth%>
+      var instance = synth.getVoices()[0];
   StereoPannerNode:
     __resources:
       - audioContext
