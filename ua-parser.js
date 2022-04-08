@@ -26,8 +26,8 @@ const parseUA = (userAgent, browsers) => {
 
   data.browser.id = ua.browser.name.toLowerCase().replace(/ /g, '_');
   data.browser.name = ua.browser.name;
-  data.os.name = ua.os.name;
-  data.os.version = ua.os.version;
+  data.os.name = ua.os.name || '';
+  data.os.version = ua.os.version || '';
 
   switch (data.browser.id) {
     case 'mobile_safari':
