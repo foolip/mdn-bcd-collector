@@ -9,9 +9,7 @@ const getMajorMinorVersion = (version) => {
 };
 
 const parseUA = (userAgent, browsers) => {
-  // XXX Removal of .NET is for Firefox 3.6.17 on BrowserStack
-  // See https://github.com/faisalman/ua-parser-js/issues/461
-  const ua = uaParser(userAgent.replace(' (.NET CLR 3.5.21022)', ''));
+  const ua = uaParser(userAgent);
   const data = {
     browser: {id: null, name: null},
     version: null,
