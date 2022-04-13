@@ -40,7 +40,7 @@ const storage = getStorage();
 
 /* c8 ignore start */
 const appVersion =
-  process.env.GAE_VERSION === 'production' ?
+  process.env.NODE_ENV === 'production' && process.env.GAE_VERSION !== 'staging' ?
     (await fs.readJson(new URL('./package.json', import.meta.url))).version :
     'Dev';
 
