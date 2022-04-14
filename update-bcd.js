@@ -328,6 +328,7 @@ const update = (bcd, supportMatrix, filter) => {
         ).reverse()) {
           if (
             result !== null &&
+            simpleStatement.version_added !== 'preview' &&
             compareVersions.compare(
               version,
               simpleStatement.version_added.replace('≤', ''),
