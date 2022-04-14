@@ -316,6 +316,7 @@ const update = (bcd, supportMatrix, filter) => {
         continue;
       }
 
+      let dataIsOlder = false;
       if (
         inferredStatement.version_added === false &&
         typeof simpleStatement.version_added === 'string'
@@ -334,12 +335,15 @@ const update = (bcd, supportMatrix, filter) => {
             )
           ) {
             // A version we have data for is the same or newer than the version in BCD
-            return false;
+            dataIsOlder = true;
+            break;
           }
         }
       }
 
-      if (
+      if (dataIsOlder) {
+        continue;
+      } else if (
         typeof simpleStatement.version_added === 'string' &&
         typeof inferredStatement.version_added === 'string' &&
         inferredStatement.version_added.includes('≤')
