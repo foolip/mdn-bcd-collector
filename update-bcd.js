@@ -183,14 +183,14 @@ const inferSupportStatements = (versionMap) => {
       if (!lastStatement) {
         statements.push({
           version_added:
-            lastWasNull || lastKnown.support === false
-              ? `${lastKnown.version}> ≤${version}`
-              : version
+            lastWasNull || lastKnown.support === false ?
+              `${lastKnown.version}> ≤${version}` :
+              version
         });
       } else if (!lastStatement.version_added) {
-        lastStatement.version_added = lastWasNull
-          ? `${lastKnown.version}> ≤${version}`
-          : version;
+        lastStatement.version_added = lastWasNull ?
+          `${lastKnown.version}> ≤${version}` :
+          version;
       } else if (lastStatement.version_removed) {
         // added back again
         statements.push({
@@ -207,9 +207,9 @@ const inferSupportStatements = (versionMap) => {
         lastStatement.version_added &&
         !lastStatement.version_removed
       ) {
-        lastStatement.version_removed = lastWasNull
-          ? `${lastKnown.version}> ≤${version}`
-          : version;
+        lastStatement.version_removed = lastWasNull ?
+          `${lastKnown.version}> ≤${version}` :
+          version;
       } else if (!lastStatement) {
         statements.push({version_added: false});
       }
