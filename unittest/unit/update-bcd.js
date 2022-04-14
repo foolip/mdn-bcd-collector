@@ -84,6 +84,11 @@ const reports = [
           result: true
         },
         {
+          name: 'api.SuperNewInterface',
+          info: {exposure: 'Window'},
+          result: false
+        },
+        {
           name: 'css.properties.font-family',
           info: {exposure: 'Window'},
           result: true
@@ -159,6 +164,11 @@ const reports = [
           result: false
         },
         {
+          name: 'api.SuperNewInterface',
+          info: {exposure: 'Window'},
+          result: false
+        },
+        {
           name: 'css.properties.font-family',
           info: {exposure: 'Window'},
           result: true
@@ -226,6 +236,11 @@ const reports = [
           name: 'api.RemovedInterface',
           info: {exposure: 'Window'},
           result: true
+        },
+        {
+          name: 'api.SuperNewInterface',
+          info: {exposure: 'Window'},
+          result: false
         },
         {
           name: 'css.properties.font-family',
@@ -331,6 +346,7 @@ describe('BCD updater', () => {
           ['api.ExperimentalInterface', true],
           ['api.NullAPI', null],
           ['api.RemovedInterface', true],
+          ['api.SuperNewInterface', false],
           ['css.properties.font-family', true],
           ['css.properties.font-face', true]
         ])
@@ -351,6 +367,7 @@ describe('BCD updater', () => {
           ['api.NewInterfaceNotInBCD', false],
           ['api.NullAPI', null],
           ['api.RemovedInterface', false],
+          ['api.SuperNewInterface', false],
           ['css.properties.font-family', true],
           ['css.properties.font-face', true]
         ])
@@ -522,6 +539,20 @@ describe('BCD updater', () => {
             ])
           ],
           [
+            'api.SuperNewInterface',
+            new Map([
+              [
+                'chrome',
+                new Map([
+                  ['82', null],
+                  ['83', false],
+                  ['84', false],
+                  ['85', false]
+                ])
+              ]
+            ])
+          ],
+          [
             'css.properties.font-family',
             new Map([
               [
@@ -595,6 +626,9 @@ describe('BCD updater', () => {
           {version_added: '0> ≤83', version_removed: '84'},
           {version_added: '85'}
         ]
+      },
+      'api.SuperNewInterface': {
+        chrome: [{version_added: false}]
       },
       'css.properties.font-family': {chrome: [{version_added: '84'}]},
       'css.properties.font-face': {chrome: []}
@@ -739,6 +773,9 @@ describe('BCD updater', () => {
             //   {version_added: '≤83', version_removed: '84'}
             // ]}}
             __compat: {support: {chrome: {version_added: null}}}
+          },
+          SuperNewInterface: {
+            __compat: {support: {chrome: {version_added: '100'}}}
           }
         },
         browsers: {

@@ -76,6 +76,9 @@ export default {
     },
     RemovedInterface: {
       __compat: {support: {chrome: {version_added: null}}}
+    },
+    SuperNewInterface: {
+      __compat: {support: {chrome: {version_added: '100'}}}
     }
   },
   browsers: {
