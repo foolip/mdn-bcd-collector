@@ -566,9 +566,6 @@ partial interface HTMLSourceElement {
 };
 
 partial interface HTMLStyleElement {
-  // https://github.com/whatwg/html/issues/5590
-  attribute boolean disabled;
-
   // moved to HTMLOrSVGElement mixin
   attribute DOMString nonce;
 
