@@ -40,6 +40,7 @@ describe('find-missing-features', () => {
         'api.ExperimentalInterface',
         'api.NullAPI',
         'api.RemovedInterface',
+        'api.SuperNewInterface',
         'css.properties.font-family',
         'css.properties.font-face',
         'javascript.builtins.Array',
@@ -64,6 +65,7 @@ describe('find-missing-features', () => {
         'api.TryingOutInterface',
         'api.NullAPI',
         'api.RemovedInterface',
+        'api.SuperNewInterface',
         'css.properties.font-family',
         'css.properties.font-face',
         'javascript.builtins.Array',
@@ -91,10 +93,11 @@ describe('find-missing-features', () => {
           'api.ExperimentalInterface',
           'api.NullAPI',
           'api.RemovedInterface',
+          'api.SuperNewInterface',
           'css.properties.font-face',
           'javascript.builtins.Date'
         ],
-        total: 17
+        total: 18
       });
     });
 
@@ -118,9 +121,10 @@ describe('find-missing-features', () => {
           'api.DummyAPI.dummy',
           'api.ExperimentalInterface',
           'api.NullAPI',
-          'api.RemovedInterface'
+          'api.RemovedInterface',
+          'api.SuperNewInterface'
         ],
-        total: 13
+        total: 14
       });
     });
 
@@ -138,10 +142,11 @@ describe('find-missing-features', () => {
           'api.ExperimentalInterface',
           'api.NullAPI',
           'api.RemovedInterface',
+          'api.SuperNewInterface',
           'css.properties.font-face',
           'javascript.builtins.Date'
         ],
-        total: 17
+        total: 18
       });
 
       assert.isTrue(
