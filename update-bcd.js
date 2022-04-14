@@ -317,6 +317,29 @@ const update = (bcd, supportMatrix, filter) => {
       }
 
       if (
+        inferredStatement.version_added === false &&
+        typeof simpleStatement.version_added === 'string'
+      ) {
+        // Make sure not to update BCD if it is set to a version newer than we have in our data
+
+        for (const [version, result] of Array.from(
+          versionMap.entries()
+        ).reverse()) {
+          if (
+            result !== null &&
+            compareVersions.compare(
+              version,
+              simpleStatement.version_added.replace('≤', ''),
+              '<='
+            )
+          ) {
+            // A version we have data for is the same or newer than the version in BCD
+            return false;
+          }
+        }
+      }
+
+      if (
         typeof simpleStatement.version_added === 'string' &&
         typeof inferredStatement.version_added === 'string' &&
         inferredStatement.version_added.includes('≤')
