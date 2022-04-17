@@ -106,10 +106,7 @@ Test certificates and instructions for generating certificates can be found in [
 npm run deploy
 ```
 
-This step is performed automatically when the `main` branch is updated:
-
-- https://staging-dot-mdn-bcd-collector.appspot.com/ is always deployed.
-- https://mdn-bcd-collector.appspot.com/ is deployed when the version in `package.json` is bumped
+This can only be done manually, there is no automatic staging deployment.
 
 ## Running tests via Selenium WebDriver
 
