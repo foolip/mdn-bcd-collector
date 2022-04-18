@@ -40,10 +40,18 @@ import {exec} from './scripts.js';
 const storage = getStorage();
 
 /* c8 ignore start */
-const appVersion =
-  process.env.NODE_ENV === 'production' ?
-    (await fs.readJson(new URL('./package.json', import.meta.url))).version :
-    'Dev-' + String(exec('git describe --tags')).substr(1);
+let appVersion;
+if (process.env.NODE_ENV === 'production') {
+  appVersion = (await fs.readJson(new URL('./package.json', import.meta.url)))
+    .version;
+} else {
+  try {
+    appVersion = 'Dev-' + String(exec('git describe --tags')).substr(1);
+  } catch (e) {
+    // If anything happens, i.e. git isn't installed, ignore
+    appVersion = 'Dev';
+  }
+}
 
 const secrets = await fs.readJson(
   new URL(
