@@ -455,7 +455,7 @@ const run = async (browser, version, os, ctx, task) => {
   }
 };
 
-const runAll = async (limitBrowsers, oses, nonConcurrent, reverse) => {
+const runAll = async (limitBrowsers, oses, concurrent, reverse) => {
   if (!Object.keys(secrets.selenium).length) {
     console.error(
       chalk`{red.bold A Selenium remote WebDriver URL is not defined in secrets.json.  Please define your Selenium remote(s).}`
@@ -501,7 +501,7 @@ const runAll = async (limitBrowsers, oses, nonConcurrent, reverse) => {
       title: bcdBrowsers[browser].name,
       task: () =>
         new Listr(browsertasks, {
-          concurrent: nonConcurrent ? false : 5,
+          concurrent,
           exitOnError: false
         })
     });
@@ -537,11 +537,11 @@ if (esMain(import.meta)) {
           choices: ['Windows', 'macOS'],
           default: ['Windows', 'macOS']
         })
-        .option('non-concurrent', {
-          describe: 'Run browsers sequentially (one at a time)',
-          alias: 's',
-          type: 'boolean',
-          nargs: 0
+        .option('concurrent', {
+          describe: 'Define the number of concurrent jobs to run',
+          alias: 'j',
+          type: 'integer',
+          nargs: 5
         })
         .option('reverse', {
           describe: 'Run browser versions oldest-to-newest',
@@ -552,5 +552,5 @@ if (esMain(import.meta)) {
     }
   );
 
-  await runAll(argv.browser, argv.os, argv.nonConcurrent, argv.reverse);
+  await runAll(argv.browser, argv.os, argv.concurrent, argv.reverse);
 }
