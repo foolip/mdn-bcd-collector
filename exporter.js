@@ -73,7 +73,7 @@ const createBody = (meta) => {
     }` +
     `\nHash Digest: ${meta.digest}` +
     `\nTest URLs: ${meta.urls.join(', ')}` +
-    (meta.version == 'Dev' ?
+    (meta.version.startsWith('Dev') ?
       '\n\n**WARNING:** this PR was created from a development/staging version!' :
       '')
   );

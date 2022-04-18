@@ -35,6 +35,7 @@ import parseResults from './results.js';
 import {getStorage} from './storage.js';
 import {parseUA} from './ua-parser.js';
 import Tests from './tests.js';
+import {exec} from './scripts.js';
 
 const storage = getStorage();
 
@@ -42,7 +43,7 @@ const storage = getStorage();
 const appVersion =
   process.env.NODE_ENV === 'production' ?
     (await fs.readJson(new URL('./package.json', import.meta.url))).version :
-    'Dev';
+    'Dev-' + String(exec('git describe --tags')).substr(1);
 
 const secrets = await fs.readJson(
   new URL(
