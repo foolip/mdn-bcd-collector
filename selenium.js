@@ -49,7 +49,7 @@ const seleniumUrls = {
   browserstack: 'https://${username}:${key}@hub-cloud.browserstack.com/wd/hub',
   saucelabs:
     'https://${username}:${key}@ondemand.${region}.saucelabs.com:443/wd/hub',
-  lambdatest: 'http://${username}:${key}@hub.lambdatest.com/wd/hub'
+  lambdatest: 'https://${username}:${key}@hub.lambdatest.com/wd/hub'
 };
 
 // Custom tests that use getUserMedia() make Edge 12-18 and Firefox 34-53 block.
