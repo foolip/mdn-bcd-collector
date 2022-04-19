@@ -211,12 +211,7 @@ const doChangelogUpdate = async (ctx) => {
 };
 
 const doVersionBump = async (newVersion) => {
-  for (const f of ['./package.json', './package-lock.json']) {
-    const filepath = new URL(f, import.meta.url);
-    const data = await fs.readJson(filepath);
-    data.version = newVersion;
-    await fs.writeJson(filepath, data, {spaces: 2});
-  }
+  exec(`npm version --no-git-tag-version ${newVersion}`);
 };
 
 const prepareBranch = async (ctx) => {
