@@ -98,6 +98,9 @@ const ignore = {
   }
 };
 
+// Sort array randomly
+const shuffle = () => Math.random() - 0.5;
+
 const prettyName = (browser, version, os) => {
   return `${bcdBrowsers[browser].name} ${version} on ${os}`;
 };
@@ -234,7 +237,9 @@ const getSeleniumUrl = (service, credentials) => {
 };
 
 const buildDriver = async (browser, version, os) => {
-  for (const [service, credentials] of Object.entries(secrets.selenium)) {
+  for (const [service, credentials] of Object.entries(secrets.selenium).sort(
+    shuffle
+  )) {
     if (service === 'browserstack') {
       if (browser === 'edge' && ['12', '13', '14'].includes(version)) {
         // BrowserStack remaps Edge 12-14 as Edge 15
