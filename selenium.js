@@ -335,7 +335,7 @@ const buildDriver = async (browser, version, os) => {
           .withCapabilities(capabilities);
         const driver = await driverBuilder.build();
 
-        return driver;
+        return {driver, service, osName, osVersion};
       } catch (e) {
         if (
           e.message.startsWith(
@@ -356,7 +356,7 @@ const buildDriver = async (browser, version, os) => {
     }
   }
 
-  return undefined;
+  return {driver: undefined};
 };
 
 const changeProtocol = (browser, version, page) => {
@@ -413,10 +413,16 @@ const click = async (driver, browser, elementId) => {
 const run = async (browser, version, os, ctx, task) => {
   log(task, 'Starting...');
 
-  const driver = await buildDriver(browser, version, os);
+  const {driver, ...service} = await buildDriver(browser, version, os);
+
   if (!driver) {
     throw new Error(task.title + ' - ' + 'Browser/OS config unsupported');
   }
+
+  log(
+    task,
+    `Selected ${service.service} on ${service.osName} ${service.osVersion}`
+  );
 
   let statusEl;
 
