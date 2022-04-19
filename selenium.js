@@ -183,7 +183,15 @@ const getOsesToTest = (service, os) => {
       osesToTest =
         service === 'saucelabs' ?
           [['macOS', '10.14']] :
+          service === 'lambdatest' ?
           [
+              ['macOS', 'Monterey'],
+              ['macOS', 'Big Sur'],
+              ['macOS', 'Mojave'],
+              ['OS X', 'El Capitan']
+            ] :
+          [
+              ['OS X', 'Monterey'],
               ['OS X', 'Big Sur'],
               ['OS X', 'Mojave'],
               ['OS X', 'El Capitan']
@@ -335,7 +343,9 @@ const buildDriver = async (browser, version, os) => {
           ) ||
           e.message.startsWith('OS/Browser combination invalid') ||
           e.message.startsWith('Browser/Browser_Version not supported') ||
-          e.message.startsWith("Couldn't compile Selenium URL")
+          e.message.startsWith('The Browser/Os combination is not supported') ||
+          e.message.startsWith("Couldn't compile Selenium URL") ||
+          e.message.startsWith('Unsupported platform')
         ) {
           // If unsupported config, continue to the next grid configuration
           continue;
