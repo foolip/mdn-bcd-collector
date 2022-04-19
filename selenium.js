@@ -546,7 +546,8 @@ if (esMain(import.meta)) {
           describe: 'Define the number of concurrent jobs to run',
           alias: 'j',
           type: 'integer',
-          nargs: 5
+          nargs: 1,
+          default: 5
         })
         .option('reverse', {
           describe: 'Run browser versions oldest-to-newest',
