@@ -65,7 +65,7 @@
     "@browser-logos/safari": "2.1.0",
     "@webref/css": "4.0.0",
     "@webref/idl": "3.7.1",
-    "c8": "7.11.0",
+    "c8": "7.11.2",
     "chai": "4.3.6",
     "chai-as-promised": "7.1.1",
     "chai-fs": "2.0.0",
