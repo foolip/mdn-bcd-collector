@@ -39,20 +39,20 @@ const REPORTS = [
   },
   {
     report: {
-      __version: 'Dev',
+      __version: '1.2.3-dev',
       results: {},
       userAgent:
         'Mozilla/5.0 (Macintosh; Intel Mac OS X 11_0_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36'
     },
     expected: {
-      slug: 'dev-chrome-86.0.4240.198-mac-os-11.0.0-31072b9b56',
-      title: 'Results from Chrome 86 / Mac OS 11.0.0 / Collector vDev',
-      body: 'User Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 11_0_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36\nBrowser: Chrome 86 (on Mac OS 11.0.0)\nHash Digest: 31072b9b56\nTest URLs: \n\n**WARNING:** this PR was created from a development/staging version!'
+      slug: '1.2.3-dev-chrome-86.0.4240.198-mac-os-11.0.0-32f70f2e14',
+      title: 'Results from Chrome 86 / Mac OS 11.0.0 / Collector v1.2.3-dev',
+      body: 'User Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 11_0_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.198 Safari/537.36\nBrowser: Chrome 86 (on Mac OS 11.0.0)\nHash Digest: 32f70f2e14\nTest URLs: \n\n**WARNING:** this PR was created from a development/staging version!'
     }
   },
   {
     report: {
-      __version: 'Dev',
+      __version: '1.2.3',
       results: {
         'https://mdn-bcd-collector.appspot.com/tests/': {}
       },
@@ -60,14 +60,14 @@ const REPORTS = [
         'Mozilla/5.0 (Linux; Android 11; Pixel 2) AppleWebKit/537.36 (KHTML, like Gecko) SamsungBrowser/12.1 Chrome/79.0.3945.136 Mobile Safari/537.36'
     },
     expected: {
-      slug: 'dev-samsunginternet-android-12.1-android-11-e688b80286',
-      title: 'Results from Samsung Internet 12.1 / Android 11 / Collector vDev',
-      body: 'User Agent: Mozilla/5.0 (Linux; Android 11; Pixel 2) AppleWebKit/537.36 (KHTML, like Gecko) SamsungBrowser/12.1 Chrome/79.0.3945.136 Mobile Safari/537.36\nBrowser: Samsung Internet 12.1 (on Android 11)\nHash Digest: e688b80286\nTest URLs: https://mdn-bcd-collector.appspot.com/tests/\n\n**WARNING:** this PR was created from a development/staging version!'
+      slug: '1.2.3-samsunginternet-android-12.1-android-11-a3a2bf6696',
+      title: 'Results from Samsung Internet 12.1 / Android 11 / Collector v1.2.3',
+      body: 'User Agent: Mozilla/5.0 (Linux; Android 11; Pixel 2) AppleWebKit/537.36 (KHTML, like Gecko) SamsungBrowser/12.1 Chrome/79.0.3945.136 Mobile Safari/537.36\nBrowser: Samsung Internet 12.1 (on Android 11)\nHash Digest: a3a2bf6696\nTest URLs: https://mdn-bcd-collector.appspot.com/tests/'
     }
   },
   {
     report: {
-      __version: 'Dev',
+      __version: '1.2.3',
       results: {
         'https://mdn-bcd-collector.appspot.com/tests/?exposure=Window': {},
         'https://mdn-bcd-collector.appspot.com/tests/?exposure=Worker': {}
@@ -76,9 +76,9 @@ const REPORTS = [
         'Mozilla/5.0 (Macintosh; Intel Mac OS X 11_0_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/800.0.1.2 Safari/537.36'
     },
     expected: {
-      slug: 'dev-chrome-800.0.1.2-mac-os-11.0.0-79a7b52d99',
-      title: 'Results from Chrome 800.0 / Mac OS 11.0.0 / Collector vDev',
-      body: 'User Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 11_0_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/800.0.1.2 Safari/537.36\nBrowser: Chrome 800.0 (on Mac OS 11.0.0) - **Not in BCD**\nHash Digest: 79a7b52d99\nTest URLs: https://mdn-bcd-collector.appspot.com/tests/?exposure=Window, https://mdn-bcd-collector.appspot.com/tests/?exposure=Worker\n\n**WARNING:** this PR was created from a development/staging version!'
+      slug: '1.2.3-chrome-800.0.1.2-mac-os-11.0.0-bd85ffd312',
+      title: 'Results from Chrome 800.0 / Mac OS 11.0.0 / Collector v1.2.3',
+      body: 'User Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 11_0_0) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/800.0.1.2 Safari/537.36\nBrowser: Chrome 800.0 (on Mac OS 11.0.0) - **Not in BCD**\nHash Digest: bd85ffd312\nTest URLs: https://mdn-bcd-collector.appspot.com/tests/?exposure=Window, https://mdn-bcd-collector.appspot.com/tests/?exposure=Worker'
     }
   }
 ];
@@ -86,7 +86,7 @@ const REPORTS = [
 describe('GitHub export', () => {
   const octokit = new Octokit();
 
-  describe('happy path', async () => {
+  describe('happy path', () => {
     // eslint-disable-next-line guard-for-in
     for (const i in REPORTS) {
       it(`Report #${Number(i) + 1}`, async () => {

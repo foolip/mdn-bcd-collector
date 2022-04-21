@@ -35,14 +35,29 @@ import parseResults from './results.js';
 import {getStorage} from './storage.js';
 import {parseUA} from './ua-parser.js';
 import Tests from './tests.js';
+import {exec} from './scripts.js';
 
 const storage = getStorage();
 
 /* c8 ignore start */
-const appVersion =
-  process.env.NODE_ENV === 'production' ?
-    (await fs.readJson(new URL('./package.json', import.meta.url))).version :
-    'Dev';
+const getAppVersion = async () => {
+  const version = (
+    await fs.readJson(new URL('./package.json', import.meta.url))
+  ).version;
+  if (process.env.NODE_ENV === 'production') {
+    return version;
+  }
+
+  try {
+    return String(exec('git describe --tags')).replace(/^v/, '');
+  } catch (e) {
+    // If anything happens, e.g., git isn't installed, just use the version
+    // from package.json with -dev appended.
+    return `${version}-dev`;
+  }
+};
+
+const appVersion = await getAppVersion();
 
 const secrets = await fs.readJson(
   new URL(
