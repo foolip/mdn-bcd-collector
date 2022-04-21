@@ -37,8 +37,6 @@ import {parseUA} from './ua-parser.js';
 import Tests from './tests.js';
 import {exec} from './scripts.js';
 
-const storage = getStorage();
-
 /* c8 ignore start */
 const getAppVersion = async () => {
   const version = (
@@ -68,6 +66,8 @@ const secrets = await fs.readJson(
   )
 );
 /* c8 ignore stop */
+
+const storage = getStorage(appVersion);
 
 const tests = new Tests({
   tests: await fs.readJson(new URL('./tests.json', import.meta.url)),

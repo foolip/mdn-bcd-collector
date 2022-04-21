@@ -139,37 +139,23 @@ describe('storage', () => {
 
   describe('getStorage', () => {
     it('testing', () => {
-      const storage = getStorage();
+      const storage = getStorage('test-version');
       assert(storage instanceof MemoryStorage);
     });
 
     it('production', () => {
-      process.env.GOOGLE_CLOUD_PROJECT = 'testing-project';
-      process.env.GAE_VERSION = 'production';
-      process.env.GCLOUD_STORAGE_BUCKET = 'prod-bucket';
-      process.env.GCLOUD_STORAGE_BUCKET_STAGING = 'staging-bucket';
+      process.env.GOOGLE_CLOUD_PROJECT = 'test-project';
+      process.env.GCLOUD_STORAGE_BUCKET = 'test-bucket';
 
-      const storage = getStorage();
+      const storage = getStorage('test-version');
       assert(storage instanceof CloudStorage);
-      assert.equal(storage._bucket.name, 'prod-bucket');
-    });
-
-    it('staging', () => {
-      process.env.GOOGLE_CLOUD_PROJECT = 'testing-project';
-      process.env.GAE_VERSION = 'staging';
-      process.env.GCLOUD_STORAGE_BUCKET = 'prod-bucket';
-      process.env.GCLOUD_STORAGE_BUCKET_STAGING = 'staging-bucket';
-
-      const storage = getStorage();
-      assert(storage instanceof CloudStorage);
-      assert.equal(storage._bucket.name, 'staging-bucket');
+      assert.equal(storage._bucket.name, 'test-bucket');
+      assert.equal(storage._version, 'test-version');
     });
 
     afterEach(() => {
       delete process.env.GOOGLE_CLOUD_PROJECT;
-      delete process.env.GAE_VERSION;
       delete process.env.GCLOUD_STORAGE_BUCKET;
-      delete process.env.GCLOUD_STORAGE_BUCKET_STAGING;
     });
   });
 });
