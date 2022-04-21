@@ -33,7 +33,7 @@
     "release": "node release.js"
   },
   "dependencies": {
-    "@google-cloud/logging-winston": "4.2.2",
+    "@google-cloud/logging-winston": "4.2.3",
     "@google-cloud/storage": "5.19.3",
     "@mdi/font": "6.6.96",
     "@mdn/browser-compat-data": "4.1.17",
