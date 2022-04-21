@@ -15,10 +15,14 @@
     "Array.prototype.filter": {},
     "Array.prototype.find": {},
     "Array.prototype.findIndex": {},
+    "Array.prototype.findLast": {},
+    "Array.prototype.findLastIndex": {},
     "Array.prototype.flat": {},
     "Array.prototype.flatMap": {},
     "Array.prototype.forEach": {},
     "Array.from": {},
+    "Array.prototype.groupBy": {},
+    "Array.prototype.groupByToMap": {},
     "Array.prototype.includes": {},
     "Array.prototype.indexOf": {},
     "Array.isArray": {},
@@ -165,6 +169,7 @@
     "Date.prototype.toString": {},
     "Date.prototype.toTimeString": {},
     "Date.prototype.toUTCString": {},
+    "Date.UTC": {},
     "Date.prototype.valueOf": {},
     "Date.prototype.@@toPrimitive": {},
     "Error": {
@@ -232,6 +237,7 @@
     "Map.prototype.@@iterator": {},
     "Map.@@species": {},
     "Map.prototype.@@toStringTag": {},
+    "Math": {},
     "Math.E": {},
     "Math.LN2": {},
     "Math.LN10": {},
@@ -633,6 +639,11 @@
     "WebAssembly.CompileError": {
       "ctor_args": "'message'"
     },
+    "WebAssembly.Exception": {
+      "ctor_args": "new WebAssembly.Tag({parameters:[]}),[]"
+    },
+    "WebAssembly.Exception.prototype.getArg": {},
+    "WebAssembly.Exception.prototype.is": {},
     "WebAssembly.Global": {
       "ctor_args": "{value:'i32'}"
     },
@@ -662,6 +673,10 @@
     "WebAssembly.Table.prototype.grow": {},
     "WebAssembly.Table.prototype.length": {},
     "WebAssembly.Table.prototype.set": {},
+    "WebAssembly.Tag": {
+      "ctor_args": "{parameters:[]}"
+    },
+    "WebAssembly.Tag.prototype.type": {},
     "WebAssembly.compile": {},
     "WebAssembly.compileStreaming": {},
     "WebAssembly.instantiate": {},
