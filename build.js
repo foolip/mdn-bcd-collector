@@ -440,9 +440,10 @@ const flattenMembers = (iface) => {
   }
 
   // Add members from ExtAttrs
-  if (getExtAttr(iface, 'LegacyFactoryFunction')) {
+  const legacyFactoryFunction = getExtAttr(iface, 'LegacyFactoryFunction');
+  if (legacyFactoryFunction) {
     members.push({
-      name: getExtAttr(iface, 'LegacyFactoryFunction').rhs.value,
+      name: legacyFactoryFunction.rhs.value,
       type: 'constructor'
     });
   }
