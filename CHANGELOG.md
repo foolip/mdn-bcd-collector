@@ -26,8 +26,8 @@
 
 #### Added
 
-- 1000+ *_event entries (#1825)
-- 600+ css.properties.*.* entries (#1805)
+- 1000+ \*\_event entries (#1825)
+- 600+ css.properties._._ entries (#1805)
 - api.BeforeInstallPromptEvent.platforms
 - api.BluetoothDevice.forget
 - api.CaptureActionEvent
@@ -138,7 +138,7 @@
 
 #### Removed
 
-- 1000+ on* event handler entries (#1825)
+- 1000+ on\* event handler entries (#1825)
 - api.AppHistory
 - api.AppHistoryCurrentChangeEvent
 - api.AppHistoryDestination
@@ -167,7 +167,7 @@
 
 #### Changed
 
-- All css.properties.* entries (#1805)
+- All css.properties.\* entries (#1805)
 - api.RTCIceCandidate
 - api.SpeechSynthesis
 - api.SpeechSynthesisUtterance
