@@ -267,24 +267,27 @@ const buildDriver = async (browser, version, os) => {
     // eslint-disable-next-line guard-for-in
     for (const [osName, osVersion] of getOsesToTest(service, os)) {
       const capabilities = new Capabilities();
-      capabilities.set(Capability.BROWSER_NAME, Browser[browser.toUpperCase()]);
 
+      // Set test name
       capabilities.set(
         'name',
         `mdn-bcd-collector: ${prettyName(browser, version, os)}`
       );
+      if (service === 'saucelabs') {
+        capabilities.set('sauce:options', {
+          name: `mdn-bcd-collector: ${prettyName(browser, version, os)}`
+        });
+      }
 
+      capabilities.set(Capability.BROWSER_NAME, Browser[browser.toUpperCase()]);
       capabilities.set(Capability.BROWSER_VERSION, version.split('.')[0]);
 
       // Remap target OS for Safari x.0 vs. x.1 on SauceLabs
       if (service === 'saucelabs') {
         if (browser === 'safari') {
-          capabilities.set(Capabilities.PLATFORM_NAME, getSafariOS(version));
+          capabilities.set('platformName', getSafariOS(version));
         } else {
-          capabilities.set(
-            Capabilities.PLATFORM_NAME,
-            `${osName} ${osVersion}`
-          );
+          capabilities.set('platformName', `${osName} ${osVersion}`);
         }
       } else {
         capabilities.set('os', osName);
@@ -338,14 +341,14 @@ const buildDriver = async (browser, version, os) => {
         return {driver, service, osName, osVersion};
       } catch (e) {
         if (
-          e.message.startsWith(
-            'Misconfigured -- Unsupported OS/browser/version/device combo'
-          ) ||
-          e.message.startsWith('OS/Browser combination invalid') ||
-          e.message.startsWith('Browser/Browser_Version not supported') ||
-          e.message.startsWith('The Browser/Os combination is not supported') ||
-          e.message.startsWith("Couldn't compile Selenium URL") ||
-          e.message.startsWith('Unsupported platform')
+          [
+            'Misconfigured -- Unsupported',
+            'OS/Browser combination invalid',
+            'Browser/Browser_Version not supported',
+            'The Browser/Os combination is not supported',
+            "Couldn't compile Selenium URL",
+            'Unsupported platform'
+          ].some((m) => e.message.includes(m))
         ) {
           // If unsupported config, continue to the next grid configuration
           continue;
@@ -549,11 +552,13 @@ if (esMain(import.meta)) {
       yargs
         .positional('browser', {
           describe: 'Limit the browser(s) to test',
+          alias: 'b',
           type: 'string',
           choices: ['chrome', 'edge', 'firefox', 'ie', 'safari']
         })
         .option('os', {
           describe: 'Specify OS to test',
+          alias: 's',
           type: 'array',
           choices: ['Windows', 'macOS'],
           default: ['Windows', 'macOS']
