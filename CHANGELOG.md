@@ -1,5 +1,29 @@
 # mdn-bcd-collector Changelog
 
+## v6.0.1
+
+### Test Changes
+
+#### Added
+
+- api.HTMLIFrameElement.fetchPriority
+- api.HTMLImageElement.fetchPriority
+- api.HTMLLinkElement.fetchPriority
+- api.HTMLScriptElement.fetchPriority
+
+#### Removed
+
+- api.CSSColorValue.colorSpace
+- api.CSSColorValue.to
+- api.HTMLIFrameElement.fetchpriority
+- api.HTMLImageElement.fetchpriority
+- api.HTMLLinkElement.fetchpriority
+- api.HTMLScriptElement.fetchpriority
+
+#### Changed
+
+### Commits
+
 ## v6.0.0
 
 ### Test Changes
