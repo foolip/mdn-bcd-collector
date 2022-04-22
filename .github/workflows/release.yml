@@ -1,0 +1,26 @@
+name: release
+on:
+  # Trigger at every Wednesday UTC noon, or manually.
+  schedule:
+    - cron: 0 12 * * 3
+  workflow_dispatch:
+jobs:
+  prepare:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+    - uses: actions/setup-node@v3
+      with:
+        node-version: 16
+    - run: npm ci
+    - name: git config
+      run: |
+        git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git config user.name "github-actions[bot]"
+    - run: node release.js --no-fetch --no-prompt
+      env:
+        GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+env:
+  FORCE_COLOR: 3

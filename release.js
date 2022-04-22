@@ -4,6 +4,8 @@ import esMain from 'es-main';
 import fs from 'fs-extra';
 import {Listr} from 'listr2';
 import prettier from 'prettier';
+import yargs from 'yargs';
+import {hideBin} from 'yargs/helpers';
 
 import {exec} from './scripts.js';
 
@@ -35,7 +37,8 @@ const prepare = () => {
             chalk`{red This script depends on the {bold GitHub CLI}. Please {bold install} the CLI using the following instructions:} {blue https://cli.github.com/}`
           );
         }
-      }
+      },
+      skip: (ctx) => ctx.skipPR
     },
     {
       title: 'Checking git status',
@@ -50,7 +53,8 @@ const prepare = () => {
     },
     {
       title: 'Fetching from remote',
-      task: () => exec('git fetch --all')
+      task: () => exec('git fetch --all'),
+      skip: (ctx) => ctx.skipFetch
     }
   ];
 };
@@ -62,6 +66,11 @@ const getNewVersion = async (ctx, task) => {
     `${versionParts[0]}.${versionParts[1] + 1}.0`,
     `${versionParts[0]}.${versionParts[1]}.${versionParts[2] + 1}`
   ];
+
+  if (ctx.skipPrompt) {
+    ctx.newVersion = newVersions[2];
+    return;
+  }
 
   ctx.newVersion = await task.prompt([
     {
@@ -236,6 +245,26 @@ const createPR = async (ctx) => {
 };
 
 const main = async () => {
+  const {argv} = yargs(hideBin(process.argv))
+      .parserConfiguration({
+        'boolean-negation': false
+      })
+      .option('no-fetch', {
+        describe: "Don't fetch remote",
+        type: 'boolean',
+        default: false
+      })
+      .option('no-prompt', {
+        describe: "Don't prompt about anything, assume defaults",
+        type: 'boolean',
+        default: false
+      })
+      .option('no-pr', {
+        describe: "Don't create a pull request",
+        type: 'boolean',
+        default: false
+      });
+
   const tasks = new Listr(
     [
       {
@@ -280,7 +309,8 @@ const main = async () => {
             );
           }
         },
-        rollback: async () => await doVersionBump(currentVersion)
+        rollback: async () => await doVersionBump(currentVersion),
+        skip: (ctx) => ctx.skipPrompt
       },
       {
         title: 'Prepare release branch',
@@ -288,13 +318,19 @@ const main = async () => {
       },
       {
         title: 'Create pull request',
-        task: createPR
+        task: createPR,
+        skip: (ctx) => ctx.skipPR
       }
     ],
     {
       showErrorMessage: true,
       // Mitigates https://github.com/cenk1cenk2/listr2/issues/631
-      injectWrapper: {enquirer}
+      injectWrapper: {enquirer},
+      ctx: {
+        skipFetch: argv['no-fetch'],
+        skipPrompt: argv['no-prompt'],
+        skipPR: argv['no-pr']
+      }
     }
   );
 
