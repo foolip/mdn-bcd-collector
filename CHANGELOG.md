@@ -1,5 +1,27 @@
 # mdn-bcd-collector Changelog
 
+## v6.0.1
+
+### Test Changes
+
+#### Added
+
+- api.HTMLIFrameElement.fetchPriority
+- api.HTMLImageElement.fetchPriority
+- api.HTMLLinkElement.fetchPriority
+- api.HTMLScriptElement.fetchPriority
+
+#### Removed
+
+- api.CSSColorValue.colorSpace
+- api.CSSColorValue.to
+
+#### Changed
+
+### Commits
+
+- Add all-lowercase fetchpriority attributes custom IDL (#1940)
+
 ## v6.0.0
 
 ### Test Changes
