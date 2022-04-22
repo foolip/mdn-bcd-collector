@@ -650,6 +650,7 @@
         "wait"
       ]
     },
+    "custom-property": {},
     "display": {
       "__additional_values": {
         "display-outside": ["block", "inline", "run-in"],
