@@ -279,12 +279,9 @@ const buildDriver = async (browser, version, os) => {
       // Remap target OS for Safari x.0 vs. x.1 on SauceLabs
       if (service === 'saucelabs') {
         if (browser === 'safari') {
-          capabilities.set(Capabilities.PLATFORM_NAME, getSafariOS(version));
+          capabilities.set('platformName', getSafariOS(version));
         } else {
-          capabilities.set(
-            Capabilities.PLATFORM_NAME,
-            `${osName} ${osVersion}`
-          );
+          capabilities.set('platformName', `${osName} ${osVersion}`);
         }
       } else {
         capabilities.set('os', osName);
