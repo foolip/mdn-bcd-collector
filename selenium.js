@@ -341,12 +341,14 @@ const buildDriver = async (browser, version, os) => {
         return {driver, service, osName, osVersion};
       } catch (e) {
         if (
-          e.message.startsWith('Misconfigured -- Unsupported') ||
-          e.message.startsWith('OS/Browser combination invalid') ||
-          e.message.startsWith('Browser/Browser_Version not supported') ||
-          e.message.startsWith('The Browser/Os combination is not supported') ||
-          e.message.startsWith("Couldn't compile Selenium URL") ||
-          e.message.startsWith('Unsupported platform')
+          [
+            'Misconfigured -- Unsupported',
+            'OS/Browser combination invalid',
+            'Browser/Browser_Version not supported',
+            'The Browser/Os combination is not supported',
+            "Couldn't compile Selenium URL",
+            'Unsupported platform'
+          ].some((m) => e.message.includes(m))
         ) {
           // If unsupported config, continue to the next grid configuration
           continue;
