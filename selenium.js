@@ -546,11 +546,13 @@ if (esMain(import.meta)) {
       yargs
         .positional('browser', {
           describe: 'Limit the browser(s) to test',
+          alias: 'b',
           type: 'string',
           choices: ['chrome', 'edge', 'firefox', 'ie', 'safari']
         })
         .option('os', {
           describe: 'Specify OS to test',
+          alias: 's',
           type: 'array',
           choices: ['Windows', 'macOS'],
           default: ['Windows', 'macOS']
