@@ -267,13 +267,19 @@ const buildDriver = async (browser, version, os) => {
     // eslint-disable-next-line guard-for-in
     for (const [osName, osVersion] of getOsesToTest(service, os)) {
       const capabilities = new Capabilities();
-      capabilities.set(Capability.BROWSER_NAME, Browser[browser.toUpperCase()]);
 
+      // Set test name
       capabilities.set(
         'name',
         `mdn-bcd-collector: ${prettyName(browser, version, os)}`
       );
+      if (service === 'saucelabs') {
+        capabilities.set('sauce:options', {
+          name: `mdn-bcd-collector: ${prettyName(browser, version, os)}`
+        });
+      }
 
+      capabilities.set(Capability.BROWSER_NAME, Browser[browser.toUpperCase()]);
       capabilities.set(Capability.BROWSER_VERSION, version.split('.')[0]);
 
       // Remap target OS for Safari x.0 vs. x.1 on SauceLabs
