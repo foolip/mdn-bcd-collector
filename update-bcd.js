@@ -351,6 +351,7 @@ const update = (bcd, supportMatrix, filter) => {
       ) {
         const range = inferredStatement.version_added.split('> ≤');
         if (
+          simpleStatement.version_added === 'preview' ||
           compareVersions.compare(
             simpleStatement.version_added.replace('≤', ''),
             range[0],
