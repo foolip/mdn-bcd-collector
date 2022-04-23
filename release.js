@@ -177,13 +177,20 @@ const getTestChanges = () => {
         }
         changed = changed.filter(simplifyTestChangesList);
 
-        ctx.testChanges =
-          '\n#### Added\n\n' +
-          added.map((x) => '- ' + x).join('\n') +
-          '\n\n#### Removed\n\n' +
-          removed.map((x) => '- ' + x).join('\n') +
-          '\n\n#### Changed\n\n' +
-          changed.map((x) => '- ' + x).join('\n');
+        ctx.testChanges = '\n';
+
+        if (added.length) {
+          ctx.testChanges +=
+            '#### Added\n\n' + added.map((x) => '- ' + x).join('\n');
+        }
+        if (removed.length) {
+          ctx.testChanges +=
+            '#### Removed\n\n' + removed.map((x) => '- ' + x).join('\n');
+        }
+        if (changed.length) {
+          ctx.testChanges +=
+            '#### Changed\n\n' + added.map((x) => '- ' + x).join('\n');
+        }
       }
     },
     {
