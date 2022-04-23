@@ -149,6 +149,7 @@
         stringIncludes(err.message, 'Argument not optional') ||
         stringIncludes(err.message, "Arguments can't be empty") ||
         stringIncludes(err.message, 'undefined is not an object') ||
+        stringIncludes(err.message, 'must be an object') ||
         stringIncludes(err.message, 'WRONG_ARGUMENTS_ERR')
       ) {
         // If it failed to construct and it's not illegal or just needs
