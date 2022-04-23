@@ -67,6 +67,12 @@
   }
 
   function stringIncludes(string, search) {
+    if (Array.isArray(search)) {
+      for (var i = 0; i < search.length; i++) {
+        if (stringIncludes(string, search[i])) return true;
+      }
+      return false;
+    }
     if (string.includes) {
       return string.includes(search);
     }
@@ -134,23 +140,27 @@
       result.result = true;
     } catch (err) {
       if (
-        stringIncludes(err.message, 'Illegal constructor') ||
-        stringIncludes(err.message, 'is not a constructor') ||
-        stringIncludes(err.message, 'Function expected') ||
-        stringIncludes(err.message, 'is not defined') ||
-        stringIncludes(err.message, "Can't find variable") ||
-        stringIncludes(err.message, 'NOT_SUPPORTED_ERR')
+        stringIncludes(err.message, [
+          'Illegal constructor',
+          'is not a constructor',
+          'Function expected',
+          'is not defined',
+          "Can't find variable",
+          'NOT_SUPPORTED_ERR'
+        ])
       ) {
         result.result = false;
       } else if (
-        stringIncludes(err.message, 'Not enough arguments') ||
-        stringIncludes(err.message, 'argument required') ||
-        stringIncludes(err.message, 'arguments required') ||
-        stringIncludes(err.message, 'Argument not optional') ||
-        stringIncludes(err.message, "Arguments can't be empty") ||
-        stringIncludes(err.message, 'undefined is not an object') ||
-        stringIncludes(err.message, 'must be an object') ||
-        stringIncludes(err.message, 'WRONG_ARGUMENTS_ERR')
+        stringIncludes(err.message, [
+          'Not enough arguments',
+          'argument required',
+          'arguments required',
+          'Argument not optional',
+          "Arguments can't be empty",
+          'undefined is not an object',
+          'must be an object',
+          'WRONG_ARGUMENTS_ERR'
+        ])
       ) {
         // If it failed to construct and it's not illegal or just needs
         // more arguments, the constructor's good
@@ -302,8 +312,7 @@
     } else if (value && typeof value === 'object') {
       if (
         'name' in value &&
-        (stringIncludes(value.name, 'NS_ERROR') ||
-          stringIncludes(value.name, 'NotSupported'))
+        stringIncludes(value.name, ['NS_ERROR', 'NotSupported'])
       ) {
         result.result = null;
         result.message = 'threw ' + stringify(value.message);
