@@ -69,7 +69,9 @@
   function stringIncludes(string, search) {
     if (Array.isArray(search)) {
       for (var i = 0; i < search.length; i++) {
-        if (stringIncludes(string, search[i])) return true;
+        if (stringIncludes(string, search[i])) {
+          return true;
+        }
       }
       return false;
     }
