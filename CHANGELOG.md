@@ -1,5 +1,31 @@
 # mdn-bcd-collector Changelog
 
+## v6.0.2
+
+### Test Changes
+
+#### Added
+
+- api.Screen.isExtended
+- api.Screen.change_event
+- api.ScreenDetailed
+- api.ScreenDetails
+- api.Window.getScreenDetails
+- css.properties.custom-property
+
+#### Removed
+
+#### Changed
+
+### Commits
+
+- Don't run tests on Windows (#1949)
+- Replace "preview" in BCD if collector has version number (#1948)
+- Update Selenium script (#1947)
+- Simplify v6 changelog (#1946)
+- Restore the css.properties.custom-property custom test (#1945)
+- Add a scheduled+manual workflow for releases (#1943)
+
 ## v6.0.1
 
 ### Test Changes
