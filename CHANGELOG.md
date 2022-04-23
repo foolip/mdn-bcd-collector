@@ -13,10 +13,6 @@
 - api.Window.getScreenDetails
 - css.properties.custom-property
 
-#### Removed
-
-#### Changed
-
 ### Commits
 
 - Don't run tests on Windows (#1949)
