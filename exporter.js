@@ -74,9 +74,9 @@ const createBody = (meta) => {
     }` +
     `\nHash Digest: ${meta.digest}` +
     `\nTest URLs: ${meta.urls.join(', ')}` +
-    (meta.version.includes('-')
-      ? '\n\n**WARNING:** this PR was created from a development/staging version!'
-      : '')
+    (meta.version.includes('-') ?
+      '\n\n**WARNING:** this PR was created from a development/staging version!' :
+      '')
   );
 };
 

@@ -182,16 +182,16 @@ const getOsesToTest = (service, os) => {
       break;
     case 'macOS':
       osesToTest =
-        service === 'saucelabs'
-          ? [['macOS', '10.14']]
-          : service === 'lambdatest'
-          ? [
+        service === 'saucelabs' ?
+          [['macOS', '10.14']] :
+          service === 'lambdatest' ?
+          [
               ['macOS', 'Monterey'],
               ['macOS', 'Big Sur'],
               ['macOS', 'Mojave'],
               ['OS X', 'El Capitan']
-            ]
-          : [
+            ] :
+          [
               ['OS X', 'Monterey'],
               ['OS X', 'Big Sur'],
               ['OS X', 'Mojave'],
