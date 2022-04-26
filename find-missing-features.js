@@ -1,8 +1,9 @@
 'use strict';
 
+import {fileURLToPath} from 'node:url';
+
 import esMain from 'es-main';
 import fs from 'fs-extra';
-import {fileURLToPath} from 'url';
 import yargs from 'yargs';
 import {hideBin} from 'yargs/helpers';
 

@@ -14,7 +14,8 @@
 
 'use strict';
 
-import assert from 'assert';
+import assert from 'node:assert/strict';
+
 import fs from 'fs-extra';
 import {Storage} from '@google-cloud/storage';
 
@@ -29,7 +30,9 @@ class CloudStorage {
 
   async put(sessionId, key, value) {
     assert(sessionId.length > 0);
-    const name = `${this._version}/sessions/${sessionId}/${encodeURIComponent(key)}`;
+    const name = `${this._version}/sessions/${sessionId}/${encodeURIComponent(
+      key
+    )}`;
     const file = this._bucket.file(name);
     const data = JSON.stringify(value);
     await file.save(data);

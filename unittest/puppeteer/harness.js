@@ -14,9 +14,10 @@
 
 'use strict';
 
+import {fileURLToPath} from 'node:url';
+
 import {assert} from 'chai';
 import fs from 'fs-extra';
-import {fileURLToPath} from 'url';
 import puppeteer from 'puppeteer';
 
 import {app} from '../../app.js';

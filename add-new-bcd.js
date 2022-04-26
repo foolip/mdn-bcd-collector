@@ -1,7 +1,8 @@
 'use strict';
 
+import path from 'node:path';
+
 import fs from 'fs-extra';
-import path from 'path';
 import esMain from 'es-main';
 
 import {getMissing} from './find-missing-features.js';
@@ -42,9 +43,9 @@ const recursiveAdd = (ident, i, data, obj) => {
   const part = ident[i];
 
   data[part] =
-    i + 1 < ident.length ?
-      recursiveAdd(ident, i + 1, part in data ? data[part] : {}, obj) :
-      Object.assign({}, obj);
+    i + 1 < ident.length
+      ? recursiveAdd(ident, i + 1, part in data ? data[part] : {}, obj)
+      : Object.assign({}, obj);
 
   return data;
 };
