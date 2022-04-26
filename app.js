@@ -14,6 +14,9 @@
 
 'use strict';
 
+import https from 'node:https';
+import http from 'node:http';
+
 import fs from 'fs-extra';
 import querystring from 'querystring';
 import bcd from '@mdn/browser-compat-data';
@@ -21,8 +24,6 @@ const bcdBrowsers = bcd.browsers;
 import esMain from 'es-main';
 import express from 'express';
 import cookieParser from 'cookie-parser';
-import https from 'https';
-import http from 'http';
 import uniqueString from 'unique-string';
 import expressLayouts from 'express-ejs-layouts';
 import yargs from 'yargs';
@@ -59,9 +60,9 @@ const appVersion = await getAppVersion();
 
 const secrets = await fs.readJson(
   new URL(
-    process.env.NODE_ENV === 'test' ?
-      './secrets.sample.json' :
-      './secrets.json',
+    process.env.NODE_ENV === 'test'
+      ? './secrets.sample.json'
+      : './secrets.json',
     import.meta.url
   )
 );
@@ -235,9 +236,9 @@ app.all('/export', (req, res, next) => {
 
 app.all('/tests/*', (req, res) => {
   const ident = req.params['0'].replace(/\//g, '.');
-  const ignoreIdents = req.query.ignore ?
-    req.query.ignore.split(',').filter((s) => s) :
-    [];
+  const ignoreIdents = req.query.ignore
+    ? req.query.ignore.split(',').filter((s) => s)
+    : [];
   const foundTests = tests.getTests(ident, req.query.exposure, ignoreIdents);
   if (foundTests && foundTests.length) {
     res.render('tests', {
