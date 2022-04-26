@@ -3,6 +3,9 @@
 
 'use strict';
 
+import path from 'node:path';
+import {fileURLToPath} from 'node:url';
+
 import assert from 'assert';
 import compareVersions from 'compare-versions';
 import esMain from 'es-main';
@@ -10,8 +13,6 @@ import fs from 'fs-extra';
 import klaw from 'klaw';
 import minimatch from 'minimatch';
 const {Minimatch} = minimatch;
-import path from 'path';
-import {fileURLToPath} from 'url';
 import yargs from 'yargs';
 import {hideBin} from 'yargs/helpers';
 

@@ -14,6 +14,9 @@
 
 'use strict';
 
+import https from 'node:https';
+import http from 'node:http';
+
 import fs from 'fs-extra';
 import querystring from 'querystring';
 import bcd from '@mdn/browser-compat-data';
@@ -21,8 +24,6 @@ const bcdBrowsers = bcd.browsers;
 import esMain from 'es-main';
 import express from 'express';
 import cookieParser from 'cookie-parser';
-import https from 'https';
-import http from 'http';
 import uniqueString from 'unique-string';
 import expressLayouts from 'express-ejs-layouts';
 import yargs from 'yargs';

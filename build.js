@@ -14,12 +14,13 @@
 
 'use strict';
 
+import path from 'node:path';
+import {fileURLToPath} from 'node:url';
+
 import css from '@webref/css';
 import esMain from 'es-main';
 import fs from 'fs-extra';
 import idl from '@webref/idl';
-import path from 'path';
-import {fileURLToPath} from 'url';
 import sass from 'sass';
 import * as WebIDL2 from 'webidl2';
 import * as YAML from 'yaml';

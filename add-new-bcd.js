@@ -1,7 +1,8 @@
 'use strict';
 
+import path from 'node:path';
+
 import fs from 'fs-extra';
-import path from 'path';
 import esMain from 'es-main';
 
 import {getMissing} from './find-missing-features.js';

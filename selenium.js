@@ -12,6 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+import path from 'node:path';
+import {fileURLToPath} from 'node:url';
+
 import {
   Browser,
   Builder,
@@ -27,8 +30,6 @@ import compareVersions from 'compare-versions';
 import fetch from 'node-fetch';
 import esMain from 'es-main';
 import fs from 'fs-extra';
-import path from 'path';
-import {fileURLToPath} from 'url';
 import chalk from 'chalk-template';
 import {Listr} from 'listr2';
 import yargs from 'yargs';

@@ -17,7 +17,8 @@
 // This module is responsible for getting results/reports out of the collector
 // web service into JSON files that can be used by update-bcd.js.
 
-import crypto from 'crypto';
+import crypto from 'node:crypto';
+
 import slugify from 'slugify';
 import stringify from 'json-stable-stringify';
 import bcd from '@mdn/browser-compat-data';

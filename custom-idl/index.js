@@ -15,7 +15,7 @@
 'use strict';
 
 import fs from 'fs-extra';
-import path from 'path';
+import path from 'node:path';
 import * as WebIDL2 from 'webidl2';
 
 // Load text (UTF-8) files from a directory and return an object mapping each
