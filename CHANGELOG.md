@@ -1,5 +1,19 @@
 # mdn-bcd-collector Changelog
 
+## v6.0.3
+
+### Test Changes
+
+#### Changed
+
+### Commits
+
+- Fix api.CSSKeyframesRule, which is currently invalid JS (#1960)
+- Prefix NodeJS built-in imports with `node:` (#1961)
+- Only include test change sections as needed (#1954)
+- Allow stringIncludes() search to be an array (#1953)
+- Update testConstructor() to catch Safari error message (#1952)
+
 ## v6.0.2
 
 ### Test Changes
