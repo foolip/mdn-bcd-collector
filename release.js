@@ -218,8 +218,7 @@ const doChangelogUpdate = async (ctx) => {
   let newChangelog =
     changelog.substring(0, idx) +
     `## v${ctx.newVersion}\n\n` +
-    '### Test Changes\n' +
-    ctx.testChanges +
+    (ctx.testChanges === '\n' ? '' : '### Test Changes\n' + ctx.testChanges) +
     '\n### Commits\n\n' +
     ctx.commits +
     '\n\n' +
