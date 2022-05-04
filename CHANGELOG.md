@@ -1,5 +1,34 @@
 # mdn-bcd-collector Changelog
 
+## v6.0.3
+
+### Test Changes
+
+#### Added
+
+- api.AudioContext.renderCapacity
+- api.AudioRenderCapacity
+- api.AudioRenderCapacityEvent
+- api.WebTransportReceiveStream
+- api.WebTransportSendStream#### Removed
+
+- api.originPolicyIds#### Changed
+
+- api.AudioContext.renderCapacity
+- api.AudioRenderCapacity
+- api.AudioRenderCapacityEvent
+- api.WebTransportReceiveStream
+- api.WebTransportSendStream
+
+### Commits
+
+- Only show "Changes" section when needed (#1963)
+- Fix api.CSSKeyframesRule, which is currently invalid JS (#1960)
+- Prefix NodeJS built-in imports with `node:` (#1961)
+- Only include test change sections as needed (#1954)
+- Allow stringIncludes() search to be an array (#1953)
+- Update testConstructor() to catch Safari error message (#1952)
+
 ## v6.0.2
 
 ### Test Changes
