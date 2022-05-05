@@ -181,21 +181,15 @@ const getTestChanges = () => {
 
         if (added.length) {
           ctx.testChanges +=
-            '#### Added\n\n' + added.map((x) => '- ' + x).join('\n');
-        }
-        if (added.length && removed.length) {
-          ctx.testChanges += '\n\n';
+            '#### Added\n\n' + added.map((x) => '- ' + x).join('\n') + '\n';
         }
         if (removed.length) {
           ctx.testChanges +=
-            '#### Removed\n\n' + removed.map((x) => '- ' + x).join('\n');
-        }
-        if (removed.length && changed.length) {
-          ctx.testChanges += '\n\n';
+            '#### Removed\n\n' + removed.map((x) => '- ' + x).join('\n') + '\n';
         }
         if (changed.length) {
           ctx.testChanges +=
-            '#### Changed\n\n' + changed.map((x) => '- ' + x).join('\n');
+            '#### Changed\n\n' + changed.map((x) => '- ' + x).join('\n') + '\n';
         }
       }
     },
