@@ -1,5 +1,25 @@
 # mdn-bcd-collector Changelog
 
+## v6.0.4
+
+### Test Changes
+
+#### Added
+
+- api.FederatedCredential.login
+- api.FederatedCredential.logout
+- api.FederatedCredential.logoutRPs
+- api.FederatedCredential.revoke
+- api.MediaDevices.getViewportMedia
+- api.MLCommandEncoder
+- api.MLContext.compute
+- api.MLContext.computeAsync
+- api.MLContext.createCommandEncoder
+
+#### Removed
+
+- api.MLGraph.compute
+
 ## v6.0.3
 
 ### Test Changes
