@@ -20,8 +20,6 @@
 
 - api.MLGraph.compute
 
-### Commits
-
 ## v6.0.3
 
 ### Test Changes
