@@ -208,6 +208,13 @@ const getGitChanges = async (ctx) => {
   ctx.commits = commits
     .filter((summary) => !summary.startsWith('Bump '))
     .map((summary) => `- ${summary.replace('<', '&lt;').replace('>', '&gt;')}`)
+    .map((summary) =>
+      // Link to pull requests
+      summary.replace(
+        /\(#(\d+)\)/g,
+        '([#$1](https://github.com/foolip/mdn-bcd-collector/pull/$1))'
+      )
+    )
     .join('\n');
 };
 
