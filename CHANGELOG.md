@@ -43,13 +43,13 @@
 
 ### Commits
 
-- Fix changelog (#1978)
-- Only show "Changes" section when needed (#1963)
-- Fix api.CSSKeyframesRule, which is currently invalid JS (#1960)
-- Prefix NodeJS built-in imports with `node:` (#1961)
-- Only include test change sections as needed (#1954)
-- Allow stringIncludes() search to be an array (#1953)
-- Update testConstructor() to catch Safari error message (#1952)
+- Fix changelog ([#1978](https://github.com/foolip/mdn-bcd-collector/pull/1978))
+- Only show "Changes" section when needed ([#1963](https://github.com/foolip/mdn-bcd-collector/pull/1963))
+- Fix api.CSSKeyframesRule, which is currently invalid JS ([#1960](https://github.com/foolip/mdn-bcd-collector/pull/1960))
+- Prefix NodeJS built-in imports with `node:` ([#1961](https://github.com/foolip/mdn-bcd-collector/pull/1961))
+- Only include test change sections as needed ([#1954](https://github.com/foolip/mdn-bcd-collector/pull/1954))
+- Allow stringIncludes() search to be an array ([#1953](https://github.com/foolip/mdn-bcd-collector/pull/1953))
+- Update testConstructor() to catch Safari error message ([#1952](https://github.com/foolip/mdn-bcd-collector/pull/1952))
 
 ## v6.0.2
 
@@ -66,12 +66,12 @@
 
 ### Commits
 
-- Don't run tests on Windows (#1949)
-- Replace "preview" in BCD if collector has version number (#1948)
-- Update Selenium script (#1947)
-- Simplify v6 changelog (#1946)
-- Restore the css.properties.custom-property custom test (#1945)
-- Add a scheduled+manual workflow for releases (#1943)
+- Don't run tests on Windows ([#1949](https://github.com/foolip/mdn-bcd-collector/pull/1949))
+- Replace "preview" in BCD if collector has version number ([#1948](https://github.com/foolip/mdn-bcd-collector/pull/1948))
+- Update Selenium script ([#1947](https://github.com/foolip/mdn-bcd-collector/pull/1947))
+- Simplify v6 changelog ([#1946](https://github.com/foolip/mdn-bcd-collector/pull/1946))
+- Restore the css.properties.custom-property custom test ([#1945](https://github.com/foolip/mdn-bcd-collector/pull/1945))
+- Add a scheduled+manual workflow for releases ([#1943](https://github.com/foolip/mdn-bcd-collector/pull/1943))
 
 ## v6.0.1
 
@@ -91,7 +91,7 @@
 
 ### Commits
 
-- Add all-lowercase fetchpriority attributes custom IDL (#1940)
+- Add all-lowercase fetchpriority attributes custom IDL ([#1940](https://github.com/foolip/mdn-bcd-collector/pull/1940))
 
 ## v6.0.0
 
@@ -99,8 +99,8 @@
 
 #### Added
 
-- 1000+ \*\_event entries (#1825)
-- 600+ css.properties._._ entries (#1805)
+- 1000+ \*\_event entries ([#1825](https://github.com/foolip/mdn-bcd-collector/pull/1825))
+- 600+ css.properties._._ entries ([#1805](https://github.com/foolip/mdn-bcd-collector/pull/1805))
 - api.BeforeInstallPromptEvent.platforms
 - api.BluetoothDevice.forget
 - api.CaptureActionEvent
@@ -211,7 +211,7 @@
 
 #### Removed
 
-- 1000+ on\* event handler entries (#1825)
+- 1000+ on\* event handler entries ([#1825](https://github.com/foolip/mdn-bcd-collector/pull/1825))
 - api.AppHistory
 - api.AppHistoryCurrentChangeEvent
 - api.AppHistoryDestination
@@ -240,7 +240,7 @@
 
 #### Changed
 
-- All css.properties.\* entries (#1805)
+- All css.properties.\* entries ([#1805](https://github.com/foolip/mdn-bcd-collector/pull/1805))
 - api.RTCIceCandidate
 - api.SpeechSynthesis
 - api.SpeechSynthesisUtterance
@@ -248,41 +248,41 @@
 
 ### Commits
 
-- Use a single storage bucket with app version as path prefix (#1934)
-- Use 'git describe' to generate version number for dev version (#1912)
-- Add missing JS builtins (#1930)
-- Fix the release script (multiple bugs) (#1933)
-- Fix custom IDL for BeforeInstallPromptEvent (#1931)
-- Simplify LegacyFactoryFunction code (#1929)
-- Log which Selenium host is chosen on what OS and OS version (#1921)
-- Provide better integration with LambdaTest (#1922)
-- Fix concurrent argument passed into Selenium (#1920)
-- Randomize selection of Selenium host (#1919)
-- Allow for defining custom number for concurrent Selenium jobs (#1914)
-- Use npm version to bump version in release script (#1918)
-- Allow LambdaTest as a Selenium host (#1913)
-- Set to production by default if NODE_ENV = production (#1903)
-- Update README about deployment (#1911)
-- Fix regex to catch reusableInstances in tests (#1909)
-- Handle "preview" in update-bcd (#1905)
-- Don't set BCD to false if BCD has version number greater than our data (#1904)
-- Fix NPM audit (#1899)
-- Remove mitigation of Firefox 3.6.17 UA parsing bug (#1893)
-- Ensure site doesn't crash if OS can't be parsed from UA (#1892)
-- Add custom test for api.Element.scroll.options_behavior_parameter (#1509)
-- Fix tests (#1888)
-- Add custom test for RTCIceCandidate API (#1660)
-- Add custom tests for speech synthesis (#1696)
-- Generate toString tests for named stringifiers in IDL (#1716)
-- Add custom tests for HTML[Anchor/Area]Element/WorkerLocation toString (#1717)
-- Log the URLs used for tests in report PR descriptions (#1813)
-- Remap event handlers (#1825)
-- Update unittests (#1784)
-- Add the ability to test CSS property values to custom-css.json (#1805)
-- Fix find-missing-results (#1826)
-- Upgrade to Node.js v16 (#1817)
-- Don't render results automatically when there are more than 250 (#1810)
-- Add custom JS tests found via find-missing-features.js (#1804)
+- Use a single storage bucket with app version as path prefix ([#1934](https://github.com/foolip/mdn-bcd-collector/pull/1934))
+- Use 'git describe' to generate version number for dev version ([#1912](https://github.com/foolip/mdn-bcd-collector/pull/1912))
+- Add missing JS builtins ([#1930](https://github.com/foolip/mdn-bcd-collector/pull/1930))
+- Fix the release script (multiple bugs) ([#1933](https://github.com/foolip/mdn-bcd-collector/pull/1933))
+- Fix custom IDL for BeforeInstallPromptEvent ([#1931](https://github.com/foolip/mdn-bcd-collector/pull/1931))
+- Simplify LegacyFactoryFunction code ([#1929](https://github.com/foolip/mdn-bcd-collector/pull/1929))
+- Log which Selenium host is chosen on what OS and OS version ([#1921](https://github.com/foolip/mdn-bcd-collector/pull/1921))
+- Provide better integration with LambdaTest ([#1922](https://github.com/foolip/mdn-bcd-collector/pull/1922))
+- Fix concurrent argument passed into Selenium ([#1920](https://github.com/foolip/mdn-bcd-collector/pull/1920))
+- Randomize selection of Selenium host ([#1919](https://github.com/foolip/mdn-bcd-collector/pull/1919))
+- Allow for defining custom number for concurrent Selenium jobs ([#1914](https://github.com/foolip/mdn-bcd-collector/pull/1914))
+- Use npm version to bump version in release script ([#1918](https://github.com/foolip/mdn-bcd-collector/pull/1918))
+- Allow LambdaTest as a Selenium host ([#1913](https://github.com/foolip/mdn-bcd-collector/pull/1913))
+- Set to production by default if NODE_ENV = production ([#1903](https://github.com/foolip/mdn-bcd-collector/pull/1903))
+- Update README about deployment ([#1911](https://github.com/foolip/mdn-bcd-collector/pull/1911))
+- Fix regex to catch reusableInstances in tests ([#1909](https://github.com/foolip/mdn-bcd-collector/pull/1909))
+- Handle "preview" in update-bcd ([#1905](https://github.com/foolip/mdn-bcd-collector/pull/1905))
+- Don't set BCD to false if BCD has version number greater than our data ([#1904](https://github.com/foolip/mdn-bcd-collector/pull/1904))
+- Fix NPM audit ([#1899](https://github.com/foolip/mdn-bcd-collector/pull/1899))
+- Remove mitigation of Firefox 3.6.17 UA parsing bug ([#1893](https://github.com/foolip/mdn-bcd-collector/pull/1893))
+- Ensure site doesn't crash if OS can't be parsed from UA ([#1892](https://github.com/foolip/mdn-bcd-collector/pull/1892))
+- Add custom test for api.Element.scroll.options_behavior_parameter ([#1509](https://github.com/foolip/mdn-bcd-collector/pull/1509))
+- Fix tests ([#1888](https://github.com/foolip/mdn-bcd-collector/pull/1888))
+- Add custom test for RTCIceCandidate API ([#1660](https://github.com/foolip/mdn-bcd-collector/pull/1660))
+- Add custom tests for speech synthesis ([#1696](https://github.com/foolip/mdn-bcd-collector/pull/1696))
+- Generate toString tests for named stringifiers in IDL ([#1716](https://github.com/foolip/mdn-bcd-collector/pull/1716))
+- Add custom tests for HTML[Anchor/Area]Element/WorkerLocation toString ([#1717](https://github.com/foolip/mdn-bcd-collector/pull/1717))
+- Log the URLs used for tests in report PR descriptions ([#1813](https://github.com/foolip/mdn-bcd-collector/pull/1813))
+- Remap event handlers ([#1825](https://github.com/foolip/mdn-bcd-collector/pull/1825))
+- Update unittests ([#1784](https://github.com/foolip/mdn-bcd-collector/pull/1784))
+- Add the ability to test CSS property values to custom-css.json ([#1805](https://github.com/foolip/mdn-bcd-collector/pull/1805))
+- Fix find-missing-results ([#1826](https://github.com/foolip/mdn-bcd-collector/pull/1826))
+- Upgrade to Node.js v16 ([#1817](https://github.com/foolip/mdn-bcd-collector/pull/1817))
+- Don't render results automatically when there are more than 250 ([#1810](https://github.com/foolip/mdn-bcd-collector/pull/1810))
+- Add custom JS tests found via find-missing-features.js ([#1804](https://github.com/foolip/mdn-bcd-collector/pull/1804))
 
 ## v5.0.0
 
@@ -1911,82 +1911,82 @@
 
 ### Commits
 
-- Remove unreachable code in build.js (#1787)
-- Remove no-longer-needed dict-arg-default rule ignore (#1788)
-- Add support for wildcard exposures (#1756)
-- Make sure to include collector version in exporter.getReportMeta (#1783)
-- Remove MediaStreamTrackProcessor custom IDL (#1776)
-- Update wording for find-missing-features' direction argument (#1701)
-- Update Attr API custom test (#1714)
-- Add IDL for missing features in BCD (#1715)
-- Add @@iterator symbol on maplike and setlike interfaces (#1718)
-- Simplify code to check for double-run of test exposures (#1703)
-- Format code on page using highlight.js (#1676)
-- Handle Android WebView 4.4.3 in ua-parser (#1681)
-- Load JSON3 polyfill only when needed (#1690)
-- Prevent tests from starting twice (#1695)
-- Use original formatting from custom tests; don't run Prettier in build.js (#1584)
-- bcd.testConstructor(): account for Opera's error message (#1671)
-- Add test for CanvasRenderingContext2D.drawFocusIfNeeded.path_parameter (#1656)
-- Simplify test for CanvasRenderingContext2D.drawImage.SVGImageElement_source_image (#1655)
-- Update IIRFilter + MediaStreamAudioDestinationNode custom tests (#1643)
-- Update tests for TextDecoder/TextEncoder (#1636)
-- Add custom test for PerformanceResourceTiming API (#1635)
-- Rename api.BaseAudioContext.decodeAudioData.promise_syntax -&gt; returns_promise (#1634)
-- Fix test for ImageCapture interface (#1615)
-- Add custom IDL for webkit-prefixed Touch attributes (#1587)
-- Fix add-new-bcd (#1600)
-- Fix reusable instances code display (#1583)
-- Fix custom IDL export (#1594)
-- Ignore Safari backported releases (#1572)
-- Keep UA parse results specific to the request, not the app (#1578)
-- Catch errors when passing return value within a callback (#1580)
-- Fix ignore on Edge 15 (#1581)
+- Remove unreachable code in build.js ([#1787](https://github.com/foolip/mdn-bcd-collector/pull/1787))
+- Remove no-longer-needed dict-arg-default rule ignore ([#1788](https://github.com/foolip/mdn-bcd-collector/pull/1788))
+- Add support for wildcard exposures ([#1756](https://github.com/foolip/mdn-bcd-collector/pull/1756))
+- Make sure to include collector version in exporter.getReportMeta ([#1783](https://github.com/foolip/mdn-bcd-collector/pull/1783))
+- Remove MediaStreamTrackProcessor custom IDL ([#1776](https://github.com/foolip/mdn-bcd-collector/pull/1776))
+- Update wording for find-missing-features' direction argument ([#1701](https://github.com/foolip/mdn-bcd-collector/pull/1701))
+- Update Attr API custom test ([#1714](https://github.com/foolip/mdn-bcd-collector/pull/1714))
+- Add IDL for missing features in BCD ([#1715](https://github.com/foolip/mdn-bcd-collector/pull/1715))
+- Add @@iterator symbol on maplike and setlike interfaces ([#1718](https://github.com/foolip/mdn-bcd-collector/pull/1718))
+- Simplify code to check for double-run of test exposures ([#1703](https://github.com/foolip/mdn-bcd-collector/pull/1703))
+- Format code on page using highlight.js ([#1676](https://github.com/foolip/mdn-bcd-collector/pull/1676))
+- Handle Android WebView 4.4.3 in ua-parser ([#1681](https://github.com/foolip/mdn-bcd-collector/pull/1681))
+- Load JSON3 polyfill only when needed ([#1690](https://github.com/foolip/mdn-bcd-collector/pull/1690))
+- Prevent tests from starting twice ([#1695](https://github.com/foolip/mdn-bcd-collector/pull/1695))
+- Use original formatting from custom tests; don't run Prettier in build.js ([#1584](https://github.com/foolip/mdn-bcd-collector/pull/1584))
+- bcd.testConstructor(): account for Opera's error message ([#1671](https://github.com/foolip/mdn-bcd-collector/pull/1671))
+- Add test for CanvasRenderingContext2D.drawFocusIfNeeded.path_parameter ([#1656](https://github.com/foolip/mdn-bcd-collector/pull/1656))
+- Simplify test for CanvasRenderingContext2D.drawImage.SVGImageElement_source_image ([#1655](https://github.com/foolip/mdn-bcd-collector/pull/1655))
+- Update IIRFilter + MediaStreamAudioDestinationNode custom tests ([#1643](https://github.com/foolip/mdn-bcd-collector/pull/1643))
+- Update tests for TextDecoder/TextEncoder ([#1636](https://github.com/foolip/mdn-bcd-collector/pull/1636))
+- Add custom test for PerformanceResourceTiming API ([#1635](https://github.com/foolip/mdn-bcd-collector/pull/1635))
+- Rename api.BaseAudioContext.decodeAudioData.promise_syntax -&gt; returns_promise ([#1634](https://github.com/foolip/mdn-bcd-collector/pull/1634))
+- Fix test for ImageCapture interface ([#1615](https://github.com/foolip/mdn-bcd-collector/pull/1615))
+- Add custom IDL for webkit-prefixed Touch attributes ([#1587](https://github.com/foolip/mdn-bcd-collector/pull/1587))
+- Fix add-new-bcd ([#1600](https://github.com/foolip/mdn-bcd-collector/pull/1600))
+- Fix reusable instances code display ([#1583](https://github.com/foolip/mdn-bcd-collector/pull/1583))
+- Fix custom IDL export ([#1594](https://github.com/foolip/mdn-bcd-collector/pull/1594))
+- Ignore Safari backported releases ([#1572](https://github.com/foolip/mdn-bcd-collector/pull/1572))
+- Keep UA parse results specific to the request, not the app ([#1578](https://github.com/foolip/mdn-bcd-collector/pull/1578))
+- Catch errors when passing return value within a callback ([#1580](https://github.com/foolip/mdn-bcd-collector/pull/1580))
+- Fix ignore on Edge 15 ([#1581](https://github.com/foolip/mdn-bcd-collector/pull/1581))
 
 ## v4.0.0
 
-- Fix styling for inputs and light background (#1571)
-- Limit deploy action to only run one at a time (#1570)
-- Map WindowOrWorkerGlobalScope members to \_globals folder (#1558)
-- Update URLs to Web IDL (#1549)
-- Use NodeGit's Revwalk to generate the changelog (#1539)
-- Create release preparation script (#1513)
-- Add custom tests for HTMLFormControlsCollection and RadioNodeList (#1528)
-- Create a changelog (#1514)
-- Ignore Deno by default in find-missing-results script (#1535)
-- Add custom test for TextMetrics API (#1534)
-- Remove insufficient tests for document.createElement() options (#1508)
-- Use WebKitMutationObserver to create a MutationObserver instance (#1511)
-- Fix test for XPathResult in old Firefox versions (#1507)
-- Sass it up! Convert styling to SCSS (#1502)
-- Add a type string for more event constructors (#1489)
-- Add documentation for how to review changes from the collector (#1436)
-- Add a privacy notice to homepage (#1499)
-- Add custom test for HTMLOptionsCollection (#1497)
-- Convert from CJS to ESM (#1475)
+- Fix styling for inputs and light background ([#1571](https://github.com/foolip/mdn-bcd-collector/pull/1571))
+- Limit deploy action to only run one at a time ([#1570](https://github.com/foolip/mdn-bcd-collector/pull/1570))
+- Map WindowOrWorkerGlobalScope members to \_globals folder ([#1558](https://github.com/foolip/mdn-bcd-collector/pull/1558))
+- Update URLs to Web IDL ([#1549](https://github.com/foolip/mdn-bcd-collector/pull/1549))
+- Use NodeGit's Revwalk to generate the changelog ([#1539](https://github.com/foolip/mdn-bcd-collector/pull/1539))
+- Create release preparation script ([#1513](https://github.com/foolip/mdn-bcd-collector/pull/1513))
+- Add custom tests for HTMLFormControlsCollection and RadioNodeList ([#1528](https://github.com/foolip/mdn-bcd-collector/pull/1528))
+- Create a changelog ([#1514](https://github.com/foolip/mdn-bcd-collector/pull/1514))
+- Ignore Deno by default in find-missing-results script ([#1535](https://github.com/foolip/mdn-bcd-collector/pull/1535))
+- Add custom test for TextMetrics API ([#1534](https://github.com/foolip/mdn-bcd-collector/pull/1534))
+- Remove insufficient tests for document.createElement() options ([#1508](https://github.com/foolip/mdn-bcd-collector/pull/1508))
+- Use WebKitMutationObserver to create a MutationObserver instance ([#1511](https://github.com/foolip/mdn-bcd-collector/pull/1511))
+- Fix test for XPathResult in old Firefox versions ([#1507](https://github.com/foolip/mdn-bcd-collector/pull/1507))
+- Sass it up! Convert styling to SCSS ([#1502](https://github.com/foolip/mdn-bcd-collector/pull/1502))
+- Add a type string for more event constructors ([#1489](https://github.com/foolip/mdn-bcd-collector/pull/1489))
+- Add documentation for how to review changes from the collector ([#1436](https://github.com/foolip/mdn-bcd-collector/pull/1436))
+- Add a privacy notice to homepage ([#1499](https://github.com/foolip/mdn-bcd-collector/pull/1499))
+- Add custom test for HTMLOptionsCollection ([#1497](https://github.com/foolip/mdn-bcd-collector/pull/1497))
+- Convert from CJS to ESM ([#1475](https://github.com/foolip/mdn-bcd-collector/pull/1475))
 
 ## v3.3.1
 
-- Automatically tag new releases (#1484)
-- Add RTCSessionDescription test; fix RTCDTMFToneChangeEvent (#1488)
+- Automatically tag new releases ([#1484](https://github.com/foolip/mdn-bcd-collector/pull/1484))
+- Add RTCSessionDescription test; fix RTCDTMFToneChangeEvent ([#1488](https://github.com/foolip/mdn-bcd-collector/pull/1488))
 
 ## v3.3.0
 
-- Add required request parameter to FetchEvent constructor (#1481)
-- Send the right tests to SharedWorker and ServiceWorker (#1479)
-- Use document.fonts or self.fonts as FontFaceSet instance (#1474)
-- Remove custom test for api.Document.documentURI.readonly (#1471)
-- Add comment explaining RTCPeerConnection constructor order (#1470)
-- Fix custom test for RTCPeerConnection (#1469)
-- Add .nvmrc (#1468)
-- Revert "Create custom test for RTCRtpReceiver" (#1464)
-- Simplify window.crypto custom test (#1465)
-- Update custom test for ImageData (#1461)
-- Change Vinyl's username on footer to match rebranding (#1460)
-- Create custom test for RTCRtpReceiver (#1459)
-- Create custom tests for DOMTokenList (#1458)
-- Fix Safari bug for window.crypto (#1457)
-- Remove stray semicolon (#1456)
+- Add required request parameter to FetchEvent constructor ([#1481](https://github.com/foolip/mdn-bcd-collector/pull/1481))
+- Send the right tests to SharedWorker and ServiceWorker ([#1479](https://github.com/foolip/mdn-bcd-collector/pull/1479))
+- Use document.fonts or self.fonts as FontFaceSet instance ([#1474](https://github.com/foolip/mdn-bcd-collector/pull/1474))
+- Remove custom test for api.Document.documentURI.readonly ([#1471](https://github.com/foolip/mdn-bcd-collector/pull/1471))
+- Add comment explaining RTCPeerConnection constructor order ([#1470](https://github.com/foolip/mdn-bcd-collector/pull/1470))
+- Fix custom test for RTCPeerConnection ([#1469](https://github.com/foolip/mdn-bcd-collector/pull/1469))
+- Add .nvmrc ([#1468](https://github.com/foolip/mdn-bcd-collector/pull/1468))
+- Revert "Create custom test for RTCRtpReceiver" ([#1464](https://github.com/foolip/mdn-bcd-collector/pull/1464))
+- Simplify window.crypto custom test ([#1465](https://github.com/foolip/mdn-bcd-collector/pull/1465))
+- Update custom test for ImageData ([#1461](https://github.com/foolip/mdn-bcd-collector/pull/1461))
+- Change Vinyl's username on footer to match rebranding ([#1460](https://github.com/foolip/mdn-bcd-collector/pull/1460))
+- Create custom test for RTCRtpReceiver ([#1459](https://github.com/foolip/mdn-bcd-collector/pull/1459))
+- Create custom tests for DOMTokenList ([#1458](https://github.com/foolip/mdn-bcd-collector/pull/1458))
+- Fix Safari bug for window.crypto ([#1457](https://github.com/foolip/mdn-bcd-collector/pull/1457))
+- Remove stray semicolon ([#1456](https://github.com/foolip/mdn-bcd-collector/pull/1456))
 
 ## v3.2.12
 
@@ -1994,119 +1994,119 @@
 
 ## v3.2.11
 
-- Reorganize custom IDL by spec affinity (#1441)
+- Reorganize custom IDL by spec affinity ([#1441](https://github.com/foolip/mdn-bcd-collector/pull/1441))
 - Remove navigator.canShare() custom IDL
-- testConstructor: add catch for Safari's "Can't find variable" error (#1434)
-- Add custom test for DOMTokenList.toggle.force_parameter (#1433)
-- Add custom test for SVGAnimatedString (#1432)
-- Ignore .DS_Store (#1431)
-- Format comments in custom tests to ensure they remain on their own line (#1430)
-- Fix the comment for RTCPeerConnection (#1429)
-- Fix import in add-new-bcd (#1427)
-- Add comment explaining the RTCPeerConnection constructor test (#1426)
+- testConstructor: add catch for Safari's "Can't find variable" error ([#1434](https://github.com/foolip/mdn-bcd-collector/pull/1434))
+- Add custom test for DOMTokenList.toggle.force_parameter ([#1433](https://github.com/foolip/mdn-bcd-collector/pull/1433))
+- Add custom test for SVGAnimatedString ([#1432](https://github.com/foolip/mdn-bcd-collector/pull/1432))
+- Ignore .DS_Store ([#1431](https://github.com/foolip/mdn-bcd-collector/pull/1431))
+- Format comments in custom tests to ensure they remain on their own line ([#1430](https://github.com/foolip/mdn-bcd-collector/pull/1430))
+- Fix the comment for RTCPeerConnection ([#1429](https://github.com/foolip/mdn-bcd-collector/pull/1429))
+- Fix import in add-new-bcd ([#1427](https://github.com/foolip/mdn-bcd-collector/pull/1427))
+- Add comment explaining the RTCPeerConnection constructor test ([#1426](https://github.com/foolip/mdn-bcd-collector/pull/1426))
 
 ## v3.2.10
 
-- Use performance.getEntries() to get PerformanceEntry instance (#1417)
-- Addressing Lighthouse audit report (#1411)
-- Add initWebKitAnimationEvent and initWebKitTransitionEvent tests (#1415)
-- Fix test for RTCPeerConnection (#1409)
-- Make testConstructor able to test constructor objects (#1408)
-- Updates for event custom tests (#1405)
-- Account for Opera Presto error (#1404)
+- Use performance.getEntries() to get PerformanceEntry instance ([#1417](https://github.com/foolip/mdn-bcd-collector/pull/1417))
+- Addressing Lighthouse audit report ([#1411](https://github.com/foolip/mdn-bcd-collector/pull/1411))
+- Add initWebKitAnimationEvent and initWebKitTransitionEvent tests ([#1415](https://github.com/foolip/mdn-bcd-collector/pull/1415))
+- Fix test for RTCPeerConnection ([#1409](https://github.com/foolip/mdn-bcd-collector/pull/1409))
+- Make testConstructor able to test constructor objects ([#1408](https://github.com/foolip/mdn-bcd-collector/pull/1408))
+- Updates for event custom tests ([#1405](https://github.com/foolip/mdn-bcd-collector/pull/1405))
+- Account for Opera Presto error ([#1404](https://github.com/foolip/mdn-bcd-collector/pull/1404))
 
 ## v3.2.9
 
-- Fix results URL generation (#1402)
+- Fix results URL generation ([#1402](https://github.com/foolip/mdn-bcd-collector/pull/1402))
 
 ## v3.2.8
 
-- Bug fixes (#1400)
+- Bug fixes ([#1400](https://github.com/foolip/mdn-bcd-collector/pull/1400))
 
 ## v3.2.7
 
-- Revert documentURI after testing api.Document.documentURI.readonly (#1398)
+- Revert documentURI after testing api.Document.documentURI.readonly ([#1398](https://github.com/foolip/mdn-bcd-collector/pull/1398))
 
 ## v3.2.6
 
-- Use console.log vs. updateStatus for completion logs (#1396)
-- Fix cryptoKey instance (#1395)
-- Fix new debugmode logging (#1394)
-- Add further debug logging in debug mode (#1393)
-- Fix odd bug with older browsers trying to post results to example.org (#1392)
+- Use console.log vs. updateStatus for completion logs ([#1396](https://github.com/foolip/mdn-bcd-collector/pull/1396))
+- Fix cryptoKey instance ([#1395](https://github.com/foolip/mdn-bcd-collector/pull/1395))
+- Fix new debugmode logging ([#1394](https://github.com/foolip/mdn-bcd-collector/pull/1394))
+- Add further debug logging in debug mode ([#1393](https://github.com/foolip/mdn-bcd-collector/pull/1393))
+- Fix odd bug with older browsers trying to post results to example.org ([#1392](https://github.com/foolip/mdn-bcd-collector/pull/1392))
 
 ## v3.2.5
 
-- Custom test updates (#1390)
-- Further synchronize ESLint and Prettier (and format remaining files) (#1389)
-- Synchronize ESLint and Prettier rules (#1388)
-- Fix find-missing-releases (#1387)
-- Add .prettierrc file (#1386)
-- Add find-missing-results (#1385)
-- Add debug mode console logs (#1384)
-- Make Plugin test inconclusive if navigator.plugins is empty (#1377)
-- Add instances for XMLHttpRequestEventTarget and XMLHttpRequestUpload (#1376)
+- Custom test updates ([#1390](https://github.com/foolip/mdn-bcd-collector/pull/1390))
+- Further synchronize ESLint and Prettier (and format remaining files) ([#1389](https://github.com/foolip/mdn-bcd-collector/pull/1389))
+- Synchronize ESLint and Prettier rules ([#1388](https://github.com/foolip/mdn-bcd-collector/pull/1388))
+- Fix find-missing-releases ([#1387](https://github.com/foolip/mdn-bcd-collector/pull/1387))
+- Add .prettierrc file ([#1386](https://github.com/foolip/mdn-bcd-collector/pull/1386))
+- Add find-missing-results ([#1385](https://github.com/foolip/mdn-bcd-collector/pull/1385))
+- Add debug mode console logs ([#1384](https://github.com/foolip/mdn-bcd-collector/pull/1384))
+- Make Plugin test inconclusive if navigator.plugins is empty ([#1377](https://github.com/foolip/mdn-bcd-collector/pull/1377))
+- Add instances for XMLHttpRequestEventTarget and XMLHttpRequestUpload ([#1376](https://github.com/foolip/mdn-bcd-collector/pull/1376))
 
 ## v3.2.4
 
-- Add a type string for most event constructors (#1375)
-- Remove ^ from package.json (#1379)
-- Add more custom tests (#1367)
-- Add/update custom tests (#1364)
-- Convert custom-tests.json to YAML (for multiline formatting) (#1358)
-- Fix custom test for Notification API (#1357)
-- Fix test for XPathResult (#1355)
-- Add additional additional for several APIs (#1347)
-- Improve test for WebSocket API (#1346)
+- Add a type string for most event constructors ([#1375](https://github.com/foolip/mdn-bcd-collector/pull/1375))
+- Remove ^ from package.json ([#1379](https://github.com/foolip/mdn-bcd-collector/pull/1379))
+- Add more custom tests ([#1367](https://github.com/foolip/mdn-bcd-collector/pull/1367))
+- Add/update custom tests ([#1364](https://github.com/foolip/mdn-bcd-collector/pull/1364))
+- Convert custom-tests.json to YAML (for multiline formatting) ([#1358](https://github.com/foolip/mdn-bcd-collector/pull/1358))
+- Fix custom test for Notification API ([#1357](https://github.com/foolip/mdn-bcd-collector/pull/1357))
+- Fix test for XPathResult ([#1355](https://github.com/foolip/mdn-bcd-collector/pull/1355))
+- Add additional additional for several APIs ([#1347](https://github.com/foolip/mdn-bcd-collector/pull/1347))
+- Improve test for WebSocket API ([#1346](https://github.com/foolip/mdn-bcd-collector/pull/1346))
 
 ## v3.2.3
 
-- Add a test for Object.hasOwn() (#1342)
-- Combine results from different reports for the same browser version (#1340)
-- Simplify getSupportMap by ignoring URL (#1339)
-- Correct preference for fake Firefox media stream (#1333)
-- Simplify getSupportMap to use bare values, not {result: ...} (#1332)
-- Fix tests for WritableStreamDefaultController/Writer (#1324)
-- Remove mapping of console-&gt;Console (#1326)
-- Fix variable names in custom tests to avoid "interface" (#1323)
+- Add a test for Object.hasOwn() ([#1342](https://github.com/foolip/mdn-bcd-collector/pull/1342))
+- Combine results from different reports for the same browser version ([#1340](https://github.com/foolip/mdn-bcd-collector/pull/1340))
+- Simplify getSupportMap by ignoring URL ([#1339](https://github.com/foolip/mdn-bcd-collector/pull/1339))
+- Correct preference for fake Firefox media stream ([#1333](https://github.com/foolip/mdn-bcd-collector/pull/1333))
+- Simplify getSupportMap to use bare values, not {result: ...} ([#1332](https://github.com/foolip/mdn-bcd-collector/pull/1332))
+- Fix tests for WritableStreamDefaultController/Writer ([#1324](https://github.com/foolip/mdn-bcd-collector/pull/1324))
+- Remove mapping of console-&gt;Console ([#1326](https://github.com/foolip/mdn-bcd-collector/pull/1326))
+- Fix variable names in custom tests to avoid "interface" ([#1323](https://github.com/foolip/mdn-bcd-collector/pull/1323))
 
 ## v3.2.2
 
-- Revert "Update lockfile version to 2" (#1321)
-- Ignore user media tests on Firefox 34-52 (#1319)
-- Update lockfile version to 2 (#1317)
-- Cover inherited attributes (#1318)
-- Add instrumentKey custom IDL (#1314)
+- Revert "Update lockfile version to 2" ([#1321](https://github.com/foolip/mdn-bcd-collector/pull/1321))
+- Ignore user media tests on Firefox 34-52 ([#1319](https://github.com/foolip/mdn-bcd-collector/pull/1319))
+- Update lockfile version to 2 ([#1317](https://github.com/foolip/mdn-bcd-collector/pull/1317))
+- Cover inherited attributes ([#1318](https://github.com/foolip/mdn-bcd-collector/pull/1318))
+- Add instrumentKey custom IDL ([#1314](https://github.com/foolip/mdn-bcd-collector/pull/1314))
 
 ## v3.2.1
 
-- Add tests for some JavaScript alt. names. in BCD (#1313)
-- Remove Function.prototype.displayName test (#1311)
+- Add tests for some JavaScript alt. names. in BCD ([#1313](https://github.com/foolip/mdn-bcd-collector/pull/1313))
+- Remove Function.prototype.displayName test ([#1311](https://github.com/foolip/mdn-bcd-collector/pull/1311))
 
 ## v3.2.0
 
-- Remove tests for columnNumber/fileName/lineNumber (#1310)
-- Generate test for JavaScript constructors (#1307)
-- Generate tests for property symbols (@@ features) (#1306)
-- Generate tests for JavaScript builtins (#1302)
+- Remove tests for columnNumber/fileName/lineNumber ([#1310](https://github.com/foolip/mdn-bcd-collector/pull/1310))
+- Generate test for JavaScript constructors ([#1307](https://github.com/foolip/mdn-bcd-collector/pull/1307))
+- Generate tests for property symbols (@@ features) ([#1306](https://github.com/foolip/mdn-bcd-collector/pull/1306))
+- Generate tests for JavaScript builtins ([#1302](https://github.com/foolip/mdn-bcd-collector/pull/1302))
 
 ## v3.1.11
 
-- Add back custom IDL now gone from @webref/idl (#1300)
-- Add MutationEvent instance (document.createEvent('MutationEvent')) (#1297)
-- Add custom tests for WritableStreamDefaultController/Writer (#1295)
-- Update UA parser to better handle iOS browsers (#1290)
-- Enable fake media stream for Firefox in Selenium script (#1289)
-- Custom tests: replace variable assignments as well (#1288)
+- Add back custom IDL now gone from @webref/idl ([#1300](https://github.com/foolip/mdn-bcd-collector/pull/1300))
+- Add MutationEvent instance (document.createEvent('MutationEvent')) ([#1297](https://github.com/foolip/mdn-bcd-collector/pull/1297))
+- Add custom tests for WritableStreamDefaultController/Writer ([#1295](https://github.com/foolip/mdn-bcd-collector/pull/1295))
+- Update UA parser to better handle iOS browsers ([#1290](https://github.com/foolip/mdn-bcd-collector/pull/1290))
+- Enable fake media stream for Firefox in Selenium script ([#1289](https://github.com/foolip/mdn-bcd-collector/pull/1289))
+- Custom tests: replace variable assignments as well ([#1288](https://github.com/foolip/mdn-bcd-collector/pull/1288))
 
 ## v3.1.10
 
-- Add IDs for export buttons (#1282)
-- Fix Firefox collection regarding new WebKitAnimationEvent test (#1280)
-- Add custom test for WebGLRenderingContext (#1279)
-- Increase the verbosity of errors in results parsing (#1278)
-- More Selenium script updates (#1277)
-- Selenium script updates (#1276)
+- Add IDs for export buttons ([#1282](https://github.com/foolip/mdn-bcd-collector/pull/1282))
+- Fix Firefox collection regarding new WebKitAnimationEvent test ([#1280](https://github.com/foolip/mdn-bcd-collector/pull/1280))
+- Add custom test for WebGLRenderingContext ([#1279](https://github.com/foolip/mdn-bcd-collector/pull/1279))
+- Increase the verbosity of errors in results parsing ([#1278](https://github.com/foolip/mdn-bcd-collector/pull/1278))
+- More Selenium script updates ([#1277](https://github.com/foolip/mdn-bcd-collector/pull/1277))
+- Selenium script updates ([#1276](https://github.com/foolip/mdn-bcd-collector/pull/1276))
 
 ## v3.1.9
 
@@ -2114,325 +2114,325 @@
 
 ## v3.1.8
 
-- Add a --path argument to filter BCD paths by wildcards (#1245)
-- Use &lt;b&gt; as a HTMLElement instance (not HTMLUnknownElement) (#1253)
-- Use window.toolbar as a BarProp instance (#1252)
-- Add more tests for (WebKit- or unprefixed) AnimationEvent/TransitionEvent (#1251)
-- Tweak some custom tests for consistency (#1250)
-- Add custom IDL for webkit-prefixed Pointer Lock API (#1249)
-- Add custom code for MouseEvent instance (#1248)
-- Add custom code for WheelEvent instance (#1247)
-- Add RTCPeerConnection instance with prefixed variants (#1246)
+- Add a --path argument to filter BCD paths by wildcards ([#1245](https://github.com/foolip/mdn-bcd-collector/pull/1245))
+- Use &lt;b&gt; as a HTMLElement instance (not HTMLUnknownElement) ([#1253](https://github.com/foolip/mdn-bcd-collector/pull/1253))
+- Use window.toolbar as a BarProp instance ([#1252](https://github.com/foolip/mdn-bcd-collector/pull/1252))
+- Add more tests for (WebKit- or unprefixed) AnimationEvent/TransitionEvent ([#1251](https://github.com/foolip/mdn-bcd-collector/pull/1251))
+- Tweak some custom tests for consistency ([#1250](https://github.com/foolip/mdn-bcd-collector/pull/1250))
+- Add custom IDL for webkit-prefixed Pointer Lock API ([#1249](https://github.com/foolip/mdn-bcd-collector/pull/1249))
+- Add custom code for MouseEvent instance ([#1248](https://github.com/foolip/mdn-bcd-collector/pull/1248))
+- Add custom code for WheelEvent instance ([#1247](https://github.com/foolip/mdn-bcd-collector/pull/1247))
+- Add RTCPeerConnection instance with prefixed variants ([#1246](https://github.com/foolip/mdn-bcd-collector/pull/1246))
 
 ## v3.1.7
 
 - Remove custom SourceBuffer.changeType now in @webref/idl
-- Fix Performance\* custom tests (#1238)
-- Create an instance for XMLHttpRequest tests (#1237)
-- Fix the fallback for creating an Event instance (#1236)
-- Always show form buttons, but disable by default (#1231)
+- Fix Performance\* custom tests ([#1238](https://github.com/foolip/mdn-bcd-collector/pull/1238))
+- Create an instance for XMLHttpRequest tests ([#1237](https://github.com/foolip/mdn-bcd-collector/pull/1237))
+- Fix the fallback for creating an Event instance ([#1236](https://github.com/foolip/mdn-bcd-collector/pull/1236))
+- Always show form buttons, but disable by default ([#1231](https://github.com/foolip/mdn-bcd-collector/pull/1231))
 
 ## v3.1.6
 
-- Test for crypto.webkitSubtle and use it as a SubtleCrypto instance (#1219)
-- Simplify subtle.crypto custom test instance (#1216)
-- Add custom test instance for WorkerLocation (#1211)
-- Update custom test for ProcessingInstruction (#1210)
-- Get a DOMException instance from a thrown exception (#1192)
+- Test for crypto.webkitSubtle and use it as a SubtleCrypto instance ([#1219](https://github.com/foolip/mdn-bcd-collector/pull/1219))
+- Simplify subtle.crypto custom test instance ([#1216](https://github.com/foolip/mdn-bcd-collector/pull/1216))
+- Add custom test instance for WorkerLocation ([#1211](https://github.com/foolip/mdn-bcd-collector/pull/1211))
+- Update custom test for ProcessingInstruction ([#1210](https://github.com/foolip/mdn-bcd-collector/pull/1210))
+- Get a DOMException instance from a thrown exception ([#1192](https://github.com/foolip/mdn-bcd-collector/pull/1192))
 
 ## v3.1.5
 
-- Fix http-&gt;https (#1205)
-- Improve MediaStream tests for camera-less devices (#1203)
-- Document how to diff tests in the release process (#1201)
-- Revert "Add reusable instances of Worker and SharedWorker" (#1202)
-- Add reusable instances of Worker and SharedWorker (#1200)
-- Fix custom test for ProcessingInstruction API (#1198)
-- Selenium: don't try to test Safari 14.0 in BrowserStack (#1197)
-- Add custom test for WebGLVertexArrayObjectOES API (#1195)
-- Use navigator as the WorkerNavigator instance (#1194)
+- Fix http-&gt;https ([#1205](https://github.com/foolip/mdn-bcd-collector/pull/1205))
+- Improve MediaStream tests for camera-less devices ([#1203](https://github.com/foolip/mdn-bcd-collector/pull/1203))
+- Document how to diff tests in the release process ([#1201](https://github.com/foolip/mdn-bcd-collector/pull/1201))
+- Revert "Add reusable instances of Worker and SharedWorker" ([#1202](https://github.com/foolip/mdn-bcd-collector/pull/1202))
+- Add reusable instances of Worker and SharedWorker ([#1200](https://github.com/foolip/mdn-bcd-collector/pull/1200))
+- Fix custom test for ProcessingInstruction API ([#1198](https://github.com/foolip/mdn-bcd-collector/pull/1198))
+- Selenium: don't try to test Safari 14.0 in BrowserStack ([#1197](https://github.com/foolip/mdn-bcd-collector/pull/1197))
+- Add custom test for WebGLVertexArrayObjectOES API ([#1195](https://github.com/foolip/mdn-bcd-collector/pull/1195))
+- Use navigator as the WorkerNavigator instance ([#1194](https://github.com/foolip/mdn-bcd-collector/pull/1194))
 
 ## v3.1.4
 
-- Test SVGElement using a &lt;title&gt; element instance (#1189)
+- Test SVGElement using a &lt;title&gt; element instance ([#1189](https://github.com/foolip/mdn-bcd-collector/pull/1189))
 
 ## v3.1.3
 
 - Document the manual release process
-- Fix SVGFEFuncAlement typo in SVGComponentTransferFunctionElement test (#1179)
-- Avoid external URL in FontFace source (#1172)
-- Avoid hardcoded appspot.com URLs in custom tests (#1170)
-- Update UA parser to handle old Android WebView versions (#1162)
+- Fix SVGFEFuncAlement typo in SVGComponentTransferFunctionElement test ([#1179](https://github.com/foolip/mdn-bcd-collector/pull/1179))
+- Avoid external URL in FontFace source ([#1172](https://github.com/foolip/mdn-bcd-collector/pull/1172))
+- Avoid hardcoded appspot.com URLs in custom tests ([#1170](https://github.com/foolip/mdn-bcd-collector/pull/1170))
+- Update UA parser to handle old Android WebView versions ([#1162](https://github.com/foolip/mdn-bcd-collector/pull/1162))
 
 ## v3.1.2
 
-- Add custom IDL for webkitSlice (#1169)
-- Add custom IDL for zoomAndPan attributes (#1166)
+- Add custom IDL for webkitSlice ([#1169](https://github.com/foolip/mdn-bcd-collector/pull/1169))
+- Add custom IDL for zoomAndPan attributes ([#1166](https://github.com/foolip/mdn-bcd-collector/pull/1166))
 
 ## v3.1.1
 
-- Update a few URLs to master branches already renamed to main (#1159)
+- Update a few URLs to master branches already renamed to main ([#1159](https://github.com/foolip/mdn-bcd-collector/pull/1159))
 - Add custom IDL for payment APIs still shipping in Chrome
 - Remove outerText custom IDL now in webref
 
 ## v3.1.0
 
-- Add custom IDL for createEncodedStreams() methods (#1147)
+- Add custom IDL for createEncodedStreams() methods ([#1147](https://github.com/foolip/mdn-bcd-collector/pull/1147))
 - Remove Sanitizer API custom IDL now in webref
 - Remove web-animations-2 custom IDL now in webref
-- Stop using CSS.supports for CSS property tests (#1132)
-- Remove '&&' combinator in compileTest calls where not needed (#1131)
-- Use webkitSpeechRecognition to test SpeechRecognition members (#1130)
+- Stop using CSS.supports for CSS property tests ([#1132](https://github.com/foolip/mdn-bcd-collector/pull/1132))
+- Remove '&&' combinator in compileTest calls where not needed ([#1131](https://github.com/foolip/mdn-bcd-collector/pull/1131))
+- Use webkitSpeechRecognition to test SpeechRecognition members ([#1130](https://github.com/foolip/mdn-bcd-collector/pull/1130))
 
 ## v3.0.2
 
-- Drop support for [Constructor] extended attribute (#1124)
-- Once again validate custom IDL (#1122)
-- Fix BluetoothGATTRemoteServer unknown type (renamed) (#1118)
-- Check for all duplicates (not just operations) in mergeMembers (#1117)
-- Remove some types from the ignore list, fixing remaining issues (#1116)
+- Drop support for [Constructor] extended attribute ([#1124](https://github.com/foolip/mdn-bcd-collector/pull/1124))
+- Once again validate custom IDL ([#1122](https://github.com/foolip/mdn-bcd-collector/pull/1122))
+- Fix BluetoothGATTRemoteServer unknown type (renamed) ([#1118](https://github.com/foolip/mdn-bcd-collector/pull/1118))
+- Check for all duplicates (not just operations) in mergeMembers ([#1117](https://github.com/foolip/mdn-bcd-collector/pull/1117))
+- Remove some types from the ignore list, fixing remaining issues ([#1116](https://github.com/foolip/mdn-bcd-collector/pull/1116))
 
 ## v3.0.1
 
-- Add back initWheelEvent as custom IDL (#1100)
-- Update button/select/submit styling (#1092)
+- Add back initWheelEvent as custom IDL ([#1100](https://github.com/foolip/mdn-bcd-collector/pull/1100))
+- Update button/select/submit styling ([#1092](https://github.com/foolip/mdn-bcd-collector/pull/1092))
 
 ## v3.0.0
 
-- Make update-bcd more conservative about updating existing data (#1088)
-- Remove unused support for update-bcd to updated prefixed entries (#1087)
-- Remove custom tests around AudioScheduledSourceNode (#1076)
+- Make update-bcd more conservative about updating existing data ([#1088](https://github.com/foolip/mdn-bcd-collector/pull/1088))
+- Remove unused support for update-bcd to updated prefixed entries ([#1087](https://github.com/foolip/mdn-bcd-collector/pull/1087))
+- Remove custom tests around AudioScheduledSourceNode ([#1076](https://github.com/foolip/mdn-bcd-collector/pull/1076))
 - Adapt to @webref/idl 1.0.11
-- Add custom IDL for webkitCreateShadowRoot() (#1080)
-- Add required arguments to createPeriodicWave custom test (#1077)
-- Use a AudioBufferSourceNode instance to test AudioScheduledSourceNode (#1074)
-- Add ms-prefixed APIs based on find-missing output (#1072)
-- Add a --include-aliases option to the find-missing script (#1071)
-- Add custom IDL for navigator.mozBattery/webkitBattery (#1069)
-- Support running a HTTPS server locally with a custom certificate (#1046)
-- Simplify code and resources in tests.json (#1063)
-- Simplify compileTest internally (#1062)
-- Remove the test category from tests.json (#1061)
-- Fix typo in SVGHKernElement custom IDL (#1055)
-- Add --release argument (filter) for update-bcd.js (#1019)
-- Simplify how custom IDL is loaded/parsed (#1048)
-- Use @webref/css package for CSS property list (#1047)
-- Add more custom IDL (#1044)
-- Clarify where to get the collector results from (#1043)
-- Add more custom IDL (#1039)
-- Let update-bcd script use ../mdn-bcd-results/ by default (#1024)
-- Document how to use the update-bcd script (#1020)
-- Document the design of update-bcd.js (not how to use it) (#1021)
-- Undo some unsightly Prettier formatting (#1018)
-- Restore getUserMedia() for custom tests and skip them in Edge 12-18 (#1017)
-- Move ignore (test filtering) logic in getTests (#1016)
-- Add custom IDL for XMLSerializer.serializeToStream method (#1012)
+- Add custom IDL for webkitCreateShadowRoot() ([#1080](https://github.com/foolip/mdn-bcd-collector/pull/1080))
+- Add required arguments to createPeriodicWave custom test ([#1077](https://github.com/foolip/mdn-bcd-collector/pull/1077))
+- Use a AudioBufferSourceNode instance to test AudioScheduledSourceNode ([#1074](https://github.com/foolip/mdn-bcd-collector/pull/1074))
+- Add ms-prefixed APIs based on find-missing output ([#1072](https://github.com/foolip/mdn-bcd-collector/pull/1072))
+- Add a --include-aliases option to the find-missing script ([#1071](https://github.com/foolip/mdn-bcd-collector/pull/1071))
+- Add custom IDL for navigator.mozBattery/webkitBattery ([#1069](https://github.com/foolip/mdn-bcd-collector/pull/1069))
+- Support running a HTTPS server locally with a custom certificate ([#1046](https://github.com/foolip/mdn-bcd-collector/pull/1046))
+- Simplify code and resources in tests.json ([#1063](https://github.com/foolip/mdn-bcd-collector/pull/1063))
+- Simplify compileTest internally ([#1062](https://github.com/foolip/mdn-bcd-collector/pull/1062))
+- Remove the test category from tests.json ([#1061](https://github.com/foolip/mdn-bcd-collector/pull/1061))
+- Fix typo in SVGHKernElement custom IDL ([#1055](https://github.com/foolip/mdn-bcd-collector/pull/1055))
+- Add --release argument (filter) for update-bcd.js ([#1019](https://github.com/foolip/mdn-bcd-collector/pull/1019))
+- Simplify how custom IDL is loaded/parsed ([#1048](https://github.com/foolip/mdn-bcd-collector/pull/1048))
+- Use @webref/css package for CSS property list ([#1047](https://github.com/foolip/mdn-bcd-collector/pull/1047))
+- Add more custom IDL ([#1044](https://github.com/foolip/mdn-bcd-collector/pull/1044))
+- Clarify where to get the collector results from ([#1043](https://github.com/foolip/mdn-bcd-collector/pull/1043))
+- Add more custom IDL ([#1039](https://github.com/foolip/mdn-bcd-collector/pull/1039))
+- Let update-bcd script use ../mdn-bcd-results/ by default ([#1024](https://github.com/foolip/mdn-bcd-collector/pull/1024))
+- Document how to use the update-bcd script ([#1020](https://github.com/foolip/mdn-bcd-collector/pull/1020))
+- Document the design of update-bcd.js (not how to use it) ([#1021](https://github.com/foolip/mdn-bcd-collector/pull/1021))
+- Undo some unsightly Prettier formatting ([#1018](https://github.com/foolip/mdn-bcd-collector/pull/1018))
+- Restore getUserMedia() for custom tests and skip them in Edge 12-18 ([#1017](https://github.com/foolip/mdn-bcd-collector/pull/1017))
+- Move ignore (test filtering) logic in getTests ([#1016](https://github.com/foolip/mdn-bcd-collector/pull/1016))
+- Add custom IDL for XMLSerializer.serializeToStream method ([#1012](https://github.com/foolip/mdn-bcd-collector/pull/1012))
 
 ## v2.0.1
 
-- Use compare-versions in selenium.js (#1009)
-- Avoid calling getUserMedia() in custom tests (#1008)
-- Update the Sauce Labs sample config to one that works (#1006)
-- Increase Selenium timeouts to 30s (#1005)
-- Expand on secrets.sample.json to make it easier to search/guess (#1004)
+- Use compare-versions in selenium.js ([#1009](https://github.com/foolip/mdn-bcd-collector/pull/1009))
+- Avoid calling getUserMedia() in custom tests ([#1008](https://github.com/foolip/mdn-bcd-collector/pull/1008))
+- Update the Sauce Labs sample config to one that works ([#1006](https://github.com/foolip/mdn-bcd-collector/pull/1006))
+- Increase Selenium timeouts to 30s ([#1005](https://github.com/foolip/mdn-bcd-collector/pull/1005))
+- Expand on secrets.sample.json to make it easier to search/guess ([#1004](https://github.com/foolip/mdn-bcd-collector/pull/1004))
 
 ## v2.0.0
 
-- Let selenium.js download the report instead of recreating it (#999)
-- Support both GET and POST for /export (#1002)
-- Simply results export into a form submission and server-side logic (#1001)
-- Export results to a downloadable URL by default (#979)
+- Let selenium.js download the report instead of recreating it ([#999](https://github.com/foolip/mdn-bcd-collector/pull/999))
+- Support both GET and POST for /export ([#1002](https://github.com/foolip/mdn-bcd-collector/pull/1002))
+- Simply results export into a form submission and server-side logic ([#1001](https://github.com/foolip/mdn-bcd-collector/pull/1001))
+- Export results to a downloadable URL by default ([#979](https://github.com/foolip/mdn-bcd-collector/pull/979))
 - Document /api/get
 - Remove XML-style &lt;br /&gt; self-closing tags
-- Remove copyright statements from HTML files (#993)
-- Rename github.js to exporter.js to expand its responsibilities (#992)
-- Validate the payloads sent to /api/results (#991)
-- Send no response for /api/results (#990)
-- Drop the empty string prefixes from tests.json (#985)
-- Drop support for building prefixed variants of tests (#984)
-- Simplify error handling in express request handlers (#983)
-- Capitalize appVersion (#982)
-- Bring DESIGN.md more into sync with how things currently work (#981)
+- Remove copyright statements from HTML files ([#993](https://github.com/foolip/mdn-bcd-collector/pull/993))
+- Rename github.js to exporter.js to expand its responsibilities ([#992](https://github.com/foolip/mdn-bcd-collector/pull/992))
+- Validate the payloads sent to /api/results ([#991](https://github.com/foolip/mdn-bcd-collector/pull/991))
+- Send no response for /api/results ([#990](https://github.com/foolip/mdn-bcd-collector/pull/990))
+- Drop the empty string prefixes from tests.json ([#985](https://github.com/foolip/mdn-bcd-collector/pull/985))
+- Drop support for building prefixed variants of tests ([#984](https://github.com/foolip/mdn-bcd-collector/pull/984))
+- Simplify error handling in express request handlers ([#983](https://github.com/foolip/mdn-bcd-collector/pull/983))
+- Capitalize appVersion ([#982](https://github.com/foolip/mdn-bcd-collector/pull/982))
+- Bring DESIGN.md more into sync with how things currently work ([#981](https://github.com/foolip/mdn-bcd-collector/pull/981))
 
 ## v1.3.3
 
-- Remove MediaSettingsRange (dictionary) custom test (#974)
-- Fix some custom Web Audio API tests (#973)
-- Test BaseAudioContext members using an AudioContext instance (#971)
+- Remove MediaSettingsRange (dictionary) custom test ([#974](https://github.com/foolip/mdn-bcd-collector/pull/974))
+- Fix some custom Web Audio API tests ([#973](https://github.com/foolip/mdn-bcd-collector/pull/973))
+- Test BaseAudioContext members using an AudioContext instance ([#971](https://github.com/foolip/mdn-bcd-collector/pull/971))
 
 ## v1.3.2
 
-- Add custom IDL for marquee event handlers still in Gecko (#964)
-- Switch to google-github-actions to avoid warning (#963)
-- Use innerHTML instead of innerText to create a Text instance (#962)
-- Get spec IDL from the new @webref/idl package (#959)
+- Add custom IDL for marquee event handlers still in Gecko ([#964](https://github.com/foolip/mdn-bcd-collector/pull/964))
+- Switch to google-github-actions to avoid warning ([#963](https://github.com/foolip/mdn-bcd-collector/pull/963))
+- Use innerHTML instead of innerText to create a Text instance ([#962](https://github.com/foolip/mdn-bcd-collector/pull/962))
+- Get spec IDL from the new @webref/idl package ([#959](https://github.com/foolip/mdn-bcd-collector/pull/959))
 
 ## v1.3.1
 
-- IE 5.5 no longer supported (#947)
-- Add another bucket of custom IDL (#940)
+- IE 5.5 no longer supported ([#947](https://github.com/foolip/mdn-bcd-collector/pull/947))
+- Add another bucket of custom IDL ([#940](https://github.com/foolip/mdn-bcd-collector/pull/940))
 
 ## v1.3.0
 
-- Add ever more custom IDL from Confluence (#938)
-- Add more custom IDL found via Confluence (#926)
-- Update webref IDL (#935)
-- Expand on custom prefixed interface tests (#931)
+- Add ever more custom IDL from Confluence ([#938](https://github.com/foolip/mdn-bcd-collector/pull/938))
+- Add more custom IDL found via Confluence ([#926](https://github.com/foolip/mdn-bcd-collector/pull/926))
+- Update webref IDL ([#935](https://github.com/foolip/mdn-bcd-collector/pull/935))
+- Expand on custom prefixed interface tests ([#931](https://github.com/foolip/mdn-bcd-collector/pull/931))
 - Use prefixed webkitOfflineAudioContext if possible
 - Fix AudioContext custom tests (use prefixed for members)
-- Avoid generating extra tests for readonly setlike/maplike (#928)
-- Add missing forEach member test for IDL setlike declarations (#927)
-- Add custom IDL for more things found via Confluence (#923)
+- Avoid generating extra tests for readonly setlike/maplike ([#928](https://github.com/foolip/mdn-bcd-collector/pull/928))
+- Add missing forEach member test for IDL setlike declarations ([#927](https://github.com/foolip/mdn-bcd-collector/pull/927))
+- Add custom IDL for more things found via Confluence ([#923](https://github.com/foolip/mdn-bcd-collector/pull/923))
 - Generate tests for event interfaces
-- Add custom CSS/IDL for things found via Confluence (#919)
-- Update webref (#918)
+- Add custom CSS/IDL for things found via Confluence ([#919](https://github.com/foolip/mdn-bcd-collector/pull/919))
+- Update webref ([#918](https://github.com/foolip/mdn-bcd-collector/pull/918))
 
 ## v1.2.0
 
-- Update README about how deployment work (no `prod` branch) (#915)
-- Simplify some custom tests (#914)
-- Fix typo in the DOMRectList custom test (#913)
-- Add additional custom CSS properties from Confluence (#912)
-- Break the dependency on BCD for building tests (#911)
-- Trim the selenium.js BCD dependency to just browsers (#909)
-- Fix the custom test for SVGPointList (#908)
-- Add and update custom tests (#894)
+- Update README about how deployment work (no `prod` branch) ([#915](https://github.com/foolip/mdn-bcd-collector/pull/915))
+- Simplify some custom tests ([#914](https://github.com/foolip/mdn-bcd-collector/pull/914))
+- Fix typo in the DOMRectList custom test ([#913](https://github.com/foolip/mdn-bcd-collector/pull/913))
+- Add additional custom CSS properties from Confluence ([#912](https://github.com/foolip/mdn-bcd-collector/pull/912))
+- Break the dependency on BCD for building tests ([#911](https://github.com/foolip/mdn-bcd-collector/pull/911))
+- Trim the selenium.js BCD dependency to just browsers ([#909](https://github.com/foolip/mdn-bcd-collector/pull/909))
+- Fix the custom test for SVGPointList ([#908](https://github.com/foolip/mdn-bcd-collector/pull/908))
+- Add and update custom tests ([#894](https://github.com/foolip/mdn-bcd-collector/pull/894))
 
 ## v1.1.8
 
-- Update custom tests (#889)
-- Improve DOMRectList and ShadowRoot custom tests (#888)
-- Add and improve custom tests (#885)
-- Use macOS Big Sur when testing with Selenium (#882)
+- Update custom tests ([#889](https://github.com/foolip/mdn-bcd-collector/pull/889))
+- Improve DOMRectList and ShadowRoot custom tests ([#888](https://github.com/foolip/mdn-bcd-collector/pull/888))
+- Add and improve custom tests ([#885](https://github.com/foolip/mdn-bcd-collector/pull/885))
+- Use macOS Big Sur when testing with Selenium ([#882](https://github.com/foolip/mdn-bcd-collector/pull/882))
 
 ## v1.1.7
 
-- Improve custom test for MessageChannel API (#880)
-- Add custom test for ImageCapture API (#879)
-- Fix constructor test function (#877)
-- Add custom test for External API (#878)
-- Add custom test for XPathExpression API (#876)
-- Update Webref (#874)
-- Fix typo in custom test for DOMRectList (#873)
-- Add custom tests for HTMLCollection and HTMLAllCollection APIs (#872)
-- Improve custom test for FontFace API (#870)
-- Add custom test for HTMLDocument API (#869)
-- Add custom test for URL API (#868)
-- Add custom tests for TextTrack and VTT APIs (#866)
-- Add custom test for StyleMedia API (#865)
-- Add custom test for MediaList API (#864)
-- Add custom test for NamedNodeMap API (#863)
-- Add custom test for DOMRectList API (#862)
-- Fix const attribute check (#858)
-- Don't generate tests for const attributes (#856)
-- Use local BCD repo for find-missing script (#851)
+- Improve custom test for MessageChannel API ([#880](https://github.com/foolip/mdn-bcd-collector/pull/880))
+- Add custom test for ImageCapture API ([#879](https://github.com/foolip/mdn-bcd-collector/pull/879))
+- Fix constructor test function ([#877](https://github.com/foolip/mdn-bcd-collector/pull/877))
+- Add custom test for External API ([#878](https://github.com/foolip/mdn-bcd-collector/pull/878))
+- Add custom test for XPathExpression API ([#876](https://github.com/foolip/mdn-bcd-collector/pull/876))
+- Update Webref ([#874](https://github.com/foolip/mdn-bcd-collector/pull/874))
+- Fix typo in custom test for DOMRectList ([#873](https://github.com/foolip/mdn-bcd-collector/pull/873))
+- Add custom tests for HTMLCollection and HTMLAllCollection APIs ([#872](https://github.com/foolip/mdn-bcd-collector/pull/872))
+- Improve custom test for FontFace API ([#870](https://github.com/foolip/mdn-bcd-collector/pull/870))
+- Add custom test for HTMLDocument API ([#869](https://github.com/foolip/mdn-bcd-collector/pull/869))
+- Add custom test for URL API ([#868](https://github.com/foolip/mdn-bcd-collector/pull/868))
+- Add custom tests for TextTrack and VTT APIs ([#866](https://github.com/foolip/mdn-bcd-collector/pull/866))
+- Add custom test for StyleMedia API ([#865](https://github.com/foolip/mdn-bcd-collector/pull/865))
+- Add custom test for MediaList API ([#864](https://github.com/foolip/mdn-bcd-collector/pull/864))
+- Add custom test for NamedNodeMap API ([#863](https://github.com/foolip/mdn-bcd-collector/pull/863))
+- Add custom test for DOMRectList API ([#862](https://github.com/foolip/mdn-bcd-collector/pull/862))
+- Fix const attribute check ([#858](https://github.com/foolip/mdn-bcd-collector/pull/858))
+- Don't generate tests for const attributes ([#856](https://github.com/foolip/mdn-bcd-collector/pull/856))
+- Use local BCD repo for find-missing script ([#851](https://github.com/foolip/mdn-bcd-collector/pull/851))
 
 ## v1.1.6
 
-- Add additional custom tests (#849)
-- Update custom tests (#845)
-- Update styling for results display (#839)
-- Add custom IDL for webkit-prefixed canvas APIs (#843)
-- Create add-new-bcd script (#838)
-- Add custom IDL for WebKitPoint and webkitConvertPointFrom\* methods (#842)
-- Remove miscapitalized entries (#837)
-- Rename a variable to prevent conflict (#836)
-- Use simplified dots for Mocha output (#835)
+- Add additional custom tests ([#849](https://github.com/foolip/mdn-bcd-collector/pull/849))
+- Update custom tests ([#845](https://github.com/foolip/mdn-bcd-collector/pull/845))
+- Update styling for results display ([#839](https://github.com/foolip/mdn-bcd-collector/pull/839))
+- Add custom IDL for webkit-prefixed canvas APIs ([#843](https://github.com/foolip/mdn-bcd-collector/pull/843))
+- Create add-new-bcd script ([#838](https://github.com/foolip/mdn-bcd-collector/pull/838))
+- Add custom IDL for WebKitPoint and webkitConvertPointFrom\* methods ([#842](https://github.com/foolip/mdn-bcd-collector/pull/842))
+- Remove miscapitalized entries ([#837](https://github.com/foolip/mdn-bcd-collector/pull/837))
+- Rename a variable to prevent conflict ([#836](https://github.com/foolip/mdn-bcd-collector/pull/836))
+- Use simplified dots for Mocha output ([#835](https://github.com/foolip/mdn-bcd-collector/pull/835))
 
 ## v1.1.5
 
-- Fix UA parsing for Firefox 3.6 on BrowserStack (#834)
-- Update tests for PerformanceMark and PerformanceEntry APIs (#833)
-- Add additional autocapitalize custom IDL (#832)
-- Add prefixed variants of preservesPitch (#831)
-- Fix test for MediaSession API (#829)
-- Fix test for HTMLModElement for older Firefox versions (#828)
-- Fix ANGLE_instanced_arrays (#827)
-- Don't auto-generate custom tests for static attributes/methods (#826)
-- Update arguments to find-missing script (#823)
-- Fix Safari minimum version for Selenium (#822)
-- Fix PR descriptions (#821)
-- Add home link to footer (#820)
+- Fix UA parsing for Firefox 3.6 on BrowserStack ([#834](https://github.com/foolip/mdn-bcd-collector/pull/834))
+- Update tests for PerformanceMark and PerformanceEntry APIs ([#833](https://github.com/foolip/mdn-bcd-collector/pull/833))
+- Add additional autocapitalize custom IDL ([#832](https://github.com/foolip/mdn-bcd-collector/pull/832))
+- Add prefixed variants of preservesPitch ([#831](https://github.com/foolip/mdn-bcd-collector/pull/831))
+- Fix test for MediaSession API ([#829](https://github.com/foolip/mdn-bcd-collector/pull/829))
+- Fix test for HTMLModElement for older Firefox versions ([#828](https://github.com/foolip/mdn-bcd-collector/pull/828))
+- Fix ANGLE_instanced_arrays ([#827](https://github.com/foolip/mdn-bcd-collector/pull/827))
+- Don't auto-generate custom tests for static attributes/methods ([#826](https://github.com/foolip/mdn-bcd-collector/pull/826))
+- Update arguments to find-missing script ([#823](https://github.com/foolip/mdn-bcd-collector/pull/823))
+- Fix Safari minimum version for Selenium ([#822](https://github.com/foolip/mdn-bcd-collector/pull/822))
+- Fix PR descriptions ([#821](https://github.com/foolip/mdn-bcd-collector/pull/821))
+- Add home link to footer ([#820](https://github.com/foolip/mdn-bcd-collector/pull/820))
 
 ## v1.1.4
 
-- Update unittests (#818)
-- Replace Listr with Listr2 (#817)
-- Update custom test for MediaStream API (#816)
-- Add custom test for NodeList API (#813)
-- Map 'DedicatedWorker' as 'Worker' (#811)
-- Fix test for MediaSource.isTypeSupported (#809)
-- Include "promise.then" replacement when importing custom tests (#810)
-- Remove formEncType and lowSrc custom IDL (#807)
-- Include percentage of missing entries in find-missing output (#805)
-- Fix default value of browser argument in update-bcd (#804)
-- Allow for filtering browsers in update-bcd (#803)
-- Update UA parser (#802)
-- Fix custom tests for HTML and SVG element APIs (#800)
-- Update BCD: improve ranges (#798)
-- Add "max-parallel: 1" to deploy step in push (#797)
-- Compact report JSON (#794)
-- Revert "Compress results JSON with GZip compression (#791)" (#793)
-- Compress results JSON with GZip compression (#791)
+- Update unittests ([#818](https://github.com/foolip/mdn-bcd-collector/pull/818))
+- Replace Listr with Listr2 ([#817](https://github.com/foolip/mdn-bcd-collector/pull/817))
+- Update custom test for MediaStream API ([#816](https://github.com/foolip/mdn-bcd-collector/pull/816))
+- Add custom test for NodeList API ([#813](https://github.com/foolip/mdn-bcd-collector/pull/813))
+- Map 'DedicatedWorker' as 'Worker' ([#811](https://github.com/foolip/mdn-bcd-collector/pull/811))
+- Fix test for MediaSource.isTypeSupported ([#809](https://github.com/foolip/mdn-bcd-collector/pull/809))
+- Include "promise.then" replacement when importing custom tests ([#810](https://github.com/foolip/mdn-bcd-collector/pull/810))
+- Remove formEncType and lowSrc custom IDL ([#807](https://github.com/foolip/mdn-bcd-collector/pull/807))
+- Include percentage of missing entries in find-missing output ([#805](https://github.com/foolip/mdn-bcd-collector/pull/805))
+- Fix default value of browser argument in update-bcd ([#804](https://github.com/foolip/mdn-bcd-collector/pull/804))
+- Allow for filtering browsers in update-bcd ([#803](https://github.com/foolip/mdn-bcd-collector/pull/803))
+- Update UA parser ([#802](https://github.com/foolip/mdn-bcd-collector/pull/802))
+- Fix custom tests for HTML and SVG element APIs ([#800](https://github.com/foolip/mdn-bcd-collector/pull/800))
+- Update BCD: improve ranges ([#798](https://github.com/foolip/mdn-bcd-collector/pull/798))
+- Add "max-parallel: 1" to deploy step in push ([#797](https://github.com/foolip/mdn-bcd-collector/pull/797))
+- Compact report JSON ([#794](https://github.com/foolip/mdn-bcd-collector/pull/794))
+- Revert "Compress results JSON with GZip compression ([#791](https://github.com/foolip/mdn-bcd-collector/pull/791))" ([#793](https://github.com/foolip/mdn-bcd-collector/pull/793))
+- Compress results JSON with GZip compression ([#791](https://github.com/foolip/mdn-bcd-collector/pull/791))
 
 ## v1.1.3
 
-- Remove duplicate question mark in did-you-mean (#788)
-- Fix custom test for HTMLQuoteElement API (#787)
-- Fix test for CanvasRenderingContext2D (#786)
-- Update webref (#785)
-- Fix tests for LegacyFactoryFunction-based constructors (#784)
+- Remove duplicate question mark in did-you-mean ([#788](https://github.com/foolip/mdn-bcd-collector/pull/788))
+- Fix custom test for HTMLQuoteElement API ([#787](https://github.com/foolip/mdn-bcd-collector/pull/787))
+- Fix test for CanvasRenderingContext2D ([#786](https://github.com/foolip/mdn-bcd-collector/pull/786))
+- Update webref ([#785](https://github.com/foolip/mdn-bcd-collector/pull/785))
+- Fix tests for LegacyFactoryFunction-based constructors ([#784](https://github.com/foolip/mdn-bcd-collector/pull/784))
 
 ## v1.1.2
 
-- Improve performance for harness.js (#782)
-- UA parser: more lenient version matching on last version (#781)
+- Improve performance for harness.js ([#782](https://github.com/foolip/mdn-bcd-collector/pull/782))
+- UA parser: more lenient version matching on last version ([#781](https://github.com/foolip/mdn-bcd-collector/pull/781))
 
 ## v1.1.1
 
-- Accommodate for old-style Firefox NS_ERROR exception (#778)
-- Improve error when a report has no results (#777)
-- Update update-bcd arguments (#776)
-- Fix misuse of word for "non-concurrent" Selenium argument (#773)
-- Fix exitOnError placement (#772)
+- Accommodate for old-style Firefox NS_ERROR exception ([#778](https://github.com/foolip/mdn-bcd-collector/pull/778))
+- Improve error when a report has no results ([#777](https://github.com/foolip/mdn-bcd-collector/pull/777))
+- Update update-bcd arguments ([#776](https://github.com/foolip/mdn-bcd-collector/pull/776))
+- Fix misuse of word for "non-concurrent" Selenium argument ([#773](https://github.com/foolip/mdn-bcd-collector/pull/773))
+- Fix exitOnError placement ([#772](https://github.com/foolip/mdn-bcd-collector/pull/772))
 
 ## v1.1.0
 
-- Allow for non-consecutive Selenium runtime (#769)
-- Simplify order of browsers to test in Selenium script (#768)
-- Remove redundant timestamp in Selenium script's log() function (#767)
-- Add a little color to some Selenium output (#766)
-- Make Selenium run 5 consecutive browsers (#765)
-- Add TODO comment on BatteryManager custom test (#764)
-- Update ignore list param (#763)
-- Use "Dev" as version on local/staging versions (#762)
-- Temporarily disable using git commit as appversion (#761)
-- Update unittests (#760)
-- Upgrade Selenium to auto-hide results (#759)
-- Use git commit hash as version in dev/staging (#758)
-- Update GitHub exporting page (#757)
-- Disable test for BatteryManager (#756)
-- Include "Dev" in version if devbuild (#754)
-- Escape &lt;br&gt; tags when console logging status updates (#755)
-- Fix test for api.EventSource (#753)
-- Don't double-load style.css (#752)
+- Allow for non-consecutive Selenium runtime ([#769](https://github.com/foolip/mdn-bcd-collector/pull/769))
+- Simplify order of browsers to test in Selenium script ([#768](https://github.com/foolip/mdn-bcd-collector/pull/768))
+- Remove redundant timestamp in Selenium script's log() function ([#767](https://github.com/foolip/mdn-bcd-collector/pull/767))
+- Add a little color to some Selenium output ([#766](https://github.com/foolip/mdn-bcd-collector/pull/766))
+- Make Selenium run 5 consecutive browsers ([#765](https://github.com/foolip/mdn-bcd-collector/pull/765))
+- Add TODO comment on BatteryManager custom test ([#764](https://github.com/foolip/mdn-bcd-collector/pull/764))
+- Update ignore list param ([#763](https://github.com/foolip/mdn-bcd-collector/pull/763))
+- Use "Dev" as version on local/staging versions ([#762](https://github.com/foolip/mdn-bcd-collector/pull/762))
+- Temporarily disable using git commit as appversion ([#761](https://github.com/foolip/mdn-bcd-collector/pull/761))
+- Update unittests ([#760](https://github.com/foolip/mdn-bcd-collector/pull/760))
+- Upgrade Selenium to auto-hide results ([#759](https://github.com/foolip/mdn-bcd-collector/pull/759))
+- Use git commit hash as version in dev/staging ([#758](https://github.com/foolip/mdn-bcd-collector/pull/758))
+- Update GitHub exporting page ([#757](https://github.com/foolip/mdn-bcd-collector/pull/757))
+- Disable test for BatteryManager ([#756](https://github.com/foolip/mdn-bcd-collector/pull/756))
+- Include "Dev" in version if devbuild ([#754](https://github.com/foolip/mdn-bcd-collector/pull/754))
+- Escape &lt;br&gt; tags when console logging status updates ([#755](https://github.com/foolip/mdn-bcd-collector/pull/755))
+- Fix test for api.EventSource ([#753](https://github.com/foolip/mdn-bcd-collector/pull/753))
+- Don't double-load style.css ([#752](https://github.com/foolip/mdn-bcd-collector/pull/752))
 
 ## v1.0.3
 
-- Fix GitHub description generation (#751)
-- Various fixes (#749)
-- Increase timeout for test running (#748)
+- Fix GitHub description generation ([#751](https://github.com/foolip/mdn-bcd-collector/pull/751))
+- Various fixes ([#749](https://github.com/foolip/mdn-bcd-collector/pull/749))
+- Increase timeout for test running ([#748](https://github.com/foolip/mdn-bcd-collector/pull/748))
 
 ## v1.0.2
 
-- Compatibility updates (#746)
+- Compatibility updates ([#746](https://github.com/foolip/mdn-bcd-collector/pull/746))
 
 ## v1.0.1
 
-- Styling updates (#744)
-- Fix issues with testing with promises (#743)
-- Selenium fixes (#742)
-- Revert "Use process.env.npm_package_version vs. require('./package.json').version (#723)" (#740)
+- Styling updates ([#744](https://github.com/foolip/mdn-bcd-collector/pull/744))
+- Fix issues with testing with promises ([#743](https://github.com/foolip/mdn-bcd-collector/pull/743))
+- Selenium fixes ([#742](https://github.com/foolip/mdn-bcd-collector/pull/742))
+- Revert "Use process.env.npm_package_version vs. require('./package.json').version ([#723](https://github.com/foolip/mdn-bcd-collector/pull/723))" ([#740](https://github.com/foolip/mdn-bcd-collector/pull/740))
 
 ## v1.0.0
 
