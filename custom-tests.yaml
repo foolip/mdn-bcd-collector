@@ -396,10 +396,6 @@ api:
       - cryptoKey
     __base: |-
       var promise = reusableInstances.cryptoKey;
-  CSSConditionRule:
-    __resources:
-      - createStyleSheet
-    __base: <%api.CSSMediaRule:instance%>
   CSSCounterStyleRule:
     __resources:
       - createStyleSheet
@@ -418,10 +414,6 @@ api:
     __base: |-
       var stylesheet = reusableInstances.createStyleSheet('@font-feature-values Font {@styleset {nice-style: 12;}}');
       var instance = stylesheet.cssRules.item(0);
-  CSSGroupingRule:
-    __resources:
-      - createStyleSheet
-    __base: <%api.CSSMediaRule:instance%>
   CSSImportRule:
     __resources:
       - createStyleSheet
