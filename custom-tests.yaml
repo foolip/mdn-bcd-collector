@@ -799,7 +799,7 @@ api:
         }
       }
   FontFace:
-    __base: var instance = new FontFace('Material Design Icons', 'url(/fonts/materialdesignicons-webfont.woff)');
+    __base: var instance = new FontFace('Material Design Icons', 'url(/fonts/materialdesignicons-webfont.woff)', {});
   FontFaceSet:
     __base: |-
       var instance;
