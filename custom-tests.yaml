@@ -1148,8 +1148,7 @@ api:
     __base: var instance = createImageBitmap(document.getElementById('resource-image-black'));
   ImageCapture:
     __base: |-
-      <%api.MediaDevices:mediaDevices%>
-      var stream = mediaDevices.getUserMedia({video: true});
+      var stream = navigator.mediaDevices.getUserMedia({video: true});
       stream.then(function() {});
       var promise = stream.then(function(s) {
         var tracks = s.getVideoTracks();
@@ -1195,7 +1194,6 @@ api:
     __base: var instance = navigator.mediaCapabilities;
   MediaDeviceInfo:
     __base: |-
-      <%api.MediaDevices:mediaDevices%>
       var promise = navigator.mediaDevices.enumerateDevices().then(
         function(devices) {
           return devices[0];
@@ -1233,9 +1231,18 @@ api:
     isTypeSupported: return 'isTypeSupported' in MediaSource;
   MediaStream:
     __base: |-
-      <%api.MediaDevices:mediaDevices%>
-      var promise = mediaDevices.getUserMedia({audio: true});
-      promise.then(function() {});
+      // This string makes this a callback test: callback(
+      if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        navigator.mediaDevices.getUserMedia({audio: true}).then(callback, fail);
+      } else if (navigator.getUserMedia) {
+        navigator.getUserMedia({audio: true}, callback, fail);
+      } else if (navigator.mozGetUserMedia) {
+        navigator.mozGetUserMedia({audio: true}, callback, fail);
+      } else if (navigator.webkitGetUserMedia) {
+        navigator.webkitGetUserMedia({audio: true}, callback, fail);
+      } else {
+        return false;
+      }
   MediaStreamAudioDestinationNode:
     __resources:
       - audioContext
