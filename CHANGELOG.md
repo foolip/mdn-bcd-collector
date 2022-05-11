@@ -1,5 +1,18 @@
 # mdn-bcd-collector Changelog
 
+## v6.0.5
+
+### Test Changes
+
+#### Changed
+
+- api.FontFace
+
+### Commits
+
+- Add 3rd argument to FontFace constructor ([#1990](https://github.com/foolip/mdn-bcd-collector/pull/1990))
+- Link to pull requests in changelog ([#1985](https://github.com/foolip/mdn-bcd-collector/pull/1985))
+
 ## v6.0.4
 
 ### Test Changes
