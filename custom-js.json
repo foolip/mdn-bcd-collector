@@ -505,6 +505,117 @@
     "TypeError": {
       "ctor_args": "'message'"
     },
+    "TypedArray.at": {
+      "code": "\"at\" in Int8Array.prototype"
+    },
+    "TypedArray.buffer": {
+      "code": "\"buffer\" in Int8Array.prototype"
+    },
+    "TypedArray.byteLength": {
+      "code": "\"byteLength\" in Int8Array.prototype"
+    },
+    "TypedArray.byteOffset": {
+      "code": "\"byteOffset\" in Int8Array.prototype"
+    },
+    "TypedArray.copyWithin": {
+      "code": "\"copyWithin\" in Int8Array.prototype"
+    },
+    "TypedArray.entries": {
+      "code": "\"entries\" in Int8Array.prototype"
+    },
+    "TypedArray.every": {
+      "code": "\"every\" in Int8Array.prototype"
+    },
+    "TypedArray.fill": {
+      "code": "\"fill\" in Int8Array.prototype"
+    },
+    "TypedArray.filter": {
+      "code": "\"filter\" in Int8Array.prototype"
+    },
+    "TypedArray.find": {
+      "code": "\"find\" in Int8Array.prototype"
+    },
+    "TypedArray.findIndex": {
+      "code": "\"findIndex\" in Int8Array.prototype"
+    },
+    "TypedArray.findLast": {
+      "code": "\"findLast\" in Int8Array.prototype"
+    },
+    "TypedArray.findLastIndex": {
+      "code": "\"findLastIndex\" in Int8Array.prototype"
+    },
+    "TypedArray.forEach": {
+      "code": "\"forEach\" in Int8Array.prototype"
+    },
+    "TypedArray.from": {
+      "code": "\"from\" in Int8Array"
+    },
+    "TypedArray.includes": {
+      "code": "\"includes\" in Int8Array.prototype"
+    },
+    "TypedArray.indexOf": {
+      "code": "\"indexOf\" in Int8Array.prototype"
+    },
+    "TypedArray.join": {
+      "code": "\"join\" in Int8Array.prototype"
+    },
+    "TypedArray.keys": {
+      "code": "\"keys\" in Int8Array.prototype"
+    },
+    "TypedArray.lastIndexOf": {
+      "code": "\"lastIndexOf\" in Int8Array.prototype"
+    },
+    "TypedArray.length": {
+      "code": "\"length\" in Int8Array.prototype"
+    },
+    "TypedArray.map": {
+      "code": "\"map\" in Int8Array.prototype"
+    },
+    "TypedArray.name": {
+      "code": "\"name\" in Int8Array"
+    },
+    "TypedArray.of": {
+      "code": "\"of\" in Int8Array"
+    },
+    "TypedArray.reduce": {
+      "code": "\"reduce\" in Int8Array.prototype"
+    },
+    "TypedArray.reduceRight": {
+      "code": "\"reduceRight\" in Int8Array.prototype"
+    },
+    "TypedArray.reverse": {
+      "code": "\"reverse\" in Int8Array.prototype"
+    },
+    "TypedArray.set": {
+      "code": "\"set\" in Int8Array.prototype"
+    },
+    "TypedArray.slice": {
+      "code": "\"slice\" in Int8Array.prototype"
+    },
+    "TypedArray.some": {
+      "code": "\"some\" in Int8Array.prototype"
+    },
+    "TypedArray.sort": {
+      "code": "\"sort\" in Int8Array.prototype"
+    },
+    "TypedArray.subarray": {
+      "code": "\"subarray\" in Int8Array.prototype"
+    },
+    "TypedArray.toLocaleString": {
+      "code": "\"toLocaleString\" in Int8Array.prototype"
+    },
+    "TypedArray.toString": {
+      "code": "\"toString\" in Int8Array.prototype"
+    },
+    "TypedArray.values": {
+      "code": "\"values\" in Int8Array.prototype"
+    },
+    "TypedArray.@@iterator": {
+      "code": "Symbol.iterator in Int8Array.prototype"
+    },
+    "TypedArray.@@species": {
+      "code": "Symbol.species in Int8Array"
+    },
     "URIError": {
       "ctor_args": "'message'"
     },

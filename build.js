@@ -873,24 +873,32 @@ const buildJS = (customJS) => {
       ...parts.filter((p) => p != 'prototype')
     ].join('.');
 
-    // Get the last part as the property and everything else as the expression
-    // we should test for existence in, or "self" if there's just one part.
-    let property = parts[parts.length - 1];
-
-    if (property.startsWith('@@')) {
-      property = `Symbol.${property.substr(2)}`;
+    if ('code' in extras) {
+      // Custom test code, nothing is generated.
+      tests[bcdPath] = compileTest({
+        raw: {code: extras.code},
+        exposure: ['Window']
+      });
     } else {
-      property = JSON.stringify(property);
+      // Get the last part as the property and everything else as the expression
+      // we should test for existence in, or "self" if there's just one part.
+      let property = parts[parts.length - 1];
+
+      if (property.startsWith('@@')) {
+        property = `Symbol.${property.substr(2)}`;
+      } else {
+        property = JSON.stringify(property);
+      }
+
+      const owner =
+        parts.length > 1 ? parts.slice(0, parts.length - 1).join('.') : 'self';
+      const code = `${owner}.hasOwnProperty(${property})`;
+
+      tests[bcdPath] = compileTest({
+        raw: {code},
+        exposure: ['Window']
+      });
     }
-
-    const owner =
-      parts.length > 1 ? parts.slice(0, parts.length - 1).join('.') : 'self';
-    const code = `${owner}.hasOwnProperty(${property})`;
-
-    tests[bcdPath] = compileTest({
-      raw: {code},
-      exposure: ['Window']
-    });
 
     // Constructors
     if ('ctor_args' in extras) {
