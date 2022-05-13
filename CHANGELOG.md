@@ -1,5 +1,59 @@
 # mdn-bcd-collector Changelog
 
+## v6.0.5
+
+### Test Changes
+
+#### Added
+
+- javascript.builtins.TypedArray.at
+- javascript.builtins.TypedArray.buffer
+- javascript.builtins.TypedArray.byteLength
+- javascript.builtins.TypedArray.byteOffset
+- javascript.builtins.TypedArray.copyWithin
+- javascript.builtins.TypedArray.entries
+- javascript.builtins.TypedArray.every
+- javascript.builtins.TypedArray.fill
+- javascript.builtins.TypedArray.filter
+- javascript.builtins.TypedArray.find
+- javascript.builtins.TypedArray.findIndex
+- javascript.builtins.TypedArray.findLast
+- javascript.builtins.TypedArray.findLastIndex
+- javascript.builtins.TypedArray.forEach
+- javascript.builtins.TypedArray.from
+- javascript.builtins.TypedArray.includes
+- javascript.builtins.TypedArray.indexOf
+- javascript.builtins.TypedArray.join
+- javascript.builtins.TypedArray.keys
+- javascript.builtins.TypedArray.lastIndexOf
+- javascript.builtins.TypedArray.length
+- javascript.builtins.TypedArray.map
+- javascript.builtins.TypedArray.name
+- javascript.builtins.TypedArray.of
+- javascript.builtins.TypedArray.reduce
+- javascript.builtins.TypedArray.reduceRight
+- javascript.builtins.TypedArray.reverse
+- javascript.builtins.TypedArray.set
+- javascript.builtins.TypedArray.slice
+- javascript.builtins.TypedArray.some
+- javascript.builtins.TypedArray.sort
+- javascript.builtins.TypedArray.subarray
+- javascript.builtins.TypedArray.toLocaleString
+- javascript.builtins.TypedArray.toString
+- javascript.builtins.TypedArray.values
+- javascript.builtins.TypedArray.@@iterator
+- javascript.builtins.TypedArray.@@species
+
+#### Changed
+
+- api.FontFace
+
+### Commits
+
+- Add custom tests for TypedArray using Int8Array ([#1997](https://github.com/foolip/mdn-bcd-collector/pull/1997))
+- Add 3rd argument to FontFace constructor ([#1990](https://github.com/foolip/mdn-bcd-collector/pull/1990))
+- Link to pull requests in changelog ([#1985](https://github.com/foolip/mdn-bcd-collector/pull/1985))
+
 ## v6.0.4
 
 ### Test Changes
