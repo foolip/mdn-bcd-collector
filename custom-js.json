@@ -505,6 +505,12 @@
     "TypeError": {
       "ctor_args": "'message'"
     },
+    "TypedArray": {
+      "code": "self.hasOwnProperty(\"Int8Array\")"
+    },
+    "TypedArray.BYTES_PER_ELEMENT": {
+      "code": "\"BYTES_PER_ELEMENT\" in Int8Array"
+    },
     "TypedArray.at": {
       "code": "\"at\" in Int8Array.prototype"
     },
