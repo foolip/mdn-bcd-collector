@@ -81,7 +81,7 @@
     "json3": "3.3.3",
     "klaw": "4.0.1",
     "listr2": "4.0.5",
-    "minimatch": "5.0.1",
+    "minimatch": "5.1.0",
     "mocha": "10.0.0",
     "node-fetch": "3.2.4",
     "nodemon": "2.0.16",
