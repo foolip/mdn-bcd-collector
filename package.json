@@ -54,7 +54,7 @@
     "yargs": "17.5.1"
   },
   "devDependencies": {
-    "@babel/core": "7.17.12",
+    "@babel/core": "7.18.0",
     "@babel/eslint-parser": "7.17.0",
     "@babel/preset-env": "7.18.0",
     "@browser-logos/chrome": "2.0.0",
