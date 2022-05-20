@@ -91,7 +91,7 @@
     "sass": "1.51.0",
     "selenium-webdriver": "4.1.2",
     "sinon": "14.0.0",
-    "webidl2": "24.2.1",
+    "webidl2": "24.2.2",
     "yaml": "2.1.0"
   }
 }
