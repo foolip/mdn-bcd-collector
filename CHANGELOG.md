@@ -1,5 +1,18 @@
 # mdn-bcd-collector Changelog
 
+## v6.0.6
+
+### Test Changes
+
+#### Added
+
+- javascript.builtins.TypedArray
+
+### Commits
+
+- Revert "Randomize selection of Selenium host ([#1919](https://github.com/foolip/mdn-bcd-collector/pull/1919))" ([#2009](https://github.com/foolip/mdn-bcd-collector/pull/2009))
+- Add custom tests for TypedArray and TypedArray.BYTES_PER_ELEMENT ([#1999](https://github.com/foolip/mdn-bcd-collector/pull/1999))
+
 ## v6.0.5
 
 ### Test Changes
