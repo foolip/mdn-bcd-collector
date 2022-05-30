@@ -12,8 +12,15 @@ jobs:
     name: Test (${{ matrix.name }})
     runs-on: ${{ matrix.runs-on }}
     steps:
-    - uses: actions/checkout@v3
-    - uses: actions/setup-node@v3
+    - name: Clone collector
+      uses: actions/checkout@v3
+    - name: Clone browser-compat-data
+      uses: actions/checkout@v3
+      with:
+        repository: mdn/browser-compat-data
+        path: browser-compat-data
+    - name: Setup NodeJS
+      uses: actions/setup-node@v3
       with:
         node-version: 16
     - run: npm ci
