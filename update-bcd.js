@@ -23,6 +23,10 @@ const BCD_DIR = fileURLToPath(
   new URL(process.env.BCD_DIR || `../browser-compat-data`, import.meta.url)
 );
 
+const {default: mirror} = await import(
+  path.join(BCD_DIR, 'scripts', 'release', 'mirror.js')
+);
+
 const findEntry = (bcd, ident) => {
   if (!ident) {
     return null;
@@ -266,6 +270,10 @@ const update = (bcd, supportMatrix, filter) => {
         continue;
       }
 
+      // Object.assign needed to prevent upstream mirroring from updating data
+      const supportData = {};
+      Object.assign(supportData, entry.__compat.support);
+
       let allStatements = entry.__compat.support[browser];
       if (!allStatements) {
         allStatements = [];
@@ -275,16 +283,25 @@ const update = (bcd, supportMatrix, filter) => {
 
       // Filter to the statements representing the feature being enabled by
       // default under the default name and no flags.
-      const defaultStatements = allStatements.filter((statement) => {
-        if ('flags' in statement) {
-          return false;
-        }
-        if ('prefix' in statement || 'alternative_name' in statement) {
-          // TODO: map the results for aliases to these statements.
-          return false;
-        }
-        return true;
-      });
+      const defaultStatements = allStatements
+        .map((statement) => {
+          // Perform mirroring
+          if (statement !== 'mirror') {
+            return statement;
+          }
+          const result = mirror(browser, supportData);
+          return result;
+        })
+        .filter((statement) => {
+          if ('flags' in statement) {
+            return false;
+          }
+          if ('prefix' in statement || 'alternative_name' in statement) {
+            // TODO: map the results for aliases to these statements.
+            return false;
+          }
+          return true;
+        });
 
       if (defaultStatements.length === 0) {
         // Prepend |inferredStatement| to |allStatements|, since there were no
