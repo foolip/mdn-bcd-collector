@@ -93,6 +93,6 @@
     "selenium-webdriver": "4.2.0",
     "sinon": "14.0.0",
     "webidl2": "24.2.2",
-    "yaml": "2.1.0"
+    "yaml": "2.1.1"
   }
 }
