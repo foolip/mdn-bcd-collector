@@ -19,7 +19,7 @@ import http from 'node:http';
 
 import fs from 'fs-extra';
 import querystring from 'querystring';
-import bcd from '@mdn/browser-compat-data';
+import bcd from '@mdn/browser-compat-data' assert {type: 'json'};
 const bcdBrowsers = bcd.browsers;
 import esMain from 'es-main';
 import express from 'express';
