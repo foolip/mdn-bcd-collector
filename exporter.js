@@ -21,7 +21,7 @@ import crypto from 'node:crypto';
 
 import slugify from 'slugify';
 import stringify from 'json-stable-stringify';
-import bcd from '@mdn/browser-compat-data';
+import bcd from '@mdn/browser-compat-data' assert {type: 'json'};
 const bcdBrowsers = bcd.browsers;
 
 import {parseUA} from './ua-parser.js';
