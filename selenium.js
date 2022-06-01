@@ -24,7 +24,7 @@ import {
   logging,
   until
 } from 'selenium-webdriver';
-import bcd from '@mdn/browser-compat-data';
+import bcd from '@mdn/browser-compat-data' assert {type: 'json'};
 const bcdBrowsers = bcd.browsers;
 import compareVersions from 'compare-versions';
 import fetch from 'node-fetch';
