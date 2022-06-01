@@ -270,10 +270,6 @@ const update = (bcd, supportMatrix, filter) => {
         continue;
       }
 
-      // Object.assign needed to prevent upstream mirroring from updating data
-      const supportData = {};
-      Object.assign(supportData, entry.__compat.support);
-
       let allStatements = entry.__compat.support[browser];
       if (!allStatements) {
         allStatements = [];
@@ -289,7 +285,7 @@ const update = (bcd, supportMatrix, filter) => {
           if (statement !== 'mirror') {
             return statement;
           }
-          const result = mirror(browser, supportData);
+          const result = mirror(browser, entry.__compat.support);
           return result;
         })
         .filter((statement) => {
