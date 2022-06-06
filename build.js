@@ -266,12 +266,12 @@ const compileTest = (test) => {
 const mergeMembers = (target, source) => {
   // Check for duplicate members across partials/mixins.
   const targetMembers = new Set(
-    target.members.map((m) => (m.name + m.special === 'static' ? 'static' : ''))
+    target.members.map((m) => m.name + (m.special === 'static' ? 'static' : ''))
   );
   for (const member of source.members) {
     if (
       targetMembers.has(
-        member.name + member.special === 'static' ? 'static' : ''
+        member.name + (member.special === 'static' ? 'static' : '')
       )
     ) {
       throw new Error(`Duplicate definition of ${target.name}.${member.name}`);
