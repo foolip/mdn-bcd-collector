@@ -1,5 +1,57 @@
 # mdn-bcd-collector Changelog
 
+## v6.0.6
+
+### Test Changes
+
+#### Added
+
+- api.GPU.getPreferredCanvasFormat
+- api.GPUAdapter.requestAdapterInfo
+- api.GPUAdapterInfo
+- api.GPUError
+- api.GPUSupportedLimits.maxInterStageShaderVariables
+- api.HTMLAnchorElement.attributionSrc
+- api.HTMLImageElement.attributionSrc
+- api.MediaSource.getHandle
+- api.MediaSourceHandle
+- api.MLGraphBuilder.buildAsync
+- api.TouchEvent.getModifierState
+- api.WebGL2RenderingContext.drawingBufferColorSpace
+- api.WebGL2RenderingContext.unpackColorSpace
+- api.WebGLRenderingContext.drawingBufferColorSpace
+- api.WebGLRenderingContext.unpackColorSpace
+- javascript.builtins.TypedArray
+
+#### Removed
+
+- api.AttributionReporting
+- api.CaptureHandleChangeEvent
+- api.GPUAdapter.name
+- api.GPUCanvasContext.getPreferredFormat
+- api.GPUValidationError.message
+- api.HTMLAnchorElement.attributionDestination
+- api.HTMLAnchorElement.attributionExpiry
+- api.HTMLAnchorElement.attributionReportTo
+- api.HTMLAnchorElement.attributionSourceEventId
+- api.HTMLAnchorElement.attributionSourcePriority
+- api.HTMLAnchorElement.registerAttributionSource
+- api.Window.attributionReporting
+
+#### Changed
+
+- api.Response.json
+
+### Commits
+
+- Allow for static members of the same name as non-static members ([#2054](https://github.com/foolip/mdn-bcd-collector/pull/2054))
+- Remove Object.assign() to mitigate mirroring changing upstream ([#2043](https://github.com/foolip/mdn-bcd-collector/pull/2043))
+- update-bcd: account for mirroring ([#2039](https://github.com/foolip/mdn-bcd-collector/pull/2039))
+- Clone browser-compat-data in PR test workflow ([#2040](https://github.com/foolip/mdn-bcd-collector/pull/2040))
+- Install fdir ([#2038](https://github.com/foolip/mdn-bcd-collector/pull/2038))
+- Revert "Randomize selection of Selenium host ([#1919](https://github.com/foolip/mdn-bcd-collector/pull/1919))" ([#2009](https://github.com/foolip/mdn-bcd-collector/pull/2009))
+- Add custom tests for TypedArray and TypedArray.BYTES_PER_ELEMENT ([#1999](https://github.com/foolip/mdn-bcd-collector/pull/1999))
+
 ## v6.0.5
 
 ### Test Changes
