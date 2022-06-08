@@ -535,21 +535,44 @@
     "break-after": {
       "__values": [
         "always",
-        "avoid-column",
+        "auto",
+        "avoid",
         "avoid-page",
-        "column",
+        "page",
+        "left",
+        "right",
         "recto",
-        "verso"
+        "verso",
+        "avoid-column",
+        "column",
+        "avoid-region",
+        "region"
       ]
     },
     "break-before": {
       "__values": [
         "always",
-        "avoid-column",
+        "auto",
+        "avoid",
         "avoid-page",
-        "column",
+        "page",
+        "left",
+        "right",
         "recto",
-        "verso"
+        "verso",
+        "avoid-column",
+        "column",
+        "avoid-region",
+        "region"
+      ]
+    },
+    "break-inside": {
+      "__values": [
+        "auto",
+        "avoid",
+        "avoid-page",
+        "avoid-column",
+        "avoid-region"
       ]
     },
     "buffered-rendering": {},
