@@ -23,7 +23,7 @@ jobs:
     # ensure we can start the server without dev dependencies
     - name: production smoke test
       run: |
-        npm ci
+        npm ci --production
         cp secrets.sample.json secrets.json
         npm start &
         npx wait-on -t 10000 -v http://localhost:8080
