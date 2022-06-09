@@ -634,6 +634,13 @@ const buildIDLMemberTests = (
   const handledMemberNames = new Set();
 
   for (const member of members) {
+    // Skip static Response.json() so it doesn't clobber the test for
+    // Response.prototype.json, see
+    // https://github.com/mdn/browser-compat-data/issues/16613.
+    if (iface.name === 'Response' && member.special === 'static' && member.name === 'json') {
+      continue;
+    }
+
     if (handledMemberNames.has(member.name)) {
       continue;
     }
