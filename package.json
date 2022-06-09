@@ -85,7 +85,7 @@
     "listr2": "4.0.5",
     "minimatch": "5.1.0",
     "mocha": "10.0.0",
-    "node-fetch": "3.2.5",
+    "node-fetch": "3.2.6",
     "nodemon": "2.0.16",
     "open-cli": "7.0.1",
     "prettier": "2.6.2",
