@@ -269,9 +269,13 @@ const mergeMembers = (target, source) => {
   const sourceMembers = new Set();
   for (const member of source.members) {
     if (targetMembers.has(member.name)) {
+      const targetMember = target.members.find((m) => m.name);
       // Static members may have the same name as a non-static member.
-      // If any are found, ignore and don't add to the members to merge.
-      if (!(member.special === 'static')) {
+      // If target has static member with same name, remove from target.
+      // If source has static member with same name, don't merge into target.
+      if (targetMember.special === 'static') {
+        target.members.pop(target.members.indexOf(targetMember));
+      } else if (member.special !== 'static') {
         throw new Error(
           `Duplicate definition of ${target.name}.${member.name}`
         );
