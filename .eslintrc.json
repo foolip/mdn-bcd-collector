@@ -1,9 +1,14 @@
 {
-  "extends": ["eslint:recommended", "google"],
-  "plugins": ["prefer-arrow"],
-  "parser": "@babel/eslint-parser",
+  "extends": [
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "google"
+  ],
+  "plugins": ["@typescript-eslint", "prefer-arrow"],
+  "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "ecmaVersion": 8
+    "ecmaVersion": 2020,
+    "sourceType": "module"
   },
   "rules": {
     "comma-dangle": ["error", "never"],
@@ -16,7 +21,10 @@
     "quotes": "off",
     "quote-props": ["error", "as-needed"],
     "require-jsdoc": "off",
-    "space-before-function-paren": "off"
+    "space-before-function-paren": "off",
+    "@typescript-eslint/no-unused-vars": "off",
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/no-empty-function": "off"
   },
   "env": {
     "es6": true,
