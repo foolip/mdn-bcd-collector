@@ -11,14 +11,11 @@
 
 import {
   Browsers,
-  CompatData,
-  CompatStatement,
   SimpleSupportStatement,
   Identifier
 } from '@mdn/browser-compat-data/types';
 import {
   Report,
-  TestResult,
   TestResultValue,
   SupportMatrix,
   SupportMap,
