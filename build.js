@@ -265,20 +265,23 @@ const compileTest = (test) => {
 
 const mergeMembers = (target, source) => {
   // Check for duplicate members across partials/mixins.
-  const targetMembers = new Set(
-    target.members.map((m) => m.name + (m.special === 'static' ? 'static' : ''))
-  );
+  const targetMembers = new Set(target.members.map((m) => m.name));
+  const sourceMembers = new Set();
   for (const member of source.members) {
-    if (
-      targetMembers.has(
-        member.name + (member.special === 'static' ? 'static' : '')
-      )
-    ) {
-      throw new Error(`Duplicate definition of ${target.name}.${member.name}`);
+    if (targetMembers.has(member.name)) {
+      // Static members may have the same name as a non-static member.
+      // If any are found, ignore and don't add to the members to merge.
+      if (!(member.special === 'static')) {
+        throw new Error(
+          `Duplicate definition of ${target.name}.${member.name}`
+        );
+      }
+    } else {
+      sourceMembers.add(member);
     }
   }
   // Now merge members.
-  target.members.push(...source.members);
+  target.members.push(...sourceMembers);
 };
 
 const flattenIDL = (specIDLs, customIDLs) => {
