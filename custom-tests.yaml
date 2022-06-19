@@ -454,6 +454,12 @@ api:
     __base: |-
       var stylesheet = reusableInstances.createStyleSheet('@media (max-width: 600px) {body {background-color: #111;color: white;}}');
       var instance = stylesheet.cssRules.item(0);
+  CSSNamespaceRule:
+    __resources:
+      - createStyleSheet
+    __base: |-
+      var stylesheet = reusableInstances.createStyleSheet('@namespace svg url(http://www.w3.org/2000/svg);');
+      var instance = stylesheet.cssRules.item(0);
   CSSPageRule:
     __resources:
       - createStyleSheet
