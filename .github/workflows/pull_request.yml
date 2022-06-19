@@ -23,6 +23,10 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 16
+      - name: Prepare browser-compat-data
+        run: npm ci
+        with:
+          path: ./browser-compat-data
       - run: npm ci
       - run: npm run format
       - run: npm run build
