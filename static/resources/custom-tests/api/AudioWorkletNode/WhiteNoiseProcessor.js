@@ -1,5 +1,11 @@
+//
+// mdn-bcd-collector: static/resources/custom-tests/api/AudioWorkletNode/WhiteNoiseProcessor.js
 // Custom test worklet for api.AudioWorkletNode, example copied from:
 // https://developer.mozilla.org/en-US/docs/Web/API/AudioWorkletNode
+//
+// © Mozilla Corporation, Gooborg Studios
+// See LICENSE.txt for copyright details
+//
 
 /* global AudioWorkletProcessor, registerProcessor */
 

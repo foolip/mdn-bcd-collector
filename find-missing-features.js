@@ -1,3 +1,11 @@
+//
+// mdn-bcd-collector: find-missing-features.js
+// Script to find features that are in the collector or BCD but not the other
+//
+// © Gooborg Studios, Google LLC
+// See LICENSE.txt for copyright details
+//
+
 import {fileURLToPath} from 'node:url';
 
 import esMain from 'es-main';

@@ -1,3 +1,11 @@
+//
+// mdn-bcd-collector: release.js
+// Script to perform a new mdn-bcd-collector release
+//
+// © Gooborg Studios, Google LLC
+// See LICENSE.txt for copyright details
+//
+
 import chalk from 'chalk-template';
 import enquirer from 'enquirer';
 import esMain from 'es-main';

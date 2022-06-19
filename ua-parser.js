@@ -1,5 +1,13 @@
-import compareVersions from "compare-versions";
-import uaParser from "ua-parser-js";
+//
+// mdn-bcd-collector: ua-parser.js
+// Module to parse user agent strings and compare them with BCD browser data
+//
+// © Gooborg Studios, Google LLC
+// See LICENSE.txt for copyright details
+//
+
+import compareVersions from 'compare-versions';
+import uaParser from 'ua-parser-js';
 
 const getMajorMinorVersion = (version) => {
   const [major, minor] = version.split('.');
@@ -126,7 +134,4 @@ const parseUA = (userAgent, browsers) => {
   return data;
 };
 
-export {
-  getMajorMinorVersion,
-  parseUA
-};
+export {getMajorMinorVersion, parseUA};

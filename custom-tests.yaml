@@ -1,3 +1,11 @@
+#
+# mdn-bcd-collector: custom-tests.yaml
+# Custom test code to override auto-generated test code
+#
+# © Gooborg Studios, Mozilla Corporation, Google LLC, Apple Inc
+# See LICENSE.txt for copyright details
+#
+
 # Custom tests here also need to be in @webref/idl or custom-idl/, see
 # https://github.com/foolip/mdn-bcd-collector/issues/1944.
 api:

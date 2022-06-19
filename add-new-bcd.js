@@ -1,3 +1,11 @@
+//
+// mdn-bcd-collector: add-new-bcd.js
+// Adds missing entries to BCD that have support in some browser version
+//
+// © Gooborg Studios, Google LLC
+// See LICENSE.txt for copyright details
+//
+
 import path from 'node:path';
 
 import fs from 'fs-extra';
