@@ -18,7 +18,6 @@ import {
   Report,
   TestResultValue,
   SupportMatrix,
-  SupportMap,
   BrowserSupportMap,
   Overrides,
   InternalSupportStatement
@@ -221,14 +220,14 @@ export const inferSupportStatements = (
       if (!lastStatement) {
         statements.push({
           version_added:
-            lastWasNull || lastKnown.support === false
-              ? `${lastKnown.version}> ≤${version}`
-              : version
+            lastWasNull || lastKnown.support === false ?
+              `${lastKnown.version}> ≤${version}` :
+              version
         });
       } else if (!lastStatement.version_added) {
-        lastStatement.version_added = lastWasNull
-          ? `${lastKnown.version}> ≤${version}`
-          : version;
+        lastStatement.version_added = lastWasNull ?
+          `${lastKnown.version}> ≤${version}` :
+          version;
       } else if (lastStatement.version_removed) {
         // added back again
         statements.push({
@@ -245,9 +244,9 @@ export const inferSupportStatements = (
         lastStatement.version_added &&
         !lastStatement.version_removed
       ) {
-        lastStatement.version_removed = lastWasNull
-          ? `${lastKnown.version}> ≤${version}`
-          : version;
+        lastStatement.version_removed = lastWasNull ?
+          `${lastKnown.version}> ≤${version}` :
+          version;
       } else if (!lastStatement) {
         statements.push({version_added: false});
       }
@@ -429,9 +428,9 @@ export const update = (
         )
       ) {
         simpleStatement.version_added =
-          typeof inferredStatement.version_added === 'string'
-            ? inferredStatement.version_added.replace('0> ', '')
-            : inferredStatement.version_added;
+          typeof inferredStatement.version_added === 'string' ?
+            inferredStatement.version_added.replace('0> ', '') :
+            inferredStatement.version_added;
         modified = true;
       }
 

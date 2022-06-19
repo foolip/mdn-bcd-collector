@@ -58,7 +58,7 @@ if (esMain(import.meta)) {
       break;
     case 'unittest':
       exec(
-        'c8 mocha --reporter dot --recursive unittest',
+        'c8 mocha --reporter dot --recursive "unittest/**/*.js" --recursive "unittest/**/*.ts"',
         {NODE_ENV: 'test'},
         false
       );
