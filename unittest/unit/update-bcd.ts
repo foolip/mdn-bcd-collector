@@ -1,18 +1,12 @@
-// Copyright 2020 Google LLC
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
+// mdn-bcd-collector: unittest/unit/update-bcd.js
+// Unittest for the BCD updater script
 //
-//     https://www.apache.org/licenses/LICENSE-2.0
+// © Google LLC, Gooborg Studios
+// See LICENSE.txt for copyright details
 //
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
 
-'use strict';
+import {Report} from '../../types/types.js';
 
 import {assert} from 'chai';
 import sinon from 'sinon';
@@ -32,70 +26,70 @@ const overrides = await fs.readJson(
   new URL('./overrides.test.json', import.meta.url)
 );
 
-const reports = [
+const reports: Report[] = [
   {
     __version: '0.3.1',
     results: {
       'https://mdn-bcd-collector.appspot.com/tests/': [
         {
           name: 'api.AbortController',
-          info: {exposure: 'Window'},
+          exposure: 'Window',
           result: true
         },
         {
           name: 'api.AbortController.abort',
-          info: {exposure: 'Window'},
+          exposure: 'Window',
           result: null
         },
         {
           name: 'api.AbortController.AbortController',
-          info: {exposure: 'Window'},
+          exposure: 'Window',
           result: false
         },
         {
           name: 'api.AudioContext',
-          info: {exposure: 'Window'},
+          exposure: 'Window',
           result: false
         },
         {
           name: 'api.AudioContext.close',
-          info: {exposure: 'Window'},
+          exposure: 'Window',
           result: null,
           message: 'threw ReferenceError: AbortController is not defined'
         },
         {
           name: 'api.DeprecatedInterface',
-          info: {exposure: 'Window'},
+          exposure: 'Window',
           result: true
         },
         {
           name: 'api.ExperimentalInterface',
-          info: {exposure: 'Window'},
+          exposure: 'Window',
           result: true
         },
         {
           name: 'api.NullAPI',
-          info: {exposure: 'Window'},
+          exposure: 'Window',
           result: null
         },
         {
           name: 'api.RemovedInterface',
-          info: {exposure: 'Window'},
+          exposure: 'Window',
           result: true
         },
         {
           name: 'api.SuperNewInterface',
-          info: {exposure: 'Window'},
+          exposure: 'Window',
           result: false
         },
         {
           name: 'css.properties.font-family',
-          info: {exposure: 'Window'},
+          exposure: 'Window',
           result: true
         },
         {
           name: 'css.properties.font-face',
-          info: {exposure: 'Window'},
+          exposure: 'Window',
           result: true
         }
       ]
@@ -109,73 +103,73 @@ const reports = [
       'https://mdn-bcd-collector.appspot.com/tests/': [
         {
           name: 'api.AbortController',
-          info: {exposure: 'Window'},
+          exposure: 'Window',
           result: true
         },
         {
           name: 'api.AbortController.abort',
-          info: {exposure: 'Window'},
+          exposure: 'Window',
           result: false
         },
         {
           name: 'api.AbortController.abort',
-          info: {exposure: 'Worker'},
+          exposure: 'Worker',
           result: true
         },
         {
           name: 'api.AbortController.AbortController',
-          info: {exposure: 'Window'},
+          exposure: 'Window',
           result: false
         },
         {
           name: 'api.AudioContext',
-          info: {exposure: 'Window'},
+          exposure: 'Window',
           result: false
         },
         {
           name: 'api.AudioContext.close',
-          info: {exposure: 'Window'},
+          exposure: 'Window',
           result: null,
           message: 'threw ReferenceError: AbortController is not defined'
         },
         {
           name: 'api.DeprecatedInterface',
-          info: {exposure: 'Window'},
+          exposure: 'Window',
           result: true
         },
         {
           name: 'api.ExperimentalInterface',
-          info: {exposure: 'Window'},
+          exposure: 'Window',
           result: true
         },
         {
           name: 'api.NewInterfaceNotInBCD',
-          info: {exposure: 'Window'},
+          exposure: 'Window',
           result: false
         },
         {
           name: 'api.NullAPI',
-          info: {exposure: 'Window'},
+          exposure: 'Window',
           result: null
         },
         {
           name: 'api.RemovedInterface',
-          info: {exposure: 'Window'},
+          exposure: 'Window',
           result: false
         },
         {
           name: 'api.SuperNewInterface',
-          info: {exposure: 'Window'},
+          exposure: 'Window',
           result: false
         },
         {
           name: 'css.properties.font-family',
-          info: {exposure: 'Window'},
+          exposure: 'Window',
           result: true
         },
         {
           name: 'css.properties.font-face',
-          info: {exposure: 'Window'},
+          exposure: 'Window',
           result: true
         }
       ]
@@ -189,67 +183,67 @@ const reports = [
       'https://mdn-bcd-collector.appspot.com/tests/': [
         {
           name: 'api.AbortController',
-          info: {exposure: 'Window'},
+          exposure: 'Window',
           result: true
         },
         {
           name: 'api.AbortController.abort',
-          info: {exposure: 'Window'},
+          exposure: 'Window',
           result: true
         },
         {
           name: 'api.AbortController.AbortController',
-          info: {exposure: 'Window'},
+          exposure: 'Window',
           result: true
         },
         {
           name: 'api.AudioContext',
-          info: {exposure: 'Window'},
+          exposure: 'Window',
           result: true
         },
         {
           name: 'api.AudioContext.close',
-          info: {exposure: 'Window'},
+          exposure: 'Window',
           result: true
         },
         {
           name: 'api.DeprecatedInterface',
-          info: {exposure: 'Window'},
+          exposure: 'Window',
           result: false
         },
         {
           name: 'api.ExperimentalInterface',
-          info: {exposure: 'Window'},
+          exposure: 'Window',
           result: true
         },
         {
           name: 'api.NewInterfaceNotInBCD',
-          info: {exposure: 'Window'},
+          exposure: 'Window',
           result: true
         },
         {
           name: 'api.NullAPI',
-          info: {exposure: 'Window'},
+          exposure: 'Window',
           result: null
         },
         {
           name: 'api.RemovedInterface',
-          info: {exposure: 'Window'},
+          exposure: 'Window',
           result: true
         },
         {
           name: 'api.SuperNewInterface',
-          info: {exposure: 'Window'},
+          exposure: 'Window',
           result: false
         },
         {
           name: 'css.properties.font-family',
-          info: {exposure: 'Window'},
+          exposure: 'Window',
           result: true
         },
         {
           name: 'css.properties.font-face',
-          info: {exposure: 'Window'},
+          exposure: 'Window',
           result: true
         }
       ]
@@ -263,7 +257,7 @@ const reports = [
       'https://mdn-bcd-collector.appspot.com/tests/': [
         {
           name: 'api.AbortController',
-          info: {exposure: 'Window'},
+          exposure: 'Window',
           result: false
         }
       ]
@@ -277,7 +271,7 @@ const reports = [
       'https://mdn-bcd-collector.appspot.com/tests/': [
         {
           name: 'api.AbortController',
-          info: {exposure: 'Window'},
+          exposure: 'Window',
           result: false
         }
       ]
@@ -291,7 +285,7 @@ const reports = [
       'https://mdn-bcd-collector.appspot.com/tests/': [
         {
           name: 'api.AbortController',
-          info: {exposure: 'Window'},
+          exposure: 'Window',
           result: true
         }
       ]
@@ -305,7 +299,7 @@ const reports = [
       'https://mdn-bcd-collector.appspot.com/tests/': [
         {
           name: 'api.AbortController',
-          info: {exposure: 'Window'},
+          exposure: 'Window',
           result: false
         }
       ]
@@ -376,7 +370,11 @@ describe('BCD updater', () => {
 
     it('no results', () => {
       assert.throws(() => {
-        getSupportMap({results: {}, userAgent: 'abc/1.2.3-beta'});
+        getSupportMap({
+          __version: 'test',
+          results: {},
+          userAgent: 'abc/1.2.3-beta'
+        });
       }, 'Report for "abc/1.2.3-beta" has no results!');
     });
   });
@@ -648,14 +646,14 @@ describe('BCD updater', () => {
 
     it('Invalid results', () => {
       assert.throws(() => {
-        const report = {
+        const report: Report = {
           __version: '0.3.1',
           results: {
             'https://mdn-bcd-collector.appspot.com/tests/': [
               {
                 name: 'api.AbortController',
-                info: {exposure: 'Window'},
-                result: 87
+                exposure: 'Window',
+                result: 87 as any
               }
             ]
           },

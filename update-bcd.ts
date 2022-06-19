@@ -1,7 +1,27 @@
+//
+// mdn-bcd-collector: update-bcd.ts
+// Script to update the BCD data using collected results
+//
 // See https://github.com/foolip/mdn-bcd-collector/blob/main/DESIGN.md#updating-bcd
 // for documentation on the approach taken in this script.
+//
+// © Google LLC, Gooborg Studios
+// See LICENSE.txt for copyright details
+//
 
-'use strict';
+import {
+  Browsers,
+  SimpleSupportStatement,
+  Identifier
+} from '@mdn/browser-compat-data/types';
+import {
+  Report,
+  TestResultValue,
+  SupportMatrix,
+  BrowserSupportMap,
+  Overrides,
+  InternalSupportStatement
+} from './types/types.js';
 
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
@@ -27,20 +47,23 @@ const {default: mirror} = await import(
   path.join(BCD_DIR, 'scripts', 'release', 'mirror.js')
 );
 
-const findEntry = (bcd, ident) => {
+export const findEntry = (
+  bcd: Identifier,
+  ident: string
+): Identifier | null => {
   if (!ident) {
     return null;
   }
-  const keys = ident.split('.');
-  let entry = bcd;
+  const keys: string[] = ident.split('.');
+  let entry: any = bcd;
   while (entry && keys.length) {
-    entry = entry[keys.shift()];
+    entry = entry[keys.shift() as string];
   }
   return entry;
 };
 
-const combineResults = (results) => {
-  let supported = null;
+const combineResults = (results: TestResultValue[]): TestResultValue => {
+  let supported: TestResultValue = null;
   for (const result of results) {
     if (result === true) {
       // If any result is true, the flattened support should be true. There
@@ -61,7 +84,7 @@ const combineResults = (results) => {
 
 // Get support map from BCD path to test result (null/true/false) for a single
 // report.
-const getSupportMap = (report) => {
+export const getSupportMap = (report: Report): BrowserSupportMap => {
   // Transform `report` to map from test name (BCD path) to array of results.
   const testMap = new Map();
   for (const tests of Object.values(report.results)) {
@@ -101,7 +124,11 @@ const getSupportMap = (report) => {
 
 // Load all reports and build a map from BCD path to browser + version
 // and test result (null/true/false) for that version.
-const getSupportMatrix = (reports, browsers, overrides) => {
+export const getSupportMatrix = (
+  reports: Report[],
+  browsers: Browsers,
+  overrides: Overrides
+): SupportMatrix => {
   const supportMatrix = new Map();
 
   for (const report of reports) {
@@ -173,11 +200,16 @@ const getSupportMatrix = (reports, browsers, overrides) => {
   return supportMatrix;
 };
 
-const inferSupportStatements = (versionMap) => {
+export const inferSupportStatements = (
+  versionMap: BrowserSupportMap
+): SimpleSupportStatement[] => {
   const versions = Array.from(versionMap.keys()).sort(compareVersions);
 
-  const statements = [];
-  const lastKnown = {version: '0', support: null};
+  const statements: SimpleSupportStatement[] = [];
+  const lastKnown: {version: string; support: TestResultValue} = {
+    version: '0',
+    support: null
+  };
   let lastWasNull = false;
 
   for (const [_, version] of versions.entries()) {
@@ -233,7 +265,11 @@ const inferSupportStatements = (versionMap) => {
   return statements;
 };
 
-const update = (bcd, supportMatrix, filter) => {
+export const update = (
+  bcd: Identifier,
+  supportMatrix: SupportMatrix,
+  filter: any
+): boolean => {
   let modified = false;
 
   for (const [path, browserMap] of supportMatrix.entries()) {
@@ -245,6 +281,9 @@ const update = (bcd, supportMatrix, filter) => {
     if (!entry || !entry.__compat) {
       continue;
     }
+
+    // Stringified then parsed to deep clone the support statements
+    const originalSupport = JSON.parse(JSON.stringify(entry.__compat.support));
 
     for (const [browser, versionMap] of browserMap.entries()) {
       if (
@@ -270,7 +309,8 @@ const update = (bcd, supportMatrix, filter) => {
         continue;
       }
 
-      let allStatements = entry.__compat.support[browser];
+      let allStatements: InternalSupportStatement | undefined =
+        entry.__compat.support[browser];
       if (!allStatements) {
         allStatements = [];
       } else if (!Array.isArray(allStatements)) {
@@ -285,7 +325,7 @@ const update = (bcd, supportMatrix, filter) => {
           if (statement !== 'mirror') {
             return statement;
           }
-          const result = mirror(browser, entry.__compat.support);
+          const result = mirror(browser, originalSupport);
           return result;
         })
         .filter((statement) => {
@@ -407,14 +447,14 @@ const update = (bcd, supportMatrix, filter) => {
 // |paths| can be files or directories. Returns an object mapping
 // from (absolute) path to the parsed file content.
 /* c8 ignore start */
-const loadJsonFiles = async (paths) => {
+export const loadJsonFiles = async (paths: string[]): Promise<any> => {
   // Ignores .DS_Store, .git, etc.
   const dotFilter = (item) => {
     const basename = path.basename(item);
     return basename === '.' || basename[0] !== '.';
   };
 
-  const jsonFiles = [];
+  const jsonFiles: string[] = [];
 
   for (const p of paths) {
     await new Promise((resolve, reject) => {
@@ -439,17 +479,22 @@ const loadJsonFiles = async (paths) => {
   return Object.fromEntries(entries);
 };
 
-const main = async (reportPaths, filter, browsers, overrides) => {
+export const main = async (
+  reportPaths: string[],
+  filter: any,
+  browsers: Browsers,
+  overrides: Overrides
+): Promise<void> => {
   // Replace filter.path with a minimatch object.
   if (filter.path) {
     filter.path = new Minimatch(filter.path);
   }
 
-  const bcdFiles = await loadJsonFiles(
+  const bcdFiles = (await loadJsonFiles(
     filter.category.map((cat) => path.join(BCD_DIR, ...cat.split('.')))
-  );
+  )) as {[key: string]: Identifier};
 
-  const reports = Object.values(await loadJsonFiles(reportPaths));
+  const reports = Object.values(await loadJsonFiles(reportPaths)) as Report[];
   const supportMatrix = getSupportMatrix(
     reports,
     browsers,
@@ -477,14 +522,15 @@ if (esMain(import.meta)) {
     new URL('./overrides.json', import.meta.url)
   );
 
-  const {argv} = yargs(hideBin(process.argv)).command(
+  const {argv}: {argv: any} = yargs(hideBin(process.argv)).command(
     '$0 [reports..]',
     'Update BCD from a specified set of report files',
     (yargs) => {
       yargs
         .positional('reports', {
           describe: 'The report files to update from (also accepts folders)',
-          type: 'array',
+          type: 'string',
+          array: true,
           default: ['../mdn-bcd-results/']
         })
         .option('category', {
@@ -521,13 +567,3 @@ if (esMain(import.meta)) {
   await main(argv.reports, argv, browsers, overrides);
 }
 /* c8 ignore stop */
-
-export {
-  findEntry,
-  getSupportMap,
-  getSupportMatrix,
-  inferSupportStatements,
-  update,
-  loadJsonFiles,
-  main
-};

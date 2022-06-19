@@ -1,4 +1,12 @@
-'use strict';
+//
+// mdn-bcd-collector: add-new-bcd.ts
+// Adds missing entries to BCD that have support in some browser version
+//
+// © Gooborg Studios, Google LLC
+// See LICENSE.txt for copyright details
+//
+
+import {Identifier} from '@mdn/browser-compat-data/types';
 
 import path from 'node:path';
 
@@ -39,7 +47,12 @@ const template = {
   }
 };
 
-const recursiveAdd = (ident, i, data, obj) => {
+export const recursiveAdd = (
+  ident: string[],
+  i: number,
+  data: Identifier,
+  obj: any
+): Identifier => {
   const part = ident[i];
 
   data[part] =
@@ -50,7 +63,7 @@ const recursiveAdd = (ident, i, data, obj) => {
   return data;
 };
 
-const orderFeatures = (key, value) => {
+export const orderFeatures = (key: string, value: Identifier): Identifier => {
   if (value instanceof Object && '__compat' in value) {
     value = Object.keys(value)
       .sort(compareFeatures)
@@ -63,7 +76,7 @@ const orderFeatures = (key, value) => {
 };
 
 /* c8 ignore start */
-const writeFile = async (ident, obj) => {
+const writeFile = async (ident: string[], obj: any): Promise<void> => {
   const filepath = path.resolve(
     path.join(BCD_DIR, ident[0], `${ident[1]}.json`)
   );
@@ -81,13 +94,20 @@ const writeFile = async (ident, obj) => {
 };
 /* c8 ignore stop */
 
-const traverseFeatures = async (obj, identifier) => {
+export const traverseFeatures = async (
+  obj: Identifier,
+  identifier: string[]
+): Promise<any> => {
   for (const i in obj) {
     if (!!obj[i] && typeof obj[i] == 'object' && i !== '__compat') {
       const thisIdent = identifier.concat([i]);
-      if (obj[i].__compat) {
-        for (const support of Object.values(obj[i].__compat.support)) {
-          if (![false, null].includes(support.version_added)) {
+      const support = obj[i]?.__compat?.support;
+      if (support) {
+        for (const statements of Object.values(support)) {
+          const supported = (
+            Array.isArray(statements) ? statements : [statements]
+          ).some((s) => s.version_added);
+          if (supported) {
             await writeFile(thisIdent, obj[i]);
             break;
           }
@@ -99,7 +119,7 @@ const traverseFeatures = async (obj, identifier) => {
   }
 };
 
-const collectMissing = async (filepath) => {
+export const collectMissing = async (filepath: string): Promise<void> => {
   const missing = {api: {}};
 
   for (const entry of getMissing(
@@ -118,7 +138,7 @@ const collectMissing = async (filepath) => {
 };
 
 /* c8 ignore start */
-const main = async () => {
+const main = async (): Promise<void> => {
   const filepath = path.resolve(
     path.join(BCD_DIR, '__missing', '__missing.json')
   );
@@ -146,5 +166,3 @@ if (esMain(import.meta)) {
   await main();
 }
 /* c8 ignore stop */
-
-export {recursiveAdd, orderFeatures, traverseFeatures, collectMissing};

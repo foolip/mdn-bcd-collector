@@ -1,3 +1,11 @@
+//
+// mdn-bcd-collector: unittest/unit/bcd.test.js
+// Unittest helper containing pseudo BCD
+//
+// © Gooborg Studios
+// See LICENSE.txt for copyright details
+//
+
 export default {
   api: {
     AbortController: {

@@ -1,3 +1,11 @@
+#
+# mdn-bcd-collector: unittest/unit/bcd.test.js
+# Unittest helper containing pseudo custom tests
+#
+# © Gooborg Studios
+# See LICENSE.txt for copyright details
+#
+
 api:
   __resources:
     audio-blip:
