@@ -85,7 +85,7 @@ const combineResults = (results: TestResultValue[]): TestResultValue => {
 
 // Get support map from BCD path to test result (null/true/false) for a single
 // report.
-export const getSupportMap = (report: Report): SupportMap => {
+export const getSupportMap = (report: Report): BrowserSupportMap => {
   // Transform `report` to map from test name (BCD path) to array of results.
   const testMap = new Map();
   for (const tests of Object.values(report.results)) {
