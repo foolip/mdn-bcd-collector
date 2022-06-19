@@ -1,5 +1,3 @@
-'use strict';
-
 import compareVersions from "compare-versions";
 import uaParser from "ua-parser-js";
 

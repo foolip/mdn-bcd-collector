@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-'use strict';
-
 // This module is responsible for getting results/reports out of the collector
 // web service into JSON files that can be used by update-bcd.js.
 

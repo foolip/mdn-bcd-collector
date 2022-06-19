@@ -1,5 +1,3 @@
-'use strict';
-
 import {fileURLToPath} from 'node:url';
 
 import esMain from 'es-main';

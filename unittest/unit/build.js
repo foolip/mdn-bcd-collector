@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-'use strict';
-
 import chai, {assert} from 'chai';
 import chaiSubset from 'chai-subset';
 chai.use(chaiSubset);

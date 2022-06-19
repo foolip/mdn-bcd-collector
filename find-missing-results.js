@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-'use strict';
-
 import compareVersions from 'compare-versions';
 import esMain from 'es-main';
 import fs from 'fs-extra';

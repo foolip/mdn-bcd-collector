@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-'use strict';
-
 import chai, {assert, expect} from 'chai';
 import chaiHttp from 'chai-http';
 chai.use(chaiHttp);

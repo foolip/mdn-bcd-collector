@@ -12,8 +12,6 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-'use strict';
-
 const parseShortString = (value, desc) => {
   if (typeof value !== 'string') {
     throw new Error(`${desc} should be a string; got ${typeof value}`);

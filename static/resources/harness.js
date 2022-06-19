@@ -16,8 +16,6 @@
           self, Worker, Promise, setTimeout, clearTimeout, MessageChannel,
           SharedWorker, ActiveXObject, hljs */
 
-'use strict';
-
 // This harness should work on as old browsers as possible and shouldn't depend
 // on any modern JavaScript features.
 

@@ -16,8 +16,6 @@
           location */
 /* global bcd, reusableInstances */
 
-'use strict';
-
 mocha.setup({
   ui: 'bdd',
   reporter: location.hash === '#reporter=json' ? 'json' : 'html'
