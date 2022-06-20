@@ -97,6 +97,7 @@ app.use(express.static('static'));
 app.use(express.static('generated'));
 
 app.locals.appVersion = appVersion;
+app.locals.bcdVersion = bcd.__meta.version;
 
 // Get user agent
 app.use((req, res, next) => {
