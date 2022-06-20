@@ -34,7 +34,7 @@ const generateReportMap = (allResults: boolean) => {
   const result: ReportMap = {};
 
   for (const [browserKey, browserData] of Object.entries(browsers)) {
-    if (!allResults && ['nodejs', 'deno'].includes(browserKey)) {
+    if (!allResults && ['nodejs', 'deno', 'oculus'].includes(browserKey)) {
       continue;
     }
 
