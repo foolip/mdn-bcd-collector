@@ -447,7 +447,9 @@ export const update = (
 // |paths| can be files or directories. Returns an object mapping
 // from (absolute) path to the parsed file content.
 /* c8 ignore start */
-export const loadJsonFiles = async (paths: string[]): Promise<any> => {
+export const loadJsonFiles = async (
+  paths: string[]
+): Promise<{[filename: string]: any}> => {
   // Ignores .DS_Store, .git, etc.
   const dotFilter = (item) => {
     const basename = path.basename(item);

@@ -1,10 +1,17 @@
 //
-// mdn-bcd-collector: find-missing-results.js
+// mdn-bcd-collector: find-missing-results.ts
 // Script to find browser versions that don't have a result file in mdn-bcd-results
 //
 // © Gooborg Studios
 // See LICENSE.txt for copyright details
 //
+
+import {CompatData} from '@mdn/browser-compat-data/types';
+import {Report} from './types/types.js';
+
+interface ReportMap {
+  [k: string]: string[];
+}
 
 import compareVersions from 'compare-versions';
 import esMain from 'es-main';
@@ -16,13 +23,15 @@ import {parseUA} from './ua-parser.js';
 import {loadJsonFiles} from './update-bcd.js';
 
 const BCD_DIR = process.env.BCD_DIR || `../browser-compat-data`;
-const {default: bcd} = await import(`${BCD_DIR}/index.js`);
+const {default: bcd}: {default: CompatData} = await import(
+  `${BCD_DIR}/index.js`
+);
 const {browsers} = bcd;
 
 const appVersion = (await fs.readJson('./package.json'))?.version;
 
-const generateReportMap = (allResults) => {
-  const result = {};
+const generateReportMap = (allResults: boolean) => {
+  const result: ReportMap = {};
 
   for (const [browserKey, browserData] of Object.entries(browsers)) {
     if (!allResults && ['nodejs', 'deno'].includes(browserKey)) {
@@ -68,7 +77,11 @@ const generateReportMap = (allResults) => {
   return result;
 };
 
-const findMissingResults = async (reportPaths, allResults, version) => {
+const findMissingResults = async (
+  reportPaths: string[],
+  allResults: boolean,
+  version: string
+) => {
   if (version == 'current') {
     version = appVersion;
   }
@@ -76,7 +89,7 @@ const findMissingResults = async (reportPaths, allResults, version) => {
   const reportMap = generateReportMap(allResults);
   const data = await loadJsonFiles(reportPaths);
 
-  for (const report of Object.values(data)) {
+  for (const report of Object.values(data) as Report[]) {
     if (version != 'all') {
       if (report.__version != version) {
         continue;
@@ -122,7 +135,8 @@ if (esMain(import.meta)) {
       yargs
         .positional('reports', {
           describe: 'The report files to update from (also accepts folders)',
-          type: 'array',
+          type: 'string',
+          array: true,
           default: ['../mdn-bcd-results/']
         })
         .option('collector-version', {
@@ -132,7 +146,7 @@ if (esMain(import.meta)) {
           default: 'current'
         })
         .option('all', {
-          describe: 'Include all results, including ignored ',
+          describe: 'Include all results, including ignored',
           alias: 'a',
           type: 'boolean',
           nargs: 0
