@@ -67,7 +67,7 @@
     "@types/mocha": "^9.1.1",
     "@types/node": "^18.0.0",
     "@types/yargs": "^17.0.10",
-    "@typescript-eslint/eslint-plugin": "^5.28.0",
+    "@typescript-eslint/eslint-plugin": "^5.29.0",
     "@webref/css": "4.2.2",
     "@webref/idl": "3.12.1",
     "c8": "7.11.3",
