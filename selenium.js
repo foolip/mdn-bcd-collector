@@ -506,7 +506,8 @@ const runAll = async (limitBrowsers, oses, concurrent, reverse) => {
 
         browsertasks.push({
           title: prettyName(browser, version, os),
-          task: (ctx, task) => run(browser, version, os, ctx, task)
+          task: (ctx, task) => run(browser, version, os, ctx, task),
+          retry: 3
         });
       }
     }
