@@ -299,16 +299,28 @@ const buildDriver = async (browser, version, os) => {
           }
         });
       } else if (browser === 'firefox') {
-        capabilities.set('moz:firefoxOptions', {
-          prefs: {
-            'media.navigator.permission.disabled': 1,
-            'media.navigator.streams.fake': true,
-            'permissions.default.microphone': 1,
-            'permissions.default.camera': 1,
-            'permissions.default.geo': 1,
-            'permissions.default.desktop-notification': 1
-          }
-        });
+        if (version >= 54) {
+          capabilities.set('moz:firefoxOptions', {
+            prefs: {
+              'media.navigator.permission.disabled': 1,
+              'media.navigator.streams.fake': true,
+              'permissions.default.microphone': 1,
+              'permissions.default.camera': 1,
+              'permissions.default.geo': 1,
+              'permissions.default.desktop-notification': 1
+            }
+          });
+        } else {
+          capabilities.set('moz:firefoxOptions', {
+            prefs: {
+              'media.navigator.permission.disabled': 1,
+              'media.navigator.streams.fake': true,
+              'permissions.default.microphone': 1,
+              'permissions.default.camera': 1,
+              'permissions.default.geo': 1
+            }
+          });
+        }
       }
 
       // Get console errors from browser
