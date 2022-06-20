@@ -32,7 +32,7 @@ api:
       src: |-
         var constructor = window.AudioContext || window.webkitAudioContext;
         if (!constructor) {
-          return false;
+          return null;
         }
         return new constructor();
     createStyleSheet:
@@ -49,13 +49,13 @@ api:
       type: instance
       src: |-
         if (!('crypto' in self) || !crypto) {
-          return false;
+          return null;
         };
-        var subtlecrypto = crypto.subtle || crypto.webkitSubtle;
-        if (!subtlecrypto) {
-          return false;
+        var subtle = crypto.subtle || crypto.webkitSubtle;
+        if (!subtle) {
+          return null;
         };
-        return subtlecrypto.generateKey({
+        return subtle.generateKey({
           name: 'RSA-OAEP',
           modulusLength: 4096,
           publicExponent: new Uint8Array([1, 0, 1]),
@@ -66,7 +66,7 @@ api:
       src: |-
         var constructor = window.OfflineAudioContext || window.webkitOfflineAudioContext;
         if (!constructor) {
-          return false;
+          return null;
         }
         return new constructor(2,44100*40,44100);
     speechRecognition:
@@ -74,7 +74,7 @@ api:
       src: |-
         var constructor = window.SpeechRecognition || window.webkitSpeechRecognition;
         if (!constructor) {
-          return false;
+          return null;
         }
         return new constructor();
     webGL:
@@ -82,7 +82,7 @@ api:
       src: |-
         var canvas = document.createElement('canvas');
         if (!canvas) {
-          return false;
+          return null;
         };
         return canvas.getContext('webgl2') || canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
     webGL1:
@@ -90,7 +90,7 @@ api:
       src: |-
         var canvas = document.createElement('canvas');
         if (!canvas) {
-          return false;
+          return null;
         };
         return canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
     webGL2:
@@ -98,7 +98,7 @@ api:
       src: |-
         var canvas = document.createElement('canvas');
         if (!canvas) {
-          return false;
+          return null;
         };
         return canvas.getContext('webgl2');
 
