@@ -47,7 +47,7 @@ See LICENSE.txt for copyright details
       <p><a href="https://github.com/foolip/mdn-bcd-collector/blob/main/CHANGELOG.md">v<%- appVersion %></a></p>
       <a href="https://github.com/foolip/mdn-bcd-collector"><span class="mdi mdi-github"> GitHub</span></a>
       <a href="/"><span class="mdi mdi-home"> Home</span></a>
-      <p id="browserinfo" <% if (!browser.inBcd) { %>class="error"<% } %>><% if (browser.browser.name) { %>Detected Browser: <%- browser.browser.name %> <%- browser.version %> <% if (!browser.inBcd) { %>(not in BCD)<% } %><% } else {%>Could not determine browser<% } %></p>
+      <p id="browserinfo" <% if (!browser.inBcd) { %>class="error"<% } %>><% if (browser.browser.name) { %>Detected Browser: <%- browser.browser.name %> <%- browser.version %> <% if (!browser.inBcd) { %>(not in BCD v<%- bcdVersion %>)<% } %><% } else {%>Could not determine browser<% } %></p>
     </footer>
 
     <%- script %>
