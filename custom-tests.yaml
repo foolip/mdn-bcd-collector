@@ -323,10 +323,17 @@ api:
           return {result: false, message: e.message};
         }
       drawImage.SVGImageElement_source_image: |-
-        <%api.CanvasRenderingContext2D:canvas%>
         <%api.SVGImageElement:image%>
         instance.drawImage(image, 0, 0);
         return true;
+      setTransform.matrix_parameter: |-
+        var matrix = new DOMMatrix([1, .2, .8, 1, 0, 0]);
+        try {
+          instance.setTransform(matrix);
+          return true;
+        } catch(e) {
+          return {result: false, message: e.message};
+        }
   ChannelMergerNode:
     __resources:
       - audioContext
