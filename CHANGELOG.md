@@ -1,5 +1,76 @@
 # mdn-bcd-collector Changelog
 
+## v6.0.7
+
+### Test Changes
+
+#### Added
+
+- api.CanvasRenderingContext2D.setTransform.matrix_parameter
+- api.CropTarget.fromElement
+- api.GPUBuffer.size
+- api.GPUBuffer.usage
+- api.GPUQuerySet.count
+- api.GPUQuerySet.type
+- api.GPUSupportedLimits.maxColorAttachments
+- api.GPUTexture.depthOrArrayLayers
+- api.GPUTexture.dimension
+- api.GPUTexture.format
+- api.GPUTexture.height
+- api.GPUTexture.mipLevelCount
+- api.GPUTexture.sampleCount
+- api.GPUTexture.usage
+- api.GPUTexture.width
+- api.HTMLScriptElement.attributionSrc
+- api.NavigateEvent.canIntercept
+- api.NavigateEvent.intercept
+- api.Window.beforeinput_event
+- css.properties.break-after.auto
+- css.properties.break-after.avoid
+- css.properties.break-after.avoid-region
+- css.properties.break-after.left
+- css.properties.break-after.page
+- css.properties.break-after.region
+- css.properties.break-after.right
+- css.properties.break-before.auto
+- css.properties.break-before.avoid
+- css.properties.break-before.avoid-region
+- css.properties.break-before.left
+- css.properties.break-before.page
+- css.properties.break-before.region
+- css.properties.break-before.right
+- css.properties.break-inside.auto
+- css.properties.break-inside.avoid
+- css.properties.break-inside.avoid-column
+- css.properties.break-inside.avoid-page
+- css.properties.break-inside.avoid-region
+
+#### Removed
+
+- api.MediaDevices.produceCropTarget
+- api.NavigateEvent.canTransition
+- api.NavigateEvent.transitionWhile
+- api.Response.clone
+
+#### Changed
+
+- api.CanvasRenderingContext2D.drawImage.SVGImageElement_source_image
+- api.CSSNamespaceRule
+
+### Commits
+
+- Test all CSS break-\* property values
+- Various tweaks ([#2085](https://github.com/foolip/mdn-bcd-collector/pull/2085))
+- Retry failed Selenium runs ([#2084](https://github.com/foolip/mdn-bcd-collector/pull/2084))
+- Convert find-missing-results to TypeScript ([#2083](https://github.com/foolip/mdn-bcd-collector/pull/2083))
+- Show BCD version when browser version isn't in BCD ([#2082](https://github.com/foolip/mdn-bcd-collector/pull/2082))
+- Return null (not false) for unavailable reusable instances ([#1983](https://github.com/foolip/mdn-bcd-collector/pull/1983))
+- Add test for api.CanvasRenderingContext2D.setTransform.matrix_parameter ([#2081](https://github.com/foolip/mdn-bcd-collector/pull/2081))
+- Add custom test for CSSNamespaceRule ([#2080](https://github.com/foolip/mdn-bcd-collector/pull/2080))
+- Don't include static members with the same name as non-static members ([#2076](https://github.com/foolip/mdn-bcd-collector/pull/2076))
+- Convert update-bcd + add-new-bcd to TypeScript ([#2075](https://github.com/foolip/mdn-bcd-collector/pull/2075))
+- Fix production smoke test to not install dev dependencies ([#2058](https://github.com/foolip/mdn-bcd-collector/pull/2058))
+
 ## v6.0.6
 
 ### Test Changes
