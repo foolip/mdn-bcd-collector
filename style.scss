@@ -233,7 +233,7 @@ footer {
     margin-left: 4px;
   }
 
-  #browserinfo {
+  .browserinfo {
     display: block;
     margin: 0;
     padding-bottom: 1em;
@@ -311,6 +311,10 @@ hr {
 
   #test-entry {
     display: block;
+  }
+
+  .browserinfo {
+    margin-bottom: 0;
   }
 }
 
