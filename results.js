@@ -29,39 +29,41 @@ const parseResults = (url, results) => {
     throw new Error('results should be an array');
   }
 
-  results = results.map((v, i) => {
-    if (!v || typeof v !== 'object') {
-      throw new Error(`results[${i}] should be an object; got ${v}`);
-    }
-    const copy = {};
-    copy.name = parseShortString(v.name, `results[${i}].name`);
-    if (![true, false, null].includes(v.result)) {
-      throw new Error(
+  results = results
+    .map((v, i) => {
+      if (!v || typeof v !== 'object') {
+        throw new Error(`results[${i}] should be an object; got ${v}`);
+      }
+      const copy = {};
+      copy.name = parseShortString(v.name, `results[${i}].name`);
+      if (![true, false, null].includes(v.result)) {
+        throw new Error(
           `results[${i}].result (${v.name}) should be true/false/null; got ${v.result}`
-      );
-    }
-    copy.result = v.result;
-    if (v.result === null) {
-      copy.message = parseShortString(
+        );
+      }
+      copy.result = v.result;
+      if (v.result === null) {
+        copy.message = parseShortString(
           v.message,
           `results[${i}].message (${v.name})`
-      );
-    }
-    // Copy exposure either from |v.exposure| or |v.info.exposure|.
-    if (v.info) {
-      copy.exposure = parseShortString(
+        );
+      }
+      // Copy exposure either from |v.exposure| or |v.info.exposure|.
+      if (v.info) {
+        copy.exposure = parseShortString(
           v.info.exposure,
           `results[${i}].info.exposure (${v.name})`
-      );
-      // Don't copy |v.info.code|.
-    } else {
-      copy.exposure = parseShortString(
+        );
+        // Don't copy |v.info.code|.
+      } else {
+        copy.exposure = parseShortString(
           v.exposure,
           `results[${i}].exposure (${v.name})`
-      );
-    }
-    return copy;
-  });
+        );
+      }
+      return copy;
+    })
+    .sort((a, b) => (a.name + a.exposure).localeCompare(b.name + b.exposure));
 
   return [url, results];
 };
