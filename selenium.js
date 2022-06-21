@@ -382,7 +382,10 @@ const changeProtocol = (browser, version, page) => {
       break;
   }
 
-  if (browser === 'edge' && version <= 18) {
+  if (
+    (browser === 'edge' && version <= 18) ||
+    (browser === 'firefox' && version <= 52)
+  ) {
     page = page.replace(/,/g, '%2C');
   }
 
