@@ -307,28 +307,25 @@ const buildDriver = async (browser, version, os) => {
           }
         });
       } else if (browser === 'firefox') {
-        if (version >= 54) {
-          capabilities.set('moz:firefoxOptions', {
-            prefs: {
-              'media.navigator.permission.disabled': 1,
-              'media.navigator.streams.fake': true,
-              'permissions.default.microphone': 1,
-              'permissions.default.camera': 1,
-              'permissions.default.geo': 1,
-              'permissions.default.desktop-notification': 1
-            }
-          });
-        } else {
-          capabilities.set('moz:firefoxOptions', {
-            prefs: {
-              'media.navigator.permission.disabled': 1,
-              'media.navigator.streams.fake': true,
-              'permissions.default.microphone': 1,
-              'permissions.default.camera': 1,
-              'permissions.default.geo': 1
-            }
-          });
+        let firefoxPrefs = {
+          'media.navigator.streams.fake': true
+        };
+        if (version >= 53) {
+          firefoxPrefs = {
+            ...firefoxPrefs,
+            'media.navigator.permission.disabled': 1,
+            'permissions.default.camera': 1,
+            'permissions.default.microphone': 1,
+            'permissions.default.geo': 1
+          };
         }
+        if (version >= 54) {
+          firefoxPrefs['permissions.default.desktop-notification'] = 1;
+        }
+
+        capabilities.set('moz:firefoxOptions', {
+          prefs: firefoxPrefs
+        });
       }
 
       // Get console errors from browser
