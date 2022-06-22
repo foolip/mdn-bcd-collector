@@ -1,5 +1,12 @@
 # mdn-bcd-collector Changelog
 
+## v6.0.8
+
+### Commits
+
+- Display browser info at top of homepage ([#2090](https://github.com/foolip/mdn-bcd-collector/pull/2090))
+- Sort results ([#2089](https://github.com/foolip/mdn-bcd-collector/pull/2089))
+
 ## v6.0.7
 
 ### Test Changes
