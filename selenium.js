@@ -29,6 +29,8 @@ import {Listr} from 'listr2';
 import yargs from 'yargs';
 import {hideBin} from 'yargs/helpers';
 
+import './selenium-keepalive.js';
+
 const secrets = await fs.readJson(new URL('./secrets.json', import.meta.url));
 
 const resultsDir = fileURLToPath(
@@ -122,8 +124,8 @@ const filterVersions = (data, earliestVersion, reverse) => {
   );
 };
 
-const getBrowsersToTest = (limitBrowsers, reverse) => {
-  const browsersToTest = {
+const getBrowsersToTest = (limitBrowsers, limitVersion, reverse) => {
+  let browsersToTest = {
     chrome: filterVersions(bcdBrowsers.chrome.releases, '15', reverse),
     edge: filterVersions(bcdBrowsers.edge.releases, '12', reverse),
     firefox: filterVersions(bcdBrowsers.firefox.releases, '4', reverse),
@@ -132,9 +134,17 @@ const getBrowsersToTest = (limitBrowsers, reverse) => {
   };
 
   if (limitBrowsers) {
-    return Object.fromEntries(
+    browsersToTest = Object.fromEntries(
       Object.entries(browsersToTest).filter(([k]) => limitBrowsers.includes(k))
     );
+  }
+
+  if (limitVersion) {
+    for (const browser of Object.keys(browsersToTest)) {
+      browsersToTest[browser] = browsersToTest[browser].filter(
+        (v) => v == limitVersion
+      );
+    }
   }
 
   return browsersToTest;
@@ -299,28 +309,25 @@ const buildDriver = async (browser, version, os) => {
           }
         });
       } else if (browser === 'firefox') {
-        if (version >= 54) {
-          capabilities.set('moz:firefoxOptions', {
-            prefs: {
-              'media.navigator.permission.disabled': 1,
-              'media.navigator.streams.fake': true,
-              'permissions.default.microphone': 1,
-              'permissions.default.camera': 1,
-              'permissions.default.geo': 1,
-              'permissions.default.desktop-notification': 1
-            }
-          });
-        } else {
-          capabilities.set('moz:firefoxOptions', {
-            prefs: {
-              'media.navigator.permission.disabled': 1,
-              'media.navigator.streams.fake': true,
-              'permissions.default.microphone': 1,
-              'permissions.default.camera': 1,
-              'permissions.default.geo': 1
-            }
-          });
+        let firefoxPrefs = {
+          'media.navigator.streams.fake': true
+        };
+        if (version >= 53) {
+          firefoxPrefs = {
+            ...firefoxPrefs,
+            'media.navigator.permission.disabled': 1,
+            'permissions.default.camera': 1,
+            'permissions.default.microphone': 1,
+            'permissions.default.geo': 1
+          };
         }
+        if (version >= 54) {
+          firefoxPrefs['permissions.default.desktop-notification'] = 1;
+        }
+
+        capabilities.set('moz:firefoxOptions', {
+          prefs: firefoxPrefs
+        });
       }
 
       // Get console errors from browser
@@ -375,7 +382,10 @@ const changeProtocol = (browser, version, page) => {
       break;
   }
 
-  if (browser === 'edge' && version <= 18) {
+  if (
+    (browser === 'edge' && version <= 18) ||
+    (browser === 'firefox' && version <= 52)
+  ) {
     page = page.replace(/,/g, '%2C');
   }
 
@@ -481,7 +491,13 @@ const run = async (browser, version, os, ctx, task) => {
   }
 };
 
-const runAll = async (limitBrowsers, oses, concurrent, reverse) => {
+const runAll = async (
+  limitBrowsers,
+  limitVersion,
+  oses,
+  concurrent,
+  reverse
+) => {
   if (!Object.keys(secrets.selenium).length) {
     console.error(
       chalk`{red.bold A Selenium remote WebDriver URL is not defined in secrets.json.  Please define your Selenium remote(s).}`
@@ -493,7 +509,11 @@ const runAll = async (limitBrowsers, oses, concurrent, reverse) => {
     console.warn(chalk`{yellow.bold Test mode: results are not saved.}`);
   }
 
-  const browsersToTest = getBrowsersToTest(limitBrowsers, reverse);
+  const browsersToTest = getBrowsersToTest(
+    limitBrowsers,
+    limitVersion,
+    reverse
+  );
   const tasks = [];
 
   // eslint-disable-next-line guard-for-in
@@ -559,6 +579,13 @@ if (esMain(import.meta)) {
           type: 'string',
           choices: ['chrome', 'edge', 'firefox', 'ie', 'safari']
         })
+        .option('browser-version', {
+          describe:
+            'The specific browser version to test (useful for testing purposes)',
+          alias: 'e',
+          type: 'string',
+          nargs: 1
+        })
         .option('os', {
           describe: 'Specify OS to test',
           alias: 's',
@@ -582,5 +609,11 @@ if (esMain(import.meta)) {
     }
   );
 
-  await runAll(argv.browser, argv.os, argv.concurrent, argv.reverse);
+  await runAll(
+    argv.browser,
+    argv.browserVersion,
+    argv.os,
+    argv.concurrent,
+    argv.reverse
+  );
 }
