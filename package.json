@@ -50,7 +50,7 @@
     "slugify": "1.6.5",
     "ua-parser-js": "1.0.2",
     "unique-string": "3.0.0",
-    "winston": "3.7.2",
+    "winston": "3.8.0",
     "yargs": "17.5.1"
   },
   "devDependencies": {
