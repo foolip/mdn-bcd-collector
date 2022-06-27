@@ -30,7 +30,8 @@
     "find-missing-features": "node find-missing-features.js",
     "find-missing-results": "ts-node find-missing-results.ts",
     "add-new-bcd": "node add-new-bcd.js",
-    "release": "node release.js"
+    "release": "node release.js",
+    "result-stats": "ts-node result-stats.ts"
   },
   "dependencies": {
     "@google-cloud/logging-winston": "5.1.0",
