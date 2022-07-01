@@ -70,7 +70,7 @@
     "@types/yargs": "^17.0.10",
     "@typescript-eslint/eslint-plugin": "^5.30.0",
     "@webref/css": "4.3.0",
-    "@webref/idl": "3.12.2",
+    "@webref/idl": "3.12.3",
     "c8": "7.11.3",
     "chai": "4.3.6",
     "chai-as-promised": "7.1.1",
