@@ -1,5 +1,37 @@
 # mdn-bcd-collector Changelog
 
+## v6.0.8
+
+### Test Changes
+
+#### Added
+
+- api.CSPViolationReportBody.toJSON
+- api.Element.checkVisibility
+- api.IdentityCredential
+- api.PublicKeyCredential.isConditionalMediationAvailable
+- api.PublicKeyCredential.parseCreationOptionsFromJSON
+- api.PublicKeyCredential.parseRequestOptionsFromJSON
+- api.PublicKeyCredential.toJSON
+- api.WorkerNavigator.hid
+
+#### Removed
+
+- api.Element.isVisible
+- api.FederatedCredential.login
+- api.FederatedCredential.logout
+- api.FederatedCredential.logoutRPs
+- api.FederatedCredential.revoke
+- api.MediaRecorderErrorEvent
+- css.properties.object-overflow
+
+### Commits
+
+- Add "results-stats" script to get data about results files ([#2102](https://github.com/foolip/mdn-bcd-collector/pull/2102))
+- Various Selenium script tweaks ([#2091](https://github.com/foolip/mdn-bcd-collector/pull/2091))
+- Display browser info at top of homepage ([#2090](https://github.com/foolip/mdn-bcd-collector/pull/2090))
+- Sort results ([#2089](https://github.com/foolip/mdn-bcd-collector/pull/2089))
+
 ## v6.0.7
 
 ### Test Changes
