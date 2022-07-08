@@ -1,5 +1,15 @@
 # mdn-bcd-collector Changelog
 
+## v6.0.9
+
+### Test Changes
+
+#### Removed
+
+- api.AnimationTimeline.phase
+
+### Commits
+
 ## v6.0.8
 
 ### Test Changes
