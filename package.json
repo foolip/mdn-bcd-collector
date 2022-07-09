@@ -27,7 +27,7 @@
     "test": "npm run format && npm run unittest",
     "selenium": "node selenium.js",
     "update-bcd": "ts-node update-bcd.ts",
-    "find-missing-features": "node find-missing-features.js",
+    "find-missing-features": "ts-node find-missing-features.ts",
     "find-missing-results": "ts-node find-missing-results.ts",
     "add-new-bcd": "node add-new-bcd.js",
     "release": "node release.js",
