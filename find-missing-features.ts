@@ -1,10 +1,13 @@
 //
-// mdn-bcd-collector: find-missing-features.js
+// mdn-bcd-collector: find-missing-features.ts
 // Script to find features that are in the collector or BCD but not the other
 //
 // © Gooborg Studios, Google LLC
 // See LICENSE.txt for copyright details
 //
+
+import {CompatData, CompatStatement} from '@mdn/browser-compat-data/types';
+import {Tests} from './types/types.js';
 
 import {fileURLToPath} from 'node:url';
 
@@ -13,15 +16,15 @@ import fs from 'fs-extra';
 import yargs from 'yargs';
 import {hideBin} from 'yargs/helpers';
 
-const traverseFeatures = (obj, path, includeAliases) => {
-  const features = [];
+const traverseFeatures = (obj: any, path: string, includeAliases: boolean) => {
+  const features: string[] = [];
 
   for (const id of Object.keys(obj)) {
     if (!obj[id] || typeof obj[id] !== 'object') {
       continue;
     }
 
-    const compat = obj[id].__compat;
+    const compat: CompatStatement = obj[id].__compat;
     if (compat) {
       features.push(`${path}${id}`);
 
@@ -62,8 +65,8 @@ const traverseFeatures = (obj, path, includeAliases) => {
   return features;
 };
 
-const findMissing = (entries, allEntries) => {
-  const missingEntries = [];
+const findMissing = (entries: string[], allEntries: string[]) => {
+  const missingEntries: string[] = [];
 
   for (const entry of allEntries) {
     if (!entries.includes(entry)) {
@@ -75,10 +78,10 @@ const findMissing = (entries, allEntries) => {
 };
 
 const getMissing = (
-  bcd,
-  tests,
+  bcd: CompatData,
+  tests: Tests,
   direction = 'collector-from-bcd',
-  category = [],
+  category: string[] = [],
   includeAliases = false
 ) => {
   const filterCategory = (item) => {
@@ -112,8 +115,8 @@ const getMissing = (
 };
 
 /* c8 ignore start */
-const main = (bcd, tests) => {
-  const {argv} = yargs(hideBin(process.argv)).command(
+const main = (bcd: CompatData, tests: Tests) => {
+  const {argv}: any = yargs(hideBin(process.argv)).command(
     '$0 [--direction]',
     'Find missing entries between BCD and the collector tests',
     (yargs) => {

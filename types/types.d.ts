@@ -12,6 +12,13 @@ export type InternalSupportStatement = SupportStatement | 'mirror';
 
 export type Exposure = 'Window' | 'Worker' | 'SharedWorker' | 'ServiceWorker';
 
+export interface Test {
+  code: string;
+  exposure: Exposure[];
+}
+
+export type Tests = Record<string, Test>;
+
 export type TestResultValue = boolean | null;
 
 export interface TestResult {
