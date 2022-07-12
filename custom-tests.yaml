@@ -1783,8 +1783,8 @@ api:
       var instance = el.x;
   SVGAnimatedNumber:
     __base: |-
-      <%api.SVGGeometryElement:el%>
-      var instance = el.pathLength;
+      <%api.SVGStopElement:el%>
+      var instance = el.offset;
   SVGAnimatedNumberList:
     __base: |-
       <%api.SVGFEConvolveMatrixElement:el%>
