@@ -215,7 +215,7 @@ const getGitChanges = async (ctx) => {
   ).split('\n');
   ctx.commits = commits
     .filter((summary) => !summary.startsWith('Bump '))
-    .map((summary) => `- ${summary.replace('<', '&lt;').replace('>', '&gt;')}`)
+    .map((summary) => `- ${summary.replaceAll('<', '&lt;').replaceAll('>', '&gt;')}`)
     .map((summary) =>
       // Link to pull requests
       summary.replace(
