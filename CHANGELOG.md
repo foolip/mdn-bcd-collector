@@ -1,5 +1,22 @@
 # mdn-bcd-collector Changelog
 
+## v6.0.9
+
+### Test Changes
+
+#### Removed
+
+- api.AnimationTimeline.phase
+
+#### Changed
+
+- api.SVGAnimatedNumber
+
+### Commits
+
+- Use &lt;stop&gt; instead of <path> for SVGAnimatedNumber custom test ([#2140](https://github.com/foolip/mdn-bcd-collector/pull/2140))
+- Convert find-missing-features to TypeScript ([#2137](https://github.com/foolip/mdn-bcd-collector/pull/2137))
+
 ## v6.0.8
 
 ### Test Changes
