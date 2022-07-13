@@ -10,6 +10,7 @@
 
 #### Changed
 
+- api.CryptoKey
 - api.SVGAnimatedNumber
 
 ### Commits
