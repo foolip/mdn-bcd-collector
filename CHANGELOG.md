@@ -1,5 +1,25 @@
 # mdn-bcd-collector Changelog
 
+## v6.0.9
+
+### Test Changes
+
+#### Removed
+
+- api.AnimationTimeline.phase
+
+#### Changed
+
+- api.CryptoKey
+- api.SVGAnimatedNumber
+
+### Commits
+
+- Fix the custom CryptoKey tests ([#2143](https://github.com/foolip/mdn-bcd-collector/pull/2143))
+- Replace all &lt; and &gt; in release script ([#2142](https://github.com/foolip/mdn-bcd-collector/pull/2142))
+- Use &lt;stop&gt; instead of &lt;path&gt; for SVGAnimatedNumber custom test ([#2140](https://github.com/foolip/mdn-bcd-collector/pull/2140))
+- Convert find-missing-features to TypeScript ([#2137](https://github.com/foolip/mdn-bcd-collector/pull/2137))
+
 ## v6.0.8
 
 ### Test Changes
