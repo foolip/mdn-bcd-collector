@@ -29,6 +29,8 @@ const tests = Object.keys(
   await fs.readJson(new URL('./tests.json', import.meta.url))
 );
 
+const statuses = {Supported: 'green', Unsupported: 'red', Unknown: 'yellow'};
+
 const dedupeArray = (array: Array<any>): Array<any> => {
   return array.filter((item, index) => array.indexOf(item) === index);
 };
@@ -81,7 +83,7 @@ const loadFile = async (file: string): Promise<Report | undefined> => {
   return data;
 };
 
-const getStats = (data: Report): any => {
+const getStats = (data: Report, featureQuery: string[]): any => {
   const testResults = Object.values(data.results).flat();
   const testedFeatures = dedupeArray(testResults.map((r) => r.name));
 
@@ -99,6 +101,26 @@ const getStats = (data: Report): any => {
       .map((r) => r.name)
   );
 
+  const featuresQueried: any[] = [];
+
+  if (featureQuery) {
+    for (const f of featureQuery) {
+      const featuresFound = testResults
+        .filter((r) => r.name === f || r.name.startsWith(`${f}.`))
+        .map((r) => ({
+          ...r,
+          status: r.result ?
+            'Supported' :
+            r.result === false ?
+            'Unsupported' :
+            'Unknown'
+        }));
+      featuresQueried.push(
+        ...featuresFound.sort((a, b) => a.name.localeCompare(b.name))
+      );
+    }
+  }
+
   return {
     version: data.__version,
     browser: parseUA(data.userAgent, bcd.browsers),
@@ -109,13 +131,12 @@ const getStats = (data: Report): any => {
       unsupported: unsupportedFeatures,
       unknown: unknownFeatures,
       missing: findMissing(testedFeatures, tests).missingEntries
-    }
+    },
+    featuresQueried
   };
 };
 
 const printStats = (stats: any): void => {
-  console.log(stats);
-
   console.log(
     chalk` -=- Statistics for {bold ${stats.browser.browser.name} ${stats.browser.version}} (${stats.browser.os.name} ${stats.browser.os.version}) -=-`
   );
@@ -140,37 +161,51 @@ const printStats = (stats: any): void => {
   const totalTests = stats.testResults.total;
   console.log(chalk`Tests Run: {bold ${totalTests}}`);
 
-  for (const statusName of ['Supported', 'Unsupported', 'Unknown']) {
-    const status = statusName.toLowerCase();
+  for (const [name, color] of Object.entries(statuses)) {
+    const status = name.toLowerCase();
     const testResults = stats.testResults[status].length;
     console.log(
-      chalk` - ${statusName}: {bold ${testResults}} features ({bold ${percentage(
+      chalk` - {${color} ${name}: {bold ${testResults}} features ({bold ${percentage(
         testResults,
         totalTests
-      )}} of tested / {bold ${percentage(testResults, tests.length)}} of total)`
+      )}} of tested / {bold ${percentage(
+        testResults,
+        tests.length
+      )}} of total)}`
     );
   }
 
   console.log(
-    chalk` - Missing: {bold ${
+    chalk` - {gray Missing: {bold ${
       stats.testResults.missing.length
     }} features ({bold ${percentage(
       stats.testResults.missing.length,
       tests.length
-    )}})`
+    )}})}`
   );
+
+  if (stats.featuresQueried.length) {
+    console.log('Feature Query:');
+    for (const feature of stats.featuresQueried) {
+      console.log(
+        chalk` - ${feature.name} ({bold ${feature.exposure}} exposure): {${
+          statuses[feature.status] || 'bold'
+        } ${feature.status}}`
+      );
+    }
+  }
 
   console.log('\n');
 };
 
-const main = async (files: string[]): Promise<void> => {
+const main = async (files: string[], features: string[]): Promise<void> => {
   for (const file of files) {
     const data = await loadFile(file);
     if (!data) {
       continue;
     }
 
-    const stats = getStats(data);
+    const stats = getStats(data, features);
     printStats(stats);
   }
 };
@@ -181,14 +216,21 @@ if (esMain(import.meta)) {
     '$0 <files..>',
     '',
     (yargs) => {
-      yargs.positional('files', {
-        describe: 'The result file(s) to generate statistics for',
-        type: 'string',
-        array: true
-      });
+      yargs
+        .positional('files', {
+          describe: 'The result file(s) to generate statistics for',
+          type: 'string',
+          array: true
+        })
+        .option('feature', {
+          alias: 'f',
+          describe: 'A specific feature identifier to query support for',
+          type: 'string',
+          array: true
+        });
     }
   );
 
-  await main(argv.files);
+  await main(argv.files, argv.feature);
 }
 /* c8 ignore stop */
