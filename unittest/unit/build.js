@@ -64,7 +64,7 @@ describe('build', () => {
       it('member (default)', () => {
         assert.equal(
           getCustomTestAPI('foo', 'baz'),
-          "(function() {\n  var instance = 1;\n  return instance && 'baz' in instance;\n})();"
+          "(function() {\n  var instance = 1;\n  return !!instance && 'baz' in instance;\n})();"
         );
       });
 
@@ -106,21 +106,21 @@ describe('build', () => {
       it('interface', () => {
         assert.equal(
           getCustomTestAPI('promise'),
-          '(function() {\n  var promise = somePromise();\n  return promise.then(function(instance) {\n    return !!instance;\n  });\n})();'
+          '(function() {\n  var promise = somePromise();\n  if (!promise) {\n    return false;\n  }\n  return promise.then(function(instance) {\n    return !!instance;\n  });\n})();'
         );
       });
 
       it('member', () => {
         assert.equal(
           getCustomTestAPI('promise', 'bar'),
-          "(function() {\n  var promise = somePromise();\n  return promise.then(function(instance) {\n    return instance && 'bar' in instance;\n  });\n})();"
+          "(function() {\n  var promise = somePromise();\n  if (!promise) {\n    return false;\n  }\n  return promise.then(function(instance) {\n    return !!instance && 'bar' in instance;\n  });\n})();"
         );
       });
 
       it('interface with import', () => {
         assert.equal(
           getCustomTestAPI('newpromise'),
-          '(function() {\n  var p = somePromise();\n  if (!p) {\n    return false;\n  }\n  var promise = p.then(function() {});\n  return promise.then(function(instance) {\n    return !!instance;\n  });\n})();'
+          '(function() {\n  var p = somePromise();\n  if (!p) {\n    return false;\n  }\n  var promise = p.then(function() {});\n  if (!promise) {\n    return false;\n  }\n  return promise.then(function(instance) {\n    return !!instance;\n  });\n})();'
         );
       });
     });
@@ -136,7 +136,7 @@ describe('build', () => {
       it('member', () => {
         assert.equal(
           getCustomTestAPI('callback', 'bar'),
-          "(function() {\n  function onsuccess(res) {\n    callback(res.result);\n  }\n  function callback(instance) {\n    try {\n      success(instance && 'bar' in instance);\n    } catch(e) {\n      fail(e);\n    }\n  };\n  return 'callback';\n})();"
+          "(function() {\n  function onsuccess(res) {\n    callback(res.result);\n  }\n  function callback(instance) {\n    try {\n      success(!!instance && 'bar' in instance);\n    } catch(e) {\n      fail(e);\n    }\n  };\n  return 'callback';\n})();"
         );
       });
 
@@ -281,7 +281,10 @@ describe('build', () => {
 
     it('namespace', () => {
       const test = {property: 'log', owner: 'console'};
-      assert.equal(compileTestCode(test), '"log" in console');
+      assert.equal(
+        compileTestCode(test),
+        '"console" in self && "log" in console'
+      );
     });
 
     it('constructor', () => {
@@ -301,11 +304,7 @@ describe('build', () => {
     it('main', () => {
       const rawTest = {
         raw: {
-          code: [
-            {property: 'Document', owner: 'self'},
-            {property: 'body', owner: `Document.prototype`}
-          ],
-          combinator: '&&'
+          code: {property: 'body', owner: `Document.prototype`}
         },
         resources: {
           'audio-blip': {
@@ -799,7 +798,7 @@ describe('build', () => {
           exposure: ['Window']
         },
         'api.Attr.name': {
-          code: '"name" in Attr.prototype',
+          code: '"Attr" in self && "name" in Attr.prototype',
           exposure: ['Window']
         }
       });
@@ -818,7 +817,7 @@ describe('build', () => {
           exposure: ['Window']
         },
         'api.Node.contains': {
-          code: '"contains" in Node.prototype',
+          code: '"Node" in self && "contains" in Node.prototype',
           exposure: ['Window']
         }
       });
@@ -838,7 +837,7 @@ describe('build', () => {
           exposure: ['Window']
         },
         'api.MediaSource.isTypeSupported': {
-          code: '"isTypeSupported" in MediaSource',
+          code: '"MediaSource" in self && "isTypeSupported" in MediaSource',
           exposure: ['Window']
         }
       });
@@ -873,7 +872,7 @@ describe('build', () => {
           exposure: ['Window']
         },
         'api.Foo.add_event': {
-          code: '"onadd" in Foo.prototype',
+          code: '"Foo" in self && "onadd" in Foo.prototype',
           exposure: ['Window']
         }
       });
@@ -914,7 +913,7 @@ describe('build', () => {
           exposure: ['Window']
         },
         'api.ANGLE_instanced_arrays.drawElementsInstancedANGLE': {
-          code: "(function() {\n  var canvas = document.createElement('canvas');\n  var gl = canvas.getContext('webgl');\n  var instance = gl.getExtension('ANGLE_instanced_arrays');\n  return instance && 'drawElementsInstancedANGLE' in instance;\n})();",
+          code: "(function() {\n  var canvas = document.createElement('canvas');\n  var gl = canvas.getContext('webgl');\n  var instance = gl.getExtension('ANGLE_instanced_arrays');\n  return !!instance && 'drawElementsInstancedANGLE' in instance;\n})();",
           exposure: ['Window']
         },
         'api.Document': {
@@ -926,7 +925,7 @@ describe('build', () => {
           exposure: ['Window']
         },
         'api.Document.loaded': {
-          code: '"loaded" in Document.prototype',
+          code: '"Document" in self && "loaded" in Document.prototype',
           exposure: ['Window']
         },
         'api.Document.loaded.loaded_is_boolean': {
@@ -1002,19 +1001,19 @@ describe('build', () => {
           exposure: ['Window']
         },
         'api.DoubleList.entries': {
-          code: '"entries" in DoubleList.prototype',
+          code: '"DoubleList" in self && "entries" in DoubleList.prototype',
           exposure: ['Window']
         },
         'api.DoubleList.forEach': {
-          code: '"forEach" in DoubleList.prototype',
+          code: '"DoubleList" in self && "forEach" in DoubleList.prototype',
           exposure: ['Window']
         },
         'api.DoubleList.keys': {
-          code: '"keys" in DoubleList.prototype',
+          code: '"DoubleList" in self && "keys" in DoubleList.prototype',
           exposure: ['Window']
         },
         'api.DoubleList.values': {
-          code: '"values" in DoubleList.prototype',
+          code: '"DoubleList" in self && "values" in DoubleList.prototype',
           exposure: ['Window']
         }
       });
@@ -1037,43 +1036,43 @@ describe('build', () => {
           exposure: ['Window']
         },
         'api.DoubleMap.clear': {
-          code: '"clear" in DoubleMap.prototype',
+          code: '"DoubleMap" in self && "clear" in DoubleMap.prototype',
           exposure: ['Window']
         },
         'api.DoubleMap.delete': {
-          code: '"delete" in DoubleMap.prototype',
+          code: '"DoubleMap" in self && "delete" in DoubleMap.prototype',
           exposure: ['Window']
         },
         'api.DoubleMap.entries': {
-          code: '"entries" in DoubleMap.prototype',
+          code: '"DoubleMap" in self && "entries" in DoubleMap.prototype',
           exposure: ['Window']
         },
         'api.DoubleMap.forEach': {
-          code: '"forEach" in DoubleMap.prototype',
+          code: '"DoubleMap" in self && "forEach" in DoubleMap.prototype',
           exposure: ['Window']
         },
         'api.DoubleMap.get': {
-          code: '"get" in DoubleMap.prototype',
+          code: '"DoubleMap" in self && "get" in DoubleMap.prototype',
           exposure: ['Window']
         },
         'api.DoubleMap.has': {
-          code: '"has" in DoubleMap.prototype',
+          code: '"DoubleMap" in self && "has" in DoubleMap.prototype',
           exposure: ['Window']
         },
         'api.DoubleMap.keys': {
-          code: '"keys" in DoubleMap.prototype',
+          code: '"DoubleMap" in self && "keys" in DoubleMap.prototype',
           exposure: ['Window']
         },
         'api.DoubleMap.set': {
-          code: '"set" in DoubleMap.prototype',
+          code: '"DoubleMap" in self && "set" in DoubleMap.prototype',
           exposure: ['Window']
         },
         'api.DoubleMap.size': {
-          code: '"size" in DoubleMap.prototype',
+          code: '"DoubleMap" in self && "size" in DoubleMap.prototype',
           exposure: ['Window']
         },
         'api.DoubleMap.values': {
-          code: '"values" in DoubleMap.prototype',
+          code: '"DoubleMap" in self && "values" in DoubleMap.prototype',
           exposure: ['Window']
         }
       });
@@ -1096,39 +1095,39 @@ describe('build', () => {
           exposure: ['Window']
         },
         'api.DoubleSet.add': {
-          code: '"add" in DoubleSet.prototype',
+          code: '"DoubleSet" in self && "add" in DoubleSet.prototype',
           exposure: ['Window']
         },
         'api.DoubleSet.clear': {
-          code: '"clear" in DoubleSet.prototype',
+          code: '"DoubleSet" in self && "clear" in DoubleSet.prototype',
           exposure: ['Window']
         },
         'api.DoubleSet.delete': {
-          code: '"delete" in DoubleSet.prototype',
+          code: '"DoubleSet" in self && "delete" in DoubleSet.prototype',
           exposure: ['Window']
         },
         'api.DoubleSet.entries': {
-          code: '"entries" in DoubleSet.prototype',
+          code: '"DoubleSet" in self && "entries" in DoubleSet.prototype',
           exposure: ['Window']
         },
         'api.DoubleSet.forEach': {
-          code: '"forEach" in DoubleSet.prototype',
+          code: '"DoubleSet" in self && "forEach" in DoubleSet.prototype',
           exposure: ['Window']
         },
         'api.DoubleSet.has': {
-          code: '"has" in DoubleSet.prototype',
+          code: '"DoubleSet" in self && "has" in DoubleSet.prototype',
           exposure: ['Window']
         },
         'api.DoubleSet.keys': {
-          code: '"keys" in DoubleSet.prototype',
+          code: '"DoubleSet" in self && "keys" in DoubleSet.prototype',
           exposure: ['Window']
         },
         'api.DoubleSet.size': {
-          code: '"size" in DoubleSet.prototype',
+          code: '"DoubleSet" in self && "size" in DoubleSet.prototype',
           exposure: ['Window']
         },
         'api.DoubleSet.values': {
-          code: '"values" in DoubleSet.prototype',
+          code: '"DoubleSet" in self && "values" in DoubleSet.prototype',
           exposure: ['Window']
         }
       });
@@ -1191,7 +1190,7 @@ describe('build', () => {
           exposure: ['Window']
         },
         'api.Number.toString': {
-          code: '"toString" in Number.prototype',
+          code: '"Number" in self && "toString" in Number.prototype',
           exposure: ['Window']
         }
       });
@@ -1211,11 +1210,11 @@ describe('build', () => {
           exposure: ['Window']
         },
         'api.HTMLAreaElement.href': {
-          code: '"href" in HTMLAreaElement.prototype',
+          code: '"HTMLAreaElement" in self && "href" in HTMLAreaElement.prototype',
           exposure: ['Window']
         },
         'api.HTMLAreaElement.toString': {
-          code: '"toString" in HTMLAreaElement.prototype',
+          code: '"HTMLAreaElement" in self && "toString" in HTMLAreaElement.prototype',
           exposure: ['Window']
         }
       });
@@ -1236,7 +1235,7 @@ describe('build', () => {
           exposure: ['Window']
         },
         'api.AudioNode.disconnect': {
-          code: '"disconnect" in AudioNode.prototype',
+          code: '"AudioNode" in self && "disconnect" in AudioNode.prototype',
           exposure: ['Window']
         }
       });
@@ -1255,7 +1254,7 @@ describe('build', () => {
           exposure: ['Window']
         },
         'api.CSS.paintWorklet': {
-          code: '"paintWorklet" in CSS',
+          code: '"CSS" in self && "paintWorklet" in CSS',
           exposure: ['Window']
         }
       });
@@ -1274,7 +1273,7 @@ describe('build', () => {
           exposure: ['Window']
         },
         'api.CSS.supports': {
-          code: '"supports" in CSS',
+          code: '"CSS" in self && "supports" in CSS',
           exposure: ['Window']
         }
       });
@@ -1341,7 +1340,7 @@ describe('build', () => {
           exposure: ['Window']
         },
         'api.Dummy.imadumdum': {
-          code: '"imadumdum" in Dummy.prototype',
+          code: '"Dummy" in self && "imadumdum" in Dummy.prototype',
           exposure: ['Window']
         },
         'api.atob': {
@@ -1543,7 +1542,7 @@ describe('build', () => {
         exposure: ['Window']
       },
       'javascript.builtins.AggregateError.AggregateError': {
-        code: "(function() {\n  new AggregateError([new Error('message')]); return true;\n})();",
+        code: '(function() {\n  if (!("AggregateError" in self)) {\n    return false;\n  }\n  var instance = new AggregateError([new Error(\'message\')]);\n  return !!instance;\n})();',
         exposure: ['Window']
       },
       'javascript.builtins.Array': {
@@ -1551,19 +1550,19 @@ describe('build', () => {
         exposure: ['Window']
       },
       'javascript.builtins.Array.@@iterator': {
-        code: 'Array.prototype.hasOwnProperty(Symbol.iterator)',
+        code: '"Array" in self && Array.prototype.hasOwnProperty(Symbol.iterator)',
         exposure: ['Window']
       },
       'javascript.builtins.Array.@@species': {
-        code: 'Array.hasOwnProperty(Symbol.species)',
+        code: '"Array" in self && Array.hasOwnProperty(Symbol.species)',
         exposure: ['Window']
       },
       'javascript.builtins.Array.Array': {
-        code: '(function() {\n  new Array(2); return true;\n})();',
+        code: '(function() {\n  if (!("Array" in self)) {\n    return false;\n  }\n  var instance = new Array(2);\n  return !!instance;\n})();',
         exposure: ['Window']
       },
       'javascript.builtins.Array.at': {
-        code: 'Array.prototype.hasOwnProperty("at")',
+        code: '"Array" in self && Array.prototype.hasOwnProperty("at")',
         exposure: ['Window']
       },
       'javascript.builtins.Atomics': {
@@ -1571,7 +1570,7 @@ describe('build', () => {
         exposure: ['Window']
       },
       'javascript.builtins.Atomics.add': {
-        code: 'Atomics.hasOwnProperty("add")',
+        code: '"Atomics" in self && Atomics.hasOwnProperty("add")',
         exposure: ['Window']
       },
       'javascript.builtins.BigInt': {
@@ -1579,7 +1578,7 @@ describe('build', () => {
         exposure: ['Window']
       },
       'javascript.builtins.BigInt.BigInt': {
-        code: '(function() {\n   BigInt(1); return true;\n})();',
+        code: '(function() {\n  if (!("BigInt" in self)) {\n    return false;\n  }\n  var instance =  BigInt(1);\n  return !!instance;\n})();',
         exposure: ['Window']
       }
     });

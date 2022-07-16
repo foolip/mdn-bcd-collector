@@ -153,7 +153,8 @@
           "Arguments can't be empty",
           'undefined is not an object',
           'must be an object',
-          'WRONG_ARGUMENTS_ERR'
+          'WRONG_ARGUMENTS_ERR',
+          'are both null'
         ])
       ) {
         // If it failed to construct and it's not illegal or just needs
@@ -251,8 +252,8 @@
   }
 
   function testCSSProperty(name) {
-    if ("CSS" in window && window.CSS.supports) {
-      return window.CSS.supports(name, "inherit");
+    if ('CSS' in window && window.CSS.supports) {
+      return window.CSS.supports(name, 'inherit');
     }
 
     var attrs = [name];
@@ -268,14 +269,14 @@
   }
 
   function testCSSPropertyValue(name, value) {
-    if ("CSS" in window && window.CSS.supports) {
+    if ('CSS' in window && window.CSS.supports) {
       return window.CSS.supports(name, value);
     }
 
     var div = document.createElement('div');
-    div.style[name] = "";
+    div.style[name] = '';
     div.style[name] = value;
-    return div.style.getPropertyValue(name) !== "";
+    return div.style.getPropertyValue(name) !== '';
   }
 
   // Once a test is evaluated and run, it calls this function with the result.

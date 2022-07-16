@@ -91,14 +91,10 @@ const getStats = (data: Report, featureQuery: string[]): any => {
     testResults.filter((r) => r.result).map((r) => r.name)
   );
   const unsupportedFeatures = dedupeArray(
-    testResults
-      .filter((r) => r.result === false && !supportedFeatures.includes(r.name))
-      .map((r) => r.name)
+    testResults.filter((r) => r.result === false).map((r) => r.name)
   );
   const unknownFeatures = dedupeArray(
-    testResults
-      .filter((r) => r.result === null && !unsupportedFeatures.includes(r.name))
-      .map((r) => r.name)
+    testResults.filter((r) => r.result === null).map((r) => r.name)
   );
 
   const featuresQueried: any[] = [];
