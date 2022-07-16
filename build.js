@@ -241,7 +241,7 @@ const compileTestCode = (test) => {
   if (test.inherit) {
     return `Object.prototype.hasOwnProperty.call(${test.owner}, "${property}")`;
   }
-  if (test.owner === 'self') {
+  if (test.owner === 'self' || test.owner === 'document.body.style') {
     return `"${property}" in ${test.owner}`;
   }
   return `"${test.owner.replace(
