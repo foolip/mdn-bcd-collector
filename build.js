@@ -97,7 +97,10 @@ const getCustomTestAPI = (name, member, type) => {
         test = testbase ?
           testbase +
             (promise ?
-              `return promise.then(function(instance) {
+              `if (!promise) {
+    return false;
+  }
+  return promise.then(function(instance) {
     return ${returnValue};
   });` :
               callback ?
@@ -127,11 +130,14 @@ const getCustomTestAPI = (name, member, type) => {
           // auto-generated custom tests
           test = false;
         } else {
-          const returnValue = `instance && '${member}' in instance`;
+          const returnValue = `!!instance && '${member}' in instance`;
           test = testbase ?
             testbase +
               (promise ?
-                `return promise.then(function(instance) {
+                `if (!promise) {
+    return false;
+  }
+  return promise.then(function(instance) {
     return ${returnValue};
   });` :
                 callback ?
@@ -235,7 +241,13 @@ const compileTestCode = (test) => {
   if (test.inherit) {
     return `Object.prototype.hasOwnProperty.call(${test.owner}, "${property}")`;
   }
-  return `"${property}" in ${test.owner}`;
+  if (test.owner === 'self') {
+    return `"${property}" in ${test.owner}`;
+  }
+  return `"${test.owner.replace(
+    '.prototype',
+    ''
+  )}" in self && "${property}" in ${test.owner}`;
 };
 
 const compileTest = (test) => {
@@ -680,7 +692,7 @@ const buildIDLMemberTests = (
         case 'symbol':
           // eslint-disable-next-line no-case-declarations
           const symbol = member.name.replace('@@', '');
-          expr = {property: `Symbol.${symbol}`, owner: `${iface.name}`};
+          expr = {property: `Symbol.${symbol}`, owner: iface.name};
           break;
       }
     }
@@ -899,7 +911,19 @@ const buildJS = (customJS) => {
 
       const owner =
         parts.length > 1 ? parts.slice(0, parts.length - 1).join('.') : 'self';
-      const code = `${owner}.hasOwnProperty(${property})`;
+
+      let code = `${owner}.hasOwnProperty(${property})`;
+
+      if (owner !== 'self') {
+        let mainOwner = owner.replace('.prototype', '');
+        if (owner.startsWith('Intl')) {
+          mainOwner = 'Intl';
+        }
+        if (owner.startsWith('WebAssembly')) {
+          mainOwner = 'WebAssembly';
+        }
+        code = `"${mainOwner}" in self && ` + code;
+      }
 
       tests[bcdPath] = compileTest({
         raw: {code},
@@ -918,7 +942,17 @@ const buildJS = (customJS) => {
       ].join('.');
       const expr = `${path}(${extras.ctor_args})`;
       const maybeNew = extras.ctor_new !== false ? 'new' : '';
-      const code = compileCustomTest(`${maybeNew} ${expr}; return true;`);
+      const code = compileCustomTest(`if (!("${
+        path.startsWith('Intl') ?
+          'Intl' :
+          path.startsWith('WebAssembly') ?
+          'WebAssembly' :
+          path
+      }" in self)) {
+    return false;
+  }
+  var instance = ${maybeNew} ${expr};
+  return !!instance;`);
       tests[ctorPath] = compileTest({
         raw: {code},
         exposure: ['Window']

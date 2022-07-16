@@ -309,6 +309,10 @@ api:
       var instance = canvas.createPattern(document.getElementById('resource-image-black'), 'repeat');
   CanvasRenderingContext2D:
     __base: |-
+      if (!('document' in self)) {
+        // XXX Implement worker tests for CanvasRenderingContext2D
+        return {result: null, message: 'Testing CanvasRenderingContext2D in workers is not yet implemented'};
+      }
       var canvas = document.createElement('canvas');
       if (!canvas) {
         return false;
@@ -880,7 +884,9 @@ api:
   History:
     __base: var instance = history;
   HTMLAllCollection:
-    __base: var instance = document.all;
+    __base: |-
+      // XXX document.all seems to be falsy, at least in Chrome
+      var instance = document.all;
     __test: return bcd.testObjectName(instance, 'HTMLAllCollection');
   HTMLAnchorElement:
     __base: var instance = document.createElement('a');
@@ -1187,7 +1193,12 @@ api:
   ImageBitmap:
     __resources:
       - image-black
-    __base: var instance = createImageBitmap(document.getElementById('resource-image-black'));
+    __base: |-
+      if (!('document' in self)) {
+        // XXX Implement worker tests for ImageBitmap
+        return {result: null, message: 'Testing ImageBitmap in workers is not yet implemented'};
+      }
+      var instance = createImageBitmap(document.getElementById('resource-image-black'));
   ImageCapture:
     __base: |-
       <%api.MediaDevices:mediaDevices%>
@@ -1257,6 +1268,9 @@ api:
       if (!reusableInstances.audioContext) {
         return false;
       }
+      if (!('createMediaElementSource' in reusableInstances.audioContext)) {
+        return false;
+      }
       var instance = reusableInstances.audioContext.createMediaElementSource(document.getElementById('resource-audio-blip'));
   MediaEncryptedEvent:
     __base: |-
@@ -1287,7 +1301,11 @@ api:
   MediaSession:
     __base: var instance = navigator.mediaSession;
   MediaSource:
-    __base: var instance = new MediaSource();
+    __base: |-
+      if (!('MediaSource' in self)) {
+        return false;
+      }
+      var instance = new MediaSource();
     isTypeSupported: return 'isTypeSupported' in MediaSource;
   MediaStream:
     __base: |-
@@ -1328,6 +1346,9 @@ api:
     __base: |-
       <%api.MediaStream:mediaStream%>
       if (!reusableInstances.audioContext) {
+        return false;
+      }
+      if (!('createMediaStreamTrackSource' in reusableInstances.audioContext)) {
         return false;
       }
       var promise = mediaStream.then(function(ms) {
@@ -1418,10 +1439,11 @@ api:
       var instance = new Notification('');
   NotificationEvent:
     __base: |-
+      <%api.Notification:notification%>
       if (!('NotificationEvent' in self)) {
         return false;
       }
-      var instance = new NotificationEvent('notificationclick');
+      var instance = new NotificationEvent('notificationclick', {notification});
   OfflineAudioCompletionEvent:
     __resources:
       - audioContext
@@ -2330,6 +2352,9 @@ api:
       try {
         instance = new WebGLContextEvent('webglcontextlost');
       } catch(e) {
+        if (!('document' in self)) {
+          return false;
+        }
         try {
           instance = document.createEvent('WebGLContextEvent');
         } catch(e) {
