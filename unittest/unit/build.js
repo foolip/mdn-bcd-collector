@@ -64,7 +64,7 @@ describe('build', () => {
       it('member (default)', () => {
         assert.equal(
           getCustomTestAPI('foo', 'baz'),
-          "(function() {\n  var instance = 1;\n  return 'baz' in instance;\n})();"
+          "(function() {\n  var instance = 1;\n  return instance && 'baz' in instance;\n})();"
         );
       });
 
@@ -113,7 +113,7 @@ describe('build', () => {
       it('member', () => {
         assert.equal(
           getCustomTestAPI('promise', 'bar'),
-          "(function() {\n  var promise = somePromise();\n  return promise.then(function(instance) {\n    return 'bar' in instance;\n  });\n})();"
+          "(function() {\n  var promise = somePromise();\n  return promise.then(function(instance) {\n    return instance && 'bar' in instance;\n  });\n})();"
         );
       });
 
@@ -136,7 +136,7 @@ describe('build', () => {
       it('member', () => {
         assert.equal(
           getCustomTestAPI('callback', 'bar'),
-          "(function() {\n  function onsuccess(res) {\n    callback(res.result);\n  }\n  function callback(instance) {\n    try {\n      success('bar' in instance);\n    } catch(e) {\n      fail(e);\n    }\n  };\n  return 'callback';\n})();"
+          "(function() {\n  function onsuccess(res) {\n    callback(res.result);\n  }\n  function callback(instance) {\n    try {\n      success(instance && 'bar' in instance);\n    } catch(e) {\n      fail(e);\n    }\n  };\n  return 'callback';\n})();"
         );
       });
 
@@ -275,7 +275,7 @@ describe('build', () => {
       const test = {property: 'Symbol.iterator', owner: 'DOMMatrixReadOnly'};
       assert.equal(
         compileTestCode(test),
-        '"Symbol" in self && "iterator" in Symbol && Symbol.iterator in DOMMatrixReadOnly.prototype'
+        '"Symbol" in self && "iterator" in Symbol && "DOMMatrixReadOnly" in self && Symbol.iterator in DOMMatrixReadOnly.prototype'
       );
     });
 
@@ -914,7 +914,7 @@ describe('build', () => {
           exposure: ['Window']
         },
         'api.ANGLE_instanced_arrays.drawElementsInstancedANGLE': {
-          code: "(function() {\n  var canvas = document.createElement('canvas');\n  var gl = canvas.getContext('webgl');\n  var instance = gl.getExtension('ANGLE_instanced_arrays');\n  return 'drawElementsInstancedANGLE' in instance;\n})();",
+          code: "(function() {\n  var canvas = document.createElement('canvas');\n  var gl = canvas.getContext('webgl');\n  var instance = gl.getExtension('ANGLE_instanced_arrays');\n  return instance && 'drawElementsInstancedANGLE' in instance;\n})();",
           exposure: ['Window']
         },
         'api.Document': {
@@ -998,7 +998,7 @@ describe('build', () => {
           exposure: ['Window']
         },
         'api.DoubleList.@@iterator': {
-          code: '"Symbol" in self && "iterator" in Symbol && Symbol.iterator in DoubleList.prototype',
+          code: '"Symbol" in self && "iterator" in Symbol && "DoubleList" in self && Symbol.iterator in DoubleList.prototype',
           exposure: ['Window']
         },
         'api.DoubleList.entries': {
@@ -1033,7 +1033,7 @@ describe('build', () => {
           exposure: ['Window']
         },
         'api.DoubleMap.@@iterator': {
-          code: '"Symbol" in self && "iterator" in Symbol && Symbol.iterator in DoubleMap.prototype',
+          code: '"Symbol" in self && "iterator" in Symbol && "DoubleMap" in self && Symbol.iterator in DoubleMap.prototype',
           exposure: ['Window']
         },
         'api.DoubleMap.clear': {
@@ -1092,7 +1092,7 @@ describe('build', () => {
           exposure: ['Window']
         },
         'api.DoubleSet.@@iterator': {
-          code: '"Symbol" in self && "iterator" in Symbol && Symbol.iterator in DoubleSet.prototype',
+          code: '"Symbol" in self && "iterator" in Symbol && "DoubleSet" in self && Symbol.iterator in DoubleSet.prototype',
           exposure: ['Window']
         },
         'api.DoubleSet.add': {

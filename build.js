@@ -127,7 +127,7 @@ const getCustomTestAPI = (name, member, type) => {
           // auto-generated custom tests
           test = false;
         } else {
-          const returnValue = `'${member}' in instance`;
+          const returnValue = `instance && '${member}' in instance`;
           test = testbase ?
             testbase +
               (promise ?
@@ -228,7 +228,9 @@ const compileTestCode = (test) => {
     return `"Symbol" in self && "${test.property.replace(
       'Symbol.',
       ''
-    )}" in Symbol && ${test.property} in ${test.owner}.prototype`;
+    )}" in Symbol && "${test.owner}" in self && ${test.property} in ${
+      test.owner
+    }.prototype`;
   }
   if (test.inherit) {
     return `Object.prototype.hasOwnProperty.call(${test.owner}, "${property}")`;
