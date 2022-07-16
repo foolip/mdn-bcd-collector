@@ -683,7 +683,11 @@ api:
         }
       }
   EventSource:
-    __base: var instance = new EventSource('/eventstream');
+    __base: |-
+      if (!('EventSource' in self)) {
+        return false;
+      }
+      var instance = new EventSource('/eventstream');
   EXT_blend_minmax:
     __resources:
       - webGL1
@@ -797,12 +801,19 @@ api:
       };
       var instance = reusableInstances.webGL2.getExtension('EXT_texture_norm16');
   ExtendableEvent:
-    __base: var instance = new ExtendableEvent('extendable');
+    __base: |-
+      if (!('ExtendableEvent' in self)) {
+        return false;
+      }
+      var instance = new ExtendableEvent('extendable');
   External:
     __base: var instance = window.external;
   FetchEvent:
     __base: |-
       <%api.Request:req%>
+      if (!('FetchEvent' in self)) {
+        return false;
+      }
       var instance = new FetchEvent('fetch', { request: req });
   FileReader:
     __base: var instance = new FileReader();
@@ -832,7 +843,11 @@ api:
         instance = self.fonts;
       }
   FontFaceSetLoadEvent:
-    __base: var instance = new FontFaceSetLoadEvent('loading');
+    __base: |-
+      if (!('FontFaceSetLoadEvent' in self)) {
+        return false;
+      }
+      var instance = new FontFaceSetLoadEvent('loading');
   GainNode:
     __resources:
       - audioContext
@@ -842,7 +857,11 @@ api:
       }
       var instance = reusableInstances.audioContext.createGain();
   GamepadEvent:
-    __base: var instance = new GamepadEvent('gamepadconnected');
+    __base: |-
+      if (!('GamepadEvent' in self)) {
+        return false;
+      }
+      var instance = new GamepadEvent('gamepadconnected');
   HashChangeEvent:
     __base: |-
       var instance;
@@ -1188,7 +1207,11 @@ api:
         instance = ctx.createImageData(16, 16);
       }
   InstallEvent:
-    __base: var instance = new InstallEvent('install');
+    __base: |-
+      if (!('InstallEvent' in self)) {
+        return false;
+      }
+      var instance = new InstallEvent('install');
   KeyboardEvent:
     __base: |-
       var instance;
@@ -1236,9 +1259,17 @@ api:
       }
       var instance = reusableInstances.audioContext.createMediaElementSource(document.getElementById('resource-audio-blip'));
   MediaEncryptedEvent:
-    __base: var instance = new MediaEncryptedEvent('encrypted');
+    __base: |-
+      if (!('MediaEncryptedEvent' in self)) {
+        return false;
+      }
+      var instance = new MediaEncryptedEvent('encrypted');
   MediaKeyMessageEvent:
-    __base: "var instance = new MediaKeyMessageEvent('license-request', {message: new ArrayBuffer(), messageType: 'license-request'});"
+    __base: |-
+      if (!('MediaKeyMessageEvent' in self)) {
+        return false;
+      }
+      var instance = new MediaKeyMessageEvent('license-request', {message: new ArrayBuffer(), messageType: 'license-request'});
   MediaList:
     __resources:
       - createStyleSheet
@@ -1248,7 +1279,11 @@ api:
   MediaQuery:
     __base: "var instance = window.matchMedia('screen and max-width: 800px;');"
   MediaQueryListEvent:
-    __base: var instance = new MediaQueryListEvent('change');
+    __base: |-
+      if (!('MediaQueryListEvent' in self)) {
+        return false;
+      }
+      var instance = new MediaQueryListEvent('change');
   MediaSession:
     __base: var instance = navigator.mediaSession;
   MediaSource:
@@ -1299,7 +1334,11 @@ api:
         return reusableInstances.audioContext.createMediaStreamTrackSource(ms)
       });
   MerchantValidationEvent:
-    __base: var instance = new MerchantValidationEvent('merchantvalidation');
+    __base: |-
+      if (!('MerchantValidationEvent' in self)) {
+        return false;
+      }
+      var instance = new MerchantValidationEvent('merchantvalidation');
   MessageEvent:
     __base: |-
       var instance;
@@ -1378,12 +1417,19 @@ api:
       }
       var instance = new Notification('');
   NotificationEvent:
-    __base: var instance = new NotificationEvent('notificationclick');
+    __base: |-
+      if (!('NotificationEvent' in self)) {
+        return false;
+      }
+      var instance = new NotificationEvent('notificationclick');
   OfflineAudioCompletionEvent:
     __resources:
       - audioContext
     __base: |-
       <%api.AudioBuffer:buffer%>
+      if (!('OfflineAudioCompletionEvent' in self)) {
+        return false;
+      }
       var instance = new OfflineAudioCompletionEvent('complete', {renderedBuffer: buffer});
   OfflineAudioContext:
     __resources:
@@ -1576,7 +1622,11 @@ api:
       var doc = new DOMParser().parseFromString('<foo />', 'application/xml');
       var instance = doc.createProcessingInstruction('xml-stylesheet', 'href="mycss.css" type="text/css"');
   PushEvent:
-    __base: var instance = new PushEvent('push');
+    __base: |-
+      if (!('PushEvent' in self)) {
+        return false;
+      }
+      var instance = new PushEvent('push');
   RadioNodeList:
     __base: |-
       <%api.HTMLFormElement:form%>
@@ -1601,9 +1651,16 @@ api:
   RTCDataChannelEvent:
     __base: |-
       <%api.RTCDataChannel:channel%>
+      if (!('RTCDataChannelEvent' in self)) {
+        return false;
+      }
       var instance = new RTCDataChannelEvent('datachannel', {channel: channel});
   RTCDTMFToneChangeEvent:
-    __base: "var instance = new RTCDTMFToneChangeEvent('tonechange', {tone: ''});"
+    __base: |-
+      if (!('RTCDTMFToneChangeEvent' in self)) {
+        return false;
+      }
+      var instance = new RTCDTMFToneChangeEvent('tonechange', {tone: ''});
   RTCIceCandidate:
     __base: "var instance = new RTCIceCandidate({candidate: 'candidate:4234997325 1 udp 2043278322 192.168.0.56 44323 typ host', sdpMid: ''});"
   RTCPeerConnection:
@@ -2179,7 +2236,11 @@ api:
       var el = document.getElementById('resource-video-blank');
       var instance = el.buffered;
   TouchEvent:
-    __base: var instance = new TouchEvent('touchstart');
+    __base: |-
+      if (!('TouchEvent' in self)) {
+        return false;
+      }
+      var instance = new TouchEvent('touchstart');
   TrackEvent:
     __base: |-
       var instance;
@@ -2514,7 +2575,11 @@ api:
       };
       var instance = new WritableStream({}).getWriter();
   XMLHttpRequest:
-    __base: var instance = new XMLHttpRequest();
+    __base: |-
+      if (!('XMLHttpRequest' in self)) {
+        return false;
+      }
+      var instance = new XMLHttpRequest();
   XMLHttpRequestEventTarget:
     __base: <%api.XMLHttpRequest:instance%>
   XMLHttpRequestUpload:
