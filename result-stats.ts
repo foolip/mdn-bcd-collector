@@ -136,7 +136,7 @@ const getStats = (data: Report, featureQuery: string[]): any => {
   };
 };
 
-const printStats = (stats: any): void => {
+const printStats = (stats: any, verboseNull: boolean): void => {
   console.log(
     chalk` -=- Statistics for {bold ${stats.browser.browser.name} ${stats.browser.version}} (${stats.browser.os.name} ${stats.browser.os.version}) -=-`
   );
@@ -175,6 +175,12 @@ const printStats = (stats: any): void => {
     );
   }
 
+  if (verboseNull) {
+    for (const f of stats.testResults.unknown) {
+      console.log(chalk`   - {yellow ${f}}`);
+    }
+  }
+
   console.log(
     chalk` - {gray Missing: {bold ${
       stats.testResults.missing.length
@@ -198,7 +204,11 @@ const printStats = (stats: any): void => {
   console.log('\n');
 };
 
-const main = async (files: string[], features: string[]): Promise<void> => {
+const main = async (
+  files: string[],
+  features: string[],
+  verboseNull: boolean
+): Promise<void> => {
   for (const file of files) {
     const data = await loadFile(file);
     if (!data) {
@@ -206,7 +216,7 @@ const main = async (files: string[], features: string[]): Promise<void> => {
     }
 
     const stats = getStats(data, features);
-    printStats(stats);
+    printStats(stats, verboseNull);
   }
 };
 
@@ -227,10 +237,16 @@ if (esMain(import.meta)) {
           describe: 'A specific feature identifier to query support for',
           type: 'string',
           array: true
+        })
+        .option('null', {
+          alias: 'n',
+          describe:
+            'Enable this flag to print the list of features with unknown support',
+          type: 'boolean'
         });
     }
   );
 
-  await main(argv.files, argv.feature);
+  await main(argv.files, argv.feature, argv.null);
 }
 /* c8 ignore stop */
