@@ -330,7 +330,14 @@ api:
         }
       drawImage.SVGImageElement_source_image: |-
         <%api.SVGImageElement:image%>
-        instance.drawImage(image, 0, 0);
+        try {
+          instance.drawImage(image, 0, 0);
+        } catch (e) {
+          if (e.name === 'TypeError') {
+            // Safari throws a TypeError for lack of support
+            return {result: false, message: 'TypeError'};
+          }
+        }
         return true;
       setTransform.matrix_parameter: |-
         var matrix = new DOMMatrix([1, .2, .8, 1, 0, 0]);
@@ -571,11 +578,23 @@ api:
   Document:
     __base: var instance = document;
   DocumentFragment:
-    __base: var instance = document.createDocumentFragment();
+    __base: |-
+      if (!('createDocumentFragment' in document)) {
+        return false;
+      }
+      var instance = document.createDocumentFragment();
   DocumentType:
-    __base: var instance = document.doctype;
+    __base: |-
+      if (!('doctype' in document)) {
+        return false;
+      }
+      var instance = document.doctype;
   DOMError:
-    __base: var instance = new DOMError('name');
+    __base: |-
+      if (!('DOMError' in self)) {
+        return false;
+      }
+      var instance = new DOMError('name');
   DOMException:
     __base: |-
       var instance;
@@ -837,7 +856,11 @@ api:
         }
       }
   FontFace:
-    __base: var instance = new FontFace('Material Design Icons', 'url(/fonts/materialdesignicons-webfont.woff)', {});
+    __base: |-
+      if (!('FontFace' in self)) {
+        return false;
+      }
+      var instance = new FontFace('Material Design Icons', 'url(/fonts/materialdesignicons-webfont.woff)', {});
   FontFaceSet:
     __base: |-
       var instance;
@@ -1202,6 +1225,9 @@ api:
   ImageCapture:
     __base: |-
       <%api.MediaDevices:mediaDevices%>
+      if (!('ImageCapture' in self)) {
+        return false;
+      }
       var stream = mediaDevices.getUserMedia({video: true});
       stream.then(function() {});
       var promise = stream.then(function(s) {
@@ -1271,7 +1297,10 @@ api:
       if (!('createMediaElementSource' in reusableInstances.audioContext)) {
         return false;
       }
-      var instance = reusableInstances.audioContext.createMediaElementSource(document.getElementById('resource-audio-blip'));
+      var el = document.getElementById('resource-audio-blip');
+      // Element is cloned for each test because only one audio source node can be associated with an element
+      var clone = el.cloneNode(true);
+      var instance = reusableInstances.audioContext.createMediaElementSource(clone);
   MediaEncryptedEvent:
     __base: |-
       if (!('MediaEncryptedEvent' in self)) {
@@ -1352,7 +1381,8 @@ api:
         return false;
       }
       var promise = mediaStream.then(function(ms) {
-        return reusableInstances.audioContext.createMediaStreamTrackSource(ms)
+        var tracks = ms.getTracks();
+        return reusableInstances.audioContext.createMediaStreamTrackSource(tracks[0]);
       });
   MerchantValidationEvent:
     __base: |-

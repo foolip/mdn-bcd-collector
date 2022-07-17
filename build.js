@@ -915,14 +915,23 @@ const buildJS = (customJS) => {
       let code = `${owner}.hasOwnProperty(${property})`;
 
       if (owner !== 'self') {
-        let mainOwner = owner.replace('.prototype', '');
         if (owner.startsWith('Intl')) {
-          mainOwner = 'Intl';
+          if (`"${parts[1]}"` === property) {
+            code = `"Intl" in self && ` + code;
+          } else {
+            code = `"Intl" in self && "${parts[1]}" in Intl && ` + code;
+          }
+        } else if (owner.startsWith('WebAssembly')) {
+          if (`"${parts[1]}"` === property) {
+            code = `"WebAssembly" in self && ` + code;
+          } else {
+            code =
+              `"WebAssembly" in self && "${parts[1]}" in WebAssembly && ` +
+              code;
+          }
+        } else {
+          code = `"${owner.replace('.prototype', '')}" in self && ` + code;
         }
-        if (owner.startsWith('WebAssembly')) {
-          mainOwner = 'WebAssembly';
-        }
-        code = `"${mainOwner}" in self && ` + code;
       }
 
       tests[bcdPath] = compileTest({
@@ -942,17 +951,25 @@ const buildJS = (customJS) => {
       ].join('.');
       const expr = `${path}(${extras.ctor_args})`;
       const maybeNew = extras.ctor_new !== false ? 'new' : '';
-      const code = compileCustomTest(`if (!("${
-        path.startsWith('Intl') ?
-          'Intl' :
-          path.startsWith('WebAssembly') ?
-          'WebAssembly' :
-          path
-      }" in self)) {
-    return false;
-  }
-  var instance = ${maybeNew} ${expr};
-  return !!instance;`);
+
+      let rawCode = `var instance = ${maybeNew} ${expr};
+  return !!instance;`;
+
+      if (path.startsWith('Intl')) {
+        rawCode =
+          `if (!("Intl" in self) || !("${parts[1]}" in Intl)) {
+  return false;
+}
+` + rawCode;
+      } else if (path.startsWith('WebAssembly')) {
+        rawCode =
+          `if (!("WebAssembly" in self) || !("${parts[1]}" in WebAssembly)) {
+  return false;
+}
+` + rawCode;
+      }
+
+      const code = compileCustomTest(rawCode);
       tests[ctorPath] = compileTest({
         raw: {code},
         exposure: ['Window']
