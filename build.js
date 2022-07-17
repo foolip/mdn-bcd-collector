@@ -957,17 +957,23 @@ const buildJS = (customJS) => {
 
       if (path.startsWith('Intl')) {
         rawCode =
-          `if (!("Intl" in self) || !("${parts[1]}" in Intl)) {
-  return false;
-}
-` + rawCode;
+          `if (!("${parts[1]}" in Intl)) {
+    return false;
+  }
+  ` + rawCode;
       } else if (path.startsWith('WebAssembly')) {
         rawCode =
-          `if (!("WebAssembly" in self) || !("${parts[1]}" in WebAssembly)) {
-  return false;
-}
-` + rawCode;
+          `if (!("${parts[1]}" in WebAssembly)) {
+    return false;
+  }
+  ` + rawCode;
       }
+
+      rawCode =
+        `if (!("${parts[0]}" in self)) {
+    return false;
+  }
+  ` + rawCode;
 
       const code = compileCustomTest(rawCode);
       tests[ctorPath] = compileTest({
