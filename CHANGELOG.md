@@ -1,5 +1,53 @@
 # mdn-bcd-collector Changelog
 
+## v6.1.0
+
+### Test Changes
+
+#### Added
+
+- api.Document.prerenderingchange_event
+- api.Document.prerendering
+- api.Element.ariaActiveDescendantElement
+- api.Element.ariaControlsElements
+- api.Element.ariaDescribedByElements
+- api.Element.ariaDetailsElements
+- api.Element.ariaErrorMessageElement
+- api.Element.ariaFlowToElements
+- api.Element.ariaLabelledByElements
+- api.Element.ariaOwnsElements
+- api.ElementInternals.ariaActiveDescendantElement
+- api.ElementInternals.ariaControlsElements
+- api.ElementInternals.ariaDescribedByElements
+- api.ElementInternals.ariaDetailsElements
+- api.ElementInternals.ariaErrorMessageElement
+- api.ElementInternals.ariaFlowToElements
+- api.ElementInternals.ariaLabelledByElements
+- api.ElementInternals.ariaOwnsElements
+- api.NavigateEvent.scroll
+- api.PerformanceNavigationTiming.activationStart
+- api.XRCompositionLayer.opacity
+
+#### Removed
+
+- api.NavigateEvent.restoreScroll
+- api.VisualViewport.segments
+
+#### Changed
+
+All tests have been updated so that if the parent feature returns `false`, the child feature will also return `false`.
+
+### Commits
+
+- Drop api.Selection.modify custom IDL
+- Update custom tests ([#2158](https://github.com/foolip/mdn-bcd-collector/pull/2158))
+- Remove more nulls from custom tests ([#2157](https://github.com/foolip/mdn-bcd-collector/pull/2157))
+- Check if interface exists before attempting to construct ([#2156](https://github.com/foolip/mdn-bcd-collector/pull/2156))
+- Print null values in stats reports via CLI arg ([#2155](https://github.com/foolip/mdn-bcd-collector/pull/2155))
+- Revert "Don't test for "instance in self" for members ([#492](https://github.com/foolip/mdn-bcd-collector/pull/492))" ([#2154](https://github.com/foolip/mdn-bcd-collector/pull/2154))
+- Allow for querying features in a report ([#2153](https://github.com/foolip/mdn-bcd-collector/pull/2153))
+- Update privacy notice ([#2146](https://github.com/foolip/mdn-bcd-collector/pull/2146))
+
 ## v6.0.9
 
 ### Test Changes
