@@ -34,7 +34,7 @@
     "result-stats": "ts-node result-stats.ts"
   },
   "dependencies": {
-    "@google-cloud/logging-winston": "5.1.1",
+    "@google-cloud/logging-winston": "5.1.2",
     "@google-cloud/storage": "6.2.3",
     "@mdi/font": "6.9.96",
     "@mdn/browser-compat-data": "5.1.4",
