@@ -1,5 +1,11 @@
 # mdn-bcd-collector Changelog
 
+## v6.1.1
+
+### Commits
+
+-
+
 ## v6.1.0
 
 ### Test Changes
