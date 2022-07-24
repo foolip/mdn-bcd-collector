@@ -429,6 +429,12 @@ api:
         return {result: false, message: 'Audio context is not available'};
       }
       var instance = reusableInstances.audioContext.createConvolver();
+  CountQueuingStrategy:
+    __base: |-
+      if (!('CountQueuingStrategy' in self)) {
+        return {result: false, message: 'CountQueuingStrategy is not defined'};
+      }
+      var instance = new CountQueuingStrategy({ highWaterMark: 1 });
   Crypto:
     __base: |-
       if (!('crypto' in self)) {
