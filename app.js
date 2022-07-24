@@ -76,6 +76,11 @@ const cookieSession = (req, res, next) => {
   next();
 };
 
+const checkIfSecure = (req, _, next) => {
+  app.locals.secure = req.secure;
+  next();
+};
+
 const createReport = (results, req) => {
   return {__version: appVersion, results, userAgent: req.get('User-Agent')};
 };
@@ -91,6 +96,7 @@ app.set('layout extractScripts', true);
 // Additional config
 app.use(cookieParser());
 app.use(cookieSession);
+app.use(checkIfSecure);
 app.use(express.urlencoded({extended: true}));
 app.use(express.json({limit: '32mb'}));
 app.use(express.static('static'));
