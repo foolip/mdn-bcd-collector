@@ -269,6 +269,16 @@ api:
   #     };
   #     var promise = navigator.getBattery();
   #     promise.then(function() {});
+  BeforeInstallPromptEvent:
+    __base: |-
+      try {
+        var instance = new BeforeInstallPromptEvent('');
+      } catch(e) {
+        if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
+          return false;
+        }
+        throw e;
+      }
   BeforeUnloadEvent:
     __base: |-
       try {
