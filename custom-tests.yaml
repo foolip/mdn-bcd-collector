@@ -297,6 +297,12 @@ api:
         return false;
       }
       var instance = reusableInstances.audioContext.createBiquadFilter();
+  ByteLengthQueuingStrategy:
+    __base: |-
+      if (!('ByteLengthQueuingStrategy' in self)) {
+        return false;
+      }
+      var instance = new ByteLengthQueuingStrategy({ highWaterMark: 1 });
   Blob:
     __base: |-
       var instance;
