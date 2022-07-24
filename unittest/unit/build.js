@@ -106,21 +106,21 @@ describe('build', () => {
       it('interface', () => {
         assert.equal(
           getCustomTestAPI('promise'),
-          '(function() {\n  var promise = somePromise();\n  if (!promise) {\n    return false;\n  }\n  return promise.then(function(instance) {\n    return !!instance;\n  });\n})();'
+          "(function() {\n  var promise = somePromise();\n  if (!promise) {\n    return {result: false, message: 'Promise variable is falsy'};\n  }\n  return promise.then(function(instance) {\n    return !!instance;\n  });\n})();"
         );
       });
 
       it('member', () => {
         assert.equal(
           getCustomTestAPI('promise', 'bar'),
-          "(function() {\n  var promise = somePromise();\n  if (!promise) {\n    return false;\n  }\n  return promise.then(function(instance) {\n    return !!instance && 'bar' in instance;\n  });\n})();"
+          "(function() {\n  var promise = somePromise();\n  if (!promise) {\n    return {result: false, message: 'Promise variable is falsy'};\n  }\n  return promise.then(function(instance) {\n    return !!instance && 'bar' in instance;\n  });\n})();"
         );
       });
 
       it('interface with import', () => {
         assert.equal(
           getCustomTestAPI('newpromise'),
-          '(function() {\n  var p = somePromise();\n  if (!p) {\n    return false;\n  }\n  var promise = p.then(function() {});\n  if (!promise) {\n    return false;\n  }\n  return promise.then(function(instance) {\n    return !!instance;\n  });\n})();'
+          "(function() {\n  var p = somePromise();\n  if (!p) {\n    return {result: false, message: 'p is falsy'};\n  }\n  var promise = p.then(function() {});\n  if (!promise) {\n    return {result: false, message: 'Promise variable is falsy'};\n  }\n  return promise.then(function(instance) {\n    return !!instance;\n  });\n})();"
         );
       });
     });
@@ -152,7 +152,7 @@ describe('build', () => {
       it('valid import', () => {
         assert.equal(
           getCustomTestAPI('import1'),
-          '(function() {\n  var a = 1;\n  if (!a) {\n    return false;\n  }\n  var instance = a;\n  return !!instance;\n})();'
+          "(function() {\n  var a = 1;\n  if (!a) {\n    return {result: false, message: 'a is falsy'};\n  }\n  var instance = a;\n  return !!instance;\n})();"
         );
       });
 
@@ -160,7 +160,7 @@ describe('build', () => {
         // XXX The "var b = a;" should be indented...
         assert.equal(
           getCustomTestAPI('import2'),
-          '(function() {\n  var a = 1;\n  if (!a) {\n    return false;\n  }\nvar b = a;\n  if (!b) {\n    return false;\n  }\n  var instance = b;\n  return !!instance;\n})();'
+          "(function() {\n  var a = 1;\n  if (!a) {\n    return {result: false, message: 'a is falsy'};\n  }\nvar b = a;\n  if (!b) {\n    return {result: false, message: 'b is falsy'};\n  }\n  var instance = b;\n  return !!instance;\n})();"
         );
       });
 
@@ -1542,7 +1542,7 @@ describe('build', () => {
         exposure: ['Window']
       },
       'javascript.builtins.AggregateError.AggregateError': {
-        code: '(function() {\n  if (!("AggregateError" in self)) {\n    return false;\n  }\n  var instance = new AggregateError([new Error(\'message\')]);\n  return !!instance;\n})();',
+        code: "(function() {\n  if (!(\"AggregateError\" in self)) {\n    return {result: false, message: 'AggregateError is not defined'};\n  }\n  var instance = new AggregateError([new Error('message')]);\n  return !!instance;\n})();",
         exposure: ['Window']
       },
       'javascript.builtins.Array': {
@@ -1558,7 +1558,7 @@ describe('build', () => {
         exposure: ['Window']
       },
       'javascript.builtins.Array.Array': {
-        code: '(function() {\n  if (!("Array" in self)) {\n    return false;\n  }\n  var instance = new Array(2);\n  return !!instance;\n})();',
+        code: '(function() {\n  if (!("Array" in self)) {\n    return {result: false, message: \'Array is not defined\'};\n  }\n  var instance = new Array(2);\n  return !!instance;\n})();',
         exposure: ['Window']
       },
       'javascript.builtins.Array.at': {
@@ -1578,7 +1578,7 @@ describe('build', () => {
         exposure: ['Window']
       },
       'javascript.builtins.BigInt.BigInt': {
-        code: '(function() {\n  if (!("BigInt" in self)) {\n    return false;\n  }\n  var instance =  BigInt(1);\n  return !!instance;\n})();',
+        code: '(function() {\n  if (!("BigInt" in self)) {\n    return {result: false, message: \'BigInt is not defined\'};\n  }\n  var instance =  BigInt(1);\n  return !!instance;\n})();',
         exposure: ['Window']
       }
     });
