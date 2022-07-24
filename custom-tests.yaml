@@ -121,7 +121,7 @@ api:
       - webGL1
     __base: |-
       if (!reusableInstances.webGL1) {
-        return false;
+        return {result: false, message: 'WebGL 1 is not available'};
       };
       var instance = reusableInstances.webGL1.getExtension('ANGLE_instanced_arrays');
     __test: return !!instance;
@@ -130,7 +130,7 @@ api:
       - audioContext
     __base: |-
       if (!reusableInstances.audioContext) {
-        return false;
+        return {result: false, message: 'Audio context is not available'};
       }
       var instance = reusableInstances.audioContext.createAnalyser();
   AnimationEvent:
@@ -143,7 +143,7 @@ api:
           instance = document.createEvent('AnimationEvent');
         } catch(e) {
           if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
-            return false;
+            return {result: false, message: 'Cannot create event'};
           }
           throw e;
         }
@@ -155,7 +155,7 @@ api:
       - audioContext
     __base: |-
       if (!reusableInstances.audioContext) {
-        return false;
+        return {result: false, message: 'Audio context is not available'};
       }
       var instance = reusableInstances.audioContext.createBuffer(2, reusableInstances.audioContext.sampleRate * 3, reusableInstances.audioContext.sampleRate);
   AudioBufferSourceNode:
@@ -163,7 +163,7 @@ api:
       - audioContext
     __base: |-
       if (!reusableInstances.audioContext) {
-        return false;
+        return {result: false, message: 'Audio context is not available'};
       }
       var instance = reusableInstances.audioContext.createBufferSource();
   AudioContext:
@@ -176,7 +176,7 @@ api:
       - audioContext
     __base: |-
       if (!reusableInstances.audioContext) {
-        return false;
+        return {result: false, message: 'Audio context is not available'};
       }
       var instance = reusableInstances.audioContext.destination;
   AudioListener:
@@ -184,7 +184,7 @@ api:
       - audioContext
     __base: |-
       if (!reusableInstances.audioContext) {
-        return false;
+        return {result: false, message: 'Audio context is not available'};
       }
       var instance = reusableInstances.audioContext.listener;
   AudioNode:
@@ -192,7 +192,7 @@ api:
       - audioContext
     __base: |-
       if (!reusableInstances.audioContext) {
-        return false;
+        return {result: false, message: 'Audio context is not available'};
       }
       var instance = reusableInstances.audioContext.createAnalyser();
   AudioParam:
@@ -209,7 +209,7 @@ api:
           instance = document.createEvent('AudioProcessingEvent');
         } catch(e) {
           if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
-            return false;
+            return {result: false, message: 'Cannot create event'};
           }
           throw e;
         }
@@ -219,7 +219,7 @@ api:
       - audioContext
     __base: |-
       if (!reusableInstances.audioContext) {
-        return false;
+        return {result: false, message: 'Audio context is not available'};
       }
       var instance = reusableInstances.audioContext.createBufferSource();
     __test: return 'AudioScheduledSourceNode' in self;
@@ -238,11 +238,11 @@ api:
       - audioContext
     __base: |-
       if (!reusableInstances.audioContext) {
-        return false;
+        return {result: false, message: 'Audio context is not available'};
       }
       if
       (!reusableInstances.audioContext.audioWorklet) {
-        return false;
+        return {result: false, message: 'Audio worklets are not available'};
       }
       var promise = reusableInstances.audioContext.audioWorklet.addModule('/resources/custom-tests/api/AudioWorkletNode/WhiteNoiseProcessor.js').then(
         function() {
@@ -265,7 +265,7 @@ api:
   # BatteryManager:
   #   __base: |-
   #     if (!('getBattery' in navigator)) {
-  #       return false;
+  #       return {result: false, message: 'navigator.getBattery() is not defined'};
   #     };
   #     var promise = navigator.getBattery();
   #     promise.then(function() {});
@@ -275,7 +275,7 @@ api:
         var instance = new BeforeInstallPromptEvent('');
       } catch(e) {
         if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
-          return false;
+          return {result: false, message: 'Cannot create event'};
         }
         throw e;
       }
@@ -285,7 +285,7 @@ api:
         var instance = document.createEvent('BeforeUnloadEvent');
       } catch(e) {
         if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
-          return false;
+          return {result: false, message: 'Cannot create event'};
         }
         throw e;
       }
@@ -294,13 +294,13 @@ api:
       - audioContext
     __base: |-
       if (!reusableInstances.audioContext) {
-        return false;
+        return {result: false, message: 'Audio context is not available'};
       }
       var instance = reusableInstances.audioContext.createBiquadFilter();
   ByteLengthQueuingStrategy:
     __base: |-
       if (!('ByteLengthQueuingStrategy' in self)) {
-        return false;
+        return {result: false, message: 'ByteLengthQueuingStrategy is not defined'};
       }
       var instance = new ByteLengthQueuingStrategy({ highWaterMark: 1 });
   Blob:
@@ -314,7 +314,7 @@ api:
   CacheStorage:
     __base: |-
       if (!('caches' in self)) {
-        return false;
+        return {result: false, message: 'caches is not defined'};
       };
       var instance = caches;
   CanvasPattern:
@@ -331,7 +331,7 @@ api:
       }
       var canvas = document.createElement('canvas');
       if (!canvas) {
-        return false;
+        return {result: false, message: 'Could not create canvas element'};
       };
       var instance = canvas.getContext('2d');
     __additional:
@@ -368,7 +368,7 @@ api:
       - audioContext
     __base: |-
       if (!reusableInstances.audioContext) {
-        return false;
+        return {result: false, message: 'Audio context is not available'};
       }
       var instance = reusableInstances.audioContext.createChannelMerger();
   ChannelSplitterNode:
@@ -376,7 +376,7 @@ api:
       - audioContext
     __base: |-
       if (!reusableInstances.audioContext) {
-        return false;
+        return {result: false, message: 'Audio context is not available'};
       }
       var instance = reusableInstances.audioContext.createChannelSplitter();
   CharacterData:
@@ -393,7 +393,7 @@ api:
           instance = document.createEvent('CloseEvent');
         } catch(e) {
           if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
-            return false;
+            return {result: false, message: 'Cannot create event'};
           }
           throw e;
         }
@@ -408,7 +408,7 @@ api:
           instance = document.createEvent('CompositionEvent');
         } catch(e) {
           if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
-            return false;
+            return {result: false, message: 'Cannot create event'};
           }
           throw e;
         }
@@ -418,7 +418,7 @@ api:
       - audioContext
     __base: |-
       if (!reusableInstances.audioContext) {
-        return false;
+        return {result: false, message: 'Audio context is not available'};
       }
       var instance = reusableInstances.audioContext.createConstantSource();
   ConvolverNode:
@@ -426,13 +426,13 @@ api:
       - audioContext
     __base: |-
       if (!reusableInstances.audioContext) {
-        return false;
+        return {result: false, message: 'Audio context is not available'};
       }
       var instance = reusableInstances.audioContext.createConvolver();
   Crypto:
     __base: |-
       if (!('crypto' in self)) {
-        return false;
+        return {result: false, message: 'crypto is not defined'};
       };
       var instance = crypto;
   CryptoKey:
@@ -548,7 +548,7 @@ api:
           instance = document.createEvent('CustomEvent');
         } catch(e) {
           if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
-            return false;
+            return {result: false, message: 'Cannot create event'};
           }
           throw e;
         }
@@ -558,7 +558,7 @@ api:
       - audioContext
     __base: |-
       if (!reusableInstances.audioContext) {
-        return false;
+        return {result: false, message: 'Audio context is not available'};
       }
       var instance = reusableInstances.audioContext.createDelay();
   DeviceMotionEvent:
@@ -571,7 +571,7 @@ api:
           instance = document.createEvent('DeviceMotionEvent');
         } catch(e) {
           if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
-            return false;
+            return {result: false, message: 'Cannot create event'};
           }
           throw e;
         }
@@ -586,7 +586,7 @@ api:
           instance = document.createEvent('DeviceOrientationEvent');
         } catch(e) {
           if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
-            return false;
+            return {result: false, message: 'Cannot create event'};
           }
           throw e;
         }
@@ -596,19 +596,19 @@ api:
   DocumentFragment:
     __base: |-
       if (!('createDocumentFragment' in document)) {
-        return false;
+        return {result: false, message: 'document.createDocumentFragment is not defined'};
       }
       var instance = document.createDocumentFragment();
   DocumentType:
     __base: |-
       if (!('doctype' in document)) {
-        return false;
+        return {result: false, message: 'document.doctype is not defined'};
       }
       var instance = document.doctype;
   DOMError:
     __base: |-
       if (!('DOMError' in self)) {
-        return false;
+        return {result: false, message: 'DOMError is not defined'};
       }
       var instance = new DOMError('name');
   DOMException:
@@ -623,8 +623,9 @@ api:
     __base: var instance = document.implementation;
   DOMRectList:
     __base: |-
-      <%api.Element:el%> if (!el.getClientRects) {
-        return false;
+      <%api.Element:el%>
+      if (!('getClientRects' in el)) {
+        return {result: false, message: 'el.getClientRects is not defined'};
       }
       var instance = el.getClientRects();
   DOMTokenList:
@@ -633,17 +634,23 @@ api:
       var instance = elm.classList;
     __additional:
       trim_whitespace: |-
-        if (!instance) { return false; }
+        if (!instance) {
+          return {result: false, message: 'Element.classList is not defined'};
+        }
         elm.className = ' foo bar foo ';
         instance.remove('bar');
         return elm.className === 'foo foo' || elm.className === 'foo';
       remove_duplicates: |-
-        if (!instance) { return false; }
+        if (!instance) {
+          return {result: false, message: 'Element.classList is not defined'};
+        }
         elm.className = ' foo bar foo ';
         instance.remove('bar');
         return elm.className === 'foo';
       toggle.force_parameter: |-
-        if (!instance) { return false; }
+        if (!instance) {
+          return {result: false, message: 'Element.classList is not defined'};
+        }
         elm.className = 'foo bar';
         if (!('toggle' in instance)) {
           return {result: false, message: 'Element.classList.toggle is not defined'};
@@ -660,7 +667,7 @@ api:
           instance = document.createEvent('DragEvent');
         } catch(e) {
           if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
-            return false;
+            return {result: false, message: 'Cannot create event'};
           }
           throw e;
         }
@@ -670,7 +677,7 @@ api:
       - audioContext
     __base: |-
       if (!reusableInstances.audioContext) {
-        return false;
+        return {result: false, message: 'Audio context is not available'};
       }
       var instance = reusableInstances.audioContext.createDynamicsCompressor();
   Element:
@@ -701,7 +708,7 @@ api:
           instance = document.createEvent('ErrorEvent');
         } catch(e) {
           if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
-            return false;
+            return {result: false, message: 'Cannot create event'};
           }
           throw e;
         }
@@ -716,7 +723,7 @@ api:
           instance = document.createEvent('Event');
         } catch(e) {
           if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
-            return false;
+            return {result: false, message: 'Cannot create event'};
           }
           throw e;
         }
@@ -724,7 +731,7 @@ api:
   EventSource:
     __base: |-
       if (!('EventSource' in self)) {
-        return false;
+        return {result: false, message: 'EventSource is not defined'};
       }
       var instance = new EventSource('/eventstream');
   EXT_blend_minmax:
@@ -732,7 +739,7 @@ api:
       - webGL1
     __base: |-
       if (!reusableInstances.webGL1) {
-        return false;
+        return {result: false, message: 'WebGL 1 is not available'};
       };
       var instance = reusableInstances.webGL1.getExtension('EXT_blend_minmax');
   EXT_clip_cull_distance:
@@ -740,7 +747,7 @@ api:
       - webGL
     __base: |-
       if (!reusableInstances.webGL) {
-        return false;
+        return {result: false, message: 'WebGL is not available'};
       };
       var instance = reusableInstances.webGL.getExtension('EXT_clip_cull_distance');
   EXT_color_buffer_float:
@@ -748,7 +755,7 @@ api:
       - webGL2
     __base: |-
       if (!reusableInstances.webGL2) {
-        return false;
+        return {result: false, message: 'WebGL 2 is not available'};
       };
       var instance = reusableInstances.webGL2.getExtension('EXT_color_buffer_float');
   EXT_color_buffer_half_float:
@@ -756,7 +763,7 @@ api:
       - webGL1
     __base: |-
       if (!reusableInstances.webGL1) {
-        return false;
+        return {result: false, message: 'WebGL 1 is not available'};
       };
       var instance = reusableInstances.webGL1.getExtension('EXT_color_buffer_half_float');
   EXT_disjoint_timer_query:
@@ -764,7 +771,7 @@ api:
       - webGL1
     __base: |-
       if (!reusableInstances.webGL1) {
-        return false;
+        return {result: false, message: 'WebGL 1 is not available'};
       };
       var instance = reusableInstances.webGL1.getExtension('EXT_disjoint_timer_query');
   EXT_disjoint_timer_query_webgl2:
@@ -772,7 +779,7 @@ api:
       - webGL2
     __base: |-
       if (!reusableInstances.webGL2) {
-        return false;
+        return {result: false, message: 'WebGL 2 is not available'};
       };
       var instance = reusableInstances.webGL2.getExtension('EXT_disjoint_timer_query_webgl2');
   EXT_float_blend:
@@ -780,7 +787,7 @@ api:
       - webGL
     __base: |-
       if (!reusableInstances.webGL) {
-        return false;
+        return {result: false, message: 'WebGL is not available'};
       };
       var instance = reusableInstances.webGL.getExtension('EXT_float_blend');
   EXT_frag_depth:
@@ -788,7 +795,7 @@ api:
       - webGL1
     __base: |-
       if (!reusableInstances.webGL1) {
-        return false;
+        return {result: false, message: 'WebGL 1 is not available'};
       };
       var instance = reusableInstances.webGL1.getExtension('EXT_frag_depth');
   EXT_shader_texture_lod:
@@ -796,7 +803,7 @@ api:
       - webGL1
     __base: |-
       if (!reusableInstances.webGL1) {
-        return false;
+        return {result: false, message: 'WebGL 1 is not available'};
       };
       var instance = reusableInstances.webGL1.getExtension('EXT_shader_texture_lod');
   EXT_sRGB:
@@ -804,7 +811,7 @@ api:
       - webGL1
     __base: |-
       if (!reusableInstances.webGL1) {
-        return false;
+        return {result: false, message: 'WebGL 1 is not available'};
       };
       var instance = reusableInstances.webGL1.getExtension('EXT_sRGB');
   EXT_texture_compression_bptc:
@@ -812,7 +819,7 @@ api:
       - webGL
     __base: |-
       if (!reusableInstances.webGL) {
-        return false;
+        return {result: false, message: 'WebGL is not available'};
       };
       var instance = reusableInstances.webGL.getExtension('EXT_texture_compression_bptc');
   EXT_texture_compression_rgtc:
@@ -820,7 +827,7 @@ api:
       - webGL
     __base: |-
       if (!reusableInstances.webGL) {
-        return false;
+        return {result: false, message: 'WebGL is not available'};
       };
       var instance = reusableInstances.webGL.getExtension('EXT_texture_compression_rgtc');
   EXT_texture_filter_anisotropic:
@@ -828,7 +835,7 @@ api:
       - webGL
     __base: |-
       if (!reusableInstances.webGL) {
-        return false;
+        return {result: false, message: 'WebGL is not available'};
       };
       var instance = reusableInstances.webGL.getExtension('EXT_texture_filter_anisotropic');
   EXT_texture_norm16:
@@ -836,13 +843,13 @@ api:
       - webGL2
     __base: |-
       if (!reusableInstances.webGL2) {
-        return false;
+        return {result: false, message: 'WebGL 2 is not available'};
       };
       var instance = reusableInstances.webGL2.getExtension('EXT_texture_norm16');
   ExtendableEvent:
     __base: |-
       if (!('ExtendableEvent' in self)) {
-        return false;
+        return {result: false, message: 'ExtendableEvent is not defined'};
       }
       var instance = new ExtendableEvent('extendable');
   External:
@@ -851,7 +858,7 @@ api:
     __base: |-
       <%api.Request:req%>
       if (!('FetchEvent' in self)) {
-        return false;
+        return {result: false, message: 'FetchEvent is not defined'};
       }
       var instance = new FetchEvent('fetch', { request: req });
   FileReader:
@@ -866,7 +873,7 @@ api:
           instance = document.createEvent('FocusEvent');
         } catch(e) {
           if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
-            return false;
+            return {result: false, message: 'Cannot create event'};
           }
           throw e;
         }
@@ -874,7 +881,7 @@ api:
   FontFace:
     __base: |-
       if (!('FontFace' in self)) {
-        return false;
+        return {result: false, message: 'FontFace is not defined'};
       }
       var instance = new FontFace('Material Design Icons', 'url(/fonts/materialdesignicons-webfont.woff)', {});
   FontFaceSet:
@@ -888,7 +895,7 @@ api:
   FontFaceSetLoadEvent:
     __base: |-
       if (!('FontFaceSetLoadEvent' in self)) {
-        return false;
+        return {result: false, message: 'FontFaceSetLoadEvent is not defined'};
       }
       var instance = new FontFaceSetLoadEvent('loading');
   GainNode:
@@ -896,13 +903,13 @@ api:
       - audioContext
     __base: |-
       if (!reusableInstances.audioContext) {
-        return false;
+        return {result: false, message: 'Audio context is not available'};
       }
       var instance = reusableInstances.audioContext.createGain();
   GamepadEvent:
     __base: |-
       if (!('GamepadEvent' in self)) {
-        return false;
+        return {result: false, message: 'GamepadEvent is not defined'};
       }
       var instance = new GamepadEvent('gamepadconnected');
   HashChangeEvent:
@@ -915,7 +922,7 @@ api:
           instance = document.createEvent('HashChangeEvent');
         } catch(e) {
           if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
-            return false;
+            return {result: false, message: 'Cannot create event'};
           }
           throw e;
         }
@@ -1213,7 +1220,7 @@ api:
           instance = document.createEvent('IDBVersionChangeEvent');
         } catch(e) {
           if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
-            return false;
+            return {result: false, message: 'Cannot create event'};
           }
           throw e;
         }
@@ -1223,10 +1230,10 @@ api:
       - audioContext
     __base: |-
       if (!reusableInstances.audioContext) {
-        return false;
+        return {result: false, message: 'Audio context is not available'};
       }
       if (!('createIIRFilter' in reusableInstances.audioContext)) {
-        return false;
+        return {result: false, message: 'audioContext.createIIRFilter is not defined'};
       }
       var instance = reusableInstances.audioContext.createIIRFilter([1], [1]);
   ImageBitmap:
@@ -1242,7 +1249,7 @@ api:
     __base: |-
       <%api.MediaDevices:mediaDevices%>
       if (!('ImageCapture' in self)) {
-        return false;
+        return {result: false, message: 'ImageCapture is not defined'};
       }
       var stream = mediaDevices.getUserMedia({video: true});
       stream.then(function() {});
@@ -1262,7 +1269,7 @@ api:
   InstallEvent:
     __base: |-
       if (!('InstallEvent' in self)) {
-        return false;
+        return {result: false, message: 'InstallEvent is not defined'};
       }
       var instance = new InstallEvent('install');
   KeyboardEvent:
@@ -1275,7 +1282,7 @@ api:
           instance = document.createEvent('KeyboardEvent');
         } catch(e) {
           if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
-            return false;
+            return {result: false, message: 'Cannot create event'};
           }
           throw e;
         }
@@ -1285,7 +1292,7 @@ api:
       - webGL
     __base: |-
       if (!reusableInstances.webGL) {
-        return false;
+        return {result: false, message: 'WebGL is not available'};
       };
       var instance = reusableInstances.webGL.getExtension('KHR_parallel_shader_compile');
   Location:
@@ -1308,10 +1315,10 @@ api:
       - audioContext
     __base: |-
       if (!reusableInstances.audioContext) {
-        return false;
+        return {result: false, message: 'Audio context is not available'};
       }
       if (!('createMediaElementSource' in reusableInstances.audioContext)) {
-        return false;
+        return {result: false, message: 'audioContext.createMediaElementSource is not defined'};
       }
       var el = document.getElementById('resource-audio-blip');
       // Element is cloned for each test because only one audio source node can be associated with an element
@@ -1320,13 +1327,13 @@ api:
   MediaEncryptedEvent:
     __base: |-
       if (!('MediaEncryptedEvent' in self)) {
-        return false;
+        return {result: false, message: 'MediaEncryptedEvent is not defined'};
       }
       var instance = new MediaEncryptedEvent('encrypted');
   MediaKeyMessageEvent:
     __base: |-
       if (!('MediaKeyMessageEvent' in self)) {
-        return false;
+        return {result: false, message: 'MediaKeyMessageEvent is not defined'};
       }
       var instance = new MediaKeyMessageEvent('license-request', {message: new ArrayBuffer(), messageType: 'license-request'});
   MediaList:
@@ -1340,7 +1347,7 @@ api:
   MediaQueryListEvent:
     __base: |-
       if (!('MediaQueryListEvent' in self)) {
-        return false;
+        return {result: false, message: 'MediaQueryListEvent is not defined'};
       }
       var instance = new MediaQueryListEvent('change');
   MediaSession:
@@ -1348,7 +1355,7 @@ api:
   MediaSource:
     __base: |-
       if (!('MediaSource' in self)) {
-        return false;
+        return {result: false, message: 'MediaSource is not defined'};
       }
       var instance = new MediaSource();
     isTypeSupported: return 'isTypeSupported' in MediaSource;
@@ -1362,10 +1369,10 @@ api:
       - audioContext
     __base: |-
       if (!reusableInstances.audioContext) {
-        return false;
+        return {result: false, message: 'Audio context is not available'};
       }
       if (!('createMediaStreamDestination' in reusableInstances.audioContext)) {
-        return false;
+        return {result: false, message: 'audioContext.createMediaStreamDestination is not defined'};
       }
       var instance = reusableInstances.audioContext.createMediaStreamDestination();
   MediaStreamAudioSourceNode:
@@ -1374,7 +1381,7 @@ api:
     __base: |-
       <%api.MediaStream:mediaStream%>
       if (!reusableInstances.audioContext) {
-        return false;
+        return {result: false, message: 'Audio context is not available'};
       }
       var promise = mediaStream.then(function(ms) {
         return reusableInstances.audioContext.createMediaStreamSource(ms)
@@ -1391,10 +1398,10 @@ api:
     __base: |-
       <%api.MediaStream:mediaStream%>
       if (!reusableInstances.audioContext) {
-        return false;
+        return {result: false, message: 'Audio context is not available'};
       }
       if (!('createMediaStreamTrackSource' in reusableInstances.audioContext)) {
-        return false;
+        return {result: false, message: 'audioContext.createMediaStreamTrackSource is not defined'};
       }
       var promise = mediaStream.then(function(ms) {
         var tracks = ms.getTracks();
@@ -1403,7 +1410,7 @@ api:
   MerchantValidationEvent:
     __base: |-
       if (!('MerchantValidationEvent' in self)) {
-        return false;
+        return {result: false, message: 'MerchantValidationEvent is not defined'};
       }
       var instance = new MerchantValidationEvent('merchantvalidation');
   MessageEvent:
@@ -1416,7 +1423,7 @@ api:
           instance = document.createEvent('MessageEvent');
         } catch(e) {
           if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
-            return false;
+            return {result: false, message: 'Cannot create event'};
           }
           throw e;
         }
@@ -1424,7 +1431,7 @@ api:
   MessageChannel:
     __base: |-
       if (!('MessageChannel' in self)) {
-        return false;
+        return {result: false, message: 'MessageChannel is not defined'};
       }
       var instance = new MessageChannel();
   MessagePort:
@@ -1445,7 +1452,7 @@ api:
           instance = document.createEvent('MouseEvent');
         } catch(e) {
           if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
-            return false;
+            return {result: false, message: 'Cannot create event'};
           }
           throw e;
         }
@@ -1456,7 +1463,7 @@ api:
         var instance = document.createEvent('MutationEvent');
       } catch(e) {
         if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
-          return false;
+          return {result: false, message: 'Cannot create event'};
         }
         throw e;
       }
@@ -1464,7 +1471,7 @@ api:
     __base: |-
       var constructor = window.MutationObserver || window.WebKitMutationObserver;
       if (!constructor) {
-        return false;
+        return {result: false, message: '(WebKit)MutationObserver is not defined'};
       };
       var instance = new constructor(function(mutations){});
   NamedNodeMap:
@@ -1480,14 +1487,14 @@ api:
   Notification:
     __base: |-
       if (!('Notification' in self)) {
-        return false;
+        return {result: false, message: 'Notification is not defined'};
       }
       var instance = new Notification('');
   NotificationEvent:
     __base: |-
       <%api.Notification:notification%>
       if (!('NotificationEvent' in self)) {
-        return false;
+        return {result: false, message: 'NotificationEvent is not defined'};
       }
       var instance = new NotificationEvent('notificationclick', {notification});
   OfflineAudioCompletionEvent:
@@ -1496,7 +1503,7 @@ api:
     __base: |-
       <%api.AudioBuffer:buffer%>
       if (!('OfflineAudioCompletionEvent' in self)) {
-        return false;
+        return {result: false, message: 'OfflineAudioCompletionEvent is not defined'};
       }
       var instance = new OfflineAudioCompletionEvent('complete', {renderedBuffer: buffer});
   OfflineAudioContext:
@@ -1509,7 +1516,7 @@ api:
       - audioContext
     __base: |-
       if (!reusableInstances.audioContext) {
-        return false;
+        return {result: false, message: 'Audio context is not available'};
       }
       var instance = reusableInstances.audioContext.createOscillator();
   OES_draw_buffers_indexed:
@@ -1517,7 +1524,7 @@ api:
       - webGL
     __base: |-
       if (!reusableInstances.webGL) {
-        return false;
+        return {result: false, message: 'WebGL is not available'};
       };
       var instance = reusableInstances.webGL.getExtension('OES_draw_buffers_indexed');
   OES_element_index_uint:
@@ -1525,7 +1532,7 @@ api:
       - webGL1
     __base: |-
       if (!reusableInstances.webGL1) {
-        return false;
+        return {result: false, message: 'WebGL 1 is not available'};
       };
       var instance = reusableInstances.webGL1.getExtension('OES_element_index_uint');
   OES_fbo_render_mipmap:
@@ -1533,7 +1540,7 @@ api:
       - webGL1
     __base: |-
       if (!reusableInstances.webGL1) {
-        return false;
+        return {result: false, message: 'WebGL 1 is not available'};
       };
       var instance = reusableInstances.webGL1.getExtension('OES_fbo_render_mipmap');
   OES_standard_derivatives:
@@ -1541,7 +1548,7 @@ api:
       - webGL1
     __base: |-
       if (!reusableInstances.webGL1) {
-        return false;
+        return {result: false, message: 'WebGL 1 is not available'};
       };
       var instance = reusableInstances.webGL1.getExtension('OES_standard_derivatives');
   OES_texture_float:
@@ -1549,7 +1556,7 @@ api:
       - webGL1
     __base: |-
       if (!reusableInstances.webGL1) {
-        return false;
+        return {result: false, message: 'WebGL 1 is not available'};
       };
       var instance = reusableInstances.webGL1.getExtension('OES_texture_float');
   OES_texture_float_linear:
@@ -1557,7 +1564,7 @@ api:
       - webGL
     __base: |-
       if (!reusableInstances.webGL) {
-        return false;
+        return {result: false, message: 'WebGL is not available'};
       };
       var instance = reusableInstances.webGL.getExtension('OES_texture_float_linear');
   OES_texture_half_float:
@@ -1565,7 +1572,7 @@ api:
       - webGL1
     __base: |-
       if (!reusableInstances.webGL1) {
-        return false;
+        return {result: false, message: 'WebGL 1 is not available'};
       };
       var instance = reusableInstances.webGL1.getExtension('OES_texture_half_float');
   OES_texture_half_float_linear:
@@ -1573,7 +1580,7 @@ api:
       - webGL
     __base: |-
       if (!reusableInstances.webGL) {
-        return false;
+        return {result: false, message: 'WebGL is not available'};
       };
       var instance = reusableInstances.webGL.getExtension('OES_texture_half_float_linear');
   OES_vertex_array_object:
@@ -1581,7 +1588,7 @@ api:
       - webGL1
     __base: |-
       if (!reusableInstances.webGL1) {
-        return false;
+        return {result: false, message: 'WebGL 1 is not available'};
       };
       var instance = reusableInstances.webGL1.getExtension('OES_vertex_array_object');
   OVR_multiview2:
@@ -1589,7 +1596,7 @@ api:
       - webGL2
     __base: |-
       if (!reusableInstances.webGL2) {
-        return false;
+        return {result: false, message: 'WebGL 2 is not available'};
       };
       var instance = reusableInstances.webGL2.getExtension('OVR_multiview2');
   PageTransitionEvent:
@@ -1602,7 +1609,7 @@ api:
           instance = document.createEvent('PageTransitionEvent');
         } catch(e) {
           if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
-            return false;
+            return {result: false, message: 'Cannot create event'};
           }
           throw e;
         }
@@ -1612,52 +1619,46 @@ api:
       - audioContext
     __base: |-
       if (!reusableInstances.audioContext) {
-        return false;
+        return {result: false, message: 'Audio context is not available'};
       }
       var instance = reusableInstances.audioContext.createPanner();
   Performance:
     __base: |-
       if (!('performance' in self)) {
-        return false;
+        return {result: false, message: 'performance is not defined'};
       };
       var instance = performance;
   PerformanceEntry:
     __base: |-
       <%api.Performance:prf%>
       if (!('getEntries' in prf)) {
-        return false;
+        return {result: false, message: 'performance.getEntries is not defined'};
       }
       var instance = prf.getEntries()[0];
   PerformanceMark:
     __base: |-
-      if (!('performance' in self)) {
-        return false;
-      };
-      if (!performance.mark) {
-        return false;
+      <%api.Performance:prf%>
+      if (!('mark' in prf)) {
+        return {result: false, message: 'performance.mark is not defined'};
       };
       performance.mark('mark');
       var instance = performance.getEntriesByName('mark')[0];
   PerformanceNavigation:
     __base: |-
-      if (!('performance' in self)) {
-        return false;
-      };
+      <%api.Performance:prf%>
       var instance = performance.navigation;
   PerformanceResourceTiming:
     __base: var instance = performance.getEntriesByType("resource")[0];
   PerformanceTiming:
     __base: |-
-      if (!('performance' in self)) {
-        return false;
-      };
+      <%api.Performance:prf%>
       var instance = performance.timing;
   PeriodicWave:
     __resources:
       - audioContext
     __base: |-
       if (!reusableInstances.audioContext) {
-        return false;
+        return {result: false, message: 'Audio context is not available'};
       }
       var real = new Float32Array(2);
       var imag = new Float32Array(2);
@@ -1680,7 +1681,7 @@ api:
           instance = document.createEvent('PopStateEvent');
         } catch(e) {
           if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
-            return false;
+            return {result: false, message: 'Cannot create event'};
           }
           throw e;
         }
@@ -1692,7 +1693,7 @@ api:
   PushEvent:
     __base: |-
       if (!('PushEvent' in self)) {
-        return false;
+        return {result: false, message: 'PushEvent is not defined'};
       }
       var instance = new PushEvent('push');
   RadioNodeList:
@@ -1720,13 +1721,13 @@ api:
     __base: |-
       <%api.RTCDataChannel:channel%>
       if (!('RTCDataChannelEvent' in self)) {
-        return false;
+        return {result: false, message: 'RTCDataChannelEvent is not defined'};
       }
       var instance = new RTCDataChannelEvent('datachannel', {channel: channel});
   RTCDTMFToneChangeEvent:
     __base: |-
       if (!('RTCDTMFToneChangeEvent' in self)) {
-        return false;
+        return {result: false, message: 'RTCDTMFToneChangeEvent is not defined'};
       }
       var instance = new RTCDTMFToneChangeEvent('tonechange', {tone: ''});
   RTCIceCandidate:
@@ -1736,7 +1737,7 @@ api:
       /* Firefox briefly defines RTCPeerConnection in older versions, but it is not a valid constructor until later versions. */
       var constructor = window.mozRTCPeerConnection || window.RTCPeerConnection || window.webkitRTCPeerConnection;
       if (!constructor) {
-        return false;
+        return {result: false, message: '(moz/webkit)RTCPeerConnection is not defined or is falsy'};
       };
       var instance = new constructor({iceServers: []});
   RTCSessionDescription:
@@ -1748,13 +1749,13 @@ api:
       - audioContext
     __base: |-
       if (!reusableInstances.audioContext) {
-        return false;
+        return {result: false, message: 'Audio context is not available'};
       }
       var instance = reusableInstances.audioContext.createScriptProcessor();
   SecurityPolicyViolationEvent:
     __base: |-
       if (!('SecurityPolicyViolationEvent' in self)) {
-        return false;
+        return {result: false, message: 'SecurityPolicyViolationEvent is not defined'};
       }
       var instance = new SecurityPolicyViolationEvent('securitypolicyviolation');
   Selection:
@@ -1763,7 +1764,7 @@ api:
     __base: |-
       var el = document.createElement('div');
       if (!el.attachShadow) {
-        return false;
+        return {result: false, message: 'Element.attachShadow is not defined'};
       };
       el.attachShadow({mode: 'open'});
       var instance = el.shadowRoot;
@@ -1782,7 +1783,7 @@ api:
           instance = document.createEvent('SpeechRecognitionErrorEvent');
         } catch(e) {
           if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
-            return false;
+            return {result: false, message: 'Cannot create event'};
           }
           throw e;
         }
@@ -1797,7 +1798,7 @@ api:
           instance = document.createEvent('SpeechRecognitionEvent');
         } catch(e) {
           if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
-            return false;
+            return {result: false, message: 'Cannot create event'};
           }
           throw e;
         }
@@ -1814,7 +1815,7 @@ api:
           instance = document.createEvent('SpeechSynthesisErrorEvent');
         } catch(e) {
           if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
-            return false;
+            return {result: false, message: 'Cannot create event'};
           }
           throw e;
         }
@@ -1829,7 +1830,7 @@ api:
           instance = document.createEvent('SpeechSynthesisEvent');
         } catch(e) {
           if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
-            return false;
+            return {result: false, message: 'Cannot create event'};
           }
           throw e;
         }
@@ -1845,7 +1846,7 @@ api:
       - audioContext
     __base: |-
       if (!reusableInstances.audioContext) {
-        return false;
+        return {result: false, message: 'Audio context is not available'};
       }
       var instance = reusableInstances.audioContext.createStereoPanner();
   StorageEvent:
@@ -1858,7 +1859,7 @@ api:
           instance = document.createEvent('StorageEvent');
         } catch(e) {
           if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
-            return false;
+            return {result: false, message: 'Cannot create event'};
           }
           throw e;
         }
@@ -1874,7 +1875,7 @@ api:
   SubtleCrypto:
     __base: |-
       if (!('crypto' in self)) {
-        return false;
+        return {result: false, message: 'crypto is not defined'};
       };
       var instance = crypto.subtle || crypto.webkitSubtle;
   SVGAElement:
@@ -2260,13 +2261,13 @@ api:
   TextDecoder:
     __base: |-
       if (!('TextDecoder' in self)) {
-        return false;
+        return {result: false, message: 'TextDecoder is not defined'};
       };
       var instance = new TextDecoder();
   TextEncoder:
     __base: |-
       if (!('TextEncoder' in self)) {
-        return false;
+        return {result: false, message: 'TextEncoder is not defined'};
       };
       var instance = new TextEncoder();
   TextMetrics:
@@ -2306,7 +2307,7 @@ api:
   TouchEvent:
     __base: |-
       if (!('TouchEvent' in self)) {
-        return false;
+        return {result: false, message: 'TouchEvent is not defined'};
       }
       var instance = new TouchEvent('touchstart');
   TrackEvent:
@@ -2319,7 +2320,7 @@ api:
           instance = document.createEvent('TrackEvent');
         } catch(e) {
           if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
-            return false;
+            return {result: false, message: 'Cannot create event'};
           }
           throw e;
         }
@@ -2333,7 +2334,7 @@ api:
           instance = document.createEvent('TransitionEvent');
         } catch(e) {
           if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
-            return false;
+            return {result: false, message: 'Cannot create event'};
           }
           throw e;
         }
@@ -2350,7 +2351,7 @@ api:
           instance = document.createEvent('UIEvent');
         } catch(e) {
           if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
-            return false;
+            return {result: false, message: 'Cannot create event'};
           }
           throw e;
         }
@@ -2389,7 +2390,7 @@ api:
       - audioContext
     __base: |-
       if (!reusableInstances.audioContext) {
-        return false;
+        return {result: false, message: 'Audio context is not available'};
       }
       var instance = reusableInstances.audioContext.createWaveShaper();
   WebGLContextEvent:
@@ -2399,13 +2400,13 @@ api:
         instance = new WebGLContextEvent('webglcontextlost');
       } catch(e) {
         if (!('document' in self)) {
-          return false;
+          return {result: false, message: 'Cannot create event'};
         }
         try {
           instance = document.createEvent('WebGLContextEvent');
         } catch(e) {
           if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
-            return false;
+            return {result: false, message: 'Cannot create event'};
           }
           throw e;
         }
@@ -2423,7 +2424,7 @@ api:
       - webGL
     __base: |-
       if (!reusableInstances.webGL) {
-        return false;
+        return {result: false, message: 'WebGL is not available'};
       };
       var instance = reusableInstances.webGL.getExtension('WEBGL_blend_equation_advanced_coherent');
   WEBGL_color_buffer_float:
@@ -2431,7 +2432,7 @@ api:
       - webGL1
     __base: |-
       if (!reusableInstances.webGL1) {
-        return false;
+        return {result: false, message: 'WebGL 1 is not available'};
       };
       var instance = reusableInstances.webGL1.getExtension('WEBGL_color_buffer_float');
   WEBGL_compressed_texture_astc:
@@ -2439,7 +2440,7 @@ api:
       - webGL
     __base: |-
       if (!reusableInstances.webGL) {
-        return false;
+        return {result: false, message: 'WebGL is not available'};
       };
       var instance = reusableInstances.webGL.getExtension('WEBGL_compressed_texture_astc');
   WEBGL_compressed_texture_atc:
@@ -2447,7 +2448,7 @@ api:
       - webGL
     __base: |-
       if (!reusableInstances.webGL) {
-        return false;
+        return {result: false, message: 'WebGL is not available'};
       };
       var instance = reusableInstances.webGL.getExtension('WEBGL_compressed_texture_atc');
   WEBGL_compressed_texture_etc:
@@ -2455,7 +2456,7 @@ api:
       - webGL
     __base: |-
       if (!reusableInstances.webGL) {
-        return false;
+        return {result: false, message: 'WebGL is not available'};
       };
       var instance = reusableInstances.webGL.getExtension('WEBGL_compressed_texture_etc');
   WEBGL_compressed_texture_etc1:
@@ -2463,7 +2464,7 @@ api:
       - webGL
     __base: |-
       if (!reusableInstances.webGL) {
-        return false;
+        return {result: false, message: 'WebGL is not available'};
       };
       var instance = reusableInstances.webGL.getExtension('WEBGL_compressed_texture_etc1');
   WEBGL_compressed_texture_pvrtc:
@@ -2471,7 +2472,7 @@ api:
       - webGL
     __base: |-
       if (!reusableInstances.webGL) {
-        return false;
+        return {result: false, message: 'WebGL is not available'};
       };
       var instance = reusableInstances.webGL.getExtension('WEBGL_compressed_texture_pvrtc');
   WEBGL_compressed_texture_s3tc:
@@ -2479,7 +2480,7 @@ api:
       - webGL
     __base: |-
       if (!reusableInstances.webGL) {
-        return false;
+        return {result: false, message: 'WebGL is not available'};
       };
       var instance = reusableInstances.webGL.getExtension('WEBGL_compressed_texture_s3tc');
   WEBGL_compressed_texture_s3tc_srgb:
@@ -2487,7 +2488,7 @@ api:
       - webGL
     __base: |-
       if (!reusableInstances.webGL) {
-        return false;
+        return {result: false, message: 'WebGL is not available'};
       };
       var instance = reusableInstances.webGL.getExtension('WEBGL_compressed_texture_s3tc_srgb');
   WEBGL_debug_renderer_info:
@@ -2495,7 +2496,7 @@ api:
       - webGL
     __base: |-
       if (!reusableInstances.webGL) {
-        return false;
+        return {result: false, message: 'WebGL is not available'};
       };
       var instance = reusableInstances.webGL.getExtension('WEBGL_debug_renderer_info');
   WEBGL_debug_shaders:
@@ -2503,7 +2504,7 @@ api:
       - webGL
     __base: |-
       if (!reusableInstances.webGL) {
-        return false;
+        return {result: false, message: 'WebGL is not available'};
       };
       var instance = reusableInstances.webGL.getExtension('WEBGL_debug_shaders');
   WEBGL_depth_texture:
@@ -2511,7 +2512,7 @@ api:
       - webGL1
     __base: |-
       if (!reusableInstances.webGL1) {
-        return false;
+        return {result: false, message: 'WebGL 1 is not available'};
       };
       var instance = reusableInstances.webGL1.getExtension('WEBGL_depth_texture');
   WEBGL_draw_buffers:
@@ -2519,7 +2520,7 @@ api:
       - webGL1
     __base: |-
       if (!reusableInstances.webGL1) {
-        return false;
+        return {result: false, message: 'WebGL 1 is not available'};
       };
       var instance = reusableInstances.webGL1.getExtension('WEBGL_draw_buffers');
   WEBGL_draw_instanced_base_vertex_base_instance:
@@ -2527,7 +2528,7 @@ api:
       - webGL
     __base: |-
       if (!reusableInstances.webGL) {
-        return false;
+        return {result: false, message: 'WebGL is not available'};
       };
       var instance = reusableInstances.webGL.getExtension('WEBGL_draw_instanced_base_vertex_base_instance');
   WEBGL_multi_draw:
@@ -2535,7 +2536,7 @@ api:
       - webGL
     __base: |-
       if (!reusableInstances.webGL) {
-        return false;
+        return {result: false, message: 'WebGL is not available'};
       };
       var instance = reusableInstances.webGL.getExtension('WEBGL_multi_draw');
   WEBGL_multi_draw_instanced_base_vertex_base_instance:
@@ -2543,7 +2544,7 @@ api:
       - webGL
     __base: |-
       if (!reusableInstances.webGL) {
-        return false;
+        return {result: false, message: 'WebGL is not available'};
       };
       var instance = reusableInstances.webGL.getExtension('WEBGL_multi_draw_instanced_base_vertex_base_instance');
   WEBGL_lose_context:
@@ -2551,7 +2552,7 @@ api:
       - webGL
     __base: |-
       if (!reusableInstances.webGL) {
-        return false;
+        return {result: false, message: 'WebGL is not available'};
       };
       var instance = reusableInstances.webGL.getExtension('WEBGL_lose_context');
   WebGLTimerQueryEXT:
@@ -2576,7 +2577,7 @@ api:
           instance = document.createEvent('WebKitAnimationEvent');
         } catch(e) {
           if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
-            return false;
+            return {result: false, message: 'Cannot create event'};
           }
           throw e;
         }
@@ -2591,7 +2592,7 @@ api:
           instance = document.createEvent('WebKitTransitionEvent');
         } catch(e) {
           if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
-            return false;
+            return {result: false, message: 'Cannot create event'};
           }
           throw e;
         }
@@ -2600,7 +2601,7 @@ api:
     __base: |-
       var constructor = self.WebSocket || self.MozWebSocket;
       if (!constructor) {
-        return false;
+        return {result: false, message: '(Moz)WebSocket is not defined or falsy'};
       }
       var instance = new constructor('wss://' + location.hostname);
   WheelEvent:
@@ -2613,7 +2614,7 @@ api:
           instance = document.createEvent('WheelEvent');
         } catch(e) {
           if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
-            return false;
+            return {result: false, message: 'Cannot create event'};
           }
           throw e;
         }
@@ -2630,7 +2631,7 @@ api:
   WritableStreamDefaultController:
     __base: |-
       if (!('WritableStream' in self)) {
-        return false;
+        return {result: false, message: 'WritableStream is not defined'};
       };
       var promise = new Promise(function(resolve, reject) {
         new WritableStream({
@@ -2642,13 +2643,13 @@ api:
   WritableStreamDefaultWriter:
     __base: |-
       if (!('WritableStream' in self)) {
-        return false;
+        return {result: false, message: 'WritableStream is not defined'};
       };
       var instance = new WritableStream({}).getWriter();
   XMLHttpRequest:
     __base: |-
       if (!('XMLHttpRequest' in self)) {
-        return false;
+        return {result: false, message: 'XMLHttpRequest is not defined'};
       }
       var instance = new XMLHttpRequest();
   XMLHttpRequestEventTarget:
