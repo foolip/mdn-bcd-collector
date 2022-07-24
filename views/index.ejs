@@ -24,7 +24,7 @@ See LICENSE.txt for copyright details
     </div>
     <br>
     <div id="limit-exposure-box">
-      <label for="limitExposure"><span class="mdi mdi-lock"></span> Limit Exposure:</label>
+      <label for="limitExposure"><span class="mdi mdi-circle-multiple-outline"></span> Limit Exposure:</label>
       <select id="limit-exposure" name="limitExposure">
         <option value="">All Global Exposures</option>
         <option value="Window">Window</option>
@@ -39,6 +39,7 @@ See LICENSE.txt for copyright details
     <% } %>
   </form>
   <%- include('browserinfo') %>
+  <%- include('unsecurewarning') %>
 </div>
 
 <div id="supported-browsers">
