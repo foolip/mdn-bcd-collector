@@ -60,7 +60,7 @@ const compileCustomTest = (code, format = true) => {
           .replace(/promise\.then/g, `${instancevar}.then`)
           .replace(/(instance|promise) = /g, `${instancevar} = `);
         if (!(['instance', 'promise'].includes(instancevar) || callback)) {
-          importcode += `\n  if (!${instancevar}) {\n    return false;\n  }`;
+          importcode += `\n  if (!${instancevar}) {\n    return {result: false, message: '${instancevar} is falsy'};\n  }`;
         }
         return importcode;
       }
@@ -98,7 +98,7 @@ const getCustomTestAPI = (name, member, type) => {
           testbase +
             (promise ?
               `if (!promise) {
-    return false;
+    return {result: false, message: 'Promise variable is falsy'};
   }
   return promise.then(function(instance) {
     return ${returnValue};
@@ -135,7 +135,7 @@ const getCustomTestAPI = (name, member, type) => {
             testbase +
               (promise ?
                 `if (!promise) {
-    return false;
+    return {result: false, message: 'Promise variable is falsy'};
   }
   return promise.then(function(instance) {
     return ${returnValue};
@@ -958,20 +958,20 @@ const buildJS = (customJS) => {
       if (path.startsWith('Intl')) {
         rawCode =
           `if (!("${parts[1]}" in Intl)) {
-    return false;
+    return {result: false, message: 'Intl.${parts[1]} is not defined'};
   }
   ` + rawCode;
       } else if (path.startsWith('WebAssembly')) {
         rawCode =
           `if (!("${parts[1]}" in WebAssembly)) {
-    return false;
+    return {result: false, message: 'WebAssembly.${parts[1]} is not defined'};
   }
   ` + rawCode;
       }
 
       rawCode =
         `if (!("${parts[0]}" in self)) {
-    return false;
+    return {result: false, message: '${parts[0]} is not defined'};
   }
   ` + rawCode;
 

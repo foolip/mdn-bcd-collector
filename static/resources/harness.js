@@ -159,7 +159,8 @@
           'is not a valid custom element constructor',
           'constructor takes a',
           'is not a valid argument count',
-          'Missing required'
+          'Missing required',
+          'Cannot read property'
         ])
       ) {
         // If it failed to construct and it's not illegal or just needs
