@@ -1696,6 +1696,21 @@ api:
     __base: |-
       var doc = new DOMParser().parseFromString('<foo />', 'application/xml');
       var instance = doc.createProcessingInstruction('xml-stylesheet', 'href="mycss.css" type="text/css"');
+  ProgressEvent:
+    __base: |-
+      var instance;
+      try {
+        instance = new ProgressEvent('progress');
+      } catch(e) {
+        try {
+          instance = document.createEvent('ProgressEvent');
+        } catch(e) {
+          if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
+            return {result: false, message: 'Cannot create event'};
+          }
+          throw e;
+        }
+      }
   PushEvent:
     __base: |-
       if (!('PushEvent' in self)) {
