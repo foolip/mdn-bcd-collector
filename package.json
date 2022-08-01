@@ -81,7 +81,7 @@
     "chalk-template": "0.4.0",
     "ejs-lint": "1.2.2",
     "enquirer": "2.3.6",
-    "eslint": "8.20.0",
+    "eslint": "8.21.0",
     "eslint-config-google": "0.14.0",
     "eslint-plugin-prefer-arrow": "1.2.3",
     "fdir": "5.2.0",
