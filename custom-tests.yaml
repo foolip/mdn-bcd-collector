@@ -1303,6 +1303,11 @@ api:
       var instance = reusableInstances.webGL.getExtension('KHR_parallel_shader_compile');
   Location:
     __base: var instance = location;
+    toString: |-
+      if (!('toString' in instance)) {
+        return {result: false, message: 'toString is not defined'};
+      }
+      return instance.toString() == instance.href;
   MediaCapabilities:
     __base: var instance = navigator.mediaCapabilities;
   MediaDeviceInfo:
@@ -2646,7 +2651,11 @@ api:
     __base: var instance = self;
   WorkerLocation:
     __base: var instance = location;
-    toString: return instance.toString() == instance.href;
+    toString: |-
+      if (!('toString' in instance)) {
+        return {result: false, message: 'toString is not defined'};
+      }
+      return instance.toString() == instance.href;
   WorkerNavigator:
     __base: var instance = navigator;
   WritableStreamDefaultController:
