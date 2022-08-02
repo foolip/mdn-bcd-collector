@@ -29,7 +29,7 @@
     "update-bcd": "ts-node update-bcd.ts",
     "find-missing-features": "ts-node find-missing-features.ts",
     "find-missing-results": "ts-node find-missing-results.ts",
-    "add-new-bcd": "node add-new-bcd.js",
+    "add-new-bcd": "ts-node add-new-bcd.ts",
     "release": "node release.js",
     "result-stats": "ts-node result-stats.ts"
   },
