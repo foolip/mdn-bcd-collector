@@ -24,7 +24,7 @@ const overrides = await fs.readJson(
 const BCD_DIR = process.env.BCD_DIR || `../browser-compat-data`;
 const {default: bcd} = await import(`${BCD_DIR}/index.js`);
 const {default: compareFeatures} = await import(
-  `${BCD_DIR}/scripts/compare-features.js`
+  `${BCD_DIR}/scripts/lib/compare-features.js`
 );
 
 const template = {
