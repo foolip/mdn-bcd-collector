@@ -16,7 +16,10 @@ const browsers = {
   edge: {name: 'Edge', releases: {16: {}, 84: {}}},
   firefox: {name: 'Firefox', releases: {3.6: {}}},
   ie: {name: 'Internet Explorer', releases: {8: {}, 11: {}}},
-  safari: {name: 'Safari', releases: {13: {}, 13.1: {}, 14: {}}},
+  safari: {
+    name: 'Safari',
+    releases: {13: {}, 13.1: {}, 14: {}, 15: {}, 15.1: {}, 15.2: {}}
+  },
   safari_ios: {
     name: 'iOS Safari',
     releases: {13: {}, 13.3: {}, 13.4: {}, 14: {}}
@@ -218,7 +221,7 @@ describe('parseUA', () => {
     );
   });
 
-  it('Safari 15 (not in BCD)', () => {
+  it('Safari 15', () => {
     assert.deepEqual(
       parseUA(
         'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.0 Safari/605.1.15',
@@ -226,8 +229,56 @@ describe('parseUA', () => {
       ),
       {
         browser: {id: 'safari', name: 'Safari'},
-        version: '15.0',
+        version: '15',
         fullVersion: '15.0',
+        os: {name: 'Mac OS', version: '10.15.6'},
+        inBcd: true
+      }
+    );
+  });
+
+  it('Safari 15.2', () => {
+    assert.deepEqual(
+      parseUA(
+        'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.2 Safari/605.1.15',
+        browsers
+      ),
+      {
+        browser: {id: 'safari', name: 'Safari'},
+        version: '15.2',
+        fullVersion: '15.2',
+        os: {name: 'Mac OS', version: '10.15.6'},
+        inBcd: true
+      }
+    );
+  });
+
+  it('Safari 15.3 (not in BCD)', () => {
+    assert.deepEqual(
+      parseUA(
+        'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/15.3 Safari/605.1.15',
+        browsers
+      ),
+      {
+        browser: {id: 'safari', name: 'Safari'},
+        version: '15.3',
+        fullVersion: '15.3',
+        os: {name: 'Mac OS', version: '10.15.6'},
+        inBcd: false
+      }
+    );
+  });
+
+  it('Safari 16 (not in BCD)', () => {
+    assert.deepEqual(
+      parseUA(
+        'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/16.0 Safari/605.1.15',
+        browsers
+      ),
+      {
+        browser: {id: 'safari', name: 'Safari'},
+        version: '16.0',
+        fullVersion: '16.0',
         os: {name: 'Mac OS', version: '10.15.6'},
         inBcd: false
       }
