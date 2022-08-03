@@ -9,6 +9,11 @@
 import compareVersions from 'compare-versions';
 import uaParser from 'ua-parser-js';
 
+const getMajorVersion = (version) => {
+  const [major] = version.split('.');
+  return major;
+};
+
 const getMajorMinorVersion = (version) => {
   const [major, minor] = version.split('.');
   return `${major}.${minor || 0}`;
@@ -106,7 +111,6 @@ const parseUA = (userAgent, browsers) => {
   // with this, find the pair of versions in |versions| that sandwiches
   // |version|, and use the first of this pair. For example, given |version|
   // "10.1" and |versions| entries "10.0" and "10.2", return "10.0".
-
   for (let i = 0; i < versions.length - 1; i++) {
     const current = versions[i];
     const next = versions[i + 1];
@@ -120,20 +124,18 @@ const parseUA = (userAgent, browsers) => {
     }
   }
 
-  // This is the last entry in |versions|. With no |next| to compare against
-  // we have to check that the major versions match. Given |version| "10.3"
-  // and |versions| entries "10.0" and "10.2", return "10.2". Given |version|
-  // "11.0", skip.
+  // This is the last entry in |versions|. With no |next| to compare against we
+  // have to check if it looks like a significant release or not. By default
+  // that means a new major version, but for Safari and Samsung Internet the
+  // major and minor version are significant.
+  let normalize = getMajorVersion;
+  if (data.browser.id.startsWith('safari') ||
+      data.browser.id === 'samsunginternet_android') {
+    normalize = getMajorMinorVersion;
+  }
   if (
-    data.browser.id.startsWith('safari') &&
-    compareVersions.compare(data.version, '15', '>=')
-  ) {
-    // Ignore this step for Safari 15.x and up, as Safari 15+ has more frequent
-    // updates and we want to track all individual minor releases
-    data.inBcd = versions.includes(data.version);
-  } else if (
     data.inBcd == false &&
-    data.version.split('.')[0] === versions[versions.length - 1].split('.')[0]
+    normalize(data.version) === normalize(versions[versions.length - 1])
   ) {
     data.inBcd = true;
     data.version = versions[versions.length - 1];
