@@ -16,6 +16,7 @@
     "prepare": "node scripts.js prepare",
     "format": "eslint . && prettier -c \"**/*.json\" \"**/*.md\" \"**/*.scss\" \"**/*.yaml\" --color && ejslint views/*",
     "format:fix": "eslint --fix . && prettier --write \"**/*.json\" \"**/*.md\" \"**/*.scss\" \"**/*.yaml\"",
+    "fix": "npm run format:fix",
     "clean": "rm -rf .nyc_output coverage generated tests.json",
     "build": "node build.js",
     "gcp-build": "npm run build",
