@@ -106,25 +106,17 @@ const parseUA = (userAgent, browsers) => {
   // with this, find the pair of versions in |versions| that sandwiches
   // |version|, and use the first of this pair. For example, given |version|
   // "10.1" and |versions| entries "10.0" and "10.2", return "10.0".
-  if (
-    data.browser.id.startsWith('safari') &&
-    compareVersions.compare(data.version, '15', '>=')
-  ) {
-    // Ignore this step for Safari 15.x and up, as Safari 15+ has more frequent
-    // updates and we want to track all individual minor releases
-    data.inBcd = data.version in browsers[data.browser.id].releases;
-  } else {
-    for (let i = 0; i < versions.length - 1; i++) {
-      const current = versions[i];
-      const next = versions[i + 1];
-      if (
-        compareVersions.compare(data.version, current, '>=') &&
-        compareVersions.compare(data.version, next, '<')
-      ) {
-        data.inBcd = true;
-        data.version = current;
-        break;
-      }
+
+  for (let i = 0; i < versions.length - 1; i++) {
+    const current = versions[i];
+    const next = versions[i + 1];
+    if (
+      compareVersions.compare(data.version, current, '>=') &&
+      compareVersions.compare(data.version, next, '<')
+    ) {
+      data.inBcd = true;
+      data.version = current;
+      break;
     }
   }
 
@@ -133,6 +125,14 @@ const parseUA = (userAgent, browsers) => {
   // and |versions| entries "10.0" and "10.2", return "10.2". Given |version|
   // "11.0", skip.
   if (
+    data.browser.id.startsWith('safari') &&
+    compareVersions.compare(data.version, '15', '>=')
+  ) {
+    // Ignore this step for Safari 15.x and up, as Safari 15+ has more frequent
+    // updates and we want to track all individual minor releases
+    data.version = data.version;
+    data.inBcd = versions.includes(data.version);
+  } else if (
     data.inBcd == false &&
     data.version.split('.')[0] === versions[versions.length - 1].split('.')[0]
   ) {
