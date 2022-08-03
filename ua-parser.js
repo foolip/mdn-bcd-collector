@@ -130,7 +130,6 @@ const parseUA = (userAgent, browsers) => {
   ) {
     // Ignore this step for Safari 15.x and up, as Safari 15+ has more frequent
     // updates and we want to track all individual minor releases
-    data.version = data.version;
     data.inBcd = versions.includes(data.version);
   } else if (
     data.inBcd == false &&
