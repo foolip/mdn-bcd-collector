@@ -10,8 +10,7 @@ import compareVersions from 'compare-versions';
 import uaParser from 'ua-parser-js';
 
 const getMajorVersion = (version) => {
-  const [major] = version.split('.');
-  return major;
+  return version.split('.')[0];
 };
 
 const getMajorMinorVersion = (version) => {
