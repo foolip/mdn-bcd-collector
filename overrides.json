@@ -8,5 +8,14 @@
   "https://github.com/mdn/browser-compat-data/pull/3667#discussion_r269207837",
   ["css.properties.ime-mode", "edge", "*", null],
   "https://github.com/mdn/browser-compat-data/pull/8071#discussion_r556514771",
-  ["api.ContactAddress", "firefox", "*", false]
+  ["api.ContactAddress", "firefox", "*", false],
+  "Exposed but doesn't actually work in 60. Tested with this test:",
+  "https://mdn.github.io/webassembly-examples/js-api-examples/compile-streaming.html",
+  ["javascript.builtins.WebAssembly.compileStreaming", "chrome", "60", false],
+  [
+    "javascript.builtins.WebAssembly.instantiateStreaming",
+    "chrome",
+    "60",
+    false
+  ]
 ]
