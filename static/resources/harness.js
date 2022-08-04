@@ -133,36 +133,32 @@
       }
       result.result = true;
     } catch (err) {
-      if (
-        stringIncludes(err.message, [
-          'Illegal constructor',
-          'is not a constructor',
-          'Function expected',
-          'is not defined',
-          "Can't find variable",
-          'NOT_SUPPORTED_ERR'
-        ])
-      ) {
+      if (stringIncludes(err.message, [
+            'Illegal constructor',
+            'is not a constructor',
+            'Function expected',
+            'is not defined',
+            "Can't find variable",
+            'NOT_SUPPORTED_ERR'
+          ])) {
         result.result = false;
-      } else if (
-        stringIncludes(err.message, [
-          'Not enough arguments',
-          'argument required',
-          'arguments required',
-          'Argument not optional',
-          "Arguments can't be empty",
-          'undefined is not an object',
-          'must be an object',
-          'WRONG_ARGUMENTS_ERR',
-          'are both null',
-          'must be specified',
-          'is not a valid custom element constructor',
-          'constructor takes a',
-          'is not a valid argument count',
-          'Missing required',
-          'Cannot read property'
-        ])
-      ) {
+      } else if (stringIncludes(err.message, [
+                   'Not enough arguments',
+                   'argument required',
+                   'arguments required',
+                   'Argument not optional',
+                   "Arguments can't be empty",
+                   'undefined is not an object',
+                   'must be an object',
+                   'WRONG_ARGUMENTS_ERR',
+                   'are both null',
+                   'must be specified',
+                   'is not a valid custom element constructor',
+                   'constructor takes a',
+                   'is not a valid argument count',
+                   'Missing required',
+                   'Cannot read property'
+                 ])) {
         // If it failed to construct and it's not illegal or just needs
         // more arguments, the constructor's good
         result.result = true;
@@ -181,10 +177,8 @@
       return false;
     }
 
-    if (
-      !instance.constructor.name &&
-      Object.prototype.toString.call(instance) === '[object Object]'
-    ) {
+    if (!instance.constructor.name &&
+        Object.prototype.toString.call(instance) === '[object Object]') {
       return {
         result: null,
         message:
@@ -197,10 +191,8 @@
     }
 
     for (var i = 0; i < names.length; i++) {
-      if (
-        instance.constructor.name === names[i] ||
-        Object.prototype.toString.call(instance) === '[object ' + names[i] + ']'
-      ) {
+      if (instance.constructor.name === names[i] ||
+          Object.prototype.toString.call(instance) === '[object ' + names[i] + ']') {
         return true;
       }
     }
@@ -311,10 +303,8 @@
       result.result = null;
       result.message = 'threw ' + stringify(value);
     } else if (value && typeof value === 'object') {
-      if (
-        'name' in value &&
-        stringIncludes(value.name, ['NS_ERROR', 'NotSupported'])
-      ) {
+      if ('name' in value &&
+          stringIncludes(value.name, ['NS_ERROR', 'NotSupported'])) {
         result.result = null;
         result.message = 'threw ' + stringify(value.message);
       } else if ('result' in value) {
@@ -382,11 +372,9 @@
     try {
       var value = eval(test.code);
 
-      if (
-        typeof value === 'object' &&
-        value !== null &&
-        typeof value.then === 'function'
-      ) {
+      if (typeof value === 'object' &&
+          value !== null &&
+          typeof value.then === 'function') {
         value.then(success, fail);
         value['catch'](fail);
       } else if (value !== 'callback') {
@@ -430,12 +418,10 @@
         }
         if (remaining.length > 0 && remaining.length <= 20) {
           consoleLog('Remaining (' + result.info.exposure + '): ' + remaining);
-        } else if (
-          (remaining.length >= 50 &&
-            remaining.length < 200 &&
-            remaining.length % 50 == 0) ||
-          (remaining.length >= 200 && remaining.length % 500 == 0)
-        ) {
+        } else if ((remaining.length >= 50 &&
+                     remaining.length < 200 &&
+                     remaining.length % 50 == 0) ||
+                   (remaining.length >= 200 && remaining.length % 500 == 0)) {
           consoleLog(
             'Remaining (' +
               result.info.exposure +
