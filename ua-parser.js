@@ -123,8 +123,8 @@ const parseUA = (userAgent, browsers) => {
     }
   }
 
-  // This is the last entry in |versions|. With no |next| to compare against we
-  // have to check if it looks like a significant release or not. By default
+  // We reached the last entry in |versions|. With no |next| to compare against
+  // we have to check if it looks like a significant release or not. By default
   // that means a new major version, but for Safari and Samsung Internet the
   // major and minor version are significant.
   let normalize = getMajorVersion;
