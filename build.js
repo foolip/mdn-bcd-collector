@@ -276,7 +276,8 @@ const mergeMembers = (target, source) => {
       // If target has static member with same name, remove from target.
       // If source has static member with same name, don't merge into target.
       if (targetMember.special === 'static') {
-        target.members.pop(target.members.indexOf(targetMember));
+        target.members = target.members.filter((m) => m.name !== member.name);
+        sourceMembers.add(member);
       } else if (member.special !== 'static') {
         throw new Error(
           `Duplicate definition of ${target.name}.${member.name}`
