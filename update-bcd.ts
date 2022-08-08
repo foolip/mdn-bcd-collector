@@ -220,14 +220,14 @@ export const inferSupportStatements = (
       if (!lastStatement) {
         statements.push({
           version_added:
-            lastWasNull || lastKnown.support === false ?
-              `${lastKnown.version}> ≤${version}` :
-              version
+            lastWasNull || lastKnown.support === false
+              ? `${lastKnown.version}> ≤${version}`
+              : version
         });
       } else if (!lastStatement.version_added) {
-        lastStatement.version_added = lastWasNull ?
-          `${lastKnown.version}> ≤${version}` :
-          version;
+        lastStatement.version_added = lastWasNull
+          ? `${lastKnown.version}> ≤${version}`
+          : version;
       } else if (lastStatement.version_removed) {
         // added back again
         statements.push({
@@ -239,12 +239,14 @@ export const inferSupportStatements = (
       lastKnown.support = true;
       lastWasNull = false;
     } else if (supported === false) {
-      if (lastStatement &&
-          lastStatement.version_added &&
-          !lastStatement.version_removed) {
-        lastStatement.version_removed = lastWasNull ?
-          `${lastKnown.version}> ≤${version}` :
-          version;
+      if (
+        lastStatement &&
+        lastStatement.version_added &&
+        !lastStatement.version_removed
+      ) {
+        lastStatement.version_removed = lastWasNull
+          ? `${lastKnown.version}> ≤${version}`
+          : version;
       } else if (!lastStatement) {
         statements.push({version_added: false});
       }
@@ -284,9 +286,11 @@ export const update = (
     const originalSupport = JSON.parse(JSON.stringify(entry.__compat.support));
 
     for (const [browser, versionMap] of browserMap.entries()) {
-      if (filter.browser &&
-          filter.browser.length &&
-          !filter.browser.includes(browser)) {
+      if (
+        filter.browser &&
+        filter.browser.length &&
+        !filter.browser.includes(browser)
+      ) {
         continue;
       }
       const inferredStatements = inferSupportStatements(versionMap);
@@ -297,9 +301,11 @@ export const update = (
 
       const inferredStatement = inferredStatements[0];
 
-      if (filter.release &&
-          filter.release !== inferredStatement.version_added &&
-          filter.release !== inferredStatement.version_removed) {
+      if (
+        filter.release &&
+        filter.release !== inferredStatement.version_added &&
+        filter.release !== inferredStatement.version_removed
+      ) {
         continue;
       }
 
@@ -365,16 +371,24 @@ export const update = (
       }
 
       let dataIsOlder = false;
-      if (inferredStatement.version_added === false &&
-          typeof simpleStatement.version_added === 'string') {
+      if (
+        inferredStatement.version_added === false &&
+        typeof simpleStatement.version_added === 'string'
+      ) {
         // Make sure not to update BCD if it is set to a version newer than we have in our data
 
-        for (const [version, result] of Array.from(versionMap.entries()).reverse()) {
-          if (result !== null &&
-              simpleStatement.version_added !== 'preview' &&
-              compareVersions.compare(
-                version,
-                simpleStatement.version_added.replace('≤', ''), '<=')) {
+        for (const [version, result] of Array.from(
+          versionMap.entries()
+        ).reverse()) {
+          if (
+            result !== null &&
+            simpleStatement.version_added !== 'preview' &&
+            compareVersions.compare(
+              version,
+              simpleStatement.version_added.replace('≤', ''),
+              '<='
+            )
+          ) {
             // A version we have data for is the same or newer than the version in BCD
             dataIsOlder = true;
             break;
@@ -384,27 +398,39 @@ export const update = (
 
       if (dataIsOlder) {
         continue;
-      } else if (typeof simpleStatement.version_added === 'string' &&
-          typeof inferredStatement.version_added === 'string' &&
-          inferredStatement.version_added.includes('≤')) {
+      } else if (
+        typeof simpleStatement.version_added === 'string' &&
+        typeof inferredStatement.version_added === 'string' &&
+        inferredStatement.version_added.includes('≤')
+      ) {
         const range = inferredStatement.version_added.split('> ≤');
-        if (simpleStatement.version_added === 'preview' ||
-            compareVersions.compare(
-              simpleStatement.version_added.replace('≤', ''),
-              range[0], '<=') ||
-            compareVersions.compare(
-              simpleStatement.version_added.replace('≤', ''),
-              range[1], '>')) {
+        if (
+          simpleStatement.version_added === 'preview' ||
+          compareVersions.compare(
+            simpleStatement.version_added.replace('≤', ''),
+            range[0],
+            '<='
+          ) ||
+          compareVersions.compare(
+            simpleStatement.version_added.replace('≤', ''),
+            range[1],
+            '>'
+          )
+        ) {
           simpleStatement.version_added =
             inferredStatement.version_added.replace('0> ', '');
           modified = true;
         }
-      } else if (!(typeof simpleStatement.version_added === 'string' &&
-                   inferredStatement.version_added === true)) {
+      } else if (
+        !(
+          typeof simpleStatement.version_added === 'string' &&
+          inferredStatement.version_added === true
+        )
+      ) {
         simpleStatement.version_added =
-          typeof inferredStatement.version_added === 'string' ?
-            inferredStatement.version_added.replace('0> ', '') :
-            inferredStatement.version_added;
+          typeof inferredStatement.version_added === 'string'
+            ? inferredStatement.version_added.replace('0> ', '')
+            : inferredStatement.version_added;
         modified = true;
       }
 

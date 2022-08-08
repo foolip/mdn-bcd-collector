@@ -23,9 +23,9 @@ import customIDL from './custom-idl/index.js';
 const customTests = YAML.parse(
   await fs.readFile(
     new URL(
-      process.env.NODE_ENV === 'test' ?
-        './unittest/unit/custom-tests.test.yaml' :
-        './custom-tests.yaml',
+      process.env.NODE_ENV === 'test'
+        ? './unittest/unit/custom-tests.test.yaml'
+        : './custom-tests.yaml',
       import.meta.url
     ),
     'utf8'
@@ -83,9 +83,9 @@ const getCustomTestAPI = (name, member, type) => {
 
   if (name in customTests.api) {
     const testbase =
-      '__base' in customTests.api[name] ?
-        customTests.api[name].__base.replace(/\n/g, '\n  ') + '\n  ' :
-        '';
+      '__base' in customTests.api[name]
+        ? customTests.api[name].__base.replace(/\n/g, '\n  ') + '\n  '
+        : '';
     const promise = testbase.includes('var promise');
     const callback = testbase.includes('callback(');
 
@@ -94,59 +94,63 @@ const getCustomTestAPI = (name, member, type) => {
         test = testbase + customTests.api[name].__test;
       } else {
         const returnValue = '!!instance';
-        test = testbase ?
-          testbase +
-            (promise ?
-              `if (!promise) {
+        test = testbase
+          ? testbase +
+            (promise
+              ? `if (!promise) {
     return {result: false, message: 'Promise variable is falsy'};
   }
   return promise.then(function(instance) {
     return ${returnValue};
-  });` :
-              callback ?
-              `function callback(instance) {
+  });`
+              : callback
+              ? `function callback(instance) {
     try {
       success(${returnValue});
     } catch(e) {
       fail(e);
     }
   };
-  return 'callback';` :
-              `return ${returnValue};`) :
-          false;
+  return 'callback';`
+              : `return ${returnValue};`)
+          : false;
       }
     } else {
-      if (member in customTests.api[name] &&
-          typeof customTests.api[name][member] === 'string') {
+      if (
+        member in customTests.api[name] &&
+        typeof customTests.api[name][member] === 'string'
+      ) {
         test = testbase + customTests.api[name][member];
       } else {
-        if (['constructor', 'static'].includes(type) ||
-            ['toString', 'toJSON'].includes(member)) {
+        if (
+          ['constructor', 'static'].includes(type) ||
+          ['toString', 'toJSON'].includes(member)
+        ) {
           // Constructors, constants, and static attributes should not have
           // auto-generated custom tests
           test = false;
         } else {
           const returnValue = `!!instance && '${member}' in instance`;
-          test = testbase ?
-            testbase +
-              (promise ?
-                `if (!promise) {
+          test = testbase
+            ? testbase +
+              (promise
+                ? `if (!promise) {
     return {result: false, message: 'Promise variable is falsy'};
   }
   return promise.then(function(instance) {
     return ${returnValue};
-  });` :
-                callback ?
-                `function callback(instance) {
+  });`
+                : callback
+                ? `function callback(instance) {
     try {
       success(${returnValue});
     } catch(e) {
       fail(e);
     }
   };
-  return 'callback';` :
-                `return ${returnValue};`) :
-            false;
+  return 'callback';`
+                : `return ${returnValue};`)
+            : false;
         }
       }
     }
@@ -172,9 +176,9 @@ const getCustomSubtestsAPI = (name) => {
 
   if (name in customTests.api) {
     const testbase =
-      '__base' in customTests.api[name] ?
-        customTests.api[name].__base.replace(/\n/g, '\n  ') + '\n  ' :
-        '';
+      '__base' in customTests.api[name]
+        ? customTests.api[name].__base.replace(/\n/g, '\n  ') + '\n  '
+        : '';
     if ('__additional' in customTests.api[name]) {
       for (const subtest of Object.entries(
         customTests.api[name].__additional
@@ -694,9 +698,9 @@ const buildIDLMemberTests = (
       }
     }
 
-    const name = isEventHandler ?
-      `${member.name.replace(/^on/, '')}_event` :
-      member.name;
+    const name = isEventHandler
+      ? `${member.name.replace(/^on/, '')}_event`
+      : member.name;
 
     tests[name] = compileTest({
       raw: {

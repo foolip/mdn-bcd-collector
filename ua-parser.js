@@ -57,9 +57,9 @@ const parseUA = (userAgent, browsers) => {
 
     if (ua.browser.name === 'Android Browser') {
       // For early WebView Android, use the OS version
-      data.fullVersion = compareVersions.compare(ua.os.version, '5.0', '<') ?
-        ua.os.version :
-        ua.engine.version;
+      data.fullVersion = compareVersions.compare(ua.os.version, '5.0', '<')
+        ? ua.os.version
+        : ua.engine.version;
     }
   } else if (os === 'ios') {
     data.browser.id += '_ios';
@@ -85,9 +85,11 @@ const parseUA = (userAgent, browsers) => {
   // Android 4.4.3 needs to be handled as a special case, because its data
   // differs from 4.4, and the code below will strip out the patch versions from
   // our version numbers.
-  if (data.browser.id === 'webview_android' &&
-      compareVersions.compare(data.fullVersion, '4.4.3', '>=') &&
-      compareVersions.compare(data.fullVersion, '5.0', '<')) {
+  if (
+    data.browser.id === 'webview_android' &&
+    compareVersions.compare(data.fullVersion, '4.4.3', '>=') &&
+    compareVersions.compare(data.fullVersion, '5.0', '<')
+  ) {
     data.version = '4.4.3';
     data.inBcd = true;
     return data;
@@ -96,8 +98,10 @@ const parseUA = (userAgent, browsers) => {
   // Certain Safari versions are backports of newer versions, but contain less
   // features, particularly ones involving OS integration. We are explicitly
   // marking these versions as "not in BCD" to avoid confusion.
-  if (data.browser.id === 'safari' &&
-      ['4.1', '6.1', '6.2', '7.1'].includes(data.version)) {
+  if (
+    data.browser.id === 'safari' &&
+    ['4.1', '6.1', '6.2', '7.1'].includes(data.version)
+  ) {
     return data;
   }
 
@@ -109,8 +113,10 @@ const parseUA = (userAgent, browsers) => {
   for (let i = 0; i < versions.length - 1; i++) {
     const current = versions[i];
     const next = versions[i + 1];
-    if (compareVersions.compare(data.version, current, '>=') &&
-        compareVersions.compare(data.version, next, '<')) {
+    if (
+      compareVersions.compare(data.version, current, '>=') &&
+      compareVersions.compare(data.version, next, '<')
+    ) {
       data.inBcd = true;
       data.version = current;
       break;
@@ -122,12 +128,16 @@ const parseUA = (userAgent, browsers) => {
   // that means a new major version, but for Safari and Samsung Internet the
   // major and minor version are significant.
   let normalize = getMajorVersion;
-  if (data.browser.id.startsWith('safari') ||
-      data.browser.id === 'samsunginternet_android') {
+  if (
+    data.browser.id.startsWith('safari') ||
+    data.browser.id === 'samsunginternet_android'
+  ) {
     normalize = getMajorMinorVersion;
   }
-  if (data.inBcd == false &&
-      normalize(data.version) === normalize(versions[versions.length - 1])) {
+  if (
+    data.inBcd == false &&
+    normalize(data.version) === normalize(versions[versions.length - 1])
+  ) {
     data.inBcd = true;
     data.version = versions[versions.length - 1];
   }

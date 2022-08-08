@@ -105,11 +105,11 @@ const getStats = (data: Report, featureQuery: string[]): any => {
         .filter((r) => r.name === f || r.name.startsWith(`${f}.`))
         .map((r) => ({
           ...r,
-          status: r.result ?
-            'Supported' :
-            r.result === false ?
-            'Unsupported' :
-            'Unknown'
+          status: r.result
+            ? 'Supported'
+            : r.result === false
+            ? 'Unsupported'
+            : 'Unknown'
         }));
       featuresQueried.push(
         ...featuresFound.sort((a, b) => a.name.localeCompare(b.name))
