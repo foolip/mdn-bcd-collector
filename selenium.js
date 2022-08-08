@@ -111,8 +111,10 @@ const filterVersions = (data, earliestVersion, reverse) => {
   const versions = [];
 
   for (const [version, versionData] of Object.entries(data)) {
-    if ((versionData.status == 'current' || versionData.status == 'retired') &&
-        compareVersions.compare(version, earliestVersion, '>=')) {
+    if (
+      (versionData.status == 'current' || versionData.status == 'retired') &&
+      compareVersions.compare(version, earliestVersion, '>=')
+    ) {
       versions.push(version);
     }
   }
@@ -181,16 +183,16 @@ const getOsesToTest = (service, os) => {
       break;
     case 'macOS':
       osesToTest =
-        service === 'saucelabs' ?
-          [['macOS', '10.14']] :
-          service === 'lambdatest' ?
-          [
+        service === 'saucelabs'
+          ? [['macOS', '10.14']]
+          : service === 'lambdatest'
+          ? [
               ['macOS', 'Monterey'],
               ['macOS', 'Big Sur'],
               ['macOS', 'Mojave'],
               ['OS X', 'El Capitan']
-            ] :
-          [
+            ]
+          : [
               ['OS X', 'Monterey'],
               ['OS X', 'Big Sur'],
               ['OS X', 'Mojave'],
@@ -252,9 +254,11 @@ const buildDriver = async (browser, version, os) => {
         continue;
       }
 
-      if (browser === 'safari' &&
-          version >= 10 &&
-          Math.round(version) == version) {
+      if (
+        browser === 'safari' &&
+        version >= 10 &&
+        Math.round(version) == version
+      ) {
         // BrowserStack doesn't support the Safari x.0 versions
         continue;
       }
@@ -377,8 +381,10 @@ const changeProtocol = (browser, version, page) => {
       break;
   }
 
-  if ((browser === 'edge' && version <= 18) ||
-      (browser === 'firefox' && version <= 52)) {
+  if (
+    (browser === 'edge' && version <= 18) ||
+    (browser === 'firefox' && version <= 52)
+  ) {
     page = page.replace(/,/g, '%2C');
   }
 
@@ -515,9 +521,11 @@ const runAll = async (
 
     for (const version of browsersToTest[browser]) {
       for (const os of oses) {
-        if (os === 'macOS' &&
-            ['edge', 'ie'].includes(browser) &&
-            version <= 18) {
+        if (
+          os === 'macOS' &&
+          ['edge', 'ie'].includes(browser) &&
+          version <= 18
+        ) {
           // Don't test Internet Explorer / EdgeHTML on macOS
           continue;
         }

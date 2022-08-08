@@ -53,7 +53,8 @@ const REPORTS = [
     },
     expected: {
       slug: '1.2.3-samsunginternet-android-12.1-android-11-a3a2bf6696',
-      title: 'Results from Samsung Internet 12.1 / Android 11 / Collector v1.2.3',
+      title:
+        'Results from Samsung Internet 12.1 / Android 11 / Collector v1.2.3',
       body: 'User Agent: Mozilla/5.0 (Linux; Android 11; Pixel 2) AppleWebKit/537.36 (KHTML, like Gecko) SamsungBrowser/12.1 Chrome/79.0.3945.136 Mobile Safari/537.36\nBrowser: Samsung Internet 12.1 (on Android 11)\nHash Digest: a3a2bf6696\nTest URLs: https://mdn-bcd-collector.appspot.com/tests/'
     }
   },

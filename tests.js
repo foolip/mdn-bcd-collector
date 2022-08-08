@@ -6,7 +6,7 @@
 // See LICENSE.txt for copyright details
 //
 
-import didYouMean from "didyoumean";
+import didYouMean from 'didyoumean';
 
 class Tests {
   constructor(options) {

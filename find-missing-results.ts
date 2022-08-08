@@ -62,8 +62,10 @@ const generateReportMap = (allResults: boolean) => {
             v == '15' ||
             v == result[browserKey][result[browserKey].length - 1]
         );
-      } else if (browserKey.includes('_android') ||
-                 browserKey.includes('_ios')) {
+      } else if (
+        browserKey.includes('_android') ||
+        browserKey.includes('_ios')
+      ) {
         // Ignore all mobile browser releases besides the most current
         result[browserKey] = result[browserKey].filter(
           (v) => v == result[browserKey][result[browserKey].length - 1]

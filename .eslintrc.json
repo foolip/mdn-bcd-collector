@@ -1,10 +1,11 @@
 {
   "extends": [
     "eslint:recommended",
+    "google",
     "plugin:@typescript-eslint/recommended",
-    "google"
+    "plugin:prettier/recommended"
   ],
-  "plugins": ["@typescript-eslint", "prefer-arrow"],
+  "plugins": ["@typescript-eslint", "prefer-arrow", "prettier"],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaVersion": 2020,

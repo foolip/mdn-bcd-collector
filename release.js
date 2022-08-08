@@ -215,7 +215,10 @@ const getGitChanges = async (ctx) => {
   ).split('\n');
   ctx.commits = commits
     .filter((summary) => !summary.startsWith('Bump '))
-    .map((summary) => `- ${summary.replaceAll('<', '&lt;').replaceAll('>', '&gt;')}`)
+    .map(
+      (summary) =>
+        `- ${summary.replaceAll('<', '&lt;').replaceAll('>', '&gt;')}`
+    )
     .map((summary) =>
       // Link to pull requests
       summary.replace(
@@ -267,24 +270,24 @@ const createPR = async (ctx) => {
 
 const main = async () => {
   const {argv} = yargs(hideBin(process.argv))
-      .parserConfiguration({
-        'boolean-negation': false
-      })
-      .option('no-fetch', {
-        describe: "Don't fetch remote",
-        type: 'boolean',
-        default: false
-      })
-      .option('no-prompt', {
-        describe: "Don't prompt about anything, assume defaults",
-        type: 'boolean',
-        default: false
-      })
-      .option('no-pr', {
-        describe: "Don't create a pull request",
-        type: 'boolean',
-        default: false
-      });
+    .parserConfiguration({
+      'boolean-negation': false
+    })
+    .option('no-fetch', {
+      describe: "Don't fetch remote",
+      type: 'boolean',
+      default: false
+    })
+    .option('no-prompt', {
+      describe: "Don't prompt about anything, assume defaults",
+      type: 'boolean',
+      default: false
+    })
+    .option('no-pr', {
+      describe: "Don't create a pull request",
+      type: 'boolean',
+      default: false
+    });
 
   const tasks = new Listr(
     [

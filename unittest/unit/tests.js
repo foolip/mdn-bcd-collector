@@ -6,10 +6,9 @@
 // See LICENSE.txt for copyright details
 //
 
+import {assert} from 'chai';
 
-import {assert} from "chai";
-
-import Tests from "../../tests.js";
+import Tests from '../../tests.js';
 
 const testDatabase = {
   'api.AbortController': {

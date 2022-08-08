@@ -6,10 +6,9 @@
 // See LICENSE.txt for copyright details
 //
 
+import {assert} from 'chai';
 
-import {assert} from "chai";
-
-import {CloudStorage, MemoryStorage, getStorage} from "../../storage.js";
+import {CloudStorage, MemoryStorage, getStorage} from '../../storage.js';
 
 const SESSION_ID = 'testsessionid';
 
