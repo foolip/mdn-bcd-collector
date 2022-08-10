@@ -1,5 +1,22 @@
 # mdn-bcd-collector Changelog
 
+## v6.1.2
+
+### Test Changes
+
+#### Added
+
+- api.Response.clone
+
+#### Changed
+
+- api.Response.json
+
+### Commits
+
+- Hook Prettier into ESLint; use Prettier's styling rules ([#2219](https://github.com/foolip/mdn-bcd-collector/pull/2219))
+- Fix removal of static members when non-static member is present ([#2218](https://github.com/foolip/mdn-bcd-collector/pull/2218))
+
 ## v6.1.1
 
 ### Test Changes
