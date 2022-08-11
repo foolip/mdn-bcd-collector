@@ -77,7 +77,7 @@ const cookieSession = (req, res, next) => {
 };
 
 const checkIfSecure = (req, _, next) => {
-  app.locals.secure = req.secure;
+  app.locals.secure = req.protocol == 'https';
   next();
 };
 
