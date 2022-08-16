@@ -192,7 +192,7 @@ const printStats = (stats: any, verboseNull: boolean): void => {
       console.log(
         chalk` - ${feature.name} ({bold ${feature.exposure}} exposure): {${
           statuses[feature.status] || 'bold'
-        } ${feature.status}}`
+        } ${feature.status}}` + (feature.message ? ` - ${feature.message}` : '')
       );
     }
   }
