@@ -150,6 +150,10 @@ $colors: (
 
 @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@400;700&family=Roboto:ital,wght@0,400;0,700;1,400&family=Montserrat:wght@500&display=swap');
 
+:root {
+  color-scheme: light dark;
+}
+
 html {
   @include themedProperty(background, 'background');
 }
