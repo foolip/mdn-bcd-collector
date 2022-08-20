@@ -1,18 +1,15 @@
-// Copyright 2020 Google LLC
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
+// mdn-bcd-collector: selenium.js
+// Script to collect results from various browsers using Selenium webdriver
 //
-//     https://www.apache.org/licenses/LICENSE-2.0
+// © Gooborg Studios, Google LLC
+// See LICENSE.txt for copyright details
 //
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
 
-const {
+import path from 'node:path';
+import {fileURLToPath} from 'node:url';
+
+import {
   Browser,
   Builder,
   By,
@@ -20,28 +17,39 @@ const {
   Capability,
   logging,
   until
-} = require('selenium-webdriver');
-const bcdBrowsers = require('@mdn/browser-compat-data').browsers;
-const compareVersions = require('compare-versions');
-const fetch = require('node-fetch');
-const fs = require('fs-extra');
-const path = require('path');
-const chalk = require('chalk');
-const {Listr} = require('listr2');
+} from 'selenium-webdriver';
+import bcd from '@mdn/browser-compat-data' assert {type: 'json'};
+const bcdBrowsers = bcd.browsers;
+import compareVersions from 'compare-versions';
+import fetch from 'node-fetch';
+import esMain from 'es-main';
+import fs from 'fs-extra';
+import chalk from 'chalk-template';
+import {Listr} from 'listr2';
+import yargs from 'yargs';
+import {hideBin} from 'yargs/helpers';
 
-const secrets = require('./secrets.json');
+import './selenium-keepalive.js';
 
-const resultsDir = path.join(__dirname, '..', 'mdn-bcd-results');
+const secrets = await fs.readJson(new URL('./secrets.json', import.meta.url));
+
+const resultsDir = fileURLToPath(
+  new URL('../mdn-bcd-results', import.meta.url)
+);
 
 const testenv = process.env.NODE_ENV === 'test';
-const host = `https://${testenv ? 'staging-dot-' : ''}mdn-bcd-collector.appspot.com`;
+const host = `https://${
+  testenv ? 'staging-dot-' : ''
+}mdn-bcd-collector.appspot.com`;
 
 const seleniumUrls = {
   browserstack: 'https://${username}:${key}@hub-cloud.browserstack.com/wd/hub',
-  saucelabs: 'https://${username}:${key}@ondemand.${region}.saucelabs.com:443/wd/hub'
+  saucelabs:
+    'https://${username}:${key}@ondemand.${region}.saucelabs.com:443/wd/hub',
+  lambdatest: 'https://${username}:${key}@hub.lambdatest.com/wd/hub'
 };
 
-// Custom tests that use getUserMedia() make Edge 12-18 block.
+// Custom tests that use getUserMedia() make Edge 12-18 and Firefox 34-53 block.
 const gumTests = [
   'ImageCapture',
   'MediaStream',
@@ -59,10 +67,31 @@ const ignore = {
     12: gumTests,
     13: gumTests,
     14: gumTests,
-    15: gumTests,
+    15: ['api.SecurityPolicyViolationEvent', ...gumTests],
     16: gumTests,
     17: gumTests,
     18: gumTests
+  },
+  firefox: {
+    34: gumTests,
+    35: gumTests,
+    36: gumTests,
+    37: gumTests,
+    38: gumTests,
+    39: gumTests,
+    40: gumTests,
+    41: gumTests,
+    42: gumTests,
+    43: gumTests,
+    44: gumTests,
+    45: gumTests,
+    46: gumTests,
+    47: gumTests,
+    48: gumTests,
+    49: gumTests,
+    50: gumTests,
+    51: gumTests,
+    52: gumTests
   }
 };
 
@@ -82,19 +111,21 @@ const filterVersions = (data, earliestVersion, reverse) => {
   const versions = [];
 
   for (const [version, versionData] of Object.entries(data)) {
-    if ((versionData.status == 'current' || versionData.status == 'retired') &&
-        compareVersions.compare(version, earliestVersion, '>=')) {
+    if (
+      (versionData.status == 'current' || versionData.status == 'retired') &&
+      compareVersions.compare(version, earliestVersion, '>=')
+    ) {
       versions.push(version);
     }
   }
 
-  return versions.sort((a, b) => compareVersions(
-      ...(reverse ? [a, b] : [b, a])
-  ));
+  return versions.sort((a, b) =>
+    compareVersions(...(reverse ? [a, b] : [b, a]))
+  );
 };
 
-const getBrowsersToTest = (limitBrowsers, reverse) => {
-  const browsersToTest = {
+const getBrowsersToTest = (limitBrowsers, limitVersion, reverse) => {
+  let browsersToTest = {
     chrome: filterVersions(bcdBrowsers.chrome.releases, '15', reverse),
     edge: filterVersions(bcdBrowsers.edge.releases, '12', reverse),
     firefox: filterVersions(bcdBrowsers.firefox.releases, '4', reverse),
@@ -103,8 +134,17 @@ const getBrowsersToTest = (limitBrowsers, reverse) => {
   };
 
   if (limitBrowsers) {
-    return Object.fromEntries(Object.entries(browsersToTest)
-        .filter(([k]) => (limitBrowsers.includes(k))));
+    browsersToTest = Object.fromEntries(
+      Object.entries(browsersToTest).filter(([k]) => limitBrowsers.includes(k))
+    );
+  }
+
+  if (limitVersion) {
+    for (const browser of Object.keys(browsersToTest)) {
+      browsersToTest[browser] = browsersToTest[browser].filter(
+        (v) => v == limitVersion
+      );
+    }
   }
 
   return browsersToTest;
@@ -142,9 +182,22 @@ const getOsesToTest = (service, os) => {
       ];
       break;
     case 'macOS':
-      osesToTest = service === 'saucelabs' ?
-                   [['macOS', '10.14']] :
-                   [['OS X', 'Big Sur'], ['OS X', 'Mojave'], ['OS X', 'El Capitan']];
+      osesToTest =
+        service === 'saucelabs'
+          ? [['macOS', '10.14']]
+          : service === 'lambdatest'
+          ? [
+              ['macOS', 'Monterey'],
+              ['macOS', 'Big Sur'],
+              ['macOS', 'Mojave'],
+              ['OS X', 'El Capitan']
+            ]
+          : [
+              ['OS X', 'Monterey'],
+              ['OS X', 'Big Sur'],
+              ['OS X', 'Mojave'],
+              ['OS X', 'El Capitan']
+            ];
       break;
     default:
       throw new Error(`Unknown/unsupported OS: ${os}`);
@@ -163,7 +216,9 @@ const getSeleniumUrl = (service, credentials) => {
     if ('url' in credentials) {
       seleniumUrls[service] = credentials.url;
     } else {
-      throw new Error(`Couldn't compile Selenium URL for ${service}: service is unknown and URL not specified`);
+      throw new Error(
+        `Couldn't compile Selenium URL for ${service}: service is unknown and URL not specified`
+      );
     }
   }
 
@@ -171,19 +226,21 @@ const getSeleniumUrl = (service, credentials) => {
   const missingVars = [];
 
   // Replace variables in pre-defined Selenium URLs
-  const seleniumUrl = seleniumUrls[service].replace(
-      re, ($1, $2) => {
-        if ($2 in credentials) {
-          return credentials[$2];
-        }
-        missingVars.push($2);
-        return $1;
-      }
-  );
+  const seleniumUrl = seleniumUrls[service].replace(re, ($1, $2) => {
+    if ($2 in credentials) {
+      return credentials[$2];
+    }
+    missingVars.push($2);
+    return $1;
+  });
 
   // Check for any unfilled variables
   if (missingVars.length) {
-    throw new Error(`Couldn't compile Selenium URL for ${service}: missing required variables: ${missingVars.join(', ')}`);
+    throw new Error(
+      `Couldn't compile Selenium URL for ${service}: missing required variables: ${missingVars.join(
+        ', '
+      )}`
+    );
   }
 
   return seleniumUrl;
@@ -210,23 +267,27 @@ const buildDriver = async (browser, version, os) => {
     // eslint-disable-next-line guard-for-in
     for (const [osName, osVersion] of getOsesToTest(service, os)) {
       const capabilities = new Capabilities();
-      capabilities.set(
-          Capability.BROWSER_NAME,
-          Browser[browser.toUpperCase()]
-      );
 
+      // Set test name
       capabilities.set(
-          'name', `mdn-bcd-collector: ${prettyName(browser, version, os)}`
+        'name',
+        `mdn-bcd-collector: ${prettyName(browser, version, os)}`
       );
+      if (service === 'saucelabs') {
+        capabilities.set('sauce:options', {
+          name: `mdn-bcd-collector: ${prettyName(browser, version, os)}`
+        });
+      }
 
-      capabilities.set(Capability.VERSION, version.split('.')[0]);
+      capabilities.set(Capability.BROWSER_NAME, Browser[browser.toUpperCase()]);
+      capabilities.set(Capability.BROWSER_VERSION, version.split('.')[0]);
 
       // Remap target OS for Safari x.0 vs. x.1 on SauceLabs
       if (service === 'saucelabs') {
         if (browser === 'safari') {
-          capabilities.set('platform', getSafariOS(version));
+          capabilities.set('platformName', getSafariOS(version));
         } else {
-          capabilities.set('platform', `${osName} ${osVersion}`);
+          capabilities.set('platformName', `${osName} ${osVersion}`);
         }
       } else {
         capabilities.set('os', osName);
@@ -248,17 +309,24 @@ const buildDriver = async (browser, version, os) => {
           }
         });
       } else if (browser === 'firefox') {
-        // XXX macOS Big Sur requires microphone permission via the OS...
-        // BrowserStack bug?
-        capabilities.set('moz:firefoxOptions', {
-          prefs: {
+        let firefoxPrefs = {
+          'media.navigator.streams.fake': true
+        };
+        if (version >= 53) {
+          firefoxPrefs = {
+            ...firefoxPrefs,
             'media.navigator.permission.disabled': 1,
-            'media.navigator.streams.fake': 1,
-            'permissions.default.microphone': 1,
             'permissions.default.camera': 1,
-            'permissions.default.geo': 1,
-            'permissions.default.desktop-notification': 1
-          }
+            'permissions.default.microphone': 1,
+            'permissions.default.geo': 1
+          };
+        }
+        if (version >= 54) {
+          firefoxPrefs['permissions.default.desktop-notification'] = 1;
+        }
+
+        capabilities.set('moz:firefoxOptions', {
+          prefs: firefoxPrefs
         });
       }
 
@@ -274,16 +342,22 @@ const buildDriver = async (browser, version, os) => {
         const seleniumUrl = getSeleniumUrl(service, credentials);
 
         // Build Selenium driver
-        const driverBuilder = new Builder().usingServer(seleniumUrl)
-            .withCapabilities(capabilities);
+        const driverBuilder = new Builder()
+          .usingServer(seleniumUrl)
+          .withCapabilities(capabilities);
         const driver = await driverBuilder.build();
 
-        return driver;
+        return {driver, service, osName, osVersion};
       } catch (e) {
-        if (e.message.startsWith('Misconfigured -- Unsupported OS/browser/version/device combo') ||
-            e.message.startsWith('OS/Browser combination invalid') ||
-            e.message.startsWith('Browser/Browser_Version not supported') ||
-            e.message.startsWith('Couldn\'t compile Selenium URL')) {
+        const messages = [
+          'Misconfigured -- Unsupported',
+          'OS/Browser combination invalid',
+          'Browser/Browser_Version not supported',
+          'The Browser/Os combination is not supported',
+          "Couldn't compile Selenium URL",
+          'Unsupported platform'
+        ];
+        if (messages.some((m) => e.message.includes(m))) {
           // If unsupported config, continue to the next grid configuration
           continue;
         } else {
@@ -293,7 +367,7 @@ const buildDriver = async (browser, version, os) => {
     }
   }
 
-  return undefined;
+  return {driver: undefined};
 };
 
 const changeProtocol = (browser, version, page) => {
@@ -307,7 +381,10 @@ const changeProtocol = (browser, version, page) => {
       break;
   }
 
-  if (browser === 'edge' && version <= 18) {
+  if (
+    (browser === 'edge' && version <= 18) ||
+    (browser === 'firefox' && version <= 52)
+  ) {
     page = page.replace(/,/g, '%2C');
   }
 
@@ -320,8 +397,9 @@ const changeProtocol = (browser, version, page) => {
 
 const awaitPageReady = async (driver) => {
   await driver.wait(() => {
-    return driver.executeScript('return document.readyState')
-        .then((readyState) => (readyState === 'complete'));
+    return driver
+      .executeScript('return document.readyState')
+      .then((readyState) => readyState === 'complete');
   }, 30000);
   await driver.executeScript('return document.readyState');
 };
@@ -338,7 +416,9 @@ const goToPage = async (driver, browser, version, page) => {
 
 const click = async (driver, browser, elementId) => {
   if (browser === 'safari') {
-    await driver.executeScript(`document.getElementById('${elementId}').click()`);
+    await driver.executeScript(
+      `document.getElementById('${elementId}').click()`
+    );
   } else {
     await driver.findElement(By.id(elementId)).click();
   }
@@ -347,15 +427,23 @@ const click = async (driver, browser, elementId) => {
 const run = async (browser, version, os, ctx, task) => {
   log(task, 'Starting...');
 
-  const driver = await buildDriver(browser, version, os);
+  const {driver, ...service} = await buildDriver(browser, version, os);
+
   if (!driver) {
     throw new Error(task.title + ' - ' + 'Browser/OS config unsupported');
   }
 
+  log(
+    task,
+    `Selected ${service.service} on ${service.osName} ${service.osVersion}`
+  );
+
   let statusEl;
 
   const ignorelist = ignore[browser] && ignore[browser][version];
-  const getvars = `?selenium=true${ignorelist ? `&ignore=${ignorelist.join(',')}` : ''}`;
+  const getvars = `?selenium=true${
+    ignorelist ? `&ignore=${ignorelist.join(',')}` : ''
+  }`;
 
   try {
     log(task, 'Loading homepage...');
@@ -372,7 +460,9 @@ const run = async (browser, version, os, ctx, task) => {
       await driver.wait(until.elementTextContains(statusEl, 'upload'), 60000);
     } catch (e) {
       if (e.name == 'TimeoutError') {
-        throw new Error(task.title + ' - ' + 'Timed out waiting for results to upload');
+        throw new Error(
+          task.title + ' - ' + 'Timed out waiting for results to upload'
+        );
       }
 
       throw e;
@@ -400,9 +490,17 @@ const run = async (browser, version, os, ctx, task) => {
   }
 };
 
-const runAll = async (limitBrowsers, oses, nonConcurrent, reverse) => {
+const runAll = async (
+  limitBrowsers,
+  limitVersion,
+  oses,
+  concurrent,
+  reverse
+) => {
   if (!Object.keys(secrets.selenium).length) {
-    console.error(chalk`{red.bold A Selenium remote WebDriver URL is not defined in secrets.json.  Please define your Selenium remote(s).}`);
+    console.error(
+      chalk`{red.bold A Selenium remote WebDriver URL is not defined in secrets.json.  Please define your Selenium remote(s).}`
+    );
     return false;
   }
 
@@ -410,7 +508,11 @@ const runAll = async (limitBrowsers, oses, nonConcurrent, reverse) => {
     console.warn(chalk`{yellow.bold Test mode: results are not saved.}`);
   }
 
-  const browsersToTest = getBrowsersToTest(limitBrowsers, reverse);
+  const browsersToTest = getBrowsersToTest(
+    limitBrowsers,
+    limitVersion,
+    reverse
+  );
   const tasks = [];
 
   // eslint-disable-next-line guard-for-in
@@ -419,7 +521,11 @@ const runAll = async (limitBrowsers, oses, nonConcurrent, reverse) => {
 
     for (const version of browsersToTest[browser]) {
       for (const os of oses) {
-        if (os === 'macOS' && ['edge', 'ie'].includes(browser) && version <= 18) {
+        if (
+          os === 'macOS' &&
+          ['edge', 'ie'].includes(browser) &&
+          version <= 18
+        ) {
           // Don't test Internet Explorer / EdgeHTML on macOS
           continue;
         }
@@ -431,73 +537,82 @@ const runAll = async (limitBrowsers, oses, nonConcurrent, reverse) => {
 
         browsertasks.push({
           title: prettyName(browser, version, os),
-          task: (ctx, task) => run(browser, version, os, ctx, task)
+          task: (ctx, task) => run(browser, version, os, ctx, task),
+          retry: 3
         });
       }
     }
 
     tasks.push({
       title: bcdBrowsers[browser].name,
-      task: () => {
-        return new Listr(browsertasks, {
-          concurrent: nonConcurrent ? false : 5, exitOnError: false
-        });
-      }
+      task: () =>
+        new Listr(browsertasks, {
+          concurrent,
+          exitOnError: false
+        })
     });
   }
 
   // TODO remove verbose when https://github.com/SamVerschueren/listr/issues/150 fixed
-  const taskrun = new Listr(tasks, {exitOnError: false, renderer: 'verbose',
+  const taskrun = new Listr(tasks, {
+    exitOnError: false,
+    renderer: 'verbose',
     rendererOptions: {
-      collapseSkips: false, collapseErrors: false
+      collapseSkips: false,
+      collapseErrors: false
     }
   });
 
-  try {
-    await taskrun.run({testenv});
-    return true;
-  } catch (e) {
-    console.error(e);
-    return false;
-  }
+  await taskrun.run({testenv});
 };
 
-/* istanbul ignore if */
-if (require.main === module) {
-  const {argv} = require('yargs').command(
-      '$0 [browser..]',
-      'Run Selenium on several browser versions',
-      (yargs) => {
-        yargs
-            .positional('browser', {
-              describe: 'Limit the browser(s) to test',
-              type: 'string',
-              choices: ['chrome', 'edge', 'firefox', 'ie', 'safari']
-            })
-            .option('os', {
-              describe: 'Specify OS to test',
-              type: 'array',
-              choices: ['Windows', 'macOS'],
-              default: ['Windows', 'macOS']
-            })
-            .option('non-concurrent', {
-              describe: 'Run browsers sequentially (one at a time)',
-              alias: 's',
-              type: 'boolean',
-              nargs: 0
-            })
-            .option('reverse', {
-              describe: 'Run browser versions oldest-to-newest',
-              alias: 'r',
-              type: 'boolean',
-              nargs: 0
-            });
-      }
+if (esMain(import.meta)) {
+  const {argv} = yargs(hideBin(process.argv)).command(
+    '$0 [browser..]',
+    'Run Selenium on several browser versions',
+    (yargs) => {
+      yargs
+        .positional('browser', {
+          describe: 'Limit the browser(s) to test',
+          alias: 'b',
+          type: 'string',
+          choices: ['chrome', 'edge', 'firefox', 'ie', 'safari']
+        })
+        .option('browser-version', {
+          describe:
+            'The specific browser version to test (useful for testing purposes)',
+          alias: 'e',
+          type: 'string',
+          nargs: 1
+        })
+        .option('os', {
+          describe: 'Specify OS to test',
+          alias: 's',
+          type: 'array',
+          choices: ['Windows', 'macOS'],
+          default: ['Windows', 'macOS']
+        })
+        .option('concurrent', {
+          describe: 'Define the number of concurrent jobs to run',
+          alias: 'j',
+          type: 'integer',
+          nargs: 1,
+          default: 5
+        })
+        .option('reverse', {
+          describe: 'Run browser versions oldest-to-newest',
+          alias: 'r',
+          type: 'boolean',
+          nargs: 0
+        });
+    }
   );
 
-  if (runAll(
-      argv.browser, argv.os, argv.nonConcurrent, argv.reverse
-  ) === false) {
-    process.exit(1);
-  }
+  await runAll(
+    argv.browser,
+    argv.browserVersion,
+    argv.os,
+    argv.concurrent,
+    argv.reverse
+  );
 }

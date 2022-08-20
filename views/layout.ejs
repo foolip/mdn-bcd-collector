@@ -1,10 +1,19 @@
+<!--
+mdn-bcd-collector: views/layout.ejs
+Main page layout
+
+© Gooborg Studios, Google LLC
+See LICENSE.txt for copyright details
+-->
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Web API and CSS property feature detections to assist the @mdn/browser-compat-data project.">
 
     <!-- Favicon -->
     <link rel="apple-touch-icon" sizes="57x57" href="/favicon/apple-icon-57x57.png">
@@ -34,11 +43,11 @@
     <%- body %>
 
     <footer>
-      <p>Made with <span class="mdi mdi-heart"></span> by <a href="https://foolip.org">@foolip</a> and <a href="https://www.queengoob.org">@vinyldarkscratch</a></p>
-      <p>v<%- appVersion %></p>
+      <p>Made with <span class="mdi mdi-heart"></span> by <a href="https://foolip.org">@foolip</a> and <a href="https://www.queengoob.org">@queengooborg</a></p>
+      <p><a href="https://github.com/foolip/mdn-bcd-collector/blob/main/CHANGELOG.md">v<%- appVersion %></a></p>
       <a href="https://github.com/foolip/mdn-bcd-collector"><span class="mdi mdi-github"> GitHub</span></a>
       <a href="/"><span class="mdi mdi-home"> Home</span></a>
-      <p id="browserinfo" <% if (!browser.inBcd) { %>class="error"<% } %>><% if (browser.browser.name) { %>Detected Browser: <%- browser.browser.name %> <%- browser.version %> <% if (!browser.inBcd) { %>(not in BCD)<% } %><% } else {%>Could not determine browser<% } %></p>
+      <%- include('browserinfo') %>
     </footer>
 
     <%- script %>

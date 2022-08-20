@@ -1,18 +1,10 @@
-// Copyright 2021 Google LLC
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
+// mdn-bcd-collector: results.js
+// Module to parse and handle test results
 //
-//     https://www.apache.org/licenses/LICENSE-2.0
+// © Google LLC, Gooborg Studios
+// See LICENSE.txt for copyright details
 //
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-'use strict';
 
 const parseShortString = (value, desc) => {
   if (typeof value !== 'string') {
@@ -37,30 +29,43 @@ const parseResults = (url, results) => {
     throw new Error('results should be an array');
   }
 
-  results = results.map((v, i) => {
-    if (!v || typeof v !== 'object') {
-      throw new Error(`results[${i}] should be an object; got ${v}`);
-    }
-    const copy = {};
-    copy.name = parseShortString(v.name, `results[${i}].name`);
-    if (![true, false, null].includes(v.result)) {
-      throw new Error(`results[${i}].result (${v.name}) should be true/false/null; got ${v.result}`);
-    }
-    copy.result = v.result;
-    if (v.result === null) {
-      copy.message = parseShortString(v.message, `results[${i}].message (${v.name})`);
-    }
-    // Copy exposure either from |v.exposure| or |v.info.exposure|.
-    if (v.info) {
-      copy.exposure = parseShortString(v.info.exposure, `results[${i}].info.exposure (${v.name})`);
-      // Don't copy |v.info.code|.
-    } else {
-      copy.exposure = parseShortString(v.exposure, `results[${i}].exposure (${v.name})`);
-    }
-    return copy;
-  });
+  results = results
+    .map((v, i) => {
+      if (!v || typeof v !== 'object') {
+        throw new Error(`results[${i}] should be an object; got ${v}`);
+      }
+      const copy = {};
+      copy.name = parseShortString(v.name, `results[${i}].name`);
+      if (![true, false, null].includes(v.result)) {
+        throw new Error(
+          `results[${i}].result (${v.name}) should be true/false/null; got ${v.result}`
+        );
+      }
+      copy.result = v.result;
+      if (v.result === null) {
+        copy.message = parseShortString(
+          v.message,
+          `results[${i}].message (${v.name})`
+        );
+      }
+      // Copy exposure either from |v.exposure| or |v.info.exposure|.
+      if (v.info) {
+        copy.exposure = parseShortString(
+          v.info.exposure,
+          `results[${i}].info.exposure (${v.name})`
+        );
+        // Don't copy |v.info.code|.
+      } else {
+        copy.exposure = parseShortString(
+          v.exposure,
+          `results[${i}].exposure (${v.name})`
+        );
+      }
+      return copy;
+    })
+    .sort((a, b) => (a.name + a.exposure).localeCompare(b.name + b.exposure));
 
   return [url, results];
 };
 
-module.exports = {parseResults};
+export default parseResults;

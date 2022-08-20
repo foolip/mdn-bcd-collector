@@ -1,4 +1,8 @@
 partial interface Screen {
+  attribute EventHandler onorientationchange;
+  undefined lockOrientation();
+  undefined unlockOrientation();
+
   // https://github.com/mozilla/gecko-dev/blob/dd042f25a8da58d565d199dcfebe4f34db64863c/dom/webidl/Screen.webidl#L33
   readonly attribute DOMString mozOrientation;
   boolean mozLockOrientation((DOMString or sequence<DOMString>) orientation);

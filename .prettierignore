@@ -3,4 +3,6 @@ coverage/
 download/
 generated/
 node_modules/
+browser-compat-data/
 tests.json
+tests.old.json

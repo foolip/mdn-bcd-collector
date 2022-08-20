@@ -1,0 +1,803 @@
+{
+  "builtins": {
+    "AggregateError": {
+      "ctor_args": "[new Error('message')]"
+    },
+    "Array": {
+      "ctor_args": "2"
+    },
+    "Array.prototype.at": {},
+    "Array.prototype.concat": {},
+    "Array.prototype.copyWithin": {},
+    "Array.prototype.entries": {},
+    "Array.prototype.every": {},
+    "Array.prototype.fill": {},
+    "Array.prototype.filter": {},
+    "Array.prototype.find": {},
+    "Array.prototype.findIndex": {},
+    "Array.prototype.findLast": {},
+    "Array.prototype.findLastIndex": {},
+    "Array.prototype.flat": {},
+    "Array.prototype.flatMap": {},
+    "Array.prototype.forEach": {},
+    "Array.from": {},
+    "Array.prototype.groupBy": {},
+    "Array.prototype.groupByToMap": {},
+    "Array.prototype.includes": {},
+    "Array.prototype.indexOf": {},
+    "Array.isArray": {},
+    "Array.prototype.join": {},
+    "Array.prototype.keys": {},
+    "Array.prototype.lastIndexOf": {},
+    "Array.prototype.length": {},
+    "Array.prototype.map": {},
+    "Array.of": {},
+    "Array.prototype.pop": {},
+    "Array.prototype.push": {},
+    "Array.prototype.reduce": {},
+    "Array.prototype.reduceRight": {},
+    "Array.prototype.reverse": {},
+    "Array.prototype.shift": {},
+    "Array.prototype.slice": {},
+    "Array.prototype.some": {},
+    "Array.prototype.sort": {},
+    "Array.prototype.splice": {},
+    "Array.prototype.toLocaleString": {},
+    "Array.prototype.toSource": {},
+    "Array.prototype.toString": {},
+    "Array.prototype.unshift": {},
+    "Array.prototype.values": {},
+    "Array.prototype.@@iterator": {},
+    "Array.@@species": {},
+    "Array.prototype.@@unscopables": {},
+    "ArrayBuffer": {
+      "ctor_args": "2"
+    },
+    "ArrayBuffer.prototype.byteLength": {},
+    "ArrayBuffer.isView": {},
+    "ArrayBuffer.prototype.slice": {},
+    "ArrayBuffer.@@species": {},
+    "Atomics": {},
+    "Atomics.add": {},
+    "Atomics.and": {},
+    "Atomics.compareExchange": {},
+    "Atomics.exchange": {},
+    "Atomics.isLockFree": {},
+    "Atomics.load": {},
+    "Atomics.notify": {},
+    "Atomics.or": {},
+    "Atomics.store": {},
+    "Atomics.sub": {},
+    "Atomics.wait": {},
+    "Atomics.wake": {},
+    "Atomics.xor": {},
+    "BigInt": {
+      "ctor_args": "1",
+      "ctor_new": false
+    },
+    "BigInt.asIntN": {},
+    "BigInt.asUintN": {},
+    "BigInt.prototype.toLocaleString": {},
+    "BigInt.prototype.toString": {},
+    "BigInt.prototype.valueOf": {},
+    "BigInt64Array": {
+      "ctor_args": "2"
+    },
+    "BigUint64Array": {
+      "ctor_args": "2"
+    },
+    "Boolean": {
+      "ctor_args": "true"
+    },
+    "Boolean.prototype.toSource": {},
+    "Boolean.prototype.toString": {},
+    "Boolean.prototype.valueOf": {},
+    "DataView": {
+      "ctor_args": "new ArrayBuffer(2)"
+    },
+    "DataView.prototype.buffer": {},
+    "DataView.prototype.byteLength": {},
+    "DataView.prototype.byteOffset": {},
+    "DataView.prototype.getBigInt64": {},
+    "DataView.prototype.getBigUint64": {},
+    "DataView.prototype.getFloat32": {},
+    "DataView.prototype.getFloat64": {},
+    "DataView.prototype.getInt16": {},
+    "DataView.prototype.getInt32": {},
+    "DataView.prototype.getInt8": {},
+    "DataView.prototype.getUint16": {},
+    "DataView.prototype.getUint32": {},
+    "DataView.prototype.getUint8": {},
+    "DataView.prototype.setBigInt64": {},
+    "DataView.prototype.setBigUint64": {},
+    "DataView.prototype.setFloat32": {},
+    "DataView.prototype.setFloat64": {},
+    "DataView.prototype.setInt16": {},
+    "DataView.prototype.setInt32": {},
+    "DataView.prototype.setInt8": {},
+    "DataView.prototype.setUint16": {},
+    "DataView.prototype.setUint32": {},
+    "DataView.prototype.setUint8": {},
+    "Date": {
+      "ctor_args": ""
+    },
+    "Date.prototype.getDate": {},
+    "Date.prototype.getDay": {},
+    "Date.prototype.getFullYear": {},
+    "Date.prototype.getHours": {},
+    "Date.prototype.getMilliseconds": {},
+    "Date.prototype.getMinutes": {},
+    "Date.prototype.getMonth": {},
+    "Date.prototype.getSeconds": {},
+    "Date.prototype.getTime": {},
+    "Date.prototype.getTimezoneOffset": {},
+    "Date.prototype.getUTCDate": {},
+    "Date.prototype.getUTCDay": {},
+    "Date.prototype.getUTCFullYear": {},
+    "Date.prototype.getUTCHours": {},
+    "Date.prototype.getUTCMilliseconds": {},
+    "Date.prototype.getUTCMinutes": {},
+    "Date.prototype.getUTCMonth": {},
+    "Date.prototype.getUTCSeconds": {},
+    "Date.prototype.getYear": {},
+    "Date.now": {},
+    "Date.parse": {},
+    "Date.prototype.setDate": {},
+    "Date.prototype.setFullYear": {},
+    "Date.prototype.setHours": {},
+    "Date.prototype.setMilliseconds": {},
+    "Date.prototype.setMinutes": {},
+    "Date.prototype.setMonth": {},
+    "Date.prototype.setSeconds": {},
+    "Date.prototype.setTime": {},
+    "Date.prototype.setUTCDate": {},
+    "Date.prototype.setUTCFullYear": {},
+    "Date.prototype.setUTCHours": {},
+    "Date.prototype.setUTCMilliseconds": {},
+    "Date.prototype.setUTCMinutes": {},
+    "Date.prototype.setUTCMonth": {},
+    "Date.prototype.setUTCSeconds": {},
+    "Date.prototype.setYear": {},
+    "Date.prototype.toDateString": {},
+    "Date.prototype.toGMTString": {},
+    "Date.prototype.toISOString": {},
+    "Date.prototype.toJSON": {},
+    "Date.prototype.toLocaleDateString": {},
+    "Date.prototype.toLocaleString": {},
+    "Date.prototype.toLocaleTimeString": {},
+    "Date.prototype.toSource": {},
+    "Date.prototype.toString": {},
+    "Date.prototype.toTimeString": {},
+    "Date.prototype.toUTCString": {},
+    "Date.UTC": {},
+    "Date.prototype.valueOf": {},
+    "Date.prototype.@@toPrimitive": {},
+    "Error": {
+      "ctor_args": "'message'"
+    },
+    "Error.prototype.cause": {},
+    "Error.prototype.message": {},
+    "Error.prototype.name": {},
+    "Error.prototype.toSource": {},
+    "Error.prototype.toString": {},
+    "EvalError": {
+      "ctor_args": "'message'"
+    },
+    "FinalizationRegistry": {
+      "ctor_args": "function(heldValue){}"
+    },
+    "FinalizationRegistry.prototype.register": {},
+    "FinalizationRegistry.prototype.unregister": {},
+    "Float32Array": {
+      "ctor_args": "2"
+    },
+    "Float64Array": {
+      "ctor_args": "2"
+    },
+    "Function": {
+      "ctor_args": "'return true'"
+    },
+    "Function.prototype.apply": {},
+    "Function.prototype.arguments": {},
+    "Function.prototype.bind": {},
+    "Function.prototype.call": {},
+    "Function.prototype.caller": {},
+    "Function.prototype.length": {},
+    "Function.prototype.name": {},
+    "Function.prototype.toSource": {},
+    "Function.prototype.toString": {},
+    "Int16Array": {
+      "ctor_args": "2"
+    },
+    "Int32Array": {
+      "ctor_args": "2"
+    },
+    "Int8Array": {
+      "ctor_args": "2"
+    },
+    "InternalError": {
+      "ctor_args": "'message'"
+    },
+    "JSON": {},
+    "JSON.parse": {},
+    "JSON.stringify": {},
+    "Map": {
+      "ctor_args": ""
+    },
+    "Map.prototype.clear": {},
+    "Map.prototype.delete": {},
+    "Map.prototype.entries": {},
+    "Map.prototype.forEach": {},
+    "Map.prototype.get": {},
+    "Map.prototype.has": {},
+    "Map.prototype.keys": {},
+    "Map.prototype.set": {},
+    "Map.prototype.size": {},
+    "Map.prototype.values": {},
+    "Map.prototype.@@iterator": {},
+    "Map.@@species": {},
+    "Map.prototype.@@toStringTag": {},
+    "Math": {},
+    "Math.E": {},
+    "Math.LN2": {},
+    "Math.LN10": {},
+    "Math.LOG2E": {},
+    "Math.LOG10E": {},
+    "Math.PI": {},
+    "Math.SQRT1_2": {},
+    "Math.SQRT2": {},
+    "Math.abs": {},
+    "Math.acos": {},
+    "Math.acosh": {},
+    "Math.asin": {},
+    "Math.asinh": {},
+    "Math.atan": {},
+    "Math.atan2": {},
+    "Math.atanh": {},
+    "Math.cbrt": {},
+    "Math.ceil": {},
+    "Math.clz32": {},
+    "Math.cos": {},
+    "Math.cosh": {},
+    "Math.exp": {},
+    "Math.expm1": {},
+    "Math.floor": {},
+    "Math.fround": {},
+    "Math.hypot": {},
+    "Math.imul": {},
+    "Math.log": {},
+    "Math.log1p": {},
+    "Math.log2": {},
+    "Math.log10": {},
+    "Math.max": {},
+    "Math.min": {},
+    "Math.pow": {},
+    "Math.random": {},
+    "Math.round": {},
+    "Math.sign": {},
+    "Math.sin": {},
+    "Math.sinh": {},
+    "Math.sqrt": {},
+    "Math.tan": {},
+    "Math.tanh": {},
+    "Math.trunc": {},
+    "Number": {
+      "ctor_args": "1"
+    },
+    "Number.EPSILON": {},
+    "Number.MAX_SAFE_INTEGER": {},
+    "Number.MAX_VALUE": {},
+    "Number.MIN_SAFE_INTEGER": {},
+    "Number.MIN_VALUE": {},
+    "Number.NaN": {},
+    "Number.NEGATIVE_INFINITY": {},
+    "Number.POSITIVE_INFINITY": {},
+    "Number.isFinite": {},
+    "Number.isInteger": {},
+    "Number.isNaN": {},
+    "Number.isSafeInteger": {},
+    "Number.parseFloat": {},
+    "Number.parseInt": {},
+    "Number.prototype.toExponential": {},
+    "Number.prototype.toFixed": {},
+    "Number.prototype.toLocaleString": {},
+    "Number.prototype.toPrecision": {},
+    "Number.prototype.toSource": {},
+    "Number.prototype.toString": {},
+    "Number.prototype.valueOf": {},
+    "Object": {
+      "ctor_args": ""
+    },
+    "Object.assign": {},
+    "Object.prototype.constructor": {},
+    "Object.create": {},
+    "Object.defineProperties": {},
+    "Object.defineProperty": {},
+    "Object.entries": {},
+    "Object.freeze": {},
+    "Object.fromEntries": {},
+    "Object.getOwnPropertyDescriptor": {},
+    "Object.getOwnPropertyDescriptors": {},
+    "Object.getOwnPropertyNames": {},
+    "Object.getOwnPropertySymbols": {},
+    "Object.getPrototypeOf": {},
+    "Object.hasOwn": {},
+    "Object.prototype.hasOwnProperty": {},
+    "Object.is": {},
+    "Object.isExtensible": {},
+    "Object.isFrozen": {},
+    "Object.prototype.isPrototypeOf": {},
+    "Object.isSealed": {},
+    "Object.keys": {},
+    "Object.preventExtensions": {},
+    "Object.prototype.propertyIsEnumerable": {},
+    "Object.seal": {},
+    "Object.setPrototypeOf": {},
+    "Object.prototype.toLocaleString": {},
+    "Object.prototype.toSource": {},
+    "Object.prototype.toString": {},
+    "Object.prototype.valueOf": {},
+    "Object.values": {},
+    "Promise": {
+      "ctor_args": "function(resolve,reject){}"
+    },
+    "Promise.all": {},
+    "Promise.allSettled": {},
+    "Promise.any": {},
+    "Promise.prototype.catch": {},
+    "Promise.prototype.finally": {},
+    "Promise.race": {},
+    "Promise.reject": {},
+    "Promise.resolve": {},
+    "Promise.prototype.then": {},
+    "Proxy": {
+      "ctor_args": "{},{}"
+    },
+    "Proxy.revocable": {},
+    "RangeError": {
+      "ctor_args": "'message'"
+    },
+    "ReferenceError": {
+      "ctor_args": "'message'"
+    },
+    "Reflect": {},
+    "Reflect.apply": {},
+    "Reflect.construct": {},
+    "Reflect.defineProperty": {},
+    "Reflect.deleteProperty": {},
+    "Reflect.get": {},
+    "Reflect.getOwnPropertyDescriptor": {},
+    "Reflect.getPrototypeOf": {},
+    "Reflect.has": {},
+    "Reflect.isExtensible": {},
+    "Reflect.ownKeys": {},
+    "Reflect.preventExtensions": {},
+    "Reflect.set": {},
+    "Reflect.setPrototypeOf": {},
+    "RegExp": {
+      "ctor_args": "'.'"
+    },
+    "RegExp.prototype.compile": {},
+    "RegExp.prototype.dotAll": {},
+    "RegExp.prototype.exec": {},
+    "RegExp.prototype.flags": {},
+    "RegExp.prototype.global": {},
+    "RegExp.prototype.hasIndices": {},
+    "RegExp.prototype.ignoreCase": {},
+    "RegExp.input": {},
+    "RegExp.prototype.multiline": {},
+    "RegExp.prototype.source": {},
+    "RegExp.prototype.sticky": {},
+    "RegExp.prototype.test": {},
+    "RegExp.prototype.toSource": {},
+    "RegExp.prototype.toString": {},
+    "RegExp.prototype.unicode": {},
+    "RegExp.prototype.@@match": {},
+    "RegExp.prototype.@@matchAll": {},
+    "RegExp.prototype.@@replace": {},
+    "RegExp.prototype.@@search": {},
+    "RegExp.@@species": {},
+    "RegExp.prototype.@@split": {},
+    "Set": {
+      "ctor_args": ""
+    },
+    "Set.prototype.add": {},
+    "Set.prototype.clear": {},
+    "Set.prototype.delete": {},
+    "Set.prototype.entries": {},
+    "Set.prototype.forEach": {},
+    "Set.prototype.has": {},
+    "Set.prototype.keys": {},
+    "Set.prototype.size": {},
+    "Set.prototype.values": {},
+    "Set.prototype.@@iterator": {},
+    "Set.@@species": {},
+    "SharedArrayBuffer": {
+      "ctor_args": "2"
+    },
+    "SharedArrayBuffer.prototype.byteLength": {},
+    "SharedArrayBuffer.prototype.slice": {},
+    "String": {
+      "ctor_args": "0"
+    },
+    "String.prototype.anchor": {},
+    "String.prototype.at": {},
+    "String.prototype.big": {},
+    "String.prototype.blink": {},
+    "String.prototype.bold": {},
+    "String.prototype.charAt": {},
+    "String.prototype.charCodeAt": {},
+    "String.prototype.codePointAt": {},
+    "String.prototype.concat": {},
+    "String.prototype.contains": {},
+    "String.prototype.endsWith": {},
+    "String.prototype.fixed": {},
+    "String.prototype.fontcolor": {},
+    "String.prototype.fontsize": {},
+    "String.fromCharCode": {},
+    "String.fromCodePoint": {},
+    "String.prototype.includes": {},
+    "String.prototype.indexOf": {},
+    "String.prototype.italics": {},
+    "String.prototype.lastIndexOf": {},
+    "String.prototype.length": {},
+    "String.prototype.link": {},
+    "String.prototype.localeCompare": {},
+    "String.prototype.match": {},
+    "String.prototype.matchAll": {},
+    "String.prototype.normalize": {},
+    "String.prototype.padEnd": {},
+    "String.prototype.padStart": {},
+    "String.raw": {},
+    "String.prototype.repeat": {},
+    "String.prototype.replace": {},
+    "String.prototype.replaceAll": {},
+    "String.prototype.search": {},
+    "String.prototype.slice": {},
+    "String.prototype.small": {},
+    "String.prototype.split": {},
+    "String.prototype.startsWith": {},
+    "String.prototype.strike": {},
+    "String.prototype.sub": {},
+    "String.prototype.substr": {},
+    "String.prototype.substring": {},
+    "String.prototype.sup": {},
+    "String.prototype.toLocaleLowerCase": {},
+    "String.prototype.toLocaleUpperCase": {},
+    "String.prototype.toLowerCase": {},
+    "String.prototype.toSource": {},
+    "String.prototype.toString": {},
+    "String.prototype.toUpperCase": {},
+    "String.prototype.trim": {},
+    "String.prototype.trimEnd": {},
+    "String.prototype.trimLeft": {},
+    "String.prototype.trimRight": {},
+    "String.prototype.trimStart": {},
+    "String.prototype.valueOf": {},
+    "String.prototype.@@iterator": {},
+    "Symbol": {
+      "ctor_args": "'description'",
+      "ctor_new": false
+    },
+    "Symbol.asyncIterator": {},
+    "Symbol.prototype.description": {},
+    "Symbol.for": {},
+    "Symbol.hasInstance": {},
+    "Symbol.isConcatSpreadable": {},
+    "Symbol.iterator": {},
+    "Symbol.keyFor": {},
+    "Symbol.match": {},
+    "Symbol.matchAll": {},
+    "Symbol.replace": {},
+    "Symbol.search": {},
+    "Symbol.species": {},
+    "Symbol.split": {},
+    "Symbol.toPrimitive": {},
+    "Symbol.prototype.toSource": {},
+    "Symbol.prototype.toString": {},
+    "Symbol.toStringTag": {},
+    "Symbol.unscopables": {},
+    "Symbol.prototype.valueOf": {},
+    "Symbol.prototype.@@toPrimitive": {},
+    "SyntaxError": {
+      "ctor_args": "'message'"
+    },
+    "TypeError": {
+      "ctor_args": "'message'"
+    },
+    "TypedArray": {
+      "code": "self.hasOwnProperty(\"Int8Array\")"
+    },
+    "TypedArray.BYTES_PER_ELEMENT": {
+      "code": "\"BYTES_PER_ELEMENT\" in Int8Array"
+    },
+    "TypedArray.at": {
+      "code": "\"at\" in Int8Array.prototype"
+    },
+    "TypedArray.buffer": {
+      "code": "\"buffer\" in Int8Array.prototype"
+    },
+    "TypedArray.byteLength": {
+      "code": "\"byteLength\" in Int8Array.prototype"
+    },
+    "TypedArray.byteOffset": {
+      "code": "\"byteOffset\" in Int8Array.prototype"
+    },
+    "TypedArray.copyWithin": {
+      "code": "\"copyWithin\" in Int8Array.prototype"
+    },
+    "TypedArray.entries": {
+      "code": "\"entries\" in Int8Array.prototype"
+    },
+    "TypedArray.every": {
+      "code": "\"every\" in Int8Array.prototype"
+    },
+    "TypedArray.fill": {
+      "code": "\"fill\" in Int8Array.prototype"
+    },
+    "TypedArray.filter": {
+      "code": "\"filter\" in Int8Array.prototype"
+    },
+    "TypedArray.find": {
+      "code": "\"find\" in Int8Array.prototype"
+    },
+    "TypedArray.findIndex": {
+      "code": "\"findIndex\" in Int8Array.prototype"
+    },
+    "TypedArray.findLast": {
+      "code": "\"findLast\" in Int8Array.prototype"
+    },
+    "TypedArray.findLastIndex": {
+      "code": "\"findLastIndex\" in Int8Array.prototype"
+    },
+    "TypedArray.forEach": {
+      "code": "\"forEach\" in Int8Array.prototype"
+    },
+    "TypedArray.from": {
+      "code": "\"from\" in Int8Array"
+    },
+    "TypedArray.includes": {
+      "code": "\"includes\" in Int8Array.prototype"
+    },
+    "TypedArray.indexOf": {
+      "code": "\"indexOf\" in Int8Array.prototype"
+    },
+    "TypedArray.join": {
+      "code": "\"join\" in Int8Array.prototype"
+    },
+    "TypedArray.keys": {
+      "code": "\"keys\" in Int8Array.prototype"
+    },
+    "TypedArray.lastIndexOf": {
+      "code": "\"lastIndexOf\" in Int8Array.prototype"
+    },
+    "TypedArray.length": {
+      "code": "\"length\" in Int8Array.prototype"
+    },
+    "TypedArray.map": {
+      "code": "\"map\" in Int8Array.prototype"
+    },
+    "TypedArray.name": {
+      "code": "\"name\" in Int8Array"
+    },
+    "TypedArray.of": {
+      "code": "\"of\" in Int8Array"
+    },
+    "TypedArray.reduce": {
+      "code": "\"reduce\" in Int8Array.prototype"
+    },
+    "TypedArray.reduceRight": {
+      "code": "\"reduceRight\" in Int8Array.prototype"
+    },
+    "TypedArray.reverse": {
+      "code": "\"reverse\" in Int8Array.prototype"
+    },
+    "TypedArray.set": {
+      "code": "\"set\" in Int8Array.prototype"
+    },
+    "TypedArray.slice": {
+      "code": "\"slice\" in Int8Array.prototype"
+    },
+    "TypedArray.some": {
+      "code": "\"some\" in Int8Array.prototype"
+    },
+    "TypedArray.sort": {
+      "code": "\"sort\" in Int8Array.prototype"
+    },
+    "TypedArray.subarray": {
+      "code": "\"subarray\" in Int8Array.prototype"
+    },
+    "TypedArray.toLocaleString": {
+      "code": "\"toLocaleString\" in Int8Array.prototype"
+    },
+    "TypedArray.toString": {
+      "code": "\"toString\" in Int8Array.prototype"
+    },
+    "TypedArray.values": {
+      "code": "\"values\" in Int8Array.prototype"
+    },
+    "TypedArray.@@iterator": {
+      "code": "Symbol.iterator in Int8Array.prototype"
+    },
+    "TypedArray.@@species": {
+      "code": "Symbol.species in Int8Array"
+    },
+    "URIError": {
+      "ctor_args": "'message'"
+    },
+    "Uint16Array": {
+      "ctor_args": "2"
+    },
+    "Uint32Array": {
+      "ctor_args": "2"
+    },
+    "Uint8Array": {
+      "ctor_args": "2"
+    },
+    "Uint8ClampedArray": {
+      "ctor_args": "2"
+    },
+    "WeakMap": {
+      "ctor_args": ""
+    },
+    "WeakMap.prototype.clear": {},
+    "WeakMap.prototype.delete": {},
+    "WeakMap.prototype.get": {},
+    "WeakMap.prototype.has": {},
+    "WeakMap.prototype.set": {},
+    "WeakRef": {
+      "ctor_args": "{}"
+    },
+    "WeakRef.prototype.deref": {},
+    "WeakSet": {
+      "ctor_args": ""
+    },
+    "WeakSet.prototype.add": {},
+    "WeakSet.prototype.delete": {},
+    "WeakSet.prototype.has": {},
+    "decodeURI": {},
+    "decodeURIComponent": {},
+    "encodeURI": {},
+    "encodeURIComponent": {},
+    "escape": {},
+    "eval": {},
+    "globalThis": {},
+    "isFinite": {},
+    "isNaN": {},
+    "parseFloat": {},
+    "parseInt": {},
+    "unescape": {},
+    "uneval": {},
+    "Intl": {},
+    "Intl.Collator": {
+      "ctor_args": "'sv'"
+    },
+    "Intl.Collator.prototype.compare": {},
+    "Intl.Collator.prototype.resolvedOptions": {},
+    "Intl.Collator.supportedLocalesOf": {},
+    "Intl.DateTimeFormat": {
+      "ctor_args": "'sv'"
+    },
+    "Intl.DateTimeFormat.prototype.format": {},
+    "Intl.DateTimeFormat.prototype.formatRange": {},
+    "Intl.DateTimeFormat.prototype.formatRangeToParts": {},
+    "Intl.DateTimeFormat.prototype.formatToParts": {},
+    "Intl.DateTimeFormat.prototype.resolvedOptions": {},
+    "Intl.DateTimeFormat.supportedLocalesOf": {},
+    "Intl.DisplayNames": {
+      "ctor_args": "'sv',{type:'language'}"
+    },
+    "Intl.DisplayNames.prototype.of": {},
+    "Intl.DisplayNames.prototype.resolvedOptions": {},
+    "Intl.DisplayNames.supportedLocalesOf": {},
+    "Intl.getCanonicalLocales": {},
+    "Intl.@@toStringTag": {},
+    "Intl.ListFormat": {
+      "ctor_args": "'sv'"
+    },
+    "Intl.ListFormat.prototype.format": {},
+    "Intl.ListFormat.prototype.formatToParts": {},
+    "Intl.ListFormat.prototype.resolvedOptions": {},
+    "Intl.ListFormat.supportedLocalesOf": {},
+    "Intl.Locale": {
+      "ctor_args": "'sv'"
+    },
+    "Intl.Locale.prototype.baseName": {},
+    "Intl.Locale.prototype.calendar": {},
+    "Intl.Locale.prototype.calendars": {},
+    "Intl.Locale.prototype.caseFirst": {},
+    "Intl.Locale.prototype.collation": {},
+    "Intl.Locale.prototype.collations": {},
+    "Intl.Locale.prototype.hourCycle": {},
+    "Intl.Locale.prototype.hourCycles": {},
+    "Intl.Locale.prototype.language": {},
+    "Intl.Locale.prototype.maximize": {},
+    "Intl.Locale.prototype.minimize": {},
+    "Intl.Locale.prototype.numberingSystem": {},
+    "Intl.Locale.prototype.numberingSystems": {},
+    "Intl.Locale.prototype.numeric": {},
+    "Intl.Locale.prototype.region": {},
+    "Intl.Locale.prototype.script": {},
+    "Intl.Locale.prototype.textInfo": {},
+    "Intl.Locale.prototype.timeZones": {},
+    "Intl.Locale.prototype.toString": {},
+    "Intl.Locale.prototype.weekInfo": {},
+    "Intl.NumberFormat": {
+      "ctor_args": "'sv'"
+    },
+    "Intl.NumberFormat.prototype.format": {},
+    "Intl.NumberFormat.prototype.formatRange": {},
+    "Intl.NumberFormat.prototype.formatRangeToParts": {},
+    "Intl.NumberFormat.prototype.formatToParts": {},
+    "Intl.NumberFormat.prototype.resolvedOptions": {},
+    "Intl.NumberFormat.supportedLocalesOf": {},
+    "Intl.PluralRules": {
+      "ctor_args": "'sv'"
+    },
+    "Intl.PluralRules.prototype.resolvedOptions": {},
+    "Intl.PluralRules.prototype.select": {},
+    "Intl.PluralRules.prototype.selectRange": {},
+    "Intl.PluralRules.supportedLocalesOf": {},
+    "Intl.RelativeTimeFormat": {
+      "ctor_args": "'sv'"
+    },
+    "Intl.RelativeTimeFormat.prototype.format": {},
+    "Intl.RelativeTimeFormat.prototype.formatToParts": {},
+    "Intl.RelativeTimeFormat.prototype.resolvedOptions": {},
+    "Intl.RelativeTimeFormat.supportedLocalesOf": {},
+    "Intl.Segmenter": {
+      "ctor_args": ""
+    },
+    "Intl.Segmenter.prototype.resolvedOptions": {},
+    "Intl.Segmenter.prototype.segment": {},
+    "Intl.Segmenter.supportedLocalesOf": {},
+    "Intl.supportedValuesOf": {},
+    "WebAssembly": {},
+    "WebAssembly.CompileError": {
+      "ctor_args": "'message'"
+    },
+    "WebAssembly.Exception": {
+      "ctor_args": "new WebAssembly.Tag({parameters:[]}),[]"
+    },
+    "WebAssembly.Exception.prototype.getArg": {},
+    "WebAssembly.Exception.prototype.is": {},
+    "WebAssembly.Global": {
+      "ctor_args": "{value:'i32'}"
+    },
+    "WebAssembly.Global.prototype.value": {},
+    "WebAssembly.Global.prototype.valueOf": {},
+    "WebAssembly.Instance": {},
+    "WebAssembly.Instance.prototype.exports": {},
+    "WebAssembly.LinkError": {
+      "ctor_args": "'message'"
+    },
+    "WebAssembly.Memory": {
+      "ctor_args": "{initial:1}"
+    },
+    "WebAssembly.Memory.prototype.buffer": {},
+    "WebAssembly.Memory.prototype.grow": {},
+    "WebAssembly.Module": {},
+    "WebAssembly.Module.customSections": {},
+    "WebAssembly.Module.exports": {},
+    "WebAssembly.Module.imports": {},
+    "WebAssembly.RuntimeError": {
+      "ctor_args": "'message'"
+    },
+    "WebAssembly.Table": {
+      "ctor_args": "{initial:1,element:'anyfunc'}"
+    },
+    "WebAssembly.Table.prototype.get": {},
+    "WebAssembly.Table.prototype.grow": {},
+    "WebAssembly.Table.prototype.length": {},
+    "WebAssembly.Table.prototype.set": {},
+    "WebAssembly.Tag": {
+      "ctor_args": "{parameters:[]}"
+    },
+    "WebAssembly.Tag.prototype.type": {},
+    "WebAssembly.compile": {},
+    "WebAssembly.compileStreaming": {},
+    "WebAssembly.instantiate": {},
+    "WebAssembly.instantiateStreaming": {},
+    "WebAssembly.validate": {}
+  }
+}

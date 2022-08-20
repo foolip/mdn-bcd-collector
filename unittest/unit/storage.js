@@ -1,22 +1,14 @@
-// Copyright 2020 Google LLC
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
+// mdn-bcd-collector: unittest/unit/storage.js
+// Unittest for the temporary storage handler
 //
-//     https://www.apache.org/licenses/LICENSE-2.0
+// © Google LLC, Gooborg Studios
+// See LICENSE.txt for copyright details
 //
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
 
-'use strict';
+import {assert} from 'chai';
 
-const assert = require('chai').assert;
-
-const {CloudStorage, MemoryStorage, getStorage} = require('../../storage');
+import {CloudStorage, MemoryStorage, getStorage} from '../../storage.js';
 
 const SESSION_ID = 'testsessionid';
 
@@ -43,7 +35,7 @@ class FakeFile {
 
 class FakeBucket {
   constructor() {
-    this._files = new Map;
+    this._files = new Map();
   }
 
   file(name) {
@@ -73,9 +65,9 @@ describe('storage', () => {
       beforeEach(() => {
         if (StorageClass === CloudStorage) {
           storage = new CloudStorage('fake-project', 'fake-bucket');
-          storage._bucket = new FakeBucket;
+          storage._bucket = new FakeBucket();
         } else {
-          storage = new StorageClass;
+          storage = new StorageClass();
         }
       });
 
@@ -139,37 +131,23 @@ describe('storage', () => {
 
   describe('getStorage', () => {
     it('testing', () => {
-      const storage = getStorage();
+      const storage = getStorage('test-version');
       assert(storage instanceof MemoryStorage);
     });
 
     it('production', () => {
-      process.env.GOOGLE_CLOUD_PROJECT = 'testing-project';
-      process.env.GAE_VERSION = 'production';
-      process.env.GCLOUD_STORAGE_BUCKET = 'prod-bucket';
-      process.env.GCLOUD_STORAGE_BUCKET_STAGING = 'staging-bucket';
+      process.env.GOOGLE_CLOUD_PROJECT = 'test-project';
+      process.env.GCLOUD_STORAGE_BUCKET = 'test-bucket';
 
-      const storage = getStorage();
+      const storage = getStorage('test-version');
       assert(storage instanceof CloudStorage);
-      assert.equal(storage._bucket.name, 'prod-bucket');
-    });
-
-    it('staging', () => {
-      process.env.GOOGLE_CLOUD_PROJECT = 'testing-project';
-      process.env.GAE_VERSION = 'staging';
-      process.env.GCLOUD_STORAGE_BUCKET = 'prod-bucket';
-      process.env.GCLOUD_STORAGE_BUCKET_STAGING = 'staging-bucket';
-
-      const storage = getStorage();
-      assert(storage instanceof CloudStorage);
-      assert.equal(storage._bucket.name, 'staging-bucket');
+      assert.equal(storage._bucket.name, 'test-bucket');
+      assert.equal(storage._version, 'test-version');
     });
 
     afterEach(() => {
       delete process.env.GOOGLE_CLOUD_PROJECT;
-      delete process.env.GAE_VERSION;
       delete process.env.GCLOUD_STORAGE_BUCKET;
-      delete process.env.GCLOUD_STORAGE_BUCKET_STAGING;
     });
   });
 });

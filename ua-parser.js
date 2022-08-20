@@ -1,7 +1,17 @@
-'use strict';
+//
+// mdn-bcd-collector: ua-parser.js
+// Module to parse user agent strings and compare them with BCD browser data
+//
+// © Gooborg Studios, Google LLC
+// See LICENSE.txt for copyright details
+//
 
-const compareVersions = require('compare-versions');
-const uaParser = require('ua-parser-js');
+import compareVersions from 'compare-versions';
+import uaParser from 'ua-parser-js';
+
+const getMajorVersion = (version) => {
+  return version.split('.')[0];
+};
 
 const getMajorMinorVersion = (version) => {
   const [major, minor] = version.split('.');
@@ -9,9 +19,7 @@ const getMajorMinorVersion = (version) => {
 };
 
 const parseUA = (userAgent, browsers) => {
-  // XXX Removal of .NET is for Firefox 3.6.17 on BrowserStack
-  // See https://github.com/faisalman/ua-parser-js/issues/461
-  const ua = uaParser(userAgent.replace(' (.NET CLR 3.5.21022)', ''));
+  const ua = uaParser(userAgent);
   const data = {
     browser: {id: null, name: null},
     version: null,
@@ -26,8 +34,8 @@ const parseUA = (userAgent, browsers) => {
 
   data.browser.id = ua.browser.name.toLowerCase().replace(/ /g, '_');
   data.browser.name = ua.browser.name;
-  data.os.name = ua.os.name;
-  data.os.version = ua.os.version;
+  data.os.name = ua.os.name || '';
+  data.os.version = ua.os.version || '';
 
   switch (data.browser.id) {
     case 'mobile_safari':
@@ -49,9 +57,9 @@ const parseUA = (userAgent, browsers) => {
 
     if (ua.browser.name === 'Android Browser') {
       // For early WebView Android, use the OS version
-      data.fullVersion = compareVersions.compare(ua.os.version, '5.0', '<') ?
-        ua.os.version :
-        ua.engine.version;
+      data.fullVersion = compareVersions.compare(ua.os.version, '5.0', '<')
+        ? ua.os.version
+        : ua.engine.version;
     }
   } else if (os === 'ios') {
     data.browser.id += '_ios';
@@ -74,6 +82,29 @@ const parseUA = (userAgent, browsers) => {
   const versions = Object.keys(browsers[data.browser.id].releases);
   versions.sort(compareVersions);
 
+  // Android 4.4.3 needs to be handled as a special case, because its data
+  // differs from 4.4, and the code below will strip out the patch versions from
+  // our version numbers.
+  if (
+    data.browser.id === 'webview_android' &&
+    compareVersions.compare(data.fullVersion, '4.4.3', '>=') &&
+    compareVersions.compare(data.fullVersion, '5.0', '<')
+  ) {
+    data.version = '4.4.3';
+    data.inBcd = true;
+    return data;
+  }
+
+  // Certain Safari versions are backports of newer versions, but contain less
+  // features, particularly ones involving OS integration. We are explicitly
+  // marking these versions as "not in BCD" to avoid confusion.
+  if (
+    data.browser.id === 'safari' &&
+    ['4.1', '6.1', '6.2', '7.1'].includes(data.version)
+  ) {
+    return data;
+  }
+
   // The |version| from the UA string is typically more precise than |versions|
   // from BCD, and some "uninteresting" releases are missing from BCD. To deal
   // with this, find the pair of versions in |versions| that sandwiches
@@ -82,27 +113,36 @@ const parseUA = (userAgent, browsers) => {
   for (let i = 0; i < versions.length - 1; i++) {
     const current = versions[i];
     const next = versions[i + 1];
-    if (compareVersions.compare(data.version, current, '>=') &&
-        compareVersions.compare(data.version, next, '<')) {
+    if (
+      compareVersions.compare(data.version, current, '>=') &&
+      compareVersions.compare(data.version, next, '<')
+    ) {
       data.inBcd = true;
       data.version = current;
       break;
     }
   }
 
-  // This is the last entry in |versions|. With no |next| to compare against
-  // we have to check that the major versions match. Given |version| "10.3"
-  // and |versions| entries "10.0" and "10.2", return "10.2". Given |version|
-  // "11.0", skip.
-  if (data.inBcd == false && data.version.split('.')[0] === versions[versions.length-1].split('.')[0]) {
+  // We reached the last entry in |versions|. With no |next| to compare against
+  // we have to check if it looks like a significant release or not. By default
+  // that means a new major version, but for Safari and Samsung Internet the
+  // major and minor version are significant.
+  let normalize = getMajorVersion;
+  if (
+    data.browser.id.startsWith('safari') ||
+    data.browser.id === 'samsunginternet_android'
+  ) {
+    normalize = getMajorMinorVersion;
+  }
+  if (
+    data.inBcd == false &&
+    normalize(data.version) === normalize(versions[versions.length - 1])
+  ) {
     data.inBcd = true;
-    data.version = versions[versions.length-1];
+    data.version = versions[versions.length - 1];
   }
 
   return data;
 };
 
-module.exports = {
-  getMajorMinorVersion,
-  parseUA
-};
+export {getMajorMinorVersion, parseUA};

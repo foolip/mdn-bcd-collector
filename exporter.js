@@ -1,28 +1,20 @@
-// Copyright 2020 Google LLC
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//     https://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
-
-'use strict';
-
+// mdn-bcd-collector: exporter.js
 // This module is responsible for getting results/reports out of the collector
-// web service into JSON files that can be used by update-bcd.js.
+// web service into JSON files that can be used by update-bcd.ts.
+//
+// © Google LLC, Gooborg Studios
+// See LICENSE.txt for copyright details
+//
 
-const crypto = require('crypto');
-const {Octokit} = require('@octokit/rest');
-const slugify = require('slugify');
-const stringify = require('json-stable-stringify');
-const {parseUA} = require('./ua-parser');
-const bcdBrowsers = require('@mdn/browser-compat-data').browsers;
+import crypto from 'node:crypto';
+
+import slugify from 'slugify';
+import stringify from 'json-stable-stringify';
+import bcd from '@mdn/browser-compat-data' assert {type: 'json'};
+const bcdBrowsers = bcd.browsers;
+
+import {parseUA} from './ua-parser.js';
 
 const getReportMeta = (report) => {
   const json = stringify(report);
@@ -39,32 +31,55 @@ const getReportMeta = (report) => {
   const os = `${ua.os.name} ${ua.os.version}`;
   const desc = `${browser} / ${os}`;
   const title = `Results from ${desc} / Collector v${version}`;
+  const urls = Object.keys(report.results);
 
-  const slug = `${version.toLowerCase()}-${ua.browser.id.replace(/_/g, '-')}-${ua.fullVersion}-${slugify(os, {lower: true})}-${digest}`;
+  const slug = `${version.toLowerCase()}-${ua.browser.id.replace(/_/g, '-')}-${
+    ua.fullVersion
+  }-${slugify(os, {lower: true})}-${digest}`;
   const filename = `${slug}.json`;
   const branch = `collector/${slug}`;
 
   return {
-    json, buffer, digest, uaString, ua, browser,
-    os, desc, title, slug, filename, branch
+    json,
+    buffer,
+    digest,
+    uaString,
+    ua,
+    browser,
+    os,
+    desc,
+    title,
+    urls,
+    slug,
+    filename,
+    branch,
+    version
   };
 };
 
 const createBody = (meta) => {
-  return `User Agent: ${meta.uaString}\nBrowser: ${meta.browser} (on ${meta.os}) ${meta.ua.inBcd ? '' : ' - **Not in BCD**'}` +
-          `\nHash Digest: ${meta.digest}\n` +
-          (meta.version == 'Dev' ? '\n**WARNING:** this PR was created from a development/staging version!' : '');
+  return (
+    `User Agent: ${meta.uaString}\nBrowser: ${meta.browser} (on ${meta.os})${
+      meta.ua.inBcd ? '' : ' - **Not in BCD**'
+    }` +
+    `\nHash Digest: ${meta.digest}` +
+    `\nTest URLs: ${meta.urls.join(', ')}` +
+    (meta.version.includes('-')
+      ? '\n\n**WARNING:** this PR was created from a development/staging version!'
+      : '')
+  );
 };
 
-const exportAsPR = async (report, token) => {
-  const octokit = new Octokit({auth: `token ${token}`});
+const exportAsPR = async (report, octokit) => {
+  if (!octokit) {
+    throw new Error('"octokit" must be defined');
+  }
 
   if ((await octokit.auth()).type == 'unauthenticated') {
-    return null;
+    throw new Error('Octokit authentication failure');
   }
 
   const meta = getReportMeta(report);
-
   await octokit.git.createRef({
     owner: 'foolip',
     repo: 'mdn-bcd-results',
@@ -97,4 +112,4 @@ const exportAsPR = async (report, token) => {
   };
 };
 
-module.exports = {getReportMeta, createBody, exportAsPR};
+export {getReportMeta, createBody, exportAsPR};

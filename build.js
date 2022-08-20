@@ -1,65 +1,78 @@
-// Copyright 2020 Google LLC
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
+// mdn-bcd-collector: build.js
+// Script to build all of the tests from the IDL and custom CSS/JS files
 //
-//     https://www.apache.org/licenses/LICENSE-2.0
+// © Google LLC, Gooborg Studios, Mozilla Corporation, Apple Inc
+// See LICENSE.txt for copyright details
 //
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
 
-'use strict';
+import path from 'node:path';
+import {fileURLToPath} from 'node:url';
 
-const css = require('@webref/css');
-const fs = require('fs-extra');
-const idl = require('@webref/idl');
-const path = require('path');
-const prettier = require('prettier');
-const WebIDL2 = require('webidl2');
+import css from '@webref/css';
+import esMain from 'es-main';
+import fs from 'fs-extra';
+import idl from '@webref/idl';
+import sass from 'sass';
+import * as WebIDL2 from 'webidl2';
+import * as YAML from 'yaml';
 
-const customCSS = require('./custom-css.json');
-const customTests = require('./custom-tests.json');
-const customIDL = require('./custom-idl');
+import customIDL from './custom-idl/index.js';
 
-const generatedDir = path.join(__dirname, 'generated');
+/* c8 ignore start */
+const customTests = YAML.parse(
+  await fs.readFile(
+    new URL(
+      process.env.NODE_ENV === 'test'
+        ? './unittest/unit/custom-tests.test.yaml'
+        : './custom-tests.yaml',
+      import.meta.url
+    ),
+    'utf8'
+  )
+);
+/* c8 ignore stop */
+
+const customCSS = await fs.readJson(
+  new URL('./custom-css.json', import.meta.url)
+);
+const customJS = await fs.readJson(
+  new URL('./custom-js.json', import.meta.url)
+);
+
+const generatedDir = fileURLToPath(new URL('./generated', import.meta.url));
 
 const compileCustomTest = (code, format = true) => {
   // Import code from other tests
-  code = code.replace(/<%(\w+)\.(\w+)(?:\.(\w+))?:(\w+)%> ?/g, (match, category, name, member, instancevar) => {
-    if (category === 'api') {
-      if (!(name in customTests.api && '__base' in customTests.api[name])) {
-        return `throw 'Test is malformed: ${match} is an invalid reference';`;
-      }
-      let importcode = compileCustomTest(customTests.api[name].__base, false);
+  code = code.replace(
+    /<%(\w+)\.(\w+)(?:\.(\w+))?:(\w+)%> ?/g,
+    (match, category, name, member, instancevar) => {
+      if (category === 'api') {
+        if (!(name in customTests.api && '__base' in customTests.api[name])) {
+          return `throw 'Test is malformed: ${match} is an invalid reference';`;
+        }
+        let importcode = compileCustomTest(customTests.api[name].__base, false);
+        const callback = importcode.includes('callback');
 
-      importcode = importcode
+        importcode = importcode
           .replace(/var (instance|promise)/g, `var ${instancevar}`)
+          .replace(/callback\(/g, `${instancevar}(`)
           .replace(/promise\.then/g, `${instancevar}.then`)
           .replace(/(instance|promise) = /g, `${instancevar} = `);
-      if (instancevar !== 'instance' && instancevar !== 'promise') {
-        importcode += ` if (!${instancevar}) {return false;}`;
+        if (!(['instance', 'promise'].includes(instancevar) || callback)) {
+          importcode += `\n  if (!${instancevar}) {\n    return {result: false, message: '${instancevar} is falsy'};\n  }`;
+        }
+        return importcode;
       }
-      return importcode;
-    }
 
-    // TODO: add CSS category
-    return `throw 'Test is malformed: import ${match}, category ${category} is not importable';`;
-  });
+      // TODO: add CSS category
+      return `throw 'Test is malformed: import ${match}, category ${category} is not importable';`;
+    }
+  );
 
   if (format) {
     // Wrap in a function
-    code = `(function () {${code}})()`;
-
-    // Format
-    try {
-      code = prettier.format(code, {singleQuote: true, parser: 'babel'}).trim();
-    } catch (e) {
-      return `throw 'Test is malformed: ${e}'`;
-    }
+    code = `(function() {\n  ${code}\n})();`;
   }
 
   return code;
@@ -69,29 +82,75 @@ const getCustomTestAPI = (name, member, type) => {
   let test = false;
 
   if (name in customTests.api) {
-    const testbase = customTests.api[name].__base || '';
+    const testbase =
+      '__base' in customTests.api[name]
+        ? customTests.api[name].__base.replace(/\n/g, '\n  ') + '\n  '
+        : '';
     const promise = testbase.includes('var promise');
+    const callback = testbase.includes('callback(');
+
     if (member === undefined) {
       if ('__test' in customTests.api[name]) {
         test = testbase + customTests.api[name].__test;
       } else {
-        test = testbase ? testbase + (
-          promise ? 'return promise.then(function(instance) {return !!instance});' : 'return !!instance;'
-        ) : false;
+        const returnValue = '!!instance';
+        test = testbase
+          ? testbase +
+            (promise
+              ? `if (!promise) {
+    return {result: false, message: 'Promise variable is falsy'};
+  }
+  return promise.then(function(instance) {
+    return ${returnValue};
+  });`
+              : callback
+              ? `function callback(instance) {
+    try {
+      success(${returnValue});
+    } catch(e) {
+      fail(e);
+    }
+  };
+  return 'callback';`
+              : `return ${returnValue};`)
+          : false;
       }
     } else {
-      if (member in customTests.api[name] &&
-          typeof(customTests.api[name][member]) === 'string') {
+      if (
+        member in customTests.api[name] &&
+        typeof customTests.api[name][member] === 'string'
+      ) {
         test = testbase + customTests.api[name][member];
       } else {
-        if (['constructor', 'static'].includes(type) || ['toString', 'toJSON'].includes(member)) {
+        if (
+          ['constructor', 'static'].includes(type) ||
+          ['toString', 'toJSON'].includes(member)
+        ) {
           // Constructors, constants, and static attributes should not have
           // auto-generated custom tests
           test = false;
         } else {
-          test = testbase ? testbase + (
-            promise ? `return promise.then(function(instance) {return '${member}' in instance});` : `return '${member}' in instance;`
-          ) : false;
+          const returnValue = `!!instance && '${member}' in instance`;
+          test = testbase
+            ? testbase +
+              (promise
+                ? `if (!promise) {
+    return {result: false, message: 'Promise variable is falsy'};
+  }
+  return promise.then(function(instance) {
+    return ${returnValue};
+  });`
+                : callback
+                ? `function callback(instance) {
+    try {
+      success(${returnValue});
+    } catch(e) {
+      fail(e);
+    }
+  };
+  return 'callback';`
+                : `return ${returnValue};`)
+            : false;
         }
       }
     }
@@ -104,7 +163,9 @@ const getCustomTestAPI = (name, member, type) => {
   test = compileCustomTest(test);
 
   if (test.includes('Test is malformed')) {
-    console.error(`api.${name}${member ? `.${member}` : ''}: ${test.replace('throw ', '')}`);
+    console.error(
+      `api.${name}${member ? `.${member}` : ''}: ${test.replace('throw ', '')}`
+    );
   }
 
   return test;
@@ -114,10 +175,14 @@ const getCustomSubtestsAPI = (name) => {
   const subtests = {};
 
   if (name in customTests.api) {
-    const testbase = customTests.api[name].__base || '';
+    const testbase =
+      '__base' in customTests.api[name]
+        ? customTests.api[name].__base.replace(/\n/g, '\n  ') + '\n  '
+        : '';
     if ('__additional' in customTests.api[name]) {
-      for (const subtest of
-        Object.entries(customTests.api[name].__additional)) {
+      for (const subtest of Object.entries(
+        customTests.api[name].__additional
+      )) {
         subtests[subtest[0]] = compileCustomTest(`${testbase}${subtest[1]}`);
       }
     }
@@ -133,9 +198,13 @@ const getCustomResourcesAPI = (name) => {
   if (name in customTests.api && '__resources' in customTests.api[name]) {
     for (const key of customTests.api[name].__resources) {
       if (Object.keys(customTests.api.__resources).includes(key)) {
-        resources[key] = customTests.api.__resources[key];
+        const r = customTests.api.__resources[key];
+        resources[key] =
+          r.type == 'instance' ? r : customTests.api.__resources[key];
       } else {
-        throw new Error(`Resource ${key} is not defined but referenced in api.${name}`);
+        throw new Error(
+          `Resource ${key} is not defined but referenced in api.${name}`
+        );
       }
     }
   }
@@ -144,9 +213,11 @@ const getCustomResourcesAPI = (name) => {
 };
 
 const getCustomTestCSS = (name) => {
-  return 'properties' in customTests.css &&
-      name in customTests.css.properties &&
-      compileCustomTest(customTests.css.properties[name]);
+  return (
+    'properties' in customTests.css &&
+    name in customTests.css.properties &&
+    compileCustomTest(customTests.css.properties[name])
+  );
 };
 
 const compileTestCode = (test) => {
@@ -160,9 +231,23 @@ const compileTestCode = (test) => {
     return `bcd.testConstructor("${property}");`;
   }
   if (test.property.startsWith('Symbol.')) {
-    return `"Symbol" in self && "${test.property.replace('Symbol.', '')}" in Symbol && ${test.property} in ${test.owner}.prototype`;
+    return `"Symbol" in self && "${test.property.replace(
+      'Symbol.',
+      ''
+    )}" in Symbol && "${test.owner}" in self && ${test.property} in ${
+      test.owner
+    }.prototype`;
   }
-  return `"${property}" in ${test.owner}`;
+  if (test.inherit) {
+    return `Object.prototype.hasOwnProperty.call(${test.owner}, "${property}")`;
+  }
+  if (test.owner === 'self' || test.owner === 'document.body.style') {
+    return `"${property}" in ${test.owner}`;
+  }
+  return `"${test.owner.replace(
+    '.prototype',
+    ''
+  )}" in self && "${property}" in ${test.owner}`;
 };
 
 const compileTest = (test) => {
@@ -187,13 +272,27 @@ const compileTest = (test) => {
 const mergeMembers = (target, source) => {
   // Check for duplicate members across partials/mixins.
   const targetMembers = new Set(target.members.map((m) => m.name));
+  const sourceMembers = new Set();
   for (const member of source.members) {
     if (targetMembers.has(member.name)) {
-      throw new Error(`Duplicate definition of ${target.name}.${member.name}`);
+      const targetMember = target.members.find((m) => m.name);
+      // Static members may have the same name as a non-static member.
+      // If target has static member with same name, remove from target.
+      // If source has static member with same name, don't merge into target.
+      if (targetMember.special === 'static') {
+        target.members = target.members.filter((m) => m.name !== member.name);
+        sourceMembers.add(member);
+      } else if (member.special !== 'static') {
+        throw new Error(
+          `Duplicate definition of ${target.name}.${member.name}`
+        );
+      }
+    } else {
+      sourceMembers.add(member);
     }
   }
   // Now merge members.
-  target.members.push(...source.members);
+  target.members.push(...sourceMembers);
 };
 
 const flattenIDL = (specIDLs, customIDLs) => {
@@ -213,11 +312,13 @@ const flattenIDL = (specIDLs, customIDLs) => {
       return true;
     }
 
-    const target = ast.find((it) => !it.partial &&
-                                    it.type === dfn.type &&
-                                    it.name === dfn.name);
+    const target = ast.find(
+      (it) => !it.partial && it.type === dfn.type && it.name === dfn.name
+    );
     if (!target) {
-      throw new Error(`Original definition not found for partial ${dfn.type} ${dfn.name}`);
+      throw new Error(
+        `Original definition not found for partial ${dfn.type} ${dfn.name}`
+      );
     }
 
     // merge members to target interface/dictionary/etc. and drop partial
@@ -229,17 +330,28 @@ const flattenIDL = (specIDLs, customIDLs) => {
   // mix in the mixins
   for (const dfn of ast) {
     if (dfn.type === 'includes') {
-      const mixin = ast.find((it) => !it.partial &&
-                                     it.type === 'interface mixin' &&
-                                     it.name === dfn.includes);
-      if (!mixin) {
-        throw new Error(`Interface mixin ${dfn.includes} not found for target ${dfn.target}`);
+      if (dfn.includes === 'WindowOrWorkerGlobalScope') {
+        // WindowOrWorkerGlobalScope is mapped differently in BCD
+        continue;
       }
-      const target = ast.find((it) => !it.partial &&
-                                      it.type === 'interface' &&
-                                      it.name === dfn.target);
+      const mixin = ast.find(
+        (it) =>
+          !it.partial &&
+          it.type === 'interface mixin' &&
+          it.name === dfn.includes
+      );
+      if (!mixin) {
+        throw new Error(
+          `Interface mixin ${dfn.includes} not found for target ${dfn.target}`
+        );
+      }
+      const target = ast.find(
+        (it) => !it.partial && it.type === 'interface' && it.name === dfn.target
+      );
       if (!target) {
-        throw new Error(`Target ${dfn.target} not found for interface mixin ${dfn.includes}`);
+        throw new Error(
+          `Target ${dfn.target} not found for interface mixin ${dfn.includes}`
+        );
       }
 
       // merge members to target interface
@@ -247,15 +359,39 @@ const flattenIDL = (specIDLs, customIDLs) => {
     }
   }
 
-  // drop includes and mixins
-  ast = ast.filter((dfn) => dfn.type !== 'includes' &&
-                            dfn.type !== 'interface mixin');
+  const globals = ast.filter((dfn) => dfn.name === 'WindowOrWorkerGlobalScope');
 
-  return ast;
+  // drop includes and mixins
+  ast = ast.filter(
+    (dfn) => dfn.type !== 'includes' && dfn.type !== 'interface mixin'
+  );
+
+  // Get all possible scopes
+  const scopes = new Set();
+  for (const dfn of ast) {
+    // Special case RTCIdentityProviderGlobalScope since it doesn't use the
+    // Global extended attribute correctly:
+    // https://github.com/w3c/webrtc-identity/pull/36
+    if (dfn.name === 'RTCIdentityProviderGlobalScope') {
+      scopes.add('RTCIdentityProvider');
+      continue;
+    }
+
+    const attr = getExtAttrSet(dfn, 'Global');
+    if (attr) {
+      for (const s of attr) {
+        scopes.add(s);
+      }
+    }
+  }
+
+  return {ast, globals, scopes};
 };
 
 const flattenMembers = (iface) => {
-  const members = iface.members.filter((member) => member.name && member.type !== 'const' && member.special !== 'inherit');
+  const members = iface.members.filter(
+    (member) => member.name && member.type !== 'const'
+  );
   for (const member of iface.members.filter((member) => !member.name)) {
     switch (member.type) {
       case 'constructor':
@@ -265,41 +401,48 @@ const flattenMembers = (iface) => {
         break;
       case 'iterable':
         members.push(
-            {name: '@@iterator', type: 'symbol'},
-            {name: 'entries', type: 'operation'},
-            {name: 'forEach', type: 'operation'},
-            {name: 'keys', type: 'operation'},
-            {name: 'values', type: 'operation'});
+          {name: '@@iterator', type: 'symbol'},
+          {name: 'entries', type: 'operation'},
+          {name: 'forEach', type: 'operation'},
+          {name: 'keys', type: 'operation'},
+          {name: 'values', type: 'operation'}
+        );
         break;
       case 'maplike':
         members.push(
-            {name: 'entries', type: 'operation'},
-            {name: 'forEach', type: 'operation'},
-            {name: 'get', type: 'operation'},
-            {name: 'has', type: 'operation'},
-            {name: 'keys', type: 'operation'},
-            {name: 'size', type: 'attribute'},
-            {name: 'values', type: 'operation'});
+          {name: '@@iterator', type: 'symbol'},
+          {name: 'entries', type: 'operation'},
+          {name: 'forEach', type: 'operation'},
+          {name: 'get', type: 'operation'},
+          {name: 'has', type: 'operation'},
+          {name: 'keys', type: 'operation'},
+          {name: 'size', type: 'attribute'},
+          {name: 'values', type: 'operation'}
+        );
         if (!member.readonly) {
           members.push(
-              {name: 'clear', type: 'operation'},
-              {name: 'delete', type: 'operation'},
-              {name: 'set', type: 'operation'});
+            {name: 'clear', type: 'operation'},
+            {name: 'delete', type: 'operation'},
+            {name: 'set', type: 'operation'}
+          );
         }
         break;
       case 'setlike':
         members.push(
-            {name: 'entries', type: 'operation'},
-            {name: 'forEach', type: 'operation'},
-            {name: 'has', type: 'operation'},
-            {name: 'keys', type: 'operation'},
-            {name: 'size', type: 'attribute'},
-            {name: 'values', type: 'operation'});
+          {name: '@@iterator', type: 'symbol'},
+          {name: 'entries', type: 'operation'},
+          {name: 'forEach', type: 'operation'},
+          {name: 'has', type: 'operation'},
+          {name: 'keys', type: 'operation'},
+          {name: 'size', type: 'attribute'},
+          {name: 'values', type: 'operation'}
+        );
         if (!member.readonly) {
           members.push(
-              {name: 'add', type: 'operation'},
-              {name: 'clear', type: 'operation'},
-              {name: 'delete', type: 'operation'});
+            {name: 'add', type: 'operation'},
+            {name: 'clear', type: 'operation'},
+            {name: 'delete', type: 'operation'}
+          );
         }
         break;
       case 'operation':
@@ -312,10 +455,16 @@ const flattenMembers = (iface) => {
     }
   }
 
+  // Catch named stringifiers
+  if (members.some((member) => member.special === 'stringifier')) {
+    members.push({name: 'toString', type: 'operation'});
+  }
+
   // Add members from ExtAttrs
-  if (getExtAttr(iface, 'LegacyFactoryFunction')) {
+  const legacyFactoryFunction = getExtAttr(iface, 'LegacyFactoryFunction');
+  if (legacyFactoryFunction) {
     members.push({
-      name: getExtAttr(iface, 'LegacyFactoryFunction').rhs.value,
+      name: legacyFactoryFunction.rhs.value,
       type: 'constructor'
     });
   }
@@ -327,62 +476,91 @@ const getExtAttr = (node, name) => {
   return node.extAttrs && node.extAttrs.find((i) => i.name === name);
 };
 
-// https://heycam.github.io/webidl/#dfn-exposure-set
-const getExposureSet = (node) => {
-  // step 6-8
-  const attr = getExtAttr(node, 'Exposed');
+const getExtAttrSet = (node, name) => {
+  const attr = getExtAttr(node, name);
   if (!attr) {
-    throw new Error(`Exposed extended attribute not found on ${node.type} ${node.name}`);
+    return null;
   }
-  const globals = new Set();
+
+  const set = new Set();
   switch (attr.rhs.type) {
     case 'identifier':
-      globals.add(attr.rhs.value);
+      set.add(attr.rhs.value);
       break;
     case 'identifier-list':
       for (const {value} of attr.rhs.value) {
-        globals.add(value);
+        set.add(value);
       }
       break;
-    /* istanbul ignore next */
+    case '*':
+      set.add('*');
+      break;
     default:
-      throw new Error(`Unexpected RHS for Exposed extended attribute`);
+      throw new Error(
+        `Unexpected RHS "${attr.rhs.type}" for ${name} extended attribute`
+      );
   }
 
-  if (globals.has('DedicatedWorker')) {
-    globals.delete('DedicatedWorker');
-    globals.add('Worker');
-  }
-
-  return globals;
+  return set;
 };
 
-const getName = (node) => {
-  if (!('name' in node)) {
-    return undefined;
+// https://webidl.spec.whatwg.org/#Exposed
+const getExposureSet = (node, scopes) => {
+  // step 6-8 of https://webidl.spec.whatwg.org/#dfn-exposure-set
+  const exposure = getExtAttrSet(node, 'Exposed');
+  if (!exposure) {
+    throw new Error(
+      `Exposed extended attribute not found on ${node.type} ${node.name}`
+    );
   }
 
-  switch (node.name) {
-    case 'console':
-      return 'Console';
-    default:
-      return node.name;
+  // Handle wildcard exposures
+  if (exposure.has('*')) {
+    exposure.delete('*');
+    for (const value of scopes) {
+      exposure.add(value);
+    }
   }
+
+  // Special case RTCIdentityProviderGlobalScope since it doesn't use the
+  // Exposed extended attribute correctly:
+  // https://github.com/w3c/webrtc-identity/pull/36
+  if (exposure.has('RTCIdentityProviderGlobalScope')) {
+    exposure.delete('RTCIdentityProviderGlobalScope');
+    exposure.add('RTCIdentityProvider');
+  }
+
+  // Some specs use "DedicatedWorker" for the exposure while others use
+  // "Worker". We spawn a dedicated worker for the "Worker" exposure.
+  // This code ensures we generate tests for either exposure.
+  // https://github.com/foolip/mdn-bcd-collector/pull/811
+  if (exposure.has('DedicatedWorker')) {
+    exposure.delete('DedicatedWorker');
+    exposure.add('Worker');
+  }
+
+  for (const e of exposure) {
+    if (!scopes.has(e)) {
+      throw new Error(
+        `${node.type} ${node.name} is exposed on ${e} but ${e} is not a valid scope`
+      );
+    }
+  }
+
+  return exposure;
 };
 
 const validateIDL = (ast) => {
   const validations = WebIDL2.validate(ast).filter((v) => {
-    // TODO: https://github.com/w3c/webref/pull/196
-    if (v.ruleName === 'dict-arg-default') {
-      return false;
-    }
     // Ignore the [LegacyNoInterfaceObject] rule.
     return v.ruleName !== 'no-nointerfaceobject';
   });
   if (validations.length) {
-    const message = validations.map((v) => {
-      return `${v.message} [${v.ruleName}]`;
-    }).join('\n\n');
+    const message = validations
+      .map((v) => {
+        return `${v.message} [${v.ruleName}]`;
+      })
+      .join('\n\n');
     throw new Error(`Web IDL validation failed:\n${message}`);
   }
 
@@ -405,38 +583,40 @@ const validateIDL = (ast) => {
   }
   // These are the types defined by Web IDL itself.
   const knownTypes = new Set([
-    'any', // https://heycam.github.io/webidl/#idl-any
-    'ArrayBuffer', // https://heycam.github.io/webidl/#idl-ArrayBuffer
-    'bigint', // https://heycam.github.io/webidl/#idl-bigint
-    'boolean', // https://heycam.github.io/webidl/#idl-boolean
-    'byte', // https://heycam.github.io/webidl/#idl-byte
-    'ByteString', // https://heycam.github.io/webidl/#idl-ByteString
-    'DataView', // https://heycam.github.io/webidl/#idl-DataView
-    'DOMString', // https://heycam.github.io/webidl/#idl-DOMString
-    'double', // https://heycam.github.io/webidl/#idl-double
-    'float', // https://heycam.github.io/webidl/#idl-float
-    'Float32Array', // https://heycam.github.io/webidl/#idl-Float32Array
-    'Float64Array', // https://heycam.github.io/webidl/#idl-Float64Array
-    'Int16Array', // https://heycam.github.io/webidl/#idl-Int16Array
-    'Int32Array', // https://heycam.github.io/webidl/#idl-Int32Array
-    'Int8Array', // https://heycam.github.io/webidl/#idl-Int8Array
-    'long long', // https://heycam.github.io/webidl/#idl-long-long
-    'long', // https://heycam.github.io/webidl/#idl-long
-    'object', // https://heycam.github.io/webidl/#idl-object
-    'octet', // https://heycam.github.io/webidl/#idl-octet
-    'short', // https://heycam.github.io/webidl/#idl-short
-    'symbol', // https://heycam.github.io/webidl/#idl-symbol
-    'Uint16Array', // https://heycam.github.io/webidl/#idl-Uint16Array
-    'Uint32Array', // https://heycam.github.io/webidl/#idl-Uint32Array
-    'Uint8Array', // https://heycam.github.io/webidl/#idl-Uint8Array
-    'Uint8ClampedArray', // https://heycam.github.io/webidl/#idl-Uint8ClampedArray
-    'unrestricted double', // https://heycam.github.io/webidl/#idl-unrestricted-double
-    'unrestricted float', // https://heycam.github.io/webidl/#idl-unrestricted-float
-    'unsigned long long', // https://heycam.github.io/webidl/#idl-unsigned-long-long
-    'unsigned long', // https://heycam.github.io/webidl/#idl-unsigned-long
-    'unsigned short', // https://heycam.github.io/webidl/#idl-unsigned-short
-    'USVString', // https://heycam.github.io/webidl/#idl-USVString
-    'undefined' // https://heycam.github.io/webidl/#idl-undefined
+    'any', // https://webidl.spec.whatwg.org/#idl-any
+    'ArrayBuffer', // https://webidl.spec.whatwg.org/#idl-ArrayBuffer
+    'bigint', // https://webidl.spec.whatwg.org/#idl-bigint
+    'BigInt64Array', // https://webidl.spec.whatwg.org/#idl-BigInt64Array
+    'BigUint64Array', // https://webidl.spec.whatwg.org/#idl-BigUint64Array
+    'boolean', // https://webidl.spec.whatwg.org/#idl-boolean
+    'byte', // https://webidl.spec.whatwg.org/#idl-byte
+    'ByteString', // https://webidl.spec.whatwg.org/#idl-ByteString
+    'DataView', // https://webidl.spec.whatwg.org/#idl-DataView
+    'DOMString', // https://webidl.spec.whatwg.org/#idl-DOMString
+    'double', // https://webidl.spec.whatwg.org/#idl-double
+    'float', // https://webidl.spec.whatwg.org/#idl-float
+    'Float32Array', // https://webidl.spec.whatwg.org/#idl-Float32Array
+    'Float64Array', // https://webidl.spec.whatwg.org/#idl-Float64Array
+    'Int16Array', // https://webidl.spec.whatwg.org/#idl-Int16Array
+    'Int32Array', // https://webidl.spec.whatwg.org/#idl-Int32Array
+    'Int8Array', // https://webidl.spec.whatwg.org/#idl-Int8Array
+    'long long', // https://webidl.spec.whatwg.org/#idl-long-long
+    'long', // https://webidl.spec.whatwg.org/#idl-long
+    'object', // https://webidl.spec.whatwg.org/#idl-object
+    'octet', // https://webidl.spec.whatwg.org/#idl-octet
+    'short', // https://webidl.spec.whatwg.org/#idl-short
+    'symbol', // https://webidl.spec.whatwg.org/#idl-symbol
+    'Uint16Array', // https://webidl.spec.whatwg.org/#idl-Uint16Array
+    'Uint32Array', // https://webidl.spec.whatwg.org/#idl-Uint32Array
+    'Uint8Array', // https://webidl.spec.whatwg.org/#idl-Uint8Array
+    'Uint8ClampedArray', // https://webidl.spec.whatwg.org/#idl-Uint8ClampedArray
+    'unrestricted double', // https://webidl.spec.whatwg.org/#idl-unrestricted-double
+    'unrestricted float', // https://webidl.spec.whatwg.org/#idl-unrestricted-float
+    'unsigned long long', // https://webidl.spec.whatwg.org/#idl-unsigned-long-long
+    'unsigned long', // https://webidl.spec.whatwg.org/#idl-unsigned-long
+    'unsigned short', // https://webidl.spec.whatwg.org/#idl-unsigned-short
+    'USVString', // https://webidl.spec.whatwg.org/#idl-USVString
+    'undefined' // https://webidl.spec.whatwg.org/#idl-undefined
   ]);
   // Add any types defined by the (flattened) spec and custom IDL.
   for (const dfn of ast) {
@@ -456,7 +636,86 @@ const validateIDL = (ast) => {
   }
 };
 
-const buildIDLTests = (ast) => {
+const buildIDLMemberTests = (
+  members,
+  iface,
+  exposureSet,
+  isGlobal,
+  resources
+) => {
+  const tests = {};
+  // Avoid generating duplicate tests for operations.
+  const handledMemberNames = new Set();
+
+  for (const member of members) {
+    if (handledMemberNames.has(member.name)) {
+      continue;
+    }
+
+    // TODO: too many events tests are being generated, see
+    // https://github.com/foolip/mdn-bcd-collector/pull/1825#issuecomment-1048009920
+
+    const isStatic = member.special === 'static' || iface.type === 'namespace';
+    const isEventHandler =
+      member.idlType?.type === 'attribute-type' &&
+      typeof member.idlType?.idlType === 'string' &&
+      member.idlType?.idlType.endsWith('EventHandler');
+
+    let expr;
+    const customTestMember = getCustomTestAPI(
+      iface.name,
+      member.name,
+      isStatic ? 'static' : member.type
+    );
+
+    if (customTestMember) {
+      expr = customTestMember;
+    } else {
+      switch (member.type) {
+        case 'attribute':
+        case 'operation':
+        case 'field':
+          if (isGlobal) {
+            expr = {property: member.name, owner: 'self'};
+          } else if (isStatic) {
+            expr = {property: member.name, owner: iface.name};
+          } else {
+            expr = {
+              property: member.name,
+              owner: `${iface.name}.prototype`,
+              inherit: member.special === 'inherit'
+            };
+          }
+          break;
+        case 'constructor':
+          expr = {property: `constructor.${member.name}`, owner: iface.name};
+          break;
+        case 'symbol':
+          // eslint-disable-next-line no-case-declarations
+          const symbol = member.name.replace('@@', '');
+          expr = {property: `Symbol.${symbol}`, owner: iface.name};
+          break;
+      }
+    }
+
+    const name = isEventHandler
+      ? `${member.name.replace(/^on/, '')}_event`
+      : member.name;
+
+    tests[name] = compileTest({
+      raw: {
+        code: expr
+      },
+      exposure: Array.from(exposureSet),
+      resources: resources
+    });
+    handledMemberNames.add(member.name);
+  }
+
+  return tests;
+};
+
+const buildIDLTests = (ast, globals, scopes) => {
   const tests = {};
 
   const interfaces = ast.filter((dfn) => {
@@ -472,14 +731,12 @@ const buildIDLTests = (ast) => {
       continue;
     }
 
-    const adjustedIfaceName = getName(iface);
-
-    const exposureSet = getExposureSet(iface);
+    const exposureSet = getExposureSet(iface, scopes);
     const isGlobal = !!getExtAttr(iface, 'Global');
-    const customIfaceTest = getCustomTestAPI(adjustedIfaceName);
-    const resources = getCustomResourcesAPI(adjustedIfaceName);
+    const customIfaceTest = getCustomTestAPI(iface.name);
+    const resources = getCustomResourcesAPI(iface.name);
 
-    tests[`api.${adjustedIfaceName}`] = compileTest({
+    tests[`api.${iface.name}`] = compileTest({
       raw: {
         code: customIfaceTest || {property: iface.name, owner: 'self'}
       },
@@ -488,67 +745,20 @@ const buildIDLTests = (ast) => {
     });
 
     const members = flattenMembers(iface);
-
-    // Avoid generating duplicate tests for operations.
-    const handledMemberNames = new Set();
-
-    for (const member of members) {
-      if (handledMemberNames.has(member.name)) {
-        continue;
-      }
-
-      const isStatic = member.special === 'static' || iface.type === 'namespace';
-
-      let expr;
-      const customTestMember = getCustomTestAPI(
-          adjustedIfaceName, member.name, isStatic ? 'static' : member.type);
-
-      if (customTestMember) {
-        expr = customTestMember;
-      } else {
-        switch (member.type) {
-          case 'attribute':
-          case 'operation':
-          case 'field':
-            if (isGlobal) {
-              expr = {property: member.name, owner: 'self'};
-            } else if (isStatic) {
-              expr = {property: member.name, owner: iface.name};
-            } else {
-              expr = {property: member.name, owner: `${iface.name}.prototype`};
-            }
-            break;
-          case 'const':
-            if (isGlobal) {
-              expr = {property: member.name, owner: 'self'};
-            } else {
-              expr = {property: member.name, owner: iface.name};
-            }
-            break;
-          case 'constructor':
-            expr = {property: `constructor.${member.name}`, owner: iface.name};
-            break;
-          case 'symbol':
-            // eslint-disable-next-line no-case-declarations
-            const symbol = member.name.replace('@@', '');
-            expr = {property: `Symbol.${symbol}`, owner: `${iface.name}`};
-            break;
-        }
-      }
-
-      tests[`api.${adjustedIfaceName}.${member.name}`] = compileTest({
-        raw: {
-          code: expr
-        },
-        exposure: Array.from(exposureSet),
-        resources: resources
-      });
-      handledMemberNames.add(member.name);
+    const memberTests = buildIDLMemberTests(
+      members,
+      iface,
+      exposureSet,
+      isGlobal,
+      resources
+    );
+    for (const [k, v] of Object.entries(memberTests)) {
+      tests[`api.${iface.name}.${k}`] = v;
     }
 
-    const subtests = getCustomSubtestsAPI(adjustedIfaceName);
+    const subtests = getCustomSubtestsAPI(iface.name);
     for (const subtest of Object.entries(subtests)) {
-      tests[`api.${adjustedIfaceName}.${subtest[0]}`] = compileTest({
+      tests[`api.${iface.name}.${subtest[0]}`] = compileTest({
         raw: {
           code: subtest[1]
         },
@@ -558,13 +768,31 @@ const buildIDLTests = (ast) => {
     }
   }
 
+  for (const iface of globals) {
+    // Remap globals tests and exposure
+    const fakeIface = {name: '_globals'};
+    const exposureSet = new Set(['Window', 'Worker']);
+
+    const members = flattenMembers(iface);
+    const memberTests = buildIDLMemberTests(
+      members,
+      fakeIface,
+      exposureSet,
+      true,
+      {}
+    );
+    for (const [k, v] of Object.entries(memberTests)) {
+      tests[`api.${k}`] = v;
+    }
+  }
+
   return tests;
 };
 
 const buildIDL = (specIDLs, customIDLs) => {
-  const ast = flattenIDL(specIDLs, customIDLs);
+  const {ast, globals, scopes} = flattenIDL(specIDLs, customIDLs);
   validateIDL(ast);
-  return buildIDLTests(ast);
+  return buildIDLTests(ast, globals, scopes);
 };
 
 // https://drafts.csswg.org/cssom/#css-property-to-idl-attribute
@@ -587,25 +815,38 @@ const cssPropertyToIDLAttribute = (property, lowercaseFirst) => {
   return output;
 };
 
-const buildCSS = (webrefCSS, customCSS) => {
-  const propertySet = new Set();
+const buildCSS = (specCSS, customCSS) => {
+  const properties = new Map();
 
-  for (const data of Object.values(webrefCSS)) {
+  for (const data of Object.values(specCSS)) {
     for (const prop of Object.keys(data.properties)) {
-      propertySet.add(prop);
+      properties.set(prop, new Map());
     }
   }
 
-  for (const prop of Object.keys(customCSS.properties)) {
-    if (propertySet.has(prop)) {
-      throw new Error(`Custom CSS property already known: ${prop}`);
+  for (const [name, data] of Object.entries(customCSS.properties)) {
+    const values = '__values' in data ? data['__values'] : [];
+    const additionalValues =
+      '__additional_values' in data ? data['__additional_values'] : {};
+
+    const mergedValues = new Map(Object.entries(additionalValues));
+    for (const value of values) {
+      if (mergedValues.has(value)) {
+        throw new Error(`CSS property value already known: ${value}`);
+      }
+      mergedValues.set(value, value);
     }
-    propertySet.add(prop);
+
+    if (properties.has(name) && mergedValues.size === 0) {
+      throw new Error(`Custom CSS property already known: ${name}`);
+    }
+
+    properties.set(name, mergedValues);
   }
 
   const tests = {};
 
-  for (const name of Array.from(propertySet).sort()) {
+  for (const name of Array.from(properties.keys()).sort()) {
     const customTest = getCustomTestCSS(name);
     if (customTest) {
       tests[`css.properties.${name}`] = compileTest({
@@ -615,21 +856,138 @@ const buildCSS = (webrefCSS, customCSS) => {
       continue;
     }
 
-    const attrName = cssPropertyToIDLAttribute(name, name.startsWith('-'));
-    const code = [{property: attrName, owner: 'document.body.style'}];
-    if (name !== attrName) {
-      code.push({property: name, owner: 'document.body.style'});
-    }
+    // Test for the property itself
     tests[`css.properties.${name}`] = compileTest({
-      raw: {code, combinator: '||'},
+      raw: {code: `bcd.testCSSProperty("${name}")`},
       exposure: ['Window']
     });
+
+    // Tests for values
+    for (const [key, value] of Array.from(
+      properties.get(name).entries()
+    ).sort()) {
+      const values = Array.isArray(value) ? value : [value];
+      const code = values
+        .map((value) => `bcd.testCSSPropertyValue("${name}", "${value}")`)
+        .join(' || ');
+      tests[`css.properties.${name}.${key}`] = compileTest({
+        raw: {code: code},
+        exposure: ['Window']
+      });
+    }
   }
 
   return tests;
 };
 
-/* istanbul ignore next */
+const buildJS = (customJS) => {
+  const tests = {};
+
+  for (const [path, extras] of Object.entries(customJS.builtins)) {
+    const parts = path.split('.');
+
+    const bcdPath = [
+      'javascript',
+      'builtins',
+      // The "prototype" part is not part of the BCD paths.
+      ...parts.filter((p) => p != 'prototype')
+    ].join('.');
+
+    if ('code' in extras) {
+      // Custom test code, nothing is generated.
+      tests[bcdPath] = compileTest({
+        raw: {code: extras.code},
+        exposure: ['Window']
+      });
+    } else {
+      // Get the last part as the property and everything else as the expression
+      // we should test for existence in, or "self" if there's just one part.
+      let property = parts[parts.length - 1];
+
+      if (property.startsWith('@@')) {
+        property = `Symbol.${property.substr(2)}`;
+      } else {
+        property = JSON.stringify(property);
+      }
+
+      const owner =
+        parts.length > 1 ? parts.slice(0, parts.length - 1).join('.') : 'self';
+
+      let code = `${owner}.hasOwnProperty(${property})`;
+
+      if (owner !== 'self') {
+        if (owner.startsWith('Intl')) {
+          if (`"${parts[1]}"` === property) {
+            code = `"Intl" in self && ` + code;
+          } else {
+            code = `"Intl" in self && "${parts[1]}" in Intl && ` + code;
+          }
+        } else if (owner.startsWith('WebAssembly')) {
+          if (`"${parts[1]}"` === property) {
+            code = `"WebAssembly" in self && ` + code;
+          } else {
+            code =
+              `"WebAssembly" in self && "${parts[1]}" in WebAssembly && ` +
+              code;
+          }
+        } else {
+          code = `"${owner.replace('.prototype', '')}" in self && ` + code;
+        }
+      }
+
+      tests[bcdPath] = compileTest({
+        raw: {code},
+        exposure: ['Window']
+      });
+    }
+
+    // Constructors
+    if ('ctor_args' in extras) {
+      const ctorPath = [
+        'javascript',
+        'builtins',
+        ...parts,
+        // Repeat the last part of the path
+        parts[parts.length - 1]
+      ].join('.');
+      const expr = `${path}(${extras.ctor_args})`;
+      const maybeNew = extras.ctor_new !== false ? 'new' : '';
+
+      let rawCode = `var instance = ${maybeNew} ${expr};
+  return !!instance;`;
+
+      if (path.startsWith('Intl')) {
+        rawCode =
+          `if (!("${parts[1]}" in Intl)) {
+    return {result: false, message: 'Intl.${parts[1]} is not defined'};
+  }
+  ` + rawCode;
+      } else if (path.startsWith('WebAssembly')) {
+        rawCode =
+          `if (!("${parts[1]}" in WebAssembly)) {
+    return {result: false, message: 'WebAssembly.${parts[1]} is not defined'};
+  }
+  ` + rawCode;
+      }
+
+      rawCode =
+        `if (!("${parts[0]}" in self)) {
+    return {result: false, message: '${parts[0]} is not defined'};
+  }
+  ` + rawCode;
+
+      const code = compileCustomTest(rawCode);
+      tests[ctorPath] = compileTest({
+        raw: {code},
+        exposure: ['Window']
+      });
+    }
+  }
+
+  return tests;
+};
+
+/* c8 ignore start */
 const copyResources = async () => {
   const resources = [
     ['json3/lib/json3.min.js', 'resources'],
@@ -640,8 +998,16 @@ const copyResources = async () => {
     ['sinon/pkg/sinon.js', 'unittest'],
     ['@browser-logos/chrome/chrome_64x64.png', 'browser-logos', 'chrome.png'],
     ['@browser-logos/edge/edge_64x64.png', 'browser-logos', 'edge.png'],
-    ['@browser-logos/firefox/firefox_64x64.png', 'browser-logos', 'firefox.png'],
-    ['@browser-logos/internet-explorer_9-11/internet-explorer_9-11_64x64.png', 'browser-logos', 'ie.png'],
+    [
+      '@browser-logos/firefox/firefox_64x64.png',
+      'browser-logos',
+      'firefox.png'
+    ],
+    [
+      '@browser-logos/internet-explorer_9-11/internet-explorer_9-11_64x64.png',
+      'browser-logos',
+      'ie.png'
+    ],
     ['@browser-logos/opera/opera_64x64.png', 'browser-logos', 'opera.png'],
     ['@browser-logos/safari/safari_64x64.png', 'browser-logos', 'safari.png'],
     ['@mdi/font/css/materialdesignicons.min.css', 'resources'],
@@ -651,7 +1017,9 @@ const copyResources = async () => {
     ['@mdi/font/fonts/materialdesignicons-webfont.woff2', 'fonts']
   ];
   for (const [srcInModules, destInGenerated, newFilename] of resources) {
-    const src = require.resolve(srcInModules);
+    const src = fileURLToPath(
+      new URL(`./node_modules/${srcInModules}`, import.meta.url)
+    );
     const destDir = path.join(generatedDir, destInGenerated);
     const dest = path.join(destDir, path.basename(src));
     await fs.ensureDir(path.dirname(dest));
@@ -662,19 +1030,35 @@ const copyResources = async () => {
   }
 };
 
-/* istanbul ignore next */
+const generateCSS = async () => {
+  const scssPath = fileURLToPath(new URL('./style.scss', import.meta.url));
+  const outPath = path.join(generatedDir, 'resources', 'style.css');
+  const result = sass.renderSync({file: scssPath});
+  if (typeof result === Error) {
+    throw result;
+  }
+  await fs.writeFile(outPath, result.css.toString(), 'utf8');
+};
+
 const build = async (customIDL, customCSS) => {
   const specCSS = await css.listAll();
   const specIDLs = await idl.parseAll();
   const IDLTests = buildIDL(specIDLs, customIDL);
   const CSSTests = buildCSS(specCSS, customCSS);
-  const tests = Object.assign({}, IDLTests, CSSTests);
+  const JSTests = buildJS(customJS);
+  const tests = Object.assign({}, IDLTests, CSSTests, JSTests);
 
-  await fs.writeJson(path.join(__dirname, 'tests.json'), tests);
+  await fs.writeJson(new URL('./tests.json', import.meta.url), tests);
   await copyResources();
+  await generateCSS();
 };
 
-module.exports = {
+if (esMain(import.meta)) {
+  await build(customIDL, customCSS);
+}
+/* c8 ignore stop */
+
+export {
   getCustomTestAPI,
   getCustomSubtestsAPI,
   getCustomResourcesAPI,
@@ -683,18 +1067,10 @@ module.exports = {
   compileTest,
   flattenIDL,
   getExposureSet,
-  getName,
   buildIDLTests,
   buildIDL,
   validateIDL,
   cssPropertyToIDLAttribute,
-  buildCSS
+  buildCSS,
+  buildJS
 };
-
-/* istanbul ignore if */
-if (require.main === module) {
-  build(customIDL, customCSS).catch((reason) => {
-    console.error(reason);
-    process.exit(1);
-  });
-}

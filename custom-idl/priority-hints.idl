@@ -1,0 +1,17 @@
+// https://github.com/WICG/priority-hints/pull/71
+
+partial interface HTMLImageElement {
+  [CEReactions] attribute DOMString fetchpriority;
+};
+
+partial interface HTMLLinkElement {
+  [CEReactions] attribute DOMString fetchpriority;
+};
+
+partial interface HTMLScriptElement {
+  [CEReactions] attribute DOMString fetchpriority;
+};
+
+partial interface HTMLIFrameElement {
+  [CEReactions] attribute DOMString fetchpriority;
+};

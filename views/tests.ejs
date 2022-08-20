@@ -1,10 +1,20 @@
+<!--
+mdn-bcd-collector: views/tests.ejs
+Page for running the specified tests
+
+© Gooborg Studios, Google LLC
+See LICENSE.txt for copyright details
+-->
+
 <%- contentFor('body') %>
 <p id="status">Running tests...</p>
 <form id="form" action=/export method=post>
   <input id="export-download" type=submit name=download value="Export for download" disabled>
   <input id="export-github" type=submit name=github value="Export to GitHub" disabled>
 </form>
-<div id="results"></div>
+<div id="results">
+  <hr />
+</div>
 
 <% let resources = {}; %>
 <% tests.forEach(function(test) {
@@ -37,13 +47,12 @@
   }; %>
 </div>
 
-<!-- TODO: https://github.com/foolip/mdn-bcd-collector/issues/407 -->
-<script src="/resources/json3.min.js"></script>
 <script src="/resources/harness.js"></script>
+
 <script>
   <% for (const [instanceId, instance] of Object.entries(resources)
     .filter((item) => (item[1].type === 'instance'))) { %>
-    bcd.addInstance("<%- instanceId %>", "<%- instance.src %>");
+    bcd.addInstance("<%- instanceId %>", <%- JSON.stringify(instance.src) %>);
   <% }; %>
   <% tests.forEach(function(test) { %>
     bcd.addTest("<%- test.ident %>", <%- JSON.stringify(test.tests) %>, "<%- test.exposure %>");

@@ -90,3 +90,8 @@ interface DirectoryEntrySync {
 // In BCD, but not the old spec
 [Exposed=Window,Worker] interface FileError {};
 [Exposed=Window,Worker] interface FileException {};
+
+// In BCD, but removed in the new spec
+partial interface FileSystemDirectoryEntry {
+  undefined removeRecursively(VoidFunction successCallback, optional ErrorCallback errorCallback);
+};

@@ -1,0 +1,11 @@
+// https://alvestrand.github.io/mediacapture-transform/chrome-96.html#idl-index
+
+[Exposed=Window]
+interface MediaStreamTrackGenerator : MediaStreamTrack {
+    constructor(MediaStreamTrackGeneratorInit init);
+    attribute WritableStream writable;  // VideoFrame or AudioFrame
+};
+
+dictionary MediaStreamTrackGeneratorInit {
+  required DOMString kind;
+};

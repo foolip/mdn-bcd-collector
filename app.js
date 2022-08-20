@@ -1,47 +1,69 @@
-// Copyright 2020 Google LLC
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
+// mdn-bcd-collector: app.js
+// Main app backend for the website
 //
-//     https://www.apache.org/licenses/LICENSE-2.0
+// © Google LLC, Gooborg Studios
+// See LICENSE.txt for copyright details
 //
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
 
-'use strict';
+import https from 'node:https';
+import http from 'node:http';
 
-const fs = require('fs');
-const path = require('path');
-const querystring = require('querystring');
-const bcdBrowsers = require('@mdn/browser-compat-data').browsers;
+import fs from 'fs-extra';
+import querystring from 'querystring';
+import bcd from '@mdn/browser-compat-data' assert {type: 'json'};
+const bcdBrowsers = bcd.browsers;
+import esMain from 'es-main';
+import express from 'express';
+import cookieParser from 'cookie-parser';
+import uniqueString from 'unique-string';
+import expressLayouts from 'express-ejs-layouts';
+import yargs from 'yargs';
+import {hideBin} from 'yargs/helpers';
+import {Octokit} from '@octokit/rest';
 
-const express = require('express');
-const cookieParser = require('cookie-parser');
-const https = require('https');
-const http = require('http');
-const uniqueString = require('unique-string');
-const expressLayouts = require('express-ejs-layouts');
+import * as exporter from './exporter.js';
+import logger from './logger.js';
+import parseResults from './results.js';
+import {getStorage} from './storage.js';
+import {parseUA} from './ua-parser.js';
+import Tests from './tests.js';
+import {exec} from './scripts.js';
 
-const exporter = require('./exporter');
-const logger = require('./logger');
-const {parseResults} = require('./results');
-const storage = require('./storage').getStorage();
-const {parseUA} = require('./ua-parser');
+/* c8 ignore start */
+const getAppVersion = async () => {
+  const version = (
+    await fs.readJson(new URL('./package.json', import.meta.url))
+  ).version;
+  if (process.env.NODE_ENV === 'production') {
+    return version;
+  }
 
-const appVersion = process.env.GAE_VERSION === 'production' ? require('./package.json').version : 'Dev';
+  try {
+    return String(exec('git describe --tags')).replace(/^v/, '');
+  } catch (e) {
+    // If anything happens, e.g., git isn't installed, just use the version
+    // from package.json with -dev appended.
+    return `${version}-dev`;
+  }
+};
 
-/* istanbul ignore next */
-const secrets = process.env.NODE_ENV === 'test' ?
-    require('./secrets.sample.json') :
-    require('./secrets.json');
+const appVersion = await getAppVersion();
 
-const Tests = require('./tests');
+const secrets = await fs.readJson(
+  new URL(
+    process.env.NODE_ENV === 'test'
+      ? './secrets.sample.json'
+      : './secrets.json',
+    import.meta.url
+  )
+);
+/* c8 ignore stop */
+
+const storage = getStorage(appVersion);
+
 const tests = new Tests({
-  tests: require('./tests.json'),
+  tests: await fs.readJson(new URL('./tests.json', import.meta.url)),
   httpOnly: process.env.NODE_ENV !== 'production'
 });
 
@@ -54,6 +76,11 @@ const cookieSession = (req, res, next) => {
   next();
 };
 
+const checkIfSecure = (req, _, next) => {
+  app.locals.secure = req.protocol == 'https';
+  next();
+};
+
 const createReport = (results, req) => {
   return {__version: appVersion, results, userAgent: req.get('User-Agent')};
 };
@@ -61,7 +88,7 @@ const createReport = (results, req) => {
 const app = express();
 
 // Layout config
-app.set('views', path.join(__dirname, 'views'));
+app.set('views', './views');
 app.set('view engine', 'ejs');
 app.use(expressLayouts);
 app.set('layout extractScripts', true);
@@ -69,14 +96,18 @@ app.set('layout extractScripts', true);
 // Additional config
 app.use(cookieParser());
 app.use(cookieSession);
+app.use(checkIfSecure);
 app.use(express.urlencoded({extended: true}));
 app.use(express.json({limit: '32mb'}));
 app.use(express.static('static'));
 app.use(express.static('generated'));
 
+app.locals.appVersion = appVersion;
+app.locals.bcdVersion = bcd.__meta.version;
+
+// Get user agent
 app.use((req, res, next) => {
-  app.locals.appVersion = appVersion;
-  app.locals.browser = parseUA(req.get('User-Agent'), bcdBrowsers);
+  res.locals.browser = parseUA(req.get('User-Agent'), bcdBrowsers);
   next();
 });
 
@@ -96,7 +127,7 @@ app.post('/api/get', (req, res) => {
   });
   const query = querystring.encode(queryParams);
 
-  res.redirect(`/tests/${testSelection}${query ? `?${query}`: ''}`);
+  res.redirect(`/tests/${testSelection}${query ? `?${query}` : ''}`);
 });
 
 app.post('/api/results', (req, res, next) => {
@@ -114,16 +145,21 @@ app.post('/api/results', (req, res, next) => {
     return;
   }
 
-  storage.put(req.sessionID, url, results).then(() => {
-    res.status(201).end();
-  }).catch(next);
+  storage
+    .put(req.sessionID, url, results)
+    .then(() => {
+      res.status(201).end();
+    })
+    .catch(next);
 });
 
 app.get('/api/results', (req, res, next) => {
-  storage.getAll(req.sessionID)
-      .then((results) => {
-        res.status(200).json(createReport(results, req));
-      }).catch(next);
+  storage
+    .getAll(req.sessionID)
+    .then((results) => {
+      res.status(200).json(createReport(results, req));
+    })
+    .catch(next);
 });
 
 // Test Resources
@@ -131,7 +167,9 @@ app.get('/api/results', (req, res, next) => {
 // api.EventSource
 app.get('/eventstream', (req, res) => {
   res.header('Content-Type', 'text/event-stream');
-  res.send('event: ping\ndata: Hello world!\ndata: {"foo": "bar"}\ndata: Goodbye world!');
+  res.send(
+    'event: ping\ndata: Hello world!\ndata: {"foo": "bar"}\ndata: Goodbye world!'
+  );
 });
 
 // Views
@@ -144,46 +182,62 @@ app.get('/', (req, res) => {
   });
 });
 
+/* c8 ignore start */
 app.get('/download/:filename', (req, res, next) => {
-  storage.readFile(req.params.filename)
-      .then((data) => {
-        res.setHeader('content-type', 'application/json;charset=UTF-8');
-        res.setHeader('content-disposition', 'attachment');
-        res.send(data);
-      }).catch(next);
+  storage
+    .readFile(req.params.filename)
+    .then((data) => {
+      res.setHeader('content-type', 'application/json;charset=UTF-8');
+      res.setHeader('content-disposition', 'attachment');
+      res.send(data);
+    })
+    .catch(next);
 });
 
 // Accept both GET and POST requests. The form uses POST, but selenium.js
 // instead simply navigates to /export.
 app.all('/export', (req, res, next) => {
   const github = !!req.body.github;
-  storage.getAll(req.sessionID)
-      .then(async (results) => {
-        const report = createReport(results, req);
-        if (github) {
-          const token = secrets.github.token;
-          const {url} = await exporter.exportAsPR(report, token);
+  storage
+    .getAll(req.sessionID)
+    .then(async (results) => {
+      const report = createReport(results, req);
+      if (github) {
+        const token = secrets.github.token;
+        if (token) {
+          const octokit = new Octokit({auth: `token ${token}`});
+          const {url} = await exporter.exportAsPR(report, octokit);
           res.render('export', {
             title: 'Exported to GitHub',
             description: url,
             url
           });
         } else {
-          const {filename, buffer} = exporter.getReportMeta(report);
-          await storage.saveFile(filename, buffer);
           res.render('export', {
-            title: 'Exported for download',
-            description: filename,
-            url: `/download/${filename}`
+            title: 'GitHub Export Disabled',
+            description: '[No GitHub Token, GitHub Export Disabled]',
+            url: '/'
           });
         }
-      }).catch(next);
+      } else {
+        const {filename, buffer} = exporter.getReportMeta(report);
+        await storage.saveFile(filename, buffer);
+        res.render('export', {
+          title: 'Exported for download',
+          description: filename,
+          url: `/download/${filename}`
+        });
+      }
+    })
+    .catch(next);
 });
+/* c8 ignore stop */
 
 app.all('/tests/*', (req, res) => {
   const ident = req.params['0'].replace(/\//g, '.');
-  const ignoreIdents = req.query.ignore ?
-      req.query.ignore.split(',').filter((s) => s) : [];
+  const ignoreIdents = req.query.ignore
+    ? req.query.ignore.split(',').filter((s) => s)
+    : [];
   const foundTests = tests.getTests(ident, req.query.exposure, ignoreIdents);
   if (foundTests && foundTests.length) {
     res.render('tests', {
@@ -209,37 +263,32 @@ app.use((req, res) => {
   });
 });
 
-module.exports = {
-  app,
-  version: appVersion
-};
-
-/* istanbul ignore if */
-if (require.main === module) {
-  const {argv} = require('yargs').command(
-      '$0',
-      'Run the mdn-bcd-collector server',
-      (yargs) => {
-        yargs
-            .option('https-cert', {
-              describe: 'HTTPS cert chains in PEM format',
-              type: 'string'
-            })
-            .option('https-key', {
-              describe: 'HTTPS private keys in PEM format',
-              type: 'string'
-            })
-            .option('https-port', {
-              describe: 'HTTPS port (requires cert and key)',
-              type: 'number',
-              default: 8443
-            })
-            .option('port', {
-              describe: 'HTTP port',
-              type: 'number',
-              default: process.env.PORT ? +process.env.PORT : 8080
-            });
-      }
+/* c8 ignore start */
+if (esMain(import.meta)) {
+  const {argv} = yargs(hideBin(process.argv)).command(
+    '$0',
+    'Run the mdn-bcd-collector server',
+    (yargs) => {
+      yargs
+        .option('https-cert', {
+          describe: 'HTTPS cert chains in PEM format',
+          type: 'string'
+        })
+        .option('https-key', {
+          describe: 'HTTPS private keys in PEM format',
+          type: 'string'
+        })
+        .option('https-port', {
+          describe: 'HTTPS port (requires cert and key)',
+          type: 'number',
+          default: 8443
+        })
+        .option('port', {
+          describe: 'HTTP port',
+          type: 'number',
+          default: process.env.PORT ? +process.env.PORT : 8080
+        });
+    }
   );
 
   http.createServer(app).listen(argv.port);
@@ -254,3 +303,6 @@ if (require.main === module) {
   }
   logger.info('Press Ctrl+C to quit.');
 }
+/* c8 ignore stop */
+
+export {app, appVersion as version};

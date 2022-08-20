@@ -111,6 +111,11 @@ partial interface DataTransfer {
   readonly attribute Node? mozSourceNode;
 };
 
+dictionary ElementRegistrationOptions {
+  object? prototype = null;
+  DOMString? extends = null;
+};
+
 partial interface Document {
   // https://github.com/whatwg/html/pull/1103
   attribute EventHandler onafterscriptexecute;
@@ -118,6 +123,8 @@ partial interface Document {
 
   // https://github.com/whatwg/html/pull/951
   readonly attribute DOMString origin;
+
+  any registerElement(DOMString type, optional ElementRegistrationOptions options = {});
 };
 
 partial interface DragEvent {
@@ -130,6 +137,8 @@ partial interface Element {
 
   // https://github.com/whatwg/html/issues/667
   attribute EventHandler onsearch;
+
+  readonly attribute boolean tabStop;
 
   // event handler attributes in the wrong place
   attribute EventHandler oncopy;
@@ -246,7 +255,6 @@ partial interface HTMLElement {
 
   attribute HTMLMenuElement? contextMenu;
   undefined forceSpellCheck();
-  attribute boolean inert;
   attribute boolean noModule;
   attribute EventHandler onModule;
 };
@@ -394,9 +402,6 @@ partial interface HTMLSourceElement {
 };
 
 partial interface HTMLStyleElement {
-  // https://github.com/whatwg/html/issues/5590
-  attribute boolean disabled;
-
   // moved to HTMLOrSVGElement mixin
   attribute DOMString nonce;
 
@@ -445,6 +450,13 @@ partial interface ImageBitmapRenderingContext {
   undefined transferImageBitmap(ImageBitmap? bitmap);
 };
 
+partial interface Location {
+  attribute USVString password;
+  attribute USVString username;
+
+  stringifier;
+};
+
 partial interface MessageEvent {
   // https://github.com/whatwg/html/pull/4009
   readonly attribute UserActivation? userActivation;
@@ -466,6 +478,11 @@ partial interface Navigator {
 
   // https://developer.mozilla.org/en-US/docs/Web/API/Navigator/mozIsLocallyAvailable
   boolean mozIsLocallyAvailable(DOMString url, boolean ifOffline);
+
+  attribute any authentication;
+  readonly attribute DOMString buildID;
+  readonly attribute DOMString doNotTrack;
+  undefined registerContentHandler();
 };
 
 partial interface Plugin {
@@ -483,6 +500,10 @@ partial interface TextTrackCueList {
 
 partial interface TextTrackList {
    TextTrack item(unsigned long index);
+};
+
+[Exposed=(Window,Worker)]
+interface Transferable {
 };
 
 partial interface VideoTrackList {
@@ -527,8 +548,6 @@ partial interface Window {
   undefined home();
   undefined maximize();
   undefined minimize();
-  attribute EventHandler onappinstalled;
-  attribute EventHandler onbeforeinstallprompt;
   attribute EventHandler onpaint;
   undefined openDialog();
   attribute object pkcs11;

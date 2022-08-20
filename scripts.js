@@ -1,31 +1,30 @@
-// Copyright 2020 Mozilla Corporation
 //
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
+// mdn-bcd-collector: scripts.js
+// A main entry point to run various scripts in a cross-platform friendly way
 //
-//     https://www.apache.org/licenses/LICENSE-2.0
+// © Mozilla Corporation, Google LLC, Gooborg Studios
+// See LICENSE.txt for copyright details
 //
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
 
-const childProcess = require('child_process');
-const path = require('path');
-const fs = require('fs');
+import fs from 'node:fs';
 
-const exec = (cmd, env) => {
+import childProcess from 'child_process';
+import esMain from 'es-main';
+import yargs from 'yargs';
+import {hideBin} from 'yargs/helpers';
+
+export const exec = (cmd, env, pipe = true) => {
   env = {...process.env, ...env};
-  console.log(`> ${cmd}`);
-  return childProcess.execSync(cmd, {env, stdio: 'inherit'});
+  if (!pipe) {
+    console.log(`> ${cmd}`);
+  }
+  return childProcess.execSync(cmd, {env, stdio: pipe ? 'pipe' : 'inherit'});
 };
 
 const prepare = () => {
   // Copy secrets.sample.json to secrets.json if needed
-  const secretsPath = path.join(__dirname, 'secrets.json');
-  const secretsSamplePath = path.join(__dirname, 'secrets.sample.json');
+  const secretsPath = new URL('./secrets.json', import.meta.url);
+  const secretsSamplePath = new URL('./secrets.sample.json', import.meta.url);
 
   if (!fs.existsSync(secretsPath)) {
     fs.copyFileSync(secretsSamplePath, secretsPath);
@@ -37,21 +36,20 @@ const prepare = () => {
   } catch (e) {
     return;
   }
-  exec('node install.js', {PUPPETEER_PRODUCT: 'firefox'});
+  exec('node install.js', {PUPPETEER_PRODUCT: 'firefox'}, false);
 };
 
-if (require.main === module) {
-  const {argv} = require('yargs').command(
-      '$0 <command>',
-      'Run an action',
-      (yargs) => {
-        yargs
-            .positional('command', {
-              describe: 'What command to run',
-              type: 'string',
-              choices: ['unittest', 'prepare']
-            });
-      }
+if (esMain(import.meta)) {
+  const {argv} = yargs(hideBin(process.argv)).command(
+    '$0 <command>',
+    'Run an action',
+    (yargs) => {
+      yargs.positional('command', {
+        describe: 'What command to run',
+        type: 'string',
+        choices: ['unittest', 'prepare']
+      });
+    }
   );
 
   switch (argv.command) {
@@ -59,7 +57,11 @@ if (require.main === module) {
       prepare();
       break;
     case 'unittest':
-      exec('nyc mocha --reporter dot --recursive unittest', {NODE_ENV: 'test'});
+      exec(
+        'c8 mocha --reporter dot --recursive "unittest/**/*.js" --recursive "unittest/**/*.ts"',
+        {NODE_ENV: 'test'},
+        false
+      );
       break;
     default:
       console.error(`Unknown command ${argv.command}!`);
