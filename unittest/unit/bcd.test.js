@@ -117,6 +117,9 @@ export default {
       },
       'font-face': {
         __compat: {support: {chrome: {version_added: null}}}
+      },
+      'font-style': {
+        __compat: {support: {chrome: {version_added: null}}}
       }
     }
   },

@@ -35,6 +35,7 @@ describe('find-missing-features', () => {
         'api.SuperNewInterface',
         'css.properties.font-family',
         'css.properties.font-face',
+        'css.properties.font-style',
         'javascript.builtins.Array',
         'javascript.builtins.Date'
       ]);
@@ -60,6 +61,7 @@ describe('find-missing-features', () => {
         'api.SuperNewInterface',
         'css.properties.font-family',
         'css.properties.font-face',
+        'css.properties.font-style',
         'javascript.builtins.Array',
         'javascript.builtins.Date'
       ]);
@@ -72,7 +74,7 @@ describe('find-missing-features', () => {
     });
 
     it('collector <- bcd', () => {
-      assert.deepEqual(getMissing(bcd, tests), {
+      const expected = {
         missingEntries: [
           'api.AbortController.AbortController',
           'api.AbortController.abort',
@@ -87,10 +89,24 @@ describe('find-missing-features', () => {
           'api.RemovedInterface',
           'api.SuperNewInterface',
           'css.properties.font-face',
+          'css.properties.font-style',
           'javascript.builtins.Date'
         ],
-        total: 18
-      });
+        total: 19
+      };
+
+      assert.deepEqual(getMissing(bcd, tests), expected);
+
+      assert.isTrue(console.log.notCalled);
+
+      // Unknown direction defaults to collector <- bcd
+      assert.deepEqual(getMissing(bcd, tests, 'foo-from-bar'), expected);
+
+      assert.isTrue(
+        console.log.calledWith(
+          "Direction 'foo-from-bar' is unknown; defaulting to collector <- bcd"
+        )
+      );
     });
 
     it('bcd <- collector', () => {
@@ -136,9 +152,10 @@ describe('find-missing-features', () => {
           'api.RemovedInterface',
           'api.SuperNewInterface',
           'css.properties.font-face',
+          'css.properties.font-style',
           'javascript.builtins.Date'
         ],
-        total: 18
+        total: 19
       });
 
       assert.isTrue(
