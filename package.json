@@ -97,7 +97,7 @@
     "nodemon": "2.0.19",
     "open-cli": "7.0.1",
     "prettier": "2.7.1",
-    "puppeteer": "16.1.1",
+    "puppeteer": "16.2.0",
     "sass": "1.54.4",
     "selenium-webdriver": "4.4.0",
     "sinon": "14.0.0",
