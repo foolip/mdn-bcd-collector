@@ -35,10 +35,6 @@ partial interface Window {
   [SecureContext] readonly attribute ApplicationCache applicationCache;
 };
 
-partial interface AudioTrackList {
-   AudioTrack item(unsigned long index);
-};
-
 // https://github.com/whatwg/html/pull/1942
 dictionary HitRegionOptions {
   Path2D? path = null;

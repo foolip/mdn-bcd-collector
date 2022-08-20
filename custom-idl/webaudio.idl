@@ -1,7 +1,3 @@
-partial interface AudioContext {
-  ConstantSourceNode createConstantSource();
-};
-
 // https://chromium.googlesource.com/chromium/src/+/9848564877f0057f4dcbc98bce061dfa17a9202c
 partial interface AudioListener {
   attribute float dopplerFactor;
