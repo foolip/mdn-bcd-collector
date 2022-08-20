@@ -107,7 +107,7 @@ export const traverseFeatures = async (
         for (const statements of Object.values(support)) {
           const supported = (
             Array.isArray(statements) ? statements : [statements]
-          ).some((s) => s.version_added);
+          ).some((s) => s.version_added && !s.version_removed);
           if (supported) {
             await writeFile(thisIdent, obj[i]);
             break;
