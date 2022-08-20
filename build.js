@@ -52,11 +52,11 @@ const compileCustomTest = (code, format = true) => {
           return `throw 'Test is malformed: ${match} is an invalid reference';`;
         }
         let importcode = compileCustomTest(customTests.api[name].__base, false);
-        const callback = importcode.includes('callback');
+        const callback = importcode.match(/callback([\(\),])/g);
 
         importcode = importcode
           .replace(/var (instance|promise)/g, `var ${instancevar}`)
-          .replace(/callback\(/g, `${instancevar}(`)
+          .replace(/callback([\(\),])/g, `${instancevar}$1`)
           .replace(/promise\.then/g, `${instancevar}.then`)
           .replace(/(instance|promise) = /g, `${instancevar} = `);
         if (!(['instance', 'promise'].includes(instancevar) || callback)) {
@@ -87,7 +87,7 @@ const getCustomTestAPI = (name, member, type) => {
         ? customTests.api[name].__base.replace(/\n/g, '\n  ') + '\n  '
         : '';
     const promise = testbase.includes('var promise');
-    const callback = testbase.includes('callback(');
+    const callback = testbase.match(/callback([\(\),])/g);
 
     if (member === undefined) {
       if ('__test' in customTests.api[name]) {
