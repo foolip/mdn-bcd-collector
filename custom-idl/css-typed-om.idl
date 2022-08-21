@@ -5,8 +5,3 @@ interface CSSPositionValue : CSSStyleValue {
   attribute CSSNumericValue x;
   attribute CSSNumericValue y;
 };
-
-partial interface Element {
-  // https://github.com/mdn/browser-compat-data/issues/6698
-  [SameObject] readonly attribute StylePropertyMap attributeStyleMap;
-};
