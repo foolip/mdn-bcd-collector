@@ -91,6 +91,11 @@ const reports: Report[] = [
           name: 'css.properties.font-face',
           exposure: 'Window',
           result: true
+        },
+        {
+          name: 'css.properties.font-style',
+          exposure: 'Window',
+          result: true
         }
       ]
     },
@@ -171,6 +176,11 @@ const reports: Report[] = [
           name: 'css.properties.font-face',
           exposure: 'Window',
           result: true
+        },
+        {
+          name: 'css.properties.font-style',
+          exposure: 'Window',
+          result: true
         }
       ]
     },
@@ -243,6 +253,11 @@ const reports: Report[] = [
         },
         {
           name: 'css.properties.font-face',
+          exposure: 'Window',
+          result: true
+        },
+        {
+          name: 'css.properties.font-style',
           exposure: 'Window',
           result: true
         }
@@ -342,7 +357,8 @@ describe('BCD updater', () => {
           ['api.RemovedInterface', true],
           ['api.SuperNewInterface', false],
           ['css.properties.font-family', true],
-          ['css.properties.font-face', true]
+          ['css.properties.font-face', true],
+          ['css.properties.font-style', true]
         ])
       );
     });
@@ -363,7 +379,8 @@ describe('BCD updater', () => {
           ['api.RemovedInterface', false],
           ['api.SuperNewInterface', false],
           ['css.properties.font-family', true],
-          ['css.properties.font-face', true]
+          ['css.properties.font-face', true],
+          ['css.properties.font-style', true]
         ])
       );
     });
@@ -577,6 +594,20 @@ describe('BCD updater', () => {
                 ])
               ]
             ])
+          ],
+          [
+            'css.properties.font-style',
+            new Map([
+              [
+                'chrome',
+                new Map([
+                  ['82', false],
+                  ['83', false],
+                  ['84', false],
+                  ['85', true]
+                ])
+              ]
+            ])
           ]
         ])
       );
@@ -629,7 +660,8 @@ describe('BCD updater', () => {
         chrome: [{version_added: false}]
       },
       'css.properties.font-family': {chrome: [{version_added: '84'}]},
-      'css.properties.font-face': {chrome: []}
+      'css.properties.font-face': {chrome: []},
+      'css.properties.font-style': {chrome: [{version_added: '85'}]}
     };
 
     const supportMatrix = getSupportMatrix(reports, bcd.browsers, overrides);
@@ -804,6 +836,9 @@ describe('BCD updater', () => {
             },
             'font-face': {
               __compat: {support: {chrome: {version_added: null}}}
+            },
+            'font-style': {
+              __compat: {support: {chrome: {version_added: '85'}}}
             }
           }
         },

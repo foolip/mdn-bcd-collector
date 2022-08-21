@@ -188,11 +188,25 @@ export const getSupportMatrix = (
     if (!versionMap) {
       continue;
     }
+
     if (version === '*') {
+      // All versions of a browser
       for (const v of versionMap.keys()) {
         versionMap.set(v, supported);
       }
+    } else if (version.includes('-')) {
+      // Browser versions between x and y (inclusive)
+      const versions = version.split('-');
+      for (const v of versionMap.keys()) {
+        if (
+          compareVersions.compare(versions[0], v, '<=') &&
+          compareVersions.compare(versions[1], v, '>=')
+        ) {
+          versionMap.set(v, supported);
+        }
+      }
     } else {
+      // Single browser versions
       versionMap.set(version, supported);
     }
   }
