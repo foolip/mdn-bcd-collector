@@ -325,6 +325,10 @@ export const update = (
 
       let allStatements: InternalSupportStatement | undefined =
         entry.__compat.support[browser];
+      if (allStatements === 'mirror') {
+        allStatements = mirror(browser, originalSupport);
+      }
+
       if (!allStatements) {
         allStatements = [];
       } else if (!Array.isArray(allStatements)) {
@@ -333,25 +337,16 @@ export const update = (
 
       // Filter to the statements representing the feature being enabled by
       // default under the default name and no flags.
-      const defaultStatements = allStatements
-        .map((statement) => {
-          // Perform mirroring
-          if (statement !== 'mirror') {
-            return statement;
-          }
-          const result = mirror(browser, originalSupport);
-          return result;
-        })
-        .filter((statement) => {
-          if ('flags' in statement) {
-            return false;
-          }
-          if ('prefix' in statement || 'alternative_name' in statement) {
-            // TODO: map the results for aliases to these statements.
-            return false;
-          }
-          return true;
-        });
+      const defaultStatements = allStatements.filter((statement) => {
+        if ('flags' in statement) {
+          return false;
+        }
+        if ('prefix' in statement || 'alternative_name' in statement) {
+          // TODO: map the results for aliases to these statements.
+          return false;
+        }
+        return true;
+      });
 
       if (defaultStatements.length === 0) {
         // Prepend |inferredStatement| to |allStatements|, since there were no
