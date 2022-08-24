@@ -14,22 +14,26 @@ interpreted with knowledge of what the test does.
 
 ### Writing custom tests
 
-The `custom-tests.json` file is used to write custom tests for APIs and CSS properties that cannot be tested with a simple statement (for example, WebGL extensions). Custom tests are written in the following structure:
+The `custom-tests.yml` file is used to write custom tests for APIs and CSS properties that cannot be tested with a simple statement (for example, WebGL extensions). Custom tests are written in the following structure:
 
 #### APIs
 
 Each API interface is written in the following structure:
 
-```json
-"INTERFACE_NAME": {
-  "__resources": ["RESOURCE_ID", ...],
-  "__base": "CODE_TO_REPEAT_FOR_EVERY_TEST",
-  "__test": "CODE_SPECIFIC_TO_TEST_THE_INTERFACE",
-  "MEMBER": "CODE_TO_TEST_THE_MEMBER",
-  "__additional": {
-    "SUBFEATURE": "CODE_TO_TEST_SUBFEATURE"
-  }
-}
+```yaml
+INTERFACE_NAME:
+  __resources:
+    - RESOURCE_ID
+    - ...
+  __base: |-
+    CODE_TO_REPEAT_FOR_EVERY_TEST
+  __test: |-
+    CODE_SPECIFIC_TO_TEST_THE_INTERFACE
+  MEMBER: |-
+    CODE_TO_TEST_THE_MEMBER
+  __additional:
+    SUBFEATURE: |-
+      CODE_TO_TEST_SUBFEATURE
 ```
 
 `__base` is the common code to access the interface, repeated across every test. This is where you create your elements and set up your environment. The instance of the interface being tested should be defined in a variable called `instance`. This will allow the build script to automatically generate tests for the instance and its members.
@@ -50,38 +54,39 @@ Each test will compile into a function as follows: `function() {__base + __test/
 
 Example:
 
-The following JSON...
+The following YAML...
 
-```json
-{
-  "api": {
-    "ANGLE_instanced_arrays": {
-      "__base": "var canvas = document.createElement('canvas'); var gl = canvas.getContext('webgl'); var instance = gl.getExtension('ANGLE_instanced_arrays');",
-      "__test": "return canvas && instance;",
-      "drawArraysInstancedANGLE": "return true && instance && 'drawArraysInstancedANGLE' in instance;"
-    },
-    "DOMTokenList": {
-      "__additional": {
-        "remove_duplicates": "var elm = document.createElement('b'); elm.className = ' foo bar foo '; elm.classList.remove('bar'); return elm.className === 'foo';"
-      }
-    }
-  },
-  "css": {}
-}
+```yaml
+api:
+  ANGLE_instanced_arrays:
+    __base: |-
+      var canvas = document.createElement('canvas');
+      var gl = canvas.getContext('webgl');
+      var instance = gl.getExtension('ANGLE_instanced_arrays');
+    __test: "return canvas && instance;"
+    drawArraysInstancedANGLE: "return true && instance && 'drawArraysInstancedANGLE' in instance;"
+  DOMTokenList:
+    __additional:
+      remove_duplicates: |-
+        var elm = document.createElement('b');
+        elm.className = ' foo bar foo ';
+        elm.classList.remove('bar');
+        return elm.className === 'foo';
+css: {}
 ```
 
 ...will compile into...
 
 ```javascript
-bcd.addTest('api.ANGLE_instanced_arrays', "(function() {var canvas = document.createElement('canvas'); var gl = canvas.getContext('webgl'); var instance = gl.getExtension('ANGLE_instanced_arrays');return canvas && instance;})()", 'Window');
-bcd.addTest('api.ANGLE_instanced_arrays.drawArraysInstancedANGLE', "(function() {var canvas = document.createElement('canvas'); var gl = canvas.getContext('webgl'); var instance = gl.getExtension('ANGLE_instanced_arrays');return true && instance && 'drawArraysInstancedANGLE' in instance;})()", 'Window');
-bcd.addTest('api.ANGLE_instanced_arrays.drawElementsInstancedANGLE', "(function() {var canvas = document.createElement('canvas'); var gl = canvas.getContext('webgl'); var instance = gl.getExtension('ANGLE_instanced_arrays');return instance && 'drawElementsInstancedANGLE' in instance;})()", 'Window');
-bcd.addTest('api.ANGLE_instanced_arrays.VERTEX_ATTRIB_ARRAY_DIVISOR_ANGLE', "(function() {var canvas = document.createElement('canvas'); var gl = canvas.getContext('webgl'); var instance = gl.getExtension('ANGLE_instanced_arrays');return instance && 'VERTEX_ATTRIB_ARRAY_DIVISOR_ANGLE' in instance;})()", 'Window');
-bcd.addTest('api.ANGLE_instanced_arrays.vertexAttribDivisorANGLE', "(function() {var canvas = document.createElement('canvas'); var gl = canvas.getContext('webgl'); var instance = gl.getExtension('ANGLE_instanced_arrays');return instance && 'vertexAttribDivisorANGLE' in instance;})()", 'Window');
+bcd.addTest('api.ANGLE_instanced_arrays', "(function() {var canvas = document.createElement('canvas');\nvar gl = canvas.getContext('webgl');\nvar instance = gl.getExtension('ANGLE_instanced_arrays');return canvas && instance;})()", 'Window');
+bcd.addTest('api.ANGLE_instanced_arrays.drawArraysInstancedANGLE', "(function() {var canvas = document.createElement('canvas');\nvar gl = canvas.getContext('webgl');\nvar instance = gl.getExtension('ANGLE_instanced_arrays');return true && instance && 'drawArraysInstancedANGLE' in instance;})()", 'Window');
+bcd.addTest('api.ANGLE_instanced_arrays.drawElementsInstancedANGLE', "(function() {var canvas = document.createElement('canvas');\nvar gl = canvas.getContext('webgl');\nvar instance = gl.getExtension('ANGLE_instanced_arrays');return instance && 'drawElementsInstancedANGLE' in instance;})()", 'Window');
+bcd.addTest('api.ANGLE_instanced_arrays.VERTEX_ATTRIB_ARRAY_DIVISOR_ANGLE', "(function() {var canvas = document.createElement('canvas');\nvar gl = canvas.getContext('webgl');\nvar instance = gl.getExtension('ANGLE_instanced_arrays');return instance && 'VERTEX_ATTRIB_ARRAY_DIVISOR_ANGLE' in instance;})()", 'Window');
+bcd.addTest('api.ANGLE_instanced_arrays.vertexAttribDivisorANGLE', "(function() {var canvas = document.createElement('canvas');\nvar gl = canvas.getContext('webgl');\nvar instance = gl.getExtension('ANGLE_instanced_arrays');return instance && 'vertexAttribDivisorANGLE' in instance;})()", 'Window');
 bcd.addTest('api.Animation', {"property":"Animation","owner":"self"}, 'Window');
 ...
 bcd.addTest('api.DOMTokenList', {"property":"DOMTokenList","owner":"self"}, 'Window');
-bcd.addTest('api.DOMTokenList.remove_duplicates', "(function() {var elm = document.createElement('b'); elm.className = ' foo bar foo '; elm.classList.remove('bar'); return elm.className === 'foo';})()", 'Window');
+bcd.addTest('api.DOMTokenList.remove_duplicates', "(function() {var elm = document.createElement('b');\nelm.className = ' foo bar foo ';\nelm.classList.remove('bar');\nreturn elm.className === 'foo';})()", 'Window');
 ```
 
 Tips: make sure to implement thorough feature checking as to not raise exceptions.
@@ -90,18 +95,14 @@ Tips: make sure to implement thorough feature checking as to not raise exception
 
 Certain tests may require resources, like audio or video. To allow the resources to load before running the tests, rather than create and add an element with JavaScript, we can define resources to be loaded through the `__resources` object.
 
-```json
-  "api": {
-    "__resources": {
-      "RESOURCE_ELEMENT_ID": {
-        "type": "RESOURCE_TYPE",
-        "src": [
-          "PATH_TO_RESOURCE",
-          "ALT_PATH_TO_RESOURCE"
-        ]
-      }
-    }
-  }
+```yaml
+api:
+  __resources:
+    RESOURCE_ELEMENT_ID:
+      type: RESOURCE_TYPE
+      src:
+        - PATH_TO_RESOURCE
+        - ALT_PATH_TO_RESOURCE
 ```
 
 For each resource we wish to load, we simply define the element ID after `resource-` to assign as the object's key, specify the resource's `type` (audio, video, image, etc.), and define the `src` as an array of file paths after `/custom-tests` (or in the case of an `instance` type, code like a custom test to return the instance).
