@@ -41,6 +41,9 @@ const parseUA = (userAgent, browsers) => {
     case 'mobile_safari':
       data.browser.id = 'safari';
       break;
+    case 'oculus_browser':
+      data.browser.id = 'oculus';
+      break;
     case 'samsung_browser':
       data.browser.id = 'samsunginternet';
       break;
