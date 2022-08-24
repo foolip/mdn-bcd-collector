@@ -63,7 +63,7 @@ api:
       var canvas = document.createElement('canvas');
       var gl = canvas.getContext('webgl');
       var instance = gl.getExtension('ANGLE_instanced_arrays');
-    __test: "return canvas && instance;"
+    __test: 'return canvas && instance;'
     drawArraysInstancedANGLE: "return true && instance && 'drawArraysInstancedANGLE' in instance;"
   DOMTokenList:
     __additional:
