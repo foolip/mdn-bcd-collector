@@ -10,7 +10,7 @@
     "url": "https://github.com/foolip/mdn-bcd-collector.git"
   },
   "engines": {
-    "node": ">=16"
+    "node": ">=16.15.0"
   },
   "scripts": {
     "prepare": "node scripts.js prepare",
