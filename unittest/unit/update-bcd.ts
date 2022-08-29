@@ -861,5 +861,205 @@ describe('BCD updater', () => {
         version_added: null
       });
     });
+
+    describe('mirror', () => {
+      const browsers: any = {
+        chrome: {name: 'Chrome', releases: {85: {}, 86: {}}},
+        chrome_android: {
+          name: 'Chrome Android',
+          upstream: 'chrome',
+          releases: {86: {}}
+        }
+      };
+
+      const bcdFromSupport = (support) => ({
+        api: {FakeInterface: {__compat: {support}}}
+      });
+
+      const mirroringCase = ({support, downstreamResult}) => {
+        const reports: Report[] = [
+          {
+            __version: '0.3.1',
+            results: {
+              'https://mdn-bcd-collector.appspot.com/tests/': [
+                {
+                  name: 'api.FakeInterface',
+                  exposure: 'Window',
+                  result: downstreamResult
+                }
+              ]
+            },
+            userAgent:
+              'Mozilla/5.0 (Linux; Android 10; SM-G960U) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.5112.97 Mobile Safari/537.36'
+          }
+        ];
+        const supportMatrix = getSupportMatrix(reports, browsers, []);
+        const bcd = bcdFromSupport(support);
+        update(bcd, supportMatrix, {});
+        return bcd;
+      };
+
+      describe('supported upstream (without flags)', () => {
+        it('supported in downstream test results', () => {
+          const actual = mirroringCase({
+            support: {
+              chrome: {version_added: '85'},
+              chrome_android: 'mirror'
+            },
+            downstreamResult: true
+          });
+          assert.deepEqual(
+            actual,
+            bcdFromSupport({
+              chrome: {version_added: '85'},
+              chrome_android: 'mirror'
+            })
+          );
+        });
+
+        it('unsupported in downstream test results', () => {
+          const actual = mirroringCase({
+            support: {
+              chrome: {version_added: '85'},
+              chrome_android: 'mirror'
+            },
+            downstreamResult: false
+          });
+          assert.deepEqual(
+            actual,
+            bcdFromSupport({
+              chrome: {version_added: '85'},
+              chrome_android: 'mirror'
+            })
+          );
+        });
+
+        it('omitted from downstream test results', () => {
+          const actual = mirroringCase({
+            support: {
+              chrome: {version_added: '85'},
+              chrome_android: 'mirror'
+            },
+            downstreamResult: null
+          });
+          assert.deepEqual(
+            actual,
+            bcdFromSupport({
+              chrome: {version_added: '85'},
+              chrome_android: 'mirror'
+            })
+          );
+        });
+      });
+
+      describe('supported upstream (with flags)', () => {
+        it('supported in downstream test results', () => {
+          const actual = mirroringCase({
+            support: {
+              chrome: {version_added: '85', flags: [{}]},
+              chrome_android: 'mirror'
+            },
+            downstreamResult: true
+          });
+          assert.deepEqual(
+            actual,
+            bcdFromSupport({
+              chrome: {version_added: '85', flags: [{}]},
+              chrome_android: [
+                {version_added: '86'},
+                {flags: [{}], version_added: '85'}
+              ]
+            })
+          );
+        });
+
+        it('unsupported in downstream test results', () => {
+          const actual = mirroringCase({
+            support: {
+              chrome: {version_added: '85', flags: [{}]},
+              chrome_android: 'mirror'
+            },
+            downstreamResult: false
+          });
+          assert.deepEqual(
+            actual,
+            bcdFromSupport({
+              chrome: {version_added: '85', flags: [{}]},
+              chrome_android: 'mirror'
+            })
+          );
+        });
+
+        it('omitted from downstream test results', () => {
+          const actual = mirroringCase({
+            support: {
+              chrome: {version_added: '85', flags: [{}]},
+              chrome_android: 'mirror'
+            },
+            downstreamResult: null
+          });
+          assert.deepEqual(
+            actual,
+            bcdFromSupport({
+              chrome: {version_added: '85', flags: [{}]},
+              chrome_android: 'mirror'
+            })
+          );
+        });
+      });
+
+      describe('unsupported upstream', () => {
+        it('supported in downstream test results', () => {
+          const actual = mirroringCase({
+            support: {
+              chrome: {version_added: false},
+              chrome_android: 'mirror'
+            },
+            downstreamResult: true
+          });
+          assert.deepEqual(
+            actual,
+            bcdFromSupport({
+              chrome: {version_added: false},
+              chrome_android: 'mirror'
+            })
+          );
+        });
+
+        it('unsupported in downstream test results', () => {
+          const actual = mirroringCase({
+            support: {
+              chrome: {version_added: false},
+              chrome_android: 'mirror'
+            },
+            downstreamResult: false
+          });
+          assert.deepEqual(
+            actual,
+            bcdFromSupport({
+              chrome: {version_added: false},
+              chrome_android: 'mirror'
+            })
+          );
+        });
+
+        it('omitted from downstream test results', () => {
+          const actual = mirroringCase({
+            support: {
+              chrome: {version_added: false},
+              chrome_android: 'mirror'
+            },
+            downstreamResult: null
+          });
+          assert.deepEqual(
+            actual,
+            bcdFromSupport({
+              chrome: {version_added: false},
+              chrome_android: 'mirror'
+            })
+          );
+        });
+      });
+    });
   });
 });
