@@ -4,7 +4,7 @@
 // web service into JSON files that can be used by update-bcd.ts.
 //
 // © Google LLC, Gooborg Studios
-// See LICENSE.txt for copyright details
+// See the LICENSE file for copyright details
 //
 
 import crypto from 'node:crypto';

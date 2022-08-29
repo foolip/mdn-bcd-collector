@@ -3,7 +3,7 @@
 // Script to build all of the tests from the IDL and custom CSS/JS files
 //
 // © Google LLC, Gooborg Studios, Mozilla Corporation, Apple Inc
-// See LICENSE.txt for copyright details
+// See the LICENSE file for copyright details
 //
 
 import path from 'node:path';

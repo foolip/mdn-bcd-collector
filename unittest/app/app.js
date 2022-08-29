@@ -3,7 +3,7 @@
 // Unittest for the main app backend
 //
 // © Gooborg Studios, Google LLC
-// See LICENSE.txt for copyright details
+// See the LICENSE file for copyright details
 //
 
 import chai, {assert, expect} from 'chai';

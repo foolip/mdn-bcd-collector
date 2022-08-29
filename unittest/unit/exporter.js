@@ -3,7 +3,7 @@
 // Unittest for the results exporter script
 //
 // © Google LLC, Gooborg Studios
-// See LICENSE.txt for copyright details
+// See the LICENSE file for copyright details
 //
 
 import chai, {assert, expect} from 'chai';

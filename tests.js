@@ -3,7 +3,7 @@
 // Module for handling the tests for the web app
 //
 // © Google LLC, Gooborg Studios
-// See LICENSE.txt for copyright details
+// See the LICENSE file for copyright details
 //
 
 import didYouMean from 'didyoumean';
