@@ -1787,6 +1787,8 @@ api:
       var instance = new SecurityPolicyViolationEvent('securitypolicyviolation');
   Selection:
     __base: var instance = window.getSelection();
+  ServiceWorkerContainer:
+    __base: var instance = navigator.serviceWorker;
   ShadowRoot:
     __base: |-
       var el = document.createElement('div');
