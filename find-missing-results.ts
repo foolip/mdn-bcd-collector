@@ -3,7 +3,7 @@
 // Script to find browser versions that don't have a result file in mdn-bcd-results
 //
 // © Gooborg Studios
-// See LICENSE.txt for copyright details
+// See the LICENSE file for copyright details
 //
 
 import {CompatData} from '@mdn/browser-compat-data/types';

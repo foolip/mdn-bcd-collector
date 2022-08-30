@@ -3,7 +3,7 @@
 // JavaScript to run tests within service workers
 //
 // © Gooborg Studios, Google LLC
-// See LICENSE.txt for copyright details
+// See the LICENSE file for copyright details
 //
 
 /* global self, caches, Request, Response, bcd */

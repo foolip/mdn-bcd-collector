@@ -6,7 +6,7 @@
 // for documentation on the approach taken in this script.
 //
 // © Google LLC, Gooborg Studios
-// See LICENSE.txt for copyright details
+// See the LICENSE file for copyright details
 //
 
 import {

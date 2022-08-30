@@ -3,7 +3,7 @@
 // Helpers and functions for running the tests in the browser
 //
 // © Google LLC, Gooborg Studios, Mozilla Corporation, Apple Inc
-// See LICENSE.txt for copyright details
+// See the LICENSE file for copyright details
 //
 
 /* global console, document, window, location, navigator, XMLHttpRequest,

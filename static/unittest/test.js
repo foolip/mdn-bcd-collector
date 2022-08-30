@@ -3,7 +3,7 @@
 // Unittests for harness.js
 //
 // © Google LLC, Gooborg Studios
-// See LICENSE.txt for copyright details
+// See the LICENSE file for copyright details
 //
 
 /* global mocha, chai, sinon, describe, it, beforeEach, afterEach, window,

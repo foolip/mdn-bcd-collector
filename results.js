@@ -3,7 +3,7 @@
 // Module to parse and handle test results
 //
 // © Google LLC, Gooborg Studios
-// See LICENSE.txt for copyright details
+// See the LICENSE file for copyright details
 //
 
 const parseShortString = (value, desc) => {

@@ -3,7 +3,7 @@
 // TypeScript definitions for the collector
 //
 // © Gooborg Studios
-// See LICENSE.txt for copyright details
+// See the LICENSE file for copyright details
 //
 
 import {BrowserName} from '@mdn/browser-compat-data/types';

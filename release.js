@@ -3,7 +3,7 @@
 // Script to perform a new mdn-bcd-collector release
 //
 // © Gooborg Studios, Google LLC
-// See LICENSE.txt for copyright details
+// See the LICENSE file for copyright details
 //
 
 import chalk from 'chalk-template';

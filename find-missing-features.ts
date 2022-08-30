@@ -3,7 +3,7 @@
 // Script to find features that are in the collector or BCD but not the other
 //
 // © Gooborg Studios, Google LLC
-// See LICENSE.txt for copyright details
+// See the LICENSE file for copyright details
 //
 
 import {CompatData, CompatStatement} from '@mdn/browser-compat-data/types';

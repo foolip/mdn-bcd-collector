@@ -3,7 +3,7 @@
 // Module to parse user agent strings and compare them with BCD browser data
 //
 // © Gooborg Studios, Google LLC
-// See LICENSE.txt for copyright details
+// See the LICENSE file for copyright details
 //
 
 import compareVersions from 'compare-versions';

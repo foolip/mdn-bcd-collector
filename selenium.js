@@ -3,7 +3,7 @@
 // Script to collect results from various browsers using Selenium webdriver
 //
 // © Gooborg Studios, Google LLC
-// See LICENSE.txt for copyright details
+// See the LICENSE file for copyright details
 //
 
 import path from 'node:path';

@@ -3,7 +3,7 @@
 // A main entry point to run various scripts in a cross-platform friendly way
 //
 // © Mozilla Corporation, Google LLC, Gooborg Studios
-// See LICENSE.txt for copyright details
+// See the LICENSE file for copyright details
 //
 
 import fs from 'node:fs';
