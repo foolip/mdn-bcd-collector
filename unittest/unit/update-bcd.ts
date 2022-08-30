@@ -912,7 +912,7 @@ describe('BCD updater', () => {
             actual,
             bcdFromSupport({
               chrome: {version_added: '85'},
-              chrome_android: 'mirror'
+              chrome_android: {version_added: '86'}
             })
           );
         });
@@ -929,7 +929,7 @@ describe('BCD updater', () => {
             actual,
             bcdFromSupport({
               chrome: {version_added: '85'},
-              chrome_android: 'mirror'
+              chrome_android: false
             })
           );
         });
@@ -985,7 +985,7 @@ describe('BCD updater', () => {
             actual,
             bcdFromSupport({
               chrome: {version_added: '85', flags: [{}]},
-              chrome_android: 'mirror'
+              chrome_android: false
             })
           );
         });
@@ -1021,7 +1021,7 @@ describe('BCD updater', () => {
             actual,
             bcdFromSupport({
               chrome: {version_added: false},
-              chrome_android: 'mirror'
+              chrome_android: {version_added: '86'}
             })
           );
         });
