@@ -27,7 +27,10 @@ import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 
 import assert from 'assert';
-import compareVersions from 'compare-versions';
+import {
+  compare as compareVersions,
+  compareVersions as compareVersionsSort
+} from 'compare-versions';
 import esMain from 'es-main';
 import fs from 'fs-extra';
 import klaw from 'klaw';
@@ -199,8 +202,8 @@ export const getSupportMatrix = (
       const versions = version.split('-');
       for (const v of versionMap.keys()) {
         if (
-          compareVersions.compare(versions[0], v, '<=') &&
-          compareVersions.compare(versions[1], v, '>=')
+          compareVersions(versions[0], v, '<=') &&
+          compareVersions(versions[1], v, '>=')
         ) {
           versionMap.set(v, supported);
         }
@@ -217,7 +220,7 @@ export const getSupportMatrix = (
 export const inferSupportStatements = (
   versionMap: BrowserSupportMap
 ): SimpleSupportStatement[] => {
-  const versions = Array.from(versionMap.keys()).sort(compareVersions);
+  const versions = Array.from(versionMap.keys()).sort(compareVersionsSort);
 
   const statements: SimpleSupportStatement[] = [];
   const lastKnown: {version: string; support: TestResultValue} = {
@@ -392,7 +395,7 @@ export const update = (
           if (
             result !== null &&
             simpleStatement.version_added !== 'preview' &&
-            compareVersions.compare(
+            compareVersions(
               version,
               simpleStatement.version_added.replace('≤', ''),
               '<='
@@ -415,12 +418,12 @@ export const update = (
         const range = inferredStatement.version_added.split('> ≤');
         if (
           simpleStatement.version_added === 'preview' ||
-          compareVersions.compare(
+          compareVersions(
             simpleStatement.version_added.replace('≤', ''),
             range[0],
             '<='
           ) ||
-          compareVersions.compare(
+          compareVersions(
             simpleStatement.version_added.replace('≤', ''),
             range[1],
             '>'

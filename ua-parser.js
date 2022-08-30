@@ -6,7 +6,10 @@
 // See the LICENSE file for copyright details
 //
 
-import compareVersions from 'compare-versions';
+import {
+  compare as compareVersions,
+  compareVersions as compareVersionsSort
+} from 'compare-versions';
 import uaParser from 'ua-parser-js';
 
 const getMajorVersion = (version) => {
@@ -60,7 +63,7 @@ const parseUA = (userAgent, browsers) => {
 
     if (ua.browser.name === 'Android Browser') {
       // For early WebView Android, use the OS version
-      data.fullVersion = compareVersions.compare(ua.os.version, '5.0', '<')
+      data.fullVersion = compareVersions(ua.os.version, '5.0', '<')
         ? ua.os.version
         : ua.engine.version;
     }
@@ -83,15 +86,15 @@ const parseUA = (userAgent, browsers) => {
   data.inBcd = false;
 
   const versions = Object.keys(browsers[data.browser.id].releases);
-  versions.sort(compareVersions);
+  versions.sort(compareVersionsSort);
 
   // Android 4.4.3 needs to be handled as a special case, because its data
   // differs from 4.4, and the code below will strip out the patch versions from
   // our version numbers.
   if (
     data.browser.id === 'webview_android' &&
-    compareVersions.compare(data.fullVersion, '4.4.3', '>=') &&
-    compareVersions.compare(data.fullVersion, '5.0', '<')
+    compareVersions(data.fullVersion, '4.4.3', '>=') &&
+    compareVersions(data.fullVersion, '5.0', '<')
   ) {
     data.version = '4.4.3';
     data.inBcd = true;
@@ -117,8 +120,8 @@ const parseUA = (userAgent, browsers) => {
     const current = versions[i];
     const next = versions[i + 1];
     if (
-      compareVersions.compare(data.version, current, '>=') &&
-      compareVersions.compare(data.version, next, '<')
+      compareVersions(data.version, current, '>=') &&
+      compareVersions(data.version, next, '<')
     ) {
       data.inBcd = true;
       data.version = current;
