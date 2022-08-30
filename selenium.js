@@ -20,7 +20,10 @@ import {
 } from 'selenium-webdriver';
 import bcd from '@mdn/browser-compat-data' assert {type: 'json'};
 const bcdBrowsers = bcd.browsers;
-import compareVersions from 'compare-versions';
+import {
+  compare as compareVersions,
+  compareVersions as compareVersionsSort
+} from 'compare-versions';
 import fetch from 'node-fetch';
 import esMain from 'es-main';
 import fs from 'fs-extra';
@@ -113,14 +116,14 @@ const filterVersions = (data, earliestVersion, reverse) => {
   for (const [version, versionData] of Object.entries(data)) {
     if (
       (versionData.status == 'current' || versionData.status == 'retired') &&
-      compareVersions.compare(version, earliestVersion, '>=')
+      compareVersions(version, earliestVersion, '>=')
     ) {
       versions.push(version);
     }
   }
 
   return versions.sort((a, b) =>
-    compareVersions(...(reverse ? [a, b] : [b, a]))
+    compareVersionsSort(...(reverse ? [a, b] : [b, a]))
   );
 };
 
