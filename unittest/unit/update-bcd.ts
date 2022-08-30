@@ -863,6 +863,8 @@ describe('BCD updater', () => {
     });
 
     describe('mirror', () => {
+      const chromeAndroid86UaString =
+        'Mozilla/5.0 (Linux; Android 10; SM-G960U) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.5112.97 Mobile Safari/537.36';
       const browsers: any = {
         chrome: {name: 'Chrome', releases: {85: {}, 86: {}}},
         chrome_android: {
@@ -876,6 +878,14 @@ describe('BCD updater', () => {
         api: {FakeInterface: {__compat: {support}}}
       });
 
+      /**
+       * Create a BCD data structure for an arbitrary web platform feature
+       * based on support data for Chrome and Chrome Android and test result
+       * data for Chrome Android. This utility invokes the `update` function
+       * and is designed to observe the behavior of the "mirror" support value.
+       *
+       * @return {BCD}
+       */
       const mirroringCase = ({support, downstreamResult}) => {
         const reports: Report[] = [
           {
@@ -889,8 +899,7 @@ describe('BCD updater', () => {
                 }
               ]
             },
-            userAgent:
-              'Mozilla/5.0 (Linux; Android 10; SM-G960U) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.5112.97 Mobile Safari/537.36'
+            userAgent: chromeAndroid86UaString
           }
         ];
         const supportMatrix = getSupportMatrix(reports, browsers, []);
@@ -912,7 +921,7 @@ describe('BCD updater', () => {
             actual,
             bcdFromSupport({
               chrome: {version_added: '85'},
-              chrome_android: {version_added: '86'}
+              chrome_android: 'mirror'
             })
           );
         });
