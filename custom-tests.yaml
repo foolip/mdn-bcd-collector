@@ -1950,7 +1950,7 @@ api:
       var instance = el.preserveAspectRatio;
   SVGAnimatedRect:
     __base: |-
-      <%api.SVGViewElement:el%>
+      <%api.SVGSVGElement:el%>
       var instance = el.viewBox;
   SVGAnimatedString:
     __base: |-
