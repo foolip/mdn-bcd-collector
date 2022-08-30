@@ -76,13 +76,64 @@ export const orderFeatures = (key: string, value: Identifier): Identifier => {
   return value;
 };
 
+const startsWithLowerCase = (s: string): boolean => {
+  return s[0] === s[0].toLowerCase();
+};
+
+const startsWithUpperCase = (s: string): boolean => {
+  return s[0] === s[0].toUpperCase();
+};
+
+export const getFilePath = (ident: string[]): string => {
+  // Shorten or modify the path depending on the section of BCD. Make a copy
+  // of ident so that it can be freely modified.
+  let parts = ident.slice();
+  if (parts.length >= 2 && parts[0] === 'api') {
+    // Assume a global if it starts with a lower case character, otherwise
+    // an interface with members.
+    if (startsWithLowerCase(parts[1])) {
+      parts = [parts[0], '_globals', parts[1]];
+    } else {
+      parts.length = 2;
+    }
+  } else if (parts.length >= 3 && parts[0] === 'css') {
+    parts.length = 3;
+  } else if (
+    parts.length >= 3 &&
+    parts[0] === 'javascript' &&
+    parts[1] === 'builtins'
+  ) {
+    if (startsWithLowerCase(parts[2])) {
+      return 'javascript/builtins/globals.json';
+    }
+    // For cases that look like namespaces like Intl and WebAssembly there
+    // should be an additional level or directory.
+    if (
+      parts.length >= 4 &&
+      parts[2] !== parts[3] &&
+      startsWithUpperCase(parts[2]) &&
+      startsWithUpperCase(parts[3])
+    ) {
+      parts.length = 4;
+    } else {
+      parts.length = 3;
+    }
+  } else {
+    throw new Error(
+      `Cannot determine file path from BCD path: ${ident.join('.')}`
+    );
+  }
+  parts[parts.length - 1] += '.json';
+  return path.join(...parts);
+};
+
 /* c8 ignore start */
 const writeFile = async (ident: string[], obj: any): Promise<void> => {
-  const filepath = path.resolve(
-    path.join(BCD_DIR, ident[0], `${ident[1]}.json`)
-  );
+  // The file path is slightly different in different parts of BCD.
+  // As a catch-all case. TODO
+  const filepath = path.resolve(BCD_DIR, getFilePath(ident));
 
-  let data = {api: {}};
+  let data = {};
   if (await fs.pathExists(filepath)) {
     data = await fs.readJSON(filepath);
   }
@@ -121,15 +172,10 @@ export const traverseFeatures = async (
 };
 
 export const collectMissing = async (filepath: string): Promise<void> => {
-  const missing = {api: {}};
+  const missing = {};
 
-  for (const entry of getMissing(
-    bcd,
-    tests,
-    'bcd-from-collector',
-    ['api'],
-    false
-  ).missingEntries) {
+  for (const entry of getMissing(bcd, tests, 'bcd-from-collector')
+    .missingEntries) {
     recursiveAdd(entry.split('.'), 0, missing, template);
   }
 
@@ -155,7 +201,7 @@ const main = async (): Promise<void> => {
 
   console.log('Injecting BCD...');
   const data = await fs.readJSON(filepath);
-  await traverseFeatures(data.api, ['api']);
+  await traverseFeatures(data, []);
 
   console.log('Cleaning up...');
   await fs.remove(filepath);
