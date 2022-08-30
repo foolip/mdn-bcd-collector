@@ -8,11 +8,11 @@ See [DESIGN.md](./DESIGN.md) for details of how this service works.
 
 ## Copyright
 
-This project is © 2020-2022 Google LLC, Mozilla Corporation and Gooborg Studios, Apache License 2.0. See LICENSE.txt for more details.
+This project is © 2020-2022 Google LLC, Mozilla Corporation and Gooborg Studios, Apache License 2.0. See the LICENSE file for more details.
 
 ## Setup
 
-This project requires Node.js 16 or greater.
+This project requires Node.js 16.15.0 or greater.
 
 ```sh
 npm install

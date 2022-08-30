@@ -3,7 +3,7 @@
 // Unittest for the BCD updater script
 //
 // © Google LLC, Gooborg Studios
-// See LICENSE.txt for copyright details
+// See the LICENSE file for copyright details
 //
 
 import {Report} from '../../types/types.js';

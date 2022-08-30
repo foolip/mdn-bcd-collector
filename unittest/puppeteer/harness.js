@@ -3,7 +3,7 @@
 // Unittest for testing harness.js in multiple browsers
 //
 // © Google LLC, Gooborg Studios, Mozilla Corporation
-// See LICENSE.txt for copyright details
+// See the LICENSE file for copyright details
 //
 
 import {fileURLToPath} from 'node:url';

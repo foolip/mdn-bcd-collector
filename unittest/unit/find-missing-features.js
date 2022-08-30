@@ -3,7 +3,7 @@
 // Unittest for the missing features finder script
 //
 // © Gooborg Studios, Google LLC
-// See LICENSE.txt for copyright details
+// See the LICENSE file for copyright details
 //
 
 import {assert} from 'chai';

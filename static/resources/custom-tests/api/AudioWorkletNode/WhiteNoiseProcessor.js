@@ -4,7 +4,7 @@
 // https://developer.mozilla.org/en-US/docs/Web/API/AudioWorkletNode
 //
 // © Mozilla Corporation, Gooborg Studios
-// See LICENSE.txt for copyright details
+// See the LICENSE file for copyright details
 //
 
 /* global AudioWorkletProcessor, registerProcessor */

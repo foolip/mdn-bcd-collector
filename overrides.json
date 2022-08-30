@@ -17,5 +17,8 @@
     "chrome",
     "60",
     false
-  ]
+  ],
+  "https://github.com/mdn/browser-compat-data/pull/17365#issuecomment-1216459968",
+  ["api.FontFaceSetLoadEvent", "chrome", "35-57", true],
+  ["api.FontFaceSetLoadEvent.fontfaces", "chrome", "35-57", true]
 ]

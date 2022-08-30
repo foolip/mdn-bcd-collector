@@ -3,7 +3,7 @@
 // Script to find browser versions that don't have a result file in mdn-bcd-results
 //
 // © Gooborg Studios
-// See LICENSE.txt for copyright details
+// See the LICENSE file for copyright details
 //
 
 import {CompatData} from '@mdn/browser-compat-data/types';
@@ -13,7 +13,10 @@ interface ReportMap {
   [k: string]: string[];
 }
 
-import compareVersions from 'compare-versions';
+import {
+  compare as compareVersions,
+  compareVersions as compareVersionsSort
+} from 'compare-versions';
 import esMain from 'es-main';
 import fs from 'fs-extra';
 import yargs from 'yargs';
@@ -41,18 +44,18 @@ const generateReportMap = (allResults: boolean) => {
     const releases = Object.entries(browserData.releases)
       .filter((r) => ['retired', 'current'].includes(r[1].status))
       .map((r) => r[0]);
-    result[browserKey] = releases.sort(compareVersions);
+    result[browserKey] = releases.sort(compareVersionsSort);
 
     if (!allResults) {
       if (browserKey == 'ie') {
         // Ignore super old IE releases
         result[browserKey] = result[browserKey].filter((v) =>
-          compareVersions.compare(v, '6', '>=')
+          compareVersions(v, '6', '>=')
         );
       } else if (browserKey == 'safari') {
         // Ignore super old Safari releases
         result[browserKey] = result[browserKey].filter((v) =>
-          compareVersions.compare(v, '4', '>=')
+          compareVersions(v, '4', '>=')
         );
       } else if (browserKey == 'opera') {
         // Ignore all Opera versions besides 12.1, 15, and the latest stable

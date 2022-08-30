@@ -3,7 +3,7 @@
 // Sets HTTP keep-alive for faster Selenium tests
 //
 // © BrowserStack, Gooborg Studios
-// See LICENSE.txt for copyright details
+// See the LICENSE file for copyright details
 //
 
 import http from 'http';

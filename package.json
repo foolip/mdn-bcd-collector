@@ -10,7 +10,7 @@
     "url": "https://github.com/foolip/mdn-bcd-collector.git"
   },
   "engines": {
-    "node": ">=16"
+    "node": ">=16.15.0"
   },
   "scripts": {
     "prepare": "node scripts.js prepare",
@@ -40,7 +40,7 @@
     "@mdi/font": "7.0.96",
     "@mdn/browser-compat-data": "5.1.10",
     "@octokit/rest": "19.0.4",
-    "compare-versions": "4.1.4",
+    "compare-versions": "5.0.1",
     "cookie-parser": "1.4.6",
     "didyoumean": "1.2.2",
     "ejs": "3.1.8",
@@ -82,7 +82,7 @@
     "chalk-template": "0.4.0",
     "ejs-lint": "1.2.2",
     "enquirer": "2.3.6",
-    "eslint": "8.22.0",
+    "eslint": "8.23.0",
     "eslint-config-google": "0.14.0",
     "eslint-config-prettier": "8.5.0",
     "eslint-plugin-prefer-arrow": "1.2.3",
@@ -97,7 +97,7 @@
     "nodemon": "2.0.19",
     "open-cli": "7.0.1",
     "prettier": "2.7.1",
-    "puppeteer": "16.2.0",
+    "puppeteer": "17.0.0",
     "sass": "1.54.5",
     "selenium-webdriver": "4.4.0",
     "sinon": "14.0.0",

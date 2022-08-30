@@ -3,7 +3,7 @@
 // Adds missing entries to BCD that have support in some browser version
 //
 // © Gooborg Studios, Google LLC
-// See LICENSE.txt for copyright details
+// See the LICENSE file for copyright details
 //
 
 import {Identifier} from '@mdn/browser-compat-data/types';

@@ -3,7 +3,7 @@
 // Unittest helper containing pseudo BCD
 //
 // © Gooborg Studios
-// See LICENSE.txt for copyright details
+// See the LICENSE file for copyright details
 //
 
 export default {
