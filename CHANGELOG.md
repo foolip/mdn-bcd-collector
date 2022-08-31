@@ -1,5 +1,53 @@
 # mdn-bcd-collector Changelog
 
+## v6.1.3
+
+### Test Changes
+
+#### Added
+
+- api.GPUSupportedLimits.maxBindingsPerBindGroup
+- api.GPUSupportedLimits.maxBufferSize
+- api.GPUSupportedLimits.maxColorAttachmentBytesPerPixel
+- api.XRSession.enabledFeatures
+- css.properties.math-depth
+- css.properties.math-shift
+- css.properties.text-decoration-trim
+
+#### Removed
+
+- api.CanvasFilter
+- api.Element.attributeStyleMap
+- api.Element.name
+- api.HTMLButtonElement.autofocus
+- api.HTMLInputElement.autofocus
+- api.HTMLSelectElement.autofocus
+- api.HTMLTextAreaElement.autofocus
+- api.SVGGraphicsElement.autofocus
+- css.properties.text-decoration-skip-inset
+
+#### Changed
+
+- api.ServiceWorkerContainer
+- api.SVGAnimatedRect
+
+### Commits
+
+- Add instance (navigator.serviceWorker) for ServiceWorkerContainer ([#2283](https://github.com/foolip/mdn-bcd-collector/pull/2283))
+- Adapt custom navigator.getDisplayMedia() IDL
+- Remove custom math-style CSS property
+- Add overrides for api.FontFaceSetLoadEvent ([#2239](https://github.com/foolip/mdn-bcd-collector/pull/2239))
+- Correct reference to project license ([#2277](https://github.com/foolip/mdn-bcd-collector/pull/2277))
+- Fix custom test for SVGAnimatedRect ([#2281](https://github.com/foolip/mdn-bcd-collector/pull/2281))
+- Correct required version of Node.js ([#2276](https://github.com/foolip/mdn-bcd-collector/pull/2276))
+- Reformat examples in design document ([#2266](https://github.com/foolip/mdn-bcd-collector/pull/2266))
+- Extend script to update BCD w/results from Oculus ([#2260](https://github.com/foolip/mdn-bcd-collector/pull/2260))
+- Fix updating BCD regarding mirrored statements ([#2265](https://github.com/foolip/mdn-bcd-collector/pull/2265))
+- Disable the unsecure warning for now ([#2264](https://github.com/foolip/mdn-bcd-collector/pull/2264))
+- Improve callback detection ([#2253](https://github.com/foolip/mdn-bcd-collector/pull/2253))
+- Allow for version ranges for overrides ([#2252](https://github.com/foolip/mdn-bcd-collector/pull/2252))
+- Remove custom IDL related to resolved BCD issues ([#2255](https://github.com/foolip/mdn-bcd-collector/pull/2255))
+
 ## v6.1.2
 
 ### Test Changes
