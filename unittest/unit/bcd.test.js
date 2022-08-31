@@ -79,6 +79,32 @@ export default {
         }
       }
     },
+    UnflaggedInterface: {
+      __compat: {
+        support: {
+          chrome: [
+            {
+              version_added: '83',
+              flags: {},
+              notes: 'Not supported on Windows XP.'
+            }
+          ]
+        }
+      }
+    },
+    UnprefixedInterface: {
+      __compat: {
+        support: {
+          chrome: [
+            {
+              version_added: '83',
+              prefix: 'webkit',
+              notes: 'Not supported on Windows XP.'
+            }
+          ]
+        }
+      }
+    },
     NullAPI: {
       __compat: {support: {chrome: {version_added: '80'}}}
     },

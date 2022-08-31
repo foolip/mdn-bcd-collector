@@ -363,10 +363,18 @@ export const update = (
           inferredStatement.version_added =
             inferredStatement.version_added.replace('0> ', '');
         }
-        allStatements.unshift(inferredStatement);
+        // Remove flag data for features which are enabled by default.
+        //
+        // See https://github.com/mdn/browser-compat-data/pull/16637
+        const nonFlagStatements = allStatements.filter(
+          (statement) => !('flags' in statement)
+        );
         entry.__compat.support[browser] =
-          allStatements.length === 1 ? allStatements[0] : allStatements;
+          nonFlagStatements.length === 0
+            ? inferredStatement
+            : [inferredStatement].concat(nonFlagStatements);
         modified = true;
+
         continue;
       }
 
