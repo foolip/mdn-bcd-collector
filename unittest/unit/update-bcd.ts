@@ -975,6 +975,8 @@ describe('BCD updater', () => {
             bcdFromSupport({
               chrome: {version_added: '85', flags: [{}]},
               chrome_android: [
+                // TODO: Remove flag data when adding enabled-by-default data.
+                // See https://github.com/mdn/browser-compat-data/pull/16637.
                 {version_added: '86'},
                 {flags: [{}], version_added: '85'}
               ]
@@ -1030,7 +1032,7 @@ describe('BCD updater', () => {
             actual,
             bcdFromSupport({
               chrome: {version_added: false},
-              chrome_android: {version_added: '86'}
+              chrome_android: {version_added: '≤86'}
             })
           );
         });
