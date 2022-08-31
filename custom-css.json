@@ -1044,7 +1044,6 @@
     "mask-position-x": {},
     "mask-position-y": {},
     "masonry": {},
-    "math-style": {},
     "max-block-size": {
       "__additional_values": {
         "fit-content_function": "fit-content(10px)"
