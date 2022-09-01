@@ -3,7 +3,7 @@
 // JavaScript to run tests within shared workers
 //
 // © Mozilla Corporation, Gooborg Studios
-// See LICENSE.txt for copyright details
+// See the LICENSE file for copyright details
 //
 
 /* global self, bcd */

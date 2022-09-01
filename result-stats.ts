@@ -3,7 +3,7 @@
 // Script to print statistics about a results file
 //
 // © Gooborg Studios
-// See LICENSE.txt for copyright details
+// See the LICENSE file for copyright details
 //
 
 import path from 'node:path';

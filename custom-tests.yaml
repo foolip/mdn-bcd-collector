@@ -3,7 +3,7 @@
 # Custom test code to override auto-generated test code
 #
 # © Gooborg Studios, Mozilla Corporation, Google LLC, Apple Inc
-# See LICENSE.txt for copyright details
+# See the LICENSE file for copyright details
 #
 
 # Custom tests here also need to be in @webref/idl or custom-idl/, see
@@ -1950,7 +1950,7 @@ api:
       var instance = el.preserveAspectRatio;
   SVGAnimatedRect:
     __base: |-
-      <%api.SVGViewElement:el%>
+      <%api.SVGSVGElement:el%>
       var instance = el.viewBox;
   SVGAnimatedString:
     __base: |-

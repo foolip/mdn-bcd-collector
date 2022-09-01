@@ -3,7 +3,7 @@
 // Adds missing entries to BCD that have support in some browser version
 //
 // © Gooborg Studios, Google LLC
-// See LICENSE.txt for copyright details
+// See the LICENSE file for copyright details
 //
 
 import {Identifier} from '@mdn/browser-compat-data/types';
@@ -107,7 +107,7 @@ export const traverseFeatures = async (
         for (const statements of Object.values(support)) {
           const supported = (
             Array.isArray(statements) ? statements : [statements]
-          ).some((s) => s.version_added);
+          ).some((s) => s.version_added && !s.version_removed);
           if (supported) {
             await writeFile(thisIdent, obj[i]);
             break;

@@ -140,11 +140,6 @@ interface SVGFontFaceUriElement : SVGElement {
 interface SVGGlyphElement : SVGElement {
 };
 
-partial interface SVGGraphicsElement {
-  // https://github.com/mdn/browser-compat-data/issues/8745
-  attribute boolean autofocus;
-};
-
 // https://www.w3.org/TR/SVG11/text.html#InterfaceSVGGlyphRefElement
 [Exposed=Window]
 interface SVGGlyphRefElement : SVGElement {

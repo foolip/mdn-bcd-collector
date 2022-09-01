@@ -3,7 +3,7 @@
 // Unittest for the test build script
 //
 // © Google LLC, Gooborg Studios, Apple Inc
-// See LICENSE.txt for copyright details
+// See the LICENSE file for copyright details
 //
 
 import chai, {assert} from 'chai';

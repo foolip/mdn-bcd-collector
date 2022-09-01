@@ -3,7 +3,7 @@
 // Loader script to load the custom IDL to supplement @webref/idl
 //
 // © Google LLC, Gooborg Studios
-// See LICENSE.txt for copyright details
+// See the LICENSE file for copyright details
 //
 
 import fs from 'fs-extra';

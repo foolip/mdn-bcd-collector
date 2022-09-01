@@ -3,7 +3,7 @@
 // Unittest helper containing pseudo BCD
 //
 // © Gooborg Studios
-// See LICENSE.txt for copyright details
+// See the LICENSE file for copyright details
 //
 
 export default {
@@ -116,6 +116,9 @@ export default {
         __compat: {support: {chrome: {version_added: null}}}
       },
       'font-face': {
+        __compat: {support: {chrome: {version_added: null}}}
+      },
+      'font-style': {
         __compat: {support: {chrome: {version_added: null}}}
       }
     }

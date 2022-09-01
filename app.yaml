@@ -3,7 +3,7 @@
 # Google App Engine configuration for the collector
 #
 # © Google LLC, Gooborg Studios
-# See LICENSE.txt for copyright details
+# See the LICENSE file for copyright details
 #
 
 runtime: nodejs16

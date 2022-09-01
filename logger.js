@@ -3,7 +3,7 @@
 // Logging output module to log to either the console or GAE cloud
 //
 // © Google LLC, Gooborg Studios
-// See LICENSE.txt for copyright details
+// See the LICENSE file for copyright details
 //
 
 import winston from 'winston';

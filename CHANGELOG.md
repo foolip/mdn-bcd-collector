@@ -1,5 +1,43 @@
 # mdn-bcd-collector Changelog
 
+## v6.1.2
+
+### Test Changes
+
+#### Added
+
+- api.ContentVisibilityAutoStateChangedEvent
+- api.GPUBuffer.mapState
+- api.Response.clone
+- css.properties.scroll-timeline
+- css.properties.scroll-timeline-axis
+- css.properties.scroll-timeline-name
+- css.properties.view-timeline
+- css.properties.view-timeline-axis
+- css.properties.view-timeline-inset
+- css.properties.view-timeline-name
+
+#### Removed
+
+- api.ImageTrack.change_event
+
+#### Changed
+
+- api.EventSource.EventSource
+- api.Response.json
+
+### Commits
+
+- Don't add new BCD for features that have already been removed ([#2251](https://github.com/foolip/mdn-bcd-collector/pull/2251))
+- Stop creating release PRs automatically ([#2246](https://github.com/foolip/mdn-bcd-collector/pull/2246))
+- Update template compat statement for add-new-bcd ([#2248](https://github.com/foolip/mdn-bcd-collector/pull/2248))
+- Add color-scheme property ([#2247](https://github.com/foolip/mdn-bcd-collector/pull/2247))
+- Include message in result stats output ([#2237](https://github.com/foolip/mdn-bcd-collector/pull/2237))
+- Fix EventSource constructor test ([#2238](https://github.com/foolip/mdn-bcd-collector/pull/2238))
+- Fix insecure context warning ([#2230](https://github.com/foolip/mdn-bcd-collector/pull/2230))
+- Hook Prettier into ESLint; use Prettier's styling rules ([#2219](https://github.com/foolip/mdn-bcd-collector/pull/2219))
+- Fix removal of static members when non-static member is present ([#2218](https://github.com/foolip/mdn-bcd-collector/pull/2218))
+
 ## v6.1.1
 
 ### Test Changes

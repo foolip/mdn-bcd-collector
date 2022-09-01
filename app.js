@@ -3,7 +3,7 @@
 // Main app backend for the website
 //
 // © Google LLC, Gooborg Studios
-// See LICENSE.txt for copyright details
+// See the LICENSE file for copyright details
 //
 
 import https from 'node:https';

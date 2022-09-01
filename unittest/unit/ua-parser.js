@@ -3,7 +3,7 @@
 // Unittest for the user agent parser
 //
 // © Gooborg Studios
-// See LICENSE.txt for copyright details
+// See the LICENSE file for copyright details
 //
 
 import {assert} from 'chai';

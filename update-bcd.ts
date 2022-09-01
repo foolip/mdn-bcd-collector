@@ -6,7 +6,7 @@
 // for documentation on the approach taken in this script.
 //
 // © Google LLC, Gooborg Studios
-// See LICENSE.txt for copyright details
+// See the LICENSE file for copyright details
 //
 
 import {
@@ -27,7 +27,10 @@ import path from 'node:path';
 import {fileURLToPath} from 'node:url';
 
 import assert from 'assert';
-import compareVersions from 'compare-versions';
+import {
+  compare as compareVersions,
+  compareVersions as compareVersionsSort
+} from 'compare-versions';
 import esMain from 'es-main';
 import fs from 'fs-extra';
 import klaw from 'klaw';
@@ -188,11 +191,25 @@ export const getSupportMatrix = (
     if (!versionMap) {
       continue;
     }
+
     if (version === '*') {
+      // All versions of a browser
       for (const v of versionMap.keys()) {
         versionMap.set(v, supported);
       }
+    } else if (version.includes('-')) {
+      // Browser versions between x and y (inclusive)
+      const versions = version.split('-');
+      for (const v of versionMap.keys()) {
+        if (
+          compareVersions(versions[0], v, '<=') &&
+          compareVersions(versions[1], v, '>=')
+        ) {
+          versionMap.set(v, supported);
+        }
+      }
     } else {
+      // Single browser versions
       versionMap.set(version, supported);
     }
   }
@@ -203,7 +220,7 @@ export const getSupportMatrix = (
 export const inferSupportStatements = (
   versionMap: BrowserSupportMap
 ): SimpleSupportStatement[] => {
-  const versions = Array.from(versionMap.keys()).sort(compareVersions);
+  const versions = Array.from(versionMap.keys()).sort(compareVersionsSort);
 
   const statements: SimpleSupportStatement[] = [];
   const lastKnown: {version: string; support: TestResultValue} = {
@@ -311,6 +328,10 @@ export const update = (
 
       let allStatements: InternalSupportStatement | undefined =
         entry.__compat.support[browser];
+      if (allStatements === 'mirror') {
+        allStatements = mirror(browser, originalSupport);
+      }
+
       if (!allStatements) {
         allStatements = [];
       } else if (!Array.isArray(allStatements)) {
@@ -319,25 +340,16 @@ export const update = (
 
       // Filter to the statements representing the feature being enabled by
       // default under the default name and no flags.
-      const defaultStatements = allStatements
-        .map((statement) => {
-          // Perform mirroring
-          if (statement !== 'mirror') {
-            return statement;
-          }
-          const result = mirror(browser, originalSupport);
-          return result;
-        })
-        .filter((statement) => {
-          if ('flags' in statement) {
-            return false;
-          }
-          if ('prefix' in statement || 'alternative_name' in statement) {
-            // TODO: map the results for aliases to these statements.
-            return false;
-          }
-          return true;
-        });
+      const defaultStatements = allStatements.filter((statement) => {
+        if ('flags' in statement) {
+          return false;
+        }
+        if ('prefix' in statement || 'alternative_name' in statement) {
+          // TODO: map the results for aliases to these statements.
+          return false;
+        }
+        return true;
+      });
 
       if (defaultStatements.length === 0) {
         // Prepend |inferredStatement| to |allStatements|, since there were no
@@ -383,7 +395,7 @@ export const update = (
           if (
             result !== null &&
             simpleStatement.version_added !== 'preview' &&
-            compareVersions.compare(
+            compareVersions(
               version,
               simpleStatement.version_added.replace('≤', ''),
               '<='
@@ -406,12 +418,12 @@ export const update = (
         const range = inferredStatement.version_added.split('> ≤');
         if (
           simpleStatement.version_added === 'preview' ||
-          compareVersions.compare(
+          compareVersions(
             simpleStatement.version_added.replace('≤', ''),
             range[0],
             '<='
           ) ||
-          compareVersions.compare(
+          compareVersions(
             simpleStatement.version_added.replace('≤', ''),
             range[1],
             '>'
