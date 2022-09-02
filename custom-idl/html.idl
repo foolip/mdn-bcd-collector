@@ -426,11 +426,6 @@ partial interface HTMLVideoElement {
   attribute boolean webkitWirelessVideoPlaybackDisabled;
 };
 
-partial interface ImageBitmapRenderingContext {
-  // https://github.com/whatwg/html/pull/1101
-  undefined transferImageBitmap(ImageBitmap? bitmap);
-};
-
 partial interface Location {
   attribute USVString password;
   attribute USVString username;
