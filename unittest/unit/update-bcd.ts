@@ -996,7 +996,7 @@ describe('BCD updater', () => {
             actual,
             bcdFromSupport({
               chrome: {version_added: '85', flags: [{}]},
-              chrome_android: false
+              chrome_android: 'mirror'
             })
           );
         });
