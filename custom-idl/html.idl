@@ -117,14 +117,6 @@ interface MediaController : EventTarget {
 // https://trac.webkit.org/browser/webkit/trunk/Source/WebCore/html/HTMLVideoElement.idl?rev=267813#L63
 enum VideoPresentationMode { "inline", "fullscreen", "picture-in-picture" };
 
-// https://github.com/whatwg/html/pull/7874
-typedef record<DOMString, any> CanvasFilterInput;
-
-[Exposed=(Window,Worker,PaintWorklet)]
-interface CanvasFilter {
-  constructor(optional (CanvasFilterInput or sequence<CanvasFilterInput>) filters);
-};
-
 partial interface CanvasRenderingContext2D {
   // https://github.com/whatwg/html/pull/1942
   undefined addHitRegion(optional HitRegionOptions options = {});
