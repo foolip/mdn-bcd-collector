@@ -229,7 +229,7 @@ export const inferSupportStatements = (
   };
   let lastWasNull = false;
 
-  for (const [_, version] of versions.entries()) {
+  for (const version of versions) {
     const supported = versionMap.get(version);
     const lastStatement = statements[statements.length - 1];
 
