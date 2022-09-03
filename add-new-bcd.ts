@@ -44,7 +44,7 @@ const template = {
       samsunginternet_android: 'mirror',
       webview_android: 'mirror'
     },
-    status: {experimental: false, standard_track: true, deprecated: false}
+    status: {experimental: true, standard_track: true, deprecated: false}
   }
 };
 
