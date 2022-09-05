@@ -629,6 +629,27 @@ describe('BCD updater', () => {
       );
     });
 
+    it('Invalid results', () => {
+      const report: Report = {
+        __version: '0.3.1',
+        results: {
+          'https://mdn-bcd-collector.appspot.com/tests/': [
+            {
+              name: 'api.AbortController',
+              exposure: 'Window',
+              result: 87 as any
+            }
+          ]
+        },
+        userAgent:
+          'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.61 Safari/537.36'
+      };
+
+      assert.throws(() => {
+        getSupportMatrix([report], bcd.browsers, overrides);
+      }, 'result not true/false/null; got 87');
+    });
+
     afterEach(() => {
       logger.warn.restore();
     });
@@ -677,27 +698,14 @@ describe('BCD updater', () => {
     }
 
     it('Invalid results', () => {
-      assert.throws(() => {
-        const report: Report = {
-          __version: '0.3.1',
-          results: {
-            'https://mdn-bcd-collector.appspot.com/tests/': [
-              {
-                name: 'api.AbortController',
-                exposure: 'Window',
-                result: 87 as any
-              }
-            ]
-          },
-          userAgent:
-            'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.61 Safari/537.36'
-        };
-        const versionMap = getSupportMatrix([report], bcd.browsers, overrides)
-          .entries()
-          .next()
-          .value[1].entries()
-          .next().value[1];
+      const versionMap = new Map([
+        ['82', null],
+        ['83', 87 as any],
+        ['84', true],
+        ['85', true]
+      ]);
 
+      assert.throws(() => {
         inferSupportStatements(versionMap);
       }, 'result not true/false/null; got 87');
     });
