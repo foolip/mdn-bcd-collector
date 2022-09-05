@@ -37,7 +37,10 @@ const generateReportMap = (allResults: boolean) => {
   const result: ReportMap = {};
 
   for (const [browserKey, browserData] of Object.entries(browsers)) {
-    if (!allResults && ['nodejs', 'deno', 'oculus'].includes(browserKey)) {
+    if (
+      !allResults &&
+      ['ie', 'nodejs', 'deno', 'oculus'].includes(browserKey)
+    ) {
       continue;
     }
 
@@ -47,12 +50,7 @@ const generateReportMap = (allResults: boolean) => {
     result[browserKey] = releases.sort(compareVersionsSort);
 
     if (!allResults) {
-      if (browserKey == 'ie') {
-        // Ignore super old IE releases
-        result[browserKey] = result[browserKey].filter((v) =>
-          compareVersions(v, '6', '>=')
-        );
-      } else if (browserKey == 'safari') {
+      if (browserKey == 'safari') {
         // Ignore super old Safari releases
         result[browserKey] = result[browserKey].filter((v) =>
           compareVersions(v, '4', '>=')
