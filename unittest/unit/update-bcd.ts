@@ -709,6 +709,35 @@ describe('BCD updater', () => {
         inferSupportStatements(versionMap);
       }, 'result not true/false/null; got 87');
     });
+
+    it('non-contiguous data, support added', () => {
+      const versionMap = new Map([
+        ['82', false],
+        ['83', null],
+        ['84', true]
+      ]);
+
+      assert.deepEqual(inferSupportStatements(versionMap), [
+        {
+          version_added: '82> ≤84'
+        }
+      ]);
+    });
+
+    it('non-contiguous data, support removed', () => {
+      const versionMap = new Map([
+        ['82', true],
+        ['83', null],
+        ['84', false]
+      ]);
+
+      assert.deepEqual(inferSupportStatements(versionMap), [
+        {
+          version_added: '82',
+          version_removed: '82> ≤84'
+        }
+      ]);
+    });
   });
 
   describe('update', () => {
