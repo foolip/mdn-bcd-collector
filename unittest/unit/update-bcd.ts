@@ -938,7 +938,10 @@ describe('BCD updater', () => {
       };
 
       const sm = getSupportMatrix([report], initialBcd.browsers, []);
-      update(finalBcd, sm, {});
+
+      const modified = update(finalBcd, sm, {});
+
+      assert.equal(modified, false, 'modified');
       assert.deepEqual(finalBcd, initialBcd);
     });
 
@@ -973,7 +976,10 @@ describe('BCD updater', () => {
       };
 
       const sm = getSupportMatrix([report], initialBcd.browsers, []);
-      update(finalBcd, sm, {});
+
+      const modified = update(finalBcd, sm, {});
+
+      assert.equal(modified, false, 'modified');
       assert.deepEqual(finalBcd, initialBcd);
     });
 
@@ -1008,7 +1014,10 @@ describe('BCD updater', () => {
       };
 
       const sm = getSupportMatrix([report], initialBcd.browsers, []);
-      update(finalBcd, sm, {});
+
+      const modified = update(finalBcd, sm, {});
+
+      assert.equal(modified, false, 'modified');
       assert.deepEqual(finalBcd, initialBcd);
     });
 
@@ -1053,7 +1062,10 @@ describe('BCD updater', () => {
       ];
 
       const sm = getSupportMatrix([report], initialBcd.browsers, []);
-      update(finalBcd, sm, {});
+
+      const modified = update(finalBcd, sm, {});
+
+      assert(modified, 'modified');
       assert.deepEqual(finalBcd, expectedBcd);
     });
 
@@ -1091,7 +1103,10 @@ describe('BCD updater', () => {
         false;
 
       const sm = getSupportMatrix([report], initialBcd.browsers, []);
-      update(finalBcd, sm, {});
+
+      const modified = update(finalBcd, sm, {});
+
+      assert(modified, 'modified');
       assert.deepEqual(finalBcd, expectedBcd);
     });
 
@@ -1111,7 +1126,10 @@ describe('BCD updater', () => {
         expectedBcd.css.properties[
           'font-style'
         ].__compat.support.chrome.version_added = '85';
-        update(bcdCopy, supportMatrix, filter);
+
+        const modified = update(bcdCopy, supportMatrix, filter);
+
+        assert(modified, 'modified');
         assert.deepEqual(bcdCopy, expectedBcd);
       });
 
@@ -1120,7 +1138,10 @@ describe('BCD updater', () => {
         expectedBcd.css.properties[
           'font-family'
         ].__compat.support.chrome.version_added = '84';
-        update(bcdCopy, supportMatrix, filter);
+
+        const modified = update(bcdCopy, supportMatrix, filter);
+
+        assert(modified, 'modified');
         assert.deepEqual(bcdCopy, expectedBcd);
       });
     });
@@ -1162,7 +1183,10 @@ describe('BCD updater', () => {
       };
 
       const sm = getSupportMatrix([report], initialBcd.browsers, []);
-      update(finalBcd, sm, {});
+
+      const modified = update(finalBcd, sm, {});
+
+      assert(modified, 'modified');
       assert.deepEqual(finalBcd, initialBcd);
     });
   });
