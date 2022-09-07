@@ -87,6 +87,21 @@ const combineResults = (results: TestResultValue[]): TestResultValue => {
   return supported;
 };
 
+// Create a string represenation of a version range, optimized for human
+// legibility.
+const joinRange = (lower: string, upper: string) =>
+  lower === '0' ? `≤${upper}` : `${lower}> ≤${upper}`;
+
+// Parse a version range string produced by `joinRange` into a lower and upper
+// boundary.
+const splitRange = (range: string) => {
+  const match = range.match(/(?:(.*)> )?(?:≤(.*))/);
+  if (!match) {
+    return {lower: range, upper: range};
+  }
+  return {lower: match[1] || '0', upper: match[2]};
+};
+
 // Get support map from BCD path to test result (null/true/false) for a single
 // report.
 export const getSupportMap = (report: Report): BrowserSupportMap => {
@@ -240,12 +255,12 @@ export const inferSupportStatements = (
         statements.push({
           version_added:
             lastWasNull || lastKnown.support === false
-              ? `${lastKnown.version}> ≤${version}`
+              ? joinRange(lastKnown.version, version)
               : version
         });
       } else if (!lastStatement.version_added) {
         lastStatement.version_added = lastWasNull
-          ? `${lastKnown.version}> ≤${version}`
+          ? joinRange(lastKnown.version, version)
           : version;
       } else if (lastStatement.version_removed) {
         // added back again
@@ -264,7 +279,7 @@ export const inferSupportStatements = (
         !lastStatement.version_removed
       ) {
         lastStatement.version_removed = lastWasNull
-          ? `${lastKnown.version}> ≤${version}`
+          ? joinRange(lastKnown.version, version)
           : version;
       } else if (!lastStatement) {
         statements.push({version_added: false});
@@ -372,10 +387,6 @@ export const update = (
           // that is implicit in no statement.
           continue;
         }
-        if (typeof inferredStatement.version_added === 'string') {
-          inferredStatement.version_added =
-            inferredStatement.version_added.replace('0> ', '');
-        }
         // Remove flag data for features which are enabled by default.
         //
         // See https://github.com/mdn/browser-compat-data/pull/16637
@@ -414,7 +425,7 @@ export const update = (
             simpleStatement.version_added !== 'preview' &&
             compareVersions(
               version,
-              simpleStatement.version_added.replace('≤', ''),
+              splitRange(simpleStatement.version_added).upper,
               '<='
             )
           ) {
@@ -432,22 +443,14 @@ export const update = (
         typeof inferredStatement.version_added === 'string' &&
         inferredStatement.version_added.includes('≤')
       ) {
-        const range = inferredStatement.version_added.split('> ≤');
+        const {lower, upper} = splitRange(inferredStatement.version_added);
+        const simpleAdded = splitRange(simpleStatement.version_added).upper;
         if (
           simpleStatement.version_added === 'preview' ||
-          compareVersions(
-            simpleStatement.version_added.replace('≤', ''),
-            range[0],
-            '<='
-          ) ||
-          compareVersions(
-            simpleStatement.version_added.replace('≤', ''),
-            range[1],
-            '>'
-          )
+          compareVersions(simpleAdded, lower, '<=') ||
+          compareVersions(simpleAdded, upper, '>')
         ) {
-          simpleStatement.version_added =
-            inferredStatement.version_added.replace('0> ', '');
+          simpleStatement.version_added = inferredStatement.version_added;
           persist(allStatements);
         }
       } else if (
@@ -457,10 +460,7 @@ export const update = (
         ) &&
         simpleStatement.version_added !== inferredStatement.version_added
       ) {
-        simpleStatement.version_added =
-          typeof inferredStatement.version_added === 'string'
-            ? inferredStatement.version_added.replace('0> ', '')
-            : inferredStatement.version_added;
+        simpleStatement.version_added = inferredStatement.version_added;
         persist(allStatements);
       }
 

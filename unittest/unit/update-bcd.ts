@@ -728,24 +728,24 @@ describe('BCD updater', () => {
   describe('inferSupportStatements', () => {
     const expectedResults = {
       'api.AbortController': {
-        chrome: [{version_added: '0> ≤83'}],
-        safari: [{version_added: '0> ≤13.1'}]
+        chrome: [{version_added: '≤83'}],
+        safari: [{version_added: '≤13.1'}]
       },
-      'api.AbortController.abort': {chrome: [{version_added: '0> ≤84'}]},
+      'api.AbortController.abort': {chrome: [{version_added: '≤84'}]},
       'api.AbortController.AbortController': {chrome: [{version_added: '85'}]},
       'api.AudioContext': {chrome: [{version_added: '85'}]},
       'api.AudioContext.close': {chrome: [{version_added: '85'}]},
       'api.DeprecatedInterface': {
-        chrome: [{version_added: '0> ≤83', version_removed: '85'}]
+        chrome: [{version_added: '≤83', version_removed: '85'}]
       },
-      'api.ExperimentalInterface': {chrome: [{version_added: '0> ≤83'}]},
-      'api.UnflaggedInterface': {chrome: [{version_added: '0> ≤84'}]},
-      'api.UnprefixedInterface': {chrome: [{version_added: '0> ≤84'}]},
+      'api.ExperimentalInterface': {chrome: [{version_added: '≤83'}]},
+      'api.UnflaggedInterface': {chrome: [{version_added: '≤84'}]},
+      'api.UnprefixedInterface': {chrome: [{version_added: '≤84'}]},
       'api.NewInterfaceNotInBCD': {chrome: [{version_added: '85'}]},
       'api.NullAPI': {chrome: []},
       'api.RemovedInterface': {
         chrome: [
-          {version_added: '0> ≤83', version_removed: '84'},
+          {version_added: '≤83', version_removed: '84'},
           {version_added: '85'}
         ]
       },
