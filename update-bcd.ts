@@ -437,7 +437,8 @@ export const update = (
         !(
           typeof simpleStatement.version_added === 'string' &&
           inferredStatement.version_added === true
-        )
+        ) &&
+        simpleStatement.version_added !== inferredStatement.version_added
       ) {
         simpleStatement.version_added =
           typeof inferredStatement.version_added === 'string'
