@@ -1152,7 +1152,7 @@ describe('BCD updater', () => {
           AbortController: {
             __compat: {
               support: {
-                chrome: {version_added: '85'},
+                chrome: {version_added: '86'},
                 chrome_android: 'mirror'
               }
             }
@@ -1186,7 +1186,7 @@ describe('BCD updater', () => {
 
       const modified = update(finalBcd, sm, {});
 
-      assert(modified, 'modified');
+      assert.equal(modified, false, 'modified');
       assert.deepEqual(finalBcd, initialBcd);
     });
   });
