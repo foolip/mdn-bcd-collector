@@ -1,5 +1,107 @@
 # mdn-bcd-collector Changelog
 
+## v6.1.4
+
+### Test Changes
+
+#### Added
+
+- api.GPUInternalError
+- api.HTMLModelElement
+- api.PerformanceResourceTiming.renderBlockingStatus
+- api.WebTransport.congestionControl
+- api.XRCamera
+- api.XRView.camera
+- api.XRWebGLBinding.getCameraImage
+
+#### Removed
+
+- api.HTMLAnchorElement.HTMLAnchorElement
+- api.HTMLAreaElement.HTMLAreaElement
+- api.HTMLAudioElement.HTMLAudioElement
+- api.HTMLBaseElement.HTMLBaseElement
+- api.HTMLBodyElement.HTMLBodyElement
+- api.HTMLBRElement.HTMLBRElement
+- api.HTMLButtonElement.HTMLButtonElement
+- api.HTMLCanvasElement.HTMLCanvasElement
+- api.HTMLDataElement.HTMLDataElement
+- api.HTMLDataListElement.HTMLDataListElement
+- api.HTMLDetailsElement.HTMLDetailsElement
+- api.HTMLDialogElement.HTMLDialogElement
+- api.HTMLDirectoryElement.HTMLDirectoryElement
+- api.HTMLDivElement.HTMLDivElement
+- api.HTMLDListElement.HTMLDListElement
+- api.HTMLElement.HTMLElement
+- api.HTMLEmbedElement.HTMLEmbedElement
+- api.HTMLFieldSetElement.HTMLFieldSetElement
+- api.HTMLFontElement.HTMLFontElement
+- api.HTMLFormElement.HTMLFormElement
+- api.HTMLFrameElement.HTMLFrameElement
+- api.HTMLFrameSetElement.HTMLFrameSetElement
+- api.HTMLHeadElement.HTMLHeadElement
+- api.HTMLHeadingElement.HTMLHeadingElement
+- api.HTMLHRElement.HTMLHRElement
+- api.HTMLHtmlElement.HTMLHtmlElement
+- api.HTMLIFrameElement.HTMLIFrameElement
+- api.HTMLImageElement.HTMLImageElement
+- api.HTMLInputElement.HTMLInputElement
+- api.HTMLLabelElement.HTMLLabelElement
+- api.HTMLLegendElement.HTMLLegendElement
+- api.HTMLLIElement.HTMLLIElement
+- api.HTMLLinkElement.HTMLLinkElement
+- api.HTMLMapElement.HTMLMapElement
+- api.HTMLMarqueeElement.HTMLMarqueeElement
+- api.HTMLMenuElement.HTMLMenuElement
+- api.HTMLMetaElement.HTMLMetaElement
+- api.HTMLMeterElement.HTMLMeterElement
+- api.HTMLModElement.HTMLModElement
+- api.HTMLObjectElement.HTMLObjectElement
+- api.HTMLOListElement.HTMLOListElement
+- api.HTMLOptGroupElement.HTMLOptGroupElement
+- api.HTMLOptionElement.HTMLOptionElement
+- api.HTMLOutputElement.HTMLOutputElement
+- api.HTMLParagraphElement.HTMLParagraphElement
+- api.HTMLParamElement.HTMLParamElement
+- api.HTMLPictureElement.HTMLPictureElement
+- api.HTMLPortalElement.HTMLPortalElement
+- api.HTMLPreElement.HTMLPreElement
+- api.HTMLProgressElement.HTMLProgressElement
+- api.HTMLQuoteElement.HTMLQuoteElement
+- api.HTMLScriptElement.HTMLScriptElement
+- api.HTMLSelectElement.HTMLSelectElement
+- api.HTMLSlotElement.HTMLSlotElement
+- api.HTMLSourceElement.HTMLSourceElement
+- api.HTMLSpanElement.HTMLSpanElement
+- api.HTMLStyleElement.HTMLStyleElement
+- api.HTMLTableCaptionElement.HTMLTableCaptionElement
+- api.HTMLTableCellElement.HTMLTableCellElement
+- api.HTMLTableColElement.HTMLTableColElement
+- api.HTMLTableElement.HTMLTableElement
+- api.HTMLTableRowElement.HTMLTableRowElement
+- api.HTMLTableSectionElement.HTMLTableSectionElement
+- api.HTMLTemplateElement.HTMLTemplateElement
+- api.HTMLTextAreaElement.HTMLTextAreaElement
+- api.HTMLTimeElement.HTMLTimeElement
+- api.HTMLTitleElement.HTMLTitleElement
+- api.HTMLTrackElement.HTMLTrackElement
+- api.HTMLUListElement.HTMLUListElement
+- api.HTMLVideoElement.HTMLVideoElement
+
+#### Changed
+
+- api.Worklet
+
+### Commits
+
+- Avoid generating tests for [HTMLConstructor] constructors ([#2328](https://github.com/foolip/mdn-bcd-collector/pull/2328))
+- Add custom test for Worklet API ([#2320](https://github.com/foolip/mdn-bcd-collector/pull/2320))
+- Ignore IE by default in find-missing-results script ([#2308](https://github.com/foolip/mdn-bcd-collector/pull/2308))
+- Revert "Remove duplicate IDL" ([#2307](https://github.com/foolip/mdn-bcd-collector/pull/2307))
+- Remove duplicate IDL ([#2306](https://github.com/foolip/mdn-bcd-collector/pull/2306))
+- Set experimental to "true" for new features by default ([#2305](https://github.com/foolip/mdn-bcd-collector/pull/2305))
+- Simplify loop ([#2300](https://github.com/foolip/mdn-bcd-collector/pull/2300))
+- Mention what the actual constructor name is if it doesn't match expected ([#2301](https://github.com/foolip/mdn-bcd-collector/pull/2301))
+
 ## v6.1.3
 
 ### Test Changes
