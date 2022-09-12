@@ -96,8 +96,6 @@
 - Avoid generating tests for [HTMLConstructor] constructors ([#2328](https://github.com/foolip/mdn-bcd-collector/pull/2328))
 - Add custom test for Worklet API ([#2320](https://github.com/foolip/mdn-bcd-collector/pull/2320))
 - Ignore IE by default in find-missing-results script ([#2308](https://github.com/foolip/mdn-bcd-collector/pull/2308))
-- Revert "Remove duplicate IDL" ([#2307](https://github.com/foolip/mdn-bcd-collector/pull/2307))
-- Remove duplicate IDL ([#2306](https://github.com/foolip/mdn-bcd-collector/pull/2306))
 - Set experimental to "true" for new features by default ([#2305](https://github.com/foolip/mdn-bcd-collector/pull/2305))
 - Simplify loop ([#2300](https://github.com/foolip/mdn-bcd-collector/pull/2300))
 - Mention what the actual constructor name is if it doesn't match expected ([#2301](https://github.com/foolip/mdn-bcd-collector/pull/2301))
