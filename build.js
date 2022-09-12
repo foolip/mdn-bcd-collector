@@ -395,9 +395,14 @@ const flattenMembers = (iface) => {
   for (const member of iface.members.filter((member) => !member.name)) {
     switch (member.type) {
       case 'constructor':
-        // Test generation doesn't use constructor arguments, so they aren't
-        // copied
-        members.push({name: iface.name, type: 'constructor'});
+        // Don't generate tests for [HTMLConstructor]. These are for custom
+        // elements, not for constructor the elements themselves:
+        // https://html.spec.whatwg.org/multipage/dom.html#html-element-constructors
+        if (!getExtAttr(member, 'HTMLConstructor')) {
+          // Test generation doesn't use constructor arguments, so they aren't
+          // copied
+          members.push({name: iface.name, type: 'constructor'});
+        }
         break;
       case 'iterable':
         members.push(
