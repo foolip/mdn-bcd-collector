@@ -984,6 +984,23 @@ describe('build', () => {
       });
     });
 
+    it('interface with [HTMLConstructor] constructor operation', () => {
+      const ast = WebIDL2.parse(
+        `[Exposed=Window]
+           interface HTMLButtonElement {
+             [HTMLConstructor] constructor();
+           };`
+      );
+
+      assert.deepEqual(buildIDLTests(ast, [], scopes), {
+        'api.HTMLButtonElement': {
+          code: '"HTMLButtonElement" in self',
+          exposure: ['Window']
+        }
+        // no constructor test
+      });
+    });
+
     it('iterable interface', () => {
       const ast = WebIDL2.parse(
         `[Exposed=Window]
