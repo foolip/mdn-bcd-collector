@@ -30,6 +30,8 @@ describe('find-missing-features', () => {
         'api.DummyAPI',
         'api.DummyAPI.dummy',
         'api.ExperimentalInterface',
+        'api.UnflaggedInterface',
+        'api.UnprefixedInterface',
         'api.NullAPI',
         'api.RemovedInterface',
         'api.SuperNewInterface',
@@ -56,6 +58,9 @@ describe('find-missing-features', () => {
         'api.DummyAPI.dummy',
         'api.ExperimentalInterface',
         'api.TryingOutInterface',
+        'api.UnflaggedInterface',
+        'api.UnprefixedInterface',
+        'api.webkitUnprefixedInterface',
         'api.NullAPI',
         'api.RemovedInterface',
         'api.SuperNewInterface',
@@ -85,6 +90,8 @@ describe('find-missing-features', () => {
           'api.DummyAPI',
           'api.DummyAPI.dummy',
           'api.ExperimentalInterface',
+          'api.UnflaggedInterface',
+          'api.UnprefixedInterface',
           'api.NullAPI',
           'api.RemovedInterface',
           'api.SuperNewInterface',
@@ -92,7 +99,7 @@ describe('find-missing-features', () => {
           'css.properties.font-style',
           'javascript.builtins.Date'
         ],
-        total: 19
+        total: 21
       };
 
       assert.deepEqual(getMissing(bcd, tests), expected);
@@ -128,11 +135,13 @@ describe('find-missing-features', () => {
           'api.DummyAPI',
           'api.DummyAPI.dummy',
           'api.ExperimentalInterface',
+          'api.UnflaggedInterface',
+          'api.UnprefixedInterface',
           'api.NullAPI',
           'api.RemovedInterface',
           'api.SuperNewInterface'
         ],
-        total: 14
+        total: 16
       });
     });
 
@@ -148,6 +157,8 @@ describe('find-missing-features', () => {
           'api.DummyAPI',
           'api.DummyAPI.dummy',
           'api.ExperimentalInterface',
+          'api.UnflaggedInterface',
+          'api.UnprefixedInterface',
           'api.NullAPI',
           'api.RemovedInterface',
           'api.SuperNewInterface',
@@ -155,7 +166,7 @@ describe('find-missing-features', () => {
           'css.properties.font-style',
           'javascript.builtins.Date'
         ],
-        total: 19
+        total: 21
       });
 
       assert.isTrue(
