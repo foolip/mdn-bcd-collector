@@ -11,6 +11,7 @@ import {Report} from '../../types/types.js';
 import {assert} from 'chai';
 import sinon from 'sinon';
 import fs from 'fs-extra';
+import {Browsers} from '@mdn/browser-compat-data/types';
 
 import logger from '../../logger.js';
 import {
@@ -949,6 +950,45 @@ describe('BCD updater', () => {
       assert.deepEqual(bcdCopy.api.AbortController.__compat.support.safari, {
         version_added: null
       });
+    });
+
+    it('does not report a modification when results corroborate existing data', () => {
+      const firefox92UaString =
+        'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:92.0) Gecko/20100101 Firefox/92.0';
+      const initialBcd = {
+        api: {
+          AbortController: {
+            __compat: {
+              support: {
+                firefox: {version_added: '92'}
+              }
+            }
+          }
+        },
+        browsers: {
+          firefox: {name: 'Firefox', releases: {92: {}}}
+        } as unknown as Browsers
+      };
+      const finalBcd = JSON.parse(JSON.stringify(initialBcd));
+      const report: Report = {
+        __version: '0.3.1',
+        results: {
+          'https://mdn-bcd-collector.appspot.com/tests/': [
+            {
+              name: 'api.AbortController',
+              exposure: 'Window',
+              result: true
+            }
+          ]
+        },
+        userAgent: firefox92UaString
+      };
+      const sm = getSupportMatrix([report], initialBcd.browsers, []);
+
+      const modified = update(finalBcd, sm, {});
+
+      assert.equal(modified, false, 'modified');
+      assert.deepEqual(finalBcd, initialBcd);
     });
   });
 });
