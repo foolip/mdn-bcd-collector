@@ -1,5 +1,153 @@
 # mdn-bcd-collector Changelog
 
+## v6.1.4
+
+### Test Changes
+
+#### Added
+
+- api.GPUInternalError
+- api.HTMLModelElement
+- api.PerformanceResourceTiming.renderBlockingStatus
+- api.WebTransport.congestionControl
+- api.XRCamera
+- api.XRView.camera
+- api.XRWebGLBinding.getCameraImage
+
+#### Removed
+
+- api.HTMLAnchorElement.HTMLAnchorElement
+- api.HTMLAreaElement.HTMLAreaElement
+- api.HTMLAudioElement.HTMLAudioElement
+- api.HTMLBaseElement.HTMLBaseElement
+- api.HTMLBodyElement.HTMLBodyElement
+- api.HTMLBRElement.HTMLBRElement
+- api.HTMLButtonElement.HTMLButtonElement
+- api.HTMLCanvasElement.HTMLCanvasElement
+- api.HTMLDataElement.HTMLDataElement
+- api.HTMLDataListElement.HTMLDataListElement
+- api.HTMLDetailsElement.HTMLDetailsElement
+- api.HTMLDialogElement.HTMLDialogElement
+- api.HTMLDirectoryElement.HTMLDirectoryElement
+- api.HTMLDivElement.HTMLDivElement
+- api.HTMLDListElement.HTMLDListElement
+- api.HTMLElement.HTMLElement
+- api.HTMLEmbedElement.HTMLEmbedElement
+- api.HTMLFieldSetElement.HTMLFieldSetElement
+- api.HTMLFontElement.HTMLFontElement
+- api.HTMLFormElement.HTMLFormElement
+- api.HTMLFrameElement.HTMLFrameElement
+- api.HTMLFrameSetElement.HTMLFrameSetElement
+- api.HTMLHeadElement.HTMLHeadElement
+- api.HTMLHeadingElement.HTMLHeadingElement
+- api.HTMLHRElement.HTMLHRElement
+- api.HTMLHtmlElement.HTMLHtmlElement
+- api.HTMLIFrameElement.HTMLIFrameElement
+- api.HTMLImageElement.HTMLImageElement
+- api.HTMLInputElement.HTMLInputElement
+- api.HTMLLabelElement.HTMLLabelElement
+- api.HTMLLegendElement.HTMLLegendElement
+- api.HTMLLIElement.HTMLLIElement
+- api.HTMLLinkElement.HTMLLinkElement
+- api.HTMLMapElement.HTMLMapElement
+- api.HTMLMarqueeElement.HTMLMarqueeElement
+- api.HTMLMenuElement.HTMLMenuElement
+- api.HTMLMetaElement.HTMLMetaElement
+- api.HTMLMeterElement.HTMLMeterElement
+- api.HTMLModElement.HTMLModElement
+- api.HTMLObjectElement.HTMLObjectElement
+- api.HTMLOListElement.HTMLOListElement
+- api.HTMLOptGroupElement.HTMLOptGroupElement
+- api.HTMLOptionElement.HTMLOptionElement
+- api.HTMLOutputElement.HTMLOutputElement
+- api.HTMLParagraphElement.HTMLParagraphElement
+- api.HTMLParamElement.HTMLParamElement
+- api.HTMLPictureElement.HTMLPictureElement
+- api.HTMLPortalElement.HTMLPortalElement
+- api.HTMLPreElement.HTMLPreElement
+- api.HTMLProgressElement.HTMLProgressElement
+- api.HTMLQuoteElement.HTMLQuoteElement
+- api.HTMLScriptElement.HTMLScriptElement
+- api.HTMLSelectElement.HTMLSelectElement
+- api.HTMLSlotElement.HTMLSlotElement
+- api.HTMLSourceElement.HTMLSourceElement
+- api.HTMLSpanElement.HTMLSpanElement
+- api.HTMLStyleElement.HTMLStyleElement
+- api.HTMLTableCaptionElement.HTMLTableCaptionElement
+- api.HTMLTableCellElement.HTMLTableCellElement
+- api.HTMLTableColElement.HTMLTableColElement
+- api.HTMLTableElement.HTMLTableElement
+- api.HTMLTableRowElement.HTMLTableRowElement
+- api.HTMLTableSectionElement.HTMLTableSectionElement
+- api.HTMLTemplateElement.HTMLTemplateElement
+- api.HTMLTextAreaElement.HTMLTextAreaElement
+- api.HTMLTimeElement.HTMLTimeElement
+- api.HTMLTitleElement.HTMLTitleElement
+- api.HTMLTrackElement.HTMLTrackElement
+- api.HTMLUListElement.HTMLUListElement
+- api.HTMLVideoElement.HTMLVideoElement
+
+#### Changed
+
+- api.Worklet
+
+### Commits
+
+- Avoid generating tests for [HTMLConstructor] constructors ([#2328](https://github.com/foolip/mdn-bcd-collector/pull/2328))
+- Add custom test for Worklet API ([#2320](https://github.com/foolip/mdn-bcd-collector/pull/2320))
+- Ignore IE by default in find-missing-results script ([#2308](https://github.com/foolip/mdn-bcd-collector/pull/2308))
+- Set experimental to "true" for new features by default ([#2305](https://github.com/foolip/mdn-bcd-collector/pull/2305))
+- Simplify loop ([#2300](https://github.com/foolip/mdn-bcd-collector/pull/2300))
+- Mention what the actual constructor name is if it doesn't match expected ([#2301](https://github.com/foolip/mdn-bcd-collector/pull/2301))
+
+## v6.1.3
+
+### Test Changes
+
+#### Added
+
+- api.GPUSupportedLimits.maxBindingsPerBindGroup
+- api.GPUSupportedLimits.maxBufferSize
+- api.GPUSupportedLimits.maxColorAttachmentBytesPerPixel
+- api.XRSession.enabledFeatures
+- css.properties.math-depth
+- css.properties.math-shift
+- css.properties.text-decoration-trim
+
+#### Removed
+
+- api.Element.attributeStyleMap
+- api.Element.name
+- api.HTMLButtonElement.autofocus
+- api.HTMLInputElement.autofocus
+- api.HTMLSelectElement.autofocus
+- api.HTMLTextAreaElement.autofocus
+- api.SVGGraphicsElement.autofocus
+- css.properties.text-decoration-skip-inset
+
+#### Changed
+
+- api.ServiceWorkerContainer
+- api.SVGAnimatedRect
+
+### Commits
+
+- Add custom IDL for CanvasFilter ([#2294](https://github.com/foolip/mdn-bcd-collector/pull/2294))
+- Add instance (navigator.serviceWorker) for ServiceWorkerContainer ([#2283](https://github.com/foolip/mdn-bcd-collector/pull/2283))
+- Adapt custom navigator.getDisplayMedia() IDL
+- Remove custom math-style CSS property
+- Add overrides for api.FontFaceSetLoadEvent ([#2239](https://github.com/foolip/mdn-bcd-collector/pull/2239))
+- Correct reference to project license ([#2277](https://github.com/foolip/mdn-bcd-collector/pull/2277))
+- Fix custom test for SVGAnimatedRect ([#2281](https://github.com/foolip/mdn-bcd-collector/pull/2281))
+- Correct required version of Node.js ([#2276](https://github.com/foolip/mdn-bcd-collector/pull/2276))
+- Reformat examples in design document ([#2266](https://github.com/foolip/mdn-bcd-collector/pull/2266))
+- Extend script to update BCD w/results from Oculus ([#2260](https://github.com/foolip/mdn-bcd-collector/pull/2260))
+- Fix updating BCD regarding mirrored statements ([#2265](https://github.com/foolip/mdn-bcd-collector/pull/2265))
+- Disable the unsecure warning for now ([#2264](https://github.com/foolip/mdn-bcd-collector/pull/2264))
+- Improve callback detection ([#2253](https://github.com/foolip/mdn-bcd-collector/pull/2253))
+- Allow for version ranges for overrides ([#2252](https://github.com/foolip/mdn-bcd-collector/pull/2252))
+- Remove custom IDL related to resolved BCD issues ([#2255](https://github.com/foolip/mdn-bcd-collector/pull/2255))
+
 ## v6.1.2
 
 ### Test Changes

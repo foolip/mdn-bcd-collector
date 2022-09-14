@@ -229,7 +229,7 @@ export const inferSupportStatements = (
   };
   let lastWasNull = false;
 
-  for (const [_, version] of versions.entries()) {
+  for (const version of versions) {
     const supported = versionMap.get(version);
     const lastStatement = statements[statements.length - 1];
 
@@ -363,10 +363,18 @@ export const update = (
           inferredStatement.version_added =
             inferredStatement.version_added.replace('0> ', '');
         }
-        allStatements.unshift(inferredStatement);
+        // Remove flag data for features which are enabled by default.
+        //
+        // See https://github.com/mdn/browser-compat-data/pull/16637
+        const nonFlagStatements = allStatements.filter(
+          (statement) => !('flags' in statement)
+        );
         entry.__compat.support[browser] =
-          allStatements.length === 1 ? allStatements[0] : allStatements;
+          nonFlagStatements.length === 0
+            ? inferredStatement
+            : [inferredStatement].concat(nonFlagStatements);
         modified = true;
+
         continue;
       }
 
@@ -437,7 +445,8 @@ export const update = (
         !(
           typeof simpleStatement.version_added === 'string' &&
           inferredStatement.version_added === true
-        )
+        ) &&
+        simpleStatement.version_added !== inferredStatement.version_added
       ) {
         simpleStatement.version_added =
           typeof inferredStatement.version_added === 'string'

@@ -1787,6 +1787,8 @@ api:
       var instance = new SecurityPolicyViolationEvent('securitypolicyviolation');
   Selection:
     __base: var instance = window.getSelection();
+  ServiceWorkerContainer:
+    __base: var instance = navigator.serviceWorker;
   ShadowRoot:
     __base: |-
       var el = document.createElement('div');
@@ -2659,6 +2661,14 @@ api:
       return instance.toString() == instance.href;
   WorkerNavigator:
     __base: var instance = navigator;
+  Worklet:
+    __resources:
+      - audioContext
+    __base: |-
+      if (!reusableInstances.audioContext) {
+        return {result: false, message: 'Audio context is not available'};
+      }
+      var instance = reusableInstances.audioContext.audioWorklet;
   WritableStreamDefaultController:
     __base: |-
       if (!('WritableStream' in self)) {

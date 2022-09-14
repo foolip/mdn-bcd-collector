@@ -11,6 +11,7 @@ import {Report} from '../../types/types.js';
 import {assert} from 'chai';
 import sinon from 'sinon';
 import fs from 'fs-extra';
+import {Browsers} from '@mdn/browser-compat-data/types';
 
 import logger from '../../logger.js';
 import {
@@ -66,6 +67,16 @@ const reports: Report[] = [
           name: 'api.ExperimentalInterface',
           exposure: 'Window',
           result: true
+        },
+        {
+          name: 'api.UnflaggedInterface',
+          exposure: 'Window',
+          result: null
+        },
+        {
+          name: 'api.UnprefixedInterface',
+          exposure: 'Window',
+          result: null
         },
         {
           name: 'api.NullAPI',
@@ -148,6 +159,16 @@ const reports: Report[] = [
           result: true
         },
         {
+          name: 'api.UnflaggedInterface',
+          exposure: 'Window',
+          result: true
+        },
+        {
+          name: 'api.UnprefixedInterface',
+          exposure: 'Window',
+          result: true
+        },
+        {
           name: 'api.NewInterfaceNotInBCD',
           exposure: 'Window',
           result: false
@@ -223,6 +244,16 @@ const reports: Report[] = [
         },
         {
           name: 'api.ExperimentalInterface',
+          exposure: 'Window',
+          result: true
+        },
+        {
+          name: 'api.UnflaggedInterface',
+          exposure: 'Window',
+          result: true
+        },
+        {
+          name: 'api.UnprefixedInterface',
           exposure: 'Window',
           result: true
         },
@@ -353,6 +384,8 @@ describe('BCD updater', () => {
           ['api.AudioContext.close', false],
           ['api.DeprecatedInterface', true],
           ['api.ExperimentalInterface', true],
+          ['api.UnflaggedInterface', null],
+          ['api.UnprefixedInterface', null],
           ['api.NullAPI', null],
           ['api.RemovedInterface', true],
           ['api.SuperNewInterface', false],
@@ -374,6 +407,8 @@ describe('BCD updater', () => {
           ['api.AudioContext.close', false],
           ['api.DeprecatedInterface', true],
           ['api.ExperimentalInterface', true],
+          ['api.UnflaggedInterface', true],
+          ['api.UnprefixedInterface', true],
           ['api.NewInterfaceNotInBCD', false],
           ['api.NullAPI', null],
           ['api.RemovedInterface', false],
@@ -505,6 +540,34 @@ describe('BCD updater', () => {
                 new Map([
                   ['82', null],
                   ['83', true],
+                  ['84', true],
+                  ['85', true]
+                ])
+              ]
+            ])
+          ],
+          [
+            'api.UnflaggedInterface',
+            new Map([
+              [
+                'chrome',
+                new Map([
+                  ['82', null],
+                  ['83', null],
+                  ['84', true],
+                  ['85', true]
+                ])
+              ]
+            ])
+          ],
+          [
+            'api.UnprefixedInterface',
+            new Map([
+              [
+                'chrome',
+                new Map([
+                  ['82', null],
+                  ['83', null],
                   ['84', true],
                   ['85', true]
                 ])
@@ -648,6 +711,8 @@ describe('BCD updater', () => {
         chrome: [{version_added: '0> ≤83', version_removed: '85'}]
       },
       'api.ExperimentalInterface': {chrome: [{version_added: '0> ≤83'}]},
+      'api.UnflaggedInterface': {chrome: [{version_added: '0> ≤84'}]},
+      'api.UnprefixedInterface': {chrome: [{version_added: '0> ≤84'}]},
       'api.NewInterfaceNotInBCD': {chrome: [{version_added: '85'}]},
       'api.NullAPI': {chrome: []},
       'api.RemovedInterface': {
@@ -787,6 +852,31 @@ describe('BCD updater', () => {
                     version_added: '50',
                     version_removed: '70',
                     alternative_name: 'TryingOutInterface',
+                    notes: 'Not supported on Windows XP.'
+                  }
+                ]
+              }
+            }
+          },
+          UnflaggedInterface: {
+            __compat: {
+              support: {
+                chrome: {
+                  version_added: '≤84'
+                }
+              }
+            }
+          },
+          UnprefixedInterface: {
+            __compat: {
+              support: {
+                chrome: [
+                  {
+                    version_added: '≤84'
+                  },
+                  {
+                    version_added: '83',
+                    prefix: 'webkit',
                     notes: 'Not supported on Windows XP.'
                   }
                 ]
@@ -1071,6 +1161,45 @@ describe('BCD updater', () => {
           );
         });
       });
+    });
+
+    it('does not report a modification when results corroborate existing data', () => {
+      const firefox92UaString =
+        'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:92.0) Gecko/20100101 Firefox/92.0';
+      const initialBcd = {
+        api: {
+          AbortController: {
+            __compat: {
+              support: {
+                firefox: {version_added: '92'}
+              }
+            }
+          }
+        },
+        browsers: {
+          firefox: {name: 'Firefox', releases: {92: {}}}
+        } as unknown as Browsers
+      };
+      const finalBcd = JSON.parse(JSON.stringify(initialBcd));
+      const report: Report = {
+        __version: '0.3.1',
+        results: {
+          'https://mdn-bcd-collector.appspot.com/tests/': [
+            {
+              name: 'api.AbortController',
+              exposure: 'Window',
+              result: true
+            }
+          ]
+        },
+        userAgent: firefox92UaString
+      };
+      const sm = getSupportMatrix([report], initialBcd.browsers, []);
+
+      const modified = update(finalBcd, sm, {});
+
+      assert.equal(modified, false, 'modified');
+      assert.deepEqual(finalBcd, initialBcd);
     });
   });
 });
