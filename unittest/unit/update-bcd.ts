@@ -938,7 +938,7 @@ describe('BCD updater', () => {
             actual,
             bcdFromSupport({
               chrome: {version_added: '85'},
-              chrome_android: false
+              chrome_android: {version_added: false}
             })
           );
         });
