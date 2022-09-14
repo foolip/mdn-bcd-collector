@@ -1002,7 +1002,7 @@ describe('BCD updater', () => {
         it('supported in downstream test results', () => {
           const actual = mirroringCase({
             support: {
-              chrome: {version_added: '85'},
+              chrome: {version_added: '86'},
               chrome_android: 'mirror'
             },
             downstreamResult: true
@@ -1010,7 +1010,7 @@ describe('BCD updater', () => {
           assert.deepEqual(
             actual,
             bcdFromSupport({
-              chrome: {version_added: '85'},
+              chrome: {version_added: '86'},
               chrome_android: 'mirror'
             })
           );
@@ -1064,12 +1064,7 @@ describe('BCD updater', () => {
             actual,
             bcdFromSupport({
               chrome: {version_added: '85', flags: [{}]},
-              chrome_android: [
-                // TODO: Remove flag data when adding enabled-by-default data.
-                // See https://github.com/mdn/browser-compat-data/pull/16637.
-                {version_added: '86'},
-                {flags: [{}], version_added: '85'}
-              ]
+              chrome_android: {version_added: '86'}
             })
           );
         });
@@ -1122,7 +1117,7 @@ describe('BCD updater', () => {
             actual,
             bcdFromSupport({
               chrome: {version_added: false},
-              chrome_android: {version_added: '≤86'}
+              chrome_android: {version_added: '86'}
             })
           );
         });
