@@ -317,12 +317,23 @@ api:
         return {result: false, message: 'caches is not defined'};
       };
       var instance = caches;
+  CanvasGradient:
+    __base: |-
+      <%api.CanvasRenderingContext2D:ctx%>
+      var instance;
+      if (ctx.createLinearGradient) {
+        instance = ctx.createLinearGradient(0, 0, 1, 1);
+      } else if (ctx.createRadialGradient) {
+        instance = ctx.createRadialGradient(0, 0, 0, 1, 1, 1);
+      } else {
+        return {result: false, message: 'Could not create linear or radial gradient'};
+      }
   CanvasPattern:
     __resources:
       - image-black
     __base: |-
-      <%api.CanvasRenderingContext2D:canvas%>
-      var instance = canvas.createPattern(document.getElementById('resource-image-black'), 'repeat');
+      <%api.CanvasRenderingContext2D:ctx%>
+      var instance = ctx.createPattern(document.getElementById('resource-image-black'), 'repeat');
   CanvasRenderingContext2D:
     __base: |-
       if (!('document' in self)) {
@@ -2301,8 +2312,8 @@ api:
       var instance = new TextEncoder();
   TextMetrics:
     __base: |-
-      <%api.CanvasRenderingContext2D:canvas%>
-      var instance = canvas.measureText('mdn-bcd-collector');
+      <%api.CanvasRenderingContext2D:ctx%>
+      var instance = ctx.measureText('mdn-bcd-collector');
   TextTrack:
     __resources:
       - video-blank
