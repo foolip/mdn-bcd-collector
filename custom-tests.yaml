@@ -949,7 +949,6 @@ api:
     __base: var instance = history;
   HTMLAllCollection:
     __base: |-
-      // XXX document.all seems to be falsy, at least in Chrome
       var instance = document.all;
     __test: return bcd.testObjectName(instance, 'HTMLAllCollection');
   HTMLAnchorElement:
