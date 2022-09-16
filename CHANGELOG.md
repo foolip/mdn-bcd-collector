@@ -1,5 +1,34 @@
 # mdn-bcd-collector Changelog
 
+## v6.1.5
+
+### Test Changes
+
+#### Added
+
+- api.CSSContainerRule.containerName
+- api.CSSContainerRule.containerQuery
+- api.Document.createTransition
+- api.DOMTransition
+- css.properties.page-transition-tag
+
+#### Changed
+
+- api.CanvasGradient
+- api.CanvasPattern
+- api.HTMLAllCollection
+- api.TextMetrics
+
+### Commits
+
+- Add back MessageEvent.userActivation custom IDL ([#2344](https://github.com/foolip/mdn-bcd-collector/pull/2344))
+- Remove custom IDL for UserActivation
+- Support testing document.all ([#2340](https://github.com/foolip/mdn-bcd-collector/pull/2340))
+- Add custom test for CanvasGradient ([#2334](https://github.com/foolip/mdn-bcd-collector/pull/2334))
+- bcd-update: do not spuriously report modifications ([#2326](https://github.com/foolip/mdn-bcd-collector/pull/2326))
+- Remove flag data for default-enabled features ([#2297](https://github.com/foolip/mdn-bcd-collector/pull/2297))
+- Support adding css.properties._ and javascript.builtins._ in add-new-bcd ([#2284](https://github.com/foolip/mdn-bcd-collector/pull/2284))
+
 ## v6.1.4
 
 ### Test Changes
