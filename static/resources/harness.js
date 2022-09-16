@@ -177,7 +177,9 @@
   }
 
   function testObjectName(instance, names) {
-    if (!instance) {
+    // Do not reject "falsey" values generally in order to support
+    // `document.all`
+    if (instance === null || instance === undefined) {
       return false;
     }
 
