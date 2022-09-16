@@ -614,11 +614,6 @@ partial interface Location {
   stringifier;
 };
 
-partial interface MessageEvent {
-  // https://github.com/whatwg/html/pull/4009
-  readonly attribute UserActivation? userActivation;
-};
-
 partial interface MouseEvent {
   // https://github.com/whatwg/html/pull/1942
   readonly attribute DOMString? region;
@@ -632,9 +627,6 @@ partial dictionary MouseEventInit {
 partial interface Navigator {
   // https://github.com/WebKit/WebKit/blob/88278b55563e5ccdc0b3419c6c391c3becc19e40/Source/WebCore/page/Navigator.idl#L30
   undefined getStorageUpdates();
-
-  // https://github.com/whatwg/html/pull/4009
-  [SameObject] readonly attribute UserActivation userActivation;
 
   // https://developer.mozilla.org/en-US/docs/Web/API/Navigator/mozIsLocallyAvailable
   boolean mozIsLocallyAvailable(DOMString url, boolean ifOffline);
@@ -668,13 +660,6 @@ interface Transferable {
 
 partial interface VideoTrackList {
    VideoTrack item(unsigned long index);
-};
-
-// https://github.com/whatwg/html/pull/4009
-[Exposed=(Window,Worker,AudioWorklet)]
-interface UserActivation {
-  readonly attribute boolean hasBeenActive;
-  readonly attribute boolean isActive;
 };
 
 partial interface Window {
