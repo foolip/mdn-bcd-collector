@@ -614,6 +614,11 @@ partial interface Location {
   stringifier;
 };
 
+partial interface MessageEvent {
+  // https://github.com/whatwg/html/pull/4009
+  readonly attribute UserActivation? userActivation;
+};
+
 partial interface MouseEvent {
   // https://github.com/whatwg/html/pull/1942
   readonly attribute DOMString? region;
