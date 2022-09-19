@@ -1036,7 +1036,7 @@ describe('BCD updater', () => {
       assert.deepEqual(finalBcd, initialBcd);
     });
 
-    it('skips negative results for unsupported features', () => {
+    it('retains flag data for unsupported features', () => {
       const initialBcd = {
         api: {
           AbortController: {
@@ -1074,13 +1074,16 @@ describe('BCD updater', () => {
       assert.deepEqual(finalBcd, initialBcd);
     });
 
-    it('skips complex support scenarios', () => {
+    it('no update given partial confirmation of complex support scenario', () => {
       const initialBcd: any = {
         api: {
           AbortController: {
             __compat: {
               support: {
-                firefox: [{version_added: '91'}, {version_removed: '92'}]
+                firefox: [
+                  {version_added: '92'},
+                  {version_added: '91', partial_implementation: true, notes: ''}
+                ]
               }
             }
           }
@@ -1112,19 +1115,60 @@ describe('BCD updater', () => {
       assert.deepEqual(finalBcd, initialBcd);
     });
 
+    it('skips complex support scenarios', () => {
+      const initialBcd: any = {
+        api: {
+          AbortController: {
+            __compat: {
+              support: {
+                firefox: [
+                  {version_added: '94'},
+                  {version_added: '93', partial_implementation: true, notes: ''}
+                ]
+              }
+            }
+          }
+        },
+        browsers: {
+          firefox: {name: 'Firefox', releases: {91: {}, 92: {}, 93: {}, 94: {}}}
+        }
+      };
+      const finalBcd = clone(initialBcd);
+      const report: Report = {
+        __version: '0.3.1',
+        results: {
+          'https://mdn-bcd-collector.appspot.com/tests/': [
+            {
+              name: 'api.AbortController',
+              exposure: 'Window',
+              result: false
+            }
+          ]
+        },
+        userAgent: firefox92UaString
+      };
+
+      const sm = getSupportMatrix([report], initialBcd.browsers, []);
+
+      const modified = update(finalBcd, sm, {});
+
+      assert.equal(modified, false, 'modified');
+      assert.deepEqual(finalBcd, initialBcd);
+    });
+
     it('skips removed features', () => {
       const initialBcd: any = {
         api: {
           AbortController: {
             __compat: {
               support: {
-                firefox: {version_removed: '91'}
+                firefox: {version_added: '90', version_removed: '91'}
               }
             }
           }
         },
         browsers: {
-          firefox: {name: 'Firefox', releases: {91: {}, 92: {}, 93: {}}}
+          firefox: {name: 'Firefox', releases: {90: {}, 91: {}, 92: {}}}
         }
       };
       const finalBcd = clone(initialBcd);
