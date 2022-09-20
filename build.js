@@ -405,13 +405,28 @@ const flattenMembers = (iface) => {
         }
         break;
       case 'iterable':
-        members.push(
-          {name: '@@iterator', type: 'symbol'},
-          {name: 'entries', type: 'operation'},
-          {name: 'forEach', type: 'operation'},
-          {name: 'keys', type: 'operation'},
-          {name: 'values', type: 'operation'}
-        );
+        if (member.async) {
+          // https://webidl.spec.whatwg.org/#idl-async-iterable
+          members.push(
+            {name: '@@asyncIterator', type: 'symbol'},
+            {name: 'values', type: 'operation'}
+          );
+          if (member.idlType.length === 2) {
+            // https://webidl.spec.whatwg.org/#pair-asynchronously-iterable-declaration
+            members.push(
+              {name: 'entries', type: 'operation'},
+              {name: 'keys', type: 'operation'}
+            );
+          }
+        } else {
+          members.push(
+            {name: '@@iterator', type: 'symbol'},
+            {name: 'entries', type: 'operation'},
+            {name: 'forEach', type: 'operation'},
+            {name: 'keys', type: 'operation'},
+            {name: 'values', type: 'operation'}
+          );
+        }
         break;
       case 'maplike':
         members.push(
