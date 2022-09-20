@@ -1,6 +1,6 @@
 # mdn-bcd-collector Changelog
 
-## v6.1.6
+## v6.2.0
 
 ### Test Changes
 
