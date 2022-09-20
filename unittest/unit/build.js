@@ -1036,6 +1036,60 @@ describe('build', () => {
       });
     });
 
+    it('async iterable interface', () => {
+      const ast = WebIDL2.parse(
+        `[Exposed=Window]
+           interface ReadableStream {
+             async iterable<any>;
+           };`
+      );
+      assert.deepEqual(buildIDLTests(ast, [], scopes), {
+        'api.ReadableStream': {
+          code: '"ReadableStream" in self',
+          exposure: ['Window']
+        },
+        'api.ReadableStream.@@asyncIterator': {
+          code: '"Symbol" in self && "asyncIterator" in Symbol && "ReadableStream" in self && Symbol.asyncIterator in ReadableStream.prototype',
+          exposure: ['Window']
+        },
+        'api.ReadableStream.values': {
+          code: '"ReadableStream" in self && "values" in ReadableStream.prototype',
+          exposure: ['Window']
+        }
+      });
+    });
+
+    it('pair async iterable interface', () => {
+      const ast = WebIDL2.parse(
+        `[Exposed=Window]
+           interface AsyncMap {
+             async iterable<DOMString, any>;
+           };`
+      );
+      assert.deepEqual(buildIDLTests(ast, [], scopes), {
+        'api.AsyncMap': {
+          code: '"AsyncMap" in self',
+          exposure: ['Window']
+        },
+        'api.AsyncMap.@@asyncIterator': {
+          code: '"Symbol" in self && "asyncIterator" in Symbol && "AsyncMap" in self && Symbol.asyncIterator in AsyncMap.prototype',
+          exposure: ['Window']
+        },
+        'api.AsyncMap.values': {
+          code: '"AsyncMap" in self && "values" in AsyncMap.prototype',
+          exposure: ['Window']
+        },
+        'api.AsyncMap.entries': {
+          code: '"AsyncMap" in self && "entries" in AsyncMap.prototype',
+          exposure: ['Window']
+        },
+        'api.AsyncMap.keys': {
+          code: '"AsyncMap" in self && "keys" in AsyncMap.prototype',
+          exposure: ['Window']
+        }
+      });
+    });
+
     it('maplike interface', () => {
       const ast = WebIDL2.parse(
         `[Exposed=Window]
