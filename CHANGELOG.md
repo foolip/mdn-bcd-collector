@@ -1,5 +1,28 @@
 # mdn-bcd-collector Changelog
 
+## v6.2.0
+
+### Test Changes
+
+#### Added
+
+- api.FileSystemDirectoryHandle.@@asyncIterator
+- api.ReadableStream.@@asyncIterator
+
+#### Removed
+
+- api.FileSystemDirectoryHandle.@@iterator
+- api.FileSystemDirectoryHandle.forEach
+- api.ReadableStream.@@iterator
+- api.ReadableStream.entries
+- api.ReadableStream.forEach
+- api.ReadableStream.keys
+
+### Commits
+
+- Support async iterators in test generation ([#2349](https://github.com/foolip/mdn-bcd-collector/pull/2349))
+- Complete test coverage for `update-bcd` script ([#2317](https://github.com/foolip/mdn-bcd-collector/pull/2317))
+
 ## v6.1.5
 
 ### Test Changes
