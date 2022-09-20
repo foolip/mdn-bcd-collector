@@ -65,6 +65,8 @@ export const findEntry = (
   return entry;
 };
 
+const clone = (value) => JSON.parse(JSON.stringify(value));
+
 const combineResults = (results: TestResultValue[]): TestResultValue => {
   let supported: TestResultValue = null;
   for (const result of results) {
@@ -301,7 +303,7 @@ export const update = (
 
     const support = entry.__compat.support;
     // Stringified then parsed to deep clone the support statements
-    const originalSupport = JSON.parse(JSON.stringify(support));
+    const originalSupport = clone(support);
 
     for (const [browser, versionMap] of browserMap.entries()) {
       if (
@@ -341,7 +343,7 @@ export const update = (
             // explicitly assign it back to the originating data structure.
             // This reduces the likelihood of inconsistencies in the handling
             // of mirrored and non-mirrored support data.
-            JSON.parse(JSON.stringify(support[browser] || null));
+            clone(support[browser] || null);
 
       if (!allStatements) {
         allStatements = [];

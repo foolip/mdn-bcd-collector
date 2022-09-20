@@ -817,7 +817,7 @@ describe('BCD updater', () => {
     let bcdCopy;
 
     beforeEach(() => {
-      bcdCopy = JSON.parse(JSON.stringify(bcd));
+      bcdCopy = clone(bcd);
     });
 
     it('normal', () => {
@@ -1219,7 +1219,7 @@ describe('BCD updater', () => {
           firefox: {name: 'Firefox', releases: {92: {}}}
         } as unknown as Browsers
       };
-      const finalBcd = JSON.parse(JSON.stringify(initialBcd));
+      const finalBcd = clone(initialBcd);
       const report: Report = {
         __version: '0.3.1',
         results: {
