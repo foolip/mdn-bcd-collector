@@ -817,7 +817,7 @@ describe('BCD updater', () => {
     let bcdCopy;
 
     beforeEach(() => {
-      bcdCopy = JSON.parse(JSON.stringify(bcd));
+      bcdCopy = clone(bcd);
     });
 
     it('normal', () => {
@@ -996,6 +996,212 @@ describe('BCD updater', () => {
       });
     });
 
+    describe('mirror', () => {
+      const chromeAndroid86UaString =
+        'Mozilla/5.0 (Linux; Android 10; SM-G960U) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.5112.97 Mobile Safari/537.36';
+      const browsers: any = {
+        chrome: {name: 'Chrome', releases: {85: {}, 86: {}}},
+        chrome_android: {
+          name: 'Chrome Android',
+          upstream: 'chrome',
+          releases: {86: {}}
+        }
+      };
+
+      const bcdFromSupport = (support) => ({
+        api: {FakeInterface: {__compat: {support}}}
+      });
+
+      /**
+       * Create a BCD data structure for an arbitrary web platform feature
+       * based on support data for Chrome and Chrome Android and test result
+       * data for Chrome Android. This utility invokes the `update` function
+       * and is designed to observe the behavior of the "mirror" support value.
+       *
+       * @return {BCD}
+       */
+      const mirroringCase = ({support, downstreamResult}) => {
+        const reports: Report[] = [
+          {
+            __version: '0.3.1',
+            results: {
+              'https://mdn-bcd-collector.appspot.com/tests/': [
+                {
+                  name: 'api.FakeInterface',
+                  exposure: 'Window',
+                  result: downstreamResult
+                }
+              ]
+            },
+            userAgent: chromeAndroid86UaString
+          }
+        ];
+        const supportMatrix = getSupportMatrix(reports, browsers, []);
+        const bcd = bcdFromSupport(support);
+        update(bcd, supportMatrix, {});
+        return bcd;
+      };
+
+      describe('supported upstream (without flags)', () => {
+        it('supported in downstream test results', () => {
+          const actual = mirroringCase({
+            support: {
+              chrome: {version_added: '86'},
+              chrome_android: 'mirror'
+            },
+            downstreamResult: true
+          });
+          assert.deepEqual(
+            actual,
+            bcdFromSupport({
+              chrome: {version_added: '86'},
+              chrome_android: 'mirror'
+            })
+          );
+        });
+
+        it('unsupported in downstream test results', () => {
+          const actual = mirroringCase({
+            support: {
+              chrome: {version_added: '85'},
+              chrome_android: 'mirror'
+            },
+            downstreamResult: false
+          });
+          assert.deepEqual(
+            actual,
+            bcdFromSupport({
+              chrome: {version_added: '85'},
+              chrome_android: {version_added: false}
+            })
+          );
+        });
+
+        it('omitted from downstream test results', () => {
+          const actual = mirroringCase({
+            support: {
+              chrome: {version_added: '85'},
+              chrome_android: 'mirror'
+            },
+            downstreamResult: null
+          });
+          assert.deepEqual(
+            actual,
+            bcdFromSupport({
+              chrome: {version_added: '85'},
+              chrome_android: 'mirror'
+            })
+          );
+        });
+      });
+
+      describe('supported upstream (with flags)', () => {
+        it('supported in downstream test results', () => {
+          const actual = mirroringCase({
+            support: {
+              chrome: {version_added: '85', flags: [{}]},
+              chrome_android: 'mirror'
+            },
+            downstreamResult: true
+          });
+          assert.deepEqual(
+            actual,
+            bcdFromSupport({
+              chrome: {version_added: '85', flags: [{}]},
+              chrome_android: {version_added: '86'}
+            })
+          );
+        });
+
+        it('unsupported in downstream test results', () => {
+          const actual = mirroringCase({
+            support: {
+              chrome: {version_added: '85', flags: [{}]},
+              chrome_android: 'mirror'
+            },
+            downstreamResult: false
+          });
+          assert.deepEqual(
+            actual,
+            bcdFromSupport({
+              chrome: {version_added: '85', flags: [{}]},
+              chrome_android: 'mirror'
+            })
+          );
+        });
+
+        it('omitted from downstream test results', () => {
+          const actual = mirroringCase({
+            support: {
+              chrome: {version_added: '85', flags: [{}]},
+              chrome_android: 'mirror'
+            },
+            downstreamResult: null
+          });
+          assert.deepEqual(
+            actual,
+            bcdFromSupport({
+              chrome: {version_added: '85', flags: [{}]},
+              chrome_android: 'mirror'
+            })
+          );
+        });
+      });
+
+      describe('unsupported upstream', () => {
+        it('supported in downstream test results', () => {
+          const actual = mirroringCase({
+            support: {
+              chrome: {version_added: false},
+              chrome_android: 'mirror'
+            },
+            downstreamResult: true
+          });
+          assert.deepEqual(
+            actual,
+            bcdFromSupport({
+              chrome: {version_added: false},
+              chrome_android: {version_added: '86'}
+            })
+          );
+        });
+
+        it('unsupported in downstream test results', () => {
+          const actual = mirroringCase({
+            support: {
+              chrome: {version_added: false},
+              chrome_android: 'mirror'
+            },
+            downstreamResult: false
+          });
+          assert.deepEqual(
+            actual,
+            bcdFromSupport({
+              chrome: {version_added: false},
+              chrome_android: 'mirror'
+            })
+          );
+        });
+
+        it('omitted from downstream test results', () => {
+          const actual = mirroringCase({
+            support: {
+              chrome: {version_added: false},
+              chrome_android: 'mirror'
+            },
+            downstreamResult: null
+          });
+          assert.deepEqual(
+            actual,
+            bcdFromSupport({
+              chrome: {version_added: false},
+              chrome_android: 'mirror'
+            })
+          );
+        });
+      });
+    });
+
     it('does not report a modification when results corroborate existing data', () => {
       const firefox92UaString =
         'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:92.0) Gecko/20100101 Firefox/92.0';
@@ -1013,7 +1219,7 @@ describe('BCD updater', () => {
           firefox: {name: 'Firefox', releases: {92: {}}}
         } as unknown as Browsers
       };
-      const finalBcd = JSON.parse(JSON.stringify(initialBcd));
+      const finalBcd = clone(initialBcd);
       const report: Report = {
         __version: '0.3.1',
         results: {

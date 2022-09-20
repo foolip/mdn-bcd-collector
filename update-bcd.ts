@@ -65,6 +65,8 @@ export const findEntry = (
   return entry;
 };
 
+const clone = (value) => JSON.parse(JSON.stringify(value));
+
 const combineResults = (results: TestResultValue[]): TestResultValue => {
   let supported: TestResultValue = null;
   for (const result of results) {
@@ -299,8 +301,9 @@ export const update = (
       continue;
     }
 
+    const support = entry.__compat.support;
     // Stringified then parsed to deep clone the support statements
-    const originalSupport = JSON.parse(JSON.stringify(entry.__compat.support));
+    const originalSupport = clone(support);
 
     for (const [browser, versionMap] of browserMap.entries()) {
       if (
@@ -326,11 +329,21 @@ export const update = (
         continue;
       }
 
-      let allStatements: InternalSupportStatement | undefined =
-        entry.__compat.support[browser];
-      if (allStatements === 'mirror') {
-        allStatements = mirror(browser, originalSupport);
-      }
+      // Update the support data with a new value.
+      const persist = (statements: SimpleSupportStatement[]) => {
+        support[browser] = statements.length === 1 ? statements[0] : statements;
+        modified = true;
+      };
+
+      let allStatements =
+        (support[browser] as InternalSupportStatement) === 'mirror'
+          ? mirror(browser, originalSupport)
+          : // Although non-mirrored support data could be modified in-place,
+            // working with a cloned version forces the subsequent code to
+            // explicitly assign it back to the originating data structure.
+            // This reduces the likelihood of inconsistencies in the handling
+            // of mirrored and non-mirrored support data.
+            clone(support[browser] || null);
 
       if (!allStatements) {
         allStatements = [];
@@ -369,11 +382,7 @@ export const update = (
         const nonFlagStatements = allStatements.filter(
           (statement) => !('flags' in statement)
         );
-        entry.__compat.support[browser] =
-          nonFlagStatements.length === 0
-            ? inferredStatement
-            : [inferredStatement].concat(nonFlagStatements);
-        modified = true;
+        persist([inferredStatement, ...nonFlagStatements]);
 
         continue;
       }
@@ -439,7 +448,7 @@ export const update = (
         ) {
           simpleStatement.version_added =
             inferredStatement.version_added.replace('0> ', '');
-          modified = true;
+          persist(allStatements);
         }
       } else if (
         !(
@@ -452,12 +461,12 @@ export const update = (
           typeof inferredStatement.version_added === 'string'
             ? inferredStatement.version_added.replace('0> ', '')
             : inferredStatement.version_added;
-        modified = true;
+        persist(allStatements);
       }
 
       if (typeof inferredStatement.version_removed === 'string') {
         simpleStatement.version_removed = inferredStatement.version_removed;
-        modified = true;
+        persist(allStatements);
       }
     }
   }
