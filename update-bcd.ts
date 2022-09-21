@@ -94,10 +94,10 @@ const joinRange = (lower: string, upper: string) =>
 
 // Parse a version range string produced by `joinRange` into a lower and upper
 // boundary.
-const splitRange = (range: string) => {
+export const splitRange = (range: string) => {
   const match = range.match(/(?:(.*)> )?(?:≤(.*))/);
   if (!match) {
-    return {lower: range, upper: range};
+    throw new Error(`Unrecognized version range value: "${range}"`);
   }
   return {lower: match[1] || '0', upper: match[2]};
 };
@@ -425,7 +425,7 @@ export const update = (
             simpleStatement.version_added !== 'preview' &&
             compareVersions(
               version,
-              splitRange(simpleStatement.version_added).upper,
+              simpleStatement.version_added.replace('≤', ''),
               '<='
             )
           ) {
@@ -444,7 +444,7 @@ export const update = (
         inferredStatement.version_added.includes('≤')
       ) {
         const {lower, upper} = splitRange(inferredStatement.version_added);
-        const simpleAdded = splitRange(simpleStatement.version_added).upper;
+        const simpleAdded = simpleStatement.version_added.replace('≤', '');
         if (
           simpleStatement.version_added === 'preview' ||
           compareVersions(simpleAdded, lower, '<=') ||

@@ -20,6 +20,7 @@ import {
   getSupportMap,
   getSupportMatrix,
   inferSupportStatements,
+  splitRange,
   update
 } from '../../update-bcd.js';
 
@@ -809,6 +810,14 @@ describe('BCD updater', () => {
           version_removed: '82> ≤84'
         }
       ]);
+    });
+  });
+
+  describe('splitRange', () => {
+    it('fails for single versions', () => {
+      assert.throws(() => {
+        splitRange('23');
+      }, 'Unrecognized version range value: "23"');
     });
   });
 
