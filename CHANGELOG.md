@@ -1,5 +1,39 @@
 # mdn-bcd-collector Changelog
 
+## v6.2.1
+
+### Test Changes
+
+#### Added
+
+- api.AnimationTimeline.getCurrentTime
+- api.AudioWorklet.port
+- api.AudioWorkletGlobalScope.port
+- api.XRAnchor.requestPersistentHandle
+- api.XRProjectionLayer.deltaPose
+- api.XRSession.deletePersistentAnchor
+- api.XRSession.restorePersistentAnchor
+- api.XRWebGLSubImage.colorTextureHeight
+- api.XRWebGLSubImage.colorTextureWidth
+- api.XRWebGLSubImage.depthStencilTextureHeight
+- api.XRWebGLSubImage.depthStencilTextureWidth
+- api.XRWebGLSubImage.motionVectorTexture
+- api.XRWebGLSubImage.motionVectorTextureHeight
+- api.XRWebGLSubImage.motionVectorTextureWidth
+- css.properties.animation-delay-end
+- css.properties.animation-delay-start
+- css.properties.animation-range
+
+#### Removed
+
+- api.XRWebGLSubImage.textureHeight
+- api.XRWebGLSubImage.textureWidth
+
+### Commits
+
+- Formalize version range handling ([#2353](https://github.com/foolip/mdn-bcd-collector/pull/2353))
+- Correct support for mirroring ([#2280](https://github.com/foolip/mdn-bcd-collector/pull/2280))
+
 ## v6.2.0
 
 ### Test Changes
