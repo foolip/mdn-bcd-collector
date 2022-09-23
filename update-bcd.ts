@@ -331,6 +331,9 @@ export const update = (
       const inferredStatements = inferSupportStatements(versionMap);
       if (inferredStatements.length !== 1) {
         // TODO: handle more complicated scenarios
+        logger.warn(
+          `${path} skipped for ${browser} due to multiple inferred statements`
+        );
         continue;
       }
 
@@ -400,6 +403,9 @@ export const update = (
 
       if (defaultStatements.length !== 1) {
         // TODO: handle more complicated scenarios
+        logger.warn(
+          `${path} skipped for ${browser} due to multiple default statements`
+        );
         continue;
       }
 
@@ -407,6 +413,9 @@ export const update = (
 
       if (simpleStatement.version_removed) {
         // TODO: handle updating existing added+removed entries.
+        logger.warn(
+          `${path} skipped for ${browser} due to added+removed statement`
+        );
         continue;
       }
 
@@ -437,6 +446,9 @@ export const update = (
       }
 
       if (dataIsOlder) {
+        logger.warn(
+          `${path} skipped for ${browser} because results are older than BCD`
+        );
         continue;
       } else if (
         typeof simpleStatement.version_added === 'string' &&
