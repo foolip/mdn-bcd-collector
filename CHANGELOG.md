@@ -1,5 +1,15 @@
 # mdn-bcd-collector Changelog
 
+## v6.2.2
+
+### Test Changes
+
+#### Added
+
+- api.XRCompositionLayer.forceMonoPresentation
+
+### Commits
+
 ## v6.2.1
 
 ### Test Changes
