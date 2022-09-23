@@ -1,5 +1,24 @@
 # mdn-bcd-collector Changelog
 
+## v6.2.2
+
+### Test Changes
+
+#### Added
+
+- api.XRCompositionLayer.forceMonoPresentation
+
+#### Changed
+
+- api.CSSStyleDeclaration.@@iterator
+- api.DOMTokenList.@@iterator
+- api.FontFaceSet.@@iterator
+- api.NodeList.@@iterator
+
+### Commits
+
+- Fix custom tests for symbols ([#2367](https://github.com/foolip/mdn-bcd-collector/pull/2367))
+
 ## v6.2.1
 
 ### Test Changes
