@@ -71,6 +71,13 @@ describe('build', () => {
       it('constructor', () => {
         assert.equal(getCustomTestAPI('foo', 'foo', 'constructor'), false);
       });
+
+      it('symbol', () => {
+        assert.equal(
+          getCustomTestAPI('foo', '@@bar', 'symbol'),
+          "(function() {\n  var instance = 1;\n  return !!instance && 'Symbol' in self && 'bar' in Symbol && Symbol.bar in instance;\n})();"
+        );
+      });
     });
 
     describe('custom test for interface only, no base', () => {
