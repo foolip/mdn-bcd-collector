@@ -130,7 +130,14 @@ const getCustomTestAPI = (name, member, type) => {
           // auto-generated custom tests
           test = false;
         } else {
-          const returnValue = `!!instance && '${member}' in instance`;
+          let returnValue;
+          if (type === 'symbol') {
+            const symbol = member.replace('@@', '');
+            returnValue = `!!instance && 'Symbol' in self && '${symbol}' in Symbol && Symbol.${symbol} in instance`;
+            console.log(returnValue);
+          } else {
+            returnValue = `!!instance && '${member}' in instance`;
+          }
           test = testbase
             ? testbase +
               (promise
