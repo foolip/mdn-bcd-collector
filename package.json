@@ -67,7 +67,7 @@
     "@browser-logos/opera": "1.1.11",
     "@browser-logos/safari": "2.1.0",
     "@types/mocha": "9.1.1",
-    "@types/node": "18.7.18",
+    "@types/node": "18.7.19",
     "@types/yargs": "17.0.12",
     "@typescript-eslint/eslint-plugin": "5.38.0",
     "@webref/css": "5.2.1",
