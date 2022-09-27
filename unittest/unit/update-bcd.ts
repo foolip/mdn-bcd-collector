@@ -1157,6 +1157,85 @@ describe('BCD updater', () => {
         });
       });
 
+      describe('partially supported upstream', () => {
+        it.skip('supported in downstream test results', () => {
+          const actual = mirroringCase({
+            support: {
+              chrome: {
+                version_added: '85',
+                partial_implementation: true,
+                notes: 'This only works on Tuesdays'
+              },
+              chrome_android: 'mirror'
+            },
+            downstreamResult: true
+          });
+          assert.deepEqual(
+            actual,
+            bcdFromSupport({
+              chrome: {
+                version_added: '85',
+                partial_implementation: true,
+                notes: 'This only works on Tuesdays'
+              },
+              chrome_android: 'mirror'
+            })
+          );
+        });
+
+        it('unsupported in downstream test results', () => {
+          const actual = mirroringCase({
+            support: {
+              chrome: {
+                version_added: '85',
+                partial_implementation: true,
+                notes: 'This only works on Wednesdays'
+              },
+              chrome_android: 'mirror'
+            },
+            downstreamResult: false
+          });
+          assert.deepEqual(
+            actual,
+            bcdFromSupport({
+              chrome: {
+                version_added: '85',
+                partial_implementation: true,
+                notes: 'This only works on Wednesdays'
+              },
+              chrome_android: {
+                version_added: false
+              }
+            })
+          );
+        });
+
+        it('omitted from downstream test results', () => {
+          const actual = mirroringCase({
+            support: {
+              chrome: {
+                version_added: '85',
+                partial_implementation: true,
+                notes: 'This only works on Thursdays'
+              },
+              chrome_android: 'mirror'
+            },
+            downstreamResult: null
+          });
+          assert.deepEqual(
+            actual,
+            bcdFromSupport({
+              chrome: {
+                version_added: '85',
+                partial_implementation: true,
+                notes: 'This only works on Thursdays'
+              },
+              chrome_android: 'mirror'
+            })
+          );
+        });
+      });
+
       describe('unsupported upstream', () => {
         it('supported in downstream test results', () => {
           const actual = mirroringCase({
