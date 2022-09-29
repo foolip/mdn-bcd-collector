@@ -69,7 +69,7 @@
     "@types/mocha": "9.1.1",
     "@types/node": "18.7.23",
     "@types/yargs": "17.0.12",
-    "@typescript-eslint/eslint-plugin": "5.38.0",
+    "@typescript-eslint/eslint-plugin": "5.38.1",
     "@webref/css": "5.2.1",
     "@webref/idl": "3.17.2",
     "c8": "7.12.0",
