@@ -68,7 +68,7 @@
     "@browser-logos/safari": "2.1.0",
     "@types/mocha": "9.1.1",
     "@types/node": "18.7.23",
-    "@types/yargs": "17.0.12",
+    "@types/yargs": "17.0.13",
     "@typescript-eslint/eslint-plugin": "5.38.1",
     "@webref/css": "5.3.0",
     "@webref/idl": "3.17.2",
