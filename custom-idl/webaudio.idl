@@ -16,13 +16,6 @@ partial interface AudioBufferSourceNode {
   readonly attribute unsigned short playbackState;
 };
 
-partial interface AudioContext {
-  ConstantSourceNode createConstantSource();
-  DelayNode createDelayNode(optional double maxDelayTime = 1.0);
-  GainNode createGainNode();
-  ScriptProcessorNode createJavaScriptNode(unsigned long bufferSize, optional unsigned long numberOfInputChannels = 2, optional unsigned long numberOfOutputChannels = 2);
-};
-
 // https://chromium.googlesource.com/chromium/src/+/9848564877f0057f4dcbc98bce061dfa17a9202c
 partial interface AudioListener {
   attribute float dopplerFactor;
