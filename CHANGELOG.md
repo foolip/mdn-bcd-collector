@@ -1,5 +1,31 @@
 # mdn-bcd-collector Changelog
 
+## v6.2.3
+
+### Test Changes
+
+#### Added
+
+- api.IdentityProvider
+- api.Request.duplex
+- api.RTCIceCandidate.relayProtocol
+- css.properties.anchor-name
+- css.properties.position-fallback
+
+#### Removed
+
+- api.AudioContext.createConstantSource
+- api.AudioContext.createDelayNode
+- api.AudioContext.createGainNode
+- api.AudioContext.createJavaScriptNode
+- api.CSSViewportRule
+
+### Commits
+
+- Log warnings for when we do nothing in update-bcd ([#2365](https://github.com/foolip/mdn-bcd-collector/pull/2365))
+- Remove some Web Audio API custom IDL ([#2370](https://github.com/foolip/mdn-bcd-collector/pull/2370))
+- Enable default (more verbose) mocha logger ([#2371](https://github.com/foolip/mdn-bcd-collector/pull/2371))
+
 ## v6.2.2
 
 ### Test Changes
