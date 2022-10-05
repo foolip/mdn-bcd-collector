@@ -468,7 +468,10 @@ export const update = (
           simpleStatement.partial_implementation
         ) {
           persist([{version_added: false}]);
-        } else {
+
+          // Positive test results do not conclusively indicate that a partial
+          // implementation has been completed.
+        } else if (!simpleStatement.partial_implementation) {
           simpleStatement.version_added = inferredStatement.version_added;
           persist(allStatements);
         }

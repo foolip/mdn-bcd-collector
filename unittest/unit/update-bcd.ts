@@ -1158,7 +1158,7 @@ describe('BCD updater', () => {
       });
 
       describe('partially supported upstream', () => {
-        it.skip('supported in downstream test results', () => {
+        it('supported in downstream test results', () => {
           const actual = mirroringCase({
             support: {
               chrome: {
