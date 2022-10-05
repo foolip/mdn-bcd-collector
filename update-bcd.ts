@@ -460,20 +460,18 @@ export const update = (
         ) &&
         simpleStatement.version_added !== inferredStatement.version_added
       ) {
-        simpleStatement.version_added = inferredStatement.version_added;
-
         // When a "mirrored" statement will be replaced with a statement
         // documenting lack of support, notes describing partial implementation
         // status are no longer relevant.
         if (
-          !simpleStatement.version_added &&
+          !inferredStatement.version_added &&
           simpleStatement.partial_implementation
         ) {
-          delete simpleStatement.partial_implementation;
-          delete simpleStatement.notes;
+          persist([{version_added: false}]);
+        } else {
+          simpleStatement.version_added = inferredStatement.version_added;
+          persist(allStatements);
         }
-
-        persist(allStatements);
       }
 
       if (typeof inferredStatement.version_removed === 'string') {

@@ -1186,11 +1186,15 @@ describe('BCD updater', () => {
         it('unsupported in downstream test results', () => {
           const actual = mirroringCase({
             support: {
-              chrome: {
-                version_added: '85',
-                partial_implementation: true,
-                notes: 'This only works on Wednesdays'
-              },
+              chrome: [
+                {
+                  version_added: '85',
+                  partial_implementation: true,
+                  impl_url: 'http://zombo.com',
+                  notes: 'This only works on Wednesdays'
+                },
+                {version_added: '84', flags: [{}]}
+              ],
               chrome_android: 'mirror'
             },
             downstreamResult: false
@@ -1198,11 +1202,15 @@ describe('BCD updater', () => {
           assert.deepEqual(
             actual,
             bcdFromSupport({
-              chrome: {
-                version_added: '85',
-                partial_implementation: true,
-                notes: 'This only works on Wednesdays'
-              },
+              chrome: [
+                {
+                  version_added: '85',
+                  partial_implementation: true,
+                  impl_url: 'http://zombo.com',
+                  notes: 'This only works on Wednesdays'
+                },
+                {version_added: '84', flags: [{}]}
+              ],
               chrome_android: {
                 version_added: false
               }
