@@ -472,8 +472,21 @@ export const update = (
         ) &&
         simpleStatement.version_added !== inferredStatement.version_added
       ) {
-        simpleStatement.version_added = inferredStatement.version_added;
-        persist(allStatements);
+        // When a "mirrored" statement will be replaced with a statement
+        // documenting lack of support, notes describing partial implementation
+        // status are no longer relevant.
+        if (
+          !inferredStatement.version_added &&
+          simpleStatement.partial_implementation
+        ) {
+          persist([{version_added: false}]);
+
+          // Positive test results do not conclusively indicate that a partial
+          // implementation has been completed.
+        } else if (!simpleStatement.partial_implementation) {
+          simpleStatement.version_added = inferredStatement.version_added;
+          persist(allStatements);
+        }
       }
 
       if (typeof inferredStatement.version_removed === 'string') {
