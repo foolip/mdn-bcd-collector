@@ -202,8 +202,10 @@ api:
   AudioProcessingEvent:
     __base: |-
       var instance;
+      var inputBuffer = new AudioBuffer({length: 1, sampleRate: 30000});
+      var outputBuffer = new AudioBuffer({length: 1, sampleRate: 30000});
       try {
-        instance = new AudioProcessingEvent('audioprocess');
+        instance = new AudioProcessingEvent('audioprocess', {inputBuffer: inputBuffer, outputBuffer: outputBuffer, playbackTime: 0});
       } catch(e) {
         try {
           instance = document.createEvent('AudioProcessingEvent');
