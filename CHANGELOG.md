@@ -1,5 +1,18 @@
 # mdn-bcd-collector Changelog
 
+## v6.2.4
+
+### Test Changes
+
+#### Changed
+
+- api.AudioProcessingEvent
+
+### Commits
+
+- update-bcd: discard irrelevant notes ([#2378](https://github.com/foolip/mdn-bcd-collector/pull/2378))
+- Correct custom test for AudioProcessingEvent ([#2400](https://github.com/foolip/mdn-bcd-collector/pull/2400))
+
 ## v6.2.3
 
 ### Test Changes
