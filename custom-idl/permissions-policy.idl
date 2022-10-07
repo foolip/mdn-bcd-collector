@@ -1,0 +1,7 @@
+partial interface PermissionsPolicyViolationReportBody {
+  // https://github.com/w3c/webappsec-permissions-policy/pull/217
+  readonly attribute DOMString message;
+
+  // https://github.com/w3c/webappsec-permissions-policy/issues/469
+  object toJSON();
+};
