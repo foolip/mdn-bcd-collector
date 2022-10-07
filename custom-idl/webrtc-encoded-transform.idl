@@ -1,3 +1,9 @@
+// https://github.com/w3c/webrtc-encoded-transform/pull/151
+dictionary RTCInsertableStreams {
+  ReadableStream readable;
+  WritableStream writable;
+};
+
 // https://github.com/w3c/webrtc-encoded-transform/pull/64
 partial interface RTCRtpSender {
   RTCInsertableStreams createEncodedStreams();
