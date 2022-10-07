@@ -1,5 +1,24 @@
 # mdn-bcd-collector Changelog
 
+## v6.2.5
+
+### Test Changes
+
+#### Added
+
+- api.CaptureController
+- api.FileSystemFileHandle.createSyncAccessHandle
+- api.FileSystemSyncAccessHandle
+- api.GPUSupportedLimits.maxColorAttachmentBytesPerSample
+
+#### Removed
+
+- api.GPUSupportedLimits.maxColorAttachmentBytesPerPixel
+
+### Commits
+
+- Add RTCInsertableStreams as custom IDL
+
 ## v6.2.4
 
 ### Test Changes
