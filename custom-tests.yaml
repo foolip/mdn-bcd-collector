@@ -1848,9 +1848,10 @@ api:
     __base: var instance = window.speechSynthesis;
   SpeechSynthesisErrorEvent:
     __base: |-
+      <%api.SpeechSynthesisUtterance:utterance%>
       var instance;
       try {
-        instance = new SpeechSynthesisErrorEvent('error');
+        instance = new SpeechSynthesisErrorEvent('error', { utterance: utterance, error: 'canceled' });
       } catch(e) {
         try {
           instance = document.createEvent('SpeechSynthesisErrorEvent');
@@ -1863,9 +1864,10 @@ api:
       }
   SpeechSynthesisEvent:
     __base: |-
+      <%api.SpeechSynthesisUtterance:utterance%>
       var instance;
       try {
-        instance = new SpeechSynthesisEvent('start');
+        instance = new SpeechSynthesisEvent('start', { utterance: utterance });
       } catch(e) {
         try {
           instance = document.createEvent('SpeechSynthesisEvent');
