@@ -1,5 +1,28 @@
 # mdn-bcd-collector Changelog
 
+## v6.2.6
+
+### Test Changes
+
+#### Added
+
+- api.AuthenticatorAssertionResponse.attestationObject
+- api.PressureRecord
+- api.ViewTransition
+
+#### Removed
+
+- api.DOMTransition
+
+#### Changed
+
+- api.SpeechSynthesisErrorEvent
+- api.SpeechSynthesisEvent
+
+### Commits
+
+- Fix speech synthesis event custom tests ([#2421](https://github.com/foolip/mdn-bcd-collector/pull/2421))
+
 ## v6.2.5
 
 ### Test Changes
