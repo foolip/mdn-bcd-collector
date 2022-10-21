@@ -12,8 +12,6 @@
 - api.AudioSinkInfo
 - api.CaptureController.setFocusBehavior
 
-### Commits
-
 ## v6.2.6
 
 ### Test Changes
