@@ -1,5 +1,17 @@
 # mdn-bcd-collector Changelog
 
+## v6.2.7
+
+### Test Changes
+
+#### Added
+
+- api.AudioContext.sinkchange_event
+- api.AudioContext.setSinkId
+- api.AudioContext.sinkId
+- api.AudioSinkInfo
+- api.CaptureController.setFocusBehavior
+
 ## v6.2.6
 
 ### Test Changes
