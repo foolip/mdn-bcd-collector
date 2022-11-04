@@ -1,4 +1,0 @@
-partial interface DataCue {
-  // https://github.com/WebKit/WebKit/blob/4d9adfed7e88a45dd3b140c685fe6324b2715c73/Source/WebCore/html/track/DataCue.idl#L34
-  attribute ArrayBuffer data;
-};
