@@ -11,13 +11,6 @@ partial interface Window {
   undefined routeEvent();
 };
 
-// https://www.w3.org/TR/1999/WD-DOM-Level-2-19990719/idl-definitions.html
-
-partial interface Event {
-  undefined preventBubble();
-  undefined preventCapture();
-};
-
 // https://www.w3.org/TR/DOM-Level-2-Traversal-Range/idl-definitions.html
 partial interface NodeIterator {
   readonly attribute boolean expandEntityReferences;
@@ -37,12 +30,10 @@ partial interface Attr {
 };
 
 partial interface Document {
-  EntityReference createEntityReference(DOMString name);
   readonly attribute DOMString xmlEncoding;
   attribute boolean xmlStandalone;
   readonly attribute DOMString xmlVersion;
   attribute boolean strictErrorChecking;
-  readonly attribute DOMConfiguration domConfig;
   undefined normalizeDocument();
   Node renameNode(Node n, DOMString namespaceURI, DOMString qualifiedName);
 };
@@ -51,14 +42,6 @@ partial interface DocumentType {
   readonly attribute NamedNodeMap entities;
   readonly attribute NamedNodeMap notations;
   readonly attribute DOMString internalSubset;
-};
-
-[Exposed=Window]
-interface DOMConfiguration {
-  undefined setParameter(DOMString name, DOMUserData value);
-  DOMUserData getParameter(DOMString name);
-  boolean canSetParameter(DOMString name, DOMUserData value);
-  readonly attribute DOMStringList parameterNames;
 };
 
 [Exposed=Window]
@@ -140,8 +123,6 @@ interface NameList {
 partial interface Node {
   boolean isSupported(DOMString feature, DOMString version);
   DOMObject getFeature(DOMString feature, DOMString version);
-  DOMUserData getUserData(DOMString key);
-  DOMUserData setUserData(DOMString key, DOMUserData data, UserDataHandler handler);
 };
 
 [Exposed=Window]
@@ -166,17 +147,6 @@ interface TypeInfo {
   const unsigned long DERIVATION_LIST = 0x00000008;
 
   boolean isDerivedFrom(DOMString typeNamespace, DOMString typeName, unsigned long derivationMethod);
-};
-
-[Exposed=Window]
-interface UserDataHandler {
-  const unsigned short NODE_CLONED = 1;
-  const unsigned short NODE_IMPORTED = 2;
-  const unsigned short NODE_DELETED = 3;
-  const unsigned short NODE_RENAMED = 4;
-  const unsigned short NODE_ADOPTED = 5;
-
-  undefined handle(unsigned short operation, DOMString key, DOMUserData data, Node src, Node dst);
 };
 
 // Non-standard stuff
@@ -235,8 +205,6 @@ partial interface Event {
   readonly attribute EventTarget? explicitOriginalTarget;
   // https://developer.mozilla.org/en-US/docs/Web/API/Event/originalTarget
   readonly attribute EventTarget? originalTarget;
-  // https://bugzilla.mozilla.org/show_bug.cgi?id=691151
-  boolean getPreventDefault();
 
   readonly attribute object path;
 };
