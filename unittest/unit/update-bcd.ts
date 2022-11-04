@@ -11,6 +11,8 @@ import {Report} from '../../types/types.js';
 import {assert} from 'chai';
 import sinon from 'sinon';
 import fs from 'fs-extra';
+import minimatch from 'minimatch';
+import {Browsers} from '@mdn/browser-compat-data/types';
 
 import logger from '../../logger.js';
 import {
@@ -18,6 +20,7 @@ import {
   getSupportMap,
   getSupportMatrix,
   inferSupportStatements,
+  splitRange,
   update
 } from '../../update-bcd.js';
 
@@ -25,6 +28,12 @@ import bcd from './bcd.test.js';
 const overrides = await fs.readJson(
   new URL('./overrides.test.json', import.meta.url)
 );
+
+const clone = (value) => JSON.parse(JSON.stringify(value));
+const chromeAndroid86UaString =
+  'Mozilla/5.0 (Linux; Android 10; SM-G960U) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.5112.97 Mobile Safari/537.36';
+const firefox92UaString =
+  'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:92.0) Gecko/20100101 Firefox/92.0';
 
 const reports: Report[] = [
   {
@@ -66,6 +75,16 @@ const reports: Report[] = [
           name: 'api.ExperimentalInterface',
           exposure: 'Window',
           result: true
+        },
+        {
+          name: 'api.UnflaggedInterface',
+          exposure: 'Window',
+          result: null
+        },
+        {
+          name: 'api.UnprefixedInterface',
+          exposure: 'Window',
+          result: null
         },
         {
           name: 'api.NullAPI',
@@ -148,6 +167,16 @@ const reports: Report[] = [
           result: true
         },
         {
+          name: 'api.UnflaggedInterface',
+          exposure: 'Window',
+          result: true
+        },
+        {
+          name: 'api.UnprefixedInterface',
+          exposure: 'Window',
+          result: true
+        },
+        {
           name: 'api.NewInterfaceNotInBCD',
           exposure: 'Window',
           result: false
@@ -223,6 +252,16 @@ const reports: Report[] = [
         },
         {
           name: 'api.ExperimentalInterface',
+          exposure: 'Window',
+          result: true
+        },
+        {
+          name: 'api.UnflaggedInterface',
+          exposure: 'Window',
+          result: true
+        },
+        {
+          name: 'api.UnprefixedInterface',
           exposure: 'Window',
           result: true
         },
@@ -353,6 +392,8 @@ describe('BCD updater', () => {
           ['api.AudioContext.close', false],
           ['api.DeprecatedInterface', true],
           ['api.ExperimentalInterface', true],
+          ['api.UnflaggedInterface', null],
+          ['api.UnprefixedInterface', null],
           ['api.NullAPI', null],
           ['api.RemovedInterface', true],
           ['api.SuperNewInterface', false],
@@ -374,6 +415,8 @@ describe('BCD updater', () => {
           ['api.AudioContext.close', false],
           ['api.DeprecatedInterface', true],
           ['api.ExperimentalInterface', true],
+          ['api.UnflaggedInterface', true],
+          ['api.UnprefixedInterface', true],
           ['api.NewInterfaceNotInBCD', false],
           ['api.NullAPI', null],
           ['api.RemovedInterface', false],
@@ -512,6 +555,34 @@ describe('BCD updater', () => {
             ])
           ],
           [
+            'api.UnflaggedInterface',
+            new Map([
+              [
+                'chrome',
+                new Map([
+                  ['82', null],
+                  ['83', null],
+                  ['84', true],
+                  ['85', true]
+                ])
+              ]
+            ])
+          ],
+          [
+            'api.UnprefixedInterface',
+            new Map([
+              [
+                'chrome',
+                new Map([
+                  ['82', null],
+                  ['83', null],
+                  ['84', true],
+                  ['85', true]
+                ])
+              ]
+            ])
+          ],
+          [
             'api.NewInterfaceNotInBCD',
             new Map([
               [
@@ -629,6 +700,27 @@ describe('BCD updater', () => {
       );
     });
 
+    it('Invalid results', () => {
+      const report: Report = {
+        __version: '0.3.1',
+        results: {
+          'https://mdn-bcd-collector.appspot.com/tests/': [
+            {
+              name: 'api.AbortController',
+              exposure: 'Window',
+              result: 87 as any
+            }
+          ]
+        },
+        userAgent:
+          'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.61 Safari/537.36'
+      };
+
+      assert.throws(() => {
+        getSupportMatrix([report], bcd.browsers, overrides);
+      }, 'result not true/false/null; got 87');
+    });
+
     afterEach(() => {
       logger.warn.restore();
     });
@@ -637,22 +729,24 @@ describe('BCD updater', () => {
   describe('inferSupportStatements', () => {
     const expectedResults = {
       'api.AbortController': {
-        chrome: [{version_added: '0> ≤83'}],
-        safari: [{version_added: '0> ≤13.1'}]
+        chrome: [{version_added: '≤83'}],
+        safari: [{version_added: '≤13.1'}]
       },
-      'api.AbortController.abort': {chrome: [{version_added: '0> ≤84'}]},
+      'api.AbortController.abort': {chrome: [{version_added: '≤84'}]},
       'api.AbortController.AbortController': {chrome: [{version_added: '85'}]},
       'api.AudioContext': {chrome: [{version_added: '85'}]},
       'api.AudioContext.close': {chrome: [{version_added: '85'}]},
       'api.DeprecatedInterface': {
-        chrome: [{version_added: '0> ≤83', version_removed: '85'}]
+        chrome: [{version_added: '≤83', version_removed: '85'}]
       },
-      'api.ExperimentalInterface': {chrome: [{version_added: '0> ≤83'}]},
+      'api.ExperimentalInterface': {chrome: [{version_added: '≤83'}]},
+      'api.UnflaggedInterface': {chrome: [{version_added: '≤84'}]},
+      'api.UnprefixedInterface': {chrome: [{version_added: '≤84'}]},
       'api.NewInterfaceNotInBCD': {chrome: [{version_added: '85'}]},
       'api.NullAPI': {chrome: []},
       'api.RemovedInterface': {
         chrome: [
-          {version_added: '0> ≤83', version_removed: '84'},
+          {version_added: '≤83', version_removed: '84'},
           {version_added: '85'}
         ]
       },
@@ -677,29 +771,53 @@ describe('BCD updater', () => {
     }
 
     it('Invalid results', () => {
-      assert.throws(() => {
-        const report: Report = {
-          __version: '0.3.1',
-          results: {
-            'https://mdn-bcd-collector.appspot.com/tests/': [
-              {
-                name: 'api.AbortController',
-                exposure: 'Window',
-                result: 87 as any
-              }
-            ]
-          },
-          userAgent:
-            'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/83.0.4103.61 Safari/537.36'
-        };
-        const versionMap = getSupportMatrix([report], bcd.browsers, overrides)
-          .entries()
-          .next()
-          .value[1].entries()
-          .next().value[1];
+      const versionMap = new Map([
+        ['82', null],
+        ['83', 87 as any],
+        ['84', true],
+        ['85', true]
+      ]);
 
+      assert.throws(() => {
         inferSupportStatements(versionMap);
       }, 'result not true/false/null; got 87');
+    });
+
+    it('non-contiguous data, support added', () => {
+      const versionMap = new Map([
+        ['82', false],
+        ['83', null],
+        ['84', true]
+      ]);
+
+      assert.deepEqual(inferSupportStatements(versionMap), [
+        {
+          version_added: '82> ≤84'
+        }
+      ]);
+    });
+
+    it('non-contiguous data, support removed', () => {
+      const versionMap = new Map([
+        ['82', true],
+        ['83', null],
+        ['84', false]
+      ]);
+
+      assert.deepEqual(inferSupportStatements(versionMap), [
+        {
+          version_added: '82',
+          version_removed: '82> ≤84'
+        }
+      ]);
+    });
+  });
+
+  describe('splitRange', () => {
+    it('fails for single versions', () => {
+      assert.throws(() => {
+        splitRange('23');
+      }, 'Unrecognized version range value: "23"');
     });
   });
 
@@ -708,7 +826,7 @@ describe('BCD updater', () => {
     let bcdCopy;
 
     beforeEach(() => {
-      bcdCopy = JSON.parse(JSON.stringify(bcd));
+      bcdCopy = clone(bcd);
     });
 
     it('normal', () => {
@@ -793,6 +911,31 @@ describe('BCD updater', () => {
               }
             }
           },
+          UnflaggedInterface: {
+            __compat: {
+              support: {
+                chrome: {
+                  version_added: '≤84'
+                }
+              }
+            }
+          },
+          UnprefixedInterface: {
+            __compat: {
+              support: {
+                chrome: [
+                  {
+                    version_added: '≤84'
+                  },
+                  {
+                    version_added: '83',
+                    prefix: 'webkit',
+                    notes: 'Not supported on Windows XP.'
+                  }
+                ]
+              }
+            }
+          },
           NullAPI: {
             __compat: {support: {chrome: {version_added: '80'}}}
           },
@@ -860,6 +1003,666 @@ describe('BCD updater', () => {
       assert.deepEqual(bcdCopy.api.AbortController.__compat.support.safari, {
         version_added: null
       });
+    });
+
+    describe('mirror', () => {
+      const chromeAndroid86UaString =
+        'Mozilla/5.0 (Linux; Android 10; SM-G960U) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.5112.97 Mobile Safari/537.36';
+      const browsers: any = {
+        chrome: {name: 'Chrome', releases: {85: {}, 86: {}}},
+        chrome_android: {
+          name: 'Chrome Android',
+          upstream: 'chrome',
+          releases: {86: {}}
+        }
+      };
+
+      const bcdFromSupport = (support) => ({
+        api: {FakeInterface: {__compat: {support}}}
+      });
+
+      /**
+       * Create a BCD data structure for an arbitrary web platform feature
+       * based on support data for Chrome and Chrome Android and test result
+       * data for Chrome Android. This utility invokes the `update` function
+       * and is designed to observe the behavior of the "mirror" support value.
+       *
+       * @return {BCD}
+       */
+      const mirroringCase = ({support, downstreamResult}) => {
+        const reports: Report[] = [
+          {
+            __version: '0.3.1',
+            results: {
+              'https://mdn-bcd-collector.appspot.com/tests/': [
+                {
+                  name: 'api.FakeInterface',
+                  exposure: 'Window',
+                  result: downstreamResult
+                }
+              ]
+            },
+            userAgent: chromeAndroid86UaString
+          }
+        ];
+        const supportMatrix = getSupportMatrix(reports, browsers, []);
+        const bcd = bcdFromSupport(support);
+        update(bcd, supportMatrix, {});
+        return bcd;
+      };
+
+      describe('supported upstream (without flags)', () => {
+        it('supported in downstream test results', () => {
+          const actual = mirroringCase({
+            support: {
+              chrome: {version_added: '86'},
+              chrome_android: 'mirror'
+            },
+            downstreamResult: true
+          });
+          assert.deepEqual(
+            actual,
+            bcdFromSupport({
+              chrome: {version_added: '86'},
+              chrome_android: 'mirror'
+            })
+          );
+        });
+
+        it('unsupported in downstream test results', () => {
+          const actual = mirroringCase({
+            support: {
+              chrome: {version_added: '85'},
+              chrome_android: 'mirror'
+            },
+            downstreamResult: false
+          });
+          assert.deepEqual(
+            actual,
+            bcdFromSupport({
+              chrome: {version_added: '85'},
+              chrome_android: {version_added: false}
+            })
+          );
+        });
+
+        it('omitted from downstream test results', () => {
+          const actual = mirroringCase({
+            support: {
+              chrome: {version_added: '85'},
+              chrome_android: 'mirror'
+            },
+            downstreamResult: null
+          });
+          assert.deepEqual(
+            actual,
+            bcdFromSupport({
+              chrome: {version_added: '85'},
+              chrome_android: 'mirror'
+            })
+          );
+        });
+      });
+
+      describe('supported upstream (with flags)', () => {
+        it('supported in downstream test results', () => {
+          const actual = mirroringCase({
+            support: {
+              chrome: {version_added: '85', flags: [{}]},
+              chrome_android: 'mirror'
+            },
+            downstreamResult: true
+          });
+          assert.deepEqual(
+            actual,
+            bcdFromSupport({
+              chrome: {version_added: '85', flags: [{}]},
+              chrome_android: {version_added: '86'}
+            })
+          );
+        });
+
+        it('unsupported in downstream test results', () => {
+          const actual = mirroringCase({
+            support: {
+              chrome: {version_added: '85', flags: [{}]},
+              chrome_android: 'mirror'
+            },
+            downstreamResult: false
+          });
+          assert.deepEqual(
+            actual,
+            bcdFromSupport({
+              chrome: {version_added: '85', flags: [{}]},
+              chrome_android: 'mirror'
+            })
+          );
+        });
+
+        it('omitted from downstream test results', () => {
+          const actual = mirroringCase({
+            support: {
+              chrome: {version_added: '85', flags: [{}]},
+              chrome_android: 'mirror'
+            },
+            downstreamResult: null
+          });
+          assert.deepEqual(
+            actual,
+            bcdFromSupport({
+              chrome: {version_added: '85', flags: [{}]},
+              chrome_android: 'mirror'
+            })
+          );
+        });
+      });
+
+      describe('partially supported upstream', () => {
+        it('supported in downstream test results', () => {
+          const actual = mirroringCase({
+            support: {
+              chrome: {
+                version_added: '85',
+                partial_implementation: true,
+                notes: 'This only works on Tuesdays'
+              },
+              chrome_android: 'mirror'
+            },
+            downstreamResult: true
+          });
+          assert.deepEqual(
+            actual,
+            bcdFromSupport({
+              chrome: {
+                version_added: '85',
+                partial_implementation: true,
+                notes: 'This only works on Tuesdays'
+              },
+              chrome_android: 'mirror'
+            })
+          );
+        });
+
+        it('unsupported in downstream test results', () => {
+          const actual = mirroringCase({
+            support: {
+              chrome: [
+                {
+                  version_added: '85',
+                  partial_implementation: true,
+                  impl_url: 'http://zombo.com',
+                  notes: 'This only works on Wednesdays'
+                },
+                {version_added: '84', flags: [{}]}
+              ],
+              chrome_android: 'mirror'
+            },
+            downstreamResult: false
+          });
+          assert.deepEqual(
+            actual,
+            bcdFromSupport({
+              chrome: [
+                {
+                  version_added: '85',
+                  partial_implementation: true,
+                  impl_url: 'http://zombo.com',
+                  notes: 'This only works on Wednesdays'
+                },
+                {version_added: '84', flags: [{}]}
+              ],
+              chrome_android: {
+                version_added: false
+              }
+            })
+          );
+        });
+
+        it('omitted from downstream test results', () => {
+          const actual = mirroringCase({
+            support: {
+              chrome: {
+                version_added: '85',
+                partial_implementation: true,
+                notes: 'This only works on Thursdays'
+              },
+              chrome_android: 'mirror'
+            },
+            downstreamResult: null
+          });
+          assert.deepEqual(
+            actual,
+            bcdFromSupport({
+              chrome: {
+                version_added: '85',
+                partial_implementation: true,
+                notes: 'This only works on Thursdays'
+              },
+              chrome_android: 'mirror'
+            })
+          );
+        });
+      });
+
+      describe('unsupported upstream', () => {
+        it('supported in downstream test results', () => {
+          const actual = mirroringCase({
+            support: {
+              chrome: {version_added: false},
+              chrome_android: 'mirror'
+            },
+            downstreamResult: true
+          });
+          assert.deepEqual(
+            actual,
+            bcdFromSupport({
+              chrome: {version_added: false},
+              chrome_android: {version_added: '86'}
+            })
+          );
+        });
+
+        it('unsupported in downstream test results', () => {
+          const actual = mirroringCase({
+            support: {
+              chrome: {version_added: false},
+              chrome_android: 'mirror'
+            },
+            downstreamResult: false
+          });
+          assert.deepEqual(
+            actual,
+            bcdFromSupport({
+              chrome: {version_added: false},
+              chrome_android: 'mirror'
+            })
+          );
+        });
+
+        it('omitted from downstream test results', () => {
+          const actual = mirroringCase({
+            support: {
+              chrome: {version_added: false},
+              chrome_android: 'mirror'
+            },
+            downstreamResult: null
+          });
+          assert.deepEqual(
+            actual,
+            bcdFromSupport({
+              chrome: {version_added: false},
+              chrome_android: 'mirror'
+            })
+          );
+        });
+      });
+    });
+
+    it('does not report a modification when results corroborate existing data', () => {
+      const firefox92UaString =
+        'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:92.0) Gecko/20100101 Firefox/92.0';
+      const initialBcd = {
+        api: {
+          AbortController: {
+            __compat: {
+              support: {
+                firefox: {version_added: '92'}
+              }
+            }
+          }
+        },
+        browsers: {
+          firefox: {name: 'Firefox', releases: {92: {}}}
+        } as unknown as Browsers
+      };
+      const finalBcd = clone(initialBcd);
+      const report: Report = {
+        __version: '0.3.1',
+        results: {
+          'https://mdn-bcd-collector.appspot.com/tests/': [
+            {
+              name: 'api.AbortController',
+              exposure: 'Window',
+              result: true
+            }
+          ]
+        },
+        userAgent: firefox92UaString
+      };
+
+      const sm = getSupportMatrix([report], initialBcd.browsers, []);
+
+      const modified = update(finalBcd, sm, {});
+
+      assert.equal(modified, false, 'modified');
+      assert.deepEqual(finalBcd, initialBcd);
+    });
+
+    it('retains flag data for unsupported features', () => {
+      const initialBcd = {
+        api: {
+          AbortController: {
+            __compat: {
+              support: {
+                firefox: {version_added: '91', flags: [{}]}
+              }
+            }
+          }
+        },
+        browsers: {
+          firefox: {name: 'Firefox', releases: {91: {}, 92: {}, 93: {}}}
+        } as unknown as Browsers
+      };
+      const finalBcd = clone(initialBcd);
+      const report: Report = {
+        __version: '0.3.1',
+        results: {
+          'https://mdn-bcd-collector.appspot.com/tests/': [
+            {
+              name: 'api.AbortController',
+              exposure: 'Window',
+              result: false
+            }
+          ]
+        },
+        userAgent: firefox92UaString
+      };
+
+      const sm = getSupportMatrix([report], initialBcd.browsers, []);
+
+      const modified = update(finalBcd, sm, {});
+
+      assert.equal(modified, false, 'modified');
+      assert.deepEqual(finalBcd, initialBcd);
+    });
+
+    it('no update given partial confirmation of complex support scenario', () => {
+      const initialBcd: any = {
+        api: {
+          AbortController: {
+            __compat: {
+              support: {
+                firefox: [
+                  {version_added: '92'},
+                  {version_added: '91', partial_implementation: true, notes: ''}
+                ]
+              }
+            }
+          }
+        },
+        browsers: {
+          firefox: {name: 'Firefox', releases: {91: {}, 92: {}, 93: {}}}
+        }
+      };
+      const finalBcd = clone(initialBcd);
+      const report: Report = {
+        __version: '0.3.1',
+        results: {
+          'https://mdn-bcd-collector.appspot.com/tests/': [
+            {
+              name: 'api.AbortController',
+              exposure: 'Window',
+              result: false
+            }
+          ]
+        },
+        userAgent: firefox92UaString
+      };
+
+      const sm = getSupportMatrix([report], initialBcd.browsers, []);
+
+      const modified = update(finalBcd, sm, {});
+
+      assert.equal(modified, false, 'modified');
+      assert.deepEqual(finalBcd, initialBcd);
+    });
+
+    it('skips complex support scenarios', () => {
+      const initialBcd: any = {
+        api: {
+          AbortController: {
+            __compat: {
+              support: {
+                firefox: [
+                  {version_added: '94'},
+                  {version_added: '93', partial_implementation: true, notes: ''}
+                ]
+              }
+            }
+          }
+        },
+        browsers: {
+          firefox: {name: 'Firefox', releases: {91: {}, 92: {}, 93: {}, 94: {}}}
+        }
+      };
+      const finalBcd = clone(initialBcd);
+      const report: Report = {
+        __version: '0.3.1',
+        results: {
+          'https://mdn-bcd-collector.appspot.com/tests/': [
+            {
+              name: 'api.AbortController',
+              exposure: 'Window',
+              result: false
+            }
+          ]
+        },
+        userAgent: firefox92UaString
+      };
+
+      const sm = getSupportMatrix([report], initialBcd.browsers, []);
+
+      const modified = update(finalBcd, sm, {});
+
+      assert.equal(modified, false, 'modified');
+      assert.deepEqual(finalBcd, initialBcd);
+    });
+
+    it('skips removed features', () => {
+      const initialBcd: any = {
+        api: {
+          AbortController: {
+            __compat: {
+              support: {
+                firefox: {version_added: '90', version_removed: '91'}
+              }
+            }
+          }
+        },
+        browsers: {
+          firefox: {name: 'Firefox', releases: {90: {}, 91: {}, 92: {}}}
+        }
+      };
+      const finalBcd = clone(initialBcd);
+      const report: Report = {
+        __version: '0.3.1',
+        results: {
+          'https://mdn-bcd-collector.appspot.com/tests/': [
+            {
+              name: 'api.AbortController',
+              exposure: 'Window',
+              result: true
+            }
+          ]
+        },
+        userAgent: firefox92UaString
+      };
+
+      const sm = getSupportMatrix([report], initialBcd.browsers, []);
+
+      const modified = update(finalBcd, sm, {});
+
+      assert.equal(modified, false, 'modified');
+      assert.deepEqual(finalBcd, initialBcd);
+    });
+
+    it('persists non-default statements', () => {
+      const initialBcd: any = {
+        api: {
+          AbortController: {
+            __compat: {
+              support: {
+                firefox: {version_added: '91', prefix: 'moz'}
+              }
+            }
+          }
+        },
+        browsers: {
+          firefox: {name: 'Firefox', releases: {91: {}, 92: {}, 93: {}}}
+        }
+      };
+      const finalBcd = clone(initialBcd);
+      const report: Report = {
+        __version: '0.3.1',
+        results: {
+          'https://mdn-bcd-collector.appspot.com/tests/': [
+            {
+              name: 'api.AbortController',
+              exposure: 'Window',
+              result: true
+            }
+          ]
+        },
+        userAgent: firefox92UaString
+      };
+      const expectedBcd = clone(initialBcd);
+      expectedBcd.api.AbortController.__compat.support.firefox = [
+        {
+          version_added: '≤92'
+        },
+        {
+          prefix: 'moz',
+          version_added: '91'
+        }
+      ];
+
+      const sm = getSupportMatrix([report], initialBcd.browsers, []);
+
+      const modified = update(finalBcd, sm, {});
+
+      assert(modified, 'modified');
+      assert.deepEqual(finalBcd, expectedBcd);
+    });
+
+    it('overrides existing support information in response to negative test results', () => {
+      const initialBcd: any = {
+        api: {
+          AbortController: {
+            __compat: {
+              support: {
+                firefox: {version_added: '91'}
+              }
+            }
+          }
+        },
+        browsers: {
+          firefox: {name: 'Firefox', releases: {91: {}, 92: {}, 93: {}}}
+        }
+      };
+      const finalBcd = clone(initialBcd);
+      const report: Report = {
+        __version: '0.3.1',
+        results: {
+          'https://mdn-bcd-collector.appspot.com/tests/': [
+            {
+              name: 'api.AbortController',
+              exposure: 'Window',
+              result: false
+            }
+          ]
+        },
+        userAgent: firefox92UaString
+      };
+      const expectedBcd = clone(initialBcd);
+      expectedBcd.api.AbortController.__compat.support.firefox.version_added =
+        false;
+
+      const sm = getSupportMatrix([report], initialBcd.browsers, []);
+
+      const modified = update(finalBcd, sm, {});
+
+      assert(modified, 'modified');
+      assert.deepEqual(finalBcd, expectedBcd);
+    });
+
+    describe('filtering', () => {
+      let expectedBcd;
+      beforeEach(() => {
+        expectedBcd = clone(bcd);
+      });
+
+      it('path', () => {
+        const filter = {
+          path: new minimatch.Minimatch('css.properties.*')
+        };
+        expectedBcd.css.properties[
+          'font-family'
+        ].__compat.support.chrome.version_added = '84';
+        expectedBcd.css.properties[
+          'font-style'
+        ].__compat.support.chrome.version_added = '85';
+
+        const modified = update(bcdCopy, supportMatrix, filter);
+
+        assert(modified, 'modified');
+        assert.deepEqual(bcdCopy, expectedBcd);
+      });
+
+      it('release', () => {
+        const filter = {release: '84'};
+        expectedBcd.css.properties[
+          'font-family'
+        ].__compat.support.chrome.version_added = '84';
+
+        const modified = update(bcdCopy, supportMatrix, filter);
+
+        assert(modified, 'modified');
+        assert.deepEqual(bcdCopy, expectedBcd);
+      });
+    });
+
+    it('persists "mirror" when test results align with support data', () => {
+      const initialBcd = {
+        api: {
+          AbortController: {
+            __compat: {
+              support: {
+                chrome: {version_added: '86'},
+                chrome_android: 'mirror'
+              }
+            }
+          }
+        },
+        browsers: {
+          chrome: {name: 'Chrome', releases: {85: {}, 86: {}}},
+          chrome_android: {
+            name: 'Chrome Android',
+            upstream: 'chrome',
+            releases: {86: {}}
+          }
+        } as unknown as Browsers
+      };
+      const finalBcd = clone(initialBcd);
+      const report: Report = {
+        __version: '0.3.1',
+        results: {
+          'https://mdn-bcd-collector.appspot.com/tests/': [
+            {
+              name: 'api.AbortController',
+              exposure: 'Window',
+              result: true
+            }
+          ]
+        },
+        userAgent: chromeAndroid86UaString
+      };
+
+      const sm = getSupportMatrix([report], initialBcd.browsers, []);
+
+      const modified = update(finalBcd, sm, {});
+
+      assert.equal(modified, false, 'modified');
+      assert.deepEqual(finalBcd, initialBcd);
     });
   });
 });

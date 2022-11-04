@@ -65,6 +65,8 @@ export const findEntry = (
   return entry;
 };
 
+const clone = (value) => JSON.parse(JSON.stringify(value));
+
 const combineResults = (results: TestResultValue[]): TestResultValue => {
   let supported: TestResultValue = null;
   for (const result of results) {
@@ -83,6 +85,21 @@ const combineResults = (results: TestResultValue[]): TestResultValue => {
     }
   }
   return supported;
+};
+
+// Create a string represenation of a version range, optimized for human
+// legibility.
+const joinRange = (lower: string, upper: string) =>
+  lower === '0' ? `≤${upper}` : `${lower}> ≤${upper}`;
+
+// Parse a version range string produced by `joinRange` into a lower and upper
+// boundary.
+export const splitRange = (range: string) => {
+  const match = range.match(/(?:(.*)> )?(?:≤(.*))/);
+  if (!match) {
+    throw new Error(`Unrecognized version range value: "${range}"`);
+  }
+  return {lower: match[1] || '0', upper: match[2]};
 };
 
 // Get support map from BCD path to test result (null/true/false) for a single
@@ -238,12 +255,12 @@ export const inferSupportStatements = (
         statements.push({
           version_added:
             lastWasNull || lastKnown.support === false
-              ? `${lastKnown.version}> ≤${version}`
+              ? joinRange(lastKnown.version, version)
               : version
         });
       } else if (!lastStatement.version_added) {
         lastStatement.version_added = lastWasNull
-          ? `${lastKnown.version}> ≤${version}`
+          ? joinRange(lastKnown.version, version)
           : version;
       } else if (lastStatement.version_removed) {
         // added back again
@@ -262,7 +279,7 @@ export const inferSupportStatements = (
         !lastStatement.version_removed
       ) {
         lastStatement.version_removed = lastWasNull
-          ? `${lastKnown.version}> ≤${version}`
+          ? joinRange(lastKnown.version, version)
           : version;
       } else if (!lastStatement) {
         statements.push({version_added: false});
@@ -299,8 +316,9 @@ export const update = (
       continue;
     }
 
+    const support = entry.__compat.support;
     // Stringified then parsed to deep clone the support statements
-    const originalSupport = JSON.parse(JSON.stringify(entry.__compat.support));
+    const originalSupport = clone(support);
 
     for (const [browser, versionMap] of browserMap.entries()) {
       if (
@@ -313,6 +331,9 @@ export const update = (
       const inferredStatements = inferSupportStatements(versionMap);
       if (inferredStatements.length !== 1) {
         // TODO: handle more complicated scenarios
+        logger.warn(
+          `${path} skipped for ${browser} due to multiple inferred statements`
+        );
         continue;
       }
 
@@ -326,11 +347,21 @@ export const update = (
         continue;
       }
 
-      let allStatements: InternalSupportStatement | undefined =
-        entry.__compat.support[browser];
-      if (allStatements === 'mirror') {
-        allStatements = mirror(browser, originalSupport);
-      }
+      // Update the support data with a new value.
+      const persist = (statements: SimpleSupportStatement[]) => {
+        support[browser] = statements.length === 1 ? statements[0] : statements;
+        modified = true;
+      };
+
+      let allStatements =
+        (support[browser] as InternalSupportStatement) === 'mirror'
+          ? mirror(browser, originalSupport)
+          : // Although non-mirrored support data could be modified in-place,
+            // working with a cloned version forces the subsequent code to
+            // explicitly assign it back to the originating data structure.
+            // This reduces the likelihood of inconsistencies in the handling
+            // of mirrored and non-mirrored support data.
+            clone(support[browser] || null);
 
       if (!allStatements) {
         allStatements = [];
@@ -359,19 +390,22 @@ export const update = (
           // that is implicit in no statement.
           continue;
         }
-        if (typeof inferredStatement.version_added === 'string') {
-          inferredStatement.version_added =
-            inferredStatement.version_added.replace('0> ', '');
-        }
-        allStatements.unshift(inferredStatement);
-        entry.__compat.support[browser] =
-          allStatements.length === 1 ? allStatements[0] : allStatements;
-        modified = true;
+        // Remove flag data for features which are enabled by default.
+        //
+        // See https://github.com/mdn/browser-compat-data/pull/16637
+        const nonFlagStatements = allStatements.filter(
+          (statement) => !('flags' in statement)
+        );
+        persist([inferredStatement, ...nonFlagStatements]);
+
         continue;
       }
 
       if (defaultStatements.length !== 1) {
         // TODO: handle more complicated scenarios
+        logger.warn(
+          `${path} skipped for ${browser} due to multiple default statements`
+        );
         continue;
       }
 
@@ -379,6 +413,9 @@ export const update = (
 
       if (simpleStatement.version_removed) {
         // TODO: handle updating existing added+removed entries.
+        logger.warn(
+          `${path} skipped for ${browser} due to added+removed statement`
+        );
         continue;
       }
 
@@ -409,46 +446,52 @@ export const update = (
       }
 
       if (dataIsOlder) {
+        logger.warn(
+          `${path} skipped for ${browser} because results are older than BCD`
+        );
         continue;
       } else if (
         typeof simpleStatement.version_added === 'string' &&
         typeof inferredStatement.version_added === 'string' &&
         inferredStatement.version_added.includes('≤')
       ) {
-        const range = inferredStatement.version_added.split('> ≤');
+        const {lower, upper} = splitRange(inferredStatement.version_added);
+        const simpleAdded = simpleStatement.version_added.replace('≤', '');
         if (
           simpleStatement.version_added === 'preview' ||
-          compareVersions(
-            simpleStatement.version_added.replace('≤', ''),
-            range[0],
-            '<='
-          ) ||
-          compareVersions(
-            simpleStatement.version_added.replace('≤', ''),
-            range[1],
-            '>'
-          )
+          compareVersions(simpleAdded, lower, '<=') ||
+          compareVersions(simpleAdded, upper, '>')
         ) {
-          simpleStatement.version_added =
-            inferredStatement.version_added.replace('0> ', '');
-          modified = true;
+          simpleStatement.version_added = inferredStatement.version_added;
+          persist(allStatements);
         }
       } else if (
         !(
           typeof simpleStatement.version_added === 'string' &&
           inferredStatement.version_added === true
-        )
+        ) &&
+        simpleStatement.version_added !== inferredStatement.version_added
       ) {
-        simpleStatement.version_added =
-          typeof inferredStatement.version_added === 'string'
-            ? inferredStatement.version_added.replace('0> ', '')
-            : inferredStatement.version_added;
-        modified = true;
+        // When a "mirrored" statement will be replaced with a statement
+        // documenting lack of support, notes describing partial implementation
+        // status are no longer relevant.
+        if (
+          !inferredStatement.version_added &&
+          simpleStatement.partial_implementation
+        ) {
+          persist([{version_added: false}]);
+
+          // Positive test results do not conclusively indicate that a partial
+          // implementation has been completed.
+        } else if (!simpleStatement.partial_implementation) {
+          simpleStatement.version_added = inferredStatement.version_added;
+          persist(allStatements);
+        }
       }
 
       if (typeof inferredStatement.version_removed === 'string') {
         simpleStatement.version_removed = inferredStatement.version_removed;
-        modified = true;
+        persist(allStatements);
       }
     }
   }

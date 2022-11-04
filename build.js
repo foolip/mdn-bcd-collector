@@ -130,7 +130,13 @@ const getCustomTestAPI = (name, member, type) => {
           // auto-generated custom tests
           test = false;
         } else {
-          const returnValue = `!!instance && '${member}' in instance`;
+          let returnValue;
+          if (type === 'symbol') {
+            const symbol = member.replace('@@', '');
+            returnValue = `!!instance && 'Symbol' in self && '${symbol}' in Symbol && Symbol.${symbol} in instance`;
+          } else {
+            returnValue = `!!instance && '${member}' in instance`;
+          }
           test = testbase
             ? testbase +
               (promise
@@ -395,18 +401,38 @@ const flattenMembers = (iface) => {
   for (const member of iface.members.filter((member) => !member.name)) {
     switch (member.type) {
       case 'constructor':
-        // Test generation doesn't use constructor arguments, so they aren't
-        // copied
-        members.push({name: iface.name, type: 'constructor'});
+        // Don't generate tests for [HTMLConstructor]. These are for custom
+        // elements, not for constructor the elements themselves:
+        // https://html.spec.whatwg.org/multipage/dom.html#html-element-constructors
+        if (!getExtAttr(member, 'HTMLConstructor')) {
+          // Test generation doesn't use constructor arguments, so they aren't
+          // copied
+          members.push({name: iface.name, type: 'constructor'});
+        }
         break;
       case 'iterable':
-        members.push(
-          {name: '@@iterator', type: 'symbol'},
-          {name: 'entries', type: 'operation'},
-          {name: 'forEach', type: 'operation'},
-          {name: 'keys', type: 'operation'},
-          {name: 'values', type: 'operation'}
-        );
+        if (member.async) {
+          // https://webidl.spec.whatwg.org/#idl-async-iterable
+          members.push(
+            {name: '@@asyncIterator', type: 'symbol'},
+            {name: 'values', type: 'operation'}
+          );
+          if (member.idlType.length === 2) {
+            // https://webidl.spec.whatwg.org/#pair-asynchronously-iterable-declaration
+            members.push(
+              {name: 'entries', type: 'operation'},
+              {name: 'keys', type: 'operation'}
+            );
+          }
+        } else {
+          members.push(
+            {name: '@@iterator', type: 'symbol'},
+            {name: 'entries', type: 'operation'},
+            {name: 'forEach', type: 'operation'},
+            {name: 'keys', type: 'operation'},
+            {name: 'values', type: 'operation'}
+          );
+        }
         break;
       case 'maplike':
         members.push(

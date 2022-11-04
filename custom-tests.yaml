@@ -202,8 +202,10 @@ api:
   AudioProcessingEvent:
     __base: |-
       var instance;
+      var inputBuffer = new AudioBuffer({length: 1, sampleRate: 30000});
+      var outputBuffer = new AudioBuffer({length: 1, sampleRate: 30000});
       try {
-        instance = new AudioProcessingEvent('audioprocess');
+        instance = new AudioProcessingEvent('audioprocess', {inputBuffer: inputBuffer, outputBuffer: outputBuffer, playbackTime: 0});
       } catch(e) {
         try {
           instance = document.createEvent('AudioProcessingEvent');
@@ -317,12 +319,23 @@ api:
         return {result: false, message: 'caches is not defined'};
       };
       var instance = caches;
+  CanvasGradient:
+    __base: |-
+      <%api.CanvasRenderingContext2D:ctx%>
+      var instance;
+      if (ctx.createLinearGradient) {
+        instance = ctx.createLinearGradient(0, 0, 1, 1);
+      } else if (ctx.createRadialGradient) {
+        instance = ctx.createRadialGradient(0, 0, 0, 1, 1, 1);
+      } else {
+        return {result: false, message: 'Could not create linear or radial gradient'};
+      }
   CanvasPattern:
     __resources:
       - image-black
     __base: |-
-      <%api.CanvasRenderingContext2D:canvas%>
-      var instance = canvas.createPattern(document.getElementById('resource-image-black'), 'repeat');
+      <%api.CanvasRenderingContext2D:ctx%>
+      var instance = ctx.createPattern(document.getElementById('resource-image-black'), 'repeat');
   CanvasRenderingContext2D:
     __base: |-
       if (!('document' in self)) {
@@ -938,7 +951,6 @@ api:
     __base: var instance = history;
   HTMLAllCollection:
     __base: |-
-      // XXX document.all seems to be falsy, at least in Chrome
       var instance = document.all;
     __test: return bcd.testObjectName(instance, 'HTMLAllCollection');
   HTMLAnchorElement:
@@ -1836,9 +1848,10 @@ api:
     __base: var instance = window.speechSynthesis;
   SpeechSynthesisErrorEvent:
     __base: |-
+      <%api.SpeechSynthesisUtterance:utterance%>
       var instance;
       try {
-        instance = new SpeechSynthesisErrorEvent('error');
+        instance = new SpeechSynthesisErrorEvent('error', { utterance: utterance, error: 'canceled' });
       } catch(e) {
         try {
           instance = document.createEvent('SpeechSynthesisErrorEvent');
@@ -1851,9 +1864,10 @@ api:
       }
   SpeechSynthesisEvent:
     __base: |-
+      <%api.SpeechSynthesisUtterance:utterance%>
       var instance;
       try {
-        instance = new SpeechSynthesisEvent('start');
+        instance = new SpeechSynthesisEvent('start', { utterance: utterance });
       } catch(e) {
         try {
           instance = document.createEvent('SpeechSynthesisEvent');
@@ -2301,8 +2315,8 @@ api:
       var instance = new TextEncoder();
   TextMetrics:
     __base: |-
-      <%api.CanvasRenderingContext2D:canvas%>
-      var instance = canvas.measureText('mdn-bcd-collector');
+      <%api.CanvasRenderingContext2D:ctx%>
+      var instance = ctx.measureText('mdn-bcd-collector');
   TextTrack:
     __resources:
       - video-blank
@@ -2661,6 +2675,14 @@ api:
       return instance.toString() == instance.href;
   WorkerNavigator:
     __base: var instance = navigator;
+  Worklet:
+    __resources:
+      - audioContext
+    __base: |-
+      if (!reusableInstances.audioContext) {
+        return {result: false, message: 'Audio context is not available'};
+      }
+      var instance = reusableInstances.audioContext.audioWorklet;
   WritableStreamDefaultController:
     __base: |-
       if (!('WritableStream' in self)) {

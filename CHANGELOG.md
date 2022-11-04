@@ -1,5 +1,303 @@
 # mdn-bcd-collector Changelog
 
+## v6.2.7
+
+### Test Changes
+
+#### Added
+
+- api.AudioContext.sinkchange_event
+- api.AudioContext.setSinkId
+- api.AudioContext.sinkId
+- api.AudioSinkInfo
+- api.CaptureController.setFocusBehavior
+
+## v6.2.6
+
+### Test Changes
+
+#### Added
+
+- api.AuthenticatorAssertionResponse.attestationObject
+- api.PressureRecord
+- api.ViewTransition
+
+#### Removed
+
+- api.DOMTransition
+
+#### Changed
+
+- api.SpeechSynthesisErrorEvent
+- api.SpeechSynthesisEvent
+
+### Commits
+
+- Fix speech synthesis event custom tests ([#2421](https://github.com/foolip/mdn-bcd-collector/pull/2421))
+
+## v6.2.5
+
+### Test Changes
+
+#### Added
+
+- api.CaptureController
+- api.FileSystemFileHandle.createSyncAccessHandle
+- api.FileSystemSyncAccessHandle
+- api.GPUSupportedLimits.maxColorAttachmentBytesPerSample
+
+#### Removed
+
+- api.GPUSupportedLimits.maxColorAttachmentBytesPerPixel
+
+### Commits
+
+- Add RTCInsertableStreams as custom IDL
+
+## v6.2.4
+
+### Test Changes
+
+#### Changed
+
+- api.AudioProcessingEvent
+
+### Commits
+
+- update-bcd: discard irrelevant notes ([#2378](https://github.com/foolip/mdn-bcd-collector/pull/2378))
+- Correct custom test for AudioProcessingEvent ([#2400](https://github.com/foolip/mdn-bcd-collector/pull/2400))
+
+## v6.2.3
+
+### Test Changes
+
+#### Added
+
+- api.IdentityProvider
+- api.Request.duplex
+- api.RTCIceCandidate.relayProtocol
+- css.properties.anchor-name
+- css.properties.position-fallback
+
+#### Removed
+
+- api.AudioContext.createConstantSource
+- api.AudioContext.createDelayNode
+- api.AudioContext.createGainNode
+- api.AudioContext.createJavaScriptNode
+- api.CSSViewportRule
+
+### Commits
+
+- Log warnings for when we do nothing in update-bcd ([#2365](https://github.com/foolip/mdn-bcd-collector/pull/2365))
+- Remove some Web Audio API custom IDL ([#2370](https://github.com/foolip/mdn-bcd-collector/pull/2370))
+- Enable default (more verbose) mocha logger ([#2371](https://github.com/foolip/mdn-bcd-collector/pull/2371))
+
+## v6.2.2
+
+### Test Changes
+
+#### Added
+
+- api.XRCompositionLayer.forceMonoPresentation
+
+#### Changed
+
+- api.CSSStyleDeclaration.@@iterator
+- api.DOMTokenList.@@iterator
+- api.FontFaceSet.@@iterator
+- api.NodeList.@@iterator
+
+### Commits
+
+- Fix custom tests for symbols ([#2367](https://github.com/foolip/mdn-bcd-collector/pull/2367))
+
+## v6.2.1
+
+### Test Changes
+
+#### Added
+
+- api.AnimationTimeline.getCurrentTime
+- api.AudioWorklet.port
+- api.AudioWorkletGlobalScope.port
+- api.XRAnchor.requestPersistentHandle
+- api.XRProjectionLayer.deltaPose
+- api.XRSession.deletePersistentAnchor
+- api.XRSession.restorePersistentAnchor
+- api.XRWebGLSubImage.colorTextureHeight
+- api.XRWebGLSubImage.colorTextureWidth
+- api.XRWebGLSubImage.depthStencilTextureHeight
+- api.XRWebGLSubImage.depthStencilTextureWidth
+- api.XRWebGLSubImage.motionVectorTexture
+- api.XRWebGLSubImage.motionVectorTextureHeight
+- api.XRWebGLSubImage.motionVectorTextureWidth
+- css.properties.animation-delay-end
+- css.properties.animation-delay-start
+- css.properties.animation-range
+
+#### Removed
+
+- api.XRWebGLSubImage.textureHeight
+- api.XRWebGLSubImage.textureWidth
+
+### Commits
+
+- Formalize version range handling ([#2353](https://github.com/foolip/mdn-bcd-collector/pull/2353))
+- Correct support for mirroring ([#2280](https://github.com/foolip/mdn-bcd-collector/pull/2280))
+
+## v6.2.0
+
+### Test Changes
+
+#### Added
+
+- api.FileSystemDirectoryHandle.@@asyncIterator
+- api.ReadableStream.@@asyncIterator
+
+#### Removed
+
+- api.FileSystemDirectoryHandle.@@iterator
+- api.FileSystemDirectoryHandle.forEach
+- api.ReadableStream.@@iterator
+- api.ReadableStream.entries
+- api.ReadableStream.forEach
+- api.ReadableStream.keys
+
+### Commits
+
+- Support async iterators in test generation ([#2349](https://github.com/foolip/mdn-bcd-collector/pull/2349))
+- Complete test coverage for `update-bcd` script ([#2317](https://github.com/foolip/mdn-bcd-collector/pull/2317))
+
+## v6.1.5
+
+### Test Changes
+
+#### Added
+
+- api.CSSContainerRule.containerName
+- api.CSSContainerRule.containerQuery
+- api.Document.createTransition
+- api.DOMTransition
+- css.properties.page-transition-tag
+
+#### Changed
+
+- api.CanvasGradient
+- api.CanvasPattern
+- api.HTMLAllCollection
+- api.TextMetrics
+
+### Commits
+
+- Add back MessageEvent.userActivation custom IDL ([#2344](https://github.com/foolip/mdn-bcd-collector/pull/2344))
+- Remove custom IDL for UserActivation
+- Support testing document.all ([#2340](https://github.com/foolip/mdn-bcd-collector/pull/2340))
+- Add custom test for CanvasGradient ([#2334](https://github.com/foolip/mdn-bcd-collector/pull/2334))
+- bcd-update: do not spuriously report modifications ([#2326](https://github.com/foolip/mdn-bcd-collector/pull/2326))
+- Remove flag data for default-enabled features ([#2297](https://github.com/foolip/mdn-bcd-collector/pull/2297))
+- Support adding css.properties._ and javascript.builtins._ in add-new-bcd ([#2284](https://github.com/foolip/mdn-bcd-collector/pull/2284))
+
+## v6.1.4
+
+### Test Changes
+
+#### Added
+
+- api.GPUInternalError
+- api.HTMLModelElement
+- api.PerformanceResourceTiming.renderBlockingStatus
+- api.WebTransport.congestionControl
+- api.XRCamera
+- api.XRView.camera
+- api.XRWebGLBinding.getCameraImage
+
+#### Removed
+
+- api.HTMLAnchorElement.HTMLAnchorElement
+- api.HTMLAreaElement.HTMLAreaElement
+- api.HTMLAudioElement.HTMLAudioElement
+- api.HTMLBaseElement.HTMLBaseElement
+- api.HTMLBodyElement.HTMLBodyElement
+- api.HTMLBRElement.HTMLBRElement
+- api.HTMLButtonElement.HTMLButtonElement
+- api.HTMLCanvasElement.HTMLCanvasElement
+- api.HTMLDataElement.HTMLDataElement
+- api.HTMLDataListElement.HTMLDataListElement
+- api.HTMLDetailsElement.HTMLDetailsElement
+- api.HTMLDialogElement.HTMLDialogElement
+- api.HTMLDirectoryElement.HTMLDirectoryElement
+- api.HTMLDivElement.HTMLDivElement
+- api.HTMLDListElement.HTMLDListElement
+- api.HTMLElement.HTMLElement
+- api.HTMLEmbedElement.HTMLEmbedElement
+- api.HTMLFieldSetElement.HTMLFieldSetElement
+- api.HTMLFontElement.HTMLFontElement
+- api.HTMLFormElement.HTMLFormElement
+- api.HTMLFrameElement.HTMLFrameElement
+- api.HTMLFrameSetElement.HTMLFrameSetElement
+- api.HTMLHeadElement.HTMLHeadElement
+- api.HTMLHeadingElement.HTMLHeadingElement
+- api.HTMLHRElement.HTMLHRElement
+- api.HTMLHtmlElement.HTMLHtmlElement
+- api.HTMLIFrameElement.HTMLIFrameElement
+- api.HTMLImageElement.HTMLImageElement
+- api.HTMLInputElement.HTMLInputElement
+- api.HTMLLabelElement.HTMLLabelElement
+- api.HTMLLegendElement.HTMLLegendElement
+- api.HTMLLIElement.HTMLLIElement
+- api.HTMLLinkElement.HTMLLinkElement
+- api.HTMLMapElement.HTMLMapElement
+- api.HTMLMarqueeElement.HTMLMarqueeElement
+- api.HTMLMenuElement.HTMLMenuElement
+- api.HTMLMetaElement.HTMLMetaElement
+- api.HTMLMeterElement.HTMLMeterElement
+- api.HTMLModElement.HTMLModElement
+- api.HTMLObjectElement.HTMLObjectElement
+- api.HTMLOListElement.HTMLOListElement
+- api.HTMLOptGroupElement.HTMLOptGroupElement
+- api.HTMLOptionElement.HTMLOptionElement
+- api.HTMLOutputElement.HTMLOutputElement
+- api.HTMLParagraphElement.HTMLParagraphElement
+- api.HTMLParamElement.HTMLParamElement
+- api.HTMLPictureElement.HTMLPictureElement
+- api.HTMLPortalElement.HTMLPortalElement
+- api.HTMLPreElement.HTMLPreElement
+- api.HTMLProgressElement.HTMLProgressElement
+- api.HTMLQuoteElement.HTMLQuoteElement
+- api.HTMLScriptElement.HTMLScriptElement
+- api.HTMLSelectElement.HTMLSelectElement
+- api.HTMLSlotElement.HTMLSlotElement
+- api.HTMLSourceElement.HTMLSourceElement
+- api.HTMLSpanElement.HTMLSpanElement
+- api.HTMLStyleElement.HTMLStyleElement
+- api.HTMLTableCaptionElement.HTMLTableCaptionElement
+- api.HTMLTableCellElement.HTMLTableCellElement
+- api.HTMLTableColElement.HTMLTableColElement
+- api.HTMLTableElement.HTMLTableElement
+- api.HTMLTableRowElement.HTMLTableRowElement
+- api.HTMLTableSectionElement.HTMLTableSectionElement
+- api.HTMLTemplateElement.HTMLTemplateElement
+- api.HTMLTextAreaElement.HTMLTextAreaElement
+- api.HTMLTimeElement.HTMLTimeElement
+- api.HTMLTitleElement.HTMLTitleElement
+- api.HTMLTrackElement.HTMLTrackElement
+- api.HTMLUListElement.HTMLUListElement
+- api.HTMLVideoElement.HTMLVideoElement
+
+#### Changed
+
+- api.Worklet
+
+### Commits
+
+- Avoid generating tests for [HTMLConstructor] constructors ([#2328](https://github.com/foolip/mdn-bcd-collector/pull/2328))
+- Add custom test for Worklet API ([#2320](https://github.com/foolip/mdn-bcd-collector/pull/2320))
+- Ignore IE by default in find-missing-results script ([#2308](https://github.com/foolip/mdn-bcd-collector/pull/2308))
+- Set experimental to "true" for new features by default ([#2305](https://github.com/foolip/mdn-bcd-collector/pull/2305))
+- Simplify loop ([#2300](https://github.com/foolip/mdn-bcd-collector/pull/2300))
+- Mention what the actual constructor name is if it doesn't match expected ([#2301](https://github.com/foolip/mdn-bcd-collector/pull/2301))
+
 ## v6.1.3
 
 ### Test Changes

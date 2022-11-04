@@ -457,9 +457,6 @@ partial dictionary MouseEventInit {
 };
 
 partial interface Navigator {
-  // https://github.com/whatwg/html/pull/4009
-  [SameObject] readonly attribute UserActivation userActivation;
-
   // https://developer.mozilla.org/en-US/docs/Web/API/Navigator/mozIsLocallyAvailable
   boolean mozIsLocallyAvailable(DOMString url, boolean ifOffline);
 
@@ -492,13 +489,6 @@ interface Transferable {
 
 partial interface VideoTrackList {
    VideoTrack item(unsigned long index);
-};
-
-// https://github.com/whatwg/html/pull/4009
-[Exposed=(Window,Worker,AudioWorklet)]
-interface UserActivation {
-  readonly attribute boolean hasBeenActive;
-  readonly attribute boolean isActive;
 };
 
 partial interface Window {
