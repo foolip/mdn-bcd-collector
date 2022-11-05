@@ -11,10 +11,6 @@ partial interface Selection {
   readonly attribute unsigned long baseOffset;
   readonly attribute Node? extentNode;
   readonly attribute unsigned long extentOffset;
-
-  // https://bugzilla.mozilla.org/show_bug.cgi?id=1623290
-  // https://github.com/mozilla/gecko-dev/blob/dd042f25a8da58d565d199dcfebe4f34db64863c/dom/webidl/Selection.webidl#L95
-  attribute short? caretBidiLevel;
 };
 
 partial interface ShadowRoot {
