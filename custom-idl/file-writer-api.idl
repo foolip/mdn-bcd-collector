@@ -1,15 +1,6 @@
 // https://www.w3.org/TR/2012/WD-file-writer-api-20120417/
 
 [Exposed=Window,Worker]
-interface BlobBuilder {
-  constructor();
-  Blob getBlob (optional DOMString contentType);
-  undefined append (DOMString text, optional DOMString endings);
-  undefined append (Blob data);
-  undefined append (ArrayBuffer data);
-};
-
-[Exposed=Window,Worker]
 interface FileSaver : EventTarget {
   constructor(Blob data);
   undefined abort ();
