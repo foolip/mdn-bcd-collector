@@ -163,7 +163,6 @@ partial interface Element {
 partial interface Event {
   // https://developer.mozilla.org/en-US/docs/Web/API/Event/explicitOriginalTarget
   readonly attribute EventTarget? explicitOriginalTarget;
-  // https://developer.mozilla.org/en-US/docs/Web/API/Ev
 
   readonly attribute object path;
 };
