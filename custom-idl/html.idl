@@ -351,7 +351,6 @@ partial interface HTMLElement {
   attribute any itemValue; // acts as DOMString on setting
 
   attribute HTMLMenuElement? contextMenu;
-  attribute DOMSettableTokenList dropzone;
   undefined forceSpellCheck();
   attribute boolean noModule;
   attribute EventHandler onModule;
