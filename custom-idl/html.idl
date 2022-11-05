@@ -35,14 +35,6 @@ partial interface Window {
   [SecureContext] readonly attribute ApplicationCache applicationCache;
 };
 
-partial interface AudioTrackList {
-   AudioTrack item(unsigned long index);
-};
-
-partial interface DataTransferItemList {
-   DataTransferItem item(unsigned long index);
-};
-
 // https://github.com/whatwg/html/pull/1942
 dictionary HitRegionOptions {
   Path2D? path = null;
@@ -55,12 +47,6 @@ dictionary HitRegionOptions {
   // for unbacked regions:
   DOMString? label = null;
   DOMString? role = null;
-};
-
-// https://www.w3.org/html/wg/spec/common-dom-interfaces.html#domsettabletokenlist-0
-[Exposed=Window]
-interface DOMSettableTokenList : DOMTokenList {
-  attribute DOMString value;
 };
 
 // https://github.com/whatwg/html/pull/1225
@@ -459,7 +445,6 @@ partial interface HTMLMarqueeElement {
 
 partial interface HTMLMediaElement {
   readonly attribute DOMTokenList controlsList;
-  readonly attribute double initialTime;
   attribute EventHandler onerror;
   Promise<undefined> seekToNextFrame();
 
@@ -518,10 +503,6 @@ interface HTMLMenuItemElement : HTMLElement {
 
   // https://github.com/mozilla/gecko-dev/blob/7c03e28b3d065fa80839e9659fd50bf340913d5f/dom/webidl/HTMLMenuItemElement.webidl#L35
   attribute boolean defaultChecked;
-};
-
-partial interface HTMLObjectElement {
-  attribute boolean typeMustMatch;
 };
 
 partial interface HTMLPreElement {
