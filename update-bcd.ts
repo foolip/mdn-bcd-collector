@@ -339,12 +339,55 @@ export const update = (
 
       const inferredStatement = inferredStatements[0];
 
-      if (
-        filter.release &&
-        filter.release !== inferredStatement.version_added &&
-        filter.release !== inferredStatement.version_removed
-      ) {
-        continue;
+      // If there's a version number filter
+      if (filter.release) {
+        const filterMatch = filter.release.match(/([\d.]+)\-([\d.]+)/);
+        if (filterMatch) {
+          if (
+            typeof inferredStatement.version_added === 'string' &&
+            (compareVersions(
+              inferredStatement.version_added.replace(/(([\d.]+)> )?≤/, ''),
+              filterMatch[1],
+              '<'
+            ) ||
+              compareVersions(
+                inferredStatement.version_added.replace(/(([\d.]+)> )?≤/, ''),
+                filterMatch[2],
+                '>'
+              ))
+          ) {
+            // If version_added is outside of filter range
+            continue;
+          }
+          if (
+            typeof inferredStatement.version_removed === 'string' &&
+            (compareVersions(
+              inferredStatement.version_removed.replace(/(([\d.]+)> )?≤/, ''),
+              filterMatch[1],
+              '<'
+            ) ||
+              compareVersions(
+                inferredStatement.version_removed.replace(/(([\d.]+)> )?≤/, ''),
+                filterMatch[2],
+                '>'
+              ))
+          ) {
+            // If version_removed and it's outside of filter range
+            continue;
+          }
+        }
+
+        if (filter.release !== inferredStatement.version_added) {
+          // If version_added doesn't match filter
+          continue;
+        }
+        if (
+          inferredStatement.version_removed &&
+          filter.release !== inferredStatement.version_removed
+        ) {
+          // If version_removed and it doesn't match filter
+          continue;
+        }
       }
 
       // Update the support data with a new value.
@@ -614,7 +657,7 @@ if (esMain(import.meta)) {
         .option('release', {
           alias: 'r',
           describe:
-            'Only update when version_added or version_removed is set to the given value',
+            'Only update when version_added or version_removed is set to the given value (can be an inclusive range, ex. xx-yy)',
           type: 'string',
           default: null
         });
