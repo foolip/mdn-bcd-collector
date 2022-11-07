@@ -341,7 +341,7 @@ export const update = (
 
       // If there's a version number filter
       if (filter.release) {
-        const filterMatch = filter.release.match(/([\d.]+)\-([\d.]+)/);
+        const filterMatch = filter.release.match(/([\d.]+)-([\d.]+)/);
         if (filterMatch) {
           if (
             typeof inferredStatement.version_added === 'string' &&
