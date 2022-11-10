@@ -43,10 +43,14 @@
     "Array.prototype.sort": {},
     "Array.prototype.splice": {},
     "Array.prototype.toLocaleString": {},
+    "Array.prototype.toReversed": {},
+    "Array.prototype.toSorted": {},
     "Array.prototype.toSource": {},
+    "Array.prototype.toSpliced": {},
     "Array.prototype.toString": {},
     "Array.prototype.unshift": {},
     "Array.prototype.values": {},
+    "Array.prototype.with": {},
     "Array.prototype.@@iterator": {},
     "Array.@@species": {},
     "Array.prototype.@@unscopables": {},
@@ -610,11 +614,20 @@
     "TypedArray.toLocaleString": {
       "code": "\"toLocaleString\" in Int8Array.prototype"
     },
+    "TypedArray.toReversed": {
+      "code": "\"toReversed\" in Int8Array.prototype"
+    },
+    "TypedArray.toSorted": {
+      "code": "\"toSorted\" in Int8Array.prototype"
+    },
     "TypedArray.toString": {
       "code": "\"toString\" in Int8Array.prototype"
     },
     "TypedArray.values": {
       "code": "\"values\" in Int8Array.prototype"
+    },
+    "TypedArray.with": {
+      "code": "\"with\" in Int8Array.prototype"
     },
     "TypedArray.@@iterator": {
       "code": "Symbol.iterator in Int8Array.prototype"
