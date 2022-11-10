@@ -1,5 +1,117 @@
 # mdn-bcd-collector Changelog
 
+## v6.2.8
+
+### Test Changes
+
+#### Added
+
+- api.CSSColorProfileRule
+- api.Document.scrollend_event
+- api.HTMLElement.scrollend_event
+- api.MathMLElement.scrollend_event
+- api.PerformanceResourceTiming.responseStatus
+- api.RTCIceCandidate.url
+- api.SVGElement.scrollend_event
+- api.VideoFrame.metadata
+- api.Window.scrollend_event
+- css.properties.anchor-scroll
+
+#### Removed
+
+- api.AudioBuffer.gain
+- api.AudioBufferSourceNode.gain
+- api.AudioBufferSourceNode.looping
+- api.AudioBufferSourceNode.noteGrainOn
+- api.AudioBufferSourceNode.noteOff
+- api.AudioBufferSourceNode.noteOn
+- api.AudioBufferSourceNode.playbackState
+- api.AudioListener.setVelocity
+- api.AudioParam.cancelValuesAndHoldAtTime
+- api.AudioParam.name
+- api.AudioParam.setTargetValueAtTime
+- api.AudioParam.units
+- api.AudioTrackList.item
+- api.BlobBuilder
+- api.BudgetService
+- api.BudgetState
+- api.CanvasCaptureMediaStream
+- api.CSS2Properties
+- api.CSSMozDocumentRule
+- api.CSSNestingRule
+- api.CSSStyleDeclaration.getPropertyShorthand
+- api.CSSStyleDeclaration.isPropertyImplicit
+- api.DataCue.data
+- api.DataTransfer.getFiles
+- api.DataTransfer.getFilesAndDirectories
+- api.DataTransferItemList.item
+- api.Directory
+- api.Document.createEntityReference
+- api.Document.domConfig
+- api.DOMConfiguration
+- api.DOMException.data
+- api.DOMException.filename
+- api.DOMException.result
+- api.DOMSettableTokenList
+- api.Element.currentStyle
+- api.Element.runtimeStyle
+- api.Event.getPreventDefault
+- api.Event.preventBubble
+- api.Event.preventCapture
+- api.FetchEvent.targetClientId
+- api.HTMLElement.dropzone
+- api.HTMLInputElement.allowdirs
+- api.HTMLInputElement.chooseDirectory
+- api.HTMLInputElement.getFiles
+- api.HTMLInputElement.getFilesAndDirectories
+- api.HTMLInputElement.isFilesAndDirectoriesSupported
+- api.HTMLMediaElement.initialTime
+- api.HTMLObjectElement.typeMustMatch
+- api.IDBDatabase.createMutableFile
+- api.KeyboardEvent.initKeyEvent
+- api.LocalMediaStream
+- api.MouseEvent.initNSMouseEvent
+- api.MSCurrentStyleCSSProperties
+- api.MSStyleCSSProperties
+- api.Node.getUserData
+- api.Node.setUserData
+- api.Notification.get
+- api.Notification.display_event
+- api.Notification.show
+- api.OscillatorNode.noteOff
+- api.OscillatorNode.noteOn
+- api.Selection.caretBidiLevel
+- api.SVGStylable
+- api.SVGSVGElement.currentView
+- api.SVGSVGElement.useCurrentView
+- api.SVGTests
+- api.SVGTransformable
+- api.SVGURIReference
+- api.SVGViewSpec
+- api.UIEvent.rangeOffset
+- api.UIEvent.rangeParent
+- api.UserDataHandler
+- api.XDomain
+- api.XDomainRequest
+
+### Commits
+
+- Improve release filter argument in update-bcd script ([#2475](https://github.com/foolip/mdn-bcd-collector/pull/2475))
+- Remove IDL for proprietary features not in BCD or removed from BCD ([#2474](https://github.com/foolip/mdn-bcd-collector/pull/2474))
+- Remove IDL for DOM features removed from BCD ([#2468](https://github.com/foolip/mdn-bcd-collector/pull/2468))
+- Remove IDL for BlobBuilder ([#2469](https://github.com/foolip/mdn-bcd-collector/pull/2469))
+- Remove IDL for HTML features removed from BCD ([#2470](https://github.com/foolip/mdn-bcd-collector/pull/2470))
+- Remove IDL for CanvasCaptureMediaStream API ([#2471](https://github.com/foolip/mdn-bcd-collector/pull/2471))
+- Remove IDL for LocalMediaStream API ([#2472](https://github.com/foolip/mdn-bcd-collector/pull/2472))
+- Remove custom IDL for Notification API ([#2473](https://github.com/foolip/mdn-bcd-collector/pull/2473))
+- Remove IDL for CSS features removed from BCD ([#2465](https://github.com/foolip/mdn-bcd-collector/pull/2465))
+- Remove custom IDL for proprietary DataCue.data ([#2466](https://github.com/foolip/mdn-bcd-collector/pull/2466))
+- Remove IDL for directory upload spec ([#2467](https://github.com/foolip/mdn-bcd-collector/pull/2467))
+- Remove IDL for proprietary IDBDatabase.createMutableFile ([#2461](https://github.com/foolip/mdn-bcd-collector/pull/2461))
+- Remove IDL for SVG features removed from BCD ([#2462](https://github.com/foolip/mdn-bcd-collector/pull/2462))
+- Remove IDL for DOMException extensions ([#2463](https://github.com/foolip/mdn-bcd-collector/pull/2463))
+- Remove IDL for budget APIs ([#2464](https://github.com/foolip/mdn-bcd-collector/pull/2464))
+
 ## v6.2.7
 
 ### Test Changes
