@@ -205,18 +205,27 @@ app.all('/export', (req, res, next) => {
       if (github) {
         const token = secrets.github.token || process.env.GITHUB_TOKEN;
         if (token) {
-          const octokit = new Octokit({auth: `token ${token}`});
-          const {url} = await exporter.exportAsPR(report, octokit);
-          res.render('export', {
-            title: 'Exported to GitHub',
-            description: url,
-            url
-          });
+          try {
+            const octokit = new Octokit({auth: `token ${token}`});
+            const {url} = await exporter.exportAsPR(report, octokit);
+            res.render('export', {
+              title: 'Exported to GitHub',
+              description: url,
+              url
+            });
+          } catch (e) {
+            console.error(e);
+            res.status(500).render('export', {
+              title: 'GitHub Export Failed',
+              description: '[GitHub Export Failed]',
+              url: null
+            });
+          }
         } else {
           res.render('export', {
             title: 'GitHub Export Disabled',
             description: '[No GitHub Token, GitHub Export Disabled]',
-            url: '/'
+            url: null
           });
         }
       } else {
