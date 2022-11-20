@@ -6,18 +6,20 @@ on:
       - main
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
     steps:
-      - uses: dkershner6/npm-version-check-with-comment-action@v1
-        id: version-check
+      - name: Checkout commit
+        uses: actions/checkout@v2
+      - name: Check for version change
+        id: check
+        uses: EndBug/version-check@v2
         with:
-          github-token: "${{ secrets.GITHUB_TOKEN }}"
-          node-version: "16.x"
-      - uses: actions/checkout@v2
-      - uses: akhileshns/heroku-deploy@v3.12.12
+          token: '${{ secrets.GITHUB_TOKEN }}'
+      - name: Deploy to Heroku
+        if: steps.check.outputs.changed == 'true'
+        uses: akhileshns/heroku-deploy@v3.12.12
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-          heroku_app_name: "mdn-bcd-collector"
+          heroku_app_name: 'mdn-bcd-collector'
           heroku_email: ${{secrets.HEROKU_EMAIL}}
-        if: ${{ steps.version-check.outputs.version-did-change == 'true' }}
