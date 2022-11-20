@@ -39,7 +39,7 @@ const reports: Report[] = [
   {
     __version: '0.3.1',
     results: {
-      'https://mdn-bcd-collector.appspot.com/tests/': [
+      'https://mdn-bcd-collector.gooborg.com/tests/': [
         {
           name: 'api.AbortController',
           exposure: 'Window',
@@ -124,7 +124,7 @@ const reports: Report[] = [
   {
     __version: '0.3.1',
     results: {
-      'https://mdn-bcd-collector.appspot.com/tests/': [
+      'https://mdn-bcd-collector.gooborg.com/tests/': [
         {
           name: 'api.AbortController',
           exposure: 'Window',
@@ -219,7 +219,7 @@ const reports: Report[] = [
   {
     __version: '0.3.1',
     results: {
-      'https://mdn-bcd-collector.appspot.com/tests/': [
+      'https://mdn-bcd-collector.gooborg.com/tests/': [
         {
           name: 'api.AbortController',
           exposure: 'Window',
@@ -308,7 +308,7 @@ const reports: Report[] = [
   {
     __version: '0.3.1',
     results: {
-      'https://mdn-bcd-collector.appspot.com/tests/': [
+      'https://mdn-bcd-collector.gooborg.com/tests/': [
         {
           name: 'api.AbortController',
           exposure: 'Window',
@@ -322,7 +322,7 @@ const reports: Report[] = [
   {
     __version: '0.3.1',
     results: {
-      'https://mdn-bcd-collector.appspot.com/tests/': [
+      'https://mdn-bcd-collector.gooborg.com/tests/': [
         {
           name: 'api.AbortController',
           exposure: 'Window',
@@ -336,7 +336,7 @@ const reports: Report[] = [
   {
     __version: '0.3.1',
     results: {
-      'https://mdn-bcd-collector.appspot.com/tests/': [
+      'https://mdn-bcd-collector.gooborg.com/tests/': [
         {
           name: 'api.AbortController',
           exposure: 'Window',
@@ -350,7 +350,7 @@ const reports: Report[] = [
   {
     __version: '0.3.1',
     results: {
-      'https://mdn-bcd-collector.appspot.com/tests/': [
+      'https://mdn-bcd-collector.gooborg.com/tests/': [
         {
           name: 'api.AbortController',
           exposure: 'Window',
@@ -704,7 +704,7 @@ describe('BCD updater', () => {
       const report: Report = {
         __version: '0.3.1',
         results: {
-          'https://mdn-bcd-collector.appspot.com/tests/': [
+          'https://mdn-bcd-collector.gooborg.com/tests/': [
             {
               name: 'api.AbortController',
               exposure: 'Window',
@@ -1034,7 +1034,7 @@ describe('BCD updater', () => {
           {
             __version: '0.3.1',
             results: {
-              'https://mdn-bcd-collector.appspot.com/tests/': [
+              'https://mdn-bcd-collector.gooborg.com/tests/': [
                 {
                   name: 'api.FakeInterface',
                   exposure: 'Window',
@@ -1319,7 +1319,7 @@ describe('BCD updater', () => {
       const report: Report = {
         __version: '0.3.1',
         results: {
-          'https://mdn-bcd-collector.appspot.com/tests/': [
+          'https://mdn-bcd-collector.gooborg.com/tests/': [
             {
               name: 'api.AbortController',
               exposure: 'Window',
@@ -1357,7 +1357,7 @@ describe('BCD updater', () => {
       const report: Report = {
         __version: '0.3.1',
         results: {
-          'https://mdn-bcd-collector.appspot.com/tests/': [
+          'https://mdn-bcd-collector.gooborg.com/tests/': [
             {
               name: 'api.AbortController',
               exposure: 'Window',
@@ -1398,7 +1398,7 @@ describe('BCD updater', () => {
       const report: Report = {
         __version: '0.3.1',
         results: {
-          'https://mdn-bcd-collector.appspot.com/tests/': [
+          'https://mdn-bcd-collector.gooborg.com/tests/': [
             {
               name: 'api.AbortController',
               exposure: 'Window',
@@ -1439,7 +1439,7 @@ describe('BCD updater', () => {
       const report: Report = {
         __version: '0.3.1',
         results: {
-          'https://mdn-bcd-collector.appspot.com/tests/': [
+          'https://mdn-bcd-collector.gooborg.com/tests/': [
             {
               name: 'api.AbortController',
               exposure: 'Window',
@@ -1477,7 +1477,7 @@ describe('BCD updater', () => {
       const report: Report = {
         __version: '0.3.1',
         results: {
-          'https://mdn-bcd-collector.appspot.com/tests/': [
+          'https://mdn-bcd-collector.gooborg.com/tests/': [
             {
               name: 'api.AbortController',
               exposure: 'Window',
@@ -1515,7 +1515,7 @@ describe('BCD updater', () => {
       const report: Report = {
         __version: '0.3.1',
         results: {
-          'https://mdn-bcd-collector.appspot.com/tests/': [
+          'https://mdn-bcd-collector.gooborg.com/tests/': [
             {
               name: 'api.AbortController',
               exposure: 'Window',
@@ -1563,7 +1563,7 @@ describe('BCD updater', () => {
       const report: Report = {
         __version: '0.3.1',
         results: {
-          'https://mdn-bcd-collector.appspot.com/tests/': [
+          'https://mdn-bcd-collector.gooborg.com/tests/': [
             {
               name: 'api.AbortController',
               exposure: 'Window',
@@ -1646,7 +1646,7 @@ describe('BCD updater', () => {
       const report: Report = {
         __version: '0.3.1',
         results: {
-          'https://mdn-bcd-collector.appspot.com/tests/': [
+          'https://mdn-bcd-collector.gooborg.com/tests/': [
             {
               name: 'api.AbortController',
               exposure: 'Window',

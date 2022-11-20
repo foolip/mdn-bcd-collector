@@ -43,7 +43,7 @@ const resultsDir = fileURLToPath(
 const testenv = process.env.NODE_ENV === 'test';
 const host = `https://${
   testenv ? 'staging-dot-' : ''
-}mdn-bcd-collector.appspot.com`;
+}mdn-bcd-collector.gooborg.com`;
 
 const seleniumUrls = {
   browserstack: 'https://${username}:${key}@hub-cloud.browserstack.com/wd/hub',
