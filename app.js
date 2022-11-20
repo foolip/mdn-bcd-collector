@@ -40,7 +40,9 @@ const getAppVersion = async () => {
   }
 
   try {
-    return String(exec('git describe --tags')).replace(/^v/, '');
+    return String(exec('git describe --tags'))
+      .replace(/^v/, '')
+      .replace('\n', '');
   } catch (e) {
     // If anything happens, e.g., git isn't installed, just use the version
     // from package.json with -dev appended.
