@@ -83,7 +83,7 @@ const exportAsPR = async (report: Report, octokit?) => {
 
   const meta = getReportMeta(report);
   await octokit.git.createRef({
-    owner: 'foolip',
+    owner: 'GooborgStudios',
     repo: 'mdn-bcd-results',
     ref: `refs/heads/${meta.branch}`,
     // first commit in repo
@@ -91,7 +91,7 @@ const exportAsPR = async (report: Report, octokit?) => {
   });
 
   await octokit.repos.createOrUpdateFileContents({
-    owner: 'foolip',
+    owner: 'GooborgStudios',
     repo: 'mdn-bcd-results',
     path: `${meta.filename}`,
     message: meta.title,
@@ -100,7 +100,7 @@ const exportAsPR = async (report: Report, octokit?) => {
   });
 
   const {data} = await octokit.pulls.create({
-    owner: 'foolip',
+    owner: 'GooborgStudios',
     repo: 'mdn-bcd-results',
     title: meta.title,
     head: meta.branch,

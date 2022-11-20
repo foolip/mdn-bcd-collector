@@ -223,7 +223,7 @@ const getGitChanges = async (ctx) => {
       // Link to pull requests
       summary.replace(
         /\(#(\d+)\)/g,
-        '([#$1](https://github.com/foolip/mdn-bcd-collector/pull/$1))'
+        '([#$1](https://github.com/GooborgStudios/mdn-bcd-collector/pull/$1))'
       )
     )
     .join('\n');
