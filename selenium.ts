@@ -44,7 +44,7 @@ const resultsDir = fileURLToPath(
 const testenv = process.env.NODE_ENV === 'test';
 const host = testenv
   ? 'http://localhost:8080'
-  : 'https://mdn-bcd-collector.appspot.com';
+  : 'https://mdn-bcd-collector.gooborg.com';
 
 const seleniumUrls = {
   browserstack: 'https://${username}:${key}@hub-cloud.browserstack.com/wd/hub',
