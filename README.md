@@ -125,7 +125,9 @@ In `secrets.json`, you'll need to add your Selenium remote(s). In the `selenium`
 
 ```json
 {
-  "github": {...},
+  "github": {
+    "token": "github-token-goes-here"
+  },
   "selenium": {
     "browserstack": {
       "username": "example",
@@ -179,12 +181,4 @@ npm run coverage
 
 ```sh
 npm run clean
-```
-
-## Release process
-
-To create a release, run the following command:
-
-```sh
-npm run release
 ```
