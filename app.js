@@ -203,7 +203,7 @@ app.all('/export', (req, res, next) => {
     .then(async (results) => {
       const report = createReport(results, req);
       if (github) {
-        const token = secrets.github.token;
+        const token = secrets.github.token || process.env.GITHUB_TOKEN;
         if (token) {
           const octokit = new Octokit({auth: `token ${token}`});
           const {url} = await exporter.exportAsPR(report, octokit);
