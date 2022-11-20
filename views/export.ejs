@@ -8,5 +8,5 @@ See the LICENSE file for copyright details
 
 <%- contentFor('body') %>
 <p>
-  Exported as <a id="download" href="<%=url%>"><%=description%></a>
+  Exported as <a id="download" <% if (!url) {%> class="error-notice" <% } else { %> href="<%=url%>" <% } %>><%=description%></a>
 </p>
