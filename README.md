@@ -91,10 +91,10 @@ These errors are worth looking out for:
 ## Running the server locally
 
 ```sh
-npm run start-dev
+npm run dev
 ```
 
-(`start-dev`, as opposed to `start`, will automatically rebuild the tests and reload the server on file changes.)
+(`dev`, as opposed to `start`, will automatically rebuild the tests and reload the server on file changes.)
 
 To also handle HTTPS traffic, use the `--https-cert` and `--https-key` arguments:
 
