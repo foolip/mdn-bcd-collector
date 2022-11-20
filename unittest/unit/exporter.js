@@ -92,7 +92,7 @@ describe('GitHub export', () => {
           .expects('createRef')
           .once()
           .withArgs({
-            owner: 'foolip',
+            owner: 'GooborgStudios',
             ref: `refs/heads/collector/${expected.slug}`,
             repo: 'mdn-bcd-results',
             sha: '753c6ed8e991e9729353a63d650ff0f5bd902b69'
@@ -104,7 +104,7 @@ describe('GitHub export', () => {
           .once()
           .withArgs(
             sinon.match({
-              owner: 'foolip',
+              owner: 'GooborgStudios',
               repo: 'mdn-bcd-results',
               path: `${expected.slug}.json`,
               message: expected.title,
@@ -118,7 +118,7 @@ describe('GitHub export', () => {
           .expects('create')
           .once()
           .withArgs({
-            owner: 'foolip',
+            owner: 'GooborgStudios',
             repo: 'mdn-bcd-results',
             title: expected.title,
             head: `collector/${expected.slug}`,
@@ -127,7 +127,8 @@ describe('GitHub export', () => {
           })
           .resolves({
             data: {
-              html_url: 'https://github.com/foolip/mdn-bcd-results/pull/42'
+              html_url:
+                'https://github.com/GooborgStudios/mdn-bcd-results/pull/42'
             }
           });
 
@@ -135,7 +136,7 @@ describe('GitHub export', () => {
 
         assert.deepEqual(result, {
           filename: `${expected.slug}.json`,
-          url: 'https://github.com/foolip/mdn-bcd-results/pull/42'
+          url: 'https://github.com/GooborgStudios/mdn-bcd-results/pull/42'
         });
       });
     }

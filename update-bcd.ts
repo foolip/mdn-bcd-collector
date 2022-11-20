@@ -2,7 +2,7 @@
 // mdn-bcd-collector: update-bcd.ts
 // Script to update the BCD data using collected results
 //
-// See https://github.com/foolip/mdn-bcd-collector/blob/main/DESIGN.md#updating-bcd
+// See https://github.com/GooborgStudios/mdn-bcd-collector/blob/main/DESIGN.md#updating-bcd
 // for documentation on the approach taken in this script.
 //
 // © Google LLC, Gooborg Studios

@@ -2,7 +2,7 @@
 
 Data collection service for MDN's [browser-compat-data](https://github.com/mdn/browser-compat-data). Live at https://mdn-bcd-collector.appspot.com/.
 
-Feature detection tests are generated based on machine readable data (Web IDL and CSS definitions) from web standards, with support for custom tests where needed. Results are submitted to the [mdn-bcd-results](https://github.com/foolip/mdn-bcd-results) repository.
+Feature detection tests are generated based on machine readable data (Web IDL and CSS definitions) from web standards, with support for custom tests where needed. Results are submitted to the [mdn-bcd-results](https://github.com/GooborgStudios/mdn-bcd-results) repository.
 
 See [DESIGN.md](./DESIGN.md) for details of how this service works.
 
@@ -20,7 +20,7 @@ npm install
 
 ## Updating BCD using the results
 
-Given a checkout of [BCD](https://github.com/mdn/browser-compat-data) at `../browser-compat-data` and a checkout of [collector results](https://github.com/foolip/mdn-bcd-results) at `../mdn-bcd-results`, `npm run update-bcd` can be used to update existing BCD entries.
+Given a checkout of [BCD](https://github.com/mdn/browser-compat-data) at `../browser-compat-data` and a checkout of [collector results](https://github.com/GooborgStudios/mdn-bcd-results) at `../mdn-bcd-results`, `npm run update-bcd` can be used to update existing BCD entries.
 
 If you have results from a browser not yet in BCD, first add the release in `../browser-compat-data/browsers/`. This is because the full version (from the `User-Agent` header) is mapped to BCD browser release as part of the processing.
 
@@ -78,7 +78,7 @@ These errors are worth looking out for:
   - Missing [interface objects](https://webidl.spec.whatwg.org/#interface-object). For example, `crypto.subtle` was shipped long before the `SubtleCrypto` interface was [exposed](https://webkit.org/b/165629) in some browsers. Missing interface objects was common in the past, especially for events, but is quite _uncommon_ for APIs introduced after ~2020. See [#7963](https://github.com/mdn/browser-compat-data/pull/7963), [#7986](https://github.com/mdn/browser-compat-data/pull/7986) and [#10837](https://github.com/mdn/browser-compat-data/pull/10837) for examples.
   - [Attributes](https://webidl.spec.whatwg.org/#es-attributes) weren't on the prototypes in some older browsers, for example [before Chrome 43](https://github.com/mdn/browser-compat-data/issues/7843). See [#6568](https://github.com/mdn/browser-compat-data/pull/6568#discussion_r479039982) for an example.
 
-  To guard against this, follow the link to the test and expand the code. A simple `'propertyName' in InterfaceName` test can yield false negatives, so an _instance_ of the type should be created and tested using the [custom tests](https://github.com/foolip/mdn-bcd-collector/blob/main/custom-tests.yaml) mechanism. Ask for this when reviewing, you don't need to create the tests yourself.
+  To guard against this, follow the link to the test and expand the code. A simple `'propertyName' in InterfaceName` test can yield false negatives, so an _instance_ of the type should be created and tested using the [custom tests](https://github.com/GooborgStudios/mdn-bcd-collector/blob/main/custom-tests.yaml) mechanism. Ask for this when reviewing, you don't need to create the tests yourself.
 
 - Consistency with other parts of the same feature. Does it seem plausible that the feature was introduced earlier or later than other parts? Examples of consistency to look for:
 
@@ -116,7 +116,7 @@ This can only be done manually, there is no automatic staging deployment.
 
 A script has been provided which will collect all of the results for nearly all of the browsers, using the Selenium WebDriver to control your CTs, and download them to your computer (which can then be submitted as a PR). To run this script, you'll need a few prerequisites:
 
-- A clone of [mdn-bcd-results](https://github.com/foolip/mdn-bcd-results) adjacent to this folder's repository (or at least a folder at `../mdn-bcd-results`)
+- A clone of [mdn-bcd-results](https://github.com/GooborgStudios/mdn-bcd-results) adjacent to this folder's repository (or at least a folder at `../mdn-bcd-results`)
 - At least one Selenium remote (ex. BrowserStack, SauceLabs, etc.)
 
 ### Define Selenium Hosts
