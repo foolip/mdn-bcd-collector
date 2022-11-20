@@ -1,0 +1,23 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: dkershner6/npm-version-check-with-comment-action@v1
+        id: version-check
+        with:
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+          node-version: "16.x"
+      - uses: actions/checkout@v2
+      - uses: akhileshns/heroku-deploy@v3.12.12
+        with:
+          heroku_api_key: ${{secrets.HEROKU_API_KEY}}
+          heroku_app_name: "mdn-bcd-collector"
+          heroku_email: ${{secrets.HEROKU_EMAIL}}
+        if: ${{ steps.version-check.outputs.version-did-change == 'true' }}
