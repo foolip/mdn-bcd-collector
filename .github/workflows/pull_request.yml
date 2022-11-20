@@ -1,4 +1,4 @@
-name: PR
+name: Test Pull Request
 on: pull_request
 jobs:
   test:
@@ -39,6 +39,8 @@ jobs:
           npx wait-on -t 10000 -v http://localhost:8080
         env:
           NODE_ENV: production
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
 env:
   FORCE_COLOR: 3
   BCD_DIR: ./browser-compat-data
