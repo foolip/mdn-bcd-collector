@@ -884,7 +884,7 @@ api:
   FileReader:
     __base: var instance = new FileReader();
   FileSystem:
-    __base: >-
+    __base: |-
       window.webkitRequestFileSystem(TEMPORARY, 8*1024 /* 8KB */, function(fs) {
         callback(fs);
       }, function(error) {
@@ -893,19 +893,19 @@ api:
   FileSystemEntry:
     __base: <%api.FileSystemDirectoryEntry:callback%>
   FileSystemDirectoryEntry:
-    __base: >-
+    __base: |-
       <%api.FileSystem:fsCallback%>
       function fsCallback(fs) {
         callback(fs.root);
       }
   FileSystemDirectoryReader:
-    __base: >-
+    __base: |-
       <%api.FileSystemDirectoryEntry:dirCallback%>
       function dirCallback(dir) {
         callback(dir.createReader());
       }
   FileSystemFileEntry:
-    __base: >-
+    __base: |-
       <%api.FileSystem:fsCallback%>
       function fsCallback(fs) {
         fs.root.getFile('foo.txt', { create: true }, function(file) {
@@ -966,13 +966,13 @@ api:
   Geolocation:
     __base: var instance = navigator.geolocation;
   GeolocationCoordinates:
-    __base: >-
+    __base: |-
       <%api.GeolocationPosition:posCallback%>
       function posCallback(pos) {
         callback(pos.coords);
       }
   GeolocationPosition:
-    __base: >-
+    __base: |-
       <%api.Geolocation:geo%>
       geo.getCurrentPosition(function(pos) {
         callback(pos);
