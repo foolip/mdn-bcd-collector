@@ -13,6 +13,10 @@ import {CloudStorage, MemoryStorage, getStorage} from '../../storage.js';
 const SESSION_ID = 'testsessionid';
 
 class FakeFile {
+  _bucket: FakeBucket;
+  _name: string;
+  _data: any;
+
   constructor(bucket, name) {
     this._bucket = bucket;
     this._name = name;
@@ -34,6 +38,8 @@ class FakeFile {
 }
 
 class FakeBucket {
+  _files: Map<string, any>;
+
   constructor() {
     this._files = new Map();
   }
@@ -47,7 +53,7 @@ class FakeBucket {
   }
 
   async getFiles(options) {
-    const files = [];
+    const files: any[] = [];
     for (const [name, file] of this._files) {
       if (name.startsWith(options.prefix)) {
         files.push(file);
@@ -60,14 +66,14 @@ class FakeBucket {
 describe('storage', () => {
   for (const StorageClass of [CloudStorage, MemoryStorage]) {
     describe(StorageClass.name, () => {
-      let storage = null;
+      let storage: any = null;
 
       beforeEach(() => {
         if (StorageClass === CloudStorage) {
-          storage = new CloudStorage('fake-project', 'fake-bucket');
+          storage = new CloudStorage('fake-project', 'fake-bucket', '');
           storage._bucket = new FakeBucket();
         } else {
-          storage = new StorageClass();
+          storage = new MemoryStorage();
         }
       });
 
@@ -141,8 +147,8 @@ describe('storage', () => {
 
       const storage = getStorage('test-version');
       assert(storage instanceof CloudStorage);
-      assert.equal(storage._bucket.name, 'test-bucket');
-      assert.equal(storage._version, 'test-version');
+      assert.equal((storage as CloudStorage)._bucket.name, 'test-bucket');
+      assert.equal((storage as CloudStorage)._version, 'test-version');
     });
 
     afterEach(() => {

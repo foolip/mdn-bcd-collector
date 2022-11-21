@@ -19,6 +19,7 @@ import {
   until
 } from 'selenium-webdriver';
 import bcd from '@mdn/browser-compat-data' assert {type: 'json'};
+import type {ReleaseStatement} from '@mdn/browser-compat-data';
 const bcdBrowsers = bcd.browsers;
 import {
   compare as compareVersions,
@@ -28,7 +29,7 @@ import fetch from 'node-fetch';
 import esMain from 'es-main';
 import fs from 'fs-extra';
 import chalk from 'chalk-template';
-import {Listr} from 'listr2';
+import {Listr, ListrTask} from 'listr2';
 import yargs from 'yargs';
 import {hideBin} from 'yargs/helpers';
 
@@ -110,8 +111,12 @@ const log = (task, message) => {
   // task.output = new Date(Date.now()).toLocaleTimeString(undefined, {hour12: false}) + ': ' + message;
 };
 
-const filterVersions = (data, earliestVersion, reverse) => {
-  const versions = [];
+const filterVersions = (
+  data: {[version: string]: ReleaseStatement},
+  earliestVersion,
+  reverse
+) => {
+  const versions: string[] = [];
 
   for (const [version, versionData] of Object.entries(data)) {
     if (
@@ -123,12 +128,12 @@ const filterVersions = (data, earliestVersion, reverse) => {
   }
 
   return versions.sort((a, b) =>
-    compareVersionsSort(...(reverse ? [a, b] : [b, a]))
+    reverse ? compareVersionsSort(a, b) : compareVersionsSort(b, a)
   );
 };
 
 const getBrowsersToTest = (limitBrowsers, limitVersion, reverse) => {
-  let browsersToTest = {
+  let browsersToTest: {[browser: string]: string[]} = {
     chrome: filterVersions(bcdBrowsers.chrome.releases, '15', reverse),
     edge: filterVersions(bcdBrowsers.edge.releases, '12', reverse),
     firefox: filterVersions(bcdBrowsers.firefox.releases, '4', reverse),
@@ -172,7 +177,7 @@ const getSafariOS = (version) => {
 };
 
 const getOsesToTest = (service, os) => {
-  let osesToTest = [];
+  let osesToTest: [string, string][] = [];
 
   switch (os) {
     case 'Windows':
@@ -226,7 +231,7 @@ const getSeleniumUrl = (service, credentials) => {
   }
 
   const re = /\${([^}]+)?}/g;
-  const missingVars = [];
+  const missingVars: string[] = [];
 
   // Replace variables in pre-defined Selenium URLs
   const seleniumUrl = seleniumUrls[service].replace(re, ($1, $2) => {
@@ -312,7 +317,7 @@ const buildDriver = async (browser, version, os) => {
           }
         });
       } else if (browser === 'firefox') {
-        let firefoxPrefs = {
+        let firefoxPrefs: {[pref: string]: any} = {
           'media.navigator.streams.fake': true
         };
         if (version >= 53) {
@@ -360,7 +365,7 @@ const buildDriver = async (browser, version, os) => {
           "Couldn't compile Selenium URL",
           'Unsupported platform'
         ];
-        if (messages.some((m) => e.message.includes(m))) {
+        if (messages.some((m) => (e as Error).message.includes(m))) {
           // If unsupported config, continue to the next grid configuration
           continue;
         } else {
@@ -462,7 +467,7 @@ const run = async (browser, version, os, ctx, task) => {
     try {
       await driver.wait(until.elementTextContains(statusEl, 'upload'), 60000);
     } catch (e) {
-      if (e.name == 'TimeoutError') {
+      if ((e as Error).name == 'TimeoutError') {
         throw new Error(
           task.title + ' - ' + 'Timed out waiting for results to upload'
         );
@@ -516,18 +521,18 @@ const runAll = async (
     limitVersion,
     reverse
   );
-  const tasks = [];
+  const tasks: ListrTask[] = [];
 
   // eslint-disable-next-line guard-for-in
   for (const browser in browsersToTest) {
-    const browsertasks = [];
+    const browsertasks: ListrTask[] = [];
 
     for (const version of browsersToTest[browser]) {
       for (const os of oses) {
         if (
           os === 'macOS' &&
           ['edge', 'ie'].includes(browser) &&
-          version <= 18
+          version <= '18'
         ) {
           // Don't test Internet Explorer / EdgeHTML on macOS
           continue;
@@ -563,18 +568,18 @@ const runAll = async (
     rendererOptions: {
       collapseSkips: false,
       collapseErrors: false
-    }
+    } as any
   });
 
   await taskrun.run({testenv});
 };
 
 if (esMain(import.meta)) {
-  const {argv} = yargs(hideBin(process.argv)).command(
+  const {argv}: {argv: any} = yargs(hideBin(process.argv)).command(
     '$0 [browser..]',
     'Run Selenium on several browser versions',
     (yargs) => {
-      yargs
+      (yargs as any)
         .positional('browser', {
           describe: 'Limit the browser(s) to test',
           alias: 'b',

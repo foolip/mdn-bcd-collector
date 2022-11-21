@@ -366,17 +366,17 @@ describe('BCD updater', () => {
   describe('findEntry', () => {
     it('equal', () => {
       assert.strictEqual(
-        findEntry(bcd, 'api.AbortController'),
+        findEntry(bcd as any, 'api.AbortController'),
         bcd.api.AbortController
       );
     });
 
     it('no path', () => {
-      assert.strictEqual(findEntry(bcd, ''), null);
+      assert.strictEqual(findEntry(bcd as any, ''), null);
     });
 
     it('invalid path', () => {
-      assert.strictEqual(findEntry(bcd, 'api.MissingAPI'), undefined);
+      assert.strictEqual(findEntry(bcd as any, 'api.MissingAPI'), undefined);
     });
   });
 
@@ -684,17 +684,17 @@ describe('BCD updater', () => {
       );
 
       assert.isTrue(
-        logger.warn.calledWith(
+        (logger.warn as any).calledWith(
           'Ignoring unknown browser Yandex 17.6 (Mozilla/5.0 (Windows NT 6.3) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 YaBrowser/17.6.1.749 Yowser/2.5 Safari/537.36)'
         )
       );
       assert.isTrue(
-        logger.warn.calledWith(
+        (logger.warn as any).calledWith(
           'Ignoring unknown Chrome version 1000.1 (Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/1000.1.4183.83 Safari/537.36)'
         )
       );
       assert.isTrue(
-        logger.warn.calledWith(
+        (logger.warn as any).calledWith(
           'Unable to parse browser from UA node-superagent/1.2.3'
         )
       );
@@ -722,7 +722,7 @@ describe('BCD updater', () => {
     });
 
     afterEach(() => {
-      logger.warn.restore();
+      (logger.warn as any).restore();
     });
   });
 

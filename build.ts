@@ -19,6 +19,15 @@ import * as YAML from 'yaml';
 
 import customIDL from './custom-idl/index.js';
 
+import type {
+  Test,
+  RawTest,
+  RawTestCodeExpr,
+  Exposure,
+  Resources,
+  IDLFiles
+} from './types/types.js';
+
 /* c8 ignore start */
 const customTests = YAML.parse(
   await fs.readFile(
@@ -42,7 +51,7 @@ const customJS = await fs.readJson(
 
 const generatedDir = fileURLToPath(new URL('./generated', import.meta.url));
 
-const compileCustomTest = (code, format = true) => {
+const compileCustomTest = (code: string, format = true): string => {
   // Import code from other tests
   code = code.replace(
     /<%(\w+)\.(\w+)(?:\.(\w+))?:(\w+)%> ?/g,
@@ -80,8 +89,12 @@ const compileCustomTest = (code, format = true) => {
   return code;
 };
 
-const getCustomTestAPI = (name, member, type) => {
-  let test = false;
+const getCustomTestAPI = (
+  name: string,
+  member?: string,
+  type?: string
+): string | false => {
+  let test: string | false = false;
 
   if (name in customTests.api) {
     const testbase =
@@ -90,8 +103,7 @@ const getCustomTestAPI = (name, member, type) => {
         : '';
     const promise = testbase.includes('var promise');
     const callback =
-      importcode.match(/callback([(),])/g) ||
-      importcode.includes(':callback%>');
+      testbase.match(/callback([(),])/g) || testbase.includes(':callback%>');
 
     if (member === undefined) {
       if ('__test' in customTests.api[name]) {
@@ -127,7 +139,7 @@ const getCustomTestAPI = (name, member, type) => {
         test = testbase + customTests.api[name][member];
       } else {
         if (
-          ['constructor', 'static'].includes(type) ||
+          ['constructor', 'static'].includes(type as string) ||
           ['toString', 'toJSON'].includes(member)
         ) {
           // Constructors, constants, and static attributes should not have
@@ -181,7 +193,7 @@ const getCustomTestAPI = (name, member, type) => {
   return test;
 };
 
-const getCustomSubtestsAPI = (name) => {
+const getCustomSubtestsAPI = (name: string): {[subtest: string]: string} => {
   const subtests = {};
 
   if (name in customTests.api) {
@@ -201,8 +213,8 @@ const getCustomSubtestsAPI = (name) => {
   return subtests;
 };
 
-const getCustomResourcesAPI = (name) => {
-  const resources = {};
+const getCustomResourcesAPI = (name: string): Resources => {
+  const resources: Resources = {};
 
   // TODO: Use tests imports to inherit resources
   if (name in customTests.api && '__resources' in customTests.api[name]) {
@@ -222,7 +234,7 @@ const getCustomResourcesAPI = (name) => {
   return resources;
 };
 
-const getCustomTestCSS = (name) => {
+const getCustomTestCSS = (name: string): string | false => {
   return (
     'properties' in customTests.css &&
     name in customTests.css.properties &&
@@ -230,7 +242,7 @@ const getCustomTestCSS = (name) => {
   );
 };
 
-const compileTestCode = (test) => {
+const compileTestCode = (test: any): string => {
   if (typeof test === 'string') {
     return test;
   }
@@ -260,17 +272,17 @@ const compileTestCode = (test) => {
   )}" in self && "${property}" in ${test.owner}`;
 };
 
-const compileTest = (test) => {
+const compileTest = (test: RawTest): Test => {
   let code;
-  if (!Array.isArray(test.raw.code)) {
-    code = compileTestCode(test.raw.code);
-  } else {
+  if (Array.isArray(test.raw.code)) {
     const parts = test.raw.code.map(compileTestCode);
     code = parts.join(` ${test.raw.combinator} `);
+  } else {
+    code = compileTestCode(test.raw.code);
   }
 
   const {exposure, resources} = test;
-  const newTest = {code, exposure};
+  const newTest: Test = {code, exposure};
 
   if (resources && Object.keys(resources).length) {
     newTest.resources = resources;
@@ -305,8 +317,8 @@ const mergeMembers = (target, source) => {
   target.members.push(...sourceMembers);
 };
 
-const flattenIDL = (specIDLs, customIDLs) => {
-  let ast = [];
+const flattenIDL = (specIDLs: IDLFiles, customIDLs: IDLFiles) => {
+  let ast: WebIDL2.IDLRootType[] = [];
 
   for (const idl of Object.values(specIDLs)) {
     ast.push(...idl);
@@ -318,12 +330,15 @@ const flattenIDL = (specIDLs, customIDLs) => {
 
   // merge partials (O^2 but still fast)
   ast = ast.filter((dfn) => {
-    if (!dfn.partial) {
+    if (!('partial' in dfn && dfn.partial)) {
       return true;
     }
 
     const target = ast.find(
-      (it) => !it.partial && it.type === dfn.type && it.name === dfn.name
+      (it) =>
+        !('partial' in it && it.partial) &&
+        it.type === dfn.type &&
+        it.name === dfn.name
     );
     if (!target) {
       throw new Error(
@@ -346,7 +361,7 @@ const flattenIDL = (specIDLs, customIDLs) => {
       }
       const mixin = ast.find(
         (it) =>
-          !it.partial &&
+          !('partial' in it && it.partial) &&
           it.type === 'interface mixin' &&
           it.name === dfn.includes
       );
@@ -356,7 +371,10 @@ const flattenIDL = (specIDLs, customIDLs) => {
         );
       }
       const target = ast.find(
-        (it) => !it.partial && it.type === 'interface' && it.name === dfn.target
+        (it) =>
+          !('partial' in it && it.partial) &&
+          it.type === 'interface' &&
+          it.name === dfn.target
       );
       if (!target) {
         throw new Error(
@@ -369,7 +387,9 @@ const flattenIDL = (specIDLs, customIDLs) => {
     }
   }
 
-  const globals = ast.filter((dfn) => dfn.name === 'WindowOrWorkerGlobalScope');
+  const globals = ast.filter(
+    (dfn) => 'name' in dfn && dfn.name === 'WindowOrWorkerGlobalScope'
+  );
 
   // drop includes and mixins
   ast = ast.filter(
@@ -382,7 +402,7 @@ const flattenIDL = (specIDLs, customIDLs) => {
     // Special case RTCIdentityProviderGlobalScope since it doesn't use the
     // Global extended attribute correctly:
     // https://github.com/w3c/webrtc-identity/pull/36
-    if (dfn.name === 'RTCIdentityProviderGlobalScope') {
+    if ('name' in dfn && dfn.name === 'RTCIdentityProviderGlobalScope') {
       scopes.add('RTCIdentityProvider');
       continue;
     }
@@ -502,17 +522,17 @@ const flattenMembers = (iface) => {
   return members.sort((a, b) => a.name.localeCompare(b.name));
 };
 
-const getExtAttr = (node, name) => {
+const getExtAttr = (node, name: string) => {
   return node.extAttrs && node.extAttrs.find((i) => i.name === name);
 };
 
-const getExtAttrSet = (node, name) => {
+const getExtAttrSet = (node, name: string) => {
   const attr = getExtAttr(node, name);
   if (!attr) {
     return null;
   }
 
-  const set = new Set();
+  const set: Set<string> = new Set();
   switch (attr.rhs.type) {
     case 'identifier':
       set.add(attr.rhs.value);
@@ -535,7 +555,7 @@ const getExtAttrSet = (node, name) => {
 };
 
 // https://webidl.spec.whatwg.org/#Exposed
-const getExposureSet = (node, scopes) => {
+const getExposureSet = (node, scopes): Set<Exposure> => {
   // step 6-8 of https://webidl.spec.whatwg.org/#dfn-exposure-set
   const exposure = getExtAttrSet(node, 'Exposed');
   if (!exposure) {
@@ -577,11 +597,13 @@ const getExposureSet = (node, scopes) => {
     }
   }
 
-  return exposure;
+  return exposure as Set<Exposure>;
 };
 
 const validateIDL = (ast) => {
-  const validations = WebIDL2.validate(ast).filter((v) => {
+  // XXX Typedefs for WebIDL2 are missing validate function
+  // XXX https://github.com/DefinitelyTyped/DefinitelyTyped/discussions/63342
+  const validations = (WebIDL2 as any).validate(ast).filter((v) => {
     // Ignore the [LegacyNoInterfaceObject] rule.
     return v.ruleName !== 'no-nointerfaceobject';
   });
@@ -597,7 +619,7 @@ const validateIDL = (ast) => {
   // Validate that there are no unknown types. There are types in lots of
   // places in the AST (interface members, arguments, return types) and rather
   // than trying to cover them all, walk the whole AST looking for "idlType".
-  const usedTypes = new Set();
+  const usedTypes: Set<string> = new Set();
   // Serialize and reparse the ast to not have to worry about own properties
   // vs enumerable properties on the prototypes, etc.
   const pending = [JSON.parse(JSON.stringify(ast))];
@@ -691,7 +713,7 @@ const buildIDLMemberTests = (
       typeof member.idlType?.idlType === 'string' &&
       member.idlType?.idlType.endsWith('EventHandler');
 
-    let expr;
+    let expr: string | RawTestCodeExpr = '';
     const customTestMember = getCustomTestAPI(
       iface.name,
       member.name,
@@ -737,7 +759,7 @@ const buildIDLMemberTests = (
         code: expr
       },
       exposure: Array.from(exposureSet),
-      resources: resources
+      resources
     });
     handledMemberNames.add(member.name);
   }
@@ -771,7 +793,7 @@ const buildIDLTests = (ast, globals, scopes) => {
         code: customIfaceTest || {property: iface.name, owner: 'self'}
       },
       exposure: Array.from(exposureSet),
-      resources: resources
+      resources
     });
 
     const members = flattenMembers(iface);
@@ -793,7 +815,7 @@ const buildIDLTests = (ast, globals, scopes) => {
           code: subtest[1]
         },
         exposure: Array.from(exposureSet),
-        resources: resources
+        resources
       });
     }
   }
@@ -819,14 +841,17 @@ const buildIDLTests = (ast, globals, scopes) => {
   return tests;
 };
 
-const buildIDL = (specIDLs, customIDLs) => {
+const buildIDL = (specIDLs: IDLFiles, customIDLs: IDLFiles) => {
   const {ast, globals, scopes} = flattenIDL(specIDLs, customIDLs);
   validateIDL(ast);
   return buildIDLTests(ast, globals, scopes);
 };
 
 // https://drafts.csswg.org/cssom/#css-property-to-idl-attribute
-const cssPropertyToIDLAttribute = (property, lowercaseFirst) => {
+const cssPropertyToIDLAttribute = (
+  property: string,
+  lowercaseFirst?: boolean
+) => {
   let output = '';
   let uppercaseNext = false;
   if (lowercaseFirst) {
@@ -848,13 +873,13 @@ const cssPropertyToIDLAttribute = (property, lowercaseFirst) => {
 const buildCSS = (specCSS, customCSS) => {
   const properties = new Map();
 
-  for (const data of Object.values(specCSS)) {
+  for (const data of Object.values(specCSS) as any[]) {
     for (const prop of Object.keys(data.properties)) {
       properties.set(prop, new Map());
     }
   }
 
-  for (const [name, data] of Object.entries(customCSS.properties)) {
+  for (const [name, data] of Object.entries(customCSS.properties) as any[]) {
     const values = '__values' in data ? data['__values'] : [];
     const additionalValues =
       '__additional_values' in data ? data['__additional_values'] : {};
@@ -895,7 +920,7 @@ const buildCSS = (specCSS, customCSS) => {
     // Tests for values
     for (const [key, value] of Array.from(
       properties.get(name).entries()
-    ).sort()) {
+    ).sort() as any[]) {
       const values = Array.isArray(value) ? value : [value];
       const code = values
         .map((value) => `bcd.testCSSPropertyValue("${name}", "${value}")`)
@@ -913,7 +938,7 @@ const buildCSS = (specCSS, customCSS) => {
 const buildJS = (customJS) => {
   const tests = {};
 
-  for (const [path, extras] of Object.entries(customJS.builtins)) {
+  for (const [path, extras] of Object.entries(customJS.builtins) as any[]) {
     const parts = path.split('.');
 
     const bcdPath = [
@@ -1064,15 +1089,12 @@ const generateCSS = async () => {
   const scssPath = fileURLToPath(new URL('./style.scss', import.meta.url));
   const outPath = path.join(generatedDir, 'resources', 'style.css');
   const result = sass.renderSync({file: scssPath});
-  if (typeof result === Error) {
-    throw result;
-  }
   await fs.writeFile(outPath, result.css.toString(), 'utf8');
 };
 
-const build = async (customIDL, customCSS) => {
+const build = async (customIDL: IDLFiles, customCSS) => {
   const specCSS = await css.listAll();
-  const specIDLs = await idl.parseAll();
+  const specIDLs: IDLFiles = await idl.parseAll();
   const IDLTests = buildIDL(specIDLs, customIDL);
   const CSSTests = buildCSS(specCSS, customCSS);
   const JSTests = buildJS(customJS);

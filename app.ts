@@ -1,5 +1,5 @@
 //
-// mdn-bcd-collector: app.js
+// mdn-bcd-collector: app.ts
 // Main app backend for the website
 //
 // © Google LLC, Gooborg Studios
@@ -142,8 +142,8 @@ app.post('/api/results', (req, res, next) => {
   let results;
   try {
     [url, results] = parseResults(req.query.for, req.body);
-  } catch (e) {
-    res.status(400).send(e.message);
+  } catch (error) {
+    res.status(400).send((error as Error).message);
     return;
   }
 
@@ -178,7 +178,7 @@ app.get('/eventstream', (req, res) => {
 
 app.get('/', (req, res) => {
   res.render('index', {
-    tests: tests.listEndpoints('/tests'),
+    tests: tests.listEndpoints(),
     selenium: req.query.selenium,
     ignore: req.query.ignore
   });
@@ -276,7 +276,7 @@ app.use((req, res) => {
 
 /* c8 ignore start */
 if (esMain(import.meta)) {
-  const {argv} = yargs(hideBin(process.argv)).command(
+  const {argv}: {argv: any} = yargs(hideBin(process.argv)).command(
     '$0',
     'Run the mdn-bcd-collector server',
     (yargs) => {

@@ -211,7 +211,8 @@ describe('test assets', () => {
     const res = await agent.get(`/eventstream`);
     assert.equal(res.status, 200);
     assert.equal(
-      res.headers['content-type'],
+      // XXX TypeScript incorrectly states the interface doesn't have "headers"
+      (res as any).headers['content-type'],
       'text/event-stream; charset=utf-8'
     );
   });

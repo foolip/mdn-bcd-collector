@@ -6,6 +6,8 @@
 // See the LICENSE file for copyright details
 //
 
+import type {CompatData} from '@mdn/browser-compat-data';
+
 export default {
   api: {
     AbortController: {
@@ -159,4 +161,4 @@ export default {
       }
     }
   }
-};
+} as any as CompatData;

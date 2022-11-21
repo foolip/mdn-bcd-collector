@@ -9,10 +9,13 @@
 import assert from 'node:assert/strict';
 
 import fs from 'fs-extra';
-import {Storage} from '@google-cloud/storage';
+import {Storage, Bucket} from '@google-cloud/storage';
 
 class CloudStorage {
-  constructor(projectId, bucketName, appVersion) {
+  _bucket: Bucket;
+  _version: string;
+
+  constructor(projectId: string, bucketName: string, appVersion: string) {
     const storage = new Storage({projectId});
     this._bucket = storage.bucket(bucketName);
     // appVersion is used as a prefix for all paths, so that multiple
@@ -40,7 +43,7 @@ class CloudStorage {
         assert(file.name.startsWith(prefix));
         const key = decodeURIComponent(file.name.substr(prefix.length));
         const data = (await file.download())[0];
-        result[key] = JSON.parse(data);
+        result[key] = JSON.parse(data.toString());
       })
     );
     return result;
@@ -62,13 +65,17 @@ class CloudStorage {
 }
 
 class MemoryStorage {
+  _data: Map<string, any>;
+
   constructor() {
     this._data = new Map();
   }
 
   async put(sessionId, key, value) {
-    let sessionData = this._data.get(sessionId);
-    if (!sessionData) {
+    let sessionData: Map<string, any>;
+    if (this._data.has(sessionId)) {
+      sessionData = this._data.get(sessionId);
+    } else {
       sessionData = new Map();
       this._data.set(sessionId, sessionData);
     }
@@ -107,7 +114,7 @@ const getStorage = (appVersion) => {
   const project = process.env.GOOGLE_CLOUD_PROJECT;
   if (project) {
     // Use GCLOUD_STORAGE_BUCKET from app.yaml.
-    const bucketName = process.env.GCLOUD_STORAGE_BUCKET;
+    const bucketName = process.env.GCLOUD_STORAGE_BUCKET || '';
     return new CloudStorage(project, bucketName, appVersion);
   }
 
