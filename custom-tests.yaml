@@ -1432,9 +1432,17 @@ api:
     isTypeSupported: return 'isTypeSupported' in MediaSource;
   MediaStream:
     __base: |-
-      <%api.MediaDevices:mediaDevices%>
-      var promise = mediaDevices.getUserMedia({audio: true});
-      promise.then(function() {});
+      if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        navigator.mediaDevices.getUserMedia({audio: true}).then(callback, fail);
+      } else if (navigator.getUserMedia) {
+        navigator.getUserMedia({audio: true}, callback, fail);
+      } else if (navigator.mozGetUserMedia) {
+        navigator.mozGetUserMedia({audio: true}, callback, fail);
+      } else if (navigator.webkitGetUserMedia) {
+        navigator.webkitGetUserMedia({audio: true}, callback, fail);
+      } else {
+        return false;
+      }
   MediaStreamAudioDestinationNode:
     __resources:
       - audioContext
