@@ -1587,6 +1587,26 @@ api:
         return {result: false, message: '(WebKit)MutationObserver is not defined'};
       };
       var instance = new constructor(function(mutations){});
+  MutationRecord:
+    __base: |-
+      <%api.MutationObserver:observer%>
+
+      // Create element and observe
+      var targetNode = document.createElement('p');
+      observer.observe(targetNode, {
+        childList: true,
+        attributes: true
+      });
+
+      // Make a change
+      targetNode.innerHTML = "foo bar";
+
+      // Get the record
+      var records = observer.takeRecords();
+      var instance = records[0];
+
+      // Finally, disconnect the observer
+      observer.disconnect();
   NamedNodeMap:
     __base: var instance = document.body.attributes;
   Navigator:
