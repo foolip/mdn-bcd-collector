@@ -16,6 +16,8 @@ const bcdBrowsers = bcd.browsers;
 
 import {parseUA} from './ua-parser.js';
 
+import type {Report} from './types/types.js';
+
 const getReportMeta = (report) => {
   const json = stringify(report);
   const buffer = Buffer.from(json);
@@ -70,7 +72,7 @@ const createBody = (meta) => {
   );
 };
 
-const exportAsPR = async (report, octokit) => {
+const exportAsPR = async (report: Report, octokit?) => {
   if (!octokit) {
     throw new Error('"octokit" must be defined');
   }

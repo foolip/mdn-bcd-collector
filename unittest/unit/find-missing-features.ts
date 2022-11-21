@@ -102,51 +102,54 @@ describe('find-missing-features', () => {
         total: 21
       };
 
-      assert.deepEqual(getMissing(bcd, tests), expected);
+      assert.deepEqual(getMissing(bcd as any, tests), expected);
 
-      assert.isTrue(console.log.notCalled);
+      assert.isTrue((console.log as any).notCalled);
 
       // Unknown direction defaults to collector <- bcd
-      assert.deepEqual(getMissing(bcd, tests, 'foo-from-bar'), expected);
+      assert.deepEqual(getMissing(bcd as any, tests, 'foo-from-bar'), expected);
 
       assert.isTrue(
-        console.log.calledWith(
+        (console.log as any).calledWith(
           "Direction 'foo-from-bar' is unknown; defaulting to collector <- bcd"
         )
       );
     });
 
     it('bcd <- collector', () => {
-      assert.deepEqual(getMissing(bcd, tests, 'bcd-from-collector'), {
+      assert.deepEqual(getMissing(bcd as any, tests, 'bcd-from-collector'), {
         missingEntries: ['javascript.builtins.Error'],
         total: 5
       });
     });
 
     it('filter category', () => {
-      assert.deepEqual(getMissing(bcd, tests, 'collector-from-bcd', ['api']), {
-        missingEntries: [
-          'api.AbortController.AbortController',
-          'api.AbortController.abort',
-          'api.AbortController.dummy',
-          'api.AudioContext',
-          'api.AudioContext.close',
-          'api.DeprecatedInterface',
-          'api.DummyAPI',
-          'api.DummyAPI.dummy',
-          'api.ExperimentalInterface',
-          'api.UnflaggedInterface',
-          'api.UnprefixedInterface',
-          'api.NullAPI',
-          'api.RemovedInterface',
-          'api.SuperNewInterface'
-        ],
-        total: 16
-      });
+      assert.deepEqual(
+        getMissing(bcd as any, tests, 'collector-from-bcd', ['api']),
+        {
+          missingEntries: [
+            'api.AbortController.AbortController',
+            'api.AbortController.abort',
+            'api.AbortController.dummy',
+            'api.AudioContext',
+            'api.AudioContext.close',
+            'api.DeprecatedInterface',
+            'api.DummyAPI',
+            'api.DummyAPI.dummy',
+            'api.ExperimentalInterface',
+            'api.UnflaggedInterface',
+            'api.UnprefixedInterface',
+            'api.NullAPI',
+            'api.RemovedInterface',
+            'api.SuperNewInterface'
+          ],
+          total: 16
+        }
+      );
     });
 
     it('unknown direction', () => {
-      assert.deepEqual(getMissing(bcd, tests, 'foo-from-bar'), {
+      assert.deepEqual(getMissing(bcd as any, tests, 'foo-from-bar'), {
         missingEntries: [
           'api.AbortController.AbortController',
           'api.AbortController.abort',
@@ -170,14 +173,14 @@ describe('find-missing-features', () => {
       });
 
       assert.isTrue(
-        console.log.calledWith(
+        (console.log as any).calledWith(
           "Direction 'foo-from-bar' is unknown; defaulting to collector <- bcd"
         )
       );
     });
 
     afterEach(() => {
-      console.log.restore();
+      (console.log as any).restore();
     });
   });
 });

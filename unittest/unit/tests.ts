@@ -63,7 +63,7 @@ describe('Tests', () => {
       'javascript.builtins.array': ['javascript.builtins.array']
     };
 
-    const endpoints = tests.buildEndpoints(tests);
+    const endpoints = tests.buildEndpoints();
 
     assert.deepEqual(endpoints, expectedEndpoints);
   });

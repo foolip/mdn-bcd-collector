@@ -10,14 +10,14 @@ import {fileURLToPath} from 'node:url';
 
 import {assert} from 'chai';
 import fs from 'fs-extra';
-import puppeteer from 'puppeteer';
+import puppeteer, {Product} from 'puppeteer';
 
 import {app} from '../../app.js';
 
 const pkg = await fs.readJson(new URL('../../package.json', import.meta.url));
 
 // Firefox is temporarily disabled due to issues on CI
-const products = ['chrome']; // ['chrome', 'firefox'];
+const products: Product[] = ['chrome']; // ['chrome', 'firefox'];
 
 // Workaround for https://github.com/puppeteer/puppeteer/issues/6255
 const consoleLogType = {
@@ -43,7 +43,7 @@ describe('harness.js', () => {
         // Browser.close() Firefox support is broken on Windows and causes hang
         // https://github.com/puppeteer/puppeteer/issues/5673
         /* eslint-disable no-invalid-this */
-        this.skip();
+        (this as any).skip();
         return;
       }
       const browser = await puppeteer.launch({product});
@@ -64,7 +64,7 @@ describe('harness.js', () => {
       });
 
       await page.goto(`http://localhost:${port}/unittest/#reporter=json`);
-      const report = await reportPromise;
+      const report: any = await reportPromise;
 
       if (product == 'chrome') {
         const jsCoverage = await page.coverage.stopJSCoverage();
@@ -72,15 +72,18 @@ describe('harness.js', () => {
         // Adjust coverage reports to point to original files
         // and filter for non-generated files
         const coverage = jsCoverage
-          .map(({rawScriptCoverage: it}) => ({
-            ...it,
-            scriptId: String(it.scriptId),
-            url: it.url.replace(
-              `http://localhost:${port}/`,
-              new URL('../../static/', import.meta.url)
-            )
-          }))
-          .filter((it) => fs.existsSync(fileURLToPath(it.url)));
+          .map(
+            ({rawScriptCoverage: it}) =>
+              it && {
+                ...it,
+                scriptId: String(it.scriptId),
+                url: it.url.replace(
+                  `http://localhost:${port}/`,
+                  new URL('../../static/', import.meta.url).toString()
+                )
+              }
+          )
+          .filter((it) => it && fs.existsSync(fileURLToPath(it.url)));
 
         coverage.forEach((it, idx) =>
           fs.writeFileSync(

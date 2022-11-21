@@ -6,10 +6,10 @@
     "static/*",
     "views/*",
     "tests.json",
-    "find-missing.js",
-    "scripts.js",
-    "selenium.js",
-    "update-bcd.js",
-    "add-new-bcd.js"
+    "find-missing.ts",
+    "scripts.ts",
+    "selenium.ts",
+    "update-bcd.ts",
+    "add-new-bcd.ts"
   ]
 }

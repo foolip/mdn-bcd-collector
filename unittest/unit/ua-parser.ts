@@ -510,11 +510,11 @@ describe('parseUA', () => {
   });
 
   it('node-superagent (unparseable)', () => {
-    assert.deepEqual(parseUA('node-superagent/1.2.3'), {
-      browser: {id: null, name: null},
-      version: null,
-      fullVersion: null,
-      os: {name: null, version: null},
+    assert.deepEqual(parseUA('node-superagent/1.2.3', browsers), {
+      browser: {id: '', name: ''},
+      version: '',
+      fullVersion: '',
+      os: {name: '', version: ''},
       inBcd: undefined
     });
   });

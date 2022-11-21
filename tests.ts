@@ -8,7 +8,15 @@
 
 import didYouMean from 'didyoumean';
 
+interface Endpoints {
+  [key: string]: string[];
+}
+
 class Tests {
+  tests: {[key: string]: any};
+  endpoints: Endpoints;
+  httpOnly: boolean;
+
   constructor(options) {
     this.tests = options.tests;
     this.endpoints = this.buildEndpoints();
@@ -16,7 +24,7 @@ class Tests {
   }
 
   buildEndpoints() {
-    const endpoints = {
+    const endpoints: Endpoints = {
       '': []
     };
 
@@ -48,14 +56,14 @@ class Tests {
     return didYouMean(input, this.listEndpoints());
   }
 
-  getTests(endpoint, testExposure, ignoreIdents = []) {
+  getTests(endpoint, testExposure?, ignoreIdents: string[] = []) {
     if (!(endpoint in this.endpoints)) {
       return [];
     }
 
     const idents = this.endpoints[endpoint];
 
-    const tests = [];
+    const tests: any[] = [];
     for (const ident of idents) {
       const ignore = ignoreIdents.some((ignoreIdent) => {
         return ident === ignoreIdent || ident.startsWith(`${ignoreIdent}.`);
@@ -67,10 +75,10 @@ class Tests {
       for (const exposure of test.exposure) {
         if (!testExposure || exposure == testExposure) {
           tests.push({
-            ident: ident,
+            ident,
             // TODO: Simplify this to just a code string.
             tests: [{code: test.code}],
-            exposure: exposure,
+            exposure,
             resources: test.resources || {}
           });
         }

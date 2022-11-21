@@ -30,6 +30,8 @@ import {
   buildJS
 } from '../../build.js';
 
+import type {RawTest} from '../../types/types.js';
+
 describe('build', () => {
   describe('getCustomTestAPI', () => {
     beforeEach(() => {
@@ -183,7 +185,7 @@ describe('build', () => {
           getCustomTestAPI('badimport'),
           "(function() {\n  throw 'Test is malformed: <%api.foobar:apple%> is an invalid reference';\n  return !!instance;\n})();"
         );
-        assert.isTrue(console.error.calledOnce);
+        assert.isTrue((console.error as any).calledOnce);
       });
 
       it('invalid import: 2nd', () => {
@@ -191,18 +193,18 @@ describe('build', () => {
           getCustomTestAPI('badimport2'),
           "(function() {\n  throw 'Test is malformed: <%api.foobar.bar:apple%> is an invalid reference';\n  return !!instance;\n})();"
         );
-        assert.isTrue(console.error.calledOnce);
+        assert.isTrue((console.error as any).calledOnce);
       });
     });
 
     afterEach(() => {
-      console.error.restore();
+      (console.error as any).restore();
     });
   });
 
   describe('getCustomSubtestsAPI', () => {
     it('get subtests', () => {
-      assert.deepEqual(getCustomSubtestsAPI('foo', 'bar'), {
+      assert.deepEqual(getCustomSubtestsAPI('foo'), {
         multiple:
           '(function() {\n  var instance = 1;\n  return 1 + 1 + 1;\n})();',
         'one.only': '(function() {\n  var instance = 1;\n  return 1;\n})();'
@@ -309,7 +311,7 @@ describe('build', () => {
 
   describe('compileTest', () => {
     it('main', () => {
-      const rawTest = {
+      const rawTest: RawTest = {
         raw: {
           code: {property: 'body', owner: `Document.prototype`}
         },
@@ -336,7 +338,7 @@ describe('build', () => {
 
     describe('custom tests', () => {
       it('one item', () => {
-        const rawTest = {
+        const rawTest: RawTest = {
           raw: {
             code: 'foo',
             combinator: '&&'
@@ -352,7 +354,7 @@ describe('build', () => {
       });
 
       it('two items', () => {
-        const rawTest = {
+        const rawTest: RawTest = {
           raw: {
             code: ['foo', 'foo'],
             combinator: '&&'
@@ -369,7 +371,7 @@ describe('build', () => {
     });
 
     it('no-repeated test code', () => {
-      const rawTests = [
+      const rawTests: RawTest[] = [
         {
           raw: {
             code: 'true',
@@ -411,7 +413,7 @@ describe('build', () => {
     });
 
     it('CSS', () => {
-      const rawTest = {
+      const rawTest: RawTest = {
         raw: {
           code: [
             {property: 'fontFamily', owner: 'document.body.style'},
@@ -482,16 +484,18 @@ describe('build', () => {
       };
       const {ast} = flattenIDL(specIDLs, customIDLs);
 
-      const interfaces = ast.filter((dfn) => dfn.type === 'interface');
+      const interfaces = ast.filter(
+        (dfn) => dfn.type === 'interface'
+      ) as WebIDL2.InterfaceType[];
       assert.lengthOf(interfaces, 3);
 
       assert.equal(interfaces[0].name, 'DummyError');
       assert.lengthOf(interfaces[0].members, 2);
-      assert.containSubset(interfaces[0].members[0], {
+      (assert as any).containSubset(interfaces[0].members[0], {
         type: 'attribute',
         name: 'imadumdum'
       });
-      assert.containSubset(interfaces[0].members[1], {
+      (assert as any).containSubset(interfaces[0].members[1], {
         type: 'operation',
         name: 'geterror'
       });
@@ -516,16 +520,18 @@ describe('build', () => {
       };
       const {ast} = flattenIDL(specIDLs, customIDLs);
 
-      const namespaces = ast.filter((dfn) => dfn.type === 'namespace');
+      const namespaces = ast.filter(
+        (dfn) => dfn.type === 'namespace'
+      ) as WebIDL2.NamespaceType[];
       assert.lengthOf(namespaces, 1);
       const [namespace] = namespaces;
       assert.equal(namespace.name, 'CSS');
       assert.lengthOf(namespace.members, 2);
-      assert.containSubset(namespace.members[0], {
+      (assert as any).containSubset(namespace.members[0], {
         type: 'operation',
         name: 'supports'
       });
-      assert.containSubset(namespace.members[1], {
+      (assert as any).containSubset(namespace.members[1], {
         type: 'attribute',
         name: 'paintWorklet'
       });
@@ -551,7 +557,10 @@ describe('build', () => {
              Window includes WindowOrWorkerGlobalScope;`
         )
       };
-      const {ast, globals} = flattenIDL(specIDLs, customIDLs);
+      const {ast, globals} = flattenIDL(specIDLs, customIDLs) as {
+        ast: WebIDL2.InterfaceType[];
+        globals: WebIDL2.InterfaceType[];
+      };
       assert.lengthOf(ast, 3);
       assert.lengthOf(globals, 1);
 
@@ -561,7 +570,7 @@ describe('build', () => {
 
       assert.equal(globals[0].name, 'WindowOrWorkerGlobalScope');
       assert.lengthOf(globals[0].members, 1);
-      assert.containSubset(globals[0].members[0], {
+      (assert as any).containSubset(globals[0].members[0], {
         type: 'operation',
         name: 'atob'
       });
@@ -680,7 +689,7 @@ describe('build', () => {
       const interfaces = ast.filter((dfn) => dfn.type === 'interface');
       assert.throws(
         () => {
-          getExposureSet(interfaces[0]);
+          getExposureSet(interfaces[0], []);
         },
         Error,
         'Unexpected RHS "integer" for Exposed extended attribute'
@@ -1426,7 +1435,6 @@ describe('build', () => {
           exposure: ['Window', 'Worker']
         }
       });
-      assert.deep;
     });
   });
 
