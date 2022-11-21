@@ -13,7 +13,7 @@ import esMain from 'es-main';
 import yargs from 'yargs';
 import {hideBin} from 'yargs/helpers';
 
-export const exec = (cmd, env, pipe = true) => {
+export const exec = (cmd, env?: any, pipe = true) => {
   env = {...process.env, ...env};
   if (!pipe) {
     console.log(`> ${cmd}`);
@@ -52,18 +52,18 @@ if (esMain(import.meta)) {
     }
   );
 
-  switch (argv.command) {
+  switch ((argv as any).command) {
     case 'prepare':
       prepare();
       break;
     case 'unittest':
       exec(
-        'c8 mocha --recursive "unittest/**/*.js" --recursive "unittest/**/*.ts"',
+        'c8 mocha --recursive "unittest/**/*.ts"',
         {NODE_ENV: 'test'},
         false
       );
       break;
     default:
-      console.error(`Unknown command ${argv.command}!`);
+      console.error(`Unknown command ${(argv as any).command}!`);
   }
 }

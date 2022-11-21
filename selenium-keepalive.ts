@@ -13,10 +13,10 @@ import https from 'https';
 const keepAliveTimeout = 30 * 1000;
 
 if (http.globalAgent && 'keepAlive' in http.globalAgent) {
-  http.globalAgent.keepAlive = true;
-  https.globalAgent.keepAlive = true;
-  http.globalAgent.keepAliveMsecs = keepAliveTimeout;
-  https.globalAgent.keepAliveMsecs = keepAliveTimeout;
+  (http.globalAgent as any).keepAlive = true;
+  (https.globalAgent as any).keepAlive = true;
+  (http.globalAgent as any).keepAliveMsecs = keepAliveTimeout;
+  (https.globalAgent as any).keepAliveMsecs = keepAliveTimeout;
 } else {
   const agent = new http.Agent({
     keepAlive: true,

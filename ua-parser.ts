@@ -23,11 +23,17 @@ const getMajorMinorVersion = (version) => {
 
 const parseUA = (userAgent, browsers) => {
   const ua = uaParser(userAgent);
-  const data = {
-    browser: {id: null, name: null},
-    version: null,
-    fullVersion: null,
-    os: {name: null, version: null},
+  const data: {
+    browser: {id: string; name: string};
+    version: string;
+    fullVersion: string;
+    os: {name: string; version: string};
+    inBcd: boolean | undefined;
+  } = {
+    browser: {id: '', name: ''},
+    version: '',
+    fullVersion: '',
+    os: {name: '', version: ''},
     inBcd: undefined
   };
 

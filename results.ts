@@ -6,6 +6,8 @@
 // See the LICENSE file for copyright details
 //
 
+import type {TestResult, Exposure} from './types/types.js';
+
 const parseShortString = (value, desc) => {
   if (typeof value !== 'string') {
     throw new Error(`${desc} should be a string; got ${typeof value}`);
@@ -34,7 +36,7 @@ const parseResults = (url, results) => {
       if (!v || typeof v !== 'object') {
         throw new Error(`results[${i}] should be an object; got ${v}`);
       }
-      const copy = {};
+      const copy: any = {};
       copy.name = parseShortString(v.name, `results[${i}].name`);
       if (![true, false, null].includes(v.result)) {
         throw new Error(
@@ -53,15 +55,15 @@ const parseResults = (url, results) => {
         copy.exposure = parseShortString(
           v.info.exposure,
           `results[${i}].info.exposure (${v.name})`
-        );
+        ) as Exposure;
         // Don't copy |v.info.code|.
       } else {
         copy.exposure = parseShortString(
           v.exposure,
           `results[${i}].exposure (${v.name})`
-        );
+        ) as Exposure;
       }
-      return copy;
+      return copy as TestResult;
     })
     .sort((a, b) => (a.name + a.exposure).localeCompare(b.name + b.exposure));
 
