@@ -6,7 +6,7 @@ partial interface CompositionEvent {
 
 [Exposed=Window]
 interface GestureEvent : UIEvent {
-  constructor();
+
   undefined initGestureEvent();
 
   readonly attribute boolean altKey;
@@ -21,39 +21,6 @@ interface GestureEvent : UIEvent {
   readonly attribute long clientY;
   readonly attribute long screenX;
   readonly attribute long screenY;
-};
-
-// https://developer.mozilla.org/en-US/docs/Web/API/MSGestureEvent
-
-typedef object MSGesture;
-
-[Exposed=Window]
-interface MSGestureEvent : UIEvent {
-  constructor();
-  undefined initGestureEvent();
-
-  readonly attribute double expansion;
-  readonly attribute MSGesture gestureObject;
-  readonly attribute double rotation;
-  readonly attribute double scale;
-  readonly attribute double translationX;
-  readonly attribute double translationY;
-  readonly attribute double velocityAngular;
-  readonly attribute double velocityExpansion;
-  readonly attribute double velocityX;
-  readonly attribute double velocityY;
-};
-
-// https://www.w3.org/TR/1999/WD-DOM-Level-2-19990923/events.html#Events-KeyEvent
-[Exposed=Window]
-interface KeyEvent : UIEvent {
-  readonly attribute boolean ctrlKey;
-  readonly attribute boolean shiftKey;
-  readonly attribute boolean altKey;
-  readonly attribute boolean metaKey;
-  readonly attribute unsigned long keyCode;
-  readonly attribute unsigned long charCode;
-  undefined initKeyEvent();
 };
 
 partial interface KeyboardEvent {
@@ -86,22 +53,12 @@ partial interface MouseEvent {
   // https://github.com/mozilla/gecko-dev/blob/06dbf167c94b89fb06f74a2d1b1c5d3ccabceb92/dom/webidl/MouseEvent.webidl#L99
   readonly attribute unsigned short mozInputSource;
 
-  // https://github.com/mozilla/gecko-dev/blob/06dbf167c94b89fb06f74a2d1b1c5d3ccabceb92/dom/webidl/MouseEvent.webidl#L89
-  readonly attribute float mozPressure;
-
   // https://github.com/WebKit/WebKit/blob/226e0bffa2f0c87d04fb84a6c63472f9a2b8c122/Source/WebCore/dom/MouseEvent.idl#L45
   readonly attribute double webkitForce;
 };
 
 [Exposed=Window]
 interface MouseScrollEvent : Event {
-};
-
-[Exposed=Window]
-interface MouseWheelEvent : Event {
-  readonly attribute long wheelDelta;
-  readonly attribute long? wheelDeltaX;
-  readonly attribute long? wheelDeltaY;
 };
 
 partial interface UIEvent {
@@ -116,13 +73,9 @@ partial interface UIEvent {
 
   // TODO: source?
   undefined cancelBubble();
-  readonly attribute boolean isChar;
 };
 
 partial interface WheelEvent {
-  // Was in Edge 12
-  undefined initWheelEvent();
-
   // https://developer.apple.com/documentation/webkitjs/wheelevent/1629934-initwebkitwheelevent
   // Note that the interface was never called WebKitWheelEvent, there was just
   // this initWebKitWheelEvent variant added here:

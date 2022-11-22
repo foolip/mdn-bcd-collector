@@ -1,3 +1,0 @@
-partial interface XMLSerializer {
-  object serializeToStream(Node root);
-};

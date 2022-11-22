@@ -1,3 +1,0 @@
-partial interface PresentationRequest {
-  undefined startWithDevice();
-};

@@ -27,10 +27,6 @@ interface ApplicationCache : EventTarget {
   attribute EventHandler onobsolete;
 };
 
-partial interface SharedWorkerGlobalScope {
-  [SecureContext] readonly attribute ApplicationCache applicationCache;
-};
-
 partial interface Window {
   [SecureContext] readonly attribute ApplicationCache applicationCache;
 };
@@ -63,8 +59,6 @@ enum MediaControllerPlaybackState { "waiting", "playing", "ended" };
 interface MediaController : EventTarget {
   constructor();
 
-  readonly attribute unsigned short readyState; // uses HTMLMediaElement.readyState's values
-
   readonly attribute TimeRanges buffered;
   readonly attribute TimeRanges seekable;
   readonly attribute unrestricted double duration;
@@ -82,22 +76,6 @@ interface MediaController : EventTarget {
 
   attribute double volume;
   attribute boolean muted;
-
-  attribute EventHandler onemptied;
-  attribute EventHandler onloadedmetadata;
-  attribute EventHandler onloadeddata;
-  attribute EventHandler oncanplay;
-  attribute EventHandler oncanplaythrough;
-  attribute EventHandler onplaying;
-  attribute EventHandler onended;
-  attribute EventHandler onwaiting;
-
-  attribute EventHandler ondurationchange;
-  attribute EventHandler ontimeupdate;
-  attribute EventHandler onplay;
-  attribute EventHandler onpause;
-  attribute EventHandler onratechange;
-  attribute EventHandler onvolumechange;
 };
 
 // https://trac.webkit.org/browser/webkit/trunk/Source/WebCore/html/HTMLVideoElement.idl?rev=267813#L63
@@ -112,15 +90,6 @@ interface CanvasFilter {
 };
 
 partial interface CanvasRenderingContext2D {
-  // https://github.com/whatwg/html/pull/1942
-  undefined addHitRegion(optional HitRegionOptions options = {});
-  undefined removeHitRegion(DOMString id);
-  undefined clearHitRegions();
-
-  attribute DOMMatrix currentTransform;
-  undefined drawWidgetAsOnScreen(Window window);
-  undefined drawWindow(Window window, double x, double y, double w, double h, DOMString bgColor, optional byte flags);
-
   // Non-standard legacy aliases in WebKit/Blink
   // https://chromium.googlesource.com/chromium/src/+/ce07cefc396fdf4016e731b4e75592586785c6b0
   // https://trac.webkit.org/changeset/221605/webkit
@@ -145,18 +114,12 @@ partial interface CanvasRenderingContext2D {
   undefined setShadow(unrestricted float width, unrestricted float height, unrestricted float blur, unrestricted float grayLevel, optional unrestricted float alpha);
   undefined setShadow(unrestricted float width, unrestricted float height, unrestricted float blur, unrestricted float r, unrestricted float g, unrestricted float b, unrestricted float a);
 
-  // https://bugzilla.mozilla.org/show_bug.cgi?id=1294360
-  attribute object mozCurrentTransform;
-  attribute object mozCurrentTransformInverse;
 
   // https://bugzilla.mozilla.org/show_bug.cgi?id=1228850
   attribute boolean mozImageSmoothingEnabled;
 
   // https://bugzilla.mozilla.org/show_bug.cgi?id=1294362
   attribute DOMString mozTextStyle;
-
-  // Was in Edge 14.
-  attribute boolean msImageSmoothingEnabled;
 
   // https://trac.webkit.org/changeset/96626/webkit
   attribute object webkitLineDash;
@@ -165,27 +128,15 @@ partial interface CanvasRenderingContext2D {
   // https://trac.webkit.org/changeset/113780/webkit
   readonly attribute float webkitBackingStorePixelRatio;
 
-  // https://trac.webkit.org/changeset/114150/webkit
-  undefined webkitPutImageDataHD();
-  ImageData webkitGetImageDataHD();
-
   // https://trac.webkit.org/changeset/117635/webkit
   attribute boolean webkitImageSmoothingEnabled;
 };
 
-partial interface CloseEvent {
-  undefined initCloseEvent();
-};
 
 // https://hg.mozilla.org/mozilla-central/file/a451ebba378efcce0967e508a8107ab14dd5edcb/dom/webidl/DataTransfer.webidl#l44
 partial interface DataTransfer {
   undefined addElement(Element element);
-  readonly attribute unsigned long mozItemCount;
   attribute DOMString mozCursor;
-  DOMStringList mozTypesAt(unsigned long index);
-  undefined mozClearDataAt(DOMString format, unsigned long index);
-  undefined mozSetDataAt(DOMString format, any data, unsigned long index);
-  any mozGetDataAt(DOMString format, unsigned long index);
   readonly attribute boolean mozUserCancelled;
   readonly attribute Node? mozSourceNode;
 };
@@ -199,15 +150,9 @@ partial interface Document {
   // https://chromium.googlesource.com/chromium/src.git/+/24e58b0d8fab28fa20e69f191d833fe97aaff75d
   any getCSSCanvasContext(DOMString contextId, DOMString name, long width, long height);
 
-  // https://github.com/whatwg/html/pull/213
-  NodeList getItems(optional DOMString typeNames = "");
-
   // https://github.com/whatwg/html/pull/1103
   attribute EventHandler onafterscriptexecute;
   attribute EventHandler onbeforescriptexecute;
-
-  // https://github.com/whatwg/html/pull/951
-  readonly attribute DOMString origin;
 
   any registerElement(DOMString type, optional ElementRegistrationOptions options = {});
 };
@@ -220,16 +165,10 @@ partial interface Element {
   // https://github.com/whatwg/html/issues/667
   attribute EventHandler onsearch;
 
-  readonly attribute boolean tabStop;
-
   // event handler attributes in the wrong place
   attribute EventHandler oncopy;
   attribute EventHandler oncut;
   attribute EventHandler onpaste;
-  attribute EventHandler onwebkitanimationend;
-  attribute EventHandler onwebkitanimationiteration;
-  attribute EventHandler onwebkitanimationstart;
-  attribute EventHandler onwebkittransitionend;
 };
 
 partial interface EventSource {
@@ -260,65 +199,11 @@ partial interface HashChangeEvent {
 partial interface HTMLAnchorElement {
   // https://github.com/whatwg/html/pull/3870
   [CEReactions] attribute DOMString hrefTranslate;
-
-  attribute DOMString media;
-};
-
-// https://github.com/whatwg/html/pull/1399
-// https://html.spec.whatwg.org/commit-snapshots/d0154579f6237358a7a642ae59b894e9116c4fbd/#htmlappletelement
-[Exposed=Window]
-interface HTMLAppletElement : HTMLElement {
-  attribute DOMString align;
-  attribute DOMString alt;
-  attribute DOMString archive;
-  attribute DOMString code;
-  attribute USVString codeBase;
-  attribute DOMString height;
-  attribute unsigned long hspace;
-  attribute DOMString name;
-  attribute USVString _object; // the underscore is not part of the identifier
-  attribute unsigned long vspace;
-  attribute DOMString width;
-};
-
-partial interface HTMLAreaElement {
-  attribute DOMString hreflang;
-  attribute DOMString media;
-  attribute DOMString type;
-};
-
-[LegacyFactoryFunction=Audio(optional DOMString src)]
-partial interface HTMLAudioElement {
-  // https://developer.mozilla.org/en-US/docs/Web/API/HTMLAudioElement#Obsolete_Mozilla-only_methods
-  unsigned long long mozCurrentSampleOffset();
-  undefined mozSetup(unsigned long channels, unsigned long rate);
-  unsigned long mozWriteAudio(any data);
-};
-
-// https://www.w3.org/TR/DOM-Level-2-HTML/html.html#ID-32774408
-[Exposed=Window]
-interface HTMLBaseFontElement : HTMLElement {
-  attribute DOMString color;
-  attribute DOMString face;
-  attribute long size;
-};
-
-partial interface HTMLButtonElement {
-  attribute HTMLMenuElement menu;
 };
 
 partial interface HTMLCanvasElement {
-  // https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/mozFetchAsStream
-  undefined mozFetchAsStream(VoidFunction callback, optional DOMString type = "image/png");
-  // https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/mozGetAsFile
-  File mozGetAsFile(DOMString name, optional DOMString type = "image/png");
   // https://developer.mozilla.org/en-US/docs/Web/API/HTMLCanvasElement/mozOpaque
   attribute boolean mozOpaque;
-  // https://github.com/mozilla/gecko-dev/blob/7c03e28b3d065fa80839e9659fd50bf340913d5f/dom/webidl/HTMLCanvasElement.webidl#L48
-  attribute any mozPrintCallback;
-
-  // Was in Edge 18.
-  Blob msToBlob();
 };
 
 // https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/core/html/html_content_element.idl
@@ -333,26 +218,12 @@ interface HTMLDocument : Document {
 };
 
 partial interface HTMLElement {
-  // https://github.com/whatwg/html/pull/213
-  attribute boolean itemScope;
-  [PutForwards=value] readonly attribute DOMTokenList itemType;
-  attribute DOMString itemId;
-  [PutForwards=value] readonly attribute DOMTokenList itemRef;
-  [PutForwards=value] readonly attribute DOMTokenList itemProp;
-  readonly attribute HTMLPropertiesCollection properties;
-  attribute any itemValue; // acts as DOMString on setting
-
   attribute HTMLMenuElement? contextMenu;
-  undefined forceSpellCheck();
-  attribute boolean noModule;
-  attribute EventHandler onModule;
 };
 
 partial interface HTMLFormElement {
   // https://github.com/mdn/browser-compat-data/issues/7519
   attribute DOMString autocapitalize;
-
-  undefined requestAutocomplete();
 };
 
 partial interface HTMLFrameElement {
@@ -368,7 +239,6 @@ partial interface HTMLFrameElement {
 };
 
 partial interface HTMLFrameSetElement {
-  attribute EventHandler onlanguage;
   attribute EventHandler onorientationchange;
 };
 
@@ -379,10 +249,6 @@ partial interface HTMLHeadElement {
 partial interface HTMLHtmlElement {
   // https://github.com/WebKit/WebKit/blob/cdb06d0c41ff04eff8f4c65d1c92c8672b4903a6/Source/WebCore/html/HTMLHtmlElement.idl#L24
   attribute DOMString manifest;
-};
-
-partial interface HTMLIFrameElement {
-  undefined setNfcFocus();
 };
 
 partial interface HTMLImageElement {
@@ -397,30 +263,13 @@ partial interface HTMLInputElement {
   attribute boolean incremental;
 
   attribute EventHandler onsearch;
-  attribute any weight;
-
-  // https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/mozGetFileNameArray
-  sequence<DOMString> mozGetFileNameArray();
-  // https://developer.mozilla.org/en-US/docs/Web/API/HTMLInputElement/mozSetFileNameArray
-  undefined mozSetFileNameArray(sequence<DOMString> fileNames);
-  // https://hg.mozilla.org/mozilla-central/file/f22c20641704d783097b1b128d826c8460de7354/dom/webidl/HTMLInputElement.webidl#l163
-  undefined mozSetFileArray(sequence<File> files);
-
+  
   // https://github.com/mozilla/gecko-dev/blob/7c03e28b3d065fa80839e9659fd50bf340913d5f/dom/webidl/HTMLInputElement.webidl#L173
   boolean mozIsTextField(boolean excludePassword);
 
   // https://github.com/mozilla/gecko-dev/blob/7c03e28b3d065fa80839e9659fd50bf340913d5f/dom/webidl/HTMLInputElement.webidl#L154
   readonly attribute long textLength;
 };
-
-[Exposed=Window]
-interface HTMLIsIndexElement : HTMLElement {
-  readonly attribute HTMLFormElement form;
-  attribute DOMString prompt;
-};
-
-[Exposed=Window]
-interface HTMLKeygenElement : HTMLElement {};
 
 partial interface HTMLLinkElement {
   // moved to HTMLOrSVGElement mixin
@@ -445,20 +294,12 @@ partial interface HTMLMediaElement {
 
   // https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement#Obsolete_attributes
   readonly attribute boolean mozAudioCaptured;
-  readonly attribute double mozChannels;
   readonly attribute double mozFragmentEnd;
-  attribute unsigned long mozFrameBufferLength;
-  readonly attribute double mozSampleRate;
 
   // https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement#Obsolete_methods
   MediaStream mozCaptureStream();
   MediaStream mozCaptureStreamUntilEnded();
   object mozGetMetadata();
-  undefined mozLoadFrom(HTMLMediaElement other);
-
-  // https://developer.mozilla.org/en-US/docs/Web/API/HTMLMediaElement#Obsolete_event_handlers
-  attribute EventHandler onmozinterruptbegin;
-  attribute EventHandler onmozinterruptend;
 
   // Prefixed preservesPitch
   attribute boolean mozPreservesPitch;
@@ -489,29 +330,11 @@ interface HTMLMenuItemElement : HTMLElement {
   attribute boolean checked;
   attribute DOMString radiogroup;
   attribute boolean default;
-
-  attribute DOMString command;
-
-  // https://github.com/mozilla/gecko-dev/blob/7c03e28b3d065fa80839e9659fd50bf340913d5f/dom/webidl/HTMLMenuItemElement.webidl#L35
-  attribute boolean defaultChecked;
 };
 
 partial interface HTMLPreElement {
   // https://github.com/WebKit/WebKit/blob/8c5122c3b04d94856c54fb5e686c014a123143f7/Source/WebCore/html/HTMLPreElement.idl#L29
   attribute boolean wrap;
-};
-
-// https://github.com/whatwg/html/pull/213
-[Exposed=Window]
-interface HTMLPropertiesCollection : HTMLCollection {
-  // inherits length and item()
-  getter PropertyNodeList? namedItem(DOMString name); // shadows inherited namedItem()
-  [SameObject] readonly attribute FrozenArray<DOMString> names;
-};
-typedef sequence<any> PropertyValueArray;
-[Exposed=Window]
-interface PropertyNodeList : NodeList {
-  PropertyValueArray getValues();
 };
 
 partial interface HTMLScriptElement {
@@ -529,20 +352,9 @@ interface HTMLShadowElement : HTMLElement {
   NodeList getDistributedNodes();
 };
 
-partial interface HTMLSourceElement {
-  attribute any keySystem;
-};
-
 partial interface HTMLStyleElement {
   // moved to HTMLOrSVGElement mixin
   attribute DOMString nonce;
-
-  attribute boolean scoped;
-};
-
-partial interface HTMLTableElement {
-  attribute boolean sortable;
-  undefined stopSorting();
 };
 
 partial interface HTMLTextAreaElement {
@@ -553,9 +365,6 @@ partial interface HTMLTextAreaElement {
 partial interface HTMLVideoElement {
   readonly attribute unsigned long webkitDecodedFrameCount;
   readonly attribute unsigned long webkitDroppedFrameCount;
-
-  // https://docs.microsoft.com/en-us/previous-versions/hh772572(v=vs.85)
-  readonly attribute boolean msIsStereo3D;
 
   // https://developer.mozilla.org/en-US/docs/Web/API/HTMLVideoElement#Gecko-specific_properties
   readonly attribute unsigned long mozParsedFrames;
@@ -579,13 +388,6 @@ partial interface ImageBitmapRenderingContext {
   undefined transferImageBitmap(ImageBitmap? bitmap);
 };
 
-partial interface Location {
-  attribute USVString password;
-  attribute USVString username;
-
-  stringifier;
-};
-
 partial interface MessageEvent {
   // https://github.com/whatwg/html/pull/4009
   readonly attribute UserActivation? userActivation;
@@ -605,13 +407,9 @@ partial interface Navigator {
   // https://github.com/WebKit/WebKit/blob/88278b55563e5ccdc0b3419c6c391c3becc19e40/Source/WebCore/page/Navigator.idl#L30
   undefined getStorageUpdates();
 
-  // https://developer.mozilla.org/en-US/docs/Web/API/Navigator/mozIsLocallyAvailable
-  boolean mozIsLocallyAvailable(DOMString url, boolean ifOffline);
-
   attribute any authentication;
   readonly attribute DOMString buildID;
   readonly attribute DOMString doNotTrack;
-  undefined registerContentHandler();
 };
 
 partial interface Plugin {
@@ -629,10 +427,6 @@ partial interface TextTrackCueList {
 
 partial interface TextTrackList {
    TextTrack item(unsigned long index);
-};
-
-[Exposed=(Window,Worker)]
-interface Transferable {
 };
 
 partial interface VideoTrackList {
@@ -662,33 +456,18 @@ partial interface Window {
   // https://bugs.chromium.org/p/chromium/issues/detail?id=438370
   readonly attribute boolean offscreenBuffering;
 
-  readonly attribute any dialogArguments;
-  undefined getAttention();
-  undefined getAttentionWithCycleCount();
   CSSStyleDeclaration getDefaultComputedStyle(Element element, DOMString? pseudoAlt);
-  readonly attribute any globalStorage;
-  undefined home();
-  undefined maximize();
-  undefined minimize();
-  attribute EventHandler onpaint;
-  undefined openDialog();
-  attribute object pkcs11;
-  any returnValue();
   undefined scrollByLines();
   undefined scrollByPages();
   undefined scrollMaxX();
   undefined scrollMaxY();
-  undefined setCursor();
   undefined setResizable();
   undefined showModalDialog();
-  object sidebar();
   undefined sizeToContent();
   undefined updateCommands();
 
-  readonly attribute double mozAnimationStartTime;
   readonly attribute double mozInnerScreenX;
   readonly attribute double mozInnerScreenY;
-  readonly attribute long long mozPaintCount;
 };
 
 partial interface WebSocket {
@@ -698,7 +477,4 @@ partial interface WebSocket {
 partial interface WorkerGlobalScope {
   // https://developer.mozilla.org/en-US/docs/Web/API/WorkerGlobalScope/dump
   undefined dump(any... data);
-
-  // https://developer.mozilla.org/en-US/docs/Web/API/WorkerGlobalScope/onclose
-  attribute EventHandler onclose;
 };

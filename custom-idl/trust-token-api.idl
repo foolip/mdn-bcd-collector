@@ -1,5 +1,0 @@
-// https://github.com/wicg/trust-token-api
-
-partial interface Document {
-  Promise<boolean> hasTrustToken(USVString issuer);
-};
