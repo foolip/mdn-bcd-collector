@@ -23,7 +23,6 @@
     "build:compile": "tsc -p .",
     "build:tests": "ts-node build.ts",
     "gcp-build": "npm run build",
-    "deploy": "gcloud app deploy",
     "start": "NODE_ENV=production node app.js",
     "dev": "npm i && nodemon -e ts,json,idl,scss,yaml --exec \"npm run build:tests && ts-node app.ts\"",
     "unittest": "ts-node scripts.ts unittest",

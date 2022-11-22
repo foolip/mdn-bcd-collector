@@ -104,14 +104,6 @@ npm start -- --https-cert=my-cert.pem --https-key=my-cert.key
 
 Test certificates and instructions for generating certificates can be found in [web-platform-tests](https://github.com/web-platform-tests/wpt/tree/master/tools/certs).
 
-## Deploying to App Engine
-
-```sh
-npm run deploy
-```
-
-This can only be done manually, there is no automatic staging deployment.
-
 ## Running tests via Selenium WebDriver
 
 A script has been provided which will collect all of the results for nearly all of the browsers, using the Selenium WebDriver to control your CTs, and download them to your computer (which can then be submitted as a PR). To run this script, you'll need a few prerequisites:
