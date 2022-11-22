@@ -37,10 +37,10 @@ jobs:
       - run: npm run build
       - run: npm run unittest
       # ensure we can start the server without dev dependencies
-      - name: production smoke test
+      - name: Production smoke test
         run: |
+          npm i -g ts-node
           npm ci --production
-          cp secrets.sample.json secrets.json
           npm start &
           npx wait-on -t 10000 -v http://localhost:8080
         env:
