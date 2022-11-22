@@ -1,5 +1,11 @@
-name: release
+name: Release New Version
+
 on: workflow_dispatch
+
+permissions:
+  contents: read
+  pull-requests: write
+
 jobs:
   prepare:
     runs-on: ubuntu-latest
