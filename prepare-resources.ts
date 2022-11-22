@@ -14,15 +14,6 @@ import esMain from 'es-main';
 import fs from 'fs-extra';
 import sass from 'sass';
 
-import type {
-  Test,
-  RawTest,
-  RawTestCodeExpr,
-  Exposure,
-  Resources,
-  IDLFiles
-} from './types/types.js';
-
 const generatedDir = fileURLToPath(new URL('./generated', import.meta.url));
 
 /* c8 ignore start */

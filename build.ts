@@ -6,9 +6,6 @@
 // See the LICENSE file for copyright details
 //
 
-import path from 'node:path';
-import {fileURLToPath} from 'node:url';
-
 import css from '@webref/css';
 import esMain from 'es-main';
 import fs from 'fs-extra';
