@@ -10,7 +10,7 @@ import chalk from 'chalk-template';
 import enquirer from 'enquirer';
 import esMain from 'es-main';
 import fs from 'fs-extra';
-import {Listr} from 'listr2';
+import {Listr, ListrTask} from 'listr2';
 import prettier from 'prettier';
 import yargs from 'yargs';
 import {hideBin} from 'yargs/helpers';
@@ -21,7 +21,7 @@ const currentVersion = (
   await fs.readJson(new URL('./package.json', import.meta.url))
 ).version;
 
-const prepare = () => {
+const prepare = (): ListrTask[] => {
   return [
     {
       title: 'Checking for Git',
@@ -126,7 +126,7 @@ const simplifyTestChangesList = (el, _, list) => {
   return true;
 };
 
-const getTestChanges = () => {
+const getTestChanges = (): ListrTask[] => {
   return [
     {
       title: 'Checkout last release',
@@ -156,7 +156,7 @@ const getTestChanges = () => {
     },
     {
       title: 'Build tests from current release',
-      task: () => exec('npm run build')
+      task: () => exec('npm run build').toString()
     },
     {
       title: 'Compare tests',
@@ -177,7 +177,7 @@ const getTestChanges = () => {
         const removed = oldTestKeys
           .filter((k) => !newTestKeys.includes(k))
           .filter(simplifyTestChangesList);
-        let changed = [];
+        let changed: string[] = [];
         for (const t of newTestKeys.filter((k) => oldTestKeys.includes(k))) {
           if (oldTests[t].code != newTests[t].code) {
             changed.push(t);
@@ -353,9 +353,10 @@ const main = async () => {
       ctx: {
         skipFetch: argv['no-fetch'],
         skipPrompt: argv['no-prompt'],
-        skipPR: argv['no-pr']
+        skipPR: argv['no-pr'],
+        newVersion: null
       }
-    }
+    } as any
   );
 
   try {
