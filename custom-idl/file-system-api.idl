@@ -6,35 +6,14 @@
 
 callback MetadataCallback = undefined (Metadata metadata);
 callback FileSystemCallback = undefined (FileSystem fileSystem);
-callback FileWriterCallback = undefined (FileWriter fileWriter);
 
 interface mixin LocalFileSystem {
   const unsigned short TEMPORARY = 0;
   const unsigned short PERSISTENT = 1;
   undefined requestFileSystem(unsigned short type, unsigned long long size, FileSystemCallback successCallback, optional ErrorCallback errorCallback);
   undefined resolveLocalFileSystemURL(DOMString url, FileSystemEntryCallback successCallback, optional ErrorCallback errorCallback);
-
-  // https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/modules/filesystem/window_file_system.idl;drc=5df9ffaab218ea7230087f40aef46d22fa766c93
-  // https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/modules/filesystem/dedicated_worker_global_scope_file_system.idl;drc=5df9ffaab218ea7230087f40aef46d22fa766c93
-  // https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/modules/filesystem/shared_worker_global_scope_file_system.idl;drc=5df9ffaab218ea7230087f40aef46d22fa766c93
-  undefined webkitRequestFileSystem(unsigned short type, unsigned long long size, FileSystemCallback successCallback, optional ErrorCallback errorCallback);
-  undefined webkitResolveLocalFileSystemURL(DOMString url, FileSystemEntryCallback successCallback, optional ErrorCallback errorCallback);
 };
 Window includes LocalFileSystem;
-WorkerGlobalScope includes LocalFileSystem;
-
-interface mixin LocalFileSystemSync {
-  // const unsigned short TEMPORARY = 0;
-  // const unsigned short PERSISTENT = 1;
-  FileSystemSync requestFileSystemSync(unsigned short type, unsigned long long size);
-  EntrySync resolveLocalFileSystemSyncURL(DOMString url);
-
-  // https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/modules/filesystem/dedicated_worker_global_scope_file_system.idl;drc=5df9ffaab218ea7230087f40aef46d22fa766c93
-  // https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/modules/filesystem/shared_worker_global_scope_file_system.idl;drc=5df9ffaab218ea7230087f40aef46d22fa766c93
-  FileSystemSync webkitRequestFileSystemSync(unsigned short type, unsigned long long size);
-  EntrySync webkitResolveLocalFileSystemSyncURL(DOMString url);
-};
-WorkerGlobalScope includes LocalFileSystemSync;
 
 [Exposed=Window,Worker]
 interface Metadata {
@@ -51,7 +30,7 @@ partial interface FileSystemEntry {
 };
 
 partial interface FileSystemFileEntry {
-  undefined createWriter(FileWriterCallback successCallback,
+  undefined createWriter(VoidFunction successCallback,
                     optional ErrorCallback errorCallback);
 };
 
@@ -64,32 +43,12 @@ interface FileSystemSync {
 };
 
 [Exposed=Window,Worker]
-interface DirectoryEntry {
-  DirectoryReader createReader();
-  undefined getFile(DOMString path, optional FileSystemFlags options = {}, optional FileSystemEntryCallback successCallback, optional ErrorCallback errorCallback);
-  undefined getDirectory(DOMString path, optional FileSystemFlags options = {}, optional FileSystemEntryCallback successCallback, optional ErrorCallback errorCallback);
-  undefined removeRecursively(VoidFunction successCallback, optional ErrorCallback errorCallback);
-};
-
-[Exposed=Window,Worker]
-interface DirectoryEntrySync {
-  DirectoryReaderSync createReader();
-  FileEntrySync getFile(DOMString path, optional FileSystemFlags options = {});
-  DirectoryEntrySync getDirectory(DOMString path, optional FileSystemFlags options = {});
-  undefined removeRecursively();
-};
+interface DirectoryEntrySync {};
 
 // The old names of things, before FileSystem prefixing
-[Exposed=Window,Worker] interface DirectoryReader {};
 [Exposed=Window,Worker] interface DirectoryReaderSync {};
-[Exposed=Window,Worker] interface Entry {};
 [Exposed=Window,Worker] interface EntrySync {};
-[Exposed=Window,Worker] interface FileEntry {};
 [Exposed=Window,Worker] interface FileEntrySync {};
-
-// In BCD, but not the old spec
-[Exposed=Window,Worker] interface FileError {};
-[Exposed=Window,Worker] interface FileException {};
 
 // In BCD, but removed in the new spec
 partial interface FileSystemDirectoryEntry {

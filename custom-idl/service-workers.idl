@@ -1,7 +1,5 @@
 partial interface FetchEvent {
-  readonly attribute Client client;
   readonly attribute boolean isReload;
-  Promise<NavigationPreloadManager> navigationPreload();
 };
 
 // https://github.com/w3c/ServiceWorker/pull/1207
@@ -20,17 +18,4 @@ partial interface ServiceWorkerContainer {
 
 partial interface ServiceWorkerGlobalScope {
   readonly attribute CacheStorage caches;
-};
-
-// https://chromium.googlesource.com/chromium/src/+/faa6203e513b171743c9d9fd7121501e681186af
-// https://chromium.googlesource.com/chromium/src/+/2369b7f3dec2f78a760ed52bf64badb2240a1968
-[Exposed=(Window,Worker)]
-interface ServiceWorkerMessageEvent {
-  constructor();
-
-  readonly attribute any data;
-  readonly attribute DOMString lastEventId;
-  readonly attribute any origin;
-  readonly attribute MessagePort ports;
-  readonly attribute any source;
 };

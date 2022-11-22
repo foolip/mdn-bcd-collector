@@ -1,19 +1,8 @@
-[Exposed=(Window,Worker), SecureContext]
-interface PushRegistration {};
-
 partial interface PushManager {
   Promise<boolean> hasPermission();
-  Promise<PushRegistration> register();
-  Promise<sequence<PushRegistration>> registrations();
-  Promise<PushRegistration> unregister();
-};
-
-[Exposed=(Window,Worker), SecureContext]
-interface PushRegistrationManager {
-  Promise<PushRegistration> getRegistration();
-  Promise<boolean> hasPermission();
-  Promise<PushRegistration> register();
-  Promise<PushRegistration> unregister();
+  Promise<any> register();
+  Promise<sequence<any>> registrations();
+  Promise<any> unregister();
 };
 
 partial interface PushSubscription {

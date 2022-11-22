@@ -45,34 +45,6 @@ partial interface Document {
   undefined webkitExitFullscreen();
 };
 
-partial interface Element {
-  undefined msRequestFullscreen();
-};
-
-partial interface Document {
-  readonly attribute boolean msFullscreenEnabled;
-  readonly attribute Element? msFullscreenElement;
-  undefined msExitFullscreen();
-};
-
-// Event handler attributes, added widely to find them wherever they are.
-partial interface Element {
-  attribute EventHandler onmozfullscreenchange;
-  attribute EventHandler onmozfullscreenerror;
-  attribute EventHandler onmsfullscreenchange;
-  attribute EventHandler onmsfullscreenerror;
-  attribute EventHandler onwebkitfullscreenchange;
-  attribute EventHandler onwebkitfullscreenerror;
-};
-partial interface mixin GlobalEventHandlers {
-  attribute EventHandler onmozfullscreenchange;
-  attribute EventHandler onmozfullscreenerror;
-  attribute EventHandler onmsfullscreenchange;
-  attribute EventHandler onmsfullscreenerror;
-  attribute EventHandler onwebkitfullscreenchange;
-  attribute EventHandler onwebkitfullscreenerror;
-};
-
 // Capitalization variant of window.fullscreen supported by Firefox:
 partial interface Window {
   readonly attribute boolean fullScreen;

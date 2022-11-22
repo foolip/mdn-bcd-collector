@@ -1,29 +1,3 @@
-// https://docs.google.com/document/d/1rnQ1gU0iwPXbO7OvKS6KO9gyfpSdSQvKhK9_OkzUuKE
-
-dictionary GamepadAxisEventInit : GamepadEventInit {
-  unsigned long axis;
-  double value;
-};
-
-[Exposed=Window]
-interface GamepadAxisEvent : GamepadEvent {
-  constructor(DOMString type, optional GamepadAxisEventInit eventInitDict = {});
-  readonly attribute unsigned long axis;
-  readonly attribute double value;
-};
-
-dictionary GamepadButtonEventInit : GamepadEventInit {
-  unsigned long button;
-  double value;
-};
-
-[Exposed=Window]
-interface GamepadButtonEvent : GamepadEvent {
-  constructor(DOMString type, optional GamepadButtonEventInit eventInitDict = {});
-  readonly attribute unsigned long button;
-  readonly attribute double value;
-};
-
 // https://docs.google.com/document/d/1jPKzVRNzzU4dUsvLpSXm1VXPQZ8FP-0lKMT-R_p-s6g
 
 enum GamepadHapticEffectType {

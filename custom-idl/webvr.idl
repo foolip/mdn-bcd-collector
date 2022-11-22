@@ -34,8 +34,6 @@ dictionary VRLayerInit {
 
 [Exposed=Window]
 interface VRDisplayCapabilities {
-  readonly attribute boolean hasPosition;
-  readonly attribute boolean hasOrientation;
   readonly attribute boolean hasExternalDisplay;
   readonly attribute boolean canPresent;
   readonly attribute unsigned long maxLayers;
@@ -96,7 +94,6 @@ interface VRStageParameters {
 
   readonly attribute float sizeX;
   readonly attribute float sizeY;
-  readonly attribute float sizeZ;
 };
 
 partial interface Navigator {
@@ -156,23 +153,15 @@ interface PositionSensorVRDevice {
 
 partial interface VRDisplay {
   VRPose getImmediatePose();
-  attribute DOMString hardwareUnitId;
 };
 
 partial interface VREyeParameters {
   readonly attribute VRFieldOfView minimumFieldOfView;
   readonly attribute VRFieldOfView maximumFieldOfView;
-  readonly attribute VRFieldOfView recommendedFieldOfView;
-  readonly attribute DOMRect renderRect;
 };
 
-partial interface VRFieldOfView {
-  constructor();
-};
 
 partial interface VRPose {
   boolean hasOrientation();
   boolean hasPosition();
-
-  readonly attribute long long timestamp;
 };

@@ -1,62 +1,18 @@
-// https://www.w3.org/TR/1998/WD-DOM-Level-2-19981228/idl-definitions.html
-
-// routeEvent() was on an EventCapturer interface together with captureEvent()
-// and releaseEvent(). Those are on Document and Window, so do the same here.
-
-partial interface Document {
-  undefined routeEvent();
-};
-
-partial interface Window {
-  undefined routeEvent();
-};
-
-// https://www.w3.org/TR/DOM-Level-2-Traversal-Range/idl-definitions.html
-partial interface NodeIterator {
-  readonly attribute boolean expandEntityReferences;
-};
-partial interface TreeWalker {
-  readonly attribute boolean expandEntityReferences;
-};
-
 // https://www.w3.org/TR/DOM-Level-3-Core/idl-definitions.html
 
 typedef any DOMUserData;
 typedef object DOMObject;
 
-partial interface Attr {
-  readonly attribute TypeInfo schemaTypeInfo;
-  readonly attribute boolean isId;
-};
-
 partial interface Document {
   readonly attribute DOMString xmlEncoding;
   attribute boolean xmlStandalone;
   readonly attribute DOMString xmlVersion;
-  attribute boolean strictErrorChecking;
-  undefined normalizeDocument();
-  Node renameNode(Node n, DOMString namespaceURI, DOMString qualifiedName);
-};
-
-partial interface DocumentType {
-  readonly attribute NamedNodeMap entities;
-  readonly attribute NamedNodeMap notations;
-  readonly attribute DOMString internalSubset;
 };
 
 [Exposed=Window]
 interface DOMError {
-  const unsigned short SEVERITY_WARNING = 1;
-  const unsigned short SEVERITY_ERROR = 2;
-  const unsigned short SEVERITY_FATAL_ERROR = 3;
-
-  readonly attribute unsigned short severity;
   readonly attribute DOMString message;
   readonly attribute DOMString type;
-  readonly attribute DOMObject relatedException;
-  readonly attribute DOMObject relatedData;
-  readonly attribute DOMLocator location;
-
   readonly attribute DOMString name;
 };
 
@@ -65,139 +21,25 @@ callback interface DOMErrorHandler {
   boolean handleError(DOMError error);
 };
 
-partial interface DOMImplementation {
-  DOMObject getFeature(DOMString feature, DOMString version);
-};
-
-[Exposed=Window]
-interface DOMImplementationList {
-  DOMImplementation item(unsigned long index);
-  readonly attribute unsigned long length;
-};
-
-[Exposed=Window]
-interface DOMImplementationSource {
-  DOMImplementation getDOMImplementation(DOMString features);
-  DOMImplementationList getDOMImplementationList(DOMString features);
-};
-
-[Exposed=Window]
-interface DOMLocator {
-  readonly attribute long lineNumber;
-  readonly attribute long columnNumber;
-  readonly attribute long byteOffset;
-  readonly attribute long utf16Offset;
-  readonly attribute Node relatedNode;
-  readonly attribute DOMString uri;
-};
-
-partial interface Element {
-  readonly attribute TypeInfo schemaTypeInfo;
-  undefined setIdAttribute(DOMString name, boolean isId);
-  undefined setIdAttributeNS(DOMString namespaceURI, DOMString localName, boolean isId);
-  undefined setIdAttributeNode(Attr idAttr, boolean isId);
-};
-
-[Exposed=Window]
-interface Entity : Node {
-  readonly attribute DOMString publicId;
-  readonly attribute DOMString systemId;
-  readonly attribute DOMString notationName;
-  readonly attribute DOMString inputEncoding;
-  readonly attribute DOMString xmlEncoding;
-  readonly attribute DOMString xmlVersion;
-};
-
-[Exposed=Window]
-interface EntityReference : Node {};
-
-[Exposed=Window]
-interface NameList {
-  DOMString getName(unsigned long index);
-  DOMString getNamespaceURI(unsigned long index);
-  readonly attribute unsigned long length;
-  boolean contains(DOMString str);
-  boolean containsNS(DOMString namespaceURI, DOMString name);
-};
-
-partial interface Node {
-  boolean isSupported(DOMString feature, DOMString version);
-  DOMObject getFeature(DOMString feature, DOMString version);
-};
-
-[Exposed=Window]
-interface Notation : Node {
-  readonly attribute DOMString publicId;
-  readonly attribute DOMString systemId;
-};
-
-partial interface Text {
-  readonly attribute boolean isElementContentWhitespace;
-  Text replaceWholeText(DOMString content);
-};
-
-[Exposed=Window]
-interface TypeInfo {
-  readonly attribute DOMString typeName;
-  readonly attribute DOMString typeNamespace;
-
-  const unsigned long DERIVATION_RESTRICTION = 0x00000001;
-  const unsigned long DERIVATION_EXTENSION = 0x00000002;
-  const unsigned long DERIVATION_UNION = 0x00000004;
-  const unsigned long DERIVATION_LIST = 0x00000008;
-
-  boolean isDerivedFrom(DOMString typeNamespace, DOMString typeName, unsigned long derivationMethod);
-};
-
 // Non-standard stuff
 
 partial interface Document {
   // https://developer.mozilla.org/en-US/docs/Web/API/Document#Non-standard_extensions
-  readonly attribute USVString? documentURIObject;
-  readonly attribute Node? popupNode;
-  readonly attribute Node? tooltipNode;
-  object getBoxObjectFor(Element element);
-  undefined loadOverlay(DOMString url, object observer);
-  undefined queryCommandText();
-
-  // https://docs.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/jj160755(v%3Dvs.85)
-  boolean execCommandShowHelp(DOMString name);
-  // https://docs.microsoft.com/en-us/previous-versions/windows/internet-explorer/ie-developer/platform-apis/aa752589(v=vs.85)
-  readonly attribute long fileSize;
   boolean contains();
-
-  // https://github.com/mozilla/gecko-dev/blob/f7949b6a83a31998267293b4497d1f86b45c18fc/dom/webidl/Element.webidl#L115
-  boolean mozMatchesSelector(DOMString selector);
 
   // https://developer.mozilla.org/en-US/docs/Web/API/Document/mozSetImageElement
   undefined mozSetImageElement(DOMString imageElementId, Element? imageElement);
-
-  // https://developer.mozilla.org/en-US/docs/Web/API/Document/mozSyntheticDocument
-  readonly attribute boolean mozSyntheticDocument;
-
-  // https://docs.microsoft.com/en-us/previous-versions/ff975201(v=vs.85)
-  boolean msMatchesSelector(DOMString selector);
 
   // https://www.w3.org/Bugs/Public/show_bug.cgi?id=14600
   undefined releaseCapture();
 };
 
 partial interface Element {
-  // https://docs.microsoft.com/en-us/previous-versions/ff975201(v=vs.85)
-  boolean msMatchesSelector(DOMString selector);
-
   // https://www.w3.org/Bugs/Public/show_bug.cgi?id=14600
   undefined setCapture(optional boolean retargetToElement);
 
   // https://github.com/mozilla/gecko-dev/blob/f7949b6a83a31998267293b4497d1f86b45c18fc/dom/webidl/Element.webidl#L144
   undefined releaseCapture();
-
-  // https://trac.webkit.org/changeset/136092/webkit
-  ShadowRoot createShadowRoot();
-  ShadowRoot webkitCreateShadowRoot();
-
-  NodeList getDestinationInsertionPoints();
-  readonly attribute boolean openOrClosedShadowRoot;
 };
 
 partial interface Event {
@@ -207,16 +49,6 @@ partial interface Event {
   readonly attribute EventTarget? originalTarget;
 
   readonly attribute object path;
-};
-
-partial interface Node {
-  readonly attribute object baseURIObject;
-  boolean hasAttributes();
-  readonly attribute DOMString localName;
-  readonly attribute DOMString? namespaceURI;
-  attribute object nodePrincipal;
-  attribute DOMString prefix;
-  readonly attribute Node rootNode;
 };
 
 partial interface ProcessingInstruction {
@@ -240,15 +72,4 @@ partial interface StaticRange {
   readonly attribute unsigned long startOffset;
   readonly attribute Node endContainer;
   readonly attribute unsigned long endOffset;
-
-  Range toRange();
-};
-
-partial interface Text {
-  NodeList getDestinationInsertionPoints();
-};
-
-partial interface XMLDocument {
-  attribute boolean async;
-  undefined load();
 };

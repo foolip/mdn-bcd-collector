@@ -1,9 +1,6 @@
 partial interface MediaStream {
-  readonly attribute boolean ended;
-  readonly attribute DOMString label;
   attribute EventHandler onactive;
   attribute EventHandler oninactive;
-  undefined stop();
 };
 
 [Exposed=Window]
@@ -13,13 +10,9 @@ interface MediaStreamEvent : Event {
 };
 
 partial interface MediaStreamTrack {
-  any getSources();
 
   // https://github.com/w3c/mediacapture-main/pull/576
   attribute EventHandler onoverconstrained;
-
-  readonly attribute boolean _readonly;
-  readonly attribute boolean remote;
 };
 
 partial interface Navigator {
