@@ -19,6 +19,10 @@ $colors: (
     dark: #031706,
     light: #f2fff4
   ),
+  background-3: (
+    dark: #260037,
+    light: #ead4ff
+  ),
   paper-bg: (
     dark: #191919,
     light: #eee
@@ -26,6 +30,10 @@ $colors: (
   main: (
     dark: #88f6a2,
     light: #097923
+  ),
+  main-2: (
+    dark: #bd88f6,
+    light: #500977
   ),
   text: (
     dark: white,
@@ -44,12 +52,12 @@ $colors: (
     light: white
   ),
   input-bg: (
-    dark: #2d672f,
-    light: #2d672f
+    dark: #462d67,
+    light: #462d67
   ),
   input-hover-bg: (
-    dark: #3d8a3f,
-    light: #3d8a3f
+    dark: #5e3d8a,
+    light: #5e3d8a
   ),
   input-disabled-bg: (
     dark: #636363,
@@ -99,49 +107,56 @@ $colors: (
   }
 }
 
-@mixin gradient-base($direction, $color-1, $color-2) {
+@mixin gradient-base($direction, $color-1, $color-2, $color-3) {
   background: $color-1; /* Old browsers */
   background: -moz-linear-gradient(
     $direction,
     $color-1 0%,
-    $color-2 100%
+    $color-2 90%,
+    $color-3 100%
   ); /* FF3.6-15 */
   background: -webkit-gradient(
     linear,
     left bottom,
     right top,
     color-stop(0%, $color-1),
-    color-stop(100%, $color-2)
+    color-stop(90%, $color-2),
+    color-stop(100%, $color-3)
   ); /* Chrome4-9,Safari4-5 */
   background: -webkit-linear-gradient(
     $direction,
     $color-1 0%,
-    $color-2 100%
+    $color-2 90%,
+    $color-3 100%
   ); /* Chrome10-25,Safari5.1-6 */
   background: -o-linear-gradient(
     $direction,
     $color-1 0%,
-    $color-2 100%
+    $color-2 90%,
+    $color-3 100%
   ); /* Opera 11.10-11.50 */
   background: linear-gradient(
     $direction,
     $color-1 0%,
-    $color-2 100%
+    $color-2 90%,
+    $color-3 100%
   ); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
 }
 
-@mixin gradient($direction, $color-1, $color-2) {
+@mixin gradient($direction, $color-1, $color-2, $color-3) {
   @include gradient-base(
     $direction,
     map-deep-get($colors, $color-1, 'dark'),
-    map-deep-get($colors, $color-2, 'dark')
+    map-deep-get($colors, $color-2, 'dark'),
+    map-deep-get($colors, $color-3, 'dark')
   );
 
   @media (prefers-color-scheme: light) {
     @include gradient-base(
       $direction,
       map-deep-get($colors, $color-1, 'light'),
-      map-deep-get($colors, $color-2, 'light')
+      map-deep-get($colors, $color-2, 'light'),
+      map-deep-get($colors, $color-3, 'light')
     );
   }
 }
@@ -161,7 +176,7 @@ html {
 body {
   font-family: 'Roboto', Arial, sans-serif;
   @include themedProperty(color, 'text');
-  @include gradient(30deg, 'background', 'background-2');
+  @include gradient(15deg, 'background', 'background-2', 'background-3');
   min-height: 100vh;
   margin: 0;
   padding: 8px;
