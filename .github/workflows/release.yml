@@ -21,7 +21,7 @@ jobs:
         run: |
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config user.name "github-actions[bot]"
-      - run: node release.js --no-fetch --no-prompt
+      - run: npm run release -- --no-fetch --no-prompt
         env:
           GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
 env:
