@@ -1,1 +1,7 @@
-<% if (process.env.NODE_ENV === 'production' && !secure) { %><p id="unsecure-warning" class="error-notice"><span class="mdi mdi-lock-off"></span> Warning: not using HTTPS!</p><% } %>
+<p id="unsecure-warning" class="error-notice"><span class="mdi mdi-lock-off"></span> Warning: not using HTTPS!</p>
+
+<script>
+  if (location.protocol === 'https:') {
+    document.getElementById('unsecure-warning').remove();
+  }
+</script>
