@@ -38,7 +38,6 @@ partial dictionary PaymentRequestDetailsUpdate {
 };
 
 partial interface PaymentRequestEvent {
-  readonly attribute boolean requestBillingAddress;
   readonly attribute object? paymentOptions;
   readonly attribute FrozenArray<PaymentShippingOption>? shippingOptions;
   Promise<PaymentRequestDetailsUpdate?> changeShippingAddress(optional AddressInit shippingAddress = {});

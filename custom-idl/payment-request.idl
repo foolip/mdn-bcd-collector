@@ -27,20 +27,11 @@ interface PaymentAddress {
   readonly attribute DOMString region;
   readonly attribute DOMString sortingCode;
   readonly attribute FrozenArray<DOMString> addressLine;
-
-  // https://github.com/w3c/payment-request/pull/765
-  readonly attribute DOMString languageCode;
-
-  // https://github.com/w3c/payment-request/pull/823
-  readonly attribute DOMString regionCode;
 };
 
 partial interface PaymentRequest {
   // https://github.com/w3c/payment-request/pull/931
   [NewObject] Promise<boolean> hasEnrolledInstrument();
-
-  readonly attribute PaymentAddress? paymentAddress;
-  readonly attribute DOMString requestId;
 };
 
 // https://github.com/w3c/payment-request/pull/929

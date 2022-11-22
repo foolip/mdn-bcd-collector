@@ -30,20 +30,3 @@ partial interface PannerNode {
   // https://chromium.googlesource.com/chromium/src/+/9848564877f0057f4dcbc98bce061dfa17a9202c
   undefined setVelocity(float x, float y, float z);
 };
-
-[Exposed=Window]
-interface webkitAudioContext : EventTarget {
-  constructor();
-
-  // https://github.com/WebKit/WebKit/blob/3a0fbaf18766c2d42757e3926687ed4676d0aacd/Source/WebCore/Modules/webaudio/WebKitAudioContext.idl#L56
-  readonly attribute unsigned long activeSourceCount;
-};
-
-[Exposed=Window]
-interface webkitOfflineAudioContext : webkitAudioContext {
-  constructor(unsigned long numberOfChannels, unsigned long length, float sampleRate);
-};
-
-[Exposed=Window]
-interface webkitAudioPannerNode : AudioNode {
-};

@@ -1,11 +1,3 @@
-partial interface SVGElement {
-  readonly attribute long offsetHeight;
-  readonly attribute long offsetLeft;
-  readonly attribute long offsetParent;
-  readonly attribute long offsetTop;
-  readonly attribute long offsetWidth;
-};
-
 partial interface SVGImageElement {
   undefined decode();
   readonly attribute boolean decoding;
@@ -17,27 +9,6 @@ interface SVGPoint {
   attribute long x;
   attribute long y;
 };
-
-[Exposed=Window] interface SVGMeshElement : SVGGeometryElement {};
-[Exposed=Window] interface SVGSolidcolorElement : SVGElement {};
-[Exposed=Window] interface SVGUnknownElement {};
-
-// SVGZoomAndPan has been both an interface and a mixin in implementations.
-// Cover all bases:
-[Exposed=Window]
-interface SVGZoomAndPan {
-  const unsigned short SVG_ZOOMANDPAN_UNKNOWN = 0;
-  const unsigned short SVG_ZOOMANDPAN_DISABLE = 1;
-  const unsigned short SVG_ZOOMANDPAN_MAGNIFY = 2;
-};
-interface mixin ZoomAndPan {
-  const unsigned short SVG_ZOOMANDPAN_UNKNOWN = 0;
-  const unsigned short SVG_ZOOMANDPAN_DISABLE = 1;
-  const unsigned short SVG_ZOOMANDPAN_MAGNIFY = 2;
-  attribute unsigned short zoomAndPan;
-};
-SVGSVGElement includes ZoomAndPan;
-SVGViewElement includes ZoomAndPan;
 
 typedef object SVGPathSegClosePath;
 typedef object SVGPathSegMovetoAbs;
@@ -82,14 +53,6 @@ interface SVGAltGlyphItemElement : SVGElement {
 interface SVGAnimateColorElement : SVGAnimationElement {
 };
 
-// https://www.w3.org/TR/SVG11/color.html#InterfaceSVGColorProfileElement
-[Exposed=Window]
-interface SVGColorProfileElement : SVGElement {
-  attribute DOMString local;
-  attribute DOMString name;
-  attribute unsigned short renderingIntent;
-};
-
 // https://www.w3.org/TR/2016/CR-SVG2-20160915/interact.html#InterfaceSVGCursorElement
 [Exposed=Window]
 interface SVGCursorElement : SVGElement {
@@ -98,12 +61,6 @@ interface SVGCursorElement : SVGElement {
 };
 SVGCursorElement includes SVGTests;
 SVGCursorElement includes SVGURIReference;
-
-// https://www.w3.org/TR/SVG11/types.html#InterfaceSVGExternalResourcesRequired
-[Exposed=Window]
-interface SVGExternalResourcesRequired {
-  readonly attribute SVGAnimatedBoolean externalResourcesRequired;
-};
 
 // https://www.w3.org/TR/SVG11/fonts.html#InterfaceSVGFontElement
 [Exposed=Window]
@@ -230,17 +187,6 @@ interface SVGRenderingIntent {
   const unsigned short RENDERING_INTENT_ABSOLUTE_COLORIMETRIC = 5;
 };
 
-partial interface SVGSVGElement {
-  // https://www.w3.org/TR/SVG11/struct.html#InterfaceSVGSVGElement
-  attribute DOMString contentScriptType;
-  attribute DOMString contentStyleType;
-  readonly attribute SVGRect viewport;
-  readonly attribute float pixelUnitToMillimeterX;
-  readonly attribute float pixelUnitToMillimeterY;
-  readonly attribute float screenPixelToMillimeterX;
-  readonly attribute float screenPixelToMillimeterY;
-};
-
 // https://www.w3.org/TR/SVG11/text.html#InterfaceSVGTRefElement
 [Exposed=Window]
 interface SVGTRefElement : SVGTextPositioningElement {
@@ -249,9 +195,4 @@ interface SVGTRefElement : SVGTextPositioningElement {
 // https://www.w3.org/TR/SVG11/fonts.html#InterfaceSVGVKernElement
 [Exposed=Window]
 interface SVGVKernElement : SVGElement {
-};
-
-partial interface SVGViewElement {
-  // https://www.w3.org/TR/SVG11/linking.html#InterfaceSVGViewElement
-  readonly attribute SVGStringList viewTarget;
 };

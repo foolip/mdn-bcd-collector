@@ -10,6 +10,5 @@ dictionary DeviceLightEventInit : EventInit {
 
 [Exposed=Window]
 interface DeviceLightEvent : Event {
-  constructor(DOMString type, optional DeviceLightEventInit eventInitDict = {});
   readonly attribute unrestricted double value;
 };

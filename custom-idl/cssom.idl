@@ -96,11 +96,6 @@ partial interface Document {
   readonly attribute DOMString? preferredStyleSheetSet;
   readonly attribute FrozenArray<DOMString> styleSheetSets;
   undefined enableStyleSheetsForSet(DOMString? name);
-
-  // https://developer.mozilla.org/en-US/docs/Web/API/Document/width
-  readonly attribute long width;
-  // https://developer.mozilla.org/en-US/docs/Web/API/Document/height
-  readonly attribute long height;
 };
 
 partial interface Window {
