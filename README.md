@@ -94,12 +94,12 @@ These errors are worth looking out for:
 npm run dev
 ```
 
-(`dev`, as opposed to `start`, will automatically rebuild the tests and reload the server on file changes.)
+(`dev`, as opposed to `start`, will use `ts-node` to run the TypeScript file, as well as automatically rebuild the tests and reload the server on file changes.)
 
 To also handle HTTPS traffic, use the `--https-cert` and `--https-key` arguments:
 
 ```sh
-npm start -- --https-cert=my-cert.pem --https-key=my-cert.key
+npm run dev -- --https-cert=my-cert.pem --https-key=my-cert.key
 ```
 
 Test certificates and instructions for generating certificates can be found in [web-platform-tests](https://github.com/web-platform-tests/wpt/tree/master/tools/certs).
