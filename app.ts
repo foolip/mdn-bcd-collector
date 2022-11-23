@@ -28,7 +28,7 @@ import parseResults from './results.js';
 import {getStorage} from './storage.js';
 import {parseUA} from './ua-parser.js';
 import Tests from './tests.js';
-import {exec} from './scripts.js';
+import exec from './lib/exec.js';
 
 /* c8 ignore start */
 const getAppVersion = async () => {
@@ -40,7 +40,7 @@ const getAppVersion = async () => {
   }
 
   try {
-    return String(exec('git describe --tags'))
+    return (await exec('git describe --tags'))
       .replace(/^v/, '')
       .replace('\n', '');
   } catch (e) {
