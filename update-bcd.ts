@@ -39,8 +39,8 @@ const {Minimatch} = minimatch;
 import yargs from 'yargs';
 import {hideBin} from 'yargs/helpers';
 
-import logger from './logger.js';
-import {parseUA} from './ua-parser.js';
+import logger from './lib/logger.js';
+import {parseUA} from './lib/ua-parser.js';
 
 const BCD_DIR = fileURLToPath(
   new URL(process.env.BCD_DIR || `../browser-compat-data`, import.meta.url)
