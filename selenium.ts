@@ -103,7 +103,6 @@ const earliestBrowserVersions = {
   chrome: '15',
   edge: '12',
   firefox: '4',
-  ie: '6',
   safari: '5.1'
 };
 
@@ -149,7 +148,6 @@ const getBrowsersToTest = (
     chrome: filterVersions('chrome', since, reverse),
     edge: filterVersions('edge', since, reverse),
     firefox: filterVersions('firefox', since, reverse),
-    ie: filterVersions('ie', since, reverse),
     safari: filterVersions('safari', since, reverse)
   };
 
@@ -535,12 +533,8 @@ const runAll = async (
 
     for (const version of browsersToTest[browser]) {
       for (const os of oses) {
-        if (
-          os === 'macOS' &&
-          ['edge', 'ie'].includes(browser) &&
-          version <= '18'
-        ) {
-          // Don't test Internet Explorer / EdgeHTML on macOS
+        if (os === 'macOS' && browser === 'edge' && version <= '18') {
+          // Don't test EdgeHTML on macOS
           continue;
         }
 
@@ -590,7 +584,7 @@ if (esMain(import.meta)) {
           describe: 'Limit the browser(s) to test',
           alias: 'b',
           type: 'string',
-          choices: ['chrome', 'edge', 'firefox', 'ie', 'safari']
+          choices: ['chrome', 'edge', 'firefox', 'safari']
         })
         .option('since', {
           describe: 'Limit to browser releases from this year on',
