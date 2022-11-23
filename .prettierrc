@@ -4,5 +4,13 @@
   "singleQuote": true,
   "bracketSpacing": false,
   "quoteProps": "as-needed",
-  "trailingComma": "none"
+  "trailingComma": "none",
+  "overrides": [
+    {
+      "files": ["**/*.yml"],
+      "options": {
+        "singleQuote": false
+      }
+    }
+  ]
 }
