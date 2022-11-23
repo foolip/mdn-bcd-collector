@@ -1,5 +1,5 @@
 //
-// mdn-bcd-collector: unittest/unit/ua-parser.js
+// mdn-bcd-collector: unittest/unit/ua-parser.ts
 // Unittest for the user agent parser
 //
 // © Gooborg Studios

@@ -1,5 +1,5 @@
 //
-// mdn-bcd-collector: unittest/unit/exporter.js
+// mdn-bcd-collector: unittest/unit/exporter.ts
 // Unittest for the results exporter script
 //
 // © Google LLC, Gooborg Studios

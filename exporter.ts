@@ -1,5 +1,5 @@
 //
-// mdn-bcd-collector: exporter.js
+// mdn-bcd-collector: exporter.ts
 // This module is responsible for getting results/reports out of the collector
 // web service into JSON files that can be used by update-bcd.ts.
 //

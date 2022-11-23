@@ -1,5 +1,5 @@
 //
-// mdn-bcd-collector: ua-parser.js
+// mdn-bcd-collector: ua-parser.ts
 // Module to parse user agent strings and compare them with BCD browser data
 //
 // © Gooborg Studios, Google LLC

@@ -1,5 +1,5 @@
 //
-// mdn-bcd-collector: release.js
+// mdn-bcd-collector: release.ts
 // Script to perform a new mdn-bcd-collector release
 //
 // © Gooborg Studios, Google LLC

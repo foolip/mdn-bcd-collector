@@ -190,7 +190,7 @@ app.get('/download/:filename', (req, res, next) => {
     .catch(next);
 });
 
-// Accept both GET and POST requests. The form uses POST, but selenium.js
+// Accept both GET and POST requests. The form uses POST, but selenium.ts
 // instead simply navigates to /export.
 app.all('/export', (req, res, next) => {
   const github = !!req.body.github;
