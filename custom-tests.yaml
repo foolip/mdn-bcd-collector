@@ -978,6 +978,8 @@ api:
         callback(pos);
       }, function(err) {
         fail(err.message);
+      }, {
+        timeout: 5000
       });
   HashChangeEvent:
     __base: |-
