@@ -806,13 +806,13 @@
     var resultValueEl = document.createElement('span');
     resultValueEl.className = 'result-value result-value-' + resultValue;
     resultValueEl.innerHTML =
-      resultValue === 'true' ?
-        'Supported' :
-        resultValue === 'false' ?
-        'No Support' :
-        resultValue === 'null' ?
-        'Support Unknown' :
-        resultValue;
+      resultValue === 'true'
+        ? 'Supported'
+        : resultValue === 'false'
+        ? 'No Support'
+        : resultValue === 'null'
+        ? 'Support Unknown'
+        : resultValue;
     resultSummaryEl.appendChild(resultValueEl);
     resultEl.appendChild(resultSummaryEl);
 
