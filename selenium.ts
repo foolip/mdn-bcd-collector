@@ -194,22 +194,31 @@ const getOsesToTest = (service, os) => {
       ];
       break;
     case 'macOS':
-      osesToTest =
-        service === 'saucelabs'
-          ? [['macOS', '10.14']]
-          : service === 'lambdatest'
-          ? [
-              ['macOS', 'Monterey'],
-              ['macOS', 'Big Sur'],
-              ['macOS', 'Mojave'],
-              ['OS X', 'El Capitan']
-            ]
-          : [
-              ['OS X', 'Monterey'],
-              ['OS X', 'Big Sur'],
-              ['OS X', 'Mojave'],
-              ['OS X', 'El Capitan']
-            ];
+      switch (service) {
+        case 'saucelabs':
+          osesToTest = [
+            ['macOS', '13'],
+            ['macOS', '10.14']
+          ];
+          break;
+        case 'lambdatest':
+          osesToTest = [
+            ['macOS', 'Ventura'],
+            ['macOS', 'Monterey'],
+            ['macOS', 'Big Sur'],
+            ['macOS', 'Mojave'],
+            ['OS X', 'El Capitan']
+          ];
+          break;
+        default:
+          osesToTest = [
+            ['OS X', 'Ventura'],
+            ['OS X', 'Monterey'],
+            ['OS X', 'Big Sur'],
+            ['OS X', 'Mojave'],
+            ['OS X', 'El Capitan']
+          ];
+      }
       break;
     default:
       throw new Error(`Unknown/unsupported OS: ${os}`);
