@@ -1,5 +1,5 @@
 //
-// mdn-bcd-collector: storage.ts
+// mdn-bcd-collector: lib/storage.ts
 // Module to handle temporary storage for the web app, locally or in GAE
 //
 // © Google LLC, Gooborg Studios
@@ -96,7 +96,7 @@ class MemoryStorage {
   async saveFile(filename, data) {
     assert(!filename.includes('..'));
     await fs.writeFile(
-      new URL(`./download/${filename}`, import.meta.url),
+      new URL(`../download/${filename}`, import.meta.url),
       data
     );
   }
@@ -104,7 +104,7 @@ class MemoryStorage {
   async readFile(filename) {
     assert(!filename.includes('..'));
     return await fs.readFile(
-      new URL(`./download/${filename}`, import.meta.url)
+      new URL(`../download/${filename}`, import.meta.url)
     );
   }
 }

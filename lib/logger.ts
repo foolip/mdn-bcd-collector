@@ -1,5 +1,5 @@
 //
-// mdn-bcd-collector: logger.ts
+// mdn-bcd-collector: lib/logger.ts
 // Logging output module to log to either the console or GAE cloud
 //
 // © Google LLC, Gooborg Studios

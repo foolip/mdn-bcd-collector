@@ -1,5 +1,5 @@
 //
-// mdn-bcd-collector: exporter.ts
+// mdn-bcd-collector: lib/exporter.ts
 // This module is responsible for getting results/reports out of the collector
 // web service into JSON files that can be used by update-bcd.ts.
 //
@@ -16,7 +16,7 @@ const bcdBrowsers = bcd.browsers;
 
 import {parseUA} from './ua-parser.js';
 
-import type {Report} from './types/types.js';
+import type {Report} from '../types/types.js';
 
 const getReportMeta = (report) => {
   const json = stringify(report);

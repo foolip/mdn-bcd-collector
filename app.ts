@@ -22,13 +22,13 @@ import yargs from 'yargs';
 import {hideBin} from 'yargs/helpers';
 import {Octokit} from '@octokit/rest';
 
-import * as exporter from './exporter.js';
-import logger from './logger.js';
-import parseResults from './results.js';
-import {getStorage} from './storage.js';
-import {parseUA} from './ua-parser.js';
-import Tests from './tests.js';
+import logger from './lib/logger.js';
+import * as exporter from './lib/exporter.js';
+import {getStorage} from './lib/storage.js';
+import {parseUA} from './lib/ua-parser.js';
+import Tests from './lib/tests.js';
 import exec from './lib/exec.js';
+import parseResults from './results.js';
 
 /* c8 ignore start */
 const getAppVersion = async () => {
@@ -210,7 +210,7 @@ app.all('/export', (req, res, next) => {
               url
             });
           } catch (e) {
-            console.error(e);
+            logger.error(e);
             res.status(500).render('export', {
               title: 'GitHub Export Failed',
               description: '[GitHub Export Failed]',
