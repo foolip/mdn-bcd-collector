@@ -203,7 +203,6 @@ const getOsesToTest = (service, os) => {
           break;
         case 'lambdatest':
           osesToTest = [
-            ['macOS', 'Ventura'],
             ['macOS', 'Monterey'],
             ['macOS', 'Big Sur'],
             ['macOS', 'Mojave'],
@@ -213,7 +212,6 @@ const getOsesToTest = (service, os) => {
         default:
           // BrowserStack
           osesToTest = [
-            ['OS X', 'Ventura'],
             ['OS X', 'Monterey'],
             ['OS X', 'Big Sur'],
             ['OS X', 'Mojave'],
