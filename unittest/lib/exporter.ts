@@ -13,7 +13,7 @@ chai.use(chaiAsPromised);
 import sinon from 'sinon';
 import {Octokit} from '@octokit/rest';
 
-import {exportAsPR} from '../../exporter.js';
+import {exportAsPR} from '../../lib/exporter.js';
 
 import type {Report} from '../../types/types.js';
 

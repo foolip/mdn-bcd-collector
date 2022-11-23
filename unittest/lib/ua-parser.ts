@@ -8,7 +8,7 @@
 
 import {assert} from 'chai';
 
-import {getMajorMinorVersion, parseUA} from '../../ua-parser.js';
+import {getMajorMinorVersion, parseUA} from '../../lib/ua-parser.js';
 
 const browsers = {
   chrome: {name: 'Chrome', releases: {82: {}, 83: {}, 84: {}, 85: {}}},
