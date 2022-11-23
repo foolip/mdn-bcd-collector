@@ -1,5 +1,5 @@
 //
-// mdn-bcd-collector: unittest/unit/bcd.test.js
+// mdn-bcd-collector: unittest/unit/bcd.test.ts
 // Unittest helper containing pseudo BCD
 //
 // © Gooborg Studios

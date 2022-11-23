@@ -1,5 +1,5 @@
 //
-// mdn-bcd-collector: unittest/unit/find-missing-features.js
+// mdn-bcd-collector: unittest/unit/find-missing-features.ts
 // Unittest for the missing features finder script
 //
 // © Gooborg Studios, Google LLC

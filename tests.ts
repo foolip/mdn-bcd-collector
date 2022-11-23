@@ -1,5 +1,5 @@
 //
-// mdn-bcd-collector: tests.js
+// mdn-bcd-collector: tests.ts
 // Module for handling the tests for the web app
 //
 // © Google LLC, Gooborg Studios

@@ -1,5 +1,5 @@
 //
-// mdn-bcd-collector: build.js
+// mdn-bcd-collector: build.ts
 // Script to build all of the tests from the IDL and custom CSS/JS files
 //
 // © Google LLC, Gooborg Studios, Mozilla Corporation, Apple Inc

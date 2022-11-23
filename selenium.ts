@@ -1,5 +1,5 @@
 //
-// mdn-bcd-collector: selenium.js
+// mdn-bcd-collector: selenium.ts
 // Script to collect results from various browsers using Selenium webdriver
 //
 // © Gooborg Studios, Google LLC

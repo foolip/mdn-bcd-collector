@@ -1,5 +1,5 @@
 //
-// mdn-bcd-collector: unittest/unit/build.js
+// mdn-bcd-collector: unittest/unit/build.ts
 // Unittest for the test build script
 //
 // © Google LLC, Gooborg Studios, Apple Inc
