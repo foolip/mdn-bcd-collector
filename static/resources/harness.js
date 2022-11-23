@@ -29,7 +29,7 @@
   };
 
   // Set to true for debugging output, and 'full' to include completion logging
-  var debugmode = false;
+  var debugmode = stringIncludes(location.search, 'debug=true');
 
   /* c8 ignore start */
   function consoleLog(message) {
@@ -438,7 +438,9 @@
           consoleWarn('Warning! ' + result.name + ' ran twice!');
         }
         if (remaining.length > 0 && remaining.length <= 20) {
-          consoleLog('Remaining (' + result.info.exposure + '): ' + remaining);
+          updateStatus(
+            'Remaining (' + result.info.exposure + '): ' + remaining
+          );
         } else if (
           (remaining.length >= 50 &&
             remaining.length < 200 &&
