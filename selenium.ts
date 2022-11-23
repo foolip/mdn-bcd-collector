@@ -211,6 +211,7 @@ const getOsesToTest = (service, os) => {
           ];
           break;
         default:
+          // BrowserStack
           osesToTest = [
             ['OS X', 'Ventura'],
             ['OS X', 'Monterey'],
@@ -290,31 +291,36 @@ const buildDriver = async (browser, version, os) => {
       const capabilities = new Capabilities();
 
       // Set test name
-      capabilities.set(
-        'name',
-        `mdn-bcd-collector: ${prettyName(browser, version, os)}`
-      );
+      const testName = `mdn-bcd-collector: ${prettyName(browser, version, os)}`;
+      capabilities.set('name', testName);
       if (service === 'saucelabs') {
         capabilities.set('sauce:options', {
-          name: `mdn-bcd-collector: ${prettyName(browser, version, os)}`
+          name: testName
         });
       }
 
       capabilities.set(Capability.BROWSER_NAME, Browser[browser.toUpperCase()]);
       capabilities.set(Capability.BROWSER_VERSION, version.split('.')[0]);
 
-      // Remap target OS for Safari x.0 vs. x.1 on SauceLabs
-      if (service === 'saucelabs') {
+      if (service === 'browserstack') {
+        const osCaps: any = {os: osName};
+        if (browser !== 'safari') {
+          osCaps.osVersion = osVersion;
+        }
+        capabilities.set('bstack:options', osCaps);
+      } else if (service === 'saucelabs') {
+        // Remap target OS for Safari x.0 vs. x.1 on SauceLabs
         if (browser === 'safari') {
           capabilities.set('platformName', getSafariOS(version));
         } else {
           capabilities.set('platformName', `${osName} ${osVersion}`);
         }
       } else {
-        capabilities.set('os', osName);
-        if (browser !== 'safari') {
-          capabilities.set('os_version', osVersion);
-        }
+        // LambdaTest
+        capabilities.set('LT:Options', {
+          name: testName,
+          platformName: `${osName} ${osVersion}`
+        });
       }
 
       // Allow mic, camera, geolocation and notifications permissions
