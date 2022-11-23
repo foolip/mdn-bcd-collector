@@ -437,12 +437,13 @@
         } else {
           consoleWarn('Warning! ' + result.name + ' ran twice!');
         }
-        if (remaining.length > 0 && remaining.length <= 20) {
+        if (remaining.length > 0 && remaining.length <= 50) {
+          consoleLog('Remaining (' + result.info.exposure + '): ' + remaining);
           updateStatus(
             'Remaining (' + result.info.exposure + '): ' + remaining
           );
         } else if (
-          (remaining.length >= 50 &&
+          (remaining.length > 50 &&
             remaining.length < 200 &&
             remaining.length % 50 == 0) ||
           (remaining.length >= 200 && remaining.length % 500 == 0)
