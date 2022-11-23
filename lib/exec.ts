@@ -13,7 +13,7 @@ const exec = async (cmd, env?: any, pipe = true) => {
   if (!pipe) {
     console.log(`> ${cmd}`);
   }
-  const output = await childProcess.execSync(cmd, {
+  const output = childProcess.execSync(cmd, {
     env,
     stdio: pipe ? 'pipe' : 'inherit'
   });
