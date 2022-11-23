@@ -1,5 +1,5 @@
 //
-// mdn-bcd-collector: selenium-keepalive.ts
+// mdn-bcd-collector: lib/selenium-keepalive.ts
 // Sets HTTP keep-alive for faster Selenium tests
 //
 // © BrowserStack, Gooborg Studios
