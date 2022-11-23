@@ -14,7 +14,7 @@
     "node": ">=16.15.0"
   },
   "scripts": {
-    "prepare": "ts-node scripts.ts prepare",
+    "prepare": "ts-nodeprepare.ts",
     "format": "eslint . && prettier -c \"**/*.json\" \"**/*.md\" \"**/*.scss\" \"**/*.yaml\" --color && ejslint views/*",
     "format:fix": "eslint --fix . && prettier --write \"**/*.json\" \"**/*.md\" \"**/*.scss\" \"**/*.yaml\"",
     "fix": "npm run format:fix",
@@ -26,7 +26,7 @@
     "gcp-build": "npm run build",
     "start": "NODE_ENV=production node app.js",
     "dev": "npm i && nodemon -e ts,json,idl,scss,yaml --exec \"npm run build:tests && npm run build:resources && ts-node app.ts\"",
-    "unittest": "ts-node scripts.ts unittest",
+    "unittest": "NODE_ENV=test c8 mocha --recursive 'unittest/**/*.ts'",
     "coverage": "c8 report -r lcov && open-cli coverage/lcov-report/index.html",
     "test": "npm run format && npm run unittest",
     "selenium": "ts-node selenium.ts",
