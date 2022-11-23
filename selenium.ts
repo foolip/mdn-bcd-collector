@@ -19,7 +19,11 @@ import {
   until
 } from 'selenium-webdriver';
 import bcd from '@mdn/browser-compat-data' assert {type: 'json'};
-import type {ReleaseStatement} from '@mdn/browser-compat-data';
+import type {
+  BrowserStatement,
+  ReleaseStatement,
+  BrowserName
+} from '@mdn/browser-compat-data';
 const bcdBrowsers = bcd.browsers;
 import {
   compare as compareVersions,
@@ -42,9 +46,9 @@ const resultsDir = fileURLToPath(
 );
 
 const testenv = process.env.NODE_ENV === 'test';
-const host = `https://${
-  testenv ? 'staging-dot-' : ''
-}mdn-bcd-collector.gooborg.com`;
+const host = testenv
+  ? 'http://localhost:8080'
+  : 'https://mdn-bcd-collector.gooborg.com';
 
 const seleniumUrls = {
   browserstack: 'https://${username}:${key}@hub-cloud.browserstack.com/wd/hub',
@@ -99,6 +103,14 @@ const ignore = {
   }
 };
 
+const earliestBrowserVersions = {
+  chrome: '15',
+  edge: '12',
+  firefox: '4',
+  ie: '6',
+  safari: '5.1'
+};
+
 const prettyName = (browser, version, os) => {
   return `${bcdBrowsers[browser].name} ${version} on ${os}`;
 };
@@ -111,17 +123,17 @@ const log = (task, message) => {
   // task.output = new Date(Date.now()).toLocaleTimeString(undefined, {hour12: false}) + ': ' + message;
 };
 
-const filterVersions = (
-  data: {[version: string]: ReleaseStatement},
-  earliestVersion,
-  reverse
-) => {
+const filterVersions = (browser: BrowserName, since: Date, reverse) => {
   const versions: string[] = [];
 
-  for (const [version, versionData] of Object.entries(data)) {
+  for (const [version, versionData] of Object.entries(
+    (bcdBrowsers[browser] as BrowserStatement).releases
+  )) {
     if (
       (versionData.status == 'current' || versionData.status == 'retired') &&
-      compareVersions(version, earliestVersion, '>=')
+      compareVersions(version, earliestBrowserVersions[browser], '>=') &&
+      versionData.release_date &&
+      new Date(versionData.release_date) > since
     ) {
       versions.push(version);
     }
@@ -132,27 +144,25 @@ const filterVersions = (
   );
 };
 
-const getBrowsersToTest = (limitBrowsers, limitVersion, reverse) => {
+const getBrowsersToTest = (
+  limitBrowsers: BrowserName[],
+  since: Date,
+  reverse: boolean
+) => {
   let browsersToTest: {[browser: string]: string[]} = {
-    chrome: filterVersions(bcdBrowsers.chrome.releases, '15', reverse),
-    edge: filterVersions(bcdBrowsers.edge.releases, '12', reverse),
-    firefox: filterVersions(bcdBrowsers.firefox.releases, '4', reverse),
-    ie: filterVersions(bcdBrowsers.ie.releases, '6', reverse),
-    safari: filterVersions(bcdBrowsers.safari.releases, '5.1', reverse)
+    chrome: filterVersions('chrome', since, reverse),
+    edge: filterVersions('edge', since, reverse),
+    firefox: filterVersions('firefox', since, reverse),
+    ie: filterVersions('ie', since, reverse),
+    safari: filterVersions('safari', since, reverse)
   };
 
   if (limitBrowsers) {
     browsersToTest = Object.fromEntries(
-      Object.entries(browsersToTest).filter(([k]) => limitBrowsers.includes(k))
+      Object.entries(browsersToTest).filter(([k]) =>
+        limitBrowsers.includes(k as BrowserName)
+      )
     );
-  }
-
-  if (limitVersion) {
-    for (const browser of Object.keys(browsersToTest)) {
-      browsersToTest[browser] = browsersToTest[browser].filter(
-        (v) => v == limitVersion
-      );
-    }
   }
 
   return browsersToTest;
@@ -586,16 +596,15 @@ if (esMain(import.meta)) {
           type: 'string',
           choices: ['chrome', 'edge', 'firefox', 'ie', 'safari']
         })
-        .option('browser-version', {
-          describe:
-            'The specific browser version to test (useful for testing purposes)',
-          alias: 'e',
+        .option('since', {
+          describe: 'Limit to browser releases from this year on',
+          alias: 's',
           type: 'string',
           nargs: 1
         })
         .option('os', {
           describe: 'Specify OS to test',
-          alias: 's',
+          alias: 'o',
           type: 'array',
           choices: ['Windows', 'macOS'],
           default: ['Windows', 'macOS']
@@ -618,7 +627,7 @@ if (esMain(import.meta)) {
 
   await runAll(
     argv.browser,
-    argv.browserVersion,
+    argv.since ? new Date(`${argv.since}-01-01`) : new Date(0),
     argv.os,
     argv.concurrent,
     argv.reverse

@@ -157,6 +157,13 @@ npm run selenium chrome
 npm run selenium edge ie
 ```
 
+Additionally, you can limit the browser versions by the year with the `--since` argument:
+
+```sh
+npm run selenium -- --since=2016
+npm run selenium firefox -- --since=2020
+```
+
 ## Running the unit tests and linter
 
 ```sh
