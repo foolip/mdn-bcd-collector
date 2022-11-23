@@ -17,7 +17,7 @@ const exec = async (cmd, env?: any, pipe = true) => {
     env,
     stdio: pipe ? 'pipe' : 'inherit'
   });
-  return output.toString();
+  return String(output);
 };
 
 export default exec;
