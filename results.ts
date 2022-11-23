@@ -1,5 +1,5 @@
 //
-// mdn-bcd-collector: results.js
+// mdn-bcd-collector: results.ts
 // Module to parse and handle test results
 //
 // © Google LLC, Gooborg Studios

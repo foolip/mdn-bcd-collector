@@ -1,5 +1,5 @@
 //
-// mdn-bcd-collector: storage.js
+// mdn-bcd-collector: storage.ts
 // Module to handle temporary storage for the web app, locally or in GAE
 //
 // © Google LLC, Gooborg Studios

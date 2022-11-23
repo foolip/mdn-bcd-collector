@@ -1,5 +1,5 @@
 //
-// mdn-bcd-collector: unittest/app/app.js
+// mdn-bcd-collector: unittest/app/app.ts
 // Unittest for the main app backend
 //
 // © Gooborg Studios, Google LLC

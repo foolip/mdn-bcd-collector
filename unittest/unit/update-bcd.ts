@@ -1,5 +1,5 @@
 //
-// mdn-bcd-collector: unittest/unit/update-bcd.js
+// mdn-bcd-collector: unittest/unit/update-bcd.ts
 // Unittest for the BCD updater script
 //
 // © Google LLC, Gooborg Studios
