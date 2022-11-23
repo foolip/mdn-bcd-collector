@@ -8,7 +8,7 @@
 
 import {assert} from 'chai';
 
-import {CloudStorage, MemoryStorage, getStorage} from '../../storage.js';
+import {CloudStorage, MemoryStorage, getStorage} from '../../lib/storage.js';
 
 const SESSION_ID = 'testsessionid';
 

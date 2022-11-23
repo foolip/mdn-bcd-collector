@@ -14,7 +14,7 @@ import fs from 'fs-extra';
 import minimatch from 'minimatch';
 import {Browsers} from '@mdn/browser-compat-data/types';
 
-import logger from '../../logger.js';
+import logger from '../../lib/logger.js';
 import {
   findEntry,
   getSupportMap,
@@ -24,9 +24,9 @@ import {
   update
 } from '../../update-bcd.js';
 
-import bcd from './bcd.test.js';
+import bcd from '../sample/bcd.test.js';
 const overrides = await fs.readJson(
-  new URL('./overrides.test.json', import.meta.url)
+  new URL('../sample/overrides.test.json', import.meta.url)
 );
 
 const clone = (value) => JSON.parse(JSON.stringify(value));
