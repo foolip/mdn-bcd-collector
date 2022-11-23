@@ -7,7 +7,7 @@
     "views/*",
     "tests.json",
     "find-missing.ts",
-    "scripts.ts",
+    "prepare.ts",
     "selenium.ts",
     "update-bcd.ts",
     "add-new-bcd.ts"
