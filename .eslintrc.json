@@ -1,7 +1,6 @@
 {
   "extends": [
     "eslint:recommended",
-    "google",
     "plugin:@typescript-eslint/recommended",
     "plugin:prettier/recommended"
   ],
