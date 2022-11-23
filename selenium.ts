@@ -33,7 +33,7 @@ import {Listr, ListrTask} from 'listr2';
 import yargs from 'yargs';
 import {hideBin} from 'yargs/helpers';
 
-import './selenium-keepalive.js';
+import './lib/selenium-keepalive.js';
 
 const secrets = await fs.readJson(new URL('./secrets.json', import.meta.url));
 
