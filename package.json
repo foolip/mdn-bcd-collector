@@ -100,7 +100,7 @@
     "node-fetch": "3.3.0",
     "nodemon": "2.0.20",
     "open-cli": "7.1.0",
-    "prettier": "2.7.1",
+    "prettier": "2.8.0",
     "puppeteer": "19.2.2",
     "sass": "1.56.1",
     "selenium-webdriver": "4.6.1",
