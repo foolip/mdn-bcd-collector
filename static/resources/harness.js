@@ -160,7 +160,8 @@
           'constructor takes a',
           'is not a valid argument count',
           'Missing required',
-          'Cannot read property'
+          'Cannot read property',
+          'event name must be provided'
         ])
       ) {
         // If it failed to construct and it's not illegal or just needs
