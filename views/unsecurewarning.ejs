@@ -1,3 +1,4 @@
+<% if (process.env.NODE_ENV === "production") { %>
 <p id="unsecure-warning" class="error-notice"><span class="mdi mdi-lock-off"></span> Warning: not using HTTPS!</p>
 
 <script>
@@ -5,3 +6,4 @@
     document.getElementById('unsecure-warning').remove();
   }
 </script>
+<% } %>
