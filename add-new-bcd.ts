@@ -9,6 +9,7 @@
 import {Identifier} from '@mdn/browser-compat-data/types';
 
 import path from 'node:path';
+import {execSync} from 'node:child_process';
 
 import fs from 'fs-extra';
 import esMain from 'es-main';
@@ -205,6 +206,7 @@ const main = async (): Promise<void> => {
 
   console.log('Cleaning up...');
   await fs.remove(filepath);
+  execSync('npm run fix', {cwd: BCD_DIR});
 
   console.log('Done!');
 };
