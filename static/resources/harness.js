@@ -374,7 +374,9 @@
   function runTest(data, i, oncomplete) {
     var test = data.tests[i];
 
-    var timeout = setTimeout(fail('Timed out'), 10000);
+    var timeout = setTimeout(function () {
+      fail('Timed out');
+    }, 10000);
 
     function success(v) {
       clearTimeout(timeout);
