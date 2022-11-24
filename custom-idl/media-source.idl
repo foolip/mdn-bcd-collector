@@ -2,7 +2,3 @@ partial interface SourceBuffer {
   Promise<undefined> appendBufferAsync();
   undefined removeAsync();
 };
-
-partial interface SourceBufferList {
-  SourceBufferList item(unsigned long index);
-};

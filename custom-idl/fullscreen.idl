@@ -1,19 +1,5 @@
 // https://blog.foolip.org/2014/07/21/history-of-the-fullscreen-api/
 
-partial interface HTMLVideoElement {
-  readonly attribute boolean webkitSupportsFullscreen;
-  readonly attribute boolean webkitDisplayingFullscreen;
-  undefined webkitEnterFullscreen();
-  undefined webkitExitFullscreen();
-  undefined webkitEnterFullScreen();
-  undefined webkitExitFullScreen();
-};
-
-partial interface Element {
-  const unsigned short ALLOW_KEYBOARD_INPUT = 1;
-  undefined webkitRequestFullScreen(unsigned short flags);
-};
-
 partial interface Document {
   readonly attribute boolean webkitIsFullScreen;
   readonly attribute boolean webkitFullScreenKeyboardInputAllowed;
@@ -21,22 +7,10 @@ partial interface Document {
   undefined webkitCancelFullScreen();
 };
 
-partial interface Element {
-  undefined mozRequestFullScreen();
-};
-
 partial interface Document {
   readonly attribute boolean mozFullScreen;
   readonly attribute boolean mozFullScreenEnabled;
   undefined mozCancelFullScreen();
-};
-
-partial interface mixin DocumentOrShadowRoot {
-  readonly attribute Element? mozFullScreenElement;
-};
-
-partial interface Element {
-  undefined webkitRequestFullscreen();
 };
 
 partial interface Document {

@@ -6,10 +6,6 @@ partial interface Element {
   attribute EventHandler ongesturechange;
   attribute EventHandler ongestureend;
   attribute EventHandler ongesturestart;
-  attribute EventHandler onwebkitcurrentplaybacktargetiswirelesschanged;
-  attribute EventHandler onwebkitneedkey;
-  attribute EventHandler onwebkitplaybacktargetavailabilitychanged;
-  attribute EventHandler onwebkitpresentationmodechanged;
 };
 
 partial interface mixin GlobalEventHandlers {
@@ -40,46 +36,4 @@ partial interface HTMLBodyElement {
 partial interface HTMLElement {
   // https://github.com/WebKit/WebKit/blob/c397d717fcd82a8daff69dccb1354a5f94ca6f9a/Source/WebCore/html/HTMLElement.idl#L57
   [CEReactions] attribute DOMString webkitdropzone;
-};
-
-partial interface HTMLMediaElement {
-  // should be on HTMLVideoElement
-  VideoPlaybackQuality getVideoPlaybackQuality();
-};
-
-// https://developer.apple.com/documentation/webkitjs/overflowevent
-[Exposed=Window]
-interface OverflowEvent : Event {
-  readonly attribute boolean horizontalOverflow;
-  readonly attribute unsigned short orient;
-  readonly attribute boolean verticalOverflow;
-};
-
-// https://developer.apple.com/documentation/webkitjs/textevent
-[Exposed=Window]
-interface TextEvent : UIEvent {
-  undefined initTextEvent();
-  readonly attribute DOMString data;
-};
-
-[Exposed=Window]
-interface UserMessageHandler {
-  Promise<any> postMessage(any message);
-};
-
-[Exposed=Window]
-interface UserMessageHandlersNamespace {
-  getter UserMessageHandler (DOMString name);
-};
-
-[Exposed=Window]
-interface WebKitNamespace {
-  readonly attribute UserMessageHandlersNamespace messageHandlers;
-};
-
-// https://developer.apple.com/documentation/webkitjs/webkitplaybacktargetavailabilityevent
-[Exposed=Window]
-interface WebKitPlaybackTargetAvailabilityEvent : Event {
-  constructor(DOMString type);
-  readonly attribute DOMString availability;
 };

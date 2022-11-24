@@ -1,13 +1,3 @@
-partial interface Selection {
-  // https://github.com/w3c/selection-api/issues/34
-  // https://chromium.googlesource.com/chromium/src/+/6ad4130faeeead16d8bf620c4387283da143ac09/third_party/blink/renderer/core/editing/selection.idl#64
-  // https://github.com/WebKit/WebKit/blob/552c0afa0b0ba5c56b3f9a36b35d1ffaa4b5f99d/Source/WebCore/page/DOMSelection.idl#L74
-  readonly attribute Node? baseNode;
-  readonly attribute unsigned long baseOffset;
-  readonly attribute Node? extentNode;
-  readonly attribute unsigned long extentOffset;
-};
-
 partial interface ShadowRoot {
   // https://github.com/w3c/selection-api/issues/114
   // https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/core/dom/document_or_shadow_root.idl;l=12;drc=5aded22f34131a7d136f7fff2b6b28b8387ad961

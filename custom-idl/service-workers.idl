@@ -15,7 +15,3 @@ interface InstallEvent : ExtendableEvent {
 partial interface ServiceWorkerContainer {
   attribute EventHandler onerror;
 };
-
-partial interface ServiceWorkerGlobalScope {
-  readonly attribute CacheStorage caches;
-};

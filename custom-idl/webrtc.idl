@@ -11,7 +11,6 @@ partial interface RTCPeerConnection {
   RTCDTMFSender createDTMFSender(MediaStreamTrack track);
 
   attribute EventHandler onaddstream;
-  attribute EventHandler onaddtrack;
   attribute EventHandler onremovestream;
 };
 
@@ -20,9 +19,6 @@ partial interface RTCPeerConnectionIceErrorEvent {
 };
 
 partial interface RTCRtpReceiver {
-  // https://henbos.github.io/webrtc-timing/#rtcrtpreceiver-interface
-  attribute double? playoutDelayHint;
-
   readonly attribute RTCDtlsTransport rtcpTransport;
 };
 

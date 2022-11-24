@@ -37,9 +37,6 @@ partial interface Document {
 partial interface Element {
   // https://www.w3.org/Bugs/Public/show_bug.cgi?id=14600
   undefined setCapture(optional boolean retargetToElement);
-
-  // https://github.com/mozilla/gecko-dev/blob/f7949b6a83a31998267293b4497d1f86b45c18fc/dom/webidl/Element.webidl#L144
-  undefined releaseCapture();
 };
 
 partial interface Event {
@@ -47,16 +44,9 @@ partial interface Event {
   readonly attribute EventTarget? explicitOriginalTarget;
   // https://developer.mozilla.org/en-US/docs/Web/API/Event/originalTarget
   readonly attribute EventTarget? originalTarget;
-
-  readonly attribute object path;
-};
-
-partial interface ProcessingInstruction {
-  readonly attribute any data;
 };
 
 partial interface Range {
-  undefined expand(optional DOMString unit = "");
   short compareNode(Node node);
 
   readonly attribute boolean collapsed;
