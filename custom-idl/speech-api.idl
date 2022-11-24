@@ -6,28 +6,3 @@ partial interface SpeechRecognitionEvent {
   readonly attribute USVString emma;
   readonly attribute DOMString interpretation;
 };
-
-[Exposed=Window]
-interface webkitSpeechGrammar {
-  constructor();
-};
-
-[Exposed=Window]
-interface webkitSpeechGrammarList {
-  constructor();
-};
-
-[Exposed=Window]
-interface webkitSpeechRecognition : EventTarget {
-  constructor();
-};
-
-[Exposed=Window]
-interface webkitSpeechRecognitionError : Event {
-  constructor(DOMString type);
-};
-
-[Exposed=Window]
-interface webkitSpeechRecognitionEvent : Event {
-  constructor(DOMString type);
-};

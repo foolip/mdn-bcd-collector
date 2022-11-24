@@ -15,29 +15,12 @@ partial interface MediaStreamTrack {
   attribute EventHandler onoverconstrained;
 };
 
-partial interface Navigator {
-  // Gecko has navigator.mozGetUserMedia
-  undefined mozGetUserMedia(MediaStreamConstraints constraints,
-                       NavigatorUserMediaSuccessCallback successCallback,
-                       NavigatorUserMediaErrorCallback errorCallback);
-  // Chromium has navigator.webkitGetUserMedia
-  undefined webkitGetUserMedia(MediaStreamConstraints constraints,
-                          NavigatorUserMediaSuccessCallback successCallback,
-                          NavigatorUserMediaErrorCallback errorCallback);
-};
-
 // https://github.com/w3c/mediacapture-main/pull/576
 [Exposed=Window]
 interface OverconstrainedErrorEvent : Event {
-  constructor (DOMString type, optional OverconstrainedErrorEventInit eventInitDict = {});
   readonly attribute OverconstrainedError? error;
 };
 
 dictionary OverconstrainedErrorEventInit : EventInit {
   OverconstrainedError? error = null;
-};
-
-[Exposed=Window]
-interface webkitMediaStream {
-  constructor();
 };

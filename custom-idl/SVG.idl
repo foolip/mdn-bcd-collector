@@ -53,15 +53,6 @@ interface SVGAltGlyphItemElement : SVGElement {
 interface SVGAnimateColorElement : SVGAnimationElement {
 };
 
-// https://www.w3.org/TR/2016/CR-SVG2-20160915/interact.html#InterfaceSVGCursorElement
-[Exposed=Window]
-interface SVGCursorElement : SVGElement {
-  [SameObject] readonly attribute SVGAnimatedLength x;
-  [SameObject] readonly attribute SVGAnimatedLength y;
-};
-SVGCursorElement includes SVGTests;
-SVGCursorElement includes SVGURIReference;
-
 // https://www.w3.org/TR/SVG11/fonts.html#InterfaceSVGFontElement
 [Exposed=Window]
 interface SVGFontElement : SVGElement {
@@ -112,29 +103,6 @@ SVGGlyphRefElement includes SVGURIReference;
 // https://www.w3.org/TR/SVG11/fonts.html#InterfaceSVGHKernElement
 [Exposed=Window]
 interface SVGHKernElement : SVGElement {
-};
-
-// https://www.w3.org/TR/SVG11/coords.html#InterfaceSVGMatrix
-[Exposed=Window]
-interface SVGMatrix {
-  attribute float a;
-  attribute float b;
-  attribute float c;
-  attribute float d;
-  attribute float e;
-  attribute float f;
-
-  SVGMatrix multiply(SVGMatrix secondMatrix);
-  SVGMatrix inverse();
-  SVGMatrix translate(float x, float y);
-  SVGMatrix scale(float scaleFactor);
-  SVGMatrix scaleNonUniform(float scaleFactorX, float scaleFactorY);
-  SVGMatrix rotate(float angle);
-  SVGMatrix rotateFromVector(float x, float y);
-  SVGMatrix flipX();
-  SVGMatrix flipY();
-  SVGMatrix skewX(float angle);
-  SVGMatrix skewY(float angle);
 };
 
 // https://www.w3.org/TR/SVG11/fonts.html#InterfaceSVGMissingGlyphElement

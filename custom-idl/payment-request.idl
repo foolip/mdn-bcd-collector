@@ -29,11 +29,6 @@ interface PaymentAddress {
   readonly attribute FrozenArray<DOMString> addressLine;
 };
 
-partial interface PaymentRequest {
-  // https://github.com/w3c/payment-request/pull/931
-  [NewObject] Promise<boolean> hasEnrolledInstrument();
-};
-
 // https://github.com/w3c/payment-request/pull/929
 [SecureContext, Exposed=Window]
 interface MerchantValidationEvent : Event {
