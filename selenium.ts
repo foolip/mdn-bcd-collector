@@ -53,7 +53,7 @@ const seleniumUrls = {
   lambdatest: 'https://${username}:${key}@hub.lambdatest.com/wd/hub'
 };
 
-// Custom tests that use getUserMedia() make Edge 12-18 and Firefox 34-53 block.
+// Custom tests that use getUserMedia() make Chrome 25-26, Edge 12-18 and Firefox 34-53 block.
 const gumTests = [
   'ImageCapture',
   'MediaStream',
@@ -64,8 +64,8 @@ const gumTests = [
 
 const ignore = {
   chrome: {
-    25: ['api.MediaStreamAudioDestinationNode'],
-    26: ['api.MediaStreamAudioDestinationNode']
+    25: gumTests,
+    26: gumTests
   },
   edge: {
     12: gumTests,
