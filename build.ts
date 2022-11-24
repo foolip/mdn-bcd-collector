@@ -29,7 +29,7 @@ const customTests = YAML.parse(
   await fs.readFile(
     new URL(
       process.env.NODE_ENV === 'test'
-        ? './unittest/unit/custom-tests.test.yaml'
+        ? './unittest/sample/custom-tests.test.yaml'
         : './custom-tests.yaml',
       import.meta.url
     ),
