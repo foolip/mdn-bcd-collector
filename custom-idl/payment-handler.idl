@@ -33,11 +33,6 @@ partial dictionary PaymentRequestDetailsUpdate {
 };
 
 partial interface PaymentRequestEvent {
-  readonly attribute object? paymentOptions;
-  readonly attribute FrozenArray<PaymentShippingOption>? shippingOptions;
-  Promise<PaymentRequestDetailsUpdate?> changeShippingAddress(optional AddressInit shippingAddress = {});
-  Promise<PaymentRequestDetailsUpdate?> changeShippingOption(DOMString shippingOption);
-
   // https://github.com/w3c/payment-handler/pull/393
   readonly attribute DOMString instrumentKey;
 };
