@@ -771,21 +771,21 @@
       var darkStyle = document.createElement('link');
       darkStyle.rel = 'stylesheet';
       darkStyle.href =
-        '//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/stackoverflow-dark.min.css';
+        '//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/stackoverflow-dark.min.css';
       document.body.appendChild(darkStyle);
 
       // Load light style
       var lightStyle = document.createElement('link');
       lightStyle.rel = 'stylesheet';
       lightStyle.href =
-        '//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/styles/stackoverflow-light.min.css';
+        '//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/stackoverflow-light.min.css';
       lightStyle.media = '(prefers-color-scheme: light)';
       document.body.appendChild(lightStyle);
 
       // Load script
       var script = document.createElement('script');
       script.src =
-        '//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.3.1/highlight.min.js';
+        '//cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/highlight.min.js';
 
       if ('onload' in script) {
         script.onload = callback;
