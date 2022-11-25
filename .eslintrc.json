@@ -4,7 +4,7 @@
     "plugin:@typescript-eslint/recommended",
     "plugin:prettier/recommended"
   ],
-  "plugins": ["@typescript-eslint", "prefer-arrow", "prettier"],
+  "plugins": ["@typescript-eslint", "prefer-arrow", "prettier", "unicorn"],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaVersion": 2020,
@@ -22,6 +22,7 @@
     "quote-props": ["error", "as-needed"],
     "require-jsdoc": "off",
     "space-before-function-paren": "off",
+    "unicorn/prefer-node-protocol": "error",
     "@typescript-eslint/no-unused-vars": "off",
     "@typescript-eslint/no-explicit-any": "off",
     "@typescript-eslint/no-empty-function": "off"

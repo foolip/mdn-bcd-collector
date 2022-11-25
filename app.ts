@@ -8,9 +8,9 @@
 
 import https from 'node:https';
 import http from 'node:http';
+import querystring from 'node:querystring';
 
 import fs from 'fs-extra';
-import querystring from 'querystring';
 import bcd from '@mdn/browser-compat-data' assert {type: 'json'};
 const bcdBrowsers = bcd.browsers;
 import esMain from 'es-main';
