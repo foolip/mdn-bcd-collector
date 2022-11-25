@@ -6,8 +6,8 @@
 // See the LICENSE file for copyright details
 //
 
-import http from 'http';
-import https from 'https';
+import http from 'node:http';
+import https from 'node:https';
 
 // set the time (in seconds) for connection to be alive
 const keepAliveTimeout = 30 * 1000;

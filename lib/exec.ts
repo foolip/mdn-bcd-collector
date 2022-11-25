@@ -6,7 +6,7 @@
 // See the LICENSE file for copyright details
 //
 
-import childProcess from 'child_process';
+import childProcess from 'node:child_process';
 
 const exec = async (cmd, env?: any, pipe = true) => {
   env = {...process.env, ...env};
