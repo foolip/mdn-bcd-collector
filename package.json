@@ -91,7 +91,7 @@
     "eslint-config-prettier": "8.5.0",
     "eslint-plugin-prefer-arrow": "1.2.3",
     "eslint-plugin-prettier": "4.2.1",
-    "eslint-plugin-unicorn": "^45.0.0",
+    "eslint-plugin-unicorn": "^45.0.1",
     "fdir": "5.3.0",
     "json3": "3.3.3",
     "klaw": "4.0.1",
