@@ -15,8 +15,19 @@ class CloudStorage {
   _bucket: Bucket;
   _version: string;
 
-  constructor(projectId: string, bucketName: string, appVersion: string) {
-    const storage = new Storage({projectId});
+  constructor(
+    projectIdOrCreds: string | any,
+    bucketName: string,
+    appVersion: string
+  ) {
+    const storageOpts =
+      typeof projectIdOrCreds === 'string'
+        ? {projectId: projectIdOrCreds}
+        : {
+            projectId: projectIdOrCreds.projectId,
+            credentials: projectIdOrCreds
+          };
+    const storage = new Storage(storageOpts);
     this._bucket = storage.bucket(bucketName);
     // appVersion is used as a prefix for all paths, so that multiple
     // deployments can use the same bucket without risk of collision.
@@ -122,7 +133,7 @@ const getStorage = (appVersion) => {
   const hdrive = JSON.parse(process.env.HDRIVE_GOOGLE_JSON_KEY || '');
   if (hdrive) {
     const bucketName = process.env.HDRIVE_GOOGLE_BUCKET || '';
-    return new CloudStorage(hdrive.project_id, bucketName, appVersion);
+    return new CloudStorage(hdrive, bucketName, appVersion);
   }
 
   // Use MemoryStorage storage for local deployment and testing.
