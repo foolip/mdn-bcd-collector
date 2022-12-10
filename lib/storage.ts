@@ -110,12 +110,19 @@ class MemoryStorage {
 }
 
 const getStorage = (appVersion) => {
-  // Use CloudStorage on Google AppEngine.
-  const project = process.env.GOOGLE_CLOUD_PROJECT;
-  if (project) {
+  // Use CloudStorage on Google App Engine.
+  const gaeproject = process.env.GOOGLE_CLOUD_PROJECT;
+  if (gaeproject) {
     // Use GCLOUD_STORAGE_BUCKET from app.yaml.
     const bucketName = process.env.GCLOUD_STORAGE_BUCKET || '';
-    return new CloudStorage(project, bucketName, appVersion);
+    return new CloudStorage(gaeproject, bucketName, appVersion);
+  }
+
+  // Use CloudStorage on Heroku + HDrive (Google Cloud).
+  const hdrive = JSON.parse(process.env.HDRIVE_GOOGLE_JSON_KEY || '');
+  if (hdrive) {
+    const bucketName = process.env.HDRIVE_GOOGLE_BUCKET || '';
+    return new CloudStorage(hdrive.project_id, bucketName, appVersion);
   }
 
   // Use MemoryStorage storage for local deployment and testing.
