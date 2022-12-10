@@ -132,6 +132,9 @@ api:
       if (!reusableInstances.audioContext) {
         return {result: false, message: 'Audio context is not available'};
       }
+      if (!('createAnalyser' in reusableInstances.audioContext)) {
+        return {result: false, message: 'audioContext.createAnalyser is not defined'};
+      }
       var instance = reusableInstances.audioContext.createAnalyser();
   AnimationEvent:
     __base: |-
@@ -165,6 +168,9 @@ api:
       if (!reusableInstances.audioContext) {
         return {result: false, message: 'Audio context is not available'};
       }
+      if (!('createBufferSource' in reusableInstances.audioContext)) {
+        return {result: false, message: 'audioContext.createBufferSource is not defined'};
+      }
       var instance = reusableInstances.audioContext.createBufferSource();
   AudioContext:
     __resources:
@@ -191,14 +197,13 @@ api:
     __resources:
       - audioContext
     __base: |-
-      if (!reusableInstances.audioContext) {
-        return {result: false, message: 'Audio context is not available'};
-      }
-      var instance = reusableInstances.audioContext.createAnalyser();
+      <%api.AnalyserNode:instance%>
   AudioParam:
     __resources:
       - audioContext
-    __base: <%api.GainNode:gainNode%> var instance = gainNode.gain;
+    __base: |-
+      <%api.GainNode:gainNode%>
+      var instance = gainNode.gain;
   AudioProcessingEvent:
     __base: |-
       var instance;
@@ -222,6 +227,9 @@ api:
     __base: |-
       if (!reusableInstances.audioContext) {
         return {result: false, message: 'Audio context is not available'};
+      }
+      if (!('createBufferSource' in reusableInstances.audioContext)) {
+        return {result: false, message: 'audioContext.createBufferSource is not defined'};
       }
       var instance = reusableInstances.audioContext.createBufferSource();
     __test: return 'AudioScheduledSourceNode' in self;
@@ -297,6 +305,9 @@ api:
     __base: |-
       if (!reusableInstances.audioContext) {
         return {result: false, message: 'Audio context is not available'};
+      }
+      if (!('createBiquadFilter' in reusableInstances.audioContext)) {
+        return {result: false, message: 'audioContext.createBiquadFilter is not defined'};
       }
       var instance = reusableInstances.audioContext.createBiquadFilter();
   ByteLengthQueuingStrategy:
@@ -383,6 +394,9 @@ api:
       if (!reusableInstances.audioContext) {
         return {result: false, message: 'Audio context is not available'};
       }
+      if (!('createChannelMerger' in reusableInstances.audioContext)) {
+        return {result: false, message: 'audioContext.createChannelMerger is not defined'};
+      }
       var instance = reusableInstances.audioContext.createChannelMerger();
   ChannelSplitterNode:
     __resources:
@@ -390,6 +404,9 @@ api:
     __base: |-
       if (!reusableInstances.audioContext) {
         return {result: false, message: 'Audio context is not available'};
+      }
+      if (!('createChannelSplitter' in reusableInstances.audioContext)) {
+        return {result: false, message: 'audioContext.createChannelSplitter is not defined'};
       }
       var instance = reusableInstances.audioContext.createChannelSplitter();
   CharacterData:
@@ -433,6 +450,9 @@ api:
       if (!reusableInstances.audioContext) {
         return {result: false, message: 'Audio context is not available'};
       }
+      if (!('createConstantSource' in reusableInstances.audioContext)) {
+        return {result: false, message: 'audioContext.createConstantSource is not defined'};
+      }
       var instance = reusableInstances.audioContext.createConstantSource();
   ConvolverNode:
     __resources:
@@ -440,6 +460,9 @@ api:
     __base: |-
       if (!reusableInstances.audioContext) {
         return {result: false, message: 'Audio context is not available'};
+      }
+      if (!('createConvolver' in reusableInstances.audioContext)) {
+        return {result: false, message: 'audioContext.createConvolver is not defined'};
       }
       var instance = reusableInstances.audioContext.createConvolver();
   CountQueuingStrategy:
@@ -579,6 +602,9 @@ api:
       if (!reusableInstances.audioContext) {
         return {result: false, message: 'Audio context is not available'};
       }
+      if (!('createDelay' in reusableInstances.audioContext)) {
+        return {result: false, message: 'audioContext.createDelay is not defined'};
+      }
       var instance = reusableInstances.audioContext.createDelay();
   DeviceMotionEvent:
     __base: |-
@@ -697,6 +723,9 @@ api:
     __base: |-
       if (!reusableInstances.audioContext) {
         return {result: false, message: 'Audio context is not available'};
+      }
+      if (!('createDynamicsCompressor' in reusableInstances.audioContext)) {
+        return {result: false, message: 'audioContext.createDynamicsCompressor is not defined'};
       }
       var instance = reusableInstances.audioContext.createDynamicsCompressor();
   Element:
@@ -955,6 +984,9 @@ api:
     __base: |-
       if (!reusableInstances.audioContext) {
         return {result: false, message: 'Audio context is not available'};
+      }
+      if (!('createGain' in reusableInstances.audioContext)) {
+        return {result: false, message: 'audioContext.createGain is not defined'};
       }
       var instance = reusableInstances.audioContext.createGain();
   GamepadEvent:
@@ -1464,6 +1496,9 @@ api:
       if (!reusableInstances.audioContext) {
         return {result: false, message: 'Audio context is not available'};
       }
+      if (!('createMediaStreamSource' in reusableInstances.audioContext)) {
+        return {result: false, message: 'audioContext.createMediaStreamSource is not defined'};
+      }
       function mediaStream(ms) {
         callback(reusableInstances.audioContext.createMediaStreamSource(ms));
       };
@@ -1653,6 +1688,9 @@ api:
       if (!reusableInstances.audioContext) {
         return {result: false, message: 'Audio context is not available'};
       }
+      if (!('createOscillator' in reusableInstances.audioContext)) {
+        return {result: false, message: 'audioContext.createOscillator is not defined'};
+      }
       var instance = reusableInstances.audioContext.createOscillator();
   OES_draw_buffers_indexed:
     __resources:
@@ -1755,6 +1793,9 @@ api:
     __base: |-
       if (!reusableInstances.audioContext) {
         return {result: false, message: 'Audio context is not available'};
+      }
+      if (!('createPanner' in reusableInstances.audioContext)) {
+        return {result: false, message: 'audioContext.createPanner is not defined'};
       }
       var instance = reusableInstances.audioContext.createPanner();
   Performance:
@@ -1901,6 +1942,9 @@ api:
       if (!reusableInstances.audioContext) {
         return {result: false, message: 'Audio context is not available'};
       }
+      if (!('createScriptProcessor' in reusableInstances.audioContext)) {
+        return {result: false, message: 'audioContext.createScriptProcessor is not defined'};
+      }
       var instance = reusableInstances.audioContext.createScriptProcessor();
   SecurityPolicyViolationEvent:
     __base: |-
@@ -2001,6 +2045,9 @@ api:
     __base: |-
       if (!reusableInstances.audioContext) {
         return {result: false, message: 'Audio context is not available'};
+      }
+      if (!('createStereoPanner' in reusableInstances.audioContext)) {
+        return {result: false, message: 'audioContext.createStereoPanner is not defined'};
       }
       var instance = reusableInstances.audioContext.createStereoPanner();
   StorageEvent:
@@ -2545,6 +2592,9 @@ api:
     __base: |-
       if (!reusableInstances.audioContext) {
         return {result: false, message: 'Audio context is not available'};
+      }
+      if (!('createWaveShaper' in reusableInstances.audioContext)) {
+        return {result: false, message: 'audioContext.createWaveShaper is not defined'};
       }
       var instance = reusableInstances.audioContext.createWaveShaper();
   WebGLContextEvent:
