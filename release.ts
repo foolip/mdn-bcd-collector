@@ -138,7 +138,7 @@ const getTestChanges = (): ListrTask[] => {
     {
       title: 'Build tests from last release',
       task: async () => {
-        await exec('npm run build');
+        await exec('npm run build:tests');
         await fs.rename(
           new URL('./tests.json', import.meta.url),
           new URL('./tests.old.json', import.meta.url)
@@ -156,7 +156,7 @@ const getTestChanges = (): ListrTask[] => {
     },
     {
       title: 'Build tests from current release',
-      task: async () => await exec('npm run build')
+      task: async () => await exec('npm run build:tests')
     },
     {
       title: 'Compare tests',
