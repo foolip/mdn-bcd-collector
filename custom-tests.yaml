@@ -1431,49 +1431,49 @@ api:
       if (!reusableInstances.audioContext) {
         return {result: false, message: 'Audio context is not available'};
       }
-      var promise = mediaStream.then(function(ms) {
-        return reusableInstances.audioContext.createMediaStreamSource(ms)
-      });
+      function mediaStream(ms) {
+        callback(reusableInstances.audioContext.createMediaStreamSource(ms));
+      };
   MediaStreamEvent:
     __base: |-
       <%api.MediaStream:mediaStream%>
-      var promise = mediaStream.then(function(stream) {
+      function mediaStream(stream) {
         try {
-          return new MediaStreamEvent('addstream', { stream: stream });
+          callback(new MediaStreamEvent('addstream', { stream: stream }));
         } catch(e) {
           try {
-            return document.createEvent('MediaStreamEvent');
+            callback(document.createEvent('MediaStreamEvent'));
           } catch(e) {
             if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
-              return false;
+              callback(false);
             }
             throw e;
           }
         }
-      });
+      };
   MediaStreamTrack:
     __base: |-
       <%api.MediaStream:mediaStream%>
-      var promise = mediaStream.then(function(ms) {
-        return ms.getAudioTracks()[0]
-      });
+      function mediaStream(ms) {
+        callback(ms.getAudioTracks()[0]);
+      };
   MediaStreamTrackEvent:
     __base: |-
       <%api.MediaStreamTrack:msTrack%>
-      var promise = msTrack.then(function(track) {
+      function msTrack(track) {
         try {
-          return new MediaStreamTrackEvent('addtrack', { track: track });
+          callback(new MediaStreamTrackEvent('addtrack', { track: track }));
         } catch(e) {
           try {
-            return document.createEvent('MediaStreamTrackEvent');
+            callback(document.createEvent('MediaStreamTrackEvent'));
           } catch(e) {
             if (e.name === 'NotSupportedError' || e.name === 'NOT_SUPPORTED_ERR') {
-              return false;
+              callback(false);
             }
             throw e;
           }
         }
-      });
+      };
   MediaStreamTrackAudioSourceNode:
     __resources:
       - audioContext
@@ -1485,10 +1485,10 @@ api:
       if (!('createMediaStreamTrackSource' in reusableInstances.audioContext)) {
         return {result: false, message: 'audioContext.createMediaStreamTrackSource is not defined'};
       }
-      var promise = mediaStream.then(function(ms) {
+      function mediaStream(ms) {
         var tracks = ms.getTracks();
-        return reusableInstances.audioContext.createMediaStreamTrackSource(tracks[0]);
-      });
+        callback(reusableInstances.audioContext.createMediaStreamTrackSource(tracks[0]));
+      };
   MerchantValidationEvent:
     __base: |-
       if (!('MerchantValidationEvent' in self)) {
