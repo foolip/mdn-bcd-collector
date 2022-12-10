@@ -130,7 +130,7 @@ const getStorage = (appVersion) => {
   }
 
   // Use CloudStorage on Heroku + HDrive (Google Cloud).
-  const hdrive = JSON.parse(process.env.HDRIVE_GOOGLE_JSON_KEY || '');
+  const hdrive = JSON.parse(process.env.HDRIVE_GOOGLE_JSON_KEY || 'null');
   if (hdrive) {
     const bucketName = process.env.HDRIVE_GOOGLE_BUCKET || '';
     return new CloudStorage(hdrive, bucketName, appVersion);
