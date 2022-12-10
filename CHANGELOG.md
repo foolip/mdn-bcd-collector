@@ -1,5 +1,216 @@
 # mdn-bcd-collector Changelog
 
+## v7.1.0
+
+### Test Changes
+
+#### Added
+
+- api.CSSKeyframesRule.length
+- api.Performance.interactionCount
+- api.VisualViewport.scrollend_event
+
+#### Removed
+
+- api.CanvasRenderingContext2D.clearShadow
+- api.CanvasRenderingContext2D.drawImageFromRect
+- api.CanvasRenderingContext2D.mozImageSmoothingEnabled
+- api.CanvasRenderingContext2D.mozTextStyle
+- api.CanvasRenderingContext2D.setAlpha
+- api.CanvasRenderingContext2D.setCompositeOperation
+- api.CanvasRenderingContext2D.setFillColor
+- api.CanvasRenderingContext2D.setLineCap
+- api.CanvasRenderingContext2D.setLineJoin
+- api.CanvasRenderingContext2D.setLineWidth
+- api.CanvasRenderingContext2D.setMiterLimit
+- api.CanvasRenderingContext2D.setShadow
+- api.CanvasRenderingContext2D.setStrokeColor
+- api.CanvasRenderingContext2D.webkitBackingStorePixelRatio
+- api.CanvasRenderingContext2D.webkitImageSmoothingEnabled
+- api.CanvasRenderingContext2D.webkitLineDash
+- api.CanvasRenderingContext2D.webkitLineDashOffset
+- api.CSSFontFeatureValuesRule.valueText
+- api.CSSKeyframesRule.insertRule
+- api.DeviceMotionEvent.initDeviceMotionEvent
+- api.DeviceOrientationEvent.initDeviceOrientationEvent
+- api.Document.mozFullScreenElement
+- api.DragEvent.initDragEvent
+- api.Element.mozRequestFullScreen
+- api.Element.webkitcurrentplaybacktargetiswirelesschanged_event
+- api.Element.webkitneedkey_event
+- api.Element.webkitplaybacktargetavailabilitychanged_event
+- api.Element.webkitpresentationmodechanged_event
+- api.Element.releaseCapture
+- api.Element.webkitRequestFullscreen
+- api.Element.webkitRequestFullScreen
+- api.Event.path
+- api.EventSource.URL
+- api.HashChangeEvent.initHashChangeEvent
+- api.HTMLAnchorElement.hrefTranslate
+- api.HTMLFormElement.autocapitalize
+- api.HTMLFrameElement.getSVGDocument
+- api.HTMLFrameElement.height
+- api.HTMLFrameElement.location
+- api.HTMLFrameElement.width
+- api.HTMLHtmlElement.manifest
+- api.HTMLInputElement.autocapitalize
+- api.HTMLInputElement.mozIsTextField
+- api.HTMLInputElement.textLength
+- api.HTMLLinkElement.nonce
+- api.HTMLMediaElement.getVideoPlaybackQuality
+- api.HTMLMediaElement.mozCaptureStream
+- api.HTMLMediaElement.mozPreservesPitch
+- api.HTMLMediaElement.webkitAudioDecodedByteCount
+- api.HTMLMediaElement.webkitClosedCaptionsVisible
+- api.HTMLMediaElement.webkitCurrentPlaybackTargetIsWireless
+- api.HTMLMediaElement.webkitHasClosedCaptions
+- api.HTMLMediaElement.webkitPreservesPitch
+- api.HTMLMediaElement.webkitShowPlaybackTargetPicker
+- api.HTMLMediaElement.webkitVideoDecodedByteCount
+- api.HTMLPreElement.wrap
+- api.HTMLScriptElement.nonce
+- api.HTMLSelectElement.blur
+- api.HTMLSelectElement.focus
+- api.HTMLStyleElement.nonce
+- api.HTMLVideoElement.autoPictureInPicture
+- api.HTMLVideoElement.webkitDecodedFrameCount
+- api.HTMLVideoElement.webkitDisplayingFullscreen
+- api.HTMLVideoElement.webkitDroppedFrameCount
+- api.HTMLVideoElement.webkitEnterFullscreen
+- api.HTMLVideoElement.webkitEnterFullScreen
+- api.HTMLVideoElement.webkitExitFullscreen
+- api.HTMLVideoElement.webkitExitFullScreen
+- api.HTMLVideoElement.webkitPresentationMode
+- api.HTMLVideoElement.webkitSetPresentationMode
+- api.HTMLVideoElement.webkitSupportsFullscreen
+- api.HTMLVideoElement.webkitSupportsPresentationMode
+- api.HTMLVideoElement.webkitWirelessVideoPlaybackDisabled
+- api.IDBVersionChangeEvent.dataLoss
+- api.IDBVersionChangeEvent.dataLossMessage
+- api.ImageBitmapRenderingContext.transferImageBitmap
+- api.InteractionCounts
+- api.IntersectionObserver.delay
+- api.IntersectionObserver.trackVisibility
+- api.IntersectionObserverEntry.isVisible
+- api.KeyboardEvent.altGraphKey
+- api.KeyboardEvent.keyLocation
+- api.KeyboardEvent.which
+- api.MessageEvent.userActivation
+- api.MouseEvent.fromElement
+- api.MouseEvent.mozInputSource
+- api.MouseEvent.toElement
+- api.MouseEvent.webkitForce
+- api.MouseEvent.which
+- api.Navigator.getStorageUpdates
+- api.Navigator.mozGetUserMedia
+- api.Navigator.webkitGetUserMedia
+- api.OverconstrainedErrorEvent.OverconstrainedErrorEvent
+- api.OverflowEvent
+- api.PaymentRequest.hasEnrolledInstrument
+- api.PaymentRequestEvent.changeShippingAddress
+- api.PaymentRequestEvent.changeShippingOption
+- api.PaymentRequestEvent.paymentOptions
+- api.PaymentRequestEvent.shippingOptions
+- api.Performance.interactionCounts
+- api.ProcessingInstruction.data
+- api.Range.expand
+- api.RTCPeerConnection.addtrack_event
+- api.RTCRtpReceiver.playoutDelayHint
+- api.Selection.baseNode
+- api.Selection.baseOffset
+- api.Selection.extentNode
+- api.Selection.extentOffset
+- api.ServiceWorkerGlobalScope.caches
+- api.ShadowRoot.mozFullScreenElement
+- api.SourceBufferList.item
+- api.SQLTransaction
+- api.SVGCursorElement
+- api.SVGMatrix
+- api.TextEvent
+- api.TextTrack.addRegion
+- api.TextTrack.regions
+- api.TextTrack.removeRegion
+- api.TextTrackCue.getCueAsHTML
+- api.TextTrackCueList.item
+- api.TextTrackList.item
+- api.UIEvent.cancelBubble
+- api.UIEvent.layerX
+- api.UIEvent.layerY
+- api.UIEvent.pageX
+- api.UIEvent.pageY
+- api.UserMessageHandler
+- api.UserMessageHandlersNamespace
+- api.VideoTrackList.item
+- api.VTTRegion.track
+- api.webkitMediaStream
+- api.WebKitMutationObserver
+- api.WebKitNamespace
+- api.WebKitPlaybackTargetAvailabilityEvent
+- api.webkitSpeechGrammar
+- api.webkitSpeechGrammarList
+- api.webkitSpeechRecognition
+- api.webkitSpeechRecognitionError
+- api.webkitSpeechRecognitionEvent
+- api.WebSocket.URL
+- api.WheelEvent.initWebKitWheelEvent
+- api.WheelEvent.webkitDirectionInvertedFromDevice
+- api.Window.absolutedeviceorientation_event
+- api.Window.openDatabase
+- api.Window.webkitIndexedDB
+- api.XMLHttpRequest.mozAnon
+- api.XMLHttpRequest.mozSystem
+- api.XMLHttpRequestProgressEvent
+- api.XRSystem.supportsSession
+
+#### Changed
+
+- api.AnalyserNode
+- api.AudioBufferSourceNode
+- api.AudioNode
+- api.AudioParam
+- api.AudioScheduledSourceNode
+- api.BiquadFilterNode
+- api.ChannelMergerNode
+- api.ChannelSplitterNode
+- api.ConstantSourceNode
+- api.ConvolverNode
+- api.DelayNode
+- api.DynamicsCompressorNode
+- api.GainNode
+- api.GeolocationCoordinates
+- api.GeolocationPosition
+- api.MediaStreamAudioSourceNode
+- api.MediaStreamEvent
+- api.MediaStreamTrack
+- api.MediaStreamTrackAudioSourceNode
+- api.MediaStreamTrackEvent
+- api.OscillatorNode
+- api.PannerNode
+- api.ScriptProcessorNode
+- api.StereoPannerNode
+- api.WaveShaperNode
+
+### Commits
+
+- Use GAE cloud storage on Heroku + HDrive
+- Fix audio node tests
+- Fix media interface tests
+- Update to latest highlight.js
+- Handle additional constructor error message
+- Show unsecure warning on test page as well
+- Ignore all user media tests in Chrome 25-26
+- Fix test timeout handler
+- Fix sample custom-tests filepath
+- Remove custom IDL for features not already in BCD
+- Add test timeout
+- Improve debugging
+- Add timeout to GeolocationPosition test
+- Allow debugmode to be turned on easier
+- Increase test timeout duration in Selenium script
+- Remove IE from Selenium script
+- Fix copyright comments
+- Update Selenium script to add "since" argument
+
 ## v7.0.0
 
 Brand new collector! The mdn-bcd-collector project has been forked and is now operated and maintained by Gooborg Studios, with a new URL to follow (https://mdn-bcd-collector.gooborg.com). We have performed a few main changes in this major revision:
