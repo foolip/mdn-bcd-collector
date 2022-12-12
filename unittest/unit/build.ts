@@ -1497,15 +1497,10 @@ describe('build', () => {
     it('valid input', () => {
       const webrefCSS = {
         'css-fonts': {
-          properties: {
-            'font-family': {},
-            'font-weight': {}
-          }
+          properties: [{name: 'font-family'}, {name: 'font-weight'}]
         },
         'css-grid': {
-          properties: {
-            grid: {}
-          }
+          properties: [{name: 'grid'}]
         }
       };
 
@@ -1556,9 +1551,7 @@ describe('build', () => {
     it('with custom test', () => {
       const css = {
         'css-dummy': {
-          properties: {
-            foo: {}
-          }
+          properties: [{name: 'foo'}]
         }
       };
 
@@ -1573,9 +1566,7 @@ describe('build', () => {
     it('double-defined property', () => {
       const css = {
         'css-dummy': {
-          properties: {
-            foo: {}
-          }
+          properties: [{name: 'foo'}]
         }
       };
 
@@ -1587,9 +1578,7 @@ describe('build', () => {
     it('invalid import', () => {
       const css = {
         'css-dummy': {
-          properties: {
-            bar: {}
-          }
+          properties: [{name: 'bar'}]
         }
       };
 
