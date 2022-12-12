@@ -15,4 +15,4 @@ jobs:
     with:
       target-repo: "GooborgStudios/mdn-bcd-collector"
     secrets:
-      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      GH_TOKEN: ${{ secrets.GOOBORG_BOT_GH_TOKEN }}
