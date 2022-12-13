@@ -1,5 +1,24 @@
 # mdn-bcd-collector Changelog
 
+## v6.2.9
+
+### Test Changes
+
+#### Added
+
+- api.CSSKeyframesRule.length
+- api.Performance.interactionCount
+- api.VisualViewport.scrollend_event
+
+#### Removed
+
+- api.InteractionCounts
+- api.Performance.interactionCounts
+
+### Commits
+
+- Add back autoPictureInPicture as custom IDL ([#2534](https://github.com/foolip/mdn-bcd-collector/pull/2534))
+
 ## v6.2.8
 
 ### Test Changes
