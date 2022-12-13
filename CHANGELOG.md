@@ -1,5 +1,23 @@
 # mdn-bcd-collector Changelog
 
+## v6.2.9
+
+### Test Changes
+
+#### Added
+
+- api.CSSKeyframesRule.length
+- api.Performance.interactionCount
+- api.VisualViewport.scrollend_event
+
+#### Removed
+
+- api.HTMLVideoElement.autoPictureInPicture
+- api.InteractionCounts
+- api.Performance.interactionCounts
+
+### Commits
+
 ## v6.2.8
 
 ### Test Changes
