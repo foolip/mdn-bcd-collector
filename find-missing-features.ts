@@ -11,6 +11,7 @@ import {Tests} from './types/types.js';
 
 import {fileURLToPath} from 'node:url';
 
+import chalk from 'chalk-template';
 import esMain from 'es-main';
 import fs from 'fs-extra';
 import yargs from 'yargs';
@@ -146,6 +147,11 @@ const main = (bcd: CompatData, tests: Tests) => {
     }
   );
 
+  const direction = argv.direction.split('-from-');
+  console.log(
+    chalk`{yellow Finding entries that are missing in {bold ${direction[0]}} but present in {bold ${direction[1]}}...}\n`
+  );
+
   const {missingEntries, total} = getMissing(
     bcd,
     tests,
@@ -155,10 +161,12 @@ const main = (bcd: CompatData, tests: Tests) => {
   );
   console.log(missingEntries.join('\n'));
   console.log(
-    `\n${missingEntries.length}/${total} (${(
+    chalk`\n{cyan ${missingEntries.length}/${total} (${(
       (missingEntries.length / total) *
       100.0
-    ).toFixed(2)}%) missing`
+    ).toFixed(2)}%)} {yellow entries missing from {bold ${
+      direction[0]
+    }} that are in {bold ${direction[1]}}}`
   );
 };
 
