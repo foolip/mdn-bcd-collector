@@ -73,7 +73,7 @@
     "@types/node": "18.11.13",
     "@types/superagent": "^4.1.16",
     "@types/webidl2": "^23.13.6",
-    "@types/yargs": "17.0.14",
+    "@types/yargs": "17.0.17",
     "@typescript-eslint/eslint-plugin": "5.46.1",
     "@webref/css": "6.1.0",
     "@webref/idl": "3.22.3",
