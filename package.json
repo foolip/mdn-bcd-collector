@@ -92,7 +92,7 @@
     "klaw": "4.0.1",
     "listr2": "5.0.6",
     "minimatch": "5.1.0",
-    "mocha": "10.1.0",
+    "mocha": "10.2.0",
     "node-fetch": "3.3.0",
     "nodemon": "2.0.20",
     "open-cli": "7.1.0",
