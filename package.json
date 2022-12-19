@@ -70,7 +70,7 @@
     "@browser-logos/opera": "1.1.11",
     "@browser-logos/safari": "2.1.0",
     "@types/mocha": "10.0.1",
-    "@types/node": "18.11.15",
+    "@types/node": "18.11.17",
     "@types/superagent": "^4.1.16",
     "@types/webidl2": "^23.13.6",
     "@types/yargs": "17.0.17",
