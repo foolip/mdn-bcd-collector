@@ -263,14 +263,13 @@ api:
       decodeAudioData.returns_promise: |-
         <%api.BaseAudioContext:ctx%>
         return ctx.decodeAudioData.length === 1;
-  # XXX Freezes in many versions of Chrome and Firefox
-  # BatteryManager:
-  #   __base: |-
-  #     if (!('getBattery' in navigator)) {
-  #       return {result: false, message: 'navigator.getBattery() is not defined'};
-  #     };
-  #     var promise = navigator.getBattery();
-  #     promise.then(function() {});
+  BatteryManager:
+    __base: |-
+      if (!('getBattery' in navigator)) {
+        return {result: false, message: 'navigator.getBattery() is not defined'};
+      };
+      var promise = navigator.getBattery();
+      promise.then(function() {});
   BeforeInstallPromptEvent:
     __base: |-
       try {
