@@ -207,7 +207,9 @@
     "Function.prototype.call": {},
     "Function.prototype.caller": {},
     "Function.prototype.length": {},
-    "Function.prototype.name": {},
+    "Function.prototype.name": {
+      "code": "function doTheThing() {};\ndoTheThing.name == 'doTheThing';"
+    },
     "Function.prototype.toSource": {},
     "Function.prototype.toString": {},
     "Int16Array": {
