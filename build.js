@@ -845,8 +845,8 @@ const buildCSS = (specCSS, customCSS) => {
   const properties = new Map();
 
   for (const data of Object.values(specCSS)) {
-    for (const prop of Object.keys(data.properties)) {
-      properties.set(prop, new Map());
+    for (const property of data.properties) {
+      properties.set(property.name, new Map());
     }
   }
 
