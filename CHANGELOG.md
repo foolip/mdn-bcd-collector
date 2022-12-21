@@ -1,5 +1,22 @@
 # mdn-bcd-collector Changelog
 
+## v6.2.10
+
+### Test Changes
+
+#### Added
+
+- api.GamepadHapticActuator.canPlayEffectType
+
+#### Removed
+
+- api.Request.priority
+
+### Commits
+
+- Add back removed bits of CanMakePaymentEvent as custom IDL ([#2556](https://github.com/foolip/mdn-bcd-collector/pull/2556))
+- Remove custom Gamepad IDL now in webref
+
 ## v6.2.9
 
 ### Test Changes
