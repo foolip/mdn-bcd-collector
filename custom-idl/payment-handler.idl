@@ -9,9 +9,14 @@ partial interface ServiceWorkerGlobalScope {
   attribute EventHandler onabortpayment;
 };
 
-// https://github.com/w3c/payment-handler/pull/170
 partial interface CanMakePaymentEvent {
+  // https://github.com/w3c/payment-handler/pull/170
   readonly attribute FrozenArray<PaymentDetailsModifier> modifiers;
+
+  // https://github.com/w3c/payment-handler/pull/404
+  readonly attribute USVString topOrigin;
+  readonly attribute USVString paymentRequestOrigin;
+  readonly attribute FrozenArray<PaymentMethodData> methodData;
 };
 
 // https://github.com/w3c/payment-handler/pull/389
