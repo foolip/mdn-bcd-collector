@@ -2535,3 +2535,14 @@ css:
     custom-property: |-
       return CSS.supports('color', 'var(--foo)') || CSS.supports('color',
       'env(--foo)');
+
+webassembly:
+  features:
+    foo:
+      __base: |-
+        var instance = {};
+      __test: return true;
+    bar:
+      __base: |-
+        var instance = {};
+      __test: return false;

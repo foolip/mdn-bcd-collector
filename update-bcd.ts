@@ -539,8 +539,8 @@ if (esMain(import.meta)) {
           alias: 'c',
           describe: 'The BCD categories to update',
           type: 'array',
-          choices: ['api', 'css.properties', 'javascript.builtins'],
-          default: ['api', 'css.properties', 'javascript.builtins']
+          choices: ['api', 'css.properties', 'javascript.builtins', 'webassembly.features'],
+          default: ['api', 'css.properties', 'javascript.builtins', 'webassembly.features']
         })
         .option('path', {
           alias: 'p',

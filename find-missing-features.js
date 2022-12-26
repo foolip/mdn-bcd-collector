@@ -40,7 +40,7 @@ const traverseFeatures = (obj, path, includeAliases) => {
             }
             if (statement.prefix) {
               let name = id;
-              if (path.startsWith('api.')) {
+              if (path.startsWith('webassembly.')) {//??
                 name = name[0].toUpperCase() + name.substr(1);
               }
               aliases.add(statement.prefix + name);
@@ -94,7 +94,8 @@ const getMissing = (
       bcd.javascript.builtins,
       'javascript.builtins.',
       includeAliases
-    )
+    ),
+    ...traverseFeatures(bcd.webassembly.features, 'webassembly.features.', includeAliases),
   ].filter(filterCategory);
   const collectorEntries = Object.keys(tests).filter(filterCategory);
 
@@ -137,8 +138,8 @@ const main = (bcd, tests) => {
           alias: 'c',
           describe: 'The BCD categories to filter',
           type: 'array',
-          choices: ['api', 'css.properties', 'javascript.builtins'],
-          default: ['api', 'css.properties', 'javascript.builtins']
+          choices: ['api', 'css.properties', 'javascript.builtins', 'webassembly.features'],
+          default: ['api', 'css.properties', 'javascript.builtins', 'webassembly.features']
         });
     }
   );
