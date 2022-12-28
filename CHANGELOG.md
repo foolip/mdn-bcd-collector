@@ -1,5 +1,37 @@
 # mdn-bcd-collector Changelog
 
+## v7.1.1
+
+### Test Changes
+
+#### Added
+
+- api.GamepadHapticActuator.canPlayEffectType
+- api.Selection.getComposedRange
+
+#### Removed
+
+- api.CanMakePaymentEvent.methodData
+- api.CanMakePaymentEvent.paymentRequestOrigin
+- api.CanMakePaymentEvent.topOrigin
+- api.PressureObserver.requestPermission
+- api.Request.priority
+
+#### Changed
+
+- api.BatteryManager
+- javascript.builtins.Function.name
+
+### Commits
+
+- Re-enable BatteryManager API tests
+- Add custom test for Function.prototype.name
+- Add output to clarify direction of find-missing-features
+- Update auto-merge.yml
+- Simplify auto-merge by using MDN reusable workflow
+- Fix auto-merge action
+- Fix unittests for buildCSS following @webref/css 6.0.0
+
 ## v7.1.0
 
 ### Test Changes
