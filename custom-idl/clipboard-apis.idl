@@ -1,6 +1,0 @@
-partial interface mixin DocumentAndElementEventHandlers {
-  // https://github.com/w3c/clipboard-apis/issues/25
-  attribute EventHandler onbeforecopy;
-  attribute EventHandler onbeforecut;
-  attribute EventHandler onbeforepaste;
-};
