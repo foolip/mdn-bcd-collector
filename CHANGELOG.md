@@ -1,5 +1,35 @@
 # mdn-bcd-collector Changelog
 
+## v6.2.11
+
+### Test Changes
+
+#### Added
+
+- api.Selection.getComposedRange
+- api.Window.beforecopy_event
+- api.Window.beforecut_event
+- api.Window.beforepaste_event
+- api.Window.copy_event
+- api.Window.cut_event
+- api.Window.paste_event
+
+#### Removed
+
+- api.Document.rejectionhandled_event
+- api.Document.unhandledrejection_event
+- api.HTMLElement.rejectionhandled_event
+- api.HTMLElement.unhandledrejection_event
+- api.MathMLElement.rejectionhandled_event
+- api.MathMLElement.unhandledrejection_event
+- api.PressureObserver.requestPermission
+- api.SVGElement.rejectionhandled_event
+- api.SVGElement.unhandledrejection_event
+
+### Commits
+
+- Stop using DocumentAndElementEventHandlers ([#2574](https://github.com/foolip/mdn-bcd-collector/pull/2574))
+
 ## v6.2.10
 
 ### Test Changes
