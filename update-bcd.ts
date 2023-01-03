@@ -462,38 +462,46 @@ export const update = (
         continue;
       }
 
-      let dataIsOlder = false;
+      // If we infer no support but BCD currently has a version number, check to make sure
+      // our data is not older than BCD (ex. BCD says 79 but we have results for 40-78)
       if (
         inferredStatement.version_added === false &&
-        typeof simpleStatement.version_added === 'string'
+        typeof simpleStatement.version_added === 'string' &&
+        simpleStatement.version_added !== 'preview'
       ) {
-        // Make sure not to update BCD if it is set to a version newer than we have in our data
+        let latestNonNullVersion = '';
 
         for (const [version, result] of Array.from(
           versionMap.entries()
         ).reverse()) {
-          if (
-            result !== null &&
-            simpleStatement.version_added !== 'preview' &&
-            compareVersions(
-              version,
-              simpleStatement.version_added.replace('≤', ''),
-              '<='
-            )
-          ) {
-            // A version we have data for is the same or newer than the version in BCD
-            dataIsOlder = true;
-            break;
+          if (result === null) {
+            // Ignore null values
+            continue;
           }
+
+          if (
+            !latestNonNullVersion ||
+            compareVersions(version, latestNonNullVersion, '>')
+          ) {
+            latestNonNullVersion = version;
+          }
+        }
+
+        if (
+          compareVersions(
+            latestNonNullVersion,
+            simpleStatement.version_added.replace('≤', ''),
+            '<'
+          )
+        ) {
+          logger.warn(
+            `${path} skipped for ${browser}; BCD says support was added in a version newer than there are results for`
+          );
+          continue;
         }
       }
 
-      if (dataIsOlder) {
-        logger.warn(
-          `${path} skipped for ${browser} because results are older than BCD`
-        );
-        continue;
-      } else if (
+      if (
         typeof simpleStatement.version_added === 'string' &&
         typeof inferredStatement.version_added === 'string' &&
         inferredStatement.version_added.includes('≤')
