@@ -74,7 +74,7 @@
     "@types/superagent": "^4.1.16",
     "@types/webidl2": "^23.13.6",
     "@types/yargs": "17.0.18",
-    "@typescript-eslint/eslint-plugin": "5.47.1",
+    "@typescript-eslint/eslint-plugin": "5.48.0",
     "@webref/css": "6.1.1",
     "@webref/idl": "3.22.6",
     "c8": "7.12.0",
