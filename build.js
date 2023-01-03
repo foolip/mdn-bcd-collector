@@ -90,8 +90,7 @@ const getCustomTestAPI = (name, member, type) => {
         : '';
     const promise = testbase.includes('var promise');
     const callback =
-      importcode.match(/callback([(),])/g) ||
-      importcode.includes(':callback%>');
+      testbase.match(/callback([(),])/g) || testbase.includes(':callback%>');
 
     if (member === undefined) {
       if ('__test' in customTests.api[name]) {
