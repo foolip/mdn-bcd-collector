@@ -1,5 +1,34 @@
 # mdn-bcd-collector Changelog
 
+## v7.1.2
+
+### Test Changes
+
+#### Added
+
+- api.Window.copy_event
+- api.Window.cut_event
+- api.Window.paste_event
+
+#### Removed
+
+- api.Document.beforecopy_event
+- api.Document.beforecut_event
+- api.Document.beforepaste_event
+- api.HTMLElement.beforecopy_event
+- api.HTMLElement.beforecut_event
+- api.HTMLElement.beforepaste_event
+- api.MathMLElement.beforecopy_event
+- api.MathMLElement.beforecut_event
+- api.MathMLElement.beforepaste_event
+- api.SVGElement.beforecopy_event
+- api.SVGElement.beforecut_event
+- api.SVGElement.beforepaste_event
+
+### Commits
+
+- Overhaul code to handle "false" but BCD set to newer version
+
 ## v7.1.1
 
 ### Test Changes
