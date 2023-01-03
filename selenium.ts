@@ -19,11 +19,7 @@ import {
   until
 } from 'selenium-webdriver';
 import bcd from '@mdn/browser-compat-data' assert {type: 'json'};
-import type {
-  BrowserStatement,
-  ReleaseStatement,
-  BrowserName
-} from '@mdn/browser-compat-data';
+import type {BrowserStatement, BrowserName} from '@mdn/browser-compat-data';
 const bcdBrowsers = bcd.browsers;
 import {
   compare as compareVersions,
