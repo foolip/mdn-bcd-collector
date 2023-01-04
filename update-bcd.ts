@@ -316,8 +316,10 @@ export const update = (
       continue;
     }
 
+    // The support statement may be modified in-place, but we may also need
+    // to resolve "mirror" statements to get real version numbers for some
+    // browser. Keep a copy of the original data around for that.
     const support = entry.__compat.support;
-    // Stringified then parsed to deep clone the support statements
     const originalSupport = clone(support);
 
     for (const [browser, versionMap] of browserMap.entries()) {
