@@ -307,8 +307,15 @@ export const update = (
   let modified = false;
 
   for (const [path, browserMap] of supportMatrix.entries()) {
-    if (filter.path && !filter.path.match(path)) {
-      continue;
+    if (filter.path) {
+      if (filter.path.constructor === Minimatch) {
+        if (!filter.path.match(path)) {
+          // If filter.path does not match glob
+          continue;
+        }
+      } else if (path !== filter.path && !path.startsWith(`${filter.path}.`)) {
+        continue;
+      }
     }
 
     const entry = findEntry(bcd, path);
@@ -594,7 +601,7 @@ export const main = async (
   overrides: Overrides
 ): Promise<void> => {
   // Replace filter.path with a minimatch object.
-  if (filter.path) {
+  if (filter.path && filter.path.includes('*')) {
     filter.path = new Minimatch(filter.path);
   }
 
@@ -651,7 +658,7 @@ if (esMain(import.meta)) {
         .option('path', {
           alias: 'p',
           describe:
-            'The BCD path to update (interpreted as a minimatch pattern)',
+            'The BCD path to update (includes children, ex. "api.Document" will also update "api.Document.body")',
           type: 'string',
           default: null
         })
