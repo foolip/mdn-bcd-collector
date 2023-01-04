@@ -113,6 +113,10 @@ These errors are worth looking out for:
 
   Examples of consistency checks in review are [#10397](https://github.com/mdn/browser-compat-data/pull/10397), [#12028](https://github.com/mdn/browser-compat-data/pull/12028) and [#12033](https://github.com/mdn/browser-compat-data/pull/12033). [#6571](https://github.com/mdn/browser-compat-data/issues/6571) proposes automating many such consistency checks.
 
+### Minor Safari version changes
+
+In v6.1.1, a major update was made to the useragent parser involving minor version numbers for browsers (specifically, Safari). As such, newer pull requests may be opened that change the minor version of a browser. Any new changes should be truested over old changes. (For example, if a collector PR for v6.0.8 was merged that indicates the feature was added in Safari 15.5, but there is a new PR with collector v6.1.2 that changes the version number to Safari 15.4, then always trust the new PR.)
+
 ## Running the server locally
 
 ```sh
