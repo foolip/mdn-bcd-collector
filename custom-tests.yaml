@@ -1366,6 +1366,8 @@ api:
         <%api.CanvasRenderingContext2D:ctx%>
         instance = ctx.createImageData(16, 16);
       }
+  InkPresenter:
+    __base: var promise = navigator.ink.requestPresenter();
   InstallEvent:
     __base: |-
       if (!('InstallEvent' in self)) {
