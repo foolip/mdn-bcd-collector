@@ -401,6 +401,20 @@ export const update = (
 
       // Update the support data with a new value.
       const persist = (statements: SimpleSupportStatement[]) => {
+        // Check for ranges and ignore them if we specify `exact-only` argument
+        if (filter.exactOnly) {
+          for (const statement of statements) {
+            if (
+              (typeof statement.version_added === 'string' &&
+                statement.version_added.includes('≤')) ||
+              (typeof statement.version_removed === 'string' &&
+                statement.version_removed.includes('≤'))
+            ) {
+              return;
+            }
+          }
+        }
+
         support[browser] = statements.length === 1 ? statements[0] : statements;
         modified = true;
       };
@@ -677,6 +691,13 @@ if (esMain(import.meta)) {
             'Only update when version_added or version_removed is set to the given value (can be an inclusive range, ex. xx-yy)',
           type: 'string',
           default: null
+        })
+        .option('exact-only', {
+          alias: 'e',
+          describe:
+            'Only update when versions are a specific number (or "false"), disallowing ranges',
+          type: 'boolean',
+          default: false
         });
     }
   );

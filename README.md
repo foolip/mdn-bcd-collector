@@ -34,36 +34,49 @@ Updating a specific category:
 
 ```sh
 npm run update-bcd -- --category=css.properties
+npm run update-bcd -- -c css.properties
 ```
 
 Updating a specific entry, ex. the `appendChild()` method on `Node`:
 
 ```sh
 npm run update-bcd -- --path=api.Node.appendChild
+npm run update-bcd -- -p api.Node.appendChild
 ```
 
 Updating a specific feature and its children, ex. the `Document` API (also updates `api.Document.*`, ex. `api.Document.body`):
 
 ```sh
 npm run update-bcd -- --path=api.Document
+npm run update-bcd -- -p api.Document
 ```
 
 Updating paths matched with wildcards, ex. everything related to WebRTC:
 
 ```sh
 npm run update-bcd -- --path=api.RTC*
+npm run update-bcd -- -p api.RTC*
+```
+
+Only update BCD when we have an exact version number and skip any ranges:
+
+```sh
+npm run update-bcd -- --exact-only
+npm run update-bcd -- -e
 ```
 
 The `--browser` argument can be used to only update data for one or more browsers:
 
 ```sh
 npm run update-bcd -- --browser=safari --browser=safari_ios
+npm run update-bcd -- -b safari -b safari_ios
 ```
 
 The `--release` arguments can be used to only update data for a specific browser release, ex. Firefox 84:
 
 ```sh
 npm run update-bcd -- --browser=firefox --release=84
+npm run update-bcd -- -b firefox -r 84
 ```
 
 This will only make changes that set either `version_added` or `version_removed` to "84".
