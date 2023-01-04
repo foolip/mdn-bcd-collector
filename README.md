@@ -30,13 +30,25 @@ Updating all data:
 npm run update-bcd
 ```
 
-Updating a specific entry, e.g., the `appendChild()` method on `Node`:
+Updating a specific category:
+
+```sh
+npm run update-bcd -- --category=css.properties
+```
+
+Updating a specific entry, ex. the `appendChild()` method on `Node`:
 
 ```sh
 npm run update-bcd -- --path=api.Node.appendChild
 ```
 
-Updating paths matched with wildcards, e.g., everything related to WebRTC:
+Updating a specific feature and its children, ex. the `Document` API (also updates `api.Document.*`, ex. `api.Document.body`):
+
+```sh
+npm run update-bcd -- --path=api.Document
+```
+
+Updating paths matched with wildcards, ex. everything related to WebRTC:
 
 ```sh
 npm run update-bcd -- --path=api.RTC*
@@ -48,7 +60,7 @@ The `--browser` argument can be used to only update data for one or more browser
 npm run update-bcd -- --browser=safari --browser=safari_ios
 ```
 
-The `--release` arguments can be used to only update data for a specific browser release, e.g., Firefox 84:
+The `--release` arguments can be used to only update data for a specific browser release, ex. Firefox 84:
 
 ```sh
 npm run update-bcd -- --browser=firefox --release=84
