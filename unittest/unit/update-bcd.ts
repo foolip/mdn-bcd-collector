@@ -11,7 +11,6 @@ import {Report} from '../../types/types.js';
 import {assert} from 'chai';
 import sinon from 'sinon';
 import fs from 'fs-extra';
-import minimatch from 'minimatch';
 import {Browsers} from '@mdn/browser-compat-data/types';
 
 import logger from '../../lib/logger.js';
@@ -1593,7 +1592,7 @@ describe('BCD updater', () => {
 
       it('path', () => {
         const filter = {
-          path: new minimatch.Minimatch('css.properties.*')
+          path: 'css.properties.*'
         };
         expectedBcd.css.properties[
           'font-family'

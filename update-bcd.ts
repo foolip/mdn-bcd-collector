@@ -299,23 +299,37 @@ export const inferSupportStatements = (
   return statements;
 };
 
+interface UpdateFilter {
+  browser?: string[];
+  release?: string;
+  path?: string;
+  exactOnly?: boolean;
+}
+
 export const update = (
   bcd: Identifier,
   supportMatrix: SupportMatrix,
-  filter: any
+  filter: UpdateFilter
 ): boolean => {
   let modified = false;
 
+  let pathFilter: ((path: string) => boolean) | undefined;
+  if (filter.path) {
+    if (filter.path.includes('*')) {
+      // Interpret as glob pattern using minimatch.
+      const mm = new Minimatch(filter.path);
+      pathFilter = (path) => mm.match(path);
+    } else {
+      // Interpret as exact or prefix match.
+      const exact = filter.path;
+      const prefix = `${filter.path}.`;
+      pathFilter = (path) => path === exact || path.startsWith(prefix);
+    }
+  }
+
   for (const [path, browserMap] of supportMatrix.entries()) {
-    if (filter.path) {
-      if (filter.path.constructor === Minimatch) {
-        if (!filter.path.match(path)) {
-          // If filter.path does not match glob
-          continue;
-        }
-      } else if (path !== filter.path && !path.startsWith(`${filter.path}.`)) {
-        continue;
-      }
+    if (pathFilter && !pathFilter(path)) {
+      continue;
     }
 
     const entry = findEntry(bcd, path);
@@ -610,17 +624,16 @@ export const loadJsonFiles = async (
   return Object.fromEntries(entries);
 };
 
+interface MainFilter extends UpdateFilter {
+  category: string[];
+}
+
 export const main = async (
   reportPaths: string[],
-  filter: any,
+  filter: MainFilter,
   browsers: Browsers,
   overrides: Overrides
 ): Promise<void> => {
-  // Replace filter.path with a minimatch object.
-  if (filter.path && filter.path.includes('*')) {
-    filter.path = new Minimatch(filter.path);
-  }
-
   const bcdFiles = (await loadJsonFiles(
     filter.category.map((cat) => path.join(BCD_DIR, ...cat.split('.')))
   )) as {[key: string]: Identifier};
