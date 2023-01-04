@@ -1030,9 +1030,10 @@ api:
   History:
     __base: var instance = history;
   HTMLAllCollection:
-    __base: |-
-      var instance = document.all;
-    __test: return bcd.testObjectName(instance, 'HTMLAllCollection');
+    __test: return bcd.testObjectName(document.all, 'HTMLAllCollection');
+    item: return document.all !== undefined && 'item' in document.all;
+    length: return document.all !== undefined && 'length' in document.all;
+    namedItem: return document.all !== undefined && 'namedItem' in document.all;
   HTMLAnchorElement:
     __base: var instance = document.createElement('a');
     __test: return bcd.testObjectName(instance, 'HTMLAnchorElement');
