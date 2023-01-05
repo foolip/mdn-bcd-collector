@@ -1367,7 +1367,14 @@ api:
         instance = ctx.createImageData(16, 16);
       }
   InkPresenter:
-    __base: var promise = navigator.ink.requestPresenter();
+    __base: |-
+      if (!('ink' in navigator)) {
+        return {result: false, message: 'navigator.ink is not defined'};
+      }
+      if (!('requestPresenter' in navigator.ink)) {
+        return {result: false, message: 'navigator.ink.requestPresenter() is not defined'};
+      }
+      var promise = navigator.ink.requestPresenter();
   InstallEvent:
     __base: |-
       if (!('InstallEvent' in self)) {
