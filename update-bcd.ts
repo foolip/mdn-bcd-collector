@@ -705,7 +705,7 @@ if (esMain(import.meta)) {
         .option('release', {
           alias: 'r',
           describe:
-            'Only update when version_added or version_removed is set to the given value (can be an inclusive range, ex. xx-yy)',
+            'Only update when version_added or version_removed is set to the given value (can be an inclusive range, ex. xx-yy, or `false` for changes that set no support)',
           type: 'string',
           default: null
         })
