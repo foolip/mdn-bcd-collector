@@ -313,5 +313,3 @@ The `update-bcd.js` script works as follows:
   - If the inferred support statement isn't simple (a single object) give up and do nothing.
   - If the BCD support statement had only `prefix`/`alternative_name`/`flags` entries, add our inferred statement.
   - Otherwise, there was an existing simple statement, which we update using the inferred statement.
-
-See [issue #571](https://github.com/foolip/mdn-bcd-collector/issues/571) for various flaws with this design.

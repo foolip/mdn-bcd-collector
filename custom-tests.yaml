@@ -6,8 +6,7 @@
 # See the LICENSE file for copyright details
 #
 
-# Custom tests here also need to be in @webref/idl or custom-idl/, see
-# https://github.com/foolip/mdn-bcd-collector/issues/1944.
+# Custom tests here also need to be in @webref/idl or custom-idl/.
 api:
   __resources:
     audio-blip:
@@ -2898,8 +2897,7 @@ api:
       <%api.XPathExpression:exp%>
       var instance = exp.evaluate(document, 0, null);
 
-# Custom tests here also need to be in @webref/css or custom-css.json, see
-# https://github.com/foolip/mdn-bcd-collector/issues/1944.
+# Custom tests here also need to be in @webref/css or custom-css.json.
 css:
   properties:
     custom-property: |-

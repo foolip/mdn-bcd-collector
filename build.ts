@@ -577,7 +577,6 @@ const getExposureSet = (node, scopes): Set<Exposure> => {
   // Some specs use "DedicatedWorker" for the exposure while others use
   // "Worker". We spawn a dedicated worker for the "Worker" exposure.
   // This code ensures we generate tests for either exposure.
-  // https://github.com/foolip/mdn-bcd-collector/pull/811
   if (exposure.has('DedicatedWorker')) {
     exposure.delete('DedicatedWorker');
     exposure.add('Worker');
@@ -698,8 +697,7 @@ const buildIDLMemberTests = (
       continue;
     }
 
-    // TODO: too many events tests are being generated, see
-    // https://github.com/foolip/mdn-bcd-collector/pull/1825#issuecomment-1048009920
+    // TODO: too many events tests are being generated
 
     const isStatic = member.special === 'static' || iface.type === 'namespace';
     const isEventHandler =
