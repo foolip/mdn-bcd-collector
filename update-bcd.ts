@@ -350,18 +350,22 @@ export const update = (
       if (filter.release) {
         const filterMatch = filter.release.match(/([\d.]+)-([\d.]+)/);
         if (filterMatch) {
+          if (typeof inferredStatement.version_added !== 'string') {
+            // If the version_added is not a string, it must be false and won't
+            // match our
+            continue;
+          }
           if (
-            typeof inferredStatement.version_added === 'string' &&
-            (compareVersions(
+            compareVersions(
               inferredStatement.version_added.replace(/(([\d.]+)> )?≤/, ''),
               filterMatch[1],
               '<'
             ) ||
-              compareVersions(
-                inferredStatement.version_added.replace(/(([\d.]+)> )?≤/, ''),
-                filterMatch[2],
-                '>'
-              ))
+            compareVersions(
+              inferredStatement.version_added.replace(/(([\d.]+)> )?≤/, ''),
+              filterMatch[2],
+              '>'
+            )
           ) {
             // If version_added is outside of filter range
             continue;
@@ -382,18 +386,18 @@ export const update = (
             // If version_removed and it's outside of filter range
             continue;
           }
-        }
-
-        if (filter.release !== inferredStatement.version_added) {
-          // If version_added doesn't match filter
-          continue;
-        }
-        if (
-          inferredStatement.version_removed &&
-          filter.release !== inferredStatement.version_removed
-        ) {
-          // If version_removed and it doesn't match filter
-          continue;
+        } else {
+          if (JSON.parse(filter.release) !== inferredStatement.version_added) {
+            // If version_added doesn't match filter
+            continue;
+          }
+          if (
+            inferredStatement.version_removed &&
+            JSON.parse(filter.release) !== inferredStatement.version_removed
+          ) {
+            // If version_removed and it doesn't match filter
+            continue;
+          }
         }
       }
 
