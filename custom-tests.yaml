@@ -1032,7 +1032,14 @@ api:
   HTMLAllCollection:
     __base: |-
       var instance = document.all;
+      // Note: in most browsers, "document.all" is falsy, so "!!instance" will return "false"
+      if (instance === undefined) {
+        return {result: false, message: 'document.all is undefined'};
+      }
     __test: return bcd.testObjectName(instance, 'HTMLAllCollection');
+    item: 'item' in instance;
+    length: 'length' in instance;
+    namedItem: 'namedItem' in instance;
   HTMLAnchorElement:
     __base: var instance = document.createElement('a');
     __test: return bcd.testObjectName(instance, 'HTMLAnchorElement');
