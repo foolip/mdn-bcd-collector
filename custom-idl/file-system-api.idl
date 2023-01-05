@@ -15,7 +15,7 @@ interface mixin LocalFileSystem {
 };
 Window includes LocalFileSystem;
 
-[Exposed=Window,Worker]
+[Exposed=(Window,Worker), LegacyNoInterfaceObject]
 interface Metadata {
  readonly attribute object modificationTime;
  readonly attribute unsigned long long size;
