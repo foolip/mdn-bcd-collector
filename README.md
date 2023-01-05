@@ -115,7 +115,7 @@ These errors are worth looking out for:
 
 ### Minor Safari version changes
 
-In v6.1.1, a major update was made to the useragent parser involving minor version numbers for browsers (specifically, Safari). As such, newer pull requests may be opened that change the minor version of a browser. Any new changes should be truested over old changes. (For example, if a collector PR for v6.0.8 was merged that indicates the feature was added in Safari 15.5, but there is a new PR with collector v6.1.2 that changes the version number to Safari 15.4, then always trust the new PR.)
+In v6.1.1, a major update was made to the useragent parser involving minor version numbers for browsers (specifically, Safari). As such, newer pull requests may be opened that change the minor version of a browser. If a newer collector version includes a change to a browser's minor version, then always trust the newer collector over the old one. (For example, if a collector PR for v6.0.8 was merged that indicates the feature was added in Safari 15.5, but there is a new PR with collector v6.1.2 that changes the version number to Safari 15.4, then trust Safari 15.4 to be the version number.)
 
 ## Running the server locally
 
