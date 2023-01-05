@@ -918,7 +918,7 @@ const buildCSS = (specCSS, customCSS) => {
       const values = Array.isArray(value) ? value : [value];
       const code = values
         .map((value) => `bcd.testCSSPropertyValue("${name}", "${value}")`)
-        .join(' || ');
+        .join(' && ');
       tests[`css.properties.${name}.${key}`] = compileTest({
         raw: {code: code},
         exposure: ['Window']
