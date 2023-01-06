@@ -90,19 +90,28 @@ app.set('view engine', 'ejs');
 app.use(expressLayouts);
 app.set('layout extractScripts', true);
 
+const setCoopCoepHeaders = (res) => {
+  res.setHeader('cross-origin-opener-policy', 'same-origin');
+  res.setHeader('cross-origin-embedder-policy', 'require-corp');
+};
+
 // Additional config
 app.use(cookieParser());
 app.use(cookieSession);
 app.use(express.urlencoded({extended: true}));
 app.use(express.json({limit: '32mb'}));
-app.use(express.static('static'));
-app.use(express.static('generated'));
+const staticOptions = {
+  setHeaders: setCoopCoepHeaders
+};
+app.use(express.static('static', staticOptions));
+app.use(express.static('generated', staticOptions));
 
 app.locals.appVersion = appVersion;
 app.locals.bcdVersion = bcd.__meta.version;
 
 // Get user agent
 app.use((req, res, next) => {
+  setCoopCoepHeaders(res);
   res.locals.browser = parseUA(req.get('User-Agent'), bcdBrowsers);
   next();
 });
