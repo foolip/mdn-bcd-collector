@@ -482,9 +482,37 @@ api:
       var promise = reusableInstances.cryptoKey;
   CSPViolationReportBody:
     __base: |-
-      // XXX Obtaining an instance of this interface involves creating a CSP violation, much like firing an event.
-      // See http://developer.mozilla.org/docs/Web/API/CSPViolationReportBody#examples
-      return {result: null, message: 'Testing CSPViolationReportBody is not yet implemented'};
+      // Note: the Content-Security-Policy header is already configured on this website
+
+      // Load some "script" from bad-domain.awful
+      var el = document.createElement('script');
+      el.src = "//bad-domain.awful/dummy-script.js";
+      document.body.append(el);
+
+      // And now observe
+      var observer = new ReportingObserver(
+        function(reports, observer) {
+          var instance = reports[0].body;
+          callback(instance);
+          el.remove();
+          observer.disconnect();
+        },
+        {
+          types: ["csp-violation"],
+          buffered: true,
+        }
+      );
+
+      observer.observe();
+    toJSON: |-
+      function callback(instance) {
+        try {
+          success(!!instance && 'toJSON' in instance);
+        } catch(e) {
+          fail(e);
+        }
+      }
+      return 'callback';
   CSSConditionRule:
     __resources:
       - createStyleSheet
