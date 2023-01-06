@@ -347,8 +347,9 @@ export const update = (
       const inferredStatement = inferredStatements[0];
 
       // If there's a version number filter
-      if (filter.release) {
-        const filterMatch = filter.release.match(/([\d.]+)-([\d.]+)/);
+      if (filter.release !== undefined) {
+        const filterMatch =
+          filter.release && filter.release.match(/([\d.]+)-([\d.]+)/);
         if (filterMatch) {
           if (typeof inferredStatement.version_added !== 'string') {
             // If the version_added is not a string, it must be false and won't
@@ -387,13 +388,13 @@ export const update = (
             continue;
           }
         } else {
-          if (JSON.parse(filter.release) !== inferredStatement.version_added) {
+          if (filter.release !== inferredStatement.version_added) {
             // If version_added doesn't match filter
             continue;
           }
           if (
             inferredStatement.version_removed &&
-            JSON.parse(filter.release) !== inferredStatement.version_removed
+            filter.release !== inferredStatement.version_removed
           ) {
             // If version_removed and it doesn't match filter
             continue;
@@ -621,6 +622,10 @@ export const main = async (
   // Replace filter.path with a minimatch object.
   if (filter.path && filter.path.includes('*')) {
     filter.path = new Minimatch(filter.path);
+  }
+
+  if (filter.release === 'false') {
+    filter.release = false;
   }
 
   const bcdFiles = (await loadJsonFiles(
