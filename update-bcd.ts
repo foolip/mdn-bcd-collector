@@ -347,7 +347,7 @@ export const update = (
       const inferredStatement = inferredStatements[0];
 
       // If there's a version number filter
-      if (filter.release !== undefined) {
+      if (filter.release || filter.release === false) {
         const filterMatch =
           filter.release && filter.release.match(/([\d.]+)-([\d.]+)/);
         if (filterMatch) {
