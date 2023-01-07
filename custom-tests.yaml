@@ -638,6 +638,11 @@ api:
         return {result: false, message: 'audioContext.createDelay is not defined'};
       }
       var instance = reusableInstances.audioContext.createDelay();
+  DeprecationReportBody:
+    __base: |-
+      // XXX Obtaining an instance of this interface is much like triggering an event.
+      // See http://developer.mozilla.org/docs/Web/API/DeprecationReportBody#examples
+      return {result: null, message: 'Testing DeprecationReportBody is not yet implemented'};
   DeviceMotionEvent:
     __base: |-
       var instance;
@@ -1420,6 +1425,11 @@ api:
         return {result: false, message: 'InstallEvent is not defined'};
       }
       var instance = new InstallEvent('install');
+  InterventionReportBody:
+    __base: |-
+      // XXX Obtaining an instance of this interface is much like triggering an event.
+      // See http://developer.mozilla.org/docs/Web/API/InterventionReportBody#examples
+      return {result: null, message: 'Testing InterventionReportBody is not yet implemented'};
   KeyboardEvent:
     __base: |-
       var instance;
@@ -1887,6 +1897,11 @@ api:
       var real = new Float32Array(2);
       var imag = new Float32Array(2);
       var instance = reusableInstances.audioContext.createPeriodicWave(real, imag);
+  PermissionsPolicyViolationReportBody:
+    __base: |-
+      // XXX Obtaining an instance of this interface is much like triggering an event.
+      // See http://developer.mozilla.org/docs/Web/API/PermissionsPolicyViolationReportBody#examples
+      return {result: null, message: 'Testing PermissionsPolicyViolationReportBody is not yet implemented'};
   Plugin:
     __base: |-
       if (!navigator.plugins.length) {
