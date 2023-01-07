@@ -492,7 +492,7 @@ api:
       // And now observe
       var observer = new ReportingObserver(
         function(reports, observer) {
-          var instance = reports[0].body;
+          var instance = reports.length > 1 && reports[0].body;
           callback(instance);
           el.remove();
           observer.disconnect();
