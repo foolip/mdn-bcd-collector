@@ -1,5 +1,55 @@
 # mdn-bcd-collector Changelog
 
+## v7.1.3
+
+### Test Changes
+
+#### Added
+
+- api.GPUPipelineError
+- css.properties.link-parameters
+- css.properties.overflow-clip-margin-block
+- css.properties.overflow-clip-margin-block-end
+- css.properties.overflow-clip-margin-block-start
+- css.properties.overflow-clip-margin-bottom
+- css.properties.overflow-clip-margin-inline
+- css.properties.overflow-clip-margin-inline-end
+- css.properties.overflow-clip-margin-inline-start
+- css.properties.overflow-clip-margin-left
+- css.properties.overflow-clip-margin-right
+- css.properties.overflow-clip-margin-top
+
+#### Changed
+
+- api.CSPViolationReportBody
+- api.DeprecationReportBody
+- api.HTMLAllCollection
+- api.ImageBitmap
+- api.InkPresenter
+- api.InterventionReportBody
+- api.PermissionsPolicyViolationReportBody
+
+### Commits
+
+- Ensure that CSPViolationReportBody test doesn't crash if no reports
+- Disable testing of other report body interfaces
+- Re-enable and add custom test for CSPViolationReportBody
+- Disable testing of CSPViolationReportBody
+- Fix release filtering
+- Fix HTMLAllCollection tests
+- Update homepage to link to official repository
+- Update comments everywhere
+- Update description for update-bcd release argument
+- Fix update-bcd release filter
+- Update testConstructor with CompressionStream Safari constructor error
+- Update tests for HTMLAllCollection to handle falsy property
+- Add custom test for InkPresenter API
+- Fix ImageBitmap test (createImageBitmap is a promise)
+- Update "Minor Safari version changes" section
+- Mention v6.1.1 UA change in "Reviewing BCD changes"
+- Add --exact-only argument to update-bcd
+- Improve path property of update-bcd script
+
 ## v7.1.2
 
 ### Test Changes
