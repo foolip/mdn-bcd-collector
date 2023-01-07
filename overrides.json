@@ -20,5 +20,19 @@
   ],
   "https://github.com/mdn/browser-compat-data/pull/17365#issuecomment-1216459968",
   ["api.FontFaceSetLoadEvent", "chrome", "35-57", true],
-  ["api.FontFaceSetLoadEvent.fontfaces", "chrome", "35-57", true]
+  ["api.FontFaceSetLoadEvent.fontfaces", "chrome", "35-57", true],
+  "https://github.com/mdn/browser-compat-data/pull/16786#issuecomment-1193065793",
+  "Note: remember to remove this override once ApplicationCache is enabled in Selenium tests",
+  ["api.ApplicationCache", "firefox", "47-200", true],
+  ["api.ApplicationCache.cached_event", "firefox", "47-200", true],
+  ["api.ApplicationCache.checking_event", "firefox", "47-200", true],
+  ["api.ApplicationCache.downloading_event", "firefox", "47-200", true],
+  ["api.ApplicationCache.error_event", "firefox", "47-200", true],
+  ["api.ApplicationCache.noupdate_event", "firefox", "47-200", true],
+  ["api.ApplicationCache.obsolete_event", "firefox", "47-200", true],
+  ["api.ApplicationCache.progress_event", "firefox", "47-200", true],
+  ["api.ApplicationCache.status", "firefox", "47-200", true],
+  ["api.ApplicationCache.swapCache", "firefox", "47-200", true],
+  ["api.ApplicationCache.update", "firefox", "47-200", true],
+  ["api.ApplicationCache.updateready_event", "firefox", "47-200", true]
 ]
