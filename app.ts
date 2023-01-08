@@ -15,6 +15,7 @@ import bcd from '@mdn/browser-compat-data' assert {type: 'json'};
 const bcdBrowsers = bcd.browsers;
 import esMain from 'es-main';
 import express from 'express';
+import {expressCspHeader, INLINE, SELF, EVAL} from 'express-csp-header';
 import cookieParser from 'cookie-parser';
 import uniqueString from 'unique-string';
 import expressLayouts from 'express-ejs-layouts';
@@ -106,6 +107,15 @@ app.use((req, res, next) => {
   res.locals.browser = parseUA(req.get('User-Agent'), bcdBrowsers);
   next();
 });
+
+// Set Content Security Policy
+app.use(
+  expressCspHeader({
+    directives: {
+      'script-src': [SELF, INLINE, EVAL, 'http://cdnjs.cloudflare.com']
+    }
+  })
+);
 
 // Backend API
 
