@@ -34,5 +34,16 @@
   ["api.ApplicationCache.status", "firefox", "47-200", true],
   ["api.ApplicationCache.swapCache", "firefox", "47-200", true],
   ["api.ApplicationCache.update", "firefox", "47-200", true],
-  ["api.ApplicationCache.updateready_event", "firefox", "47-200", true]
+  ["api.ApplicationCache.updateready_event", "firefox", "47-200", true],
+  "A WebKit prototyping error makes the `length` property undefined on the following interface's prototypes:",
+  ["api.DOMStringList.length", "chrome", "1-44", true],
+  ["api.DataTransferItemList.length", "chrome", "13-44", true],
+  ["api.FileList.length", "chrome", "1-44", true],
+  ["api.Storage.length", "chrome", "4-44", true],
+  "The DataTransfer API is a special event API for drag/drop events containing drag data, so creating an instance of the interface is too challenging.",
+  ["api.DataTransfer.dropEffect", "chrome", "3-43", true],
+  ["api.DataTransfer.effectAllowed", "chrome", "3-43", true],
+  ["api.DataTransfer.files", "chrome", "3-43", true],
+  ["api.DataTransfer.items", "chrome", "3-43", true],
+  ["api.DataTransfer.types", "chrome", "3-43", true]
 ]
