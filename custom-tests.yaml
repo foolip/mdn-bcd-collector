@@ -410,6 +410,13 @@ api:
       var instance = reusableInstances.audioContext.createChannelSplitter();
   CharacterData:
     __base: <%api.Text:instance%>
+  Client:
+    __base: |-
+      var promise = clients.matchAll({
+        includeUncontrolled: true
+      }).then((clientList) => {
+        return clientList.length && clientList[0];
+      });
   Clients:
     __base: var instance = clients;
   Clipboard:
