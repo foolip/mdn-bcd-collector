@@ -411,6 +411,8 @@ api:
     __base: <%api.Text:instance%>
   Clients:
     __base: var instance = clients;
+  Clipboard:
+    __base: var instance = navigator.clipboard;
   CloseEvent:
     __base: |-
       var instance;
