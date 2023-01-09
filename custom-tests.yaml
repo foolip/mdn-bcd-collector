@@ -1966,6 +1966,13 @@ api:
       };
       el.attachShadow({mode: 'open'});
       var instance = el.shadowRoot;
+  SpeechGrammar:
+    __base: |-
+      var constructor = self.SpeechGrammar || self.webkitSpeechGrammar;
+      if (!constructor) {
+        return {result: false, message: '(webkit)SpeechGrammar is not defined'};
+      }
+      var instance = new constructor();
   SpeechRecognition:
     __resources:
       - speechRecognition
@@ -2807,7 +2814,7 @@ api:
     __base: |-
       var constructor = self.WebSocket || self.MozWebSocket;
       if (!constructor) {
-        return {result: false, message: '(Moz)WebSocket is not defined or falsy'};
+        return {result: false, message: '(Moz)WebSocket is not defined'};
       }
       var instance = new constructor('wss://' + location.hostname);
   WheelEvent:
