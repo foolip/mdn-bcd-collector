@@ -1879,6 +1879,7 @@ api:
         return {result: false, message: 'performance.getEntries is not defined'};
       }
       var instance = prf.getEntries()[0];
+    toJSON: return !!instance && 'toJSON' in instance;
   PerformanceMark:
     __base: |-
       <%api.Performance:prf%>
