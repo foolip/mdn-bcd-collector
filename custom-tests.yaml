@@ -949,6 +949,8 @@ api:
       var instance = new ExtendableEvent('extendable');
   External:
     __base: var instance = window.external;
+  FeaturePolicy:
+    __base: var instance = document.featurePolicy;
   FetchEvent:
     __base: |-
       <%api.Request:req%>
