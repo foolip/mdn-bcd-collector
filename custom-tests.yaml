@@ -525,7 +525,11 @@ api:
   CSSConditionRule:
     __resources:
       - createStyleSheet
-    __base: <%api.CSSMediaRule:instance%>
+    __base: |-
+      <%api.CSSMediaRule:instance%>
+      if (!('conditionText' in instance)) {
+        return {result: false, message: 'CSSConditionRule instance must have "conditionText" property, which is missing from this instance'};
+      }
   CSSCounterStyleRule:
     __resources:
       - createStyleSheet
@@ -547,7 +551,11 @@ api:
   CSSGroupingRule:
     __resources:
       - createStyleSheet
-    __base: <%api.CSSMediaRule:instance%>
+    __base: |-
+      <%api.CSSMediaRule:instance%>
+      if (!('cssRules' in instance)) {
+        return {result: false, message: 'CSSGroupingRule instance must have "cssRules" property, which is missing from this instance'};
+      }
   CSSImportRule:
     __resources:
       - createStyleSheet
