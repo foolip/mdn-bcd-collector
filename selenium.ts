@@ -603,6 +603,7 @@ if (esMain(import.meta)) {
           describe: 'Limit to browser releases from this year on',
           alias: 's',
           type: 'string',
+          default: '2020',
           nargs: 1
         })
         .option('os', {
@@ -630,7 +631,7 @@ if (esMain(import.meta)) {
 
   await runAll(
     argv.browser,
-    argv.since ? new Date(`${argv.since}-01-01`) : new Date(0),
+    new Date(`${argv.since}-01-01`),
     argv.os,
     argv.concurrent,
     argv.reverse
