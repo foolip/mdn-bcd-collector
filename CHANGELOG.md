@@ -1,5 +1,32 @@
 # mdn-bcd-collector Changelog
 
+## v7.1.4
+
+### Test Changes
+
+#### Changed
+
+- api.Client
+- api.Clipboard
+- api.CSPViolationReportBody
+- api.FeaturePolicy
+- api.PerformanceEntry.toJSON
+
+### Commits
+
+- Set default "since" argument to 2020
+- Add custom test for api.PerformanceEntry.toJSON
+- Reinstall express-csp-header as non-dev dependency
+- Add overrides for referrerPolicy properties
+- Add custom test for FeaturePolicy API
+- Add additional overrides
+- Add custom test for Client API
+- Add custom test for Clipboard API
+- Fix test for CSPViolationReportBody
+- Send CSP header instead of using meta tag
+- Add override for ApplicationCache API
+- Fix release filtering
+
 ## v7.1.3
 
 ### Test Changes
