@@ -41,7 +41,7 @@
     "@google-cloud/logging-winston": "5.3.0",
     "@google-cloud/storage": "6.9.0",
     "@mdi/font": "7.1.96",
-    "@mdn/browser-compat-data": "5.2.27",
+    "@mdn/browser-compat-data": "5.2.28",
     "@octokit/rest": "19.0.5",
     "compare-versions": "5.0.3",
     "cookie-parser": "1.4.6",
