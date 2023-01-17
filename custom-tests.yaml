@@ -2650,6 +2650,8 @@ api:
         instance = new webkitURL(location.href)
       };
     __test: return 'URL' in self;
+  URLSearchParams:
+    __base: var instance = new URLSearchParams("q=HelloWorld&target=MDN");
   ValidityState:
     __base: |-
       <%api.HTMLInputElement:el%>
