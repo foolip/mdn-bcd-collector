@@ -1864,6 +1864,8 @@ api:
           throw e;
         }
       }
+  PaintWorklet:
+    __base: var instance = CSS.paintWorklet;
   PannerNode:
     __resources:
       - audioContext
@@ -2923,10 +2925,12 @@ api:
     __resources:
       - audioContext
     __base: |-
-      if (!reusableInstances.audioContext) {
-        return {result: false, message: 'Audio context is not available'};
+      var instance;
+      if (reusableInstances.audioContext) {
+        instance = reusableInstances.audioContext.audioWorklet;
+      } else {
+        instance = CSS.paintWorklet;
       }
-      var instance = reusableInstances.audioContext.audioWorklet;
   WritableStreamDefaultController:
     __base: |-
       if (!('WritableStream' in self)) {
