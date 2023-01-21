@@ -385,13 +385,14 @@ api:
         <%api.SVGImageElement:image%>
         try {
           instance.drawImage(image, 0, 0);
+          return true;
         } catch (e) {
           if (e.name === 'TypeError') {
-            // Safari throws a TypeError for lack of support
-            return {result: false, message: 'TypeError'};
+            // A TypeError is thrown for lack of support
+            return {result: false, message: e.message};
           }
+          throw e;
         }
-        return true;
       setTransform.matrix_parameter: |-
         var matrix = new DOMMatrix([1, .2, .8, 1, 0, 0]);
         try {
