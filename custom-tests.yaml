@@ -347,6 +347,8 @@ api:
       <%api.CanvasRenderingContext2D:ctx%>
       var instance = ctx.createPattern(document.getElementById('resource-image-black'), 'repeat');
   CanvasRenderingContext2D:
+    __resources:
+      - image-black # Used in drawImage.ImageBitmap_source_image, XXX remove when imports include resources
     __base: |-
       if (!('document' in self)) {
         // XXX Implement worker tests for CanvasRenderingContext2D
