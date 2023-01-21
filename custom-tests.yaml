@@ -366,6 +366,20 @@ api:
         } catch(e) {
           return {result: false, message: e.message};
         }
+      drawImage.ImageBitmap_source_image: |-
+        <%api.ImageBitmap:imgbmpPromise%>
+        var promise = imgbmpPromise.then(function(imgbmp) {
+          instance.drawImage(imgbmp, 0, 0);
+          return true;
+        }).catch(function(e) {
+          if (e.name === 'TypeError') {
+            // A TypeError is thrown for lack of support
+            return {result: false, message: e.message};
+          }
+          throw e;
+        });
+
+        return promise;
       drawImage.SVGImageElement_source_image: |-
         <%api.SVGImageElement:image%>
         try {
