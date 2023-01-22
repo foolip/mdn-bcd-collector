@@ -85,7 +85,10 @@
     "-moz-margin-end": {},
     "-moz-margin-start": {},
     "-moz-orient": {
-      "__values": ["auto", "inline_and_block"]
+      "__values": ["auto"],
+      "__additional_values": {
+        "inline_and_block": ["inline", "block"]
+      }
     },
     "-moz-osx-font-smoothing": {},
     "-moz-outline-radius": {},
