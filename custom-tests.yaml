@@ -510,6 +510,9 @@ api:
   CSPViolationReportBody:
     __base: |-
       // Note: the Content-Security-Policy header is already configured on this website
+      if (!('ReportingObserver' in self)) {
+        return {result: false, message: 'ReportingObserver is not defined'};
+      }
 
       // Load some "script" from bad-domain.awful
       var el = document.createElement('script');
