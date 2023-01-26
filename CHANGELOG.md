@@ -1,5 +1,74 @@
 # mdn-bcd-collector Changelog
 
+## v7.1.5
+
+### Test Changes
+
+#### Added
+
+- api.CanvasRenderingContext2D.drawImage.ImageBitmap_source_image
+- api.Element.ariaErrorMessageElements
+- api.ElementInternals.ariaErrorMessageElements
+- api.MLActivation
+- api.MLGraphBuilder.lstm
+- api.MLGraphBuilder.lstmCell
+- api.PaymentRequestEvent.changeShippingAddress
+- api.PaymentRequestEvent.changeShippingOption
+- api.PaymentRequestEvent.paymentOptions
+- api.PaymentRequestEvent.shippingOptions
+- api.PressureRecord.toJSON
+- api.ViewTransition.updateCallbackDone
+- css.properties.layout-order
+- css.properties.reading-order
+
+#### Removed
+
+- api.Document.mozCancelFullScreen
+- api.Document.mozFullScreen
+- api.Document.mozFullScreenEnabled
+- api.Document.webkitCancelFullScreen
+- api.Document.webkitCurrentFullScreenElement
+- api.Document.webkitExitFullscreen
+- api.Document.webkitFullscreenElement
+- api.Document.webkitFullscreenEnabled
+- api.Document.webkitFullScreenKeyboardInputAllowed
+- api.Document.webkitHidden
+- api.Document.webkitIsFullScreen
+- api.Document.webkitVisibilityState
+- api.Element.ariaErrorMessageElement
+- api.ElementInternals.ariaErrorMessageElement
+- api.MLOperator
+- api.PaymentInstruments
+- api.PaymentManager.instruments
+- api.ViewTransition.domUpdated
+- api.Window.fullScreen
+- api.XRCompositionLayer.chromaticAberrationCorrection
+
+#### Changed
+
+- api.CanvasRenderingContext2D.drawImage.SVGImageElement_source_image
+- api.CSPViolationReportBody
+- api.CSSConditionRule
+- api.CSSGroupingRule
+- api.URLSearchParams
+- api.Worklet
+- css.properties.-moz-orient.inline_and_block
+
+### Commits
+
+- Drop IE support
+- Remove custom IDL for prefixed features
+- Remove custom IDL for fullscreen alternative names
+- Fix test for css.properties.-moz-orient.inline_and_block
+- Fix test for CSPViolationReportBody
+- Fix CanvasRenderingContext2D resource list
+- Improve test for api.CanvasRenderingContext2D.drawImage.SVGImageElement_source_image
+- Add custom test for api.CanvasRenderingContext2D.drawImage.ImageBitmap_source_image
+- Update theme color
+- Add custom test for URLSearchParams
+- Add custom test for PaintWorklet; fall back to PaintWorklet for Worklet if AudioWorklet unavailable
+- Improve tests for CSSConditionRule and CSSGroupingRule
+
 ## v7.1.4
 
 ### Test Changes
