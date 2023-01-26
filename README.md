@@ -8,7 +8,7 @@ See [DESIGN.md](./DESIGN.md) for details of how this service works.
 
 ## Copyright
 
-This project is © 2020-2022 Google LLC, Mozilla Corporation and Gooborg Studios, Apache License 2.0. See the LICENSE file for more details.
+This project is © 2023 Gooborg Studios, © 2020-2022 Google LLC, Mozilla Corporation and Gooborg Studios, Apache License 2.0. See the LICENSE file for more details.
 
 ## Setup
 
