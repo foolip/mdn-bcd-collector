@@ -8,7 +8,7 @@
 
 /* global console, document, window, location, navigator, XMLHttpRequest,
           self, Worker, Promise, setTimeout, clearTimeout, MessageChannel,
-          SharedWorker, ActiveXObject, hljs */
+          SharedWorker, hljs */
 
 // This harness should work on as old browsers as possible and shouldn't depend
 // on any modern JavaScript features.
@@ -894,20 +894,15 @@
   function sendReport(results) {
     var body = JSON.stringify(results);
 
-    var client;
-    if ('XMLHttpRequest' in self) {
-      client = new XMLHttpRequest();
-    } else if ('ActiveXObject' in self) {
-      client = new ActiveXObject('Microsoft.XMLHTTP');
-    }
-
-    if (!client) {
+    if (!('XMLHttpRequest' in self)) {
       updateStatus(
         'Cannot upload results: XMLHttpRequest is not supported.',
         'error-notice'
       );
       return;
     }
+
+    var client = new XMLHttpRequest();
 
     var resultsURL =
       (location.origin || location.protocol + '//' + location.host) +
