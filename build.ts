@@ -413,9 +413,15 @@ const flattenIDL = (specIDLs: IDLFiles, customIDLs: IDLFiles) => {
 };
 
 const flattenMembers = (iface) => {
-  const members = iface.members.filter(
-    (member) => member.name && member.type !== 'const'
-  );
+  const members = iface.members
+    .filter((member) => member.name && member.type !== 'const')
+    .filter((member) => {
+      // Filter alt. names for Document.characterSet
+      return !(
+        iface.name == 'Document' &&
+        ['charset', 'inputEncoding'].includes(member.name)
+      );
+    });
   for (const member of iface.members.filter((member) => !member.name)) {
     switch (member.type) {
       case 'constructor':
