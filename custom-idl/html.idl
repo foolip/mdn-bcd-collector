@@ -27,10 +27,6 @@ interface ApplicationCache : EventTarget {
   attribute EventHandler onobsolete;
 };
 
-partial interface Window {
-  [SecureContext] readonly attribute ApplicationCache applicationCache;
-};
-
 // https://github.com/whatwg/html/pull/1942
 dictionary HitRegionOptions {
   Path2D? path = null;
