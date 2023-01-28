@@ -740,6 +740,18 @@ api:
       }
   DOMImplementation:
     __base: var instance = document.implementation;
+  DOMMatrix:
+    __base: |-
+      var instance;
+      if ('DOMMatrix' in self) {
+        instance = new DOMMatrix();
+      } else if ('WebKitCSSMatrix' in self) {
+        instance = new WebKitCSSMatrix();
+      } else if ('SVGMatrix' in self) {
+        instance = new SVGMatrix();
+      } else {
+        return {result: false, message: 'DOMMatrix, WebKitCSSMatrix and SVGMatrix are not defined.'}
+      }
   DOMRectList:
     __base: |-
       <%api.Element:el%>
