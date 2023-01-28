@@ -2,11 +2,6 @@ partial interface DOMMatrixReadOnly {
   undefined transform();
 };
 
-[Exposed=Window]
-interface WebKitCSSMatrix {
-  constructor();
-};
-
 // https://github.com/WebKit/webkit/blob/9940f5c6cd901c3cce4efb372ebd94d808218d80/Source/WebCore/page/WebKitPoint.idl#L26
 [Exposed=Window]
 interface WebKitPoint {
