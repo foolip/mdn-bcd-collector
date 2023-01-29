@@ -233,6 +233,24 @@
       };
     }
 
+    if (!instance) {
+      return {
+        result: false,
+        message: 'testOptionParam: instance is falsy'
+      };
+    }
+
+    if (
+      methodName &&
+      methodName !== 'constructor' &&
+      !(methodName in instance)
+    ) {
+      return {
+        result: false,
+        message: 'testOptionParam: instance.' + methodName + ' is undefined'
+      };
+    }
+
     var accessed = false;
     var options = Object.defineProperty({}, paramName, {
       get: function () {
@@ -240,7 +258,17 @@
         return paramValue;
       }
     });
-    instance[methodName](options);
+
+    if (methodName === 'constructor') {
+      // If methodName is 'constructor', we're testing a constructor
+      new instance(options);
+    } else if (methodName) {
+      instance[methodName](options);
+    } else {
+      // If there's no method name specified, we're testing a function
+      instance(options);
+    }
+
     return accessed;
   }
 
