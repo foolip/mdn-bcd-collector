@@ -1438,6 +1438,9 @@ api:
         // XXX Implement worker tests for ImageBitmap
         return {result: null, message: 'Testing ImageBitmap in workers is not yet implemented'};
       }
+      if (!('createImageBitmap' in self)) {
+        return {result: false, message: 'Cannot create image bitmap'};
+      }
       var promise = createImageBitmap(document.getElementById('resource-image-black'));
   ImageCapture:
     __base: |-
