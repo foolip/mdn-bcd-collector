@@ -106,6 +106,17 @@ api:
 
   _globals:
     crypto: return !!self.crypto;
+  AbortSignal:
+    __additional:
+      abort.reason_parameter: |-
+        if (!('AbortSignal' in self)) {
+          return {result: false, message: 'AbortSignal is not defined'};
+        }
+        if (!('abort' in AbortSignal)) {
+          return {result: false, message: 'AbortSignal.abort is undefined'}
+        }
+        var instance = AbortSignal.abort('Foo bar');
+        return instance.reason === 'Foo bar';
   Attr:
     __base: |-
       var el = document.createElement('b');
@@ -177,6 +188,10 @@ api:
       - audioContext
     __base: var instance = reusableInstances.audioContext;
     __test: return 'AudioContext' in self;
+    __additional:
+      AudioContext.options_latencyHint_parameter: return bcd.testOptionParam(window.AudioContext || window.webkitAudioContext, 'constructor', 'latencyHint', 'playback');
+      AudioContext.options_sampleRate_parameter: return bcd.testOptionParam(window.AudioContext || window.webkitAudioContext, 'constructor', 'sampleRate', '44100');
+      AudioContext.options_sinkId_parameter: return bcd.testOptionParam(window.AudioContext || window.webkitAudioContext, 'constructor', 'sinkId', '');
   AudioDestinationNode:
     __resources:
       - audioContext
@@ -198,6 +213,10 @@ api:
       - audioContext
     __base: |-
       <%api.AnalyserNode:instance%>
+    __additional:
+      disconnect.destination_parameter: return bcd.testOptionParam(instance, 'disconnect', 'destination', instance);
+      disconnect.output_parameter: return bcd.testOptionParam(instance, 'disconnect', 'output', 0);
+      disconnect.input_parameter: return bcd.testOptionParam(instance, 'disconnect', 'input', 0);
   AudioParam:
     __resources:
       - audioContext
