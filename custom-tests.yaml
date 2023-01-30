@@ -1105,6 +1105,7 @@ api:
       scrollBy.options_behavior_parameter: return bcd.testOptionParam(instance, 'scrollBy', 'behavior', 'auto');
       scrollBy.options_left_parameter: return bcd.testOptionParam(instance, 'scrollBy', 'left', '0');
       scrollBy.options_top_parameter: return bcd.testOptionParam(instance, 'scrollBy', 'top', '0');
+      scrollIntoView.options_parameter: return bcd.testOptionParam(instance, 'scrollIntoView', 'behavior', 'auto');
       scrollTo.options_behavior_parameter: return bcd.testOptionParam(instance, 'scrollTo', 'behavior', 'auto');
       scrollTo.options_left_parameter: return bcd.testOptionParam(instance, 'scrollTo', 'left', '0');
       scrollTo.options_top_parameter: return bcd.testOptionParam(instance, 'scrollTo', 'top', '0');
@@ -1145,6 +1146,8 @@ api:
       }
       var instance = new EventSource('/eventstream');
     EventSource: return !!instance;
+  EventTarget:
+    __base: <%api.Element:instance%>
   EXT_blend_minmax:
     __resources:
       - webGL1
