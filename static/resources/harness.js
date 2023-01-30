@@ -189,7 +189,7 @@
     // Do not reject "falsey" values generally in order to support
     // `document.all`
     if (instance === null || instance === undefined) {
-      return false;
+      return {result: false, message: 'testObjectName: instance is falsy'};
     }
 
     if (
@@ -199,7 +199,7 @@
       return {
         result: null,
         message:
-          'Browser does not support object prototype confirmation methods'
+          'testObjectName: Browser does not support object prototype confirmation methods'
       };
     }
 
@@ -217,14 +217,14 @@
 
     for (var i = 0; i < names.length; i++) {
       if (actualName === names[i]) {
-        return true;
+        return {result: true, message: 'Got ' + actualName};
       }
     }
 
     return {
       result: false,
       message:
-        'Instance prototype does not match accepted names (expected ' +
+        'testObjectName: Instance prototype does not match accepted names (expected ' +
         names.join(', ') +
         '; got ' +
         actualName +
