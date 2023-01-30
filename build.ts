@@ -87,8 +87,8 @@ const compileCustomTest = (code: string, format = true): string => {
       if (e instanceof SyntaxError) {
         return `(function () {\n  throw "Test is malformed: ${e.message}";\n})();`;
       }
+      /* c8 ignore next 3 */
       // We should never reach the next line
-      /* c8 ignore next */
       throw e;
     }
   }

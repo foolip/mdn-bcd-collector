@@ -221,6 +221,8 @@
         // more arguments, the constructor's good
         result.result = true;
       } else {
+        /* c8 ignore next 3 */
+        // If there's some other error, return null and update this function
         result.result = null;
       }
 
@@ -246,6 +248,7 @@
       return {result: false, message: 'testObjectName: instance is falsy'};
     }
 
+    /* c8 ignore start */
     if (
       !instance.constructor.name &&
       Object.prototype.toString.call(instance) === '[object Object]'
@@ -256,6 +259,7 @@
           'testObjectName: Browser does not support object prototype confirmation methods'
       };
     }
+    /* c8 ignore stop */
 
     if (typeof names === 'string') {
       names = [names];
@@ -369,12 +373,14 @@
       return false;
     }
 
+    /* c8 ignore start */
     if (!('Object' in self && 'defineProperty' in Object)) {
       return {
         result: null,
         message: 'Browser does not support detection methods'
       };
     }
+    /* c8 ignore stop */
 
     if (!instance) {
       return {
@@ -481,12 +487,15 @@
       result.result = null;
       result.message = 'threw ' + stringify(value);
     } else if (value && typeof value === 'object') {
+      /* c8 ignore start */
       if (
         'name' in value &&
         stringIncludes(value.name, ['NS_ERROR', 'NotSupported'])
       ) {
+        // Catch exceptions from early versions of Firefox
         result.result = null;
         result.message = 'threw ' + stringify(value.message);
+        /* c8 ignore stop */
       } else if ('result' in value) {
         result.result = value.result;
         if (value.message) {
@@ -523,6 +532,7 @@
       }
     }
 
+    /* c8 ignore start */
     if (debugmode) {
       if (typeof result.result !== 'boolean' && result.result !== null) {
         consoleLog(
@@ -530,6 +540,7 @@
         );
       }
     }
+    /* c8 ignore stop */
   }
 
   /**
@@ -546,9 +557,12 @@
   function runTest(data, i, oncomplete) {
     var test = data.tests[i];
 
+    /* c8 ignore start */
+    // If a test is stuck for too long (ex. user interaction needed), ignore it
     var timeout = setTimeout(function () {
       fail('Timed out');
     }, 10000);
+    /* c8 ignore stop */
 
     function success(v) {
       clearTimeout(timeout);
@@ -599,17 +613,20 @@
     var results = [];
     var completedTests = 0;
 
+    /* c8 ignore start */
     if (debugmode) {
       var remaining = [];
       for (var t = 0; t < tests.length; t++) {
         remaining.push(tests[t].name);
       }
     }
+    /* c8 ignore stop */
 
     var oncomplete = function (result) {
       results.push(result);
       completedTests += 1;
 
+      /* c8 ignore start */
       if (debugmode) {
         if (debugmode === 'full') {
           consoleLog(
@@ -646,6 +663,7 @@
           );
         }
       }
+      /* c8 ignore stop */
 
       if (completedTests == tests.length) {
         callback(results);
@@ -697,7 +715,9 @@
         try {
           myWorker = new Worker('/resources/worker.js');
         } catch (e) {
+          /* c8 ignore start */
           // eslint-disable-next-rule no-empty
+          /* c8 ignore stop */
         }
       }
 
@@ -713,6 +733,7 @@
           })
         );
       } else {
+        /* c8 ignore start */
         updateStatus(
           'No worker support, skipping Worker/DedicatedWorker tests'
         );
@@ -740,6 +761,7 @@
         }
 
         callback(results);
+        /* c8 ignore stop */
       }
     } else {
       callback([]);
@@ -764,7 +786,9 @@
         try {
           myWorker = new SharedWorker('/resources/sharedworker.js');
         } catch (e) {
+          /* c8 ignore start */
           // eslint-disable-next-rule no-empty
+          /* c8 ignore stop */
         }
       }
 
@@ -780,6 +804,7 @@
           })
         );
       } else {
+        /* c8 ignore start */
         updateStatus('No shared worker support, skipping SharedWorker tests');
 
         var results = [];
@@ -805,6 +830,7 @@
         }
 
         callback(results);
+        /* c8 ignore stop */
       }
     } else {
       callback([]);
@@ -850,6 +876,7 @@
             });
         });
       } else {
+        /* c8 ignore start */
         updateStatus('No service worker support, skipping ServiceWorker tests');
 
         var results = [];
@@ -875,6 +902,7 @@
         }
 
         callback(results);
+        /* c8 ignore stop */
       }
     } else {
       callback([]);
