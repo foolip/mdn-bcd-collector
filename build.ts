@@ -78,7 +78,7 @@ const compileCustomTest = (code: string, format = true): string => {
 
   if (format) {
     // Wrap in a function
-    code = `(function() {\n  ${code}\n})();`;
+    code = `(function () {\n  ${code}\n})();`;
 
     try {
       // Use Prettier to format code
@@ -120,7 +120,7 @@ const getCustomTestAPI = (
           ? testbase +
             (promise
               ? `if (!promise) {
-    return {result: false, message: 'Promise variable is falsy'};
+    return {result: false, message: "Promise variable is falsy"};
   }
   return promise.then(function(instance) {
     return ${returnValue};
@@ -133,7 +133,7 @@ const getCustomTestAPI = (
       fail(e);
     }
   };
-  return 'callback';`
+  return "callback";`
               : `return ${returnValue};`)
           : false;
       }
@@ -155,15 +155,15 @@ const getCustomTestAPI = (
           let returnValue;
           if (type === 'symbol') {
             const symbol = member.replace('@@', '');
-            returnValue = `!!instance && 'Symbol' in self && '${symbol}' in Symbol && Symbol.${symbol} in instance`;
+            returnValue = `!!instance && "Symbol" in self && "${symbol}" in Symbol && Symbol.${symbol} in instance`;
           } else {
-            returnValue = `!!instance && '${member}' in instance`;
+            returnValue = `!!instance && "${member}" in instance`;
           }
           test = testbase
             ? testbase +
               (promise
                 ? `if (!promise) {
-    return {result: false, message: 'Promise variable is falsy'};
+    return {result: false, message: "Promise variable is falsy"};
   }
   return promise.then(function(instance) {
     return ${returnValue};
@@ -176,7 +176,7 @@ const getCustomTestAPI = (
       fail(e);
     }
   };
-  return 'callback';`
+  return "callback";`
                 : `return ${returnValue};`)
             : false;
         }
