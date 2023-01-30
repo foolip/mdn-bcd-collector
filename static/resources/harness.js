@@ -89,7 +89,6 @@
     }
     return string.indexOf(search) !== -1;
   }
-  /* c8 ignore stop */
 
   /**
    * Update the status field with a new message
@@ -120,6 +119,7 @@
 
     consoleLog(statusElement.innerHTML.replace(/<br>/g, '\n'));
   }
+  /* c8 ignore stop */
 
   /**
    * Add a reusable instance for code that can be used in multiple tests
