@@ -50,6 +50,14 @@
     }
   }
 
+  /**
+   * Safe stringification
+   *
+   * value (any): The value to stringify
+   *
+   * returns (string): The stringified value; if value cannot be serialized,
+   *   "unserializable value"
+   */
   function stringify(value) {
     try {
       return String(value);
@@ -58,6 +66,15 @@
     }
   }
 
+  /**
+   * A non-invasive polyfill for String.prototype.includes()
+   *
+   * string (string): The string to test
+   * search (string | string[]): The string to search for; if array, check if any
+   *   search string is applicable
+   *
+   * returns (Boolean): `true` if (any) search string found, otherwise `false`.
+   */
   function stringIncludes(string, search) {
     if (Array.isArray(search)) {
       for (var i = 0; i < search.length; i++) {
@@ -74,6 +91,14 @@
   }
   /* c8 ignore stop */
 
+  /**
+   * Update the status field with a new message
+   *
+   * newStatus (string): The new status message
+   * className (string?): A class name to set on the status field element
+   *
+   * returns (null)
+   */
   function updateStatus(newStatus, className) {
     var statusElement = document.getElementById('status');
     if (!statusElement) {
@@ -96,6 +121,14 @@
     consoleLog(statusElement.innerHTML.replace(/<br>/g, '\n'));
   }
 
+  /**
+   * Add a reusable instance for code that can be used in multiple tests
+   *
+   * name (string): Name of the instance
+   * code (string): A string of the code to create the instance
+   *
+   * returns (null)
+   */
   function addInstance(name, code) {
     var newCode = '(function () {\n  ' + code.replace(/\n/g, '\n  ') + '\n})()';
     reusableInstances.__sources[name] = newCode;
@@ -108,6 +141,16 @@
     }
   }
 
+  /**
+   * Add a test to the queue
+   *
+   * name (string): Name of the test
+   * tests (Tests): The test itself
+   * exposure (Exposure): The test exposure
+   * info (object?): Additional test info
+   *
+   * returns (null)
+   */
   function addTest(name, tests, exposure, info) {
     if (!(exposure in pending)) {
       pending[exposure] = [];
@@ -121,6 +164,14 @@
     });
   }
 
+  /**
+   * Test a constructor with no arguments for support, and check the error message to
+   * determine if it's supported or an illegal constructor.
+   *
+   * iface (function): The constructor to test
+   *
+   * returns (TestResult): The result of the test
+   */
   function testConstructor(iface) {
     var result = {};
 
@@ -132,6 +183,7 @@
         new iface();
       }
       result.result = true;
+      result.message = 'Constructor passed with no errors';
     } catch (err) {
       if (
         stringIncludes(err.message, [
@@ -179,11 +231,13 @@
   }
 
   /**
-   * This function tests to ensure an object prototype's name matches an entry in an explicit list of names
+   * This function tests to ensure an object prototype's name matches an entry in an
+   * explicit list of names
    *
-   * instance: An object to test
-   * names: The valid name(s); may be a string or array of strings
+   * instance (object): An object to test
+   * names (string | string[]): The valid name(s)
    *
+   * returns (TestResult): Whether the prototype name matches a name in `names` parameter
    */
   function testObjectName(instance, names) {
     // Do not reject "falsey" values generally in order to support
@@ -234,23 +288,27 @@
 
   /**
    * This function tests to see if a parameter or option within an object is accessed
-   * during a method call. It passes an object as the first paramter to the method, calls the method, and checks to see if the option was accessed during the call.
+   * during a method call. It passes an object as the first paramter to the method, calls
+   * the method, and checks to see if the option was accessed during the call.
    *
-   * XXX This can only test with the first argument.  To test the second, third, etc. argument, wrap the method in a function.  Example:
+   * XXX This can only test with the first argument.  To test the second, third, etc.
+   * argument, wrap the method in a function.  Example:
    *   function foo(opts) {
    *     instance.doTheThing(one, two, opts);
    *   }
    *   return bcd.testOptionParam(foo, null, 'bar', 'apple');
    *
-   * instance: A function, constructor, or object to test
-   * methodName: The name(s) of a method to test; leave empty if instance is function, or
-   *   set to 'constructor' if instance is constructor
-   * optName: The name of the option to test; leave empty to pass "optValue" as directly
-   *   as the argument
-   * optValue: The value of the option to test; if "optName" is empty, this will be
+   * instance (function|object): A function, constructor, or object to test
+   * methodName (string|string[]?): The name(s) of a method to test; leave empty if
+   *   instance is function, or set to 'constructor' if instance is constructor
+   * optName (string?): The name of the option to test; leave empty to pass "optValue" as
+   *   directly as the argument
+   * optValue (any): The value of the option to test; if "optName" is empty, this will be
    *   passed directly as the argument
-   * otherOptions: An object containing other options to set, in case of required options;
-   *   if "optName" is empty, this has no effect
+   * otherOptions (object?): An object containing other options to set, in case of
+   *   required options; if "optName" is empty, this has no effect
+   *
+   * returns (TestResult): If the value was accessed, the result will be `true`
    *
    * Examples:
    *
@@ -364,6 +422,14 @@
     return accessed;
   }
 
+  /**
+   * Converts a CSS property name to an equivalent IDL attribute name
+   *
+   * property (string): The CSS property name
+   * lowercaseFirst (boolean?): (XXX Document me!)
+   *
+   * returns (string): The property name, camel-cased and without hyphens
+   */
   function cssPropertyToIDLAttribute(property, lowercaseFirst) {
     var output = '';
     var uppercaseNext = false;
@@ -416,23 +482,35 @@
     return div.style.getPropertyValue(name) !== '';
   }
 
-  // Once a test is evaluated and run, it calls this function with the result.
-  // This function then compiles a result object from the given result value,
-  // and then passes the result to `callback()` (or if the result is not true
-  // and there are more test variants, run the next test variant).
-  //
-  // If the test result is an error or non-boolean, the result value is set to
-  // `null` and the original value is mentioned in the result message.
-  //
-  // Test results are mapped into objects like this:
-  // {
-  //   "name": "api.Attr.localName",
-  //   "result": true,
-  //   "info": {
-  //     "code": "'localName' in Attr.prototype",
-  //     "exposure": "Window"
-  //   }
-  // }
+  /**
+   * Once a test is evaluated and run, it calls this function with the result.
+   * This function then compiles a result object from the given result value,
+   * and then passes the result to `callback()` (or if the result is not true
+   * and there are more test variants, run the next test variant).
+   *
+   * If the test result is an error or non-boolean, the result value is set to
+   * `null` and the original value is mentioned in the result message.
+   *
+   * Test results are mapped into objects like this:
+   * {
+   *   "name": "api.Attr.localName",
+   *   "result": true,
+   *   "message": "Test passed",
+   *   "info": {
+   *     "code": "'localName' in Attr.prototype",
+   *     "exposure": "Window"
+   *   }
+   * }
+   *
+   * value (any): The value from the test
+   * data (object): The data about the test
+   * i (Number): The index of the test run
+   * callback (function): The function to call once the test is processed
+   *
+   * returns (void)
+   * callback (TestResult): The processed result of the test
+   *
+   */
   function processTestResult(value, data, i, callback) {
     var result = {name: data.name, info: {}};
 
@@ -493,6 +571,17 @@
     }
   }
 
+  /**
+   * Runs a test and then process the test result, sending the data to `oncomplete`
+   *
+   * data (Test): The test to run
+   * i (Number): The index of the test
+   * oncomplete (function): The callback to call once function completes
+   *
+   * returns (void)
+   * callback (TestResult): The processed result of the test
+   *
+   */
   function runTest(data, i, oncomplete) {
     var test = data.tests[i];
 
@@ -535,6 +624,16 @@
     }
   }
 
+  /**
+   * Runs a series of tests and then calls the callback function with the results
+   *
+   * tests (Tests): The tests to run
+   * callback (function): The callback to call once function completes
+   *
+   * returns (void)
+   * callback (TestResults): The processed result of the tests
+   *
+   */
   function runTests(tests, callback) {
     var results = [];
     var completedTests = 0;
@@ -601,6 +700,15 @@
     }
   }
 
+  /**
+   * Run all of the pending tests under the Window exposure if any
+   *
+   * callback (function): The callback to call once function completes
+   *
+   * returns (void)
+   * callback (TestResults): The processed result of the tests
+   *
+   */
   function runWindow(callback) {
     if (pending.Window) {
       updateStatus('Running tests for Window...');
@@ -610,6 +718,15 @@
     }
   }
 
+  /**
+   * Run all of the pending tests under the Worker exposure if any
+   *
+   * callback (function): The callback to call once function completes
+   *
+   * returns (void)
+   * callback (TestResults): The processed result of the tests
+   *
+   */
   function runWorker(callback) {
     if (pending.Worker) {
       updateStatus('Running tests for Worker...');
@@ -668,6 +785,15 @@
     }
   }
 
+  /**
+   * Run all of the pending tests under the SharedWorker exposure if any
+   *
+   * callback (function): The callback to call once function completes
+   *
+   * returns (void)
+   * callback (TestResults): The processed result of the tests
+   *
+   */
   function runSharedWorker(callback) {
     if (pending.SharedWorker) {
       updateStatus('Running tests for Shared Worker...');
@@ -724,6 +850,15 @@
     }
   }
 
+  /**
+   * Run all of the pending tests under the ServiceWorker exposure if any
+   *
+   * callback (function): The callback to call once function completes
+   *
+   * returns (void)
+   * callback (TestResults): The processed result of the tests
+   *
+   */
   function runServiceWorker(callback) {
     if (pending.ServiceWorker) {
       updateStatus('Running tests for Service Worker...');
@@ -785,6 +920,17 @@
     }
   }
 
+  /**
+   * Run all of the pending tests
+   *
+   * callback (function?): The callback to call once tests are completed
+   * resourceCount (Number?): The number of resources required
+   * hideResults (boolean): Whether to keep the results hidden afterwards
+   *
+   * returns (void)
+   * callback (TestResults): The processed result of the tests
+   *
+   */
   function go(callback, resourceCount, hideResults) {
     var allresults = [];
     state = {
@@ -886,6 +1032,15 @@
     }
   }
 
+  /**
+   * Attempt to load highlight.js for code syntax highlighting, or silently fail
+   *
+   * callback (function?): The callback to call once function completes
+   *
+   * returns (void)
+   * callback (void)
+   *
+   */
   function loadHighlightJs(callback) {
     try {
       // Load dark (main) style
@@ -912,7 +1067,7 @@
         script.onload = callback;
         script.onerror = callback;
       } else {
-        // If we can't determine when harness.js loads, use a delay
+        // If we can't determine when highlight.js loads, use a delay
         setTimeout(callback, 500);
       }
 
@@ -923,6 +1078,15 @@
     }
   }
 
+  /**
+   * Render a report element to display on the page
+   *
+   * result (TestResult): The test result to render
+   * resultsEl (HTMLElement): The element to add the report to
+   *
+   * returns (void)
+   *
+   */
   function renderReportEl(result, resultsEl) {
     var resultEl = document.createElement('details');
     resultEl.className = 'result';
@@ -1011,6 +1175,14 @@
     resultsEl.appendChild(resultEl);
   }
 
+  /**
+   * Send the results to the server
+   *
+   * results (TestResults): The results to send
+   *
+   * returns (void)
+   *
+   */
   function sendReport(results) {
     var body = JSON.stringify(results);
 
@@ -1049,6 +1221,16 @@
     };
   }
 
+  /**
+   * Send test results to the server and potentially render them on the page. If there
+   * are a lot of results, ask the user before rendering.
+   *
+   * results (TestResults): The test results
+   * hideResults (boolean): If `true`, don't render the report on the page
+   *
+   * returns (void)
+   *
+   */
   function report(results, hideResults) {
     updateStatus('Tests complete. Posting results to server...');
 
