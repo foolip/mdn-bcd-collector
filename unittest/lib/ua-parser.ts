@@ -189,6 +189,22 @@ describe('parseUA', () => {
     );
   });
 
+  it('Oculus Browser', () => {
+    assert.deepEqual(
+      parseUA(
+        'Mozilla/5.0 (Linux; Android 7.0; SM-G920I Build/NRD90M) AppleWebKit/537.36 (KHTML, like Gecko) OculusBrowser/3.4.9 SamsungBrowser/4.0 Chrome/57.0.2987.146 Mobile VR Safari/537.36',
+        browsers
+      ),
+      {
+        browser: {id: 'oculus', name: 'Oculus Browser'},
+        version: '3.4',
+        fullVersion: '3.4.9',
+        os: {name: 'Android', version: '7.0'},
+        inBcd: undefined
+      }
+    );
+  });
+
   it('Safari 14', () => {
     assert.deepEqual(
       parseUA(
