@@ -546,6 +546,39 @@ api:
           throw e;
         }
       }
+  CompressionStream:
+    __base: var instance = new CompressionStream("gzip");
+    __additional:
+      CompressionStream.deflate: |-
+        try {
+          new CompressionStream("deflate");
+          return true;
+        } catch(e) {
+          if (e instanceof TypeError) {
+            return {result: false, message: e.message};
+          }
+          return e;
+        }
+      CompressionStream.deflate-raw: |-
+        try {
+          new CompressionStream("deflate-raw");
+          return true;
+        } catch(e) {
+          if (e instanceof TypeError) {
+            return {result: false, message: e.message};
+          }
+          return e;
+        }
+      CompressionStream.gzip: |-
+        try {
+          new CompressionStream("gzip");
+          return true;
+        } catch(e) {
+          if (e instanceof TypeError) {
+            return {result: false, message: e.message};
+          }
+          return e;
+        }
   ConstantSourceNode:
     __resources:
       - audioContext
