@@ -24,9 +24,7 @@ const overrides = await fs.readJson(
 
 const BCD_DIR = process.env.BCD_DIR || `../browser-compat-data`;
 const {default: bcd} = await import(`${BCD_DIR}/index.js`);
-const {default: compareFeatures} = await import(
-  `${BCD_DIR}/scripts/lib/compare-features.js`
-);
+const {orderFeatures} = await import(`${BCD_DIR}/scripts/fix/feature-order.js`);
 
 const template = {
   __compat: {
@@ -63,18 +61,6 @@ export const recursiveAdd = (
       : Object.assign({}, obj);
 
   return data;
-};
-
-export const orderFeatures = (key: string, value: Identifier): Identifier => {
-  if (value instanceof Object && '__compat' in value) {
-    value = Object.keys(value)
-      .sort(compareFeatures)
-      .reduce((result, key) => {
-        result[key] = value[key];
-        return result;
-      }, {});
-  }
-  return value;
 };
 
 const startsWithLowerCase = (s: string): boolean => {
