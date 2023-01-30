@@ -432,13 +432,15 @@
    *   whether that value is supported with the property
    */
   function testCSSProperty(name, value) {
+    // Use CSS.supports if available
     if ('CSS' in window && window.CSS.supports) {
       return window.CSS.supports(name, value || 'inherit');
     }
 
+    // Use fallback
     var div = document.createElement('div');
-    div.style[name] = value || 'inherit';
-    return div.style.getPropertyValue(name) !== '';
+    div.setProperty(name, value || 'inherit');
+    return div.getPropertyValue(name);
   }
 
   /**
