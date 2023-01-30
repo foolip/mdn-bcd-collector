@@ -1710,15 +1710,15 @@ interface Invalid {};
           exposure: ['Window']
         },
         'css.properties.font-family.emoji': {
-          code: 'bcd.testCSSPropertyValue("font-family", "emoji")',
+          code: 'bcd.testCSSProperty("font-family", "emoji")',
           exposure: ['Window']
         },
         'css.properties.font-family.historic': {
-          code: 'bcd.testCSSPropertyValue("font-family", "sans-serif") || bcd.testCSSPropertyValue("font-family", "serif")',
+          code: 'bcd.testCSSProperty("font-family", "sans-serif") || bcd.testCSSProperty("font-family", "serif")',
           exposure: ['Window']
         },
         'css.properties.font-family.system-ui': {
-          code: 'bcd.testCSSPropertyValue("font-family", "system-ui")',
+          code: 'bcd.testCSSProperty("font-family", "system-ui")',
           exposure: ['Window']
         },
         'css.properties.font-weight': {
