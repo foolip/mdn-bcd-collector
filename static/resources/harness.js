@@ -225,7 +225,13 @@
     };
   }
 
-  function testOptionParam(instance, methodName, paramName, paramValue) {
+  function testOptionParam(
+    instance,
+    methodName,
+    paramName,
+    paramValue,
+    otherOptions
+  ) {
     if (!('Object' in self && 'defineProperty' in Object)) {
       return {
         result: null,
@@ -252,7 +258,7 @@
     }
 
     var accessed = false;
-    var options = Object.defineProperty({}, paramName, {
+    var options = Object.defineProperty(otherOptions || {}, paramName, {
       get: function () {
         accessed = true;
         return paramValue;
