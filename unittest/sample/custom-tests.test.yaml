@@ -42,6 +42,8 @@ api:
     __base: <%api.foobar:apple%>
   badimport2:
     __base: <%api.foobar.bar:apple%>
+  syntaxerror:
+    __base: 2fast + 4you = !saanic;
   fig:
     __test: return 2;
   apple:
