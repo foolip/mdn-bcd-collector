@@ -272,6 +272,12 @@
    *     ->
    *     instance.doTheThing(<'apple'>);
    *
+   *   Multiple Method Names (returns `true` if any pass):
+   *     bcd.testOptionParam(instance, ['doTheThing', 'undo'], 'bar', 'apple');
+   *     ->
+   *     instance.doTheThing({bar: <'apple'>});
+   *     instance.undo({bar: <'apple'>});
+   *
    */
   function testOptionParam(
     instance,
@@ -280,6 +286,24 @@
     optValue,
     otherOptions
   ) {
+    // If an array of method names is specified, test them all
+    if (Array.isArray(methodName)) {
+      for (var i = 0; i < methodName.length; i++) {
+        if (
+          testOptionParam(
+            instance,
+            methodName[i],
+            optName,
+            optValue,
+            otherOptions
+          )
+        ) {
+          return true;
+        }
+      }
+      return false;
+    }
+
     if (!('Object' in self && 'defineProperty' in Object)) {
       return {
         result: null,
