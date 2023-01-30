@@ -86,9 +86,8 @@ const compileCustomTest = (code: string, format = true): string => {
     } catch (e) {
       if (e instanceof SyntaxError) {
         return `throw 'Test is malformed: ${e.message}';`;
-      } else {
-        throw e;
       }
+      throw e;
     }
   }
 
