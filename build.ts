@@ -9,6 +9,7 @@
 import css from '@webref/css';
 import esMain from 'es-main';
 import fs from 'fs-extra';
+import prettier from 'prettier';
 import idl from '@webref/idl';
 import * as WebIDL2 from 'webidl2';
 import * as YAML from 'yaml';
@@ -78,6 +79,17 @@ const compileCustomTest = (code: string, format = true): string => {
   if (format) {
     // Wrap in a function
     code = `(function() {\n  ${code}\n})();`;
+
+    try {
+      // Use Prettier to format code
+      code = prettier.format(code, {parser: 'babel'});
+    } catch (e) {
+      if (e instanceof SyntaxError) {
+        return `throw 'Test is malformed: ${e.message}';`;
+      } else {
+        throw e;
+      }
+    }
   }
 
   return code;
