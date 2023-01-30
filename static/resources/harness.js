@@ -454,9 +454,25 @@
     return output;
   }
 
-  function testCSSProperty(name) {
+  /**
+   * Test a CSS property for support
+   *
+   * name (string): The CSS property name
+   * value (string?): The CSS property value
+   *
+   * returns (TestResult): Whether the property is supported; if `value` is present,
+   *   whether that value is supported with the property
+   */
+  function testCSSProperty(name, value) {
     if ('CSS' in window && window.CSS.supports) {
-      return window.CSS.supports(name, 'inherit');
+      return window.CSS.supports(name, value || 'inherit');
+    }
+
+    if (value) {
+      var div = document.createElement('div');
+      div.style[name] = '';
+      div.style[name] = value;
+      return div.style.getPropertyValue(name) !== '';
     }
 
     var attrs = [name];
@@ -469,17 +485,6 @@
     }
 
     return false;
-  }
-
-  function testCSSPropertyValue(name, value) {
-    if ('CSS' in window && window.CSS.supports) {
-      return window.CSS.supports(name, value);
-    }
-
-    var div = document.createElement('div');
-    div.style[name] = '';
-    div.style[name] = value;
-    return div.style.getPropertyValue(name) !== '';
   }
 
   /**
@@ -1368,7 +1373,6 @@
     testObjectName: testObjectName,
     testOptionParam: testOptionParam,
     testCSSProperty: testCSSProperty,
-    testCSSPropertyValue: testCSSPropertyValue,
     addInstance: addInstance,
     addTest: addTest,
     runTests: runTests,
