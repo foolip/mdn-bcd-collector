@@ -225,11 +225,59 @@
     };
   }
 
+  /**
+   * This function tests to see if a parameter or option within an object is accessed
+   * during a method call. It passes an object as the first paramter to the method, calls the method, and checks to see if the option was accessed during the call.
+   *
+   * XXX This can only test with the first argument.  To test the second, third, etc. argument, wrap the method in a function.  Example:
+   *   function foo(opts) {
+   *     instance.doTheThing(one, two, opts);
+   *   }
+   *   return bcd.testOptionParam(foo, null, 'bar', 'apple');
+   *
+   * instance: A function, constructor, or object to test
+   * methodName: The name(s) of a method to test; leave empty if instance is function, or
+   *   set to 'constructor' if instance is constructor
+   * optName: The name of the option to test; leave empty to pass "optValue" as directly
+   *   as the argument
+   * optValue: The value of the option to test; if "optName" is empty, this will be
+   *   passed directly as the argument
+   * otherOptions: An object containing other options to set, in case of required options;
+   *   if "optName" is empty, this has no effect
+   *
+   * Examples:
+   *
+   *   Simple:
+   *     bcd.testOptionParam(instance, 'doTheThing', 'bar', 'apple');
+   *     ->
+   *    instance.doTheThing({bar: <'apple'>});
+   *
+   *   With otherOptions:
+   *     bcd.testOptionParam(instance, 'doTheThing', 'bar', 'apple', {fruits: true});
+   *     ->
+   *     instance.doTheThing({fruits, true, bar: <'apple'>});
+   *
+   *   No Method Name:
+   *     bcd.testOptionParam(instance, null, 'bar', 'apple');
+   *     ->
+   *     instance({bar: <'apple'>});
+   *
+   *   Constructor:
+   *     bcd.testOptionParam(instance, 'constructor', 'bar', 'apple');
+   *     ->
+   *     new instance({bar: <'apple'>});
+   *
+   *   No optName:
+   *     bcd.testOptionParam(instance, 'doTheThing', null, 'apple');
+   *     ->
+   *     instance.doTheThing(<'apple'>);
+   *
+   */
   function testOptionParam(
     instance,
     methodName,
-    paramName,
-    paramValue,
+    optName,
+    optValue,
     otherOptions
   ) {
     if (!('Object' in self && 'defineProperty' in Object)) {
@@ -261,13 +309,13 @@
     var paramObj = {
       get: function () {
         accessed = true;
-        return paramValue;
+        return optValue;
       }
     };
     var options;
 
-    if (paramName) {
-      options = Object.defineProperty(otherOptions || {}, paramName, paramObj);
+    if (optName) {
+      options = Object.defineProperty(otherOptions || {}, optName, paramObj);
     } else {
       options = paramObj;
     }
