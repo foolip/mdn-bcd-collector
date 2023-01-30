@@ -16,7 +16,6 @@ import sass from 'sass';
 
 const generatedDir = fileURLToPath(new URL('./generated', import.meta.url));
 
-/* c8 ignore start */
 const copyResources = async () => {
   const resources = [
     ['json3/lib/json3.min.js', 'resources'],
@@ -74,4 +73,3 @@ const prepareResources = async () => {
 if (esMain(import.meta)) {
   await prepareResources();
 }
-/* c8 ignore stop */
