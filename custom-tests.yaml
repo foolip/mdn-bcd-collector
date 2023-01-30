@@ -1058,7 +1058,7 @@ api:
             options
           )
         }
-        return bcd.testOptionParam(animate, '', 'composite', 'replace');
+        return bcd.testOptionParam(animate, null, 'composite', 'replace');
       animate.options_id_parameter: |-
         function animate(options) {
           instance.animate(
@@ -1069,7 +1069,7 @@ api:
             options
           )
         }
-        return bcd.testOptionParam(animate, '', 'id', '');
+        return bcd.testOptionParam(animate, null, 'id', '');
       animate.options_iterationComposite_parameter: |-
         function animate(options) {
           instance.animate(
@@ -1080,7 +1080,7 @@ api:
             options
           )
         }
-        return bcd.testOptionParam(animate, '', 'iterationComposite', '');
+        return bcd.testOptionParam(animate, null, 'iterationComposite', '');
       animate.options_pseudoElement_parameter: |-
         function animate(options) {
           instance.animate(
@@ -1091,7 +1091,7 @@ api:
             options
           )
         }
-        return bcd.testOptionParam(animate, '', 'pseudoElement', '');
+        return bcd.testOptionParam(animate, null, 'pseudoElement', '');
       attachShadow.init_delegatesFocus_parameter: return bcd.testOptionParam(instance, 'attachShadow', 'delegatesFocus', true);
       getElementsByTagName.all_elements_selector: |-
         instance.append(document.createElement('p'));
@@ -1099,6 +1099,10 @@ api:
       getElementsByTagNameNS.all_elements_selector: |-
         instance.append(document.createElement('p'));
         return instance.getElementsByTagNameNS("http://www.w3.org/1999/xhtml", "*").length > 0;
+      requestFullscreen.options_navigationUI_parameter: return bcd.testOptionParam(instance, 'requestFullscreen', 'navigationUI', false);
+      requestFullscreen.returns_promise: |-
+        var value = instance.requestFullscreen();
+        return 'then' in value;
       scroll.options_behavior_parameter: return bcd.testOptionParam(instance, 'scroll', 'behavior', 'auto');
       scroll.options_left_parameter: return bcd.testOptionParam(instance, 'scroll', 'left', '0');
       scroll.options_top_parameter: return bcd.testOptionParam(instance, 'scroll', 'top', '0');
