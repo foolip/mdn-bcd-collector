@@ -1093,6 +1093,7 @@
   }
 
   global.stringify = stringify;
+  global.stringIncludes = stringIncludes;
   global.reusableInstances = reusableInstances;
   global.bcd = {
     testConstructor: testConstructor,
