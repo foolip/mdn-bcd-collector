@@ -85,8 +85,10 @@ const compileCustomTest = (code: string, format = true): string => {
       code = prettier.format(code, {parser: 'babel'});
     } catch (e) {
       if (e instanceof SyntaxError) {
-        return `throw 'Test is malformed: ${e.message}';`;
+        return `(function () {\n  throw "Test is malformed: ${e.message}";\n})();`;
       }
+      // We should never reach the next line
+      /* c8 ignore next */
       throw e;
     }
   }
