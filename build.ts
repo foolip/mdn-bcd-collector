@@ -943,7 +943,7 @@ const buildCSS = (specCSS, customCSS) => {
     ).sort() as any[]) {
       const values = Array.isArray(value) ? value : [value];
       const code = values
-        .map((value) => `bcd.testCSSPropertyValue("${name}", "${value}")`)
+        .map((value) => `bcd.testCSSProperty("${name}", "${value}")`)
         .join(' || ');
       tests[`css.properties.${name}.${key}`] = compileTest({
         raw: {code: code},
