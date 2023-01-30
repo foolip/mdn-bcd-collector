@@ -141,7 +141,7 @@ describe('storage', () => {
       assert(storage instanceof MemoryStorage);
     });
 
-    it('production', () => {
+    it('production: GAE', () => {
       process.env.GOOGLE_CLOUD_PROJECT = 'test-project';
       process.env.GCLOUD_STORAGE_BUCKET = 'test-bucket';
 
@@ -149,11 +149,22 @@ describe('storage', () => {
       assert(storage instanceof CloudStorage);
       assert.equal((storage as CloudStorage)._bucket.name, 'test-bucket');
       assert.equal((storage as CloudStorage)._version, 'test-version');
-    });
 
-    afterEach(() => {
       delete process.env.GOOGLE_CLOUD_PROJECT;
       delete process.env.GCLOUD_STORAGE_BUCKET;
+    });
+
+    it('production: Heroku + GAE', () => {
+      process.env.HDRIVE_GOOGLE_JSON_KEY = '{"project_id": "test-project"}';
+      process.env.HDRIVE_GOOGLE_BUCKET = 'test-bucket';
+
+      const storage = getStorage('test-version');
+      assert(storage instanceof CloudStorage);
+      assert.equal((storage as CloudStorage)._bucket.name, 'test-bucket');
+      assert.equal((storage as CloudStorage)._version, 'test-version');
+
+      delete process.env.HDRIVE_GOOGLE_JSON_KEY;
+      delete process.env.HDRIVE_GOOGLE_BUCKET;
     });
   });
 });
