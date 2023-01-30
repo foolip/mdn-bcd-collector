@@ -88,7 +88,7 @@ api:
     __test: return !!scope;
     specialWorklet: return scope && 'specialWorklet' in scope;
   Document:
-    charset: return document.charset == "UTF-8";
+    characterSet: return document.characterSet == "UTF-8";
     __additional:
       loaded.loaded_is_boolean: return typeof document.loaded === "boolean";
 css:
