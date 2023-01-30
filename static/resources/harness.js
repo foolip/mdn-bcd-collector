@@ -258,12 +258,19 @@
     }
 
     var accessed = false;
-    var options = Object.defineProperty(otherOptions || {}, paramName, {
+    var paramObj = {
       get: function () {
         accessed = true;
         return paramValue;
       }
-    });
+    };
+    var options;
+
+    if (paramName) {
+      options = Object.defineProperty(otherOptions || {}, paramName, paramObj);
+    } else {
+      options = paramObj;
+    }
 
     if (methodName === 'constructor') {
       // If methodName is 'constructor', we're testing a constructor
