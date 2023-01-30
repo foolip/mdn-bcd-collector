@@ -8,7 +8,7 @@
 
 import {assert} from 'chai';
 
-import {getFilePath} from '../../add-new-bcd.js';
+import {recursiveAdd, getFilePath} from '../../add-new-bcd.js';
 
 describe('add-new-bcd', () => {
   describe('API', () => {
@@ -110,5 +110,11 @@ describe('add-new-bcd', () => {
 
   it('Unknown part of BCD', () => {
     assert.throws(() => getFilePath(['lol', 'no']));
+  });
+
+  it('recursiveAdd', () => {
+    const data: any = {foo: {bar: {}}};
+    recursiveAdd(['foo', 'bar', 'apple'], 0, data, {status: 'ripe'});
+    assert.strictEqual(data.foo.bar.apple.status, 'ripe');
   });
 });
