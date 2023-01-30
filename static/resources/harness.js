@@ -178,6 +178,13 @@
     return result;
   }
 
+  /**
+   * This function tests to ensure an object prototype's name matches an entry in an explicit list of names
+   *
+   * instance: An object to test
+   * names: The valid name(s); may be a string or array of strings
+   *
+   */
   function testObjectName(instance, names) {
     // Do not reject "falsey" values generally in order to support
     // `document.all`
