@@ -327,6 +327,15 @@ describe('build', () => {
         );
         assert.isTrue((console.error as any).calledOnce);
       });
+
+      it('bad syntax', () => {
+        assert.isTrue(
+          (getCustomTestAPI('syntaxerror') as string).includes(
+            'throw "Test is malformed:'
+          )
+        );
+        assert.isTrue((console.error as any).calledOnce);
+      });
     });
 
     afterEach(() => {
