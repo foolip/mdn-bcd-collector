@@ -606,6 +606,10 @@ api:
         return {result: false, message: 'CountQueuingStrategy is not defined'};
       }
       var instance = new CountQueuingStrategy({ highWaterMark: 1 });
+  CredentialsContainer:
+    __base: var instance = navigator.credentials;
+    __additional:
+      get.identity_option: return bcd.testOptionParam(instance, 'get', 'identity', 'use');
   Crypto:
     __base: |-
       if (!('crypto' in self)) {
@@ -753,7 +757,7 @@ api:
           instance.insertRule('a {color: blue;}');
           return true;
         } catch(e) {
-          if (e instanceof TypeError || e.message === 'WRONG_ARGUMENTS_ERR') {
+          if (e instanceof TypeError || stringIncludes(e.message, ['WRONG_ARGUMENTS_ERR', 'Not enough arguments'])) {
             return {result: false, message: e.message};
           }
           return e;
@@ -785,6 +789,39 @@ api:
           throw e;
         }
       }
+  DecompressionStream:
+    __base: var instance = new DecompressionStream("gzip");
+    __additional:
+      DecompressionStream.deflate: |-
+        try {
+          new DecompressionStream("deflate");
+          return true;
+        } catch(e) {
+          if (e instanceof TypeError) {
+            return {result: false, message: e.message};
+          }
+          return e;
+        }
+      DecompressionStream.deflate-raw: |-
+        try {
+          new DecompressionStream("deflate-raw");
+          return true;
+        } catch(e) {
+          if (e instanceof TypeError) {
+            return {result: false, message: e.message};
+          }
+          return e;
+        }
+      DecompressionStream.gzip: |-
+        try {
+          new DecompressionStream("gzip");
+          return true;
+        } catch(e) {
+          if (e instanceof TypeError) {
+            return {result: false, message: e.message};
+          }
+          return e;
+        }
   DelayNode:
     __resources:
       - audioContext
@@ -833,6 +870,25 @@ api:
       }
   Document:
     __base: var instance = document;
+    __additional:
+      createElement.options_parameter: return bcd.testOptionParam(instance, 'createElement', '', {});
+      createElementNS.options_parameter: return bcd.testOptionParam(instance, 'createElementNS', '', {});
+      createTreeWalker.whatToShow_filter_parameters_optional: |-
+        try {
+          instance.createTreeWalker(document.body);
+          return true;
+        } catch(e) {
+          if (stringIncludes(e.message, ['WRONG_ARGUMENTS_ERR', 'Not enough arguments'])) {
+            return {result: false, message: e.message};
+          }
+          return e;
+        }
+      exitFullscreen.returns_promise: |-
+        if (!('Promise' in self)) {
+          return {result: false, message: 'Promises are not supported'};
+        }
+        var value = document.exitFullscreen();
+        return 'then' in value;
   DocumentFragment:
     __base: |-
       if (!('createDocumentFragment' in document)) {
@@ -873,6 +929,43 @@ api:
       } else {
         return {result: false, message: 'DOMMatrix, WebKitCSSMatrix and SVGMatrix are not defined.'}
       }
+  DOMParser:
+    __base: |-
+      if (!('DOMParser' in self)) {
+        return {result: false, message: 'DOMParser is not defined'}
+      }
+      var instance = new DOMParser();
+    __additional:
+      parseFromString.html: |-
+        try {
+          instance.parseFromString('<html></html>', 'text/html');
+          return true;
+        } catch(e) {
+          if (e instanceof TypeError) {
+            return {result: false, message: e.message};
+          }
+          return e;
+        }
+      parseFromString.svg: |-
+        try {
+          instance.parseFromString('<circle />', 'image/svg+xml');
+          return true;
+        } catch(e) {
+          if (e instanceof TypeError) {
+            return {result: false, message: e.message};
+          }
+          return e;
+        }
+      parseFromString.xml: |-
+        try {
+          instance.parseFromString('<foo />', 'text/xml');
+          return true;
+        } catch(e) {
+          if (e instanceof TypeError) {
+            return {result: false, message: e.message};
+          }
+          return e;
+        }
   DOMRectList:
     __base: |-
       <%api.Element:el%>
@@ -885,6 +978,9 @@ api:
       var elm = document.createElement('b');
       var instance = elm.classList;
     __additional:
+      add.multiple_parameters: |-
+        instance.add("foo", "bar", "baz");
+        return elm.className === "foo bar baz";
       trim_whitespace: |-
         if (!instance) {
           return {result: false, message: 'Element.classList is not defined'};
@@ -899,6 +995,14 @@ api:
         elm.className = ' foo bar foo ';
         instance.remove('bar');
         return elm.className === 'foo';
+      remove.multiple_parameters: |-
+        instance.add("foo", "bar", "baz");
+        instance.remove("bar", "baz");
+        return elm.className === "foo";
+      replace.boolean_value: |-
+        instance.add("foo");
+        var value = instance.replace("foo", "bar");
+        return value === true;
       toggle.force_parameter: |-
         if (!instance) {
           return {result: false, message: 'Element.classList is not defined'};
@@ -2111,7 +2215,8 @@ api:
       }
   ProcessingInstruction:
     __base: |-
-      var doc = new DOMParser().parseFromString('<foo />', 'application/xml');
+      <%api.DOMParser:parser%>
+      var doc = parser.parseFromString('<foo />', 'application/xml');
       var instance = doc.createProcessingInstruction('xml-stylesheet', 'href="mycss.css" type="text/css"');
   ProgressEvent:
     __base: |-
