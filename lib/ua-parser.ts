@@ -63,7 +63,7 @@ const parseUA = (userAgent, browsers) => {
   }
 
   const os = data.os.name.toLowerCase();
-  if (os === 'android') {
+  if (os === 'android' && data.browser.id !== 'oculus') {
     data.browser.id += '_android';
     data.browser.name += ' Android';
 
