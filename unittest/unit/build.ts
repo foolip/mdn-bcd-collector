@@ -52,21 +52,33 @@ describe('build', () => {
       it('interface', () => {
         assert.equal(
           getCustomTestAPI('foo'),
-          '(function() {\n  var instance = 1;\n  return instance + 4;\n})();'
+          `(function () {
+  var instance = 1;
+  return instance + 4;
+})();
+`
         );
       });
 
       it('member (custom)', () => {
         assert.equal(
           getCustomTestAPI('foo', 'bar'),
-          '(function() {\n  var instance = 1;\n  return 1 + 1;\n})();'
+          `(function () {
+  var instance = 1;
+  return 1 + 1;
+})();
+`
         );
       });
 
       it('member (default)', () => {
         assert.equal(
           getCustomTestAPI('foo', 'baz'),
-          "(function() {\n  var instance = 1;\n  return !!instance && 'baz' in instance;\n})();"
+          `(function () {
+  var instance = 1;
+  return !!instance && "baz" in instance;
+})();
+`
         );
       });
 
@@ -77,7 +89,13 @@ describe('build', () => {
       it('symbol', () => {
         assert.equal(
           getCustomTestAPI('foo', '@@bar', 'symbol'),
-          "(function() {\n  var instance = 1;\n  return !!instance && 'Symbol' in self && 'bar' in Symbol && Symbol.bar in instance;\n})();"
+          `(function () {
+  var instance = 1;
+  return (
+    !!instance && "Symbol" in self && "bar" in Symbol && Symbol.bar in instance
+  );
+})();
+`
         );
       });
     });
@@ -86,7 +104,10 @@ describe('build', () => {
       it('interface', () => {
         assert.equal(
           getCustomTestAPI('fig'),
-          '(function() {\n  return 2;\n})();'
+          `(function () {
+  return 2;
+})();
+`
         );
       });
 
@@ -99,14 +120,22 @@ describe('build', () => {
       it('interface', () => {
         assert.equal(
           getCustomTestAPI('apple'),
-          '(function() {\n  var a = 1;\n  return !!instance;\n})();'
+          `(function () {
+  var a = 1;
+  return !!instance;
+})();
+`
         );
       });
 
       it('member', () => {
         assert.equal(
           getCustomTestAPI('apple', 'bar'),
-          '(function() {\n  var a = 1;\n  return a + 3;\n})();'
+          `(function () {
+  var a = 1;
+  return a + 3;
+})();
+`
         );
       });
     });
@@ -115,21 +144,52 @@ describe('build', () => {
       it('interface', () => {
         assert.equal(
           getCustomTestAPI('promise'),
-          "(function() {\n  var promise = somePromise();\n  if (!promise) {\n    return {result: false, message: 'Promise variable is falsy'};\n  }\n  return promise.then(function(instance) {\n    return !!instance;\n  });\n})();"
+          `(function () {
+  var promise = somePromise();
+  if (!promise) {
+    return { result: false, message: "Promise variable is falsy" };
+  }
+  return promise.then(function (instance) {
+    return !!instance;
+  });
+})();
+`
         );
       });
 
       it('member', () => {
         assert.equal(
           getCustomTestAPI('promise', 'bar'),
-          "(function() {\n  var promise = somePromise();\n  if (!promise) {\n    return {result: false, message: 'Promise variable is falsy'};\n  }\n  return promise.then(function(instance) {\n    return !!instance && 'bar' in instance;\n  });\n})();"
+          `(function () {
+  var promise = somePromise();
+  if (!promise) {
+    return { result: false, message: "Promise variable is falsy" };
+  }
+  return promise.then(function (instance) {
+    return !!instance && "bar" in instance;
+  });
+})();
+`
         );
       });
 
       it('interface with import', () => {
         assert.equal(
           getCustomTestAPI('newpromise'),
-          "(function() {\n  var p = somePromise();\n  if (!p) {\n    return {result: false, message: 'p is falsy'};\n  }\n  var promise = p.then(function() {});\n  if (!promise) {\n    return {result: false, message: 'Promise variable is falsy'};\n  }\n  return promise.then(function(instance) {\n    return !!instance;\n  });\n})();"
+          `(function () {
+  var p = somePromise();
+  if (!p) {
+    return { result: false, message: "p is falsy" };
+  }
+  var promise = p.then(function () {});
+  if (!promise) {
+    return { result: false, message: "Promise variable is falsy" };
+  }
+  return promise.then(function (instance) {
+    return !!instance;
+  });
+})();
+`
         );
       });
     });
@@ -138,21 +198,63 @@ describe('build', () => {
       it('interface', () => {
         assert.equal(
           getCustomTestAPI('callback'),
-          "(function() {\n  function onsuccess(res) {\n    callback(res.result);\n  }\n  function callback(instance) {\n    try {\n      success(!!instance);\n    } catch(e) {\n      fail(e);\n    }\n  };\n  return 'callback';\n})();"
+          `(function () {
+  function onsuccess(res) {
+    callback(res.result);
+  }
+  function callback(instance) {
+    try {
+      success(!!instance);
+    } catch (e) {
+      fail(e);
+    }
+  }
+  return "callback";
+})();
+`
         );
       });
 
       it('member', () => {
         assert.equal(
           getCustomTestAPI('callback', 'bar'),
-          "(function() {\n  function onsuccess(res) {\n    callback(res.result);\n  }\n  function callback(instance) {\n    try {\n      success(!!instance && 'bar' in instance);\n    } catch(e) {\n      fail(e);\n    }\n  };\n  return 'callback';\n})();"
+          `(function () {
+  function onsuccess(res) {
+    callback(res.result);
+  }
+  function callback(instance) {
+    try {
+      success(!!instance && "bar" in instance);
+    } catch (e) {
+      fail(e);
+    }
+  }
+  return "callback";
+})();
+`
         );
       });
 
       it('interface with import', () => {
         assert.equal(
           getCustomTestAPI('newcallback'),
-          "(function() {\n  function onsuccess(res) {\n  c(res.result);\n}\n  function c(result) {\n    callback(result);\n  }\n  function callback(instance) {\n    try {\n      success(!!instance);\n    } catch(e) {\n      fail(e);\n    }\n  };\n  return 'callback';\n})();"
+          `(function () {
+  function onsuccess(res) {
+    c(res.result);
+  }
+  function c(result) {
+    callback(result);
+  }
+  function callback(instance) {
+    try {
+      success(!!instance);
+    } catch (e) {
+      fail(e);
+    }
+  }
+  return "callback";
+})();
+`
         );
       });
     });
@@ -161,29 +263,56 @@ describe('build', () => {
       it('valid import', () => {
         assert.equal(
           getCustomTestAPI('import1'),
-          "(function() {\n  var a = 1;\n  if (!a) {\n    return {result: false, message: 'a is falsy'};\n  }\n  var instance = a;\n  return !!instance;\n})();"
+          `(function () {
+  var a = 1;
+  if (!a) {
+    return { result: false, message: "a is falsy" };
+  }
+  var instance = a;
+  return !!instance;
+})();
+`
         );
       });
 
       it('valid import: two imports', () => {
-        // XXX The "var b = a;" should be indented...
         assert.equal(
           getCustomTestAPI('import2'),
-          "(function() {\n  var a = 1;\n  if (!a) {\n    return {result: false, message: 'a is falsy'};\n  }\nvar b = a;\n  if (!b) {\n    return {result: false, message: 'b is falsy'};\n  }\n  var instance = b;\n  return !!instance;\n})();"
+          `(function () {
+  var a = 1;
+  if (!a) {
+    return { result: false, message: "a is falsy" };
+  }
+  var b = a;
+  if (!b) {
+    return { result: false, message: "b is falsy" };
+  }
+  var instance = b;
+  return !!instance;
+})();
+`
         );
       });
 
       it('valid import: import is instance', () => {
         assert.equal(
           getCustomTestAPI('straightimport'),
-          '(function() {\n  var instance = 1;\n  return !!instance;\n})();'
+          `(function () {
+  var instance = 1;
+  return !!instance;
+})();
+`
         );
       });
 
       it('invalid import: 1st', () => {
         assert.equal(
           getCustomTestAPI('badimport'),
-          "(function() {\n  throw 'Test is malformed: <%api.foobar:apple%> is an invalid reference';\n  return !!instance;\n})();"
+          `(function () {
+  throw "Test is malformed: <%api.foobar:apple%> is an invalid reference";
+  return !!instance;
+})();
+`
         );
         assert.isTrue((console.error as any).calledOnce);
       });
@@ -191,7 +320,11 @@ describe('build', () => {
       it('invalid import: 2nd', () => {
         assert.equal(
           getCustomTestAPI('badimport2'),
-          "(function() {\n  throw 'Test is malformed: <%api.foobar.bar:apple%> is an invalid reference';\n  return !!instance;\n})();"
+          `(function () {
+  throw "Test is malformed: <%api.foobar.bar:apple%> is an invalid reference";
+  return !!instance;
+})();
+`
         );
         assert.isTrue((console.error as any).calledOnce);
       });
@@ -205,9 +338,16 @@ describe('build', () => {
   describe('getCustomSubtestsAPI', () => {
     it('get subtests', () => {
       assert.deepEqual(getCustomSubtestsAPI('foo'), {
-        multiple:
-          '(function() {\n  var instance = 1;\n  return 1 + 1 + 1;\n})();',
-        'one.only': '(function() {\n  var instance = 1;\n  return 1;\n})();'
+        multiple: `(function () {
+  var instance = 1;
+  return 1 + 1 + 1;
+})();
+`,
+        'one.only': `(function () {
+  var instance = 1;
+  return 1;
+})();
+`
       });
     });
   });
@@ -224,7 +364,11 @@ describe('build', () => {
       assert.deepEqual(getCustomResourcesAPI('WebGLRenderingContext'), {
         webGL: {
           type: 'instance',
-          src: "var canvas = document.createElement('canvas');\nif (!canvas) {\n  return false;\n};\nreturn canvas.getContext('webgl2') || canvas.getContext('webgl') || canvas.getContext('experimental-webgl');"
+          src: `var canvas = document.createElement('canvas');
+if (!canvas) {
+  return false;
+};
+return canvas.getContext('webgl2') || canvas.getContext('webgl') || canvas.getContext('experimental-webgl');`
         }
       });
     });
@@ -252,14 +396,20 @@ describe('build', () => {
     it('custom test for property', () => {
       assert.equal(
         getCustomTestCSS('foo'),
-        '(function() {\n  return 1;\n})();'
+        `(function () {
+  return 1;
+})();
+`
       );
     });
 
     it('import (not implemented)', () => {
       assert.equal(
         getCustomTestCSS('bar'),
-        "(function() {\n  throw 'Test is malformed: import <%css.properties.foo:a%>, category css is not importable';\n})();"
+        `(function () {
+  throw "Test is malformed: import <%css.properties.foo:a%>, category css is not importable";
+})();
+`
       );
     });
   });
@@ -921,15 +1071,33 @@ describe('build', () => {
 
       assert.deepEqual(buildIDLTests(ast, [], scopes), {
         'api.ANGLE_instanced_arrays': {
-          code: "(function() {\n  var canvas = document.createElement('canvas');\n  var gl = canvas.getContext('webgl');\n  var instance = gl.getExtension('ANGLE_instanced_arrays');\n  return !!instance;\n})();",
+          code: `(function () {
+  var canvas = document.createElement("canvas");
+  var gl = canvas.getContext("webgl");
+  var instance = gl.getExtension("ANGLE_instanced_arrays");
+  return !!instance;
+})();
+`,
           exposure: ['Window']
         },
         'api.ANGLE_instanced_arrays.drawArraysInstancedANGLE': {
-          code: "(function() {\n  var canvas = document.createElement('canvas');\n  var gl = canvas.getContext('webgl');\n  var instance = gl.getExtension('ANGLE_instanced_arrays');\n  return true && instance && 'drawArraysInstancedANGLE' in instance;\n})();",
+          code: `(function () {
+  var canvas = document.createElement("canvas");
+  var gl = canvas.getContext("webgl");
+  var instance = gl.getExtension("ANGLE_instanced_arrays");
+  return true && instance && "drawArraysInstancedANGLE" in instance;
+})();
+`,
           exposure: ['Window']
         },
         'api.ANGLE_instanced_arrays.drawElementsInstancedANGLE': {
-          code: "(function() {\n  var canvas = document.createElement('canvas');\n  var gl = canvas.getContext('webgl');\n  var instance = gl.getExtension('ANGLE_instanced_arrays');\n  return !!instance && 'drawElementsInstancedANGLE' in instance;\n})();",
+          code: `(function () {
+  var canvas = document.createElement("canvas");
+  var gl = canvas.getContext("webgl");
+  var instance = gl.getExtension("ANGLE_instanced_arrays");
+  return !!instance && "drawElementsInstancedANGLE" in instance;
+})();
+`,
           exposure: ['Window']
         },
         'api.Document': {
@@ -937,7 +1105,10 @@ describe('build', () => {
           exposure: ['Window']
         },
         'api.Document.characterSet': {
-          code: '(function() {\n  return document.characterSet == "UTF-8";\n})();',
+          code: `(function () {
+  return document.characterSet == "UTF-8";
+})();
+`,
           exposure: ['Window']
         },
         'api.Document.loaded': {
@@ -945,7 +1116,10 @@ describe('build', () => {
           exposure: ['Window']
         },
         'api.Document.loaded.loaded_is_boolean': {
-          code: '(function() {\n  return typeof document.loaded === "boolean";\n})();',
+          code: `(function () {
+  return typeof document.loaded === "boolean";
+})();
+`,
           exposure: ['Window']
         }
       });
@@ -1376,11 +1550,19 @@ describe('build', () => {
 
       assert.deepEqual(buildIDLTests(ast, [], scopes), {
         'api.Scope': {
-          code: '(function() {\n  var scope = Scope;\n  return !!scope;\n})();',
+          code: `(function () {
+  var scope = Scope;
+  return !!scope;
+})();
+`,
           exposure: ['Window']
         },
         'api.Scope.specialWorklet': {
-          code: "(function() {\n  var scope = Scope;\n  return scope && 'specialWorklet' in scope;\n})();",
+          code: `(function () {
+  var scope = Scope;
+  return scope && "specialWorklet" in scope;
+})();
+`,
           exposure: ['Window']
         }
       });
@@ -1453,9 +1635,15 @@ describe('build', () => {
 
     it('invalid idl', () => {
       const ast = WebIDL2.parse(`interface Invalid {};`);
-      assert.throws(() => {
-        validateIDL(ast);
-      }, 'Web IDL validation failed:\nValidation error at line 1, inside `interface Invalid`:\ninterface Invalid {};\n          ^ Interfaces must have `[Exposed]` extended attribute. To fix, add, for example, `[Exposed=Window]`. Please also consider carefully if your interface should also be exposed in a Worker scope. Refer to the [WebIDL spec section on Exposed](https://heycam.github.io/webidl/#Exposed) for more information. [require-exposed]');
+      assert.throws(
+        () => {
+          validateIDL(ast);
+        },
+        `Web IDL validation failed:
+Validation error at line 1, inside \`interface Invalid\`:
+interface Invalid {};
+          ^ Interfaces must have \`[Exposed]\` extended attribute. To fix, add, for example, \`[Exposed=Window]\`. Please also consider carefully if your interface should also be exposed in a Worker scope. Refer to the [WebIDL spec section on Exposed](https://heycam.github.io/webidl/#Exposed) for more information. [require-exposed]`
+      );
     });
 
     it('unknown types', () => {
@@ -1557,7 +1745,10 @@ describe('build', () => {
 
       assert.deepEqual(buildCSS(css, {properties: {}}), {
         'css.properties.foo': {
-          code: '(function() {\n  return 1;\n})();',
+          code: `(function () {
+  return 1;
+})();
+`,
           exposure: ['Window']
         }
       });
@@ -1584,7 +1775,10 @@ describe('build', () => {
 
       assert.deepEqual(buildCSS(css, {properties: {}}), {
         'css.properties.bar': {
-          code: "(function() {\n  throw 'Test is malformed: import <%css.properties.foo:a%>, category css is not importable';\n})();",
+          code: `(function () {
+  throw "Test is malformed: import <%css.properties.foo:a%>, category css is not importable";
+})();
+`,
           exposure: ['Window']
         }
       });
@@ -1617,7 +1811,14 @@ describe('build', () => {
         exposure: ['Window']
       },
       'javascript.builtins.AggregateError.AggregateError': {
-        code: "(function() {\n  if (!(\"AggregateError\" in self)) {\n    return {result: false, message: 'AggregateError is not defined'};\n  }\n  var instance = new AggregateError([new Error('message')]);\n  return !!instance;\n})();",
+        code: `(function () {
+  if (!("AggregateError" in self)) {
+    return { result: false, message: "AggregateError is not defined" };
+  }
+  var instance = new AggregateError([new Error("message")]);
+  return !!instance;
+})();
+`,
         exposure: ['Window']
       },
       'javascript.builtins.Array': {
@@ -1633,7 +1834,14 @@ describe('build', () => {
         exposure: ['Window']
       },
       'javascript.builtins.Array.Array': {
-        code: '(function() {\n  if (!("Array" in self)) {\n    return {result: false, message: \'Array is not defined\'};\n  }\n  var instance = new Array(2);\n  return !!instance;\n})();',
+        code: `(function () {
+  if (!("Array" in self)) {
+    return { result: false, message: "Array is not defined" };
+  }
+  var instance = new Array(2);
+  return !!instance;
+})();
+`,
         exposure: ['Window']
       },
       'javascript.builtins.Array.at': {
@@ -1653,7 +1861,14 @@ describe('build', () => {
         exposure: ['Window']
       },
       'javascript.builtins.BigInt.BigInt': {
-        code: '(function() {\n  if (!("BigInt" in self)) {\n    return {result: false, message: \'BigInt is not defined\'};\n  }\n  var instance =  BigInt(1);\n  return !!instance;\n})();',
+        code: `(function () {
+  if (!("BigInt" in self)) {
+    return { result: false, message: "BigInt is not defined" };
+  }
+  var instance = BigInt(1);
+  return !!instance;
+})();
+`,
         exposure: ['Window']
       }
     });
