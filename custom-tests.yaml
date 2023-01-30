@@ -286,6 +286,11 @@ api:
     __base: var instance = reusableInstances.audioContext;
     __test: return 'BaseAudioContext' in self;
     __additional:
+      createPeriodicWave.constraints_disableNormalization_parameter: |-
+        function create(constraints) {
+          instance.createPeriodicWave([0, 1], [0, 0], constraints);
+        }
+        return bcd.testOptionParam(create, null, 'disableNormalization', true);
       decodeAudioData.returns_promise: |-
         <%api.BaseAudioContext:ctx%>
         return ctx.decodeAudioData.length === 1;
@@ -364,6 +369,18 @@ api:
     __base: |-
       <%api.CanvasRenderingContext2D:ctx%>
       var instance = ctx.createPattern(document.getElementById('resource-image-black'), 'repeat');
+    __additional:
+      setTransform.dommatrix: |-
+        <%api.DOMMatrix:matrix%>
+        try {
+          instance.setTransform(matrix);
+          return true;
+        } catch(e) {
+          if (e instanceof TypeError) {
+            return {result: false, message: e.message};
+          }
+          return e;
+        }
   CanvasRenderingContext2D:
     __resources:
       - image-black # Used in drawImage.ImageBitmap_source_image, XXX remove when imports include resources
@@ -378,9 +395,17 @@ api:
       };
       var instance = canvas.getContext('2d');
     __additional:
+      clip.path_parameter: |-
+        <%api.Path2D:path%>
+        try {
+          instance.clip(path);
+          return true;
+        } catch(e) {
+          return {result: false, message: e.message};
+        }
       drawFocusIfNeeded.path_parameter: |-
-        var path = new Path2D();
-        var el = document.createElement('p');
+        <%api.Path2D:path%>
+        <%api.HTMLElement:el%>
         try {
           instance.drawFocusIfNeeded(path, el);
           return true;
@@ -413,10 +438,42 @@ api:
           }
           throw e;
         }
+      fill.path_parameter: |-
+        <%api.Path2D:path%>
+        try {
+          instance.fill(path);
+          return true;
+        } catch(e) {
+          return {result: false, message: e.message};
+        }
+      isPointInPath.path_parameter: |-
+        <%api.Path2D:path%>
+        try {
+          instance.isPointInPath(path, 0, 0);
+          return true;
+        } catch(e) {
+          return {result: false, message: e.message};
+        }
+      isPointInStroke.path_parameter: |-
+        <%api.Path2D:path%>
+        try {
+          instance.isPointInStroke(path, 0, 0);
+          return true;
+        } catch(e) {
+          return {result: false, message: e.message};
+        }
       setTransform.matrix_parameter: |-
         var matrix = new DOMMatrix([1, .2, .8, 1, 0, 0]);
         try {
           instance.setTransform(matrix);
+          return true;
+        } catch(e) {
+          return {result: false, message: e.message};
+        }
+      stroke.path_parameter: |-
+        <%api.Path2D:path%>
+        try {
+          instance.stroke(path);
           return true;
         } catch(e) {
           return {result: false, message: e.message};
@@ -454,6 +511,8 @@ api:
       });
   Clients:
     __base: var instance = clients;
+    __additional:
+      matchAll.options_includeUncontrolled_parameter: return bcd.testOptionParam(instance, 'matchAll', 'includeUncontrolled', true);
   Clipboard:
     __base: var instance = navigator.clipboard;
   CloseEvent:
@@ -655,6 +714,17 @@ api:
     __resources:
       - createStyleSheet
     __base: "var instance = reusableInstances.createStyleSheet('p {color: red;}');"
+    __additional:
+      insertRule.index_parameter_optional: |-
+        try {
+          instance.insertRule('a {color: blue;}');
+          return true;
+        } catch(e) {
+          if (e instanceof TypeError || e.message === 'WRONG_ARGUMENTS_ERR') {
+            return {result: false, message: e.message};
+          }
+          return e;
+        }
   CSSSupportsRule:
     __resources:
       - createStyleSheet
@@ -1930,6 +2000,12 @@ api:
         return {result: false, message: 'audioContext.createPanner is not defined'};
       }
       var instance = reusableInstances.audioContext.createPanner();
+  Path2D:
+    __base: |-
+      if (!('Path2D' in self)) {
+        return {result: false, message: 'Path2D is not defined'};
+      }
+      var instance = new Path2D();
   Performance:
     __base: |-
       if (!('performance' in self)) {
