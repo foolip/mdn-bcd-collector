@@ -2,7 +2,7 @@
 // mdn-bcd-collector: lib/storage.ts
 // Module to handle temporary storage for the web app, locally or in GAE
 //
-// © Google LLC, Gooborg Studios
+// © Gooborg Studios, Google LLC
 // See the LICENSE file for copyright details
 //
 

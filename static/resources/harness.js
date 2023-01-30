@@ -2,7 +2,7 @@
 // mdn-bcd-collector: static/resources/harness.js
 // Helpers and functions for running the tests in the browser
 //
-// © Google LLC, Gooborg Studios, Mozilla Corporation, Apple Inc
+// © Gooborg Studios, Google LLC, Mozilla Corporation, Apple Inc
 // See the LICENSE file for copyright details
 //
 

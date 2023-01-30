@@ -2,7 +2,7 @@
 // mdn-bcd-collector: unittest/unit/storage.ts
 // Unittest for the temporary storage handler
 //
-// © Google LLC, Gooborg Studios
+// © Gooborg Studios, Google LLC
 // See the LICENSE file for copyright details
 //
 

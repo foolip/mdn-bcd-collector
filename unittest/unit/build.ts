@@ -2,7 +2,7 @@
 // mdn-bcd-collector: unittest/unit/build.ts
 // Unittest for the test build script
 //
-// © Google LLC, Gooborg Studios, Apple Inc
+// © Gooborg Studios, Google LLC, Apple Inc
 // See the LICENSE file for copyright details
 //
 

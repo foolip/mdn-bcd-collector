@@ -5,7 +5,7 @@
 // See https://github.com/GooborgStudios/mdn-bcd-collector/blob/main/DESIGN.md#updating-bcd
 // for documentation on the approach taken in this script.
 //
-// © Google LLC, Gooborg Studios
+// © Gooborg Studios, Google LLC
 // See the LICENSE file for copyright details
 //
 

@@ -2,7 +2,7 @@
 // mdn-bcd-collector: unittest/unit/update-bcd.ts
 // Unittest for the BCD updater script
 //
-// © Google LLC, Gooborg Studios
+// © Gooborg Studios, Google LLC
 // See the LICENSE file for copyright details
 //
 

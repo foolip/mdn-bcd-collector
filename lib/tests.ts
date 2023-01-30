@@ -2,7 +2,7 @@
 // mdn-bcd-collector: lib/tests.ts
 // Module for handling the tests for the web app
 //
-// © Google LLC, Gooborg Studios
+// © Gooborg Studios, Google LLC
 // See the LICENSE file for copyright details
 //
 

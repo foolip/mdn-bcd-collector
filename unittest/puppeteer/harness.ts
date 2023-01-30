@@ -2,7 +2,7 @@
 // mdn-bcd-collector: unittest/puppeteer/harness.ts
 // Unittest for testing harness.js in multiple browsers
 //
-// © Google LLC, Gooborg Studios, Mozilla Corporation
+// © Gooborg Studios, Google LLC, Mozilla Corporation
 // See the LICENSE file for copyright details
 //
 

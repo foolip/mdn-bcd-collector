@@ -2,7 +2,7 @@
 // mdn-bcd-collector: unittest/unit/tests.ts
 // Unittest for the Tests class
 //
-// © Google LLC, Gooborg Studios
+// © Gooborg Studios, Google LLC
 // See the LICENSE file for copyright details
 //
 

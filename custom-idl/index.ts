@@ -2,7 +2,7 @@
 // mdn-bcd-collector: custom-idl/index.ts
 // Loader script to load the custom IDL to supplement @webref/idl
 //
-// © Google LLC, Gooborg Studios
+// © Gooborg Studios, Google LLC
 // See the LICENSE file for copyright details
 //
 

@@ -3,7 +3,7 @@
 // This module is responsible for getting results/reports out of the collector
 // web service into JSON files that can be used by update-bcd.ts.
 //
-// © Google LLC, Gooborg Studios
+// © Gooborg Studios, Google LLC
 // See the LICENSE file for copyright details
 //
 

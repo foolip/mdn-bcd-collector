@@ -2,7 +2,7 @@
 // mdn-bcd-collector: results.ts
 // Module to parse and handle test results
 //
-// © Google LLC, Gooborg Studios
+// © Gooborg Studios, Google LLC
 // See the LICENSE file for copyright details
 //
 

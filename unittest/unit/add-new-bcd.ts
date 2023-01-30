@@ -2,7 +2,7 @@
 // mdn-bcd-collector: unittest/unit/add-new-bcd.ts
 // Unittest for the script to add new features to BCD
 //
-// © Google LLC, Gooborg Studios
+// © Gooborg Studios, Google LLC
 // See LICENSE.txt for copyright details
 //
 

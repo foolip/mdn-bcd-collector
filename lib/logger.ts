@@ -2,7 +2,7 @@
 // mdn-bcd-collector: lib/logger.ts
 // Logging output module to log to either the console or GAE cloud
 //
-// © Google LLC, Gooborg Studios
+// © Gooborg Studios, Google LLC
 // See the LICENSE file for copyright details
 //
 
