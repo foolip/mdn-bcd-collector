@@ -423,38 +423,6 @@
   }
 
   /**
-   * Converts a CSS property name to an equivalent IDL attribute name
-   *
-   * property (string): The CSS property name
-   * lowercaseFirst (boolean?): (XXX Document me!)
-   *
-   * returns (string): The property name, camel-cased and without hyphens
-   */
-  function cssPropertyToIDLAttribute(property, lowercaseFirst) {
-    var output = '';
-    var uppercaseNext = false;
-
-    if (lowercaseFirst) {
-      property = property.substr(1);
-    }
-
-    for (var i = 0; i < property.length; i++) {
-      var c = property[i];
-
-      if (c === '-') {
-        uppercaseNext = true;
-      } else if (uppercaseNext) {
-        uppercaseNext = false;
-        output += c.toUpperCase();
-      } else {
-        output += c;
-      }
-    }
-
-    return output;
-  }
-
-  /**
    * Test a CSS property for support
    *
    * name (string): The CSS property name
@@ -468,23 +436,9 @@
       return window.CSS.supports(name, value || 'inherit');
     }
 
-    if (value) {
-      var div = document.createElement('div');
-      div.style[name] = '';
-      div.style[name] = value;
-      return div.style.getPropertyValue(name) !== '';
-    }
-
-    var attrs = [name];
-    attrs.push(cssPropertyToIDLAttribute(name, name.startsWith('-')));
-    for (var i = 0; i < attrs.length; i++) {
-      var attr = attrs[i];
-      if (attr in document.body.style) {
-        return true;
-      }
-    }
-
-    return false;
+    var div = document.createElement('div');
+    div.style[name] = value || 'inherit';
+    return div.style.getPropertyValue(name) !== '';
   }
 
   /**
