@@ -858,29 +858,6 @@ const buildIDL = (specIDLs: IDLFiles, customIDLs: IDLFiles) => {
   return buildIDLTests(ast, globals, scopes);
 };
 
-// https://drafts.csswg.org/cssom/#css-property-to-idl-attribute
-const cssPropertyToIDLAttribute = (
-  property: string,
-  lowercaseFirst?: boolean
-) => {
-  let output = '';
-  let uppercaseNext = false;
-  if (lowercaseFirst) {
-    property = property.substr(1);
-  }
-  for (const c of property) {
-    if (c === '-') {
-      uppercaseNext = true;
-    } else if (uppercaseNext) {
-      uppercaseNext = false;
-      output += c.toUpperCase();
-    } else {
-      output += c;
-    }
-  }
-  return output;
-};
-
 const buildCSS = (specCSS, customCSS) => {
   const properties = new Map();
 
@@ -1082,7 +1059,6 @@ export {
   buildIDLTests,
   buildIDL,
   validateIDL,
-  cssPropertyToIDLAttribute,
   buildCSS,
   buildJS
 };

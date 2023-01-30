@@ -24,7 +24,6 @@ import {
   getCustomTestAPI,
   getCustomSubtestsAPI,
   getCustomResourcesAPI,
-  cssPropertyToIDLAttribute,
   buildCSS,
   getCustomTestCSS,
   buildJS
@@ -580,14 +579,6 @@ return canvas.getContext('webgl2') || canvas.getContext('webgl') || canvas.getCo
         exposure: ['Window']
       });
     });
-  });
-
-  it('cssPropertyToIDLAttribute', () => {
-    assert.equal(cssPropertyToIDLAttribute('line-height'), 'lineHeight');
-    assert.equal(
-      cssPropertyToIDLAttribute('-webkit-line-clamp', true),
-      'webkitLineClamp'
-    );
   });
 
   it('buildIDL', () => {
