@@ -2194,6 +2194,10 @@ api:
       - offlineAudioContext
     __base: var instance = reusableInstances.offlineAudioContext;
     __test: return 'OfflineAudioContext' in self;
+    __additional:
+      startRendering.returns_promise: |-
+        var value = instance.startRendering();
+        return 'then' in value;
   OscillatorNode:
     __resources:
       - audioContext
@@ -2325,6 +2329,13 @@ api:
         return {result: false, message: 'performance is not defined'};
       };
       var instance = performance;
+    __additional:
+      mark.markOptions_parameter: |-
+        function mark(options) {
+          instance.mark('foo', options);
+        }
+        return bcd.testOptionParam(mark, null, 'detail', 'bar');
+      mark.returns_performancemark: return !!instance.mark('foo');
   PerformanceEntry:
     __base: |-
       <%api.Performance:prf%>
@@ -2428,14 +2439,46 @@ api:
       var instance = form.elements.namedItem('radio');
   Range:
     __base: var instance = document.createRange();
+    __additional:
+      collapse.toStart_parameter_optional: |-
+        try {
+          instance.collapse();
+          return true;
+        } catch(e) {
+          if (e instanceof TypeError || stringIncludes(e.message, ['WRONG_ARGUMENTS_ERR', 'Not enough arguments'])) {
+            return {result: false, message: e.message};
+          }
+          return e;
+        }
   Request:
     __base: var instance = new Request('');
+    __additional:
+      Request.init_referrer_parameter: |-
+        function construct(options) {
+          new Request('', options);
+        }
+        return bcd.testOptionParam(construct, null, 'referrer', 'no-referrer');
   Response:
     __base: var instance = new Response('');
   RTCDataChannel:
     __base: |-
       <%api.RTCPeerConnection:connection%>
       var instance = connection.createDataChannel('channel');
+    __additional:
+      binaryType.arraybuffer_value: |-
+        try {
+          instance.binaryType = 'arraybuffer';
+          return true;
+        } catch(e) {
+          return {result: false, message: e.message};
+        }
+      binaryType.blob_value: |-
+        try {
+          instance.binaryType = 'blob';
+          return true;
+        } catch(e) {
+          return {result: false, message: e.message};
+        }
   RTCDataChannelEvent:
     __base: |-
       <%api.RTCDataChannel:channel%>
@@ -2459,6 +2502,55 @@ api:
         return {result: false, message: '(moz/webkit)RTCPeerConnection is not defined or is falsy'};
       };
       var instance = new constructor({iceServers: []});
+    __additional:
+      RTCPeerConnection.configuration_bundlePolicy_parameter: return bcd.testOptionParam(constructor, 'constructor', 'bundlePolicy', 'balanced');
+      RTCPeerConnection.configuration_certificates_parameter: return bcd.testOptionParam(constructor, 'constructor', 'certificates', []);
+      RTCPeerConnection.configuration_iceCandidatePoolSize_parameter: return bcd.testOptionParam(constructor, 'constructor', 'iceCandidatePoolSize', 0);
+      RTCPeerConnection.configuration_iceServers_parameter: return bcd.testOptionParam(constructor, 'constructor', 'iceServers', []);
+      RTCPeerConnection.configuration_iceTransportPolicy_parameter: return bcd.testOptionParam(constructor, 'constructor', 'iceTransportPolicy', 'all');
+      RTCPeerConnection.configuration_peerIdentity_parameter: return bcd.testOptionParam(constructor, 'constructor', 'peerIdentity', 'foobar');
+      RTCPeerConnection.configuration_rtcpMuxPolicy_parameter: return bcd.testOptionParam(constructor, 'constructor', 'rtcpMuxPolicy', 'negotiate');
+      addIceCandidate.returns_promise: |-
+        <%api.RTCIceCandidate:candidate%>
+        var value = instance.addIceCandidate(candidate);
+        return 'then' in value;
+      addTransceiver.init_direction_parameter: |-
+        function addTransceiver(init) {
+          instance.addTransceiver("audio", init)
+        }
+        return bcd.testOptionParam(addTransceiver, null, "direction", "sendrecv");
+      addTransceiver.init_sendEncodings_parameter: |-
+        function addTransceiver(init) {
+          instance.addTransceiver("audio", init)
+        }
+        return bcd.testOptionParam(addTransceiver, null, "sendEncodings", [{maxBitrate: 44100}]);
+      createAnswer.returns_promise: |-
+        var value = instance.createAnswer();
+        return 'then' in value;
+      createOffer.returns_promise: |-
+        var value = instance.createOffer();
+        return 'then' in value;
+      getStats.returns_promise: |-
+        var value = instance.getStats();
+        return 'then' in value;
+      setLocalDescription.description_parameter_optional: |-
+        try {
+          instance.setLocalDescription();
+          return true;
+        } catch(e) {
+          if (e instanceof TypeError || stringIncludes(e.message, ['WRONG_ARGUMENTS_ERR', 'Not enough arguments'])) {
+            return {result: false, message: e.message};
+          }
+          return e;
+        }
+      setLocalDescription.returns_promise: |-
+        <%api.RTCSessionDescription:description%>
+        var value = instance.setLocalDescription(description);
+        return 'then' in value;
+      setRemoteDescription.returns_promise: |-
+        <%api.RTCSessionDescription:description%>
+        var value = instance.seRemotelDescription(description);
+        return 'then' in value;
   RTCSessionDescription:
     __base: "var instance = new RTCSessionDescription({type: 'offer'});"
   Screen:
