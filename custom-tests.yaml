@@ -2458,8 +2458,37 @@ api:
           new Request('', options);
         }
         return bcd.testOptionParam(construct, null, 'referrer', 'no-referrer');
+      Request.navigate_mode: |-
+        try {
+          new Request('', {mode: 'navigate'});
+        } catch(e) {
+          if (e instanceof TypeError) {
+            return {result: false, message: e.message};
+          }
+          return e;
+        }
+      mode.navigate_mode: |-
+        try {
+          new Request('', {mode: 'navigate'});
+        } catch(e) {
+          if (e instanceof TypeError) {
+            return {result: false, message: e.message};
+          }
+          return e;
+        }
   Response:
     __base: var instance = new Response('');
+    __additional:
+      Response.body_parameter_optional: |-
+        try {
+          new Response();
+          return true;
+        } catch(e) {
+          if (e instanceof TypeError || stringIncludes(e.message, ['WRONG_ARGUMENTS_ERR', 'Not enough arguments'])) {
+            return {result: false, message: e.message};
+          }
+          return e;
+        }
   RTCDataChannel:
     __base: |-
       <%api.RTCPeerConnection:connection%>
@@ -2574,6 +2603,47 @@ api:
       var instance = new SecurityPolicyViolationEvent('securitypolicyviolation');
   Selection:
     __base: var instance = window.getSelection();
+    __additional:
+      collapse.node_parameter_nullable: |-
+        try {
+          instance.collapse(null);
+          return true;
+        } catch(e) {
+          if (e instanceof TypeError || stringIncludes(e.message, ['WRONG_ARGUMENTS_ERR', 'Not enough arguments'])) {
+            return {result: false, message: e.message};
+          }
+          return e;
+        }
+      collapse.offset_parameter_optional: |-
+        try {
+          instance.collapse(document.createElement("p"));
+          return true;
+        } catch(e) {
+          if (e instanceof TypeError || stringIncludes(e.message, ['WRONG_ARGUMENTS_ERR', 'Not enough arguments'])) {
+            return {result: false, message: e.message};
+          }
+          return e;
+        }
+      containsNode.partialContainment_parameter_optional: |-
+        try {
+          instance.containsNode(document.createElement("p"));
+          return true;
+        } catch(e) {
+          if (e instanceof TypeError || stringIncludes(e.message, ['WRONG_ARGUMENTS_ERR', 'Not enough arguments'])) {
+            return {result: false, message: e.message};
+          }
+          return e;
+        }
+      extend.offset_parameter_optional: |-
+        try {
+          instance.extend(document.createElement("p"));
+          return true;
+        } catch(e) {
+          if (e instanceof TypeError || stringIncludes(e.message, ['WRONG_ARGUMENTS_ERR', 'Not enough arguments'])) {
+            return {result: false, message: e.message};
+          }
+          return e;
+        }
   ServiceWorkerContainer:
     __base: var instance = navigator.serviceWorker;
   ShadowRoot:
@@ -2804,6 +2874,8 @@ api:
     __test: return bcd.testObjectName(instance, 'SVGDiscardElement');
   SVGElement:
     __base: var instance = document.createElementNS('http://www.w3.org/2000/svg', 'title');
+    __additional:
+      focus.options_preventScroll_parameter: return bcd.testOptionParam(instance, 'focus', 'preventScroll', true);
   SVGEllipseElement:
     __base: var instance = document.createElementNS('http://www.w3.org/2000/svg', 'ellipse');
     __test: return bcd.testObjectName(instance, 'SVGEllipseElement');
