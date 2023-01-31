@@ -287,12 +287,18 @@ api:
     __test: return 'BaseAudioContext' in self;
     __additional:
       createPeriodicWave.constraints_disableNormalization_parameter: |-
+        if (!(instance && instance.createPeriodicWave)) {
+          return {result: false, message: 'instance.createPeriodicWave is not defined'};
+        }
         function create(constraints) {
           instance.createPeriodicWave([0, 1], [0, 0], constraints);
         }
         return bcd.testOptionParam(create, null, 'disableNormalization', true);
       decodeAudioData.returns_promise: |-
         <%api.BaseAudioContext:ctx%>
+        if (!(instance && instance.decodeAudioData)) {
+          return {result: false, message: 'instance.decodeAudioData is not defined'};
+        }
         var value = instance.decodeAudioData(new ArrayBuffer());
         return 'then' in value;
   BatteryManager:
@@ -373,6 +379,9 @@ api:
     __additional:
       setTransform.dommatrix: |-
         <%api.DOMMatrix:matrix%>
+        if (!(instance && instance.setTransform)) {
+          return {result: false, message: 'instance.setTransform is not defined'};
+        }
         try {
           instance.setTransform(matrix);
           return true;
@@ -398,6 +407,9 @@ api:
     __additional:
       clip.path_parameter: |-
         <%api.Path2D:path%>
+        if (!(instance && instance.clipPath)) {
+          return {result: false, message: 'instance.clipPath is not defined'};
+        }
         try {
           instance.clip(path);
           return true;
@@ -407,6 +419,9 @@ api:
       drawFocusIfNeeded.path_parameter: |-
         <%api.Path2D:path%>
         <%api.HTMLElement:el%>
+        if (!(instance && instance.drawFocusIfNeeded)) {
+          return {result: false, message: 'instance.drawFocusIfNeeded is not defined'};
+        }
         try {
           instance.drawFocusIfNeeded(path, el);
           return true;
@@ -547,7 +562,11 @@ api:
         }
       }
   CompressionStream:
-    __base: var instance = new CompressionStream("gzip");
+    __base: |-
+      if (!('CompressionStream' in self)) {
+        return {result: false, message: 'CompressionStream is not defined'};
+      }
+      var instance = new CompressionStream("gzip");
     __additional:
       CompressionStream.deflate: |-
         try {
@@ -754,6 +773,9 @@ api:
     __base: "var instance = reusableInstances.createStyleSheet('p {color: red;}');"
     __additional:
       insertRule.index_parameter_optional: |-
+        if (!(instance && instance.insertRule)) {
+          return {result: false, message: 'instance.insertRule is not defined'};
+        }
         try {
           instance.insertRule('a {color: blue;}');
           return true;
@@ -791,7 +813,11 @@ api:
         }
       }
   DecompressionStream:
-    __base: var instance = new DecompressionStream("gzip");
+    __base: |-
+      if (!('DecompressionStream' in self)) {
+        return {result: false, message: 'DecompressionStream is not defined'};
+      }
+      var instance = new DecompressionStream("gzip");
     __additional:
       DecompressionStream.deflate: |-
         try {
@@ -938,6 +964,9 @@ api:
       var instance = new DOMParser();
     __additional:
       parseFromString.html: |-
+        if (!(instance && instance.parseFromString)) {
+          return {result: false, message: 'instance.parseFromString is not defined'};
+        }
         try {
           instance.parseFromString('<html></html>', 'text/html');
           return true;
@@ -948,6 +977,9 @@ api:
           return e;
         }
       parseFromString.svg: |-
+        if (!(instance && instance.parseFromString)) {
+          return {result: false, message: 'instance.parseFromString is not defined'};
+        }
         try {
           instance.parseFromString('<circle />', 'image/svg+xml');
           return true;
@@ -958,6 +990,9 @@ api:
           return e;
         }
       parseFromString.xml: |-
+        if (!(instance && instance.parseFromString)) {
+          return {result: false, message: 'instance.parseFromString is not defined'};
+        }
         try {
           instance.parseFromString('<foo />', 'text/xml');
           return true;
@@ -976,30 +1011,30 @@ api:
       var instance = el.getClientRects();
   DOMTokenList:
     __base: |-
-      var elm = document.createElement('b');
-      var instance = elm.classList;
+      var el = document.createElement('b');
+      var instance = el.classList;
     __additional:
       add.multiple_parameters: |-
         instance.add("foo", "bar", "baz");
-        return elm.className === "foo bar baz";
+        return el.className === "foo bar baz";
       trim_whitespace: |-
         if (!instance) {
           return {result: false, message: 'Element.classList is not defined'};
         }
-        elm.className = ' foo bar foo ';
+        el.className = ' foo bar foo ';
         instance.remove('bar');
-        return elm.className === 'foo foo' || elm.className === 'foo';
+        return el.className === 'foo foo' || el.className === 'foo';
       remove_duplicates: |-
         if (!instance) {
           return {result: false, message: 'Element.classList is not defined'};
         }
-        elm.className = ' foo bar foo ';
+        el.className = ' foo bar foo ';
         instance.remove('bar');
-        return elm.className === 'foo';
+        return el.className === 'foo';
       remove.multiple_parameters: |-
         instance.add("foo", "bar", "baz");
         instance.remove("bar", "baz");
-        return elm.className === "foo";
+        return el.className === "foo";
       replace.boolean_value: |-
         instance.add("foo");
         var value = instance.replace("foo", "bar");
@@ -1008,12 +1043,13 @@ api:
         if (!instance) {
           return {result: false, message: 'Element.classList is not defined'};
         }
-        elm.className = 'foo bar';
         if (!('toggle' in instance)) {
           return {result: false, message: 'Element.classList.toggle is not defined'};
         }
+        el.className = 'foo bar';
+        
         instance.toggle('foo', true);
-        return elm.className === 'foo bar';
+        return el.className === 'foo bar';
   DragEvent:
     __base: |-
       var instance;
@@ -1050,6 +1086,9 @@ api:
       }
     __additional:
       animate.options_composite_parameter: |-
+        if (!(instance && instance.animate)) {
+          return {result: false, message: 'instance.animate is not defined'};
+        }
         function animate(options) {
           instance.animate(
             [
@@ -1061,6 +1100,9 @@ api:
         }
         return bcd.testOptionParam(animate, null, 'composite', 'replace');
       animate.options_id_parameter: |-
+        if (!(instance && instance.animate)) {
+          return {result: false, message: 'instance.animate is not defined'};
+        }
         function animate(options) {
           instance.animate(
             [
@@ -1072,6 +1114,9 @@ api:
         }
         return bcd.testOptionParam(animate, null, 'id', '');
       animate.options_iterationComposite_parameter: |-
+        if (!(instance && instance.animate)) {
+          return {result: false, message: 'instance.animate is not defined'};
+        }
         function animate(options) {
           instance.animate(
             [
@@ -1083,6 +1128,9 @@ api:
         }
         return bcd.testOptionParam(animate, null, 'iterationComposite', '');
       animate.options_pseudoElement_parameter: |-
+        if (!(instance && instance.animate)) {
+          return {result: false, message: 'instance.animate is not defined'};
+        }
         function animate(options) {
           instance.animate(
             [
@@ -1095,13 +1143,22 @@ api:
         return bcd.testOptionParam(animate, null, 'pseudoElement', '');
       attachShadow.init_delegatesFocus_parameter: return bcd.testOptionParam(instance, 'attachShadow', 'delegatesFocus', true);
       getElementsByTagName.all_elements_selector: |-
+        if (!(instance && instance.getElementsByTagName)) {
+          return {result: false, message: 'instance.getElementsByTagName is not defined'};
+        }
         instance.append(document.createElement('p'));
         return instance.getElementsByTagName("*").length > 0;
       getElementsByTagNameNS.all_elements_selector: |-
+        if (!(instance && instance.getElementsByTagNameNS)) {
+          return {result: false, message: 'instance.getElementsByTagNameNS is not defined'};
+        }
         instance.append(document.createElement('p'));
         return instance.getElementsByTagNameNS("http://www.w3.org/1999/xhtml", "*").length > 0;
       requestFullscreen.options_navigationUI_parameter: return bcd.testOptionParam(instance, 'requestFullscreen', 'navigationUI', false);
       requestFullscreen.returns_promise: |-
+        if (!(instance && instance.requestFullscreen)) {
+          return {result: false, message: 'instance.requestFullscreen is not defined'};
+        }
         var value = instance.requestFullscreen();
         return 'then' in value;
       scroll.options_behavior_parameter: return bcd.testOptionParam(instance, 'scroll', 'behavior', 'auto');
@@ -1458,80 +1515,131 @@ api:
     __test: return bcd.testObjectName(instance, 'HTMLCanvasElement');
     __additional:
       getContext.bitmaprenderer_context: |-
+        if (!(instance && instance.getContext)) {
+          return {result: false, message: 'instance.getContext is not defined'};
+        }
         var ctx = instance.getContext('bitmaprenderer');
         return !!ctx;
       getContext.bitmaprenderer_context.options_alpha_parameter: |-
+        if (!(instance && instance.getContext)) {
+          return {result: false, message: 'instance.getContext is not defined'};
+        }
         function createContext(options) {
           return instance.getContext('bitmaprenderer', options);
         }
         return bcd.testOptionParam(createContext, null, 'alpha', true);
       getContext.webgl_context: |-
+        if (!(instance && instance.getContext)) {
+          return {result: false, message: 'instance.getContext is not defined'};
+        }
         var ctx = instance.getContext('webgl');
         return !!ctx;
       getContext.webgl_context.options_alpha_parameter: |-
+        if (!(instance && instance.getContext)) {
+          return {result: false, message: 'instance.getContext is not defined'};
+        }
         function createContext(options) {
           return instance.getContext('webgl', options) || instance.getContext('experimental-webgl', options);
         }
         return bcd.testOptionParam(createContext, null, 'alpha', true);
       getContext.webgl_context.options_desynchronized_parameter: |-
+        if (!(instance && instance.getContext)) {
+          return {result: false, message: 'instance.getContext is not defined'};
+        }
         function createContext(options) {
           return instance.getContext('webgl', options) || instance.getContext('experimental-webgl', options);
         }
         return bcd.testOptionParam(createContext, null, 'desynchronized', true);
       getContext.webgl_context.options_failIfMajorPerformanceCaveat_parameter:
+        if (!(instance && instance.getContext)) {
+          return {result: false, message: 'instance.getContext is not defined'};
+        }
         |-
         function createContext(options) {
           return instance.getContext('webgl', options) || instance.getContext('experimental-webgl', options);
         }
         return bcd.testOptionParam(createContext, null, 'failIfMajorPerformanceCaveat', true);
       getContext.webgl_context.options_powerPreference_parameter: |-
+        if (!(instance && instance.getContext)) {
+          return {result: false, message: 'instance.getContext is not defined'};
+        }
         function createContext(options) {
           return instance.getContext('webgl', options) || instance.getContext('experimental-webgl', options);
         }
         return bcd.testOptionParam(createContext, null, 'powerPreference', "default");
       getContext.webgl2_context: |-
+        if (!(instance && instance.getContext)) {
+          return {result: false, message: 'instance.getContext is not defined'};
+        }
         var ctx = instance.getContext('webgl2');
         return !!ctx;
       getContext.webgl2_context.options_alpha_parameter: |-
+        if (!(instance && instance.getContext)) {
+          return {result: false, message: 'instance.getContext is not defined'};
+        }
         function createContext(options) {
           return instance.getContext('webgl2', options);
         }
         return bcd.testOptionParam(createContext, null, 'alpha', true);
       getContext.webgl2_context.options_desynchronized_parameter: |-
+        if (!(instance && instance.getContext)) {
+          return {result: false, message: 'instance.getContext is not defined'};
+        }
         function createContext(options) {
           return instance.getContext('webgl2', options);
         }
         return bcd.testOptionParam(createContext, null, 'desynchronized', true);
       getContext.webgl2_context.options_failIfMajorPerformanceCaveat_parameter:
+        if (!(instance && instance.getContext)) {
+          return {result: false, message: 'instance.getContext is not defined'};
+        }
         |-
         function createContext(options) {
           return instance.getContext('webgl2', options);
         }
         return bcd.testOptionParam(createContext, null, 'failIfMajorPerformanceCaveat', true);
       getContext.webgl2_context.options_powerPreference_parameter: |-
+        if (!(instance && instance.getContext)) {
+          return {result: false, message: 'instance.getContext is not defined'};
+        }
         function createContext(options) {
           return instance.getContext('webgl2', options);
         }
         return bcd.testOptionParam(createContext, null, 'powerPreference', "default");
       getContext.2d_context: |-
+        if (!(instance && instance.getContext)) {
+          return {result: false, message: 'instance.getContext is not defined'};
+        }
         var ctx = instance.getContext('2d');
         return !!ctx;
       getContext.2d_context.options_alpha_parameter: |-
+        if (!(instance && instance.getContext)) {
+          return {result: false, message: 'instance.getContext is not defined'};
+        }
         function createContext(options) {
           return instance.getContext('2d', options);
         }
         return bcd.testOptionParam(createContext, null, 'alpha', true);
       getContext.2d_context.options_colorSpace_parameter: |-
+        if (!(instance && instance.getContext)) {
+          return {result: false, message: 'instance.getContext is not defined'};
+        }
         function createContext(options) {
           return instance.getContext('2d', options);
         }
         return bcd.testOptionParam(createContext, null, 'colorSpace', "srgb");
       getContext.2d_context.options_desynchronized_parameter: |-
+        if (!(instance && instance.getContext)) {
+          return {result: false, message: 'instance.getContext is not defined'};
+        }
         function createContext(options) {
           return instance.getContext('2d', options);
         }
         return bcd.testOptionParam(createContext, null, 'desynchronized', true);
       getContext.2d_context.options_willReadFrequently_parameter: |-
+        if (!(instance && instance.getContext)) {
+          return {result: false, message: 'instance.getContext is not defined'};
+        }
         function createContext(options) {
           return instance.getContext('2d', options);
         }
@@ -1646,6 +1754,9 @@ api:
     __test: return bcd.testObjectName(instance, 'HTMLVideoElement');
     __additional:
       play.returns_promise: |-
+        if (!(instance && instance.play)) {
+          return {result: false, message: 'instance.play is not defined'};
+        }
         var value = instance.play();
         instance.pause();
         return 'then' in value;
@@ -1753,6 +1864,9 @@ api:
     __test: return bcd.testObjectName(instance, 'HTMLTableRowElement');
     __additional:
       insertCell.index_parameter_optional: |-
+        if (!(instance && instance.insertCell)) {
+          return {result: false, message: 'instance.insertCell is not defined'};
+        }
         try {
           instance.insertCell();
           return true;
@@ -2196,6 +2310,9 @@ api:
     __test: return 'OfflineAudioContext' in self;
     __additional:
       startRendering.returns_promise: |-
+        if (!(instance && instance.startRendering)) {
+          return {result: false, message: 'instance.startRendering is not defined'};
+        }
         var value = instance.startRendering();
         return 'then' in value;
   OscillatorNode:
@@ -2331,6 +2448,9 @@ api:
       var instance = performance;
     __additional:
       mark.markOptions_parameter: |-
+        if (!(instance && instance.mark)) {
+          return {result: false, message: 'instance.mark is not defined'};
+        }
         function mark(options) {
           instance.mark('foo', options);
         }
@@ -2441,6 +2561,9 @@ api:
     __base: var instance = document.createRange();
     __additional:
       collapse.toStart_parameter_optional: |-
+        if (!(instance && instance.collapse)) {
+          return {result: false, message: 'instance.collapse is not defined'};
+        }
         try {
           instance.collapse();
           return true;
@@ -2451,7 +2574,11 @@ api:
           return e;
         }
   Request:
-    __base: var instance = new Request('');
+    __base: |-
+      if (!('Request' in self)) {
+        return {result: false, message: 'Request is not defined'};
+      }
+      var instance = new Request('');
     __additional:
       Request.init_referrer_parameter: |-
         function construct(options) {
@@ -2477,7 +2604,11 @@ api:
           return e;
         }
   Response:
-    __base: var instance = new Response('');
+    __base: |-
+      if (!('Response' in self)) {
+        return {result: false, message: 'Response is not defined'};
+      }
+      var instance = new Response('');
     __additional:
       Response.body_parameter_optional: |-
         try {
@@ -2541,29 +2672,50 @@ api:
       RTCPeerConnection.configuration_rtcpMuxPolicy_parameter: return bcd.testOptionParam(constructor, 'constructor', 'rtcpMuxPolicy', 'negotiate');
       addIceCandidate.returns_promise: |-
         <%api.RTCIceCandidate:candidate%>
+        if (!(instance && instance.addIceCandidate)) {
+          return {result: false, message: 'instance.addIceCandidate is not defined'};
+        }
         var value = instance.addIceCandidate(candidate);
         return 'then' in value;
       addTransceiver.init_direction_parameter: |-
+        if (!(instance && instance.addTransceiver)) {
+          return {result: false, message: 'instance.addTransceiver is not defined'};
+        }
         function addTransceiver(init) {
           instance.addTransceiver("audio", init)
         }
         return bcd.testOptionParam(addTransceiver, null, "direction", "sendrecv");
       addTransceiver.init_sendEncodings_parameter: |-
+        if (!(instance && instance.addTransceiver)) {
+          return {result: false, message: 'instance.addTransceiver is not defined'};
+        }
         function addTransceiver(init) {
           instance.addTransceiver("audio", init)
         }
         return bcd.testOptionParam(addTransceiver, null, "sendEncodings", [{maxBitrate: 44100}]);
       createAnswer.returns_promise: |-
+        if (!(instance && instance.createAnswer)) {
+          return {result: false, message: 'instance.createAnswer is not defined'};
+        }
         var value = instance.createAnswer();
         return 'then' in value;
       createOffer.returns_promise: |-
+        if (!(instance && instance.createOffer)) {
+          return {result: false, message: 'instance.createOffer is not defined'};
+        }
         var value = instance.createOffer();
         return 'then' in value;
       getStats.returns_promise: |-
+        if (!(instance && instance.getStats)) {
+          return {result: false, message: 'instance.getStats is not defined'};
+        }
         var value = instance.getStats();
         return 'then' in value;
       setLocalDescription.description_parameter_optional: |-
         try {
+          if (!(instance && instance.setLocalDescription)) {
+            return {result: false, message: 'instance.setLocalDescription is not defined'};
+          }
           instance.setLocalDescription();
           return true;
         } catch(e) {
@@ -2574,11 +2726,17 @@ api:
         }
       setLocalDescription.returns_promise: |-
         <%api.RTCSessionDescription:description%>
+        if (!(instance && instance.setLocalDescription)) {
+          return {result: false, message: 'instance.setLocalDescription is not defined'};
+        }
         var value = instance.setLocalDescription(description);
         return 'then' in value;
       setRemoteDescription.returns_promise: |-
         <%api.RTCSessionDescription:description%>
-        var value = instance.seRemotelDescription(description);
+        if (!(instance && instance.setRemoteDescription)) {
+          return {result: false, message: 'instance.setRemoteDescription is not defined'};
+        }
+        var value = instance.setRemoteDescription(description);
         return 'then' in value;
   RTCSessionDescription:
     __base: "var instance = new RTCSessionDescription({type: 'offer'});"
@@ -2606,6 +2764,9 @@ api:
     __additional:
       collapse.node_parameter_nullable: |-
         try {
+          if (!(instance && instance.collapse)) {
+            return {result: false, message: 'instance.collapse is not defined'};
+          }
           instance.collapse(null);
           return true;
         } catch(e) {
@@ -2616,6 +2777,9 @@ api:
         }
       collapse.offset_parameter_optional: |-
         try {
+          if (!(instance && instance.collapse)) {
+            return {result: false, message: 'instance.collapse is not defined'};
+          }
           instance.collapse(document.createElement("p"));
           return true;
         } catch(e) {
@@ -2626,6 +2790,9 @@ api:
         }
       containsNode.partialContainment_parameter_optional: |-
         try {
+          if (!(instance && instance.containsNode)) {
+            return {result: false, message: 'instance.containsNode is not defined'};
+          }
           instance.containsNode(document.createElement("p"));
           return true;
         } catch(e) {
@@ -2636,6 +2803,9 @@ api:
         }
       extend.offset_parameter_optional: |-
         try {
+          if (!(instance && instance.extend)) {
+            return {result: false, message: 'instance.extend is not defined'};
+          }
           instance.extend(document.createElement("p"));
           return true;
         } catch(e) {
