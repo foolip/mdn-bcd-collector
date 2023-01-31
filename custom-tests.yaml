@@ -1048,7 +1048,7 @@ api:
           return {result: false, message: 'Element.classList.toggle is not defined'};
         }
         el.className = 'foo bar';
-        
+
         instance.toggle('foo', true);
         return el.className === 'foo bar';
   DragEvent:
@@ -1552,10 +1552,10 @@ api:
         }
         return bcd.testOptionParam(createContext, null, 'desynchronized', true);
       getContext.webgl_context.options_failIfMajorPerformanceCaveat_parameter:
+        |-
         if (!(instance && instance.getContext)) {
           return {result: false, message: 'instance.getContext is not defined'};
         }
-        |-
         function createContext(options) {
           return instance.getContext('webgl', options) || instance.getContext('experimental-webgl', options);
         }
@@ -1591,10 +1591,10 @@ api:
         }
         return bcd.testOptionParam(createContext, null, 'desynchronized', true);
       getContext.webgl2_context.options_failIfMajorPerformanceCaveat_parameter:
+        |-
         if (!(instance && instance.getContext)) {
           return {result: false, message: 'instance.getContext is not defined'};
         }
-        |-
         function createContext(options) {
           return instance.getContext('webgl2', options);
         }
