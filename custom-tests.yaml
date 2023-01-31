@@ -293,7 +293,8 @@ api:
         return bcd.testOptionParam(create, null, 'disableNormalization', true);
       decodeAudioData.returns_promise: |-
         <%api.BaseAudioContext:ctx%>
-        return 'then' in decodeAudioData;
+        var value = instance.decodeAudioData(new ArrayBuffer());
+        return 'then' in value;
   BatteryManager:
     __base: |-
       if (!('getBattery' in navigator)) {
