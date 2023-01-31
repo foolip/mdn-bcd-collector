@@ -293,7 +293,7 @@ api:
         return bcd.testOptionParam(create, null, 'disableNormalization', true);
       decodeAudioData.returns_promise: |-
         <%api.BaseAudioContext:ctx%>
-        return ctx.decodeAudioData.length === 1;
+        return 'then' in decodeAudioData;
   BatteryManager:
     __base: |-
       if (!('getBattery' in navigator)) {
@@ -1349,6 +1349,12 @@ api:
         return {result: false, message: 'FontFaceSetLoadEvent is not defined'};
       }
       var instance = new FontFaceSetLoadEvent('loading');
+  FormData:
+    __base: |-
+      if (!('FormData' in self)) {
+        return {result: false, message: 'FormData is not defined'};
+      }
+      var instance = new FormData();
   GainNode:
     __resources:
       - audioContext
@@ -1443,8 +1449,92 @@ api:
     __base: var instance = document.createElement('button');
     __test: return bcd.testObjectName(instance, 'HTMLButtonElement');
   HTMLCanvasElement:
+    WebGLRenderingContext:
+    __resources:
+      - webGL1
+      - webGL2
     __base: var instance = document.createElement('canvas');
     __test: return bcd.testObjectName(instance, 'HTMLCanvasElement');
+    __additional:
+      getContext.bitmaprenderer_context: |-
+        var ctx = instance.getContext('bitmaprenderer');
+        return !!ctx;
+      getContext.bitmaprenderer_context.options_alpha_parameter: |-
+        function createContext(options) {
+          return instance.getContext('bitmaprenderer', options);
+        }
+        return bcd.testOptionParam(createContext, null, 'alpha', true);
+      getContext.webgl_context: |-
+        var ctx = instance.getContext('webgl');
+        return !!ctx;
+      getContext.webgl_context.options_alpha_parameter: |-
+        function createContext(options) {
+          return instance.getContext('webgl', options) || instance.getContext('experimental-webgl', options);
+        }
+        return bcd.testOptionParam(createContext, null, 'alpha', true);
+      getContext.webgl_context.options_desynchronized_parameter: |-
+        function createContext(options) {
+          return instance.getContext('webgl', options) || instance.getContext('experimental-webgl', options);
+        }
+        return bcd.testOptionParam(createContext, null, 'desynchronized', true);
+      getContext.webgl_context.options_failIfMajorPerformanceCaveat_parameter:
+        |-
+        function createContext(options) {
+          return instance.getContext('webgl', options) || instance.getContext('experimental-webgl', options);
+        }
+        return bcd.testOptionParam(createContext, null, 'failIfMajorPerformanceCaveat', true);
+      getContext.webgl_context.options_powerPreference_parameter: |-
+        function createContext(options) {
+          return instance.getContext('webgl', options) || instance.getContext('experimental-webgl', options);
+        }
+        return bcd.testOptionParam(createContext, null, 'powerPreference', "default");
+      getContext.webgl2_context: |-
+        var ctx = instance.getContext('webgl2');
+        return !!ctx;
+      getContext.webgl2_context.options_alpha_parameter: |-
+        function createContext(options) {
+          return instance.getContext('webgl2', options);
+        }
+        return bcd.testOptionParam(createContext, null, 'alpha', true);
+      getContext.webgl2_context.options_desynchronized_parameter: |-
+        function createContext(options) {
+          return instance.getContext('webgl2', options);
+        }
+        return bcd.testOptionParam(createContext, null, 'desynchronized', true);
+      getContext.webgl2_context.options_failIfMajorPerformanceCaveat_parameter:
+        |-
+        function createContext(options) {
+          return instance.getContext('webgl2', options);
+        }
+        return bcd.testOptionParam(createContext, null, 'failIfMajorPerformanceCaveat', true);
+      getContext.webgl2_context.options_powerPreference_parameter: |-
+        function createContext(options) {
+          return instance.getContext('webgl2', options);
+        }
+        return bcd.testOptionParam(createContext, null, 'powerPreference', "default");
+      getContext.2d_context: |-
+        var ctx = instance.getContext('2d');
+        return !!ctx;
+      getContext.2d_context.options_alpha_parameter: |-
+        function createContext(options) {
+          return instance.getContext('2d', options);
+        }
+        return bcd.testOptionParam(createContext, null, 'alpha', true);
+      getContext.2d_context.options_colorSpace_parameter: |-
+        function createContext(options) {
+          return instance.getContext('2d', options);
+        }
+        return bcd.testOptionParam(createContext, null, 'colorSpace', "srgb");
+      getContext.2d_context.options_desynchronized_parameter: |-
+        function createContext(options) {
+          return instance.getContext('2d', options);
+        }
+        return bcd.testOptionParam(createContext, null, 'desynchronized', true);
+      getContext.2d_context.options_willReadFrequently_parameter: |-
+        function createContext(options) {
+          return instance.getContext('2d', options);
+        }
+        return bcd.testOptionParam(createContext, null, 'willReadFrequently', true);
   HTMLCollection:
     __base: var instance = document.forms;
   HTMLContentElement:
@@ -1475,6 +1565,9 @@ api:
     __base: var instance = document;
   HTMLElement:
     __base: var instance = document.createElement('b');
+    __additional:
+      focus.options_focusVisible_parameter: return bcd.testOptionParam(instance, 'focus', 'focusVisible', true);
+      focus.options_preventScroll_parameter: return bcd.testOptionParam(instance, 'focus', 'preventScroll', true);
   HTMLEmbedElement:
     __base: var instance = document.createElement('embed');
     __test: return bcd.testObjectName(instance, 'HTMLEmbedElement');
@@ -1550,6 +1643,11 @@ api:
   HTMLMediaElement:
     __base: <%api.HTMLVideoElement:instance%>
     __test: return bcd.testObjectName(instance, 'HTMLVideoElement');
+    __additional:
+      play.returns_promise: |-
+        var value = instance.play();
+        instance.pause();
+        return 'then' in value;
   HTMLMenuElement:
     __base: var instance = document.createElement('menu');
     __test: return bcd.testObjectName(instance, 'HTMLMenuElement');
@@ -1614,6 +1712,14 @@ api:
   HTMLSelectElement:
     __base: var instance = document.createElement('select');
     __test: return bcd.testObjectName(instance, 'HTMLSelectElement');
+    __additional:
+      add.index_before_parameter: |-
+        instance.add(document.createElement("option"));
+        instance.add(document.createElement("option"));
+        function add(before) {
+          instance.add(document.createElement("option"), before);
+        }
+        return bcd.testOptionParam(add, null, null, 1);
   HTMLShadowElement:
     __base: var instance = document.createElement('shadow');
     __test: return bcd.testObjectName(instance, 'HTMLShadowElement');
@@ -1644,6 +1750,17 @@ api:
   HTMLTableRowElement:
     __base: var instance = document.createElement('tr');
     __test: return bcd.testObjectName(instance, 'HTMLTableRowElement');
+    __additional:
+      insertCell.index_parameter_optional: |-
+        try {
+          instance.insertCell();
+          return true;
+        } catch(e) {
+          if (stringIncludes(e.message, ['WRONG_ARGUMENTS_ERR', 'Not enough arguments'])) {
+            return {result: false, message: e.message};
+          }
+          return e;
+        }
   HTMLTableSectionElement:
     __base: var instance = document.createElement('tbody');
     __test: return bcd.testObjectName(instance, 'HTMLTableSectionElement');
