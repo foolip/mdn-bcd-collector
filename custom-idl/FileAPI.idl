@@ -2,3 +2,7 @@ partial interface File {
   readonly attribute object lastModifiedDate;
   readonly attribute DOMString type;
 };
+
+partial interface FileSystemHandle {
+  undefined remove();
+};
