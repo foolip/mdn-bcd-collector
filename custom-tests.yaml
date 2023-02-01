@@ -2103,7 +2103,7 @@ api:
       } else if (navigator.webkitGetUserMedia) {
         navigator.webkitGetUserMedia({audio: true}, callback, fail);
       } else {
-        return false;
+        return {result: false, message: 'navigator(.mediaDevices).(moz/webkit)getUserMedia is not defined'};
       }
   MediaStreamAudioDestinationNode:
     __resources:
@@ -3429,8 +3429,45 @@ api:
         instance = new webkitURL(location.href)
       };
     __test: return 'URL' in self;
+  URLPattern:
+    __base: |-
+      if (!('URLPattern' in self)) {
+        return {result: false, message: 'URLPattern is not defined'};
+      }
+      var instance = new URLPattern('https://mdn-bcd-collector.gooborg.com/tests/*');
+    __additional:
+      URLPattern.ignoreCase_option: |-
+        function constructor(options) {
+          new URLPattern('https://mdn-bcd-collector.gooborg.com/tests/*', options);
+        }
+        return bcd.testOptionParam(constructor, null, 'ignoreCase', true);
   URLSearchParams:
-    __base: var instance = new URLSearchParams("q=HelloWorld&target=MDN");
+    __base: |-
+      if (!('URLSearchParams' in self)) {
+        return {result: false, message: 'URLSearchParams is not defined'};
+      }
+      var instance = new URLSearchParams("q=HelloWorld&target=MDN");
+    __additional:
+      URLSearchParams.record: |-
+        try {
+          new URLSearchParams({"q", "HelloWorld", "target": "MDN"});
+          return true;
+        } catch(e) {
+          if (e instanceof TypeError) {
+            return {result: false, message: e.message};
+          }
+          return e;
+        }
+      URLSearchParams.sequence: |-
+        try {
+          new URLSearchParams([["q", "HelloWorld"]], ["target", "MDN"]]);
+          return true;
+        } catch(e) {
+          if (e instanceof TypeError) {
+            return {result: false, message: e.message};
+          }
+          return e;
+        }
   ValidityState:
     __base: |-
       <%api.HTMLInputElement:el%>
@@ -3690,6 +3727,16 @@ api:
       }
   Window:
     __base: var instance = window;
+    __additional:
+      scroll.options_behavior_parameter: return bcd.testOptionParam(instance, 'scroll', 'behavior', 'auto');
+      scroll.options_left_parameter: return bcd.testOptionParam(instance, 'scroll', 'left', '0');
+      scroll.options_top_parameter: return bcd.testOptionParam(instance, 'scroll', 'top', '0');
+      scrollBy.options_behavior_parameter: return bcd.testOptionParam(instance, 'scrollBy', 'behavior', 'auto');
+      scrollBy.options_left_parameter: return bcd.testOptionParam(instance, 'scrollBy', 'left', '0');
+      scrollBy.options_top_parameter: return bcd.testOptionParam(instance, 'scrollBy', 'top', '0');
+      scrollTo.options_behavior_parameter: return bcd.testOptionParam(instance, 'scrollTo', 'behavior', 'auto');
+      scrollTo.options_left_parameter: return bcd.testOptionParam(instance, 'scrollTo', 'left', '0');
+      scrollTo.options_top_parameter: return bcd.testOptionParam(instance, 'scrollTo', 'top', '0');
   WorkerGlobalScope:
     __base: var instance = self;
   WorkerLocation:
