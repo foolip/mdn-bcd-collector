@@ -19,17 +19,17 @@ jobs:
         id: check
         uses: EndBug/version-check@v2
         with:
-          token: '${{ secrets.GITHUB_TOKEN }}'
+          token: "${{ secrets.GITHUB_TOKEN }}"
       - name: Tag new release
         uses: ButlerLogic/action-autotag@stable
         with:
-          GITHUB_TOKEN: '${{ secrets.GITHUB_TOKEN }}'
+          GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
           strategy: package
-          tag_prefix: 'v'
+          tag_prefix: "v"
       - name: Deploy to Heroku
         if: steps.check.outputs.changed == 'true'
         uses: akhileshns/heroku-deploy@v3.12.12
         with:
           heroku_api_key: ${{secrets.HEROKU_API_KEY}}
-          heroku_app_name: 'mdn-bcd-collector'
+          heroku_app_name: "mdn-bcd-collector"
           heroku_email: ${{secrets.HEROKU_EMAIL}}
