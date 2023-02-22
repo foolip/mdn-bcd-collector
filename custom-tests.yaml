@@ -291,7 +291,15 @@ api:
           return {result: false, message: 'instance.createPeriodicWave is not defined'};
         }
         function create(constraints) {
-          instance.createPeriodicWave([0, 1], [0, 0], constraints);
+          var real = new Float32Array(2);
+          var imag = new Float32Array(2);
+
+          real[0] = 0;
+          real[1] = 1;
+          imag[0] = 0;
+          imag[1] = 0;
+
+          instance.createPeriodicWave(real, image, constraints);
         }
         return bcd.testOptionParam(create, null, 'disableNormalization', true);
       decodeAudioData.returns_promise: |-
