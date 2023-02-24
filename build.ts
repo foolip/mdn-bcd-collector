@@ -718,13 +718,19 @@ const buildIDLMemberTests = (
       continue;
     }
 
-    // TODO: too many events tests are being generated
-
-    const isStatic = member.special === 'static' || iface.type === 'namespace';
     const isEventHandler =
       member.idlType?.type === 'attribute-type' &&
       typeof member.idlType?.idlType === 'string' &&
       member.idlType?.idlType.endsWith('EventHandler');
+
+    if (isEventHandler) {
+      // XXX Tests for events will be added with another package, see
+      // https://github.com/GooborgStudios/mdn-bcd-collector/issues/133 for
+      // details. In the meantime, ignore event handlers.
+      continue;
+    }
+
+    const isStatic = member.special === 'static' || iface.type === 'namespace';
 
     let expr: string | RawTestCodeExpr = '';
     const customTestMember = getCustomTestAPI(
@@ -763,11 +769,11 @@ const buildIDLMemberTests = (
       }
     }
 
-    const name = isEventHandler
-      ? `${member.name.replace(/^on/, '')}_event`
-      : member.name;
+    // const name = isEventHandler
+    //   ? `${member.name.replace(/^on/, '')}_event`
+    //   : member.name;
 
-    tests[name] = compileTest({
+    tests[member.name] = compileTest({
       raw: {
         code: expr
       },

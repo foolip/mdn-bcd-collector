@@ -1036,10 +1036,6 @@ return canvas.getContext('webgl2') || canvas.getContext('webgl') || canvas.getCo
         'api.Foo': {
           code: '"Foo" in self',
           exposure: ['Window']
-        },
-        'api.Foo.add_event': {
-          code: '"Foo" in self && "onadd" in Foo.prototype',
-          exposure: ['Window']
         }
       });
     });
