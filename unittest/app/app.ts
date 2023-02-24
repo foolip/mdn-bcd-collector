@@ -22,7 +22,7 @@ const packageLock = await fs.readJson(
   new URL('../../package-lock.json', import.meta.url)
 );
 
-const userAgent = `node-superagent/${packageLock.dependencies.superagent.version}`;
+const userAgent = `node-superagent/${packageLock.packages['node_modules/superagent'].version}`;
 
 describe('/api/results', () => {
   it('missing `Content-Type` header', async () => {
