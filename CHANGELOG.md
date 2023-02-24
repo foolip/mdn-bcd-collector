@@ -1,5 +1,47 @@
 # mdn-bcd-collector Changelog
 
+## v8.0.1
+
+### Test Changes
+
+#### Added
+
+- api.ContentVisibilityAutoStateChangeEvent
+- api.CSSScopeRule
+- api.GPUShaderModule.getCompilationInfo
+- api.Headers.getSetCookie
+- api.Selection.direction
+- api.Selection.getComposedRanges
+- api.WebTransport.ratecontrolfeedback_event
+- api.WebTransport.rateControlFeedback
+- api.WebTransport.rateControlFeedbackMinInterval
+- api.WebTransportRateControlFeedback
+- css.properties.animation-range-end
+- css.properties.animation-range-start
+
+#### Removed
+
+- api.ContentVisibilityAutoStateChangedEvent
+- api.GPUShaderModule.compilationInfo
+- api.HTMLIFrameElement.fetchPriority
+- api.IdentityCredential.logoutRPs
+- api.IdentityProvider
+- api.Selection.getComposedRange
+- css.properties.animation-delay-end
+- css.properties.animation-delay-start
+
+#### Changed
+
+- api.BaseAudioContext.createPeriodicWave.constraints_disableNormalization_parameter
+
+### Commits
+
+- Fix security audit
+- Fix test for BaseAudioContext.createPeriodicWave.constraints_disableNormalization_parameter
+- Make unsecure context warning a link to secure context
+- Run Prettier on deploy workflow
+- Add .nvmrc
+
 ## v8.0.0
 
 ### Test Changes
