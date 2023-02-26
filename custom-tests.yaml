@@ -416,8 +416,8 @@ api:
     __additional:
       clip.path_parameter: |-
         <%api.Path2D:path%>
-        if (!(instance && instance.clipPath)) {
-          return {result: false, message: 'instance.clipPath is not defined'};
+        if (!(instance && instance.clip)) {
+          return {result: false, message: 'instance.clip is not defined'};
         }
         try {
           instance.clip(path);
