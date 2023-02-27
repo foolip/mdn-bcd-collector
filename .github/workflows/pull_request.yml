@@ -39,7 +39,7 @@ jobs:
       # ensure we can start the server without dev dependencies
       - name: Production smoke test
         run: |
-          npm i -g ts-node
+          npm i -g ts-node @swc/core
           npm ci --production
           npm start &
           npx wait-on -t 10000 -v http://localhost:8080
