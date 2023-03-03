@@ -104,7 +104,7 @@
     "minimatch": "7.4.2",
     "mocha": "10.2.0",
     "node-fetch": "3.3.0",
-    "nodemon": "2.0.20",
+    "nodemon": "2.0.21",
     "open-cli": "7.1.0",
     "prettier": "2.8.4",
     "puppeteer": "19.7.2",
