@@ -56,7 +56,7 @@
     "fs-extra": "11.1.0",
     "json-stable-stringify": "1.0.2",
     "slugify": "1.6.5",
-    "ua-parser-js": "1.0.33",
+    "ua-parser-js": "1.0.34",
     "unique-string": "3.0.0",
     "winston": "3.8.2",
     "yargs": "17.7.1"
