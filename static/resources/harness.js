@@ -32,6 +32,8 @@
   var debugmode = stringIncludes(location.search, 'debug=true');
 
   /* c8 ignore start */
+  // Non-invasive polyfills
+
   function consoleLog(message) {
     if ('console' in self) {
       console.log(message);
@@ -67,6 +69,21 @@
   }
 
   /**
+   * A non-invasive polyfill for Array.isArray()
+   *
+   * obj (any): The object to test
+   *
+   * returns (Boolean): `true` if the object is an array, otherwise `false`.
+   */
+  function isArray(obj) {
+    if ('isArray' in Array) {
+      return Array.isArray(obj);
+    }
+
+    return obj.constructor === Array;
+  }
+
+  /**
    * A non-invasive polyfill for String.prototype.includes()
    *
    * string (string): The string to test
@@ -76,7 +93,7 @@
    * returns (Boolean): `true` if (any) search string found, otherwise `false`.
    */
   function stringIncludes(string, search) {
-    if (Array.isArray(search)) {
+    if (isArray(search)) {
       for (var i = 0; i < search.length; i++) {
         if (stringIncludes(string, search[i])) {
           return true;
@@ -89,6 +106,8 @@
     }
     return string.indexOf(search) !== -1;
   }
+
+  // End non-invasive polyfills
 
   /**
    * Update the status field with a new message
@@ -356,7 +375,7 @@
     otherOptions
   ) {
     // If an array of method names is specified, test them all
-    if (Array.isArray(methodName)) {
+    if (isArray(methodName)) {
       for (var i = 0; i < methodName.length; i++) {
         if (
           testOptionParam(
