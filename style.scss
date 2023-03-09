@@ -180,6 +180,10 @@ body {
   min-height: 100vh;
   margin: 0;
   padding: 8px;
+
+  // Handle notch / dynamic island
+  padding-left: max(8px, env(safe-area-inset-left));
+  padding-right: max(8px, env(safe-area-inset-right));
 }
 
 h1,
@@ -245,7 +249,7 @@ footer {
   background-color: rgb(0, 0, 0, 0.25);
   width: 100vw;
   margin-top: 1em;
-  margin-left: -8px;
+  margin-left: min(-8px, calc(env(safe-area-inset-left) * -1));
 
   & > * {
     display: inline-block;
@@ -261,7 +265,7 @@ footer {
 
 hr {
   width: 100vw;
-  margin-left: -8px;
+  margin-left: min(-8px, calc(env(safe-area-inset-left) * -1));
 }
 
 .paper {
@@ -408,6 +412,10 @@ hr {
 
 .result {
   margin-bottom: 0.5em;
+
+  summary {
+    word-break: break-all;
+  }
 
   .result-value {
     font-weight: bold;
