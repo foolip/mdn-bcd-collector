@@ -1,5 +1,35 @@
 # mdn-bcd-collector Changelog
 
+## v8.1.1
+
+### Test Changes
+
+#### Added
+
+- api.URLSearchParams.size
+- css.properties.border-block-end-radius
+- css.properties.border-block-start-radius
+- css.properties.border-bottom-radius
+- css.properties.border-inline-end-radius
+- css.properties.border-inline-start-radius
+- css.properties.border-left-radius
+- css.properties.border-right-radius
+- css.properties.border-top-radius
+- css.properties.text-autospace
+- css.properties.text-spacing-trim
+
+#### Changed
+
+- api.CanvasRenderingContext2D.clip.path_parameter
+
+### Commits
+
+- Adapt full purple color scheme
+- Add non-invasive polyfill for Array.isArray()
+- Fix production smoke test
+- Fix test for api.CanvasRenderingContext2D.clip.path_parameter
+- Switch from tsc to swc for ts-node calls
+
 ## v8.1.0
 
 ### Test Changes
