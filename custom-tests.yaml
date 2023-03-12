@@ -221,8 +221,8 @@ api:
     __resources:
       - audioContext
     __base: |-
-      <%api.GainNode:gainNode%>
-      var instance = gainNode.gain;
+      <%api.BiquadFilterNode:biquadFilterNode%>
+      var instance = biquadFilterNode.gain;
   AudioProcessingEvent:
     __base: |-
       var instance;
