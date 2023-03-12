@@ -1,9 +1,11 @@
 <% if (process.env.NODE_ENV === "production") { %>
-<p id="unsecure-warning"><a href="https://mdn-bcd-collector.gooborg.com" class="error-notice"><span class="mdi mdi-lock-off"></span> Warning: not using HTTPS!</a></p>
+<p id="unsecure-warning"><a href="https://mdn-bcd-collector.gooborg.com" class="error-notice" id="unsecure-warning-link"><span class="mdi mdi-lock-off"></span> Warning: not using HTTPS!</a></p>
 
 <script>
   if (location.protocol === 'https:') {
     document.getElementById('unsecure-warning').remove();
+  } else {
+    document.getElementById('unsecure-warning-link').href = location.href.replace('http://', 'https://');
   }
 </script>
 <% } %>
