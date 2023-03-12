@@ -348,12 +348,6 @@ api:
         return {result: false, message: 'audioContext.createBiquadFilter is not defined'};
       }
       var instance = reusableInstances.audioContext.createBiquadFilter();
-  ByteLengthQueuingStrategy:
-    __base: |-
-      if (!('ByteLengthQueuingStrategy' in self)) {
-        return {result: false, message: 'ByteLengthQueuingStrategy is not defined'};
-      }
-      var instance = new ByteLengthQueuingStrategy({ highWaterMark: 1 });
   Blob:
     __base: |-
       var instance;
@@ -362,6 +356,14 @@ api:
       } catch(e) {
         instance = new BlobBuilder();
       }
+  Bluetooth:
+    __base: var instance = navigator.bluetooth;
+  ByteLengthQueuingStrategy:
+    __base: |-
+      if (!('ByteLengthQueuingStrategy' in self)) {
+        return {result: false, message: 'ByteLengthQueuingStrategy is not defined'};
+      }
+      var instance = new ByteLengthQueuingStrategy({ highWaterMark: 1 });
   CacheStorage:
     __base: |-
       if (!('caches' in self)) {
