@@ -214,9 +214,24 @@ api:
     __base: |-
       <%api.AnalyserNode:instance%>
     __additional:
-      disconnect.destination_parameter: return bcd.testOptionParam(instance, 'disconnect', 'destination', instance);
-      disconnect.output_parameter: return bcd.testOptionParam(instance, 'disconnect', 'output', 0);
-      disconnect.input_parameter: return bcd.testOptionParam(instance, 'disconnect', 'input', 0);
+      disconnect.destination_parameter: |-
+        <%api.AnalyserNode:node2%>
+        instance.connect(node2);
+        return bcd.testOptionParam(instance, 'disconnect', null, node2);
+      disconnect.output_parameter: |-
+        <%api.AnalyserNode:node2%>
+        instance.connect(node2);
+        function disconnect(output) {
+          instance.disconnect(node2, output);
+        }
+        return bcd.testOptionParam(disconnect, null, null, 0);
+      disconnect.input_parameter: |-
+        <%api.AnalyserNode:node2%>
+        instance.connect(node2);
+        function disconnect(input) {
+          instance.disconnect(node2, 0, input);
+        }
+        return bcd.testOptionParam(disconnect, null, null, 0);
   AudioParam:
     __resources:
       - audioContext
