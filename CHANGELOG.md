@@ -1,5 +1,61 @@
 # mdn-bcd-collector Changelog
 
+## v8.1.2
+
+### Test Changes
+
+#### Added
+
+- api.Document.hasPrivateTokens
+- api.Document.hasRedemptionRecord
+- api.Fence
+- api.FencedFrameConfig
+- api.GPUSupportedLimits.maxFragmentCombinedOutputResources
+- api.HTMLButtonElement.popoverTargetAction
+- api.HTMLButtonElement.popoverTargetElement
+- api.HTMLFencedFrameElement
+- api.HTMLInputElement.popoverTargetAction
+- api.HTMLInputElement.popoverTargetElement
+- api.MLGraphBuilder.prelu
+- api.Navigator.joinAdInterestGroup
+- api.Navigator.runAdAuction
+- api.Window.fence
+- api.XRSession.isSystemKeyboardSupported
+- css.properties.white-space-collapse
+
+#### Removed
+
+- api.HTMLButtonElement.popoverHideTargetElement
+- api.HTMLButtonElement.popoverShowTargetElement
+- api.HTMLButtonElement.popoverToggleTargetElement
+- api.HTMLInputElement.popoverHideTargetElement
+- api.HTMLInputElement.popoverShowTargetElement
+- api.HTMLInputElement.popoverToggleTargetElement
+- api.NavigateEvent
+- api.Navigation
+- api.NavigationCurrentEntryChangeEvent
+- api.NavigationDestination
+- api.NavigationHistoryEntry
+- api.NavigationTransition
+- api.WebTransport.rateControlFeedback
+- api.WebTransport.rateControlFeedbackMinInterval
+- api.WebTransportRateControlFeedback
+- api.Window.navigation
+- css.properties.text-space-collapse
+
+#### Changed
+
+- api.AudioParam
+- api.Bluetooth
+
+### Commits
+
+- Unsecure warning: point to specific page
+- AudioParam: use BiquadFilterNode instead
+- Add custom test for Bluetooth API
+- Update theme color
+- Handle notch / Dynamic Island on iPhone
+
 ## v8.1.1
 
 ### Test Changes
