@@ -41,7 +41,7 @@ api:
         return function(css) {
           var el = document.createElement('style');
           el.innerHTML = css;
-          document.head.appendChild(el);
+          (document.head || document.body).appendChild(el);
           el.sheet.disabled = true;
           return el.sheet;
         }
