@@ -301,7 +301,7 @@ export const inferSupportStatements = (
 
 interface UpdateFilter {
   browser?: string[];
-  release?: string;
+  release?: string | false;
   path?: string;
   exactOnly?: boolean;
 }
