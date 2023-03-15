@@ -915,7 +915,7 @@ describe('build', () => {
           [Exposed=Window]
           interface Document {
             readonly attribute boolean loaded;
-            readonly attribute DOMString? charset;
+            readonly attribute DOMString? characterSet;
           };`
       );
 
@@ -936,8 +936,8 @@ describe('build', () => {
           code: '"Document" in self',
           exposure: ['Window']
         },
-        'api.Document.charset': {
-          code: '(function() {\n  return document.charset == "UTF-8";\n})();',
+        'api.Document.characterSet': {
+          code: '(function() {\n  return document.characterSet == "UTF-8";\n})();',
           exposure: ['Window']
         },
         'api.Document.loaded': {
