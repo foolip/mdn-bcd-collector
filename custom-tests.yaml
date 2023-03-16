@@ -3444,11 +3444,11 @@ api:
       if (!('URLPattern' in self)) {
         return {result: false, message: 'URLPattern is not defined'};
       }
-      var instance = new URLPattern('https://mdn-bcd-collector.gooborg.com/tests/*');
+      var instance = new URLPattern('https://developer.mozilla.org/en-US/docs/Web/API/*');
     __additional:
       URLPattern.ignoreCase_option: |-
         function constructor(options) {
-          new URLPattern('https://mdn-bcd-collector.gooborg.com/tests/*', options);
+          new URLPattern('https://developer.mozilla.org/en-US/docs/Web/API/*', options);
         }
         return bcd.testOptionParam(constructor, null, 'ignoreCase', true);
   URLSearchParams:
