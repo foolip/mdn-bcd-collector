@@ -9,9 +9,9 @@ See the LICENSE file for copyright details
 <%- contentFor('body') %>
 <%- include('unsecurewarning') %>
 <p id="status">Running tests...</p>
-<form id="form" action=/export method=post>
-  <input id="export-download" type=submit name=download value="Export for download" disabled>
-  <input id="export-github" type=submit name=github value="Export to GitHub" disabled>
+<form id="form" action="/export" method="post">
+  <input id="export-download" type="submit" name="download" value="Export for download" disabled>
+  <input id="export-github" type="submit" name="github" value="Export to GitHub" disabled>
 </form>
 <div id="results">
   <hr />
