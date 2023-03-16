@@ -12,7 +12,7 @@ This project is © 2020-2022 Google LLC, Mozilla Corporation and Gooborg Studios
 
 ## Setup
 
-This project requires Node.js 16.15.0 or greater.
+This project requires Node.js 18 or greater.
 
 ```sh
 npm install
