@@ -1984,6 +1984,17 @@ api:
         return {result: false, message: 'Cannot create image bitmap'};
       }
       var promise = createImageBitmap(document.getElementById('resource-image-black'));
+  ImageBitmapRenderingContext:
+    __base: |-
+      if (!('document' in self)) {
+        // XXX Implement worker tests for ImageBitmapRenderingContext
+        return {result: null, message: 'Testing ImageBitmapRenderingContext in workers is not yet implemented'};
+      }
+      var canvas = document.createElement('canvas');
+      if (!canvas) {
+        return {result: false, message: 'Could not create canvas element'};
+      };
+      var instance = canvas.getContext('bitmaprenderer');
   ImageCapture:
     __base: |-
       <%api.MediaDevices:mediaDevices%>
