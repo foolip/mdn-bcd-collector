@@ -1490,13 +1490,13 @@ api:
     __base: var instance = document.createElement('a');
     __test: return bcd.testObjectName(instance, 'HTMLAnchorElement');
     toString: |-
-      instance.href = 'https://mdn-bcd-collector.gooborg.com/';
+      instance.href = 'https://developer.mozilla.org/';
       return instance.toString() == instance.href;
   HTMLAreaElement:
     __base: var instance = document.createElement('area');
     __test: return bcd.testObjectName(instance, 'HTMLAreaElement');
     toString: |-
-      instance.href = 'https://mdn-bcd-collector.gooborg.com/';
+      instance.href = 'https://developer.mozilla.org/';
       return instance.toString() == instance.href;
   HTMLAudioElement:
     __base: var instance = document.createElement('audio');
@@ -3443,11 +3443,11 @@ api:
       if (!('URLPattern' in self)) {
         return {result: false, message: 'URLPattern is not defined'};
       }
-      var instance = new URLPattern('https://mdn-bcd-collector.gooborg.com/tests/*');
+      var instance = new URLPattern('https://developer.mozilla.org/en-US/docs/Web/API/*');
     __additional:
       URLPattern.ignoreCase_option: |-
         function constructor(options) {
-          new URLPattern('https://mdn-bcd-collector.gooborg.com/tests/*', options);
+          new URLPattern('https://developer.mozilla.org/en-US/docs/Web/API/*', options);
         }
         return bcd.testOptionParam(constructor, null, 'ignoreCase', true);
   URLSearchParams:

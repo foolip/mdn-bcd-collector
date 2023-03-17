@@ -11,7 +11,6 @@ import {Report} from '../../types/types.js';
 import {assert} from 'chai';
 import sinon from 'sinon';
 import fs from 'fs-extra';
-import minimatch from 'minimatch';
 import {Browsers} from '@mdn/browser-compat-data/types';
 
 import logger from '../../lib/logger.js';
@@ -39,7 +38,7 @@ const reports: Report[] = [
   {
     __version: '0.3.1',
     results: {
-      'https://mdn-bcd-collector.gooborg.com/tests/': [
+      'https://mdn-bcd-collector.example/tests/': [
         {
           name: 'api.AbortController',
           exposure: 'Window',
@@ -124,7 +123,7 @@ const reports: Report[] = [
   {
     __version: '0.3.1',
     results: {
-      'https://mdn-bcd-collector.gooborg.com/tests/': [
+      'https://mdn-bcd-collector.example/tests/': [
         {
           name: 'api.AbortController',
           exposure: 'Window',
@@ -219,7 +218,7 @@ const reports: Report[] = [
   {
     __version: '0.3.1',
     results: {
-      'https://mdn-bcd-collector.gooborg.com/tests/': [
+      'https://mdn-bcd-collector.example/tests/': [
         {
           name: 'api.AbortController',
           exposure: 'Window',
@@ -308,7 +307,7 @@ const reports: Report[] = [
   {
     __version: '0.3.1',
     results: {
-      'https://mdn-bcd-collector.gooborg.com/tests/': [
+      'https://mdn-bcd-collector.example/tests/': [
         {
           name: 'api.AbortController',
           exposure: 'Window',
@@ -322,7 +321,7 @@ const reports: Report[] = [
   {
     __version: '0.3.1',
     results: {
-      'https://mdn-bcd-collector.gooborg.com/tests/': [
+      'https://mdn-bcd-collector.example/tests/': [
         {
           name: 'api.AbortController',
           exposure: 'Window',
@@ -336,7 +335,7 @@ const reports: Report[] = [
   {
     __version: '0.3.1',
     results: {
-      'https://mdn-bcd-collector.gooborg.com/tests/': [
+      'https://mdn-bcd-collector.example/tests/': [
         {
           name: 'api.AbortController',
           exposure: 'Window',
@@ -350,7 +349,7 @@ const reports: Report[] = [
   {
     __version: '0.3.1',
     results: {
-      'https://mdn-bcd-collector.gooborg.com/tests/': [
+      'https://mdn-bcd-collector.example/tests/': [
         {
           name: 'api.AbortController',
           exposure: 'Window',
@@ -704,7 +703,7 @@ describe('BCD updater', () => {
       const report: Report = {
         __version: '0.3.1',
         results: {
-          'https://mdn-bcd-collector.gooborg.com/tests/': [
+          'https://mdn-bcd-collector.example/tests/': [
             {
               name: 'api.AbortController',
               exposure: 'Window',
@@ -1034,7 +1033,7 @@ describe('BCD updater', () => {
           {
             __version: '0.3.1',
             results: {
-              'https://mdn-bcd-collector.gooborg.com/tests/': [
+              'https://mdn-bcd-collector.example/tests/': [
                 {
                   name: 'api.FakeInterface',
                   exposure: 'Window',
@@ -1319,7 +1318,7 @@ describe('BCD updater', () => {
       const report: Report = {
         __version: '0.3.1',
         results: {
-          'https://mdn-bcd-collector.gooborg.com/tests/': [
+          'https://mdn-bcd-collector.example/tests/': [
             {
               name: 'api.AbortController',
               exposure: 'Window',
@@ -1357,7 +1356,7 @@ describe('BCD updater', () => {
       const report: Report = {
         __version: '0.3.1',
         results: {
-          'https://mdn-bcd-collector.gooborg.com/tests/': [
+          'https://mdn-bcd-collector.example/tests/': [
             {
               name: 'api.AbortController',
               exposure: 'Window',
@@ -1398,7 +1397,7 @@ describe('BCD updater', () => {
       const report: Report = {
         __version: '0.3.1',
         results: {
-          'https://mdn-bcd-collector.gooborg.com/tests/': [
+          'https://mdn-bcd-collector.example/tests/': [
             {
               name: 'api.AbortController',
               exposure: 'Window',
@@ -1439,7 +1438,7 @@ describe('BCD updater', () => {
       const report: Report = {
         __version: '0.3.1',
         results: {
-          'https://mdn-bcd-collector.gooborg.com/tests/': [
+          'https://mdn-bcd-collector.example/tests/': [
             {
               name: 'api.AbortController',
               exposure: 'Window',
@@ -1477,7 +1476,7 @@ describe('BCD updater', () => {
       const report: Report = {
         __version: '0.3.1',
         results: {
-          'https://mdn-bcd-collector.gooborg.com/tests/': [
+          'https://mdn-bcd-collector.example/tests/': [
             {
               name: 'api.AbortController',
               exposure: 'Window',
@@ -1515,7 +1514,7 @@ describe('BCD updater', () => {
       const report: Report = {
         __version: '0.3.1',
         results: {
-          'https://mdn-bcd-collector.gooborg.com/tests/': [
+          'https://mdn-bcd-collector.example/tests/': [
             {
               name: 'api.AbortController',
               exposure: 'Window',
@@ -1563,7 +1562,7 @@ describe('BCD updater', () => {
       const report: Report = {
         __version: '0.3.1',
         results: {
-          'https://mdn-bcd-collector.gooborg.com/tests/': [
+          'https://mdn-bcd-collector.example/tests/': [
             {
               name: 'api.AbortController',
               exposure: 'Window',
@@ -1593,7 +1592,7 @@ describe('BCD updater', () => {
 
       it('path', () => {
         const filter = {
-          path: new minimatch.Minimatch('css.properties.*')
+          path: 'css.properties.*'
         };
         expectedBcd.css.properties[
           'font-family'
@@ -1646,7 +1645,7 @@ describe('BCD updater', () => {
       const report: Report = {
         __version: '0.3.1',
         results: {
-          'https://mdn-bcd-collector.gooborg.com/tests/': [
+          'https://mdn-bcd-collector.example/tests/': [
             {
               name: 'api.AbortController',
               exposure: 'Window',

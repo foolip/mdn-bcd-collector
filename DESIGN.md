@@ -225,8 +225,8 @@ GET /api/tests
 
 ```json
 [
-  "https://mdn-bcd-collector.gooborg.com/bcd/api/Sensor.html",
-  "http://mdn-bcd-collector.gooborg.com/bcd/css/properties/dot-supports.html"
+  "https://mdn-bcd-collector.example/bcd/api/Sensor.html",
+  "http://mdn-bcd-collector.example/bcd/css/properties/dot-supports.html"
 ]
 ```
 
@@ -279,7 +279,7 @@ GET /api/results
 
 ```json
 {
-  "https://mdn-bcd-collector.gooborg.com/bcd/api/Sensor.html": {
+  "https://mdn-bcd-collector.example/bcd/api/Sensor.html": {
     "some-data": "some-value"
   }
 }
@@ -292,7 +292,7 @@ empty object is returned.
 
 ### Manually
 
-When pointing a browser at https://mdn-bcd-collector.gooborg.com/ to run tests,
+When pointing a browser at https://mdn-bcd-collector.example/ to run tests,
 the server keeps track of which tests to run, accepts results from each test as
 it run, and combines all of the results at the end. A random session id, stored
 in a cookie, is used to get results back.

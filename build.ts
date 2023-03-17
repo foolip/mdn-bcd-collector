@@ -802,6 +802,13 @@ const buildIDLTests = (ast, globals, scopes) => {
       continue;
     }
 
+    // If [LegacyNoInterfaceObject] is used on the interface and there aren't
+    // any custom tests, build no tests for this interface.
+    const noInterfaceObject = getExtAttr(iface, 'LegacyNoInterfaceObject');
+    if (noInterfaceObject && !(iface.name in customTests.api)) {
+      continue;
+    }
+
     const exposureSet = getExposureSet(iface, scopes);
     const isGlobal = !!getExtAttr(iface, 'Global');
     const customIfaceTest = getCustomTestAPI(iface.name);

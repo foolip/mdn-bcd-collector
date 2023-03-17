@@ -299,23 +299,37 @@ export const inferSupportStatements = (
   return statements;
 };
 
+interface UpdateFilter {
+  browser?: string[];
+  release?: string | false;
+  path?: string;
+  exactOnly?: boolean;
+}
+
 export const update = (
   bcd: Identifier,
   supportMatrix: SupportMatrix,
-  filter: any
+  filter: UpdateFilter
 ): boolean => {
   let modified = false;
 
+  let pathFilter: ((path: string) => boolean) | undefined;
+  if (filter.path) {
+    if (filter.path.includes('*')) {
+      // Interpret as glob pattern using minimatch.
+      const mm = new Minimatch(filter.path);
+      pathFilter = (path) => mm.match(path);
+    } else {
+      // Interpret as exact or prefix match.
+      const exact = filter.path;
+      const prefix = `${filter.path}.`;
+      pathFilter = (path) => path === exact || path.startsWith(prefix);
+    }
+  }
+
   for (const [path, browserMap] of supportMatrix.entries()) {
-    if (filter.path) {
-      if (filter.path.constructor === Minimatch) {
-        if (!filter.path.match(path)) {
-          // If filter.path does not match glob
-          continue;
-        }
-      } else if (path !== filter.path && !path.startsWith(`${filter.path}.`)) {
-        continue;
-      }
+    if (pathFilter && !pathFilter(path)) {
+      continue;
     }
 
     const entry = findEntry(bcd, path);
@@ -323,8 +337,10 @@ export const update = (
       continue;
     }
 
+    // The support statement may be modified in-place, but we may also need
+    // to resolve "mirror" statements to get real version numbers for some
+    // browser. Keep a copy of the original data around for that.
     const support = entry.__compat.support;
-    // Stringified then parsed to deep clone the support statements
     const originalSupport = clone(support);
 
     for (const [browser, versionMap] of browserMap.entries()) {
@@ -347,7 +363,7 @@ export const update = (
       const inferredStatement = inferredStatements[0];
 
       // If there's a version number filter
-      if (filter.release || filter.release === false) {
+      if (filter.release !== undefined) {
         const filterMatch =
           filter.release && filter.release.match(/([\d.]+)-([\d.]+)/);
         if (filterMatch) {
@@ -613,17 +629,16 @@ export const loadJsonFiles = async (
   return Object.fromEntries(entries);
 };
 
+interface MainFilter extends UpdateFilter {
+  category: string[];
+}
+
 export const main = async (
   reportPaths: string[],
-  filter: any,
+  filter: MainFilter,
   browsers: Browsers,
   overrides: Overrides
 ): Promise<void> => {
-  // Replace filter.path with a minimatch object.
-  if (filter.path && filter.path.includes('*')) {
-    filter.path = new Minimatch(filter.path);
-  }
-
   if (filter.release === 'false') {
     filter.release = false;
   }
