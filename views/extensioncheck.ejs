@@ -1,0 +1,104 @@
+<div id="extension-warnings" class="paper hidden">
+  <h2><span class="mdi mdi-alert"></span> Problematic Extensions Detected</h2>
+  <div id="extension-warnings-extensions">
+
+  </div>
+  <hr />
+  <p>Please disable these extensions or switch to a profile that does not use them.</p>
+</div>
+
+<script>
+  (function() {
+    var container = document.getElementById('extension-warnings-extensions');
+
+    function checkUrl(url, callback) {
+      var client = new XMLHttpRequest();
+
+      client.open('GET', url);
+      client.send();
+      client.onreadystatechange = function () {
+        if (client.readyState == 4) {
+          if (client.status >= 200 && client.status <= 299) {
+            callback(true);
+          } else {
+            callback(false);
+          }
+        }
+      };
+    };
+
+    function checkChromeExtension(id, callback) {
+      if (id) {
+        checkUrl('chrome-extension://' + id + '/assets/manifestIcons/icon.svg', callback);
+      } else {
+        callback(false);
+      }
+    }
+
+    function checkFirefoxExtension(id, callback) {
+      if (id) {
+        checkUrl('moz-extension://' + id + '/assets/manifestIcons/icon.svg', callback);
+      } else {
+        callback(false);
+      }
+    }
+
+    function checkExtension(options, callback) {
+      checkChromeExtension(options.chromeId, function(result) {
+        if (result) {
+          callback('chrome');
+        } else {
+          checkFirefoxExtension(options.firefoxId, function(result) {
+            if (result) {
+              callback('firefox');
+            } else {
+              callback(false);
+
+              // XXX Detect on Safari
+            }
+          });
+        }
+      })
+    };
+
+    function renderNote(extension) {
+      var el = document.createElement('div');
+
+      var elHdr = document.createElement('h3');
+      elHdr.innerText = extension.name;
+      el.appendChild(elHdr);
+      var elTxt = document.createElement('p');
+      elTxt.innerText = extension.message;
+      el.appendChild(elTxt);
+
+      container.appendChild(el);
+
+      container.parentElement.classList.remove('hidden');
+    }
+
+    function checkExtensions(extensions) {
+      if (!('XMLHttpRequest' in self)) {
+        // Detection methods aren't supported, skip
+        return;
+      }
+
+      for (var i = 0; i < extensions.length; i++) {
+        var extension = extensions[i];
+        checkExtension(extension, function(result) {
+          if (result) {
+            renderNote(extension);
+          }
+        })
+      }
+    };
+
+    checkExtensions([
+      {
+        name: 'NordPass',
+        'message': 'NordPass performs polyfill-like transformations on navigator.credentials, affecting tests for the CredentialsContainer API.',
+        'chromeId': 'fooolghllnmhmmndgjiamiiodkpenpbb',
+        'firefoxId': '3a147c47-c111-4048-9bc5-d72f227311fe'
+      }
+    ]);
+  })();
+</script>

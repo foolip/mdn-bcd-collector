@@ -275,6 +275,10 @@ hr {
   @include themedProperty(color, 'success');
 }
 
+.hidden {
+  display: none;
+}
+
 .mdi:before {
   /* Ensure that *something* shows up on older browsers */
   content: '\FFFD';
@@ -375,7 +379,8 @@ hr {
   }
 }
 
-#known-caveats {
+#known-caveats,
+#extension-warnings {
   @include themedProperty(background, 'error-bg', 0.05);
   width: intrinsic;
   width: -webkit-max-content;
@@ -386,6 +391,23 @@ hr {
   margin-bottom: 1em;
   text-align: center;
   list-style-position: inside;
+}
+
+#extension-warnings {
+  margin-top: 1em;
+
+  h2,
+  h3 {
+    @include themedProperty(color, 'error');
+  }
+
+  h3 {
+    margin-bottom: 0;
+  }
+
+  p {
+    margin-top: 0;
+  }
 }
 
 #privacy-notice {
