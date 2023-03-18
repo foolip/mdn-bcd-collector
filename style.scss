@@ -249,8 +249,11 @@ footer {
 }
 
 hr {
-  width: 100vw;
-  margin-left: min(-8px, calc(env(safe-area-inset-left) * -1));
+  width: calc(
+    100% - max(0px, env(safe-area-inset-left)) -
+      max(0px, env(safe-area-inset-right))
+  );
+  margin-left: min(0px, calc(env(safe-area-inset-left) * -1));
 }
 
 .paper {
