@@ -236,7 +236,8 @@
           'Missing required',
           'Cannot read property',
           'event name must be provided',
-          'requires a single argument'
+          'requires a single argument',
+          'requires at least'
         ])
       ) {
         // If it failed to construct and it's not illegal or just needs
