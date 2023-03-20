@@ -61,6 +61,10 @@ const secrets = await fs.readJson(
     import.meta.url
   )
 );
+
+const browserExtensions = await fs.readJson(
+  new URL('./browser-extensions.json', import.meta.url)
+);
 /* c8 ignore stop */
 
 const storage = getStorage(appVersion);
@@ -101,6 +105,7 @@ app.use(express.static('generated'));
 
 app.locals.appVersion = appVersion;
 app.locals.bcdVersion = bcd.__meta.version;
+app.locals.browserExtensions = browserExtensions;
 
 // Get user agent
 app.use((req, res, next) => {
