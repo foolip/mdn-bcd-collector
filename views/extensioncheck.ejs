@@ -10,6 +10,7 @@
 <script>
   (function() {
     var container = document.getElementById('extension-warnings-extensions');
+    var doSend = <%- locals.sendToServer || false %>;
 
     function checkUrl(url, callback) {
       var client = new XMLHttpRequest();
@@ -76,20 +77,40 @@
       container.parentElement.classList.remove('hidden');
     }
 
+    function sendToServer(results) {
+      var client = new XMLHttpRequest();
+
+      client.open('POST', '/api/browserExtensions');
+      client.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+      client.send(JSON.stringify(results));
+    }
+
     function checkExtensions(extensions) {
       if (!('XMLHttpRequest' in self)) {
         // Detection methods aren't supported, skip
         return;
       }
 
-      for (var i = 0; i < extensions.length; i++) {
-        var extension = extensions[i];
+      var extensionsToCheck = Object.keys(extensions);
+      var remaining = extensionsToCheck.length;
+
+      var results = {};
+
+      extensionsToCheck.forEach(function(k) {
+        var extension = extensions[k];
         checkExtension(extension, function(result) {
+          results[k] = result;
+          remaining--;
+
+          if (remaining == 0 && doSend) {
+            sendToServer(results);
+          }
+
           if (result) {
             renderNote(extension);
           }
-        })
-      }
+        });
+      });
     };
 
     checkExtensions(<%- JSON.stringify(browserExtensions) %>);

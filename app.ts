@@ -84,7 +84,15 @@ const cookieSession = (req, res, next) => {
 };
 
 const createReport = (results, req) => {
-  return {__version: appVersion, results, userAgent: req.get('User-Agent')};
+  const extensions = results.extensions;
+  const testResults = Object.assign({}, results);
+  delete testResults.extensions;
+  return {
+    __version: appVersion,
+    results: testResults,
+    extensions: results.extensions,
+    userAgent: req.get('User-Agent')
+  };
 };
 
 const app = express();
@@ -141,7 +149,7 @@ app.post('/api/get', (req, res) => {
   res.redirect(`/tests/${testSelection}${query ? `?${query}` : ''}`);
 });
 
-app.post('/api/results', (req, res, next) => {
+app.post('/api/results', async (req, res, next) => {
   if (!req.is('json')) {
     res.status(400).send('body should be JSON');
     return;
@@ -156,21 +164,33 @@ app.post('/api/results', (req, res, next) => {
     return;
   }
 
-  storage
-    .put(req.sessionID, url, results)
-    .then(() => {
-      res.status(201).end();
-    })
-    .catch(next);
+  try {
+    await storage.put(req.sessionID, url, results);
+    res.status(201).end();
+  } catch (e) {
+    next(e);
+  }
 });
 
-app.get('/api/results', (req, res, next) => {
-  storage
-    .getAll(req.sessionID)
-    .then((results) => {
-      res.status(200).json(createReport(results, req));
-    })
-    .catch(next);
+app.get('/api/results', async (req, res, next) => {
+  const results = await storage.getAll(req.sessionID);
+  res.status(200).json(createReport(results, req));
+});
+
+app.post('/api/browserExtensions', async (req, res, next) => {
+  if (!req.is('json')) {
+    res.status(400).send('body should be JSON');
+    return;
+  }
+
+  try {
+    const extData = (await storage.get(req.sessionID, 'extensions')) || {};
+    Object.assign(extData, req.body);
+    await storage.put(req.sessionID, 'extensions', extData);
+    res.status(201).end();
+  } catch (e) {
+    next(e);
+  }
 });
 
 // Test Resources
@@ -194,62 +214,64 @@ app.get('/', (req, res) => {
 });
 
 /* c8 ignore start */
-app.get('/download/:filename', (req, res, next) => {
-  storage
-    .readFile(req.params.filename)
-    .then((data) => {
-      res.setHeader('content-type', 'application/json;charset=UTF-8');
-      res.setHeader('content-disposition', 'attachment');
-      res.send(data);
-    })
-    .catch(next);
+app.get('/download/:filename', async (req, res, next) => {
+  const data = await storage.readFile(req.params.filename);
+
+  try {
+    res.setHeader('content-type', 'application/json;charset=UTF-8');
+    res.setHeader('content-disposition', 'attachment');
+    res.send(data);
+  } catch (e) {
+    next(e);
+  }
 });
 
 // Accept both GET and POST requests. The form uses POST, but selenium.ts
 // instead simply navigates to /export.
-app.all('/export', (req, res, next) => {
+app.all('/export', async (req, res, next) => {
   const github = !!req.body.github;
-  storage
-    .getAll(req.sessionID)
-    .then(async (results) => {
-      const report = createReport(results, req);
-      if (github) {
-        const token = secrets.github.token || process.env.GITHUB_TOKEN;
-        if (token) {
-          try {
-            const octokit = new Octokit({auth: `token ${token}`});
-            const {url} = await exporter.exportAsPR(report, octokit);
-            res.render('export', {
-              title: 'Exported to GitHub',
-              description: url,
-              url
-            });
-          } catch (e) {
-            logger.error(e);
-            res.status(500).render('export', {
-              title: 'GitHub Export Failed',
-              description: '[GitHub Export Failed]',
-              url: null
-            });
-          }
-        } else {
+  const results = await storage.getAll(req.sessionID);
+
+  try {
+    const report = createReport(results, req);
+    if (github) {
+      const token = secrets.github.token || process.env.GITHUB_TOKEN;
+      if (token) {
+        try {
+          const octokit = new Octokit({auth: `token ${token}`});
+          const {url} = await exporter.exportAsPR(report, octokit);
           res.render('export', {
-            title: 'GitHub Export Disabled',
-            description: '[No GitHub Token, GitHub Export Disabled]',
+            title: 'Exported to GitHub',
+            description: url,
+            url
+          });
+        } catch (e) {
+          logger.error(e);
+          res.status(500).render('export', {
+            title: 'GitHub Export Failed',
+            description: '[GitHub Export Failed]',
             url: null
           });
         }
       } else {
-        const {filename, buffer} = exporter.getReportMeta(report);
-        await storage.saveFile(filename, buffer);
         res.render('export', {
-          title: 'Exported for download',
-          description: filename,
-          url: `/download/${filename}`
+          title: 'GitHub Export Disabled',
+          description: '[No GitHub Token, GitHub Export Disabled]',
+          url: null
         });
       }
-    })
-    .catch(next);
+    } else {
+      const {filename, buffer} = exporter.getReportMeta(report);
+      await storage.saveFile(filename, buffer);
+      res.render('export', {
+        title: 'Exported for download',
+        description: filename,
+        url: `/download/${filename}`
+      });
+    }
+  } catch (e) {
+    next(e);
+  }
 });
 /* c8 ignore stop */
 

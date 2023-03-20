@@ -1,9 +1,9 @@
-[
-  {
+{
+  "nordpass": {
     "name": "NordPass",
     "message": "NordPass performs polyfill-like transformations on navigator.credentials, affecting tests for the CredentialsContainer API.",
     "affectedTests": ["api.CredentialsContainer"],
     "chromeId": "fooolghllnmhmmndgjiamiiodkpenpbb",
     "firefoxId": "3a147c47-c111-4048-9bc5-d72f227311fe"
   }
-]
+}

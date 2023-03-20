@@ -8,7 +8,7 @@ See the LICENSE file for copyright details
 
 <%- contentFor('body') %>
 <%- include('unsecurewarning') %>
-<%- include('extensioncheck') %>
+<%- include('extensioncheck', {sendToServer: true}) %>
 <p id="status">Running tests...</p>
 <form id="form" action="/export" method="post">
   <input id="export-download" type="submit" name="download" value="Export for download" disabled>
