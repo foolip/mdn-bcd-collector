@@ -90,7 +90,7 @@ const createReport = (results, req) => {
   return {
     __version: appVersion,
     results: testResults,
-    extensions: results.extensions,
+    extensions,
     userAgent: req.get('User-Agent')
   };
 };
@@ -172,7 +172,7 @@ app.post('/api/results', async (req, res, next) => {
   }
 });
 
-app.get('/api/results', async (req, res, next) => {
+app.get('/api/results', async (req, res) => {
   const results = await storage.getAll(req.sessionID);
   res.status(200).json(createReport(results, req));
 });
