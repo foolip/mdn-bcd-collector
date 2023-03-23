@@ -31,6 +31,3 @@ jobs:
 
       - id: 'deploy'
         uses: 'google-github-actions/deploy-appengine@v1'
-        with:
-          env_vars: |-
-            GCLOUD_STORAGE_BUCKET=moz-fx-dev-fiji-mdnplaygound.appspot.com

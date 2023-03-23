@@ -7,3 +7,5 @@
 #
 
 runtime: nodejs16
+env_variables:
+  GCLOUD_STORAGE_BUCKET: moz-fx-dev-fiji-mdnplaygound.appspot.com
