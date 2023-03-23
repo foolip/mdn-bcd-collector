@@ -21,6 +21,8 @@ jobs:
       - id: 'checkout'
         uses: actions/checkout@v2
         
+      - run: cp secrets.sample.json secrets.json
+        
       - id: 'auth'
         uses: 'google-github-actions/auth@v1'
         with:
