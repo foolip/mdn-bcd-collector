@@ -113,6 +113,12 @@ These errors are worth looking out for:
 
   Examples of consistency checks in review are [#10397](https://github.com/mdn/browser-compat-data/pull/10397), [#12028](https://github.com/mdn/browser-compat-data/pull/12028) and [#12033](https://github.com/mdn/browser-compat-data/pull/12033). [#6571](https://github.com/mdn/browser-compat-data/issues/6571) proposes automating many such consistency checks.
 
+### Changes to option parameter data
+
+In v8.0.0, a new function was introduced (`bcd.testOptionParam()`) which allowed for the testing of option parameter support. For example, given the `Window.scroll()` method, it can determine if the `top` option parameter in `Window.scroll({top: 0})` has been accessed. However, there are still a few caveats with this approach:
+
+- It can determine if the option as been accessed, but it cannot determine if the method's behavior changed. This approach has been known to cause some issues with detection in Chrome, as [Chrome may read the value before checking if the flag to enable the behavior has been turned on](https://github.com/mdn/browser-compat-data/pull/18985#issuecomment-1461923451).
+
 ### Minor Safari version changes
 
 In v6.1.1, a major update was made to the user agent parser involving minor version numbers for browsers (specifically, Safari). As such, newer pull requests may be opened that change the minor version of a browser. If a newer collector version includes a change to a browser's minor version, then always trust the newer collector over the old one. (For example, if a collector PR for v6.0.8 was merged that indicates the feature was added in Safari 15.5, but there is a new PR with collector v6.1.2 that changes the version number to Safari 15.4, then trust Safari 15.4 to be the version number.)
