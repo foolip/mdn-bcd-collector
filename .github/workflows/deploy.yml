@@ -1,0 +1,31 @@
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+      - gcp
+
+permissions:
+  contents: write
+  deployments: write
+
+jobs:
+  deploy:
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+    runs-on: ubuntu-latest
+
+    steps:
+      - id: 'checkout'
+        uses: actions/checkout@v2
+        
+      - id: 'auth'
+        uses: 'google-github-actions/auth@v1'
+        with:
+          workload_identity_provider: 'projects/859994377457/locations/global/workloadIdentityPools/github-actions/providers/github-actions'
+          service_account: 'deploy-collector@moz-fx-dev-fiji-mdnplaygound.iam.gserviceaccount.com'
+
+      - id: 'deploy'
+        uses: 'google-github-actions/deploy-appengine@v1'
