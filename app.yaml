@@ -8,4 +8,4 @@
 
 runtime: nodejs16
 env_variables:
-  GCLOUD_STORAGE_BUCKET: mdn-bcd-buffer
+  GCLOUD_STORAGE_BUCKET: fiji-mdn-collector
