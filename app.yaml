@@ -6,6 +6,6 @@
 # See the LICENSE file for copyright details
 #
 
-runtime: nodejs16
+runtime: nodejs18
 env_variables:
   GCLOUD_STORAGE_BUCKET: mdn-bcd-buffer
