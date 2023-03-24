@@ -149,7 +149,7 @@ const main = (bcd: CompatData, tests: Tests) => {
 
   const direction = argv.direction.split('-from-');
   console.log(
-    chalk`{yellow Finding entries that are missing in {bold ${direction[0]}} but present in {bold ${direction[1]}}...}\n`
+    chalk`{yellow Finding entries that are missing in {red.bold ${direction[0]}} but present in {green.bold ${direction[1]}}...}\n`
   );
 
   const {missingEntries, total} = getMissing(
@@ -164,9 +164,9 @@ const main = (bcd: CompatData, tests: Tests) => {
     chalk`\n{cyan ${missingEntries.length}/${total} (${(
       (missingEntries.length / total) *
       100.0
-    ).toFixed(2)}%)} {yellow entries missing from {bold ${
+    ).toFixed(2)}%)} {yellow entries missing from {red.bold ${
       direction[0]
-    }} that are in {bold ${direction[1]}}}`
+    }} that are in {green.bold ${direction[1]}}}`
   );
 };
 

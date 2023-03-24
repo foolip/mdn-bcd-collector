@@ -6,9 +6,15 @@
     "**/unittest/**",
     "**/coverage/**",
     "**/resources/custom-tests/**",
-    "release.js",
-    "selenium.js",
-    "scripts.js",
-    "json3.min.js"
+    "**/types/**",
+    "lib/selenium-keepalive.ts",
+    "prepare.ts",
+    "prepare-resources.ts",
+    "release.ts",
+    "selenium.ts",
+    "json3.min.js",
+    "static/resources/worker.js",
+    "static/resources/serviceworker.js",
+    "static/resources/sharedworker.js"
   ]
 }

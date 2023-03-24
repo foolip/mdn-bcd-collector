@@ -8,7 +8,7 @@
 
 /* global console, document, window, location, navigator, XMLHttpRequest,
           self, Worker, Promise, setTimeout, clearTimeout, MessageChannel,
-          SharedWorker, ActiveXObject, hljs */
+          SharedWorker, hljs */
 
 // This harness should work on as old browsers as possible and shouldn't depend
 // on any modern JavaScript features.
@@ -32,6 +32,8 @@
   var debugmode = stringIncludes(location.search, 'debug=true');
 
   /* c8 ignore start */
+  // Non-invasive polyfills
+
   function consoleLog(message) {
     if ('console' in self) {
       console.log(message);
@@ -50,6 +52,14 @@
     }
   }
 
+  /**
+   * Safe stringification
+   *
+   * value (any): The value to stringify
+   *
+   * returns (string): The stringified value; if value cannot be serialized,
+   *   "unserializable value"
+   */
   function stringify(value) {
     try {
       return String(value);
@@ -58,8 +68,32 @@
     }
   }
 
+  /**
+   * A non-invasive polyfill for Array.isArray()
+   *
+   * obj (any): The object to test
+   *
+   * returns (Boolean): `true` if the object is an array, otherwise `false`.
+   */
+  function isArray(obj) {
+    if ('isArray' in Array) {
+      return Array.isArray(obj);
+    }
+
+    return obj.constructor === Array;
+  }
+
+  /**
+   * A non-invasive polyfill for String.prototype.includes()
+   *
+   * string (string): The string to test
+   * search (string | string[]): The string to search for; if array, check if any
+   *   search string is applicable
+   *
+   * returns (Boolean): `true` if (any) search string found, otherwise `false`.
+   */
   function stringIncludes(string, search) {
-    if (Array.isArray(search)) {
+    if (isArray(search)) {
       for (var i = 0; i < search.length; i++) {
         if (stringIncludes(string, search[i])) {
           return true;
@@ -72,8 +106,17 @@
     }
     return string.indexOf(search) !== -1;
   }
-  /* c8 ignore stop */
 
+  // End non-invasive polyfills
+
+  /**
+   * Update the status field with a new message
+   *
+   * newStatus (string): The new status message
+   * className (string?): A class name to set on the status field element
+   *
+   * returns (null)
+   */
   function updateStatus(newStatus, className) {
     var statusElement = document.getElementById('status');
     if (!statusElement) {
@@ -95,7 +138,16 @@
 
     consoleLog(statusElement.innerHTML.replace(/<br>/g, '\n'));
   }
+  /* c8 ignore stop */
 
+  /**
+   * Add a reusable instance for code that can be used in multiple tests
+   *
+   * name (string): Name of the instance
+   * code (string): A string of the code to create the instance
+   *
+   * returns (null)
+   */
   function addInstance(name, code) {
     var newCode = '(function () {\n  ' + code.replace(/\n/g, '\n  ') + '\n})()';
     reusableInstances.__sources[name] = newCode;
@@ -108,6 +160,16 @@
     }
   }
 
+  /**
+   * Add a test to the queue
+   *
+   * name (string): Name of the test
+   * tests (Tests): The test itself
+   * exposure (Exposure): The test exposure
+   * info (object?): Additional test info
+   *
+   * returns (null)
+   */
   function addTest(name, tests, exposure, info) {
     if (!(exposure in pending)) {
       pending[exposure] = [];
@@ -121,6 +183,14 @@
     });
   }
 
+  /**
+   * Test a constructor with no arguments for support, and check the error message to
+   * determine if it's supported or an illegal constructor.
+   *
+   * iface (function): The constructor to test
+   *
+   * returns (TestResult): The result of the test
+   */
   function testConstructor(iface) {
     var result = {};
 
@@ -132,6 +202,7 @@
         new iface();
       }
       result.result = true;
+      result.message = 'Constructor passed with no errors';
     } catch (err) {
       if (
         stringIncludes(err.message, [
@@ -161,13 +232,16 @@
           'is not a valid argument count',
           'Missing required',
           'Cannot read property',
-          'event name must be provided'
+          'event name must be provided',
+          'requires a single argument'
         ])
       ) {
         // If it failed to construct and it's not illegal or just needs
         // more arguments, the constructor's good
         result.result = true;
       } else {
+        /* c8 ignore next 3 */
+        // If there's some other error, return null and update this function
         result.result = null;
       }
 
@@ -177,13 +251,23 @@
     return result;
   }
 
+  /**
+   * This function tests to ensure an object prototype's name matches an entry in an
+   * explicit list of names
+   *
+   * instance (object): An object to test
+   * names (string | string[]): The valid name(s)
+   *
+   * returns (TestResult): Whether the prototype name matches a name in `names` parameter
+   */
   function testObjectName(instance, names) {
     // Do not reject "falsey" values generally in order to support
     // `document.all`
     if (instance === null || instance === undefined) {
-      return false;
+      return {result: false, message: 'testObjectName: instance is falsy'};
     }
 
+    /* c8 ignore start */
     if (
       !instance.constructor.name &&
       Object.prototype.toString.call(instance) === '[object Object]'
@@ -191,9 +275,10 @@
       return {
         result: null,
         message:
-          'Browser does not support object prototype confirmation methods'
+          'testObjectName: Browser does not support object prototype confirmation methods'
       };
     }
+    /* c8 ignore stop */
 
     if (typeof names === 'string') {
       names = [names];
@@ -209,14 +294,14 @@
 
     for (var i = 0; i < names.length; i++) {
       if (actualName === names[i]) {
-        return true;
+        return {result: true, message: 'Got ' + actualName};
       }
     }
 
     return {
       result: false,
       message:
-        'Instance prototype does not match accepted names (expected ' +
+        'testObjectName: Instance prototype does not match accepted names (expected ' +
         names.join(', ') +
         '; got ' +
         actualName +
@@ -224,94 +309,194 @@
     };
   }
 
-  function testOptionParam(instance, methodName, paramName, paramValue) {
+  /**
+   * This function tests to see if a parameter or option within an object is accessed
+   * during a method call. It passes an object as the first paramter to the method, calls
+   * the method, and checks to see if the option was accessed during the call.
+   *
+   * XXX This can only test with the first argument.  To test the second, third, etc.
+   * argument, wrap the method in a function.  Example:
+   *   function foo(opts) {
+   *     instance.doTheThing(one, two, opts);
+   *   }
+   *   return bcd.testOptionParam(foo, null, 'bar', 'apple');
+   *
+   * instance (function|object): A function, constructor, or object to test
+   * methodName (string|string[]?): The name(s) of a method to test; leave empty if
+   *   instance is function, or set to 'constructor' if instance is constructor
+   * optName (string?): The name of the option to test; leave empty to pass "optValue" as
+   *   directly as the argument
+   * optValue (any): The value of the option to test; if "optName" is empty, this will be
+   *   passed directly as the argument
+   * otherOptions (object?): An object containing other options to set, in case of
+   *   required options; if "optName" is empty, this has no effect
+   *
+   * returns (TestResult): If the value was accessed, the result will be `true`
+   *
+   * Examples:
+   *
+   *   Simple:
+   *     bcd.testOptionParam(instance, 'doTheThing', 'bar', 'apple');
+   *     ->
+   *    instance.doTheThing({bar: <'apple'>});
+   *
+   *   With otherOptions:
+   *     bcd.testOptionParam(instance, 'doTheThing', 'bar', 'apple', {fruits: true});
+   *     ->
+   *     instance.doTheThing({fruits, true, bar: <'apple'>});
+   *
+   *   No Method Name:
+   *     bcd.testOptionParam(instance, null, 'bar', 'apple');
+   *     ->
+   *     instance({bar: <'apple'>});
+   *
+   *   Constructor:
+   *     bcd.testOptionParam(instance, 'constructor', 'bar', 'apple');
+   *     ->
+   *     new instance({bar: <'apple'>});
+   *
+   *   No optName:
+   *     bcd.testOptionParam(instance, 'doTheThing', null, 'apple');
+   *     ->
+   *     instance.doTheThing(<'apple'>);
+   *
+   *   Multiple Method Names (returns `true` if any pass):
+   *     bcd.testOptionParam(instance, ['doTheThing', 'undo'], 'bar', 'apple');
+   *     ->
+   *     instance.doTheThing({bar: <'apple'>});
+   *     instance.undo({bar: <'apple'>});
+   *
+   */
+  function testOptionParam(
+    instance,
+    methodName,
+    optName,
+    optValue,
+    otherOptions
+  ) {
+    // If an array of method names is specified, test them all
+    if (isArray(methodName)) {
+      for (var i = 0; i < methodName.length; i++) {
+        if (
+          testOptionParam(
+            instance,
+            methodName[i],
+            optName,
+            optValue,
+            otherOptions
+          )
+        ) {
+          return true;
+        }
+      }
+      return false;
+    }
+
+    /* c8 ignore start */
     if (!('Object' in self && 'defineProperty' in Object)) {
       return {
         result: null,
         message: 'Browser does not support detection methods'
       };
     }
+    /* c8 ignore stop */
+
+    if (!instance) {
+      return {
+        result: false,
+        message: 'testOptionParam: instance is falsy'
+      };
+    }
+
+    if (
+      methodName &&
+      methodName !== 'constructor' &&
+      !(methodName in instance)
+    ) {
+      return {
+        result: false,
+        message: 'testOptionParam: instance.' + methodName + ' is undefined'
+      };
+    }
 
     var accessed = false;
-    var options = Object.defineProperty({}, paramName, {
+    var paramObj = {
       get: function () {
         accessed = true;
-        return paramValue;
+        return optValue;
       }
-    });
-    instance[methodName](options);
+    };
+    var options;
+
+    if (optName) {
+      options = Object.defineProperty(otherOptions || {}, optName, paramObj);
+    } else {
+      options = paramObj;
+    }
+
+    if (methodName === 'constructor') {
+      // If methodName is 'constructor', we're testing a constructor
+      new instance(options);
+    } else if (methodName) {
+      instance[methodName](options);
+    } else {
+      // If there's no method name specified, we're testing a function
+      instance(options);
+    }
+
     return accessed;
   }
 
-  function cssPropertyToIDLAttribute(property, lowercaseFirst) {
-    var output = '';
-    var uppercaseNext = false;
-
-    if (lowercaseFirst) {
-      property = property.substr(1);
-    }
-
-    for (var i = 0; i < property.length; i++) {
-      var c = property[i];
-
-      if (c === '-') {
-        uppercaseNext = true;
-      } else if (uppercaseNext) {
-        uppercaseNext = false;
-        output += c.toUpperCase();
-      } else {
-        output += c;
-      }
-    }
-
-    return output;
-  }
-
-  function testCSSProperty(name) {
+  /**
+   * Test a CSS property for support
+   *
+   * name (string): The CSS property name
+   * value (string?): The CSS property value
+   *
+   * returns (TestResult): Whether the property is supported; if `value` is present,
+   *   whether that value is supported with the property
+   */
+  function testCSSProperty(name, value) {
+    // Use CSS.supports if available
     if ('CSS' in window && window.CSS.supports) {
-      return window.CSS.supports(name, 'inherit');
+      return window.CSS.supports(name, value || 'inherit');
     }
 
-    var attrs = [name];
-    attrs.push(cssPropertyToIDLAttribute(name, name.startsWith('-')));
-    for (var i = 0; i < attrs.length; i++) {
-      var attr = attrs[i];
-      if (attr in document.body.style) {
-        return true;
-      }
-    }
-
-    return false;
-  }
-
-  function testCSSPropertyValue(name, value) {
-    if ('CSS' in window && window.CSS.supports) {
-      return window.CSS.supports(name, value);
-    }
-
+    // Use fallback
     var div = document.createElement('div');
-    div.style[name] = '';
-    div.style[name] = value;
-    return div.style.getPropertyValue(name) !== '';
+    div.setProperty(name, value || 'inherit');
+    return div.getPropertyValue(name);
   }
 
-  // Once a test is evaluated and run, it calls this function with the result.
-  // This function then compiles a result object from the given result value,
-  // and then passes the result to `callback()` (or if the result is not true
-  // and there are more test variants, run the next test variant).
-  //
-  // If the test result is an error or non-boolean, the result value is set to
-  // `null` and the original value is mentioned in the result message.
-  //
-  // Test results are mapped into objects like this:
-  // {
-  //   "name": "api.Attr.localName",
-  //   "result": true,
-  //   "info": {
-  //     "code": "'localName' in Attr.prototype",
-  //     "exposure": "Window"
-  //   }
-  // }
+  /**
+   * Once a test is evaluated and run, it calls this function with the result.
+   * This function then compiles a result object from the given result value,
+   * and then passes the result to `callback()` (or if the result is not true
+   * and there are more test variants, run the next test variant).
+   *
+   * If the test result is an error or non-boolean, the result value is set to
+   * `null` and the original value is mentioned in the result message.
+   *
+   * Test results are mapped into objects like this:
+   * {
+   *   "name": "api.Attr.localName",
+   *   "result": true,
+   *   "message": "Test passed",
+   *   "info": {
+   *     "code": "'localName' in Attr.prototype",
+   *     "exposure": "Window"
+   *   }
+   * }
+   *
+   * value (any): The value from the test
+   * data (object): The data about the test
+   * i (Number): The index of the test run
+   * callback (function): The function to call once the test is processed
+   *
+   * returns (void)
+   * callback (TestResult): The processed result of the test
+   *
+   */
   function processTestResult(value, data, i, callback) {
     var result = {name: data.name, info: {}};
 
@@ -321,12 +506,15 @@
       result.result = null;
       result.message = 'threw ' + stringify(value);
     } else if (value && typeof value === 'object') {
+      /* c8 ignore start */
       if (
         'name' in value &&
         stringIncludes(value.name, ['NS_ERROR', 'NotSupported'])
       ) {
+        // Catch exceptions from early versions of Firefox
         result.result = null;
         result.message = 'threw ' + stringify(value.message);
+        /* c8 ignore stop */
       } else if ('result' in value) {
         result.result = value.result;
         if (value.message) {
@@ -363,6 +551,7 @@
       }
     }
 
+    /* c8 ignore start */
     if (debugmode) {
       if (typeof result.result !== 'boolean' && result.result !== null) {
         consoleLog(
@@ -370,14 +559,29 @@
         );
       }
     }
+    /* c8 ignore stop */
   }
 
+  /**
+   * Runs a test and then process the test result, sending the data to `oncomplete`
+   *
+   * data (Test): The test to run
+   * i (Number): The index of the test
+   * oncomplete (function): The callback to call once function completes
+   *
+   * returns (void)
+   * callback (TestResult): The processed result of the test
+   *
+   */
   function runTest(data, i, oncomplete) {
     var test = data.tests[i];
 
+    /* c8 ignore start */
+    // If a test is stuck for too long (ex. user interaction needed), ignore it
     var timeout = setTimeout(function () {
       fail('Timed out');
     }, 10000);
+    /* c8 ignore stop */
 
     function success(v) {
       clearTimeout(timeout);
@@ -414,21 +618,34 @@
     }
   }
 
+  /**
+   * Runs a series of tests and then calls the callback function with the results
+   *
+   * tests (Tests): The tests to run
+   * callback (function): The callback to call once function completes
+   *
+   * returns (void)
+   * callback (TestResults): The processed result of the tests
+   *
+   */
   function runTests(tests, callback) {
     var results = [];
     var completedTests = 0;
 
+    /* c8 ignore start */
     if (debugmode) {
       var remaining = [];
       for (var t = 0; t < tests.length; t++) {
         remaining.push(tests[t].name);
       }
     }
+    /* c8 ignore stop */
 
     var oncomplete = function (result) {
       results.push(result);
       completedTests += 1;
 
+      /* c8 ignore start */
       if (debugmode) {
         if (debugmode === 'full') {
           consoleLog(
@@ -465,6 +682,7 @@
           );
         }
       }
+      /* c8 ignore stop */
 
       if (completedTests == tests.length) {
         callback(results);
@@ -480,6 +698,15 @@
     }
   }
 
+  /**
+   * Run all of the pending tests under the Window exposure if any
+   *
+   * callback (function): The callback to call once function completes
+   *
+   * returns (void)
+   * callback (TestResults): The processed result of the tests
+   *
+   */
   function runWindow(callback) {
     if (pending.Window) {
       updateStatus('Running tests for Window...');
@@ -489,6 +716,15 @@
     }
   }
 
+  /**
+   * Run all of the pending tests under the Worker exposure if any
+   *
+   * callback (function): The callback to call once function completes
+   *
+   * returns (void)
+   * callback (TestResults): The processed result of the tests
+   *
+   */
   function runWorker(callback) {
     if (pending.Worker) {
       updateStatus('Running tests for Worker...');
@@ -498,7 +734,9 @@
         try {
           myWorker = new Worker('/resources/worker.js');
         } catch (e) {
+          /* c8 ignore start */
           // eslint-disable-next-rule no-empty
+          /* c8 ignore stop */
         }
       }
 
@@ -514,6 +752,7 @@
           })
         );
       } else {
+        /* c8 ignore start */
         updateStatus(
           'No worker support, skipping Worker/DedicatedWorker tests'
         );
@@ -541,12 +780,22 @@
         }
 
         callback(results);
+        /* c8 ignore stop */
       }
     } else {
       callback([]);
     }
   }
 
+  /**
+   * Run all of the pending tests under the SharedWorker exposure if any
+   *
+   * callback (function): The callback to call once function completes
+   *
+   * returns (void)
+   * callback (TestResults): The processed result of the tests
+   *
+   */
   function runSharedWorker(callback) {
     if (pending.SharedWorker) {
       updateStatus('Running tests for Shared Worker...');
@@ -556,7 +805,9 @@
         try {
           myWorker = new SharedWorker('/resources/sharedworker.js');
         } catch (e) {
+          /* c8 ignore start */
           // eslint-disable-next-rule no-empty
+          /* c8 ignore stop */
         }
       }
 
@@ -572,6 +823,7 @@
           })
         );
       } else {
+        /* c8 ignore start */
         updateStatus('No shared worker support, skipping SharedWorker tests');
 
         var results = [];
@@ -597,12 +849,22 @@
         }
 
         callback(results);
+        /* c8 ignore stop */
       }
     } else {
       callback([]);
     }
   }
 
+  /**
+   * Run all of the pending tests under the ServiceWorker exposure if any
+   *
+   * callback (function): The callback to call once function completes
+   *
+   * returns (void)
+   * callback (TestResults): The processed result of the tests
+   *
+   */
   function runServiceWorker(callback) {
     if (pending.ServiceWorker) {
       updateStatus('Running tests for Service Worker...');
@@ -633,6 +895,7 @@
             });
         });
       } else {
+        /* c8 ignore start */
         updateStatus('No service worker support, skipping ServiceWorker tests');
 
         var results = [];
@@ -658,12 +921,24 @@
         }
 
         callback(results);
+        /* c8 ignore stop */
       }
     } else {
       callback([]);
     }
   }
 
+  /**
+   * Run all of the pending tests
+   *
+   * callback (function?): The callback to call once tests are completed
+   * resourceCount (Number?): The number of resources required
+   * hideResults (boolean): Whether to keep the results hidden afterwards
+   *
+   * returns (void)
+   * callback (TestResults): The processed result of the tests
+   *
+   */
   function go(callback, resourceCount, hideResults) {
     var allresults = [];
     state = {
@@ -765,6 +1040,15 @@
     }
   }
 
+  /**
+   * Attempt to load highlight.js for code syntax highlighting, or silently fail
+   *
+   * callback (function?): The callback to call once function completes
+   *
+   * returns (void)
+   * callback (void)
+   *
+   */
   function loadHighlightJs(callback) {
     try {
       // Load dark (main) style
@@ -791,7 +1075,7 @@
         script.onload = callback;
         script.onerror = callback;
       } else {
-        // If we can't determine when harness.js loads, use a delay
+        // If we can't determine when highlight.js loads, use a delay
         setTimeout(callback, 500);
       }
 
@@ -802,6 +1086,15 @@
     }
   }
 
+  /**
+   * Render a report element to display on the page
+   *
+   * result (TestResult): The test result to render
+   * resultsEl (HTMLElement): The element to add the report to
+   *
+   * returns (void)
+   *
+   */
   function renderReportEl(result, resultsEl) {
     var resultEl = document.createElement('details');
     resultEl.className = 'result';
@@ -890,23 +1183,26 @@
     resultsEl.appendChild(resultEl);
   }
 
+  /**
+   * Send the results to the server
+   *
+   * results (TestResults): The results to send
+   *
+   * returns (void)
+   *
+   */
   function sendReport(results) {
     var body = JSON.stringify(results);
 
-    var client;
-    if ('XMLHttpRequest' in self) {
-      client = new XMLHttpRequest();
-    } else if ('ActiveXObject' in self) {
-      client = new ActiveXObject('Microsoft.XMLHTTP');
-    }
-
-    if (!client) {
+    if (!('XMLHttpRequest' in self)) {
       updateStatus(
         'Cannot upload results: XMLHttpRequest is not supported.',
         'error-notice'
       );
       return;
     }
+
+    var client = new XMLHttpRequest();
 
     var resultsURL =
       (location.origin || location.protocol + '//' + location.host) +
@@ -933,6 +1229,16 @@
     };
   }
 
+  /**
+   * Send test results to the server and potentially render them on the page. If there
+   * are a lot of results, ask the user before rendering.
+   *
+   * results (TestResults): The test results
+   * hideResults (boolean): If `true`, don't render the report on the page
+   *
+   * returns (void)
+   *
+   */
   function report(results, hideResults) {
     updateStatus('Tests complete. Posting results to server...');
 
@@ -1063,13 +1369,13 @@
   }
 
   global.stringify = stringify;
+  global.stringIncludes = stringIncludes;
   global.reusableInstances = reusableInstances;
   global.bcd = {
     testConstructor: testConstructor,
     testObjectName: testObjectName,
     testOptionParam: testOptionParam,
     testCSSProperty: testCSSProperty,
-    testCSSPropertyValue: testCSSPropertyValue,
     addInstance: addInstance,
     addTest: addTest,
     runTests: runTests,

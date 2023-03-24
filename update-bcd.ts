@@ -301,7 +301,7 @@ export const inferSupportStatements = (
 
 interface UpdateFilter {
   browser?: string[];
-  release?: string;
+  release?: string | false;
   path?: string;
   exactOnly?: boolean;
 }
@@ -363,21 +363,26 @@ export const update = (
       const inferredStatement = inferredStatements[0];
 
       // If there's a version number filter
-      if (filter.release) {
-        const filterMatch = filter.release.match(/([\d.]+)-([\d.]+)/);
+      if (filter.release !== undefined) {
+        const filterMatch =
+          filter.release && filter.release.match(/([\d.]+)-([\d.]+)/);
         if (filterMatch) {
+          if (typeof inferredStatement.version_added !== 'string') {
+            // If the version_added is not a string, it must be false and won't
+            // match our
+            continue;
+          }
           if (
-            typeof inferredStatement.version_added === 'string' &&
-            (compareVersions(
+            compareVersions(
               inferredStatement.version_added.replace(/(([\d.]+)> )?≤/, ''),
               filterMatch[1],
               '<'
             ) ||
-              compareVersions(
-                inferredStatement.version_added.replace(/(([\d.]+)> )?≤/, ''),
-                filterMatch[2],
-                '>'
-              ))
+            compareVersions(
+              inferredStatement.version_added.replace(/(([\d.]+)> )?≤/, ''),
+              filterMatch[2],
+              '>'
+            )
           ) {
             // If version_added is outside of filter range
             continue;
@@ -398,18 +403,18 @@ export const update = (
             // If version_removed and it's outside of filter range
             continue;
           }
-        }
-
-        if (filter.release !== inferredStatement.version_added) {
-          // If version_added doesn't match filter
-          continue;
-        }
-        if (
-          inferredStatement.version_removed &&
-          filter.release !== inferredStatement.version_removed
-        ) {
-          // If version_removed and it doesn't match filter
-          continue;
+        } else {
+          if (filter.release !== inferredStatement.version_added) {
+            // If version_added doesn't match filter
+            continue;
+          }
+          if (
+            inferredStatement.version_removed &&
+            filter.release !== inferredStatement.version_removed
+          ) {
+            // If version_removed and it doesn't match filter
+            continue;
+          }
         }
       }
 
@@ -634,6 +639,10 @@ export const main = async (
   browsers: Browsers,
   overrides: Overrides
 ): Promise<void> => {
+  if (filter.release === 'false') {
+    filter.release = false;
+  }
+
   const bcdFiles = (await loadJsonFiles(
     filter.category.map((cat) => path.join(BCD_DIR, ...cat.split('.')))
   )) as {[key: string]: Identifier};
@@ -701,7 +710,7 @@ if (esMain(import.meta)) {
         .option('release', {
           alias: 'r',
           describe:
-            'Only update when version_added or version_removed is set to the given value (can be an inclusive range, ex. xx-yy)',
+            'Only update when version_added or version_removed is set to the given value (can be an inclusive range, ex. xx-yy, or `false` for changes that set no support)',
           type: 'string',
           default: null
         })

@@ -9,6 +9,7 @@
 import css from '@webref/css';
 import esMain from 'es-main';
 import fs from 'fs-extra';
+import prettier from 'prettier';
 import idl from '@webref/idl';
 import * as WebIDL2 from 'webidl2';
 import * as YAML from 'yaml';
@@ -77,7 +78,19 @@ const compileCustomTest = (code: string, format = true): string => {
 
   if (format) {
     // Wrap in a function
-    code = `(function() {\n  ${code}\n})();`;
+    code = `(function () {\n  ${code}\n})();`;
+
+    try {
+      // Use Prettier to format code
+      code = prettier.format(code, {parser: 'babel'});
+    } catch (e) {
+      if (e instanceof SyntaxError) {
+        return `(function () {\n  throw "Test is malformed: ${e.message}";\n})();`;
+      }
+      /* c8 ignore next 3 */
+      // We should never reach the next line
+      throw e;
+    }
   }
 
   return code;
@@ -108,7 +121,7 @@ const getCustomTestAPI = (
           ? testbase +
             (promise
               ? `if (!promise) {
-    return {result: false, message: 'Promise variable is falsy'};
+    return {result: false, message: "Promise variable is falsy"};
   }
   return promise.then(function(instance) {
     return ${returnValue};
@@ -121,7 +134,7 @@ const getCustomTestAPI = (
       fail(e);
     }
   };
-  return 'callback';`
+  return "callback";`
               : `return ${returnValue};`)
           : false;
       }
@@ -143,15 +156,15 @@ const getCustomTestAPI = (
           let returnValue;
           if (type === 'symbol') {
             const symbol = member.replace('@@', '');
-            returnValue = `!!instance && 'Symbol' in self && '${symbol}' in Symbol && Symbol.${symbol} in instance`;
+            returnValue = `!!instance && "Symbol" in self && "${symbol}" in Symbol && Symbol.${symbol} in instance`;
           } else {
-            returnValue = `!!instance && '${member}' in instance`;
+            returnValue = `!!instance && "${member}" in instance`;
           }
           test = testbase
             ? testbase +
               (promise
                 ? `if (!promise) {
-    return {result: false, message: 'Promise variable is falsy'};
+    return {result: false, message: "Promise variable is falsy"};
   }
   return promise.then(function(instance) {
     return ${returnValue};
@@ -164,7 +177,7 @@ const getCustomTestAPI = (
       fail(e);
     }
   };
-  return 'callback';`
+  return "callback";`
                 : `return ${returnValue};`)
             : false;
         }
@@ -413,9 +426,17 @@ const flattenIDL = (specIDLs: IDLFiles, customIDLs: IDLFiles) => {
 };
 
 const flattenMembers = (iface) => {
-  const members = iface.members.filter(
-    (member) => member.name && member.type !== 'const'
-  );
+  const members = iface.members
+    .filter((member) => member.name && member.type !== 'const')
+    // Filter alt. names for standard features within the standard IDL
+    .filter(
+      (member) =>
+        !(
+          (iface.name === 'Document' &&
+            ['charset', 'inputEncoding'].includes(member.name)) ||
+          (iface.name === 'Window' && member.name === 'clientInformation')
+        )
+    );
   for (const member of iface.members.filter((member) => !member.name)) {
     switch (member.type) {
       case 'constructor':
@@ -698,14 +719,19 @@ const buildIDLMemberTests = (
       continue;
     }
 
-    // TODO: too many events tests are being generated, see
-    // https://github.com/foolip/mdn-bcd-collector/pull/1825#issuecomment-1048009920
-
-    const isStatic = member.special === 'static' || iface.type === 'namespace';
     const isEventHandler =
       member.idlType?.type === 'attribute-type' &&
       typeof member.idlType?.idlType === 'string' &&
       member.idlType?.idlType.endsWith('EventHandler');
+
+    if (isEventHandler) {
+      // XXX Tests for events will be added with another package, see
+      // https://github.com/GooborgStudios/mdn-bcd-collector/issues/133 for
+      // details. In the meantime, ignore event handlers.
+      continue;
+    }
+
+    const isStatic = member.special === 'static' || iface.type === 'namespace';
 
     let expr: string | RawTestCodeExpr = '';
     const customTestMember = getCustomTestAPI(
@@ -744,11 +770,11 @@ const buildIDLMemberTests = (
       }
     }
 
-    const name = isEventHandler
-      ? `${member.name.replace(/^on/, '')}_event`
-      : member.name;
+    // const name = isEventHandler
+    //   ? `${member.name.replace(/^on/, '')}_event`
+    //   : member.name;
 
-    tests[name] = compileTest({
+    tests[member.name] = compileTest({
       raw: {
         code: expr
       },
@@ -848,29 +874,6 @@ const buildIDL = (specIDLs: IDLFiles, customIDLs: IDLFiles) => {
   return buildIDLTests(ast, globals, scopes);
 };
 
-// https://drafts.csswg.org/cssom/#css-property-to-idl-attribute
-const cssPropertyToIDLAttribute = (
-  property: string,
-  lowercaseFirst?: boolean
-) => {
-  let output = '';
-  let uppercaseNext = false;
-  if (lowercaseFirst) {
-    property = property.substr(1);
-  }
-  for (const c of property) {
-    if (c === '-') {
-      uppercaseNext = true;
-    } else if (uppercaseNext) {
-      uppercaseNext = false;
-      output += c.toUpperCase();
-    } else {
-      output += c;
-    }
-  }
-  return output;
-};
-
 const buildCSS = (specCSS, customCSS) => {
   const properties = new Map();
 
@@ -924,7 +927,7 @@ const buildCSS = (specCSS, customCSS) => {
     ).sort() as any[]) {
       const values = Array.isArray(value) ? value : [value];
       const code = values
-        .map((value) => `bcd.testCSSPropertyValue("${name}", "${value}")`)
+        .map((value) => `bcd.testCSSProperty("${name}", "${value}")`)
         .join(' || ');
       tests[`css.properties.${name}.${key}`] = compileTest({
         raw: {code: code},
@@ -1072,7 +1075,6 @@ export {
   buildIDLTests,
   buildIDL,
   validateIDL,
-  cssPropertyToIDLAttribute,
   buildCSS,
   buildJS
 };

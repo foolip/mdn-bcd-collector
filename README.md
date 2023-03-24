@@ -12,7 +12,7 @@ This project is © 2020-2022 Google LLC, Mozilla Corporation and Gooborg Studios
 
 ## Setup
 
-This project requires Node.js 16.15.0 or greater.
+This project requires Node.js 18 or greater.
 
 ```sh
 npm install
@@ -115,7 +115,7 @@ These errors are worth looking out for:
 
 ### Minor Safari version changes
 
-In v6.1.1, a major update was made to the user agent parser involving minor version numbers for browsers (specifically, Safari). As such, newer pull requests may be opened that change the minor version of a browser. Any new changes should be trusted over old changes. (For example, if a collector PR for v6.0.8 was merged that indicates the feature was added in Safari 15.5, but there is a new PR with collector v6.1.2 that changes the version number to Safari 15.4, then always trust the new PR.)
+In v6.1.1, a major update was made to the user agent parser involving minor version numbers for browsers (specifically, Safari). As such, newer pull requests may be opened that change the minor version of a browser. If a newer collector version includes a change to a browser's minor version, then always trust the newer collector over the old one. (For example, if a collector PR for v6.0.8 was merged that indicates the feature was added in Safari 15.5, but there is a new PR with collector v6.1.2 that changes the version number to Safari 15.4, then trust Safari 15.4 to be the version number.)
 
 ## Running the server locally
 
@@ -130,8 +130,6 @@ To also handle HTTPS traffic, use the `--https-cert` and `--https-key` arguments
 ```sh
 npm run dev -- --https-cert=my-cert.pem --https-key=my-cert.key
 ```
-
-Test certificates and instructions for generating certificates can be found in [web-platform-tests](https://github.com/web-platform-tests/wpt/tree/master/tools/certs).
 
 ## Deploying to App Engine
 
@@ -167,6 +165,10 @@ In `secrets.json`, you'll need to add your Selenium remote(s). In the `selenium`
       "key": "some-API-key-goes-here",
       "region": "us-west-1"
     },
+    "lambdatest": {
+      "username": "example",
+      "key": "some-API-key-goes-here"
+    },
     "custom": "https://my.example.page.org/selenium/wd"
   }
 }
@@ -176,6 +178,7 @@ Currently, the Selenium hosts known to the script are:
 
 - BrowserStack - requires `username` and `key`
 - SauceLabs - requires `username`, `key`, and `region`
+- LambdaTest - requires `username` and `key`
 
 You may use other Selenium hosts, but please be aware that they have not been tested and you may experience unexpected results.
 
@@ -194,11 +197,11 @@ npm run selenium chrome
 npm run selenium edge ie
 ```
 
-Additionally, you can limit the browser versions by the year with the `--since` argument:
+Additionally, you can limit the browser versions by the year with the `--since` argument (default: 2020):
 
 ```sh
 npm run selenium -- --since=2016
-npm run selenium firefox -- --since=2020
+npm run selenium firefox -- --since=2000 # Grab all versions of Firefox
 ```
 
 ## Running the unit tests and linter
