@@ -2591,6 +2591,11 @@ api:
       }
       var instance = new Request('');
     __additional:
+      Request.init_priority_parameter: |-
+        function construct(options) {
+          new Request('', options);
+        }
+        return bcd.testOptionParam(construct, null, 'priority', 'auto');
       Request.init_referrer_parameter: |-
         function construct(options) {
           new Request('', options);
