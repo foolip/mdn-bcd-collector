@@ -1,8 +1,0 @@
-partial interface SpeechGrammar {
-  constructor();
-};
-
-partial interface SpeechRecognitionEvent {
-  readonly attribute USVString emma;
-  readonly attribute DOMString interpretation;
-};

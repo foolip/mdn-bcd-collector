@@ -1,4 +1,0 @@
-partial interface SourceBuffer {
-  Promise<undefined> appendBufferAsync();
-  undefined removeAsync();
-};

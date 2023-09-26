@@ -1,7 +1,0 @@
-[
-  "Test overrides",
-  ["css.properties.font-family", "safari", "5.1", false],
-  ["css.properties.font-family", "chrome", "83", false],
-  ["css.properties.font-face", "chrome", "*", null],
-  ["css.properties.font-style", "chrome", "82-84", false]
-]

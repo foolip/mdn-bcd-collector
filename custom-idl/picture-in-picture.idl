@@ -1,4 +1,0 @@
-// https://github.com/w3c/picture-in-picture/pull/216
-partial interface HTMLVideoElement {
-  [CEReactions] attribute boolean autoPictureInPicture;
-};

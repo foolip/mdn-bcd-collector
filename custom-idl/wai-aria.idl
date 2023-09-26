@@ -1,4 +1,0 @@
-partial interface mixin ARIAMixin {
-  // https://source.chromium.org/chromium/chromium/src/+/master:third_party/blink/renderer/core/dom/aria_attributes.idl;l=36;drc=6a76f7b5e8aab0c8372fe627145ceb21c10ddc11
-  attribute DOMString ariaRelevant;
-};
