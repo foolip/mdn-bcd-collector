@@ -1,4 +1,0 @@
-partial interface NetworkInformation {
-  // https://bugs.chromium.org/p/chromium/issues/detail?id=699892
-  attribute EventHandler ontypechange;
-};

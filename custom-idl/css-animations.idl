@@ -1,3 +1,0 @@
-partial interface AnimationEvent {
-  undefined initAnimationEvent(DOMString type, boolean bubbles, boolean cancelable, DOMString animationName, float elapsedTime);
-};

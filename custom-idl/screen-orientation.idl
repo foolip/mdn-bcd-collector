@@ -1,5 +1,0 @@
-partial interface Screen {
-  attribute EventHandler onorientationchange;
-  undefined lockOrientation();
-  undefined unlockOrientation();
-};

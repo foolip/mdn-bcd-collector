@@ -1,4 +1,0 @@
-// https://chromium.googlesource.com/chromium/src/+/fe14ae8caf179f194788ec029e3d274c6d849b3e/third_party/blink/renderer/core/timing/performance.idl#68
-partial interface Performance {
-  [Exposed=Window] readonly attribute any memory;
-};
